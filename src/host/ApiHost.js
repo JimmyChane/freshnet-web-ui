@@ -2,20 +2,11 @@ import HostRequest from "./HostRequest.js";
 import HostResponse from "./HostResponse.js";
 import Text from "@/items/data/Text.js";
 
-class ApiHost {
-	static #dev_port = 80;
-	static #parseOrigin(protocol, hostname, port) {
-		port = port === 80 ? "" : `:${port}`;
-		return `${protocol}//${hostname}${port}`;
-	}
+import config from "@/../freshnet.config";
 
-	get #pathCloudinary() {
-		return "https://res.cloudinary.com/freshnet/image/upload/";
-	}
+class ApiHost {
 	get origin() {
-		// return "https://www.freshnet.app";
-		const { protocol, hostname } = window.location;
-		return ApiHost.#parseOrigin(protocol, hostname, ApiHost.#dev_port);
+		return config.host;
 	}
 	get imgFile() {
 		return {
@@ -33,7 +24,7 @@ class ApiHost {
 					query = `?width=${width}&height=${height}`;
 				}
 
-				return `${this.origin}/api/image/name/${name}${query}`;
+				return `${config.hostApi}/image/name/${name}${query}`;
 			},
 			list: () => this.api({ url: `image/list` }).then((json) => json.content),
 			upload: (images = []) => {
@@ -53,13 +44,13 @@ class ApiHost {
 	}
 
 	res(url) {
-		return `${this.origin}/resource/${url}`;
+		return `${config.hostRes}/${url}`;
 	}
 	cloudinary(param = { url: "" }) {
 		let { url } = param;
 		url = typeof url === "string" ? Text.trim(url, "") : "";
 		if (url === "") return "";
-		return `${this.#pathCloudinary}resource/${url}`;
+		return `${config.cloudinaryRes}/${url}`;
 	}
 
 	request() {
@@ -76,7 +67,7 @@ class ApiHost {
 	async fetch(param = {}) {
 		let { method = "GET", url = "", headers = {}, body = undefined } = param;
 
-		if (url) url = `${this.origin}/api/${url}`;
+		if (url) url = `${config.hostApi}/${url}`;
 		if (window.localStorage.getItem("userToken")) {
 			headers.authorization = window.localStorage.getItem("userToken");
 		}

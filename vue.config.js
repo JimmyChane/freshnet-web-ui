@@ -1,14 +1,15 @@
 const TimeBuilder = require("./src/tools/TimeBuilder.js");
 const timestamp = TimeBuilder.getCurrent("-");
+const config = require("./freshnet.config.js");
 
 module.exports = {
 	publicPath: "./",
-	outputDir: "../express/public/page",
+	outputDir: config.exportAbsolutePath,
 	productionSourceMap: false,
 	devServer: {
 		disableHostCheck: true,
-		port: 8080,
-		public: "0.0.0.0:8080",
+		port: config.devPort,
+		// public: "0.0.0.0:8080",
 		// open: process.platform === "darwin",
 		// host: "0.0.0.0",
 		// https: false,

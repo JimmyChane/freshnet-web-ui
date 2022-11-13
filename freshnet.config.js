@@ -1,17 +1,15 @@
-export default {
-	development: {
-		port: 80,
-		host: "127.0.0.1",
-	},
-	production: {
-		port: 80,
+module.exports = {
+	devPort: 8080,
 
-		originApi: "www.freshnet.app/api",
-		originRes: "www.freshnet.app/resource",
-		cloudinary: "https://res.cloudinary.com/freshnet/image/upload", // not sure
-		cloudinaryRes: "https://res.cloudinary.com/freshnet/image/upload/resource",
-	},
-	export: {
-		absolutePath: "../express/public/page", // not sure
-	},
+	// host: "http://127.0.0.1",
+	// hostApi: "http://127.0.0.1/api",
+	// hostRes: "http://127.0.0.1/resource",
+
+	host: "https://www.freshnet.app",
+	hostApi: "https://www.freshnet.app/api",
+	hostRes: "https://www.freshnet.app/resource",
+
+	cloudinaryRes: "https://res.cloudinary.com/freshnet/image/upload/resource",
+
+	exportAbsolutePath: "../freshnet-express/public/page",
 };
