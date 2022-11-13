@@ -1,0 +1,160 @@
+<script>
+   import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
+   import Footer from "@/app/Footer.vue";
+
+   export default {
+      rtitle: "Page Not Found",
+      components: { Actionbar, Footer },
+      data() {
+         return { drawer: { isExpand: false }, top: { shadow: false } };
+      },
+   };
+</script>
+
+<template>
+   <div class="Page404" @scroll="(event) => (top.shadow = event.target.scrollTop > 0)">
+      <Actionbar
+         :class="['Home-top', top.shadow ? 'Home-top-shadow' : '']"
+         v-if="$root.navigation.isDrawer()"
+         :leftMenus="[
+            {
+               title: 'Hamburger Menu',
+               icon: host.res('icon/hamburgerMenu-2A4858.svg'),
+               click: () => $root.openNavigationDrawer(),
+            },
+         ]"
+      >
+         <div class="Home-top-body">
+            <router-link
+               class="Login-top-logo"
+               v-if="$root.navigation.isDrawer()"
+               :to="{ name: 'home' }"
+            >
+               <img class="Login-top-logo-img" :src="host.res('icon/home-2A4858.svg')" />
+            </router-link>
+         </div>
+      </Actionbar>
+
+      <div class="Page404-main">
+         <span class="Page404-title">404</span>
+         <p class="Page404-description">The page you’re looking for cannot be found</p>
+
+         <router-link class="Page404-goBack" :to="{ path: '/' }">Go Back</router-link>
+      </div>
+
+      <Footer />
+   </div>
+</template>
+
+<style lang="scss" scoped>
+   .Page404 {
+      --page-background-color: #c9d7df;
+      --page-background-color-shadow: #b6b6b6;
+
+      background: var(--page-background-color);
+      color: #2a4858;
+
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: stretch;
+      position: relative;
+
+      .Page404-body {
+         z-index: 1;
+         width: 100%;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: flex-start;
+         position: relative;
+         overflow-x: hidden;
+         overflow-y: auto;
+      }
+
+      .Home-top {
+         top: 0;
+         right: 0;
+         left: 0;
+         z-index: 2;
+         width: 100%;
+         background: #d6e1e5;
+         position: sticky;
+         flex-grow: 0;
+         transition: var(--animation-duration);
+
+         .Home-top-body {
+            width: 100%;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            column-gap: 1rem;
+
+            .Login-top-logo {
+               --size: 2.8rem;
+
+               width: var(--size);
+               height: var(--size);
+               min-width: var(--size);
+               min-height: var(--size);
+               max-width: var(--size);
+               max-height: var(--size);
+               background: none;
+               border: none;
+               cursor: pointer;
+               padding: 0.6rem;
+               border-radius: 50%;
+               transition: var(--animation-duration);
+               display: flex;
+               flex-grow: 0;
+               flex-direction: row;
+               align-items: center;
+               justify-content: center;
+
+               &:hover {
+                  background: hsla(0, 0%, 0%, 0.1);
+                  background: #49748940;
+               }
+               &-img {
+                  height: 100%;
+                  width: 100%;
+               }
+            }
+         }
+      }
+      .Home-top-shadow {
+         box-shadow: 0 0 3rem rgba(0, 0, 0, 0.1);
+      }
+
+      .Page404-main {
+         z-index: 1;
+         width: 100%;
+         max-width: 35rem;
+         padding: 1.4rem;
+
+         display: flex;
+         flex-direction: column;
+         flex-grow: 1;
+         align-items: flex-start;
+         justify-content: center;
+
+         .Page404-title {
+            font-size: 4rem;
+            opacity: 0.6;
+            line-height: 1.4;
+         }
+         .Page404-description {
+            font-weight: 400;
+            font-size: 1.2rem;
+         }
+         .Page404-goBack {
+            color: var(--primary-color);
+            margin-top: 2rem;
+         }
+      }
+   }
+</style>

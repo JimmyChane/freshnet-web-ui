@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8" />
+
+      <meta http-equiv="Cache-Control" content="max-age=21600, s-maxage=21600, public" />
+      <meta http-equiv="Expires" content="0" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+      <!-- Link Previews -->
+      <!-- <meta property="og:url" content="https://freshnet.app" /> -->
+      <meta property="og:site_name" content="Freshnet Enterprise" />
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="Home" />
+      <meta property="og:image" content="logos-512.png" />
+      <meta
+         property="og:description"
+         content="We sell notebooks, printers, repairs, and more."
+      />
+
+      <!-- Viewport -->
+      <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+
+      <!-- Theme -->
+      <meta name="theme-color" content="#2f579d" />
+
+      <!-- Manifest -->
+      <link rel="manifest" href="manifest.webmanifest" />
+
+      <!-- Style -->
+      <link
+         rel="stylesheet"
+         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
+      />
+      <link href="<%= BASE_URL %>favicon.ico" rel="icon" />
+
+      <title><%= htmlWebpackPlugin.options.title %></title>
+   </head>
+   <body>
+      <noscript>
+         <strong>
+            We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly
+            without JavaScript enabled. Please enable it to continue.
+         </strong>
+      </noscript>
+
+      <script>
+         window.addEventListener("load", () => {
+            if ("serviceWorker" in navigator) {
+               navigator.serviceWorker
+                  .register("./sw.js")
+                  .then((registration) => console.log("SW registration successful"))
+                  .catch((error) => console.error("SW registration failed"));
+            }
+         });
+      </script>
+      <div id="app"></div>
+   </body>
+</html>
