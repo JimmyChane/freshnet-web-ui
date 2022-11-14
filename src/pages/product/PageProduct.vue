@@ -4,7 +4,6 @@
 
 	import Navigation from "@/tools/Navigation.js";
 
-	import AppHost from "@/host/AppHost.js";
 	import Footer from "@/app/Footer.vue";
 
 	import PanelProducts from "./PanelProducts.vue";
@@ -528,9 +527,7 @@
 
 				const categories = await this.categoryStore.dispatch("getItems");
 				categories.forEach((category) => {
-					const group = groups.find(
-						(group) => group.category.id === category.id,
-					);
+					const group = groups.find((group) => group.category.id === category.id);
 					if (!group) groups.push({ category, items: [] });
 				});
 
@@ -708,9 +705,7 @@
 			:input="popup.productDescriptionUpdate.input"
 			@click-dismiss="() => popup.productDescriptionUpdate.dismiss()"
 			@click-cancel="() => popup.productDescriptionUpdate.cancel()"
-			@click-confirm="
-				(output) => popup.productDescriptionUpdate.confirm(output)
-			"
+			@click-confirm="(output) => popup.productDescriptionUpdate.confirm(output)"
 		/>
 		<!-- Popup Product Category Update -->
 		<WindowUpdateCategory
@@ -728,9 +723,7 @@
 			:input="popup.productSpecificationsUpdate.input"
 			@click-dismiss="() => popup.productSpecificationsUpdate.dismiss()"
 			@click-cancel="() => popup.productSpecificationsUpdate.cancel()"
-			@click-confirm="
-				(output) => popup.productSpecificationsUpdate.confirm(output)
-			"
+			@click-confirm="(output) => popup.productSpecificationsUpdate.confirm(output)"
 		/>
 	</div>
 </template>

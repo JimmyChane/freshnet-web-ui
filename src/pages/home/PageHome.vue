@@ -7,6 +7,7 @@
 	import Header from "./PageHome-Header.vue";
 
 	import SectionProduct from "./PageHome-SectionProduct.vue";
+	import SectionContact from "./PageHome-SectionContact.vue";
 	import SectionPrint from "./PageHome-SectionPrint.vue";
 	import SectionLocation from "./PageHome-SectionLocation.vue";
 	import SectionAboutUs from "./PageHome-SectionAboutUs.vue";
@@ -36,6 +37,7 @@
 			ItemSearchPs2Disc,
 			ItemSearchService,
 			SectionProduct,
+			SectionContact,
 			SectionPrint,
 			SectionLocation,
 			SectionAboutUs,
@@ -55,6 +57,74 @@
 				if (this.$root.window.innerWidth > 1170) return "Home-isHorizontal";
 				return "Home-isVertical";
 			},
+
+			contacts() {
+				return [
+					{
+						title: "Support Contact",
+						title: "Office (Mobile)",
+						description: "014 631 5353",
+						links: [
+							{
+								title: "Call",
+								icon: this.host.res("icon/call-color.svg"),
+								href: "tel:+60146315353",
+							},
+							{
+								title: "Whatsapp",
+								icon: this.host.res("icon/whatsapp-color.svg"),
+								href: "https://api.whatsapp.com/send?phone=60146315353",
+								target: "__blank,",
+							},
+							{
+								title: "Telegram",
+								icon: this.host.res("icon/telegram-color.svg"),
+								href: "https://t.me/FreshnetEnterprise",
+								target: "__blank",
+							},
+						],
+					},
+					{
+						title: "Mr Beh",
+						description: "016 795 9444",
+						links: [
+							{
+								title: "Call",
+								icon: this.host.res("icon/call-color.svg"),
+								href: "tel:+60167959444",
+							},
+							{
+								title: "Whatsapp",
+								icon: this.host.res("icon/whatsapp-color.svg"),
+								href: "https://api.whatsapp.com/send?phone=60167959444",
+								target: "__blank,",
+							},
+						],
+					},
+					{
+						title: "Office 1",
+						description: "03 3281 1526",
+						links: [
+							{
+								title: "Telephone",
+								icon: this.host.res("icon/telephone-color.svg"),
+								href: "tel:+60332811526",
+							},
+						],
+					},
+					{
+						title: "Office 2",
+						description: "03 3289 7297",
+						links: [
+							{
+								title: "Telephone",
+								icon: this.host.res("icon/telephone-color.svg"),
+								href: "tel:+60332897297",
+							},
+						],
+					},
+				];
+			},
 		},
 		mounted() {
 			document.title = "Freshnet Enterprise";
@@ -71,6 +141,15 @@
 				<Header class="Home-header" :style="{ 'grid-area': 'header' }" />
 
 				<SectionProduct :style="{ 'grid-area': 'product' }" :isThin="isThin" />
+				<SectionContact
+					v-for="contact of contacts"
+					:key="contact.title"
+					:style="{ 'grid-area': 'contact' }"
+					:isThin="isThin"
+					:title="contact.title"
+					:description="contact.description"
+					:links="contact.links"
+				/>
 				<SectionPrint :style="{ 'grid-area': 'print' }" :isThin="isThin" />
 				<SectionLocation :style="{ 'grid-area': 'location' }" :isThin="isThin" />
 				<SectionAboutUs
@@ -83,9 +162,9 @@
 					:isThin="isThin"
 					v-if="false"
 				/>
-
-				<!-- <Footer :style="{ 'grid-area': 'footer' }" /> -->
 			</div>
+
+			<Footer />
 		</div>
 	</div>
 </template>
@@ -145,7 +224,7 @@
 		.Home-scroll {
 			.Home-body {
 				display: grid;
-				grid-template-areas: "header header" "product print" "product location" "footer footer";
+				grid-template-areas: "header header" "product print" "product location";
 				grid-template-columns: 1fr 1fr;
 				grid-template-rows: 10rem 1fr 1fr;
 				justify-content: start;
