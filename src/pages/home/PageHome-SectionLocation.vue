@@ -48,11 +48,9 @@
 
 		&:hover,
 		&:focus {
-			transform: scale(1.02);
+			transform: scale(1.01);
 			box-shadow: 0px 0px 1.5rem #278b73;
-			.HomeSectionLocation-click {
-				transition: var(--animation-duration);
-			}
+			text-decoration: underline;
 			.HomeSectionLocation-img {
 				box-shadow: 0px 0px 1.5rem #278b73;
 			}
@@ -85,6 +83,7 @@
 				flex-direction: column;
 				justify-content: flex-end;
 				text-decoration: underline;
+				font-size: 0.8em;
 			}
 		}
 		.HomeSectionLocation-img {
@@ -102,9 +101,8 @@
 		}
 	}
 	.HomeSectionLocation-isThin {
-		width: calc(100% - 2rem);
-		height: 10rem;
-		margin: 0 1rem;
+		width: 100%;
+		height: 100%;
 		font-size: 0.8rem;
 		.HomeSectionLocation-img {
 			margin: 2.5em 2em 2.5em 0;

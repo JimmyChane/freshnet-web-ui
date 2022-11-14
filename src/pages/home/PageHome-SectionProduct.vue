@@ -310,7 +310,7 @@
 					transition: var(--animation-duration);
 
 					&:hover {
-						transform: scale(1.05);
+						transform: scale(1.01);
 						box-shadow: 0px 0px 1.5rem var(--primary-color);
 						text-decoration: underline;
 					}
@@ -319,8 +319,8 @@
 		}
 	}
 	.HomeSectionProduct-isThin {
-		width: calc(100% - 2rem);
-		margin: 0 1rem;
+		width: 100%;
+		height: 100%;
 		font-size: 0.9rem;
 		.HomeSectionProduct-right {
 			.HomeSectionProduct-footer {

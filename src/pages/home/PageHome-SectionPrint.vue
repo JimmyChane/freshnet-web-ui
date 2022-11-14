@@ -46,11 +46,9 @@
 
 		&:hover,
 		&:focus {
-			transform: scale(1.02);
+			transform: scale(1.01);
 			box-shadow: 0px 0px 1.5rem #2d619d;
-			.HomeSectionPrint-click {
-				transition: var(--animation-duration);
-			}
+			text-decoration: underline;
 		}
 
 		.HomeSectionPrint-main {
@@ -80,6 +78,7 @@
 				flex-direction: column;
 				justify-content: flex-end;
 				text-decoration: underline;
+				font-size: 0.8em;
 			}
 		}
 		.HomeSectionPrint-img {
@@ -94,8 +93,8 @@
 		}
 	}
 	.HomeSectionPrint-isThin {
-		width: calc(100% - 2rem);
-		margin: 0 1rem;
+		width: 100%;
+		height: 100%;
 		font-size: 0.8rem;
 		.HomeSectionPrint-img {
 			margin: 2.5em 2em 2.5em 0;

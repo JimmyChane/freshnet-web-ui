@@ -50,8 +50,6 @@
 			},
 
 			isThin: (c) => c.$root.navigation.isDrawer(),
-			isWide: (c) => !c.$root.navigation.isDrawer(),
-			isWider: (c) => c.$root.navigation.isWide(),
 
 			classes() {
 				if (this.$root.window.innerWidth > 1170) return "Home-isHorizontal";
@@ -63,7 +61,7 @@
 					{
 						title: "Support Contact",
 						title: "Office (Mobile)",
-						description: "014 631 5353",
+						description: "014-631 5353",
 						links: [
 							{
 								title: "Call",
@@ -86,7 +84,7 @@
 					},
 					{
 						title: "Mr Beh",
-						description: "016 795 9444",
+						description: "016-795 9444",
 						links: [
 							{
 								title: "Call",
@@ -103,7 +101,7 @@
 					},
 					{
 						title: "Office 1",
-						description: "03 3281 1526",
+						description: "03-3281 1526",
 						links: [
 							{
 								title: "Telephone",
@@ -114,7 +112,7 @@
 					},
 					{
 						title: "Office 2",
-						description: "03 3289 7297",
+						description: "03-3289 7297",
 						links: [
 							{
 								title: "Telephone",
@@ -138,20 +136,47 @@
 			<Actionbar class="Home-actionbar" :isThin="isThin" />
 
 			<div class="Home-body">
-				<Header class="Home-header" :style="{ 'grid-area': 'header' }" />
+				<Header
+					class="Home-header"
+					:style="{
+						'grid-column': '1 / -1',
+						'grid-row': '1 / span 1',
+					}"
+				/>
 
-				<SectionProduct :style="{ 'grid-area': 'product' }" :isThin="isThin" />
+				<SectionProduct
+					:style="{
+						'grid-column': 'auto / span 2',
+						'grid-row': 'auto / span 4',
+					}"
+					:isThin="isThin"
+				/>
+				<SectionPrint
+					:style="{
+						'grid-column': 'auto / span 2',
+						'grid-row': 'auto / span 2',
+					}"
+					:isThin="isThin"
+				/>
+				<SectionLocation
+					:style="{
+						'grid-column': 'auto / span 2',
+						'grid-row': 'auto / span 2',
+					}"
+					:isThin="isThin"
+				/>
 				<SectionContact
 					v-for="contact of contacts"
 					:key="contact.title"
-					:style="{ 'grid-area': 'contact' }"
+					:style="{
+						'grid-column': 'auto / span 1',
+						'grid-row': 'auto / span 2',
+					}"
 					:isThin="isThin"
 					:title="contact.title"
 					:description="contact.description"
 					:links="contact.links"
 				/>
-				<SectionPrint :style="{ 'grid-area': 'print' }" :isThin="isThin" />
-				<SectionLocation :style="{ 'grid-area': 'location' }" :isThin="isThin" />
 				<SectionAboutUs
 					:style="{ 'grid-area': 'about' }"
 					:isThin="isThin"
@@ -198,7 +223,7 @@
 			}
 			.Home-body {
 				z-index: 1;
-				flex-grow: 5;
+				width: calc(100% - 16rem);
 				width: 100%;
 			}
 		}
@@ -208,14 +233,18 @@
 		--actionbar-height: 6rem;
 		.Home-scroll {
 			.Home-body {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: flex-start;
-
-				max-width: 38.5rem;
+				// max-width: 38.5rem;
 				padding: 1rem;
 				gap: 1rem;
+
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				grid-auto-flow: row;
+
+				justify-content: center;
+				align-items: center;
+				justify-items: center;
+				align-content: center;
 			}
 		}
 	}
@@ -223,15 +252,20 @@
 		--actionbar-height: 3.5rem;
 		.Home-scroll {
 			.Home-body {
-				display: grid;
-				grid-template-areas: "header header" "product print" "product location";
-				grid-template-columns: 1fr 1fr;
-				grid-template-rows: 10rem 1fr 1fr;
-				justify-content: start;
-
-				max-width: 87.5rem;
+				height: max-content;
+				max-width: 80rem;
 				gap: 1rem;
 				padding: 2rem;
+
+				display: grid;
+				// grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+				grid-template-columns: 1fr 1fr 1fr 1fr;
+				grid-auto-flow: row;
+
+				justify-content: center;
+				align-items: center;
+				justify-items: center;
+				align-content: center;
 			}
 		}
 	}
