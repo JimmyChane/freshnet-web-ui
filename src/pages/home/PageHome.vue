@@ -223,8 +223,8 @@
 			}
 			.Home-body {
 				z-index: 1;
-				width: calc(100% - 16rem);
 				width: 100%;
+				gap: 0.8rem;
 			}
 		}
 	}
@@ -233,9 +233,7 @@
 		--actionbar-height: 6rem;
 		.Home-scroll {
 			.Home-body {
-				// max-width: 38.5rem;
 				padding: 1rem;
-				gap: 1rem;
 
 				display: grid;
 				grid-template-columns: 1fr 1fr;
@@ -254,7 +252,6 @@
 			.Home-body {
 				height: max-content;
 				max-width: 80rem;
-				gap: 1rem;
 				padding: 2rem;
 
 				display: grid;

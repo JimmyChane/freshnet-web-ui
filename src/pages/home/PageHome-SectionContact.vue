@@ -61,14 +61,15 @@
 
 <style lang="scss" scoped>
 	.HomeSectionContact {
+		width: 100%;
+		height: 100%;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
 		justify-content: center;
-		// background: linear-gradient(101deg, #ad5dd3 0%, #742998 100%);
 		background-color: #ffffff;
 
-		border-radius: 1em;
+		border-radius: 0.5em;
 		overflow: hidden;
 		color: black;
 
@@ -90,11 +91,10 @@
 			flex-grow: 1;
 			align-items: flex-start;
 			justify-content: center;
-			padding: 2em;
 			height: 100%;
 			max-height: 12em;
 			z-index: 2;
-			padding: 1em;
+			padding: 0.8em;
 
 			.HomeSectionContact-title {
 				font-weight: 600;
@@ -114,7 +114,6 @@
 				display: flex;
 				flex-direction: row;
 				align-items: center;
-				margin-top: 0.3em;
 
 				.HomeSectionContact-link {
 					padding: 0.5em;
@@ -135,13 +134,9 @@
 		}
 	}
 	.HomeSectionContact-isThin {
-		width: 100%;
-		height: 100%;
 		font-size: 1rem;
 	}
 	.HomeSectionContact-isWide {
-		width: 100%;
-		height: 100%;
 		font-size: 1.3rem;
 	}
 </style>
