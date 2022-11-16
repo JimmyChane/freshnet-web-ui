@@ -178,7 +178,7 @@
 					width: 100%;
 					line-height: 1.1;
 					font-size: 1rem;
-					font-weight: 900;
+					font-weight: 600;
 					white-space: pre-line;
 				}
 			}

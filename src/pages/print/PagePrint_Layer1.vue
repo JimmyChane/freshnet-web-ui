@@ -48,7 +48,7 @@
 			align-items: center;
 			justify-content: center;
 
-			font-weight: 900;
+			font-weight: 600;
 			font-size: 1.2rem;
 			text-align: center;
 		}

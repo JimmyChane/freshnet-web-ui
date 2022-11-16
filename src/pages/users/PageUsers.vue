@@ -439,7 +439,7 @@
 				gap: 10px;
 				.PageUsers-window-title {
 					font-size: 1.1rem;
-					font-weight: 900;
+					font-weight: 600;
 				}
 				.PageUsers-window-inputText {
 					flex-grow: 1;

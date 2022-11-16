@@ -69,7 +69,7 @@
 		border: 0.1rem solid hsla(0, 0%, 0%, 0.2);
 		background-color: white;
 		color: black;
-		font-weight: 900;
+		font-weight: 600;
 		font-size: 1rem;
 		line-height: 1;
 		cursor: pointer;

@@ -283,7 +283,7 @@
 
 						.PagePs2-section-title {
 							font-size: 1.2rem;
-							font-weight: 900;
+							font-weight: 600;
 							margin: 0.75rem 0;
 						}
 

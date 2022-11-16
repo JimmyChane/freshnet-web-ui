@@ -76,7 +76,7 @@
 				justify-content: center;
 
 				font-size: 0.8rem;
-				font-weight: 900;
+				font-weight: 600;
 				background: hsl(0, 0%, 98%);
 				border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
 				padding: 0.2rem 0.4rem;

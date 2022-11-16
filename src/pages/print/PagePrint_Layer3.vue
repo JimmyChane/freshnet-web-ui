@@ -47,7 +47,7 @@
 			align-items: center;
 			justify-content: space-between;
 
-			font-weight: 900;
+			font-weight: 600;
 
 			.Layer3-icon {
 				--size: 2.5rem;

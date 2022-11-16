@@ -90,7 +90,7 @@
 			border-style: solid;
 			border-color: var(--type-color);
 			border-radius: 2rem;
-			font-weight: 900;
+			font-weight: 600;
 			color: var(--type-color);
 			padding: 8px 24px;
 			background-color: white;

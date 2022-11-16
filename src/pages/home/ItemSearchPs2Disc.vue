@@ -81,7 +81,7 @@
 				}
 			}
 			.ItemSearchPs2Disc-title {
-				font-weight: 900;
+				font-weight: 600;
 			}
 			.ItemSearchPs2Disc-subTitle {
 				font-size: 0.8em;

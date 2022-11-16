@@ -716,7 +716,7 @@
 				.LayoutProductViewer-text {
 					color: white;
 					font-size: 2.2rem;
-					font-weight: 900;
+					font-weight: 600;
 					padding-left: 2rem;
 					padding-right: 2rem;
 				}
@@ -779,7 +779,7 @@
 						}
 						.LayoutProductViewer-brand-item-title {
 							font-size: 1.1rem;
-							font-weight: 900;
+							font-weight: 600;
 						}
 					}
 					.LayoutProductViewer-brand-noContent {
@@ -819,7 +819,7 @@
 					}
 					.LayoutProductViewer-category-item-title {
 						font-size: 1rem;
-						font-weight: 900;
+						font-weight: 600;
 					}
 				}
 				.LayoutProductViewer-category-noContent {
@@ -896,7 +896,7 @@
 						width: 100%;
 						padding: 1.2rem;
 						background: hsla(0, 0%, 100%, 0.6);
-						font-weight: 900;
+						font-weight: 600;
 					}
 				}
 				.LayoutProductViewer-whatIncluded-noContent {

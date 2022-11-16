@@ -425,7 +425,7 @@
 			.WindowProduct-abstract-title {
 				flex-grow: 1;
 				font-size: 1.05rem;
-				font-weight: 900;
+				font-weight: 600;
 				color: hsl(0, 0%, 40%);
 				color: black;
 				text-align: start;

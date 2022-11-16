@@ -350,7 +350,7 @@
 					color: inherit;
 
 					.PanelCustomer-service-item-title {
-						font-weight: 900;
+						font-weight: 600;
 					}
 				}
 			}
@@ -376,7 +376,7 @@
 					color: inherit;
 
 					.PanelCustomer-order-item-title {
-						font-weight: 900;
+						font-weight: 600;
 					}
 				}
 			}

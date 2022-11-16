@@ -56,10 +56,10 @@
          transition: var(--animation-duration);
          .ItemFloatingContactLink-title1 {
             font-size: 0.7em;
-            font-weight: 900;
+            font-weight: 600;
          }
          .ItemFloatingContactLink-title2 {
-            font-weight: 900;
+            font-weight: 600;
          }
       }
 

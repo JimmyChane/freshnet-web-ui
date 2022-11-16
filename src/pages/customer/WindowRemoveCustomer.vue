@@ -125,7 +125,7 @@
 						text-overflow: clip;
 						overflow-x: hidden;
 
-						font-weight: 900;
+						font-weight: 600;
 						font-size: 0.8rem;
 						display: flex;
 						flex-direction: row;
@@ -158,7 +158,7 @@
 					min-height: 2.5rem;
 					flex-grow: 1;
 					padding: 0.5rem;
-					font-weight: 900;
+					font-weight: 600;
 					font-size: 0.8rem;
 
 					display: flex;

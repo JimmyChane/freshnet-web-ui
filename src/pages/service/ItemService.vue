@@ -321,7 +321,7 @@
 						border: 1px solid #dddddd;
 						border-radius: 0.2rem;
 						background-color: #f4f4f4;
-						font-weight: 900;
+						font-weight: 600;
 						font-size: 0.8rem;
 
 						text-decoration: none;
@@ -467,7 +467,7 @@
 						border: 1px solid #dddddd;
 						border-radius: 0.2rem;
 						background-color: #f4f4f4;
-						font-weight: 900;
+						font-weight: 600;
 						font-size: 0.8rem;
 
 						text-decoration: none;

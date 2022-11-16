@@ -83,7 +83,7 @@
             }
          }
          .ItemSearchCategory-title {
-            font-weight: 900;
+            font-weight: 600;
          }
       }
    }

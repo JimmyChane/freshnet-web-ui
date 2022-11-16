@@ -63,7 +63,7 @@
 				min-height: 1.8rem;
 				.PanelCustomer-section-title {
 					text-align: start;
-					font-weight: 900;
+					font-weight: 600;
 					flex-grow: 1;
 					font-size: 1.2rem;
 					color: hsl(0, 0%, 0%);

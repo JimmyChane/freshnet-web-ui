@@ -50,7 +50,7 @@
 		grid-area: title;
 		display: flex;
 		align-items: center;
-		font-weight: 900;
+		font-weight: 600;
 	}
 	.SectionCategory-item-count {
 		grid-area: count;

@@ -159,7 +159,7 @@
 			justify-content: flex-start;
 
 			font-size: 1.4rem;
-			font-weight: 900;
+			font-weight: 600;
 			white-space: nowrap;
 			text-overflow: clip;
 			color: var(--primary-color);

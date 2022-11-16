@@ -87,7 +87,7 @@
 				font-size: 0.7rem;
 			}
 			.ItemProductSpecification-content {
-				font-weight: 900;
+				font-weight: 600;
 				height: 100%;
 				display: flex;
 				flex-direction: row;

@@ -223,7 +223,7 @@
 				gap: 0.7rem;
 				.WindowService-belonging-title {
 					font-size: 1.1rem;
-					font-weight: 900;
+					font-weight: 600;
 				}
 				.WindowService-belonging-list {
 					width: 100%;
@@ -252,7 +252,7 @@
 						border-color: var(--type-color);
 						border-radius: 50px;
 						box-shadow: 0 0 4px hsl(0, 0%, 90%);
-						font-weight: 900;
+						font-weight: 600;
 						color: var(--type-color);
 						padding: 4px 16px;
 						background-color: white;

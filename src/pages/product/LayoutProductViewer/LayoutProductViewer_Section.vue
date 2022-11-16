@@ -48,7 +48,7 @@
 			gap: 0.5rem;
 
 			.LayoutProductViewerSection-title {
-				font-weight: 900;
+				font-weight: 600;
 				font-size: 1rem;
 				padding: 0.8rem 0;
 			}

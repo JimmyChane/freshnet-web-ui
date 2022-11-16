@@ -147,7 +147,7 @@
 <style lang="scss" scoped>
 	//Abstract
 	.PageDatabase-title {
-		font-weight: 900;
+		font-weight: 600;
 		font-size: 1.4rem;
 		color: var(--primary-color);
 		letter-spacing: 0.1rem;

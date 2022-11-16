@@ -704,7 +704,7 @@
 					max-width: 90rem;
 					color: white;
 					font-size: 2.2rem;
-					font-weight: 900;
+					font-weight: 600;
 					text-align: center;
 					padding: 2rem;
 
@@ -757,7 +757,7 @@
 					}
 					.LayoutProductViewer-brand-item-title {
 						font-size: 1.1rem;
-						font-weight: 900;
+						font-weight: 600;
 						background: hsla(0, 0%, 100%, 0.5);
 						border: 1px solid white;
 						border-radius: 0.2rem;
@@ -779,7 +779,7 @@
 				background: hsla(0, 0%, 100%, 0.6);
 				padding: 1.2rem;
 				border-radius: 0.6rem;
-				font-weight: 900;
+				font-weight: 600;
 				.LayoutProductViewer-title-noContent {
 					opacity: 0.6;
 					font-style: italic;
@@ -810,7 +810,7 @@
 					}
 					.LayoutProductViewer-category-item-title {
 						font-size: 1rem;
-						font-weight: 900;
+						font-weight: 600;
 					}
 				}
 				.LayoutProductViewer-category-noContent {
@@ -844,7 +844,7 @@
 					border-radius: 0.6rem;
 					background: hsla(0, 0%, 100%, 0.6);
 					padding: 1.2rem;
-					font-size: 1.1rem;
+					font-size: 1rem;
 					.LayoutProductViewer-description-noContent {
 						opacity: 0.6;
 						font-style: italic;
@@ -906,7 +906,7 @@
 						width: 100%;
 						padding: 1.2rem;
 						background: hsla(0, 0%, 100%, 0.6);
-						font-weight: 900;
+						font-weight: 600;
 					}
 				}
 				.LayoutProductViewer-whatIncluded-noContent {

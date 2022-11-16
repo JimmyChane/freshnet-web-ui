@@ -90,7 +90,7 @@
 
 			font-size: 1.6rem;
 			font-weight: 400;
-			font-weight: 900;
+			font-weight: 600;
 			white-space: nowrap;
 			text-overflow: clip;
 			color: inherit;

@@ -125,7 +125,7 @@
 
       .InputTextArea-sign {
          font-size: 0.7em;
-         font-weight: 900;
+         font-weight: 600;
          transition: var(--animation-duration);
       }
 
@@ -181,7 +181,7 @@
          padding-left: 0;
 
          color: hsl(0, 0%, 20%);
-         font-weight: 900;
+         font-weight: 600;
       }
 
       .InputTextArea-input {

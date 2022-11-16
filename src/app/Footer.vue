@@ -161,7 +161,7 @@
 						.PageHomeFooter-section-title {
 							width: 100%;
 							height: 2rem;
-							font-weight: 900;
+							font-weight: 600;
 							font-size: 1.2rem;
 							text-align: start;
 						}

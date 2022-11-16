@@ -225,7 +225,7 @@
 			// Abstract
 			.WindowService-title {
 				font-size: 1.1rem;
-				font-weight: 900;
+				font-weight: 600;
 			}
 			// Abstract
 			.WindowService-input {

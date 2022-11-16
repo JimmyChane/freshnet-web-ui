@@ -134,7 +134,7 @@
 				padding: 0.4rem 0.6rem;
 				color: white;
 				font-size: 0.8rem;
-				font-weight: 900;
+				font-weight: 600;
 				border-radius: 0.2rem 0 0 0.2rem;
 			}
 			.LabelMenus-content {
@@ -142,7 +142,7 @@
 				background-color: white;
 				padding: 0.4rem 1.2rem;
 				font-size: 0.8rem;
-				font-weight: 900;
+				font-weight: 600;
 				border-radius: 0 0.2rem 0.2rem 0;
 				color: black;
 				display: flex;
@@ -230,7 +230,7 @@
 				background: none;
 				text-align: start;
 				font-size: 0.8rem;
-				font-weight: 900;
+				font-weight: 600;
 
 				--background-color-hover: hsl(0, 0%, 90%);
 				--background-color-selected: hsl(0, 0%, 70%);

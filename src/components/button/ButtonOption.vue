@@ -108,7 +108,7 @@
       align-items: center;
       justify-content: center;
       transition: var(--animation-duration);
-      font-weight: 900;
+      font-weight: 600;
 
       .ButtonOption-main {
          font-size: inherit;

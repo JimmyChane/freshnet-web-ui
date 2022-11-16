@@ -69,7 +69,7 @@
 			.ItemProductSuggest2-title {
 				width: fit-content;
 				line-height: 1rem;
-				font-weight: 900;
+				font-weight: 600;
 				font-size: 1rem;
 			}
 		}

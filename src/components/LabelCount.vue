@@ -26,7 +26,7 @@
 		justify-content: center;
 
 		font-size: 0.7rem;
-		font-weight: 900;
+		font-weight: 600;
 		color: white;
 		padding: 0.15rem 0.3rem;
 		border-radius: 0.15rem;

@@ -63,7 +63,7 @@
 				min-height: 1.8rem;
 				.PanelService-section-title {
 					text-align: start;
-					font-weight: 900;
+					font-weight: 600;
 					flex-grow: 1;
 					font-size: 0.9rem;
 					color: hsl(0, 0%, 0%);

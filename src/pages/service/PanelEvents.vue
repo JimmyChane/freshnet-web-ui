@@ -82,7 +82,7 @@
 
 			.PanelEvents-title {
 				text-align: start;
-				font-weight: 900;
+				font-weight: 600;
 				flex-grow: 1;
 				font-size: 1.1rem;
 				color: hsla(0, 0%, 0%, 0.4);
@@ -90,7 +90,7 @@
 
 			.PanelEvents-totalCost {
 				text-align: start;
-				font-weight: 900;
+				font-weight: 600;
 				flex-grow: 1;
 				font-size: 1.1rem;
 				color: hsla(0, 0%, 0%, 0.8);
@@ -132,7 +132,7 @@
 			border: none;
 			cursor: pointer;
 			& > * {
-				font-weight: 900;
+				font-weight: 600;
 				color: hsl(0, 0%, 20%);
 				text-align: center;
 			}

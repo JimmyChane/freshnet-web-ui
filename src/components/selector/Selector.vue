@@ -189,7 +189,6 @@
 			padding: 0.6em 1em;
 			border-radius: 6px;
 			color: var(--item-font-color);
-			font-weight: 900;
 			font-weight: 400;
 			font-size: 1rem;
 			cursor: pointer;

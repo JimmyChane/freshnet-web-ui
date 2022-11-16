@@ -52,7 +52,7 @@
             flex-wrap: wrap;
             column-gap: 80px;
             row-gap: 20px;
-            font-weight: 900;
+            font-weight: 600;
             font-size: 1.4rem;
          }
       }

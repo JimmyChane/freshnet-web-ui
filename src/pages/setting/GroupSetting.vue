@@ -62,7 +62,7 @@
          background-color: hsla(0, 0%, 100%, 0.6);
 
          .GroupSetting-title {
-            font-weight: 900;
+            font-weight: 600;
             text-align: start;
             padding: 0.4rem 0;
          }

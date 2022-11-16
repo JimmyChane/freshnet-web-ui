@@ -45,7 +45,7 @@
 				width: fit-content;
 				background: rgba(255, 255, 255, 0.5);
 				padding: 0.2em 1em;
-				font-weight: 900;
+				font-weight: 600;
 				font-size: 0.9em;
 				border-radius: 0.2em;
 			}

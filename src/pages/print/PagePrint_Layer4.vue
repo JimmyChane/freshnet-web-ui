@@ -34,7 +34,7 @@
 			align-items: center;
 			justify-content: flex-start;
 
-			font-weight: 900;
+			font-weight: 600;
 
 			.Layer4-icon {
 				--size: 2.5rem;
@@ -50,7 +50,7 @@
 			flex-grow: 1;
 			font-size: 1rem;
 			text-align: end;
-			font-weight: 900;
+			font-weight: 600;
 		}
 	}
 </style>

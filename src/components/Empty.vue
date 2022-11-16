@@ -32,7 +32,7 @@
          padding: 1.5em;
       }
       .Empty-text {
-         font-weight: 900;
+         font-weight: 600;
       }
    }
 </style>

@@ -32,7 +32,7 @@
          flex-basis: 5rem;
          --action-color: hsl(0, 0%, 70%);
          padding: 10px;
-         font-weight: 900;
+         font-weight: 600;
          font-size: 0.8rem;
          background-color: transparent;
          color: var(--action-color);

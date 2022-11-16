@@ -161,7 +161,7 @@
             color: var(--accent-color);
             min-width: max-content;
             font-size: 0.8rem;
-            font-weight: 900;
+            font-weight: 600;
             background: none;
             border: none;
             border-radius: 0.2rem;

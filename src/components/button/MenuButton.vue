@@ -31,7 +31,7 @@
 	.MenuButton {
 		border-radius: 50%;
 		transition: all var(--animation-duration) ease-out;
-		font-weight: 900;
+		font-weight: 600;
 		font-size: 1rem;
 
 		display: flex;

@@ -244,7 +244,7 @@
 		transition: var(--animation-duration);
 		padding: 0.5rem;
 		font-size: 1rem;
-		font-weight: 900;
+		font-weight: 600;
 		text-decoration: none;
 		color: black;
 		min-width: max-content;

@@ -188,7 +188,7 @@
 		.ItemProduct-previewEmpty {
 			color: rgba(0, 0, 0, 0.3);
 			font-size: 0.8rem;
-			font-weight: 900;
+			font-weight: 600;
 			display: flex;
 			align-items: center;
 			justify-content: center;

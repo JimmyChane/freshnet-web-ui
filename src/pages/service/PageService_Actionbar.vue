@@ -284,7 +284,7 @@
 						text-overflow: ellipsis;
 						white-space: nowrap;
 						overflow: hidden;
-						font-weight: 900;
+						font-weight: 600;
 						color: var(--primary-color);
 					}
 					.Actionbar-tab-icon {

@@ -103,7 +103,7 @@
 			border: none;
 			cursor: pointer;
 			font-size: 1rem;
-			font-weight: 900;
+			font-weight: 400;
 			line-height: 0.9rem;
 			border-radius: 0.5rem;
 			color: white;

@@ -36,7 +36,7 @@
       .WindowSection-header {
          width: 100%;
          font-size: 1.1rem;
-         font-weight: 900;
+         font-weight: 600;
       }
       .WindowSection-main {
          width: 100%;

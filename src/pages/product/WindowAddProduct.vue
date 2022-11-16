@@ -138,7 +138,7 @@
 <style lang="scss" scoped>
 	.WindowAddProduct-reuse-title {
 		font-size: 1.1rem;
-		font-weight: 900;
+		font-weight: 600;
 	}
 	.WindowAddProduct-reuse-required {
 		color: hsl(0, 50%, 50%);

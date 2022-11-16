@@ -423,7 +423,7 @@
 				top: 0;
 				bottom: 0;
 				.PageCustomer-PanelRightEmpty-text {
-					font-weight: 900;
+					font-weight: 600;
 					font-size: 1.2rem;
 					color: hsl(0, 0%, 84%);
 					background: hsla(0, 0%, 0%, 0.04);

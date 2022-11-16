@@ -161,7 +161,7 @@
 				border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
 				.LayoutFindCustomer-title {
 					font-size: 1.4rem;
-					font-weight: 900;
+					font-weight: 600;
 				}
 				.LayoutFindCustomer-close {
 					width: 2rem;

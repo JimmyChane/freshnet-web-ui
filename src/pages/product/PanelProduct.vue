@@ -204,7 +204,7 @@
 				gap: 0.1rem;
 				line-height: 1.1rem;
 
-				font-weight: 900;
+				font-weight: 600;
 				font-size: 1rem;
 
 				overflow: hidden;

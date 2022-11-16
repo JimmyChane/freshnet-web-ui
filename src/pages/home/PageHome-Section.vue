@@ -39,7 +39,7 @@
 		transition: var(--animation-duration);
 
 		font-size: 1.6rem;
-		font-weight: 900;
+		font-weight: 600;
 	}
 	.PageHomeSection-title-line {
 		background: #d8c626;

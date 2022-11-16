@@ -12,7 +12,7 @@
 
 <style lang="scss" scoped>
    .WindowTitle-root {
-      font-weight: 900;
+      font-weight: 600;
       font-size: 1.8rem;
       color: hsl(0, 0%, 30%);
    }

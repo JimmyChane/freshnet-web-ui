@@ -106,7 +106,7 @@
 				}
 			}
 			.ItemSearchService-title {
-				font-weight: 900;
+				font-weight: 600;
 			}
 			.ItemSearchService-subTitle {
 				font-size: 0.8em;
