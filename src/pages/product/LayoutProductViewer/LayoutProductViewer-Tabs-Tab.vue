@@ -26,16 +26,17 @@
 		min-width: max-content;
 		border: none;
 		background: none;
+		font-weight: 600;
+		font-size: 0.9rem;
+		padding: 0.5rem 0.7rem;
+		transition: var(--animation-duration);
 	}
 	.Tabs-Tab-isDeselected {
-		font-weight: 400;
-		font-size: 0.7rem;
-		padding: 0.5rem 0.7rem;
+		transform: scale(0.8);
+		color: hsla(0, 0%, 0%, 0.5);
 		cursor: pointer;
 	}
 	.Tabs-Tab-isSelected {
-		font-weight: 600;
-		font-size: 0.9rem;
-		padding: 0.5rem 2rem;
+		color: black;
 	}
 </style>

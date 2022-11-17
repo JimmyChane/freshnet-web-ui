@@ -1,29 +1,14 @@
 <script>
-	import Tab from "./PanelProduct-Tabs-Tab.vue";
+	import Tab from "./LayoutProductViewer-Tabs-Tab.vue";
 
 	export default {
 		components: { Tab },
-		data() {
-			return {
-				items: [
-					{ key: "image", title: "Image", isSelected: () => false },
-					{ key: "price", title: "Price", isSelected: () => false },
-					{ key: "capability", title: "Capability", isSelected: () => false },
-					{
-						key: "specification",
-						title: "Specification",
-						isSelected: () => true,
-					},
-					{ key: "description", title: "Description", isSelected: () => false },
-					{ key: "include", title: "What's Included", isSelected: () => false },
-				],
-			};
-		},
+		props: { items: { type: Array, default: () => [] } },
 	};
 </script>
 
 <template>
-	<div class="PanelProductTabs">
+	<div class="LayoutProductViewerTabs">
 		<Tab
 			v-for="item of items"
 			:key="item.title"
@@ -34,7 +19,7 @@
 </template>
 
 <style lang="scss" scoped>
-	.PanelProductTabs {
+	.LayoutProductViewerTabs {
 		width: 100%;
 		display: flex;
 		flex-direction: row;
@@ -42,7 +27,7 @@
 		overflow-x: auto;
 		padding: 0 0.5rem;
 	}
-	.PanelProductTabs {
+	.LayoutProductViewerTabs {
 		--scrollbar-size: 0;
 		--scrollbar-thumb-radius: 0;
 		--scrollbar-thumb-radius: 0;

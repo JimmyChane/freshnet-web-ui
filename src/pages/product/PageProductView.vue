@@ -41,15 +41,12 @@
 </script>
 
 <template>
-	<div :class="['PageProductView']" id="PageProductView">
-		<div class="PageProductView-body" id="PageProductView-print">
-			<LayoutProductViewer
-				class="PageProductView-viewer"
-				:product="product"
-				:isWide="isOver1200px"
-				:isEditable="false"
-			/>
-		</div>
+	<div class="PageProductView">
+		<LayoutProductViewer
+			:product="product"
+			:isWide="isOver1200px"
+			:isEditable="false"
+		/>
 
 		<LoadingDots class="PageProductView-loading" v-if="isLoading" />
 	</div>
@@ -58,27 +55,12 @@
 <style lang="scss" scoped>
 	.PageProductView {
 		width: 100%;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: flex-start;
-		background: hsla(0, 0%, 50%, 0);
 
-		.PageProductView-body {
-			z-index: 1;
-			background: white;
-			width: 100%;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: flex-start;
-			flex-grow: 1;
-
-			.PageProductView-viewer {
-				width: 100%;
-				flex-grow: 1;
-			}
-		}
 		.PageProductView-loading {
 			z-index: 2;
 		}

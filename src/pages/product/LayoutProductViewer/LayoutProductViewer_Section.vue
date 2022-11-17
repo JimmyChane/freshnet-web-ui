@@ -46,7 +46,7 @@
 			align-items: center;
 			justify-content: space-between;
 			gap: 0.5rem;
-			padding: 0 1rem;
+			padding: 0 1.2rem;
 
 			.LayoutProductViewerSection-title {
 				font-weight: 600;

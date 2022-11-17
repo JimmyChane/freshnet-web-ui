@@ -1,11 +1,9 @@
 <script>
 	import AppHost from "@/host/AppHost.js";
-	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
 	import LayoutProductViewer from "@/pages/product/LayoutProductViewer/LayoutProductViewer.vue";
-	import Tabs from "./PanelProduct-Tabs.vue";
 
 	export default {
-		components: { Actionbar, LayoutProductViewer, Tabs },
+		components: { LayoutProductViewer },
 		emits: [
 			"click-dismiss",
 			"click-productRemove",
@@ -25,21 +23,7 @@
 			isEditable: { type: Boolean, default: false },
 			isBackable: { type: Boolean, default: true },
 		},
-		data() {
-			return { primaryColor: null, fullTitle: "" };
-		},
 		computed: {
-			settings: (context) => {
-				let settings = context.settingStore.getters.items;
-				return Array.isArray(settings) ? settings : [];
-			},
-
-			actionbarColor() {
-				if (this.primaryColor) {
-					return this.primaryColor.mix("ffffff", 0.6);
-				}
-			},
-
 			actionbarLeftMenus() {
 				return {
 					key: "close",
@@ -82,27 +66,8 @@
 					// },
 				];
 			},
-			refViewer() {
-				return this.$refs.viewer;
-			},
-		},
-		watch: {
-			product() {
-				const { PanelProduct } = this.$refs;
-				if (PanelProduct) PanelProduct.scrollTop = 0;
-				this.invalidate();
-			},
-		},
-		mounted() {
-			this.invalidate();
 		},
 		methods: {
-			async invalidate() {
-				this.fullTitle = "";
-				if (!this.product) return;
-				this.fullTitle = await this.product.fetchFullTitle();
-			},
-
 			clickCopyLink() {
 				if (!this.product) {
 					this.$root.feedback("Cannot Copy");
@@ -135,33 +100,14 @@
 
 <template>
 	<div class="PanelProduct" ref="PanelProduct">
-		<div
-			class="PanelProduct-toolbar"
-			:style="{ 'background-color': actionbarColor }"
-		>
-			<Actionbar
-				class="PanelProduct-actionbar"
-				:leftMenus="actionbarLeftMenus"
-				:rightMenus="actionbarRightMenus"
-				:style="{ 'background-color': actionbarColor }"
-			>
-				<span class="PanelProduct-actionbar-title" v-if="fullTitle">{{
-					fullTitle
-				}}</span>
-			</Actionbar>
-
-			<Tabs @click-item="(tab) => refViewer.scrollTo(tab.key)" />
-		</div>
-
 		<LayoutProductViewer
-			class="PanelProduct-main"
-			ref="viewer"
 			:isWide="isWide"
 			:isEditable="isEditable"
+			:leftMenus="actionbarLeftMenus"
+			:rightMenus="actionbarRightMenus"
 			:product="product"
 			:productPrevious="productPrevious"
 			:productNext="productNext"
-			@change-primaryColor="(x) => (primaryColor = x)"
 			@click-product-imageRemove="(x) => $emit('click-product-imageRemove', x)"
 			@click-product-titleBrandUpdate="
 				(x) => $emit('click-product-titleBrandUpdate', x)
@@ -185,53 +131,11 @@
 		width: 100%;
 		height: 100%;
 
-		background: white;
 		font-size: 1.2rem;
-
-		overflow-y: auto;
-		position: relative;
 
 		display: flex;
 		justify-content: flex-start;
 		flex-direction: column;
 		align-items: center;
-
-		.PanelProduct-toolbar {
-			z-index: 3;
-			width: 100%;
-			position: sticky;
-			border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
-			top: 0;
-			.PanelProduct-actionbar {
-				border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
-			}
-			.PanelProduct-actionbar-title {
-				display: flex;
-				flex-direction: column;
-				align-items: flex-start;
-				justify-content: center;
-				gap: 0.1rem;
-				line-height: 1.1rem;
-
-				font-weight: 600;
-				font-size: 1rem;
-
-				overflow: hidden;
-				color: black;
-				text-align: start;
-				text-overflow: clip;
-
-				white-space: nowrap;
-
-				width: 100%;
-			}
-			.PanelProduct-tabs {
-			}
-		}
-
-		.PanelProduct-main {
-			z-index: 2;
-			flex-grow: 1;
-		}
 	}
 </style>

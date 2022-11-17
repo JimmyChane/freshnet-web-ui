@@ -3,8 +3,8 @@
 	import ProductPrice from "@/items/ProductPrice.js";
 	import SettingModule from "@/items/data/Setting.js";
 
+	import Tabs from "./LayoutProductViewer-Tabs.vue";
 	import Contacts from "./LayoutProductViewer_Contacts.vue";
-
 	import LayoutProductViewerSection from "./LayoutProductViewer_Section.vue";
 	import LayoutProductViewerImagePreview from "./LayoutProductViewer_ImagePreview.vue";
 	import LayoutProductViewerImages from "./LayoutProductViewer_Images.vue";
@@ -14,11 +14,12 @@
 	import ItemProductSpecification from "./LayoutProductViewer-ItemSpecification.vue";
 	import ItemProductSuggest from "./LayoutProductViewer_ItemProductSuggest.vue";
 
+	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
+
 	import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
 	export default {
 		components: {
-			Contacts,
 			LayoutProductViewerSection,
 			LayoutProductViewerImagePreview,
 			LayoutProductViewerImages,
@@ -27,6 +28,9 @@
 			ItemProductSpecification,
 			ItemProductStockCheckbox,
 			ItemProductSuggest,
+			Actionbar,
+			Tabs,
+			Contacts,
 		},
 		emits: [
 			"click-product-imageRemove",
@@ -37,12 +41,15 @@
 			"click-product-specificationsUpdate",
 		],
 		props: {
+			isWide: { type: Boolean, default: false },
+			isEditable: { type: Boolean, default: false },
+
+			leftMenus: { default: () => [] },
+			rightMenus: { default: () => [] },
+
 			product: { type: Object, default: () => null },
 			productPrevious: { type: Object, default: () => null },
 			productNext: { type: Object, default: () => null },
-
-			isWide: { type: Boolean, default: false },
-			isEditable: { type: Boolean, default: false },
 		},
 		data() {
 			return {
@@ -54,9 +61,43 @@
 				category: null,
 				fullTitle: "",
 				brand: null,
+
+				tabKeyNow: "",
 			};
 		},
 		computed: {
+			tabs() {
+				if (!this.product) return [];
+
+				const tabs = [
+					this.imagePreview ? { key: "image", title: "Image" } : null,
+					this.isEditable ? { key: "brand", title: "Brand" } : null,
+					this.isEditable ? { key: "title", title: "Title" } : null,
+					// { key: "capability", title: "Capability" },
+					this.isEditable || this.productSpecifications.length
+						? { key: "specification", title: "Specification" }
+						: null,
+					this.isEditable || this.whatIncludeds.length
+						? { key: "include", title: "What's Included" }
+						: null,
+					this.isEditable || this.description
+						? { key: "description", title: "Description" }
+						: null,
+					this.isEditable || this.settingShowPrice
+						? { key: "price", title: "Price" }
+						: null,
+					this.isEditable ? { key: "stock", title: "Stock" } : null,
+					this.isEditable ? { key: "category", title: "Category" } : null,
+				];
+
+				return tabs.filter((tab) => {
+					if (tab) {
+						tab.isSelected = () => tab.key === this.tabKeyNow;
+					}
+					return tab;
+				});
+			},
+
 			hasImagePrevious: (context) =>
 				context.images.length > 0 && context.imagePreviewIndex > 0,
 			hasImageNext: (context) =>
@@ -204,6 +245,7 @@
 					? chroma(this.primaryColorHex)
 					: chroma("294656");
 			},
+			actionbarColor: (c) => c.primaryColor.mix("ffffff", 0.6),
 			backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.3),
 			headerBackgroundColor: (c) => c.primaryColor.mix("000000", 0.4),
 			titleColor() {
@@ -218,12 +260,12 @@
 			imagePreview() {
 				this.invalidateImagePreview();
 			},
-			primaryColor() {
-				this.$emit("change-primaryColor", this.primaryColor);
-			},
 		},
 		methods: {
 			async invalidateProduct() {
+				this._self.$el.scrollTop = 0;
+				this.tabKeyNow = this.tabs.length ? this.tabs[0].key : "";
+
 				if (this.product) this.addArrowListener();
 				else this.removeArrowListener();
 
@@ -300,10 +342,42 @@
 
 			scrollTo(key = "") {
 				const ref = this.$refs[`key${key}`];
-
 				if (!ref) return;
-
 				ref.$el.scrollIntoView({ behavior: "smooth", block: "start" });
+			},
+			scrolling(event) {
+				const getOffset = (target) => {
+					return {
+						width: target.offsetWidth,
+						height: target.offsetHeight,
+						left: target.offsetLeft,
+						top: target.offsetTop,
+					};
+				};
+
+				const parent = event.target;
+				const parentOffset = getOffset(parent);
+				const pointHeight = parentOffset.height / 4;
+
+				for (const tab of this.tabs) {
+					const ref = this.$refs[`key${tab.key}`];
+					if (!ref) continue;
+					const target = ref.$el;
+					if (!target) continue;
+
+					const bound = target.getBoundingClientRect();
+
+					const start = bound.y;
+					if (0 < start && start < pointHeight) {
+						this.tabKeyNow = tab.key;
+						continue;
+					}
+					const end = bound.y + bound.height;
+					if (0 < end && end < pointHeight) {
+						this.tabKeyNow = tab.key;
+						continue;
+					}
+				}
 			},
 		},
 		mounted() {
@@ -326,7 +400,31 @@
 			'--primary-color': primaryColor,
 			'background-color': backgroundColor,
 		}"
+		@scroll="(event) => scrolling(event)"
 	>
+		<div
+			class="LayoutProductViewer-toolbar"
+			:style="{ 'background-color': actionbarColor }"
+			v-if="!isWide"
+		>
+			<Actionbar
+				class="LayoutProductViewer-actionbar"
+				:leftMenus="leftMenus"
+				:rightMenus="rightMenus"
+				:style="{ 'background-color': actionbarColor }"
+			>
+				<span class="LayoutProductViewer-actionbar-title" v-if="fullTitle">{{
+					fullTitle
+				}}</span>
+			</Actionbar>
+
+			<Tabs
+				v-if="tabs.length"
+				@click-item="(tab) => scrollTo(tab.key)"
+				:items="tabs"
+			/>
+		</div>
+
 		<div class="LayoutProductViewer-header">
 			<div
 				class="LayoutProductViewer-preview"
@@ -385,6 +483,7 @@
 		<div class="LayoutProductViewer-info">
 			<!-- brand -->
 			<LayoutProductViewerSection
+				ref="keybrand"
 				v-if="isEditable"
 				title="Brand"
 				:menu="{
@@ -421,6 +520,7 @@
 
 			<!-- title -->
 			<LayoutProductViewerSection
+				ref="keytitle"
 				v-if="isEditable"
 				title="Title"
 				:menu="{
@@ -463,7 +563,7 @@
 						  }
 						: null
 				"
-				:title="isEditable ? 'Specification' : ''"
+				title="Specification"
 			>
 				<div class="LayoutProductViewer-specification">
 					<div
@@ -489,7 +589,7 @@
 				ref="keyinclude"
 				v-if="isEditable || whatIncludeds.length"
 				:primaryColor="primaryColor.toString()"
-				:title="isEditable ? `What's Included` : ''"
+				title="What's Included"
 			>
 				<div class="LayoutProductViewer-whatIncluded">
 					<div
@@ -517,7 +617,7 @@
 				class="LayoutProductViewer-descriptionParent"
 				v-if="isEditable || description"
 				:primaryColor="primaryColor.toString()"
-				:title="isEditable ? 'Description' : ''"
+				title="Description"
 				:menu="
 					isEditable
 						? {
@@ -563,6 +663,7 @@
 
 			<!-- stock -->
 			<LayoutProductViewerSection
+				ref="keystock"
 				:primaryColor="primaryColor.toString()"
 				title="Stock"
 				v-if="isEditable"
@@ -599,6 +700,7 @@
 
 			<!-- category -->
 			<LayoutProductViewerSection
+				ref="keycategory"
 				v-if="isEditable"
 				:primaryColor="primaryColor.toString()"
 				title="Category"
@@ -687,11 +789,51 @@
 <style lang="scss" scoped>
 	.LayoutProductViewer {
 		width: 100%;
+		height: 100%;
 		position: relative;
 		background: hsl(0, 0%, 90%);
 		color: #2a4858;
 		font-size: 1.2rem;
 		display: grid;
+		flex-direction: column;
+		align-items: center;
+
+		overflow-y: auto;
+		scroll-padding-top: 8rem;
+
+		.LayoutProductViewer-toolbar {
+			grid-area: toolbar;
+			z-index: 3;
+			width: 100%;
+			position: sticky;
+			border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
+			top: 0;
+			.LayoutProductViewer-actionbar {
+				border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
+			}
+			.LayoutProductViewer-actionbar-title {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				justify-content: center;
+				gap: 0.1rem;
+				line-height: 1.1rem;
+
+				font-weight: 600;
+				font-size: 1rem;
+
+				overflow: hidden;
+				color: black;
+				text-align: start;
+				text-overflow: clip;
+
+				white-space: nowrap;
+
+				width: 100%;
+			}
+			.LayoutProductViewer-tabs {
+			}
+		}
 
 		.LayoutProductViewer-header {
 			grid-area: header;
@@ -737,15 +879,13 @@
 			grid-area: info;
 
 			z-index: 2;
-			overflow: hidden;
 			gap: 1.5rem;
 			color: black;
-
-			height: inherit;
 
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			justify-content: flex-start;
 
 			& > * {
 				max-width: 50rem;
@@ -882,7 +1022,7 @@
 					width: 100%;
 					border-radius: 1rem;
 					overflow: hidden;
-					gap: 0.2rem;
+					gap: 1px;
 
 					display: flex;
 					flex-direction: column;
@@ -909,7 +1049,7 @@
 				.LayoutProductViewer-whatIncludeds {
 					width: 100%;
 					max-width: 30rem;
-					gap: 0.2rem;
+					gap: 1px;
 					line-height: 0.8;
 					border-radius: 1rem;
 					overflow: hidden;
@@ -997,13 +1137,14 @@
 	}
 
 	.LayoutProductViewer-isThin {
-		grid-template-areas: "header" "info";
+		grid-template-areas: "toolbar" "header" "info";
 		grid-template-rows: max-content minmax(1fr, max-content);
 		grid-template-columns: 100%;
 
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		padding-bottom: 10rem;
 
 		.LayoutProductViewer-header {
 			width: 100%;
