@@ -12,6 +12,7 @@ class ProductSpecContent {
 
 	content = "";
 	type = "";
+	typeKey = "";
 
 	fromData(data) {
 		data = ModuleSpecification.trim({
@@ -21,6 +22,7 @@ class ProductSpecContent {
 
 		this.content = data.content;
 		this.type = data.type;
+		this.typeKey = data.type;
 		this.fetchType();
 
 		return this;
@@ -40,11 +42,11 @@ class ProductSpecContent {
 	}
 
 	async fetchType() {
-		if (!U.isString(this.type)) return type;
+		if (!U.isString(this.type)) return this.type;
 
 		const specifications = await this.specificationStore.dispatch("getItems");
 		const specification = specifications.find((spec) => {
-			return spec.key == this.type;
+			return spec.key == this.typeKey;
 		});
 		this.type = specification;
 		return this.type;

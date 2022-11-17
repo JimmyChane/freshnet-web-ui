@@ -11,7 +11,7 @@
 	import LayoutProductViewerPriceViewer from "./LayoutProductViewer_PriceViewer.vue";
 	import LayoutProductViewerPriceEditor from "./LayoutProductViewer_PriceEditor.vue";
 	import ItemProductStockCheckbox from "./LayoutProductViewer_StockCheckbox.vue";
-	import ItemProductSpecification from "./LayoutProductViewer_ItemSpecification.vue";
+	import ItemProductSpecification from "./LayoutProductViewer-ItemSpecification.vue";
 	import ItemProductSuggest from "./LayoutProductViewer_ItemProductSuggest.vue";
 
 	import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
@@ -204,7 +204,7 @@
 					? chroma(this.primaryColorHex)
 					: chroma("294656");
 			},
-			backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.4),
+			backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.3),
 			headerBackgroundColor: (c) => c.primaryColor.mix("000000", 0.4),
 			titleColor() {
 				const isDark = chroma.deltaE(this.primaryColor, "000000") < 60;
@@ -453,7 +453,7 @@
 						  }
 						: null
 				"
-				title="Specification"
+				:title="isEditable ? 'Specification' : ''"
 			>
 				<div class="LayoutProductViewer-specification">
 					<div
@@ -464,6 +464,7 @@
 							v-for="spec in productSpecifications"
 							:key="spec.name"
 							:productSpecification="spec"
+							:isVertical="false"
 						/>
 					</div>
 
@@ -477,7 +478,7 @@
 			<LayoutProductViewerSection
 				v-if="isEditable || whatIncludeds.length"
 				:primaryColor="primaryColor.toString()"
-				title="What's Included"
+				:title="isEditable ? `What's Included` : ''"
 			>
 				<div class="LayoutProductViewer-whatIncluded">
 					<div
@@ -504,7 +505,7 @@
 				class="LayoutProductViewer-descriptionParent"
 				v-if="isEditable || description"
 				:primaryColor="primaryColor.toString()"
-				title="Description"
+				:title="isEditable ? 'Description' : ''"
 				:menu="
 					isEditable
 						? {
@@ -669,7 +670,7 @@
 <style lang="scss" scoped>
 	.LayoutProductViewer {
 		width: 100%;
-		position: relative;
+		// position: relative;
 		background: hsl(0, 0%, 90%);
 		color: #2a4858;
 		font-size: 1.2rem;
@@ -754,14 +755,13 @@
 					.LayoutProductViewer-brand-item-icon {
 						padding: 0.5rem;
 						height: 2rem;
+						background: hsla(0, 0%, 100%, 0.5);
+						border: 1px solid white;
+						border-radius: 0.2rem;
 					}
 					.LayoutProductViewer-brand-item-title {
 						font-size: 1.1rem;
 						font-weight: 600;
-						background: hsla(0, 0%, 100%, 0.5);
-						border: 1px solid white;
-						border-radius: 0.2rem;
-						padding: 0.5rem 0.8rem;
 					}
 				}
 				.LayoutProductViewer-brand-noContent {
@@ -842,7 +842,7 @@
 					font-size: 1rem;
 
 					border-radius: 0.6rem;
-					background: hsla(0, 0%, 100%, 0.6);
+					// background: hsla(0, 0%, 100%, 0.6);
 					padding: 1.2rem;
 					font-size: 1rem;
 					.LayoutProductViewer-description-noContent {
@@ -865,10 +865,10 @@
 					width: 100%;
 					border-radius: 1rem;
 					overflow: hidden;
-
-					display: grid;
-					grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 					gap: 0.2rem;
+
+					display: flex;
+					flex-direction: column;
 				}
 				.LayoutProductViewer-specification-noContent {
 					width: 100%;
@@ -952,7 +952,7 @@
 			z-index: 2;
 			width: 100%;
 			height: 100%;
-			position: relative;
+			// position: relative;
 
 			background-color: hsl(0, 0%, 90%);
 
@@ -962,7 +962,7 @@
 			justify-content: center;
 			.LayoutProductViewer-emtpy-cardBackground {
 				z-index: 1;
-				position: absolute;
+				// position: absolute;
 				width: 100%;
 				height: 100%;
 
@@ -987,10 +987,6 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-
-		// display: flex;
-		// flex-direction: column;
-		// align-items: center;
 
 		.LayoutProductViewer-header {
 			width: 100%;
@@ -1017,7 +1013,7 @@
 		grid-template-columns: 45% 1fr;
 
 		.LayoutProductViewer-header {
-			position: sticky;
+			// position: sticky;
 			left: 1.5rem;
 			top: 1.5rem;
 			margin: 1.5rem;
@@ -1035,8 +1031,6 @@
 		}
 		.LayoutProductViewer-info {
 			padding-bottom: 0;
-			margin: 1.5rem;
-			width: calc(100% - 3rem);
 		}
 	}
 </style>

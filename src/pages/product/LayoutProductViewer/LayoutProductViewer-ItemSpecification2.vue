@@ -1,35 +1,38 @@
 <script>
 	export default {
 		props: { productSpecification: Object, default: () => null },
-		computed: {
-			specificationType() {
-				if (!this.productSpecification)
-					return this.productSpecification.unknownKey;
-				return this.productSpecification.type;
+		data() {
+			return { title: "", icon: "", content: "" };
+		},
+		watch: {
+			productSpecification() {
+				this.invalidate();
 			},
-			specificationIcon() {
-				if (!this.specificationType || !this.specificationType.icon) return "";
-				return this.specificationType.icon.toUrl();
-			},
-			specificationTitle() {
-				if (
-					typeof this.specificationType === "object" &&
-					this.specificationType !== null
-				)
-					return this.specificationType.title;
-				if (typeof this.specificationType === "string")
-					return this.parseKeyToTitle(this.specificationType);
-				return "";
-			},
-			specificationContent: (c) => c.productSpecification.content,
+		},
+		mounted() {
+			this.invalidate();
 		},
 		methods: {
+			async invalidate() {
+				this.title = "";
+				this.icon = "";
+				this.content = "";
+
+				const type = this.productSpecification
+					? await this.productSpecification.fetchType()
+					: null;
+
+				this.title = type
+					? type.title
+					: this.parseKeyToTitle(this.productSpecification.type);
+				this.icon = type && type.icon ? type.icon.toUrl() : "";
+				this.content = this.productSpecification.content;
+			},
 			parseKeyToTitle(key = "") {
 				if (key === "none") return "";
 
 				return key.split(" ").reduce((title, text) => {
 					let result = text.charAt(0).toUpperCase() + text.slice(1);
-
 					return title === "" ? result : `${title} ${result}`;
 				}, "");
 			},
@@ -41,16 +44,12 @@
 	<div class="ItemProductSpecification">
 		<img
 			class="ItemProductSpecification-icon"
-			:style="{ opacity: specificationIcon ? '1' : '0' }"
-			:src="specificationIcon"
+			:style="{ opacity: icon ? '1' : '0' }"
+			:src="icon"
 		/>
 		<div class="ItemProductSpecification-body">
-			<span class="ItemProductSpecification-title">{{
-				specificationTitle
-			}}</span>
-			<span class="ItemProductSpecification-content">{{
-				specificationContent
-			}}</span>
+			<span class="ItemProductSpecification-title">{{ title }}</span>
+			<span class="ItemProductSpecification-content">{{ content }}</span>
 		</div>
 	</div>
 </template>

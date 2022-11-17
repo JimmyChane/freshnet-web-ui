@@ -2,9 +2,10 @@
 	import AppHost from "@/host/AppHost.js";
 	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
 	import LayoutProductViewer from "@/pages/product/LayoutProductViewer/LayoutProductViewer.vue";
+	import Tabs from "./PanelProduct-Tabs.vue";
 
 	export default {
-		components: { Actionbar, LayoutProductViewer },
+		components: { Actionbar, LayoutProductViewer, Tabs },
 		emits: [
 			"click-dismiss",
 			"click-productRemove",
@@ -40,18 +41,10 @@
 			},
 
 			actionbarLeftMenus() {
-				if (!this.isBackable) {
-					return {
-						key: "close",
-						title: "Close",
-						icon: this.host.res("icon/close-000000.svg"),
-						click: () => this.$emit("click-dismiss"),
-					};
-				}
 				return {
-					key: "back",
-					title: "Back",
-					icon: this.host.res("icon/arrow-left-000000.svg"),
+					key: "close",
+					title: "Close",
+					icon: this.host.res("icon/close-000000.svg"),
 					click: () => this.$emit("click-dismiss"),
 				};
 			},
@@ -139,16 +132,23 @@
 
 <template>
 	<div class="PanelProduct" ref="PanelProduct">
-		<Actionbar
-			class="PanelProduct-actionbar"
-			:leftMenus="actionbarLeftMenus"
-			:rightMenus="actionbarRightMenus"
+		<div
+			class="PanelProduct-toolbar"
 			:style="{ 'background-color': actionbarColor }"
 		>
-			<span class="PanelProduct-actionbar-title" v-if="fullTitle">{{
-				fullTitle
-			}}</span>
-		</Actionbar>
+			<Actionbar
+				class="PanelProduct-actionbar"
+				:leftMenus="actionbarLeftMenus"
+				:rightMenus="actionbarRightMenus"
+				:style="{ 'background-color': actionbarColor }"
+			>
+				<span class="PanelProduct-actionbar-title" v-if="fullTitle">{{
+					fullTitle
+				}}</span>
+			</Actionbar>
+
+			<Tabs />
+		</div>
 
 		<LayoutProductViewer
 			class="PanelProduct-main"
@@ -192,10 +192,15 @@
 		flex-direction: column;
 		align-items: center;
 
-		.PanelProduct-actionbar {
+		.PanelProduct-toolbar {
 			z-index: 3;
 			width: 100%;
+			position: sticky;
 			border-bottom: 1px solid hsl(0, 0%, 80%);
+			top: 0;
+			.PanelProduct-actionbar {
+				border-bottom: 1px solid hsl(0, 0%, 80%);
+			}
 			.PanelProduct-actionbar-title {
 				display: flex;
 				flex-direction: column;
@@ -215,6 +220,8 @@
 				white-space: nowrap;
 
 				width: 100%;
+			}
+			.PanelProduct-tabs {
 			}
 		}
 
