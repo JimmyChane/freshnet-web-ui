@@ -6,13 +6,16 @@
 		data() {
 			return {
 				items: [
-					{ title: "Image", isSelected: () => false },
-					{ title: "Brand", isSelected: () => false },
-					{ title: "Price", isSelected: () => false },
-					{ title: "Capability", isSelected: () => false },
-					{ title: "Specification", isSelected: () => true },
-					{ title: "Description", isSelected: () => false },
-					{ title: "What's Included", isSelected: () => false },
+					{ key: "image", title: "Image", isSelected: () => false },
+					{ key: "price", title: "Price", isSelected: () => false },
+					{ key: "capability", title: "Capability", isSelected: () => false },
+					{
+						key: "specification",
+						title: "Specification",
+						isSelected: () => true,
+					},
+					{ key: "description", title: "Description", isSelected: () => false },
+					{ key: "include", title: "What's Included", isSelected: () => false },
 				],
 			};
 		},
@@ -21,13 +24,18 @@
 
 <template>
 	<div class="PanelProductTabs">
-		<Tab v-for="item of items" :key="item.title" :item="item" />
+		<Tab
+			v-for="item of items"
+			:key="item.title"
+			:item="item"
+			@click="() => $emit('click-item', item)"
+		/>
 	</div>
 </template>
 
 <style lang="scss" scoped>
 	.PanelProductTabs {
-      width: 100%;
+		width: 100%;
 		display: flex;
 		flex-direction: row;
 		align-items: center;

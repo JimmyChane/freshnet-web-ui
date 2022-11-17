@@ -82,6 +82,9 @@
 					// },
 				];
 			},
+			refViewer() {
+				return this.$refs.viewer;
+			},
 		},
 		watch: {
 			product() {
@@ -147,16 +150,17 @@
 				}}</span>
 			</Actionbar>
 
-			<Tabs />
+			<Tabs @click-item="(tab) => refViewer.scrollTo(tab.key)" />
 		</div>
 
 		<LayoutProductViewer
 			class="PanelProduct-main"
+			ref="viewer"
+			:isWide="isWide"
+			:isEditable="isEditable"
 			:product="product"
 			:productPrevious="productPrevious"
 			:productNext="productNext"
-			:isWide="isWide"
-			:isEditable="isEditable"
 			@change-primaryColor="(x) => (primaryColor = x)"
 			@click-product-imageRemove="(x) => $emit('click-product-imageRemove', x)"
 			@click-product-titleBrandUpdate="
@@ -196,10 +200,10 @@
 			z-index: 3;
 			width: 100%;
 			position: sticky;
-			border-bottom: 1px solid hsl(0, 0%, 80%);
+			border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
 			top: 0;
 			.PanelProduct-actionbar {
-				border-bottom: 1px solid hsl(0, 0%, 80%);
+				border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
 			}
 			.PanelProduct-actionbar-title {
 				display: flex;

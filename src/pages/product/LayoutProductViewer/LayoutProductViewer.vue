@@ -297,6 +297,14 @@
 					this.onKeyUp = null;
 				}
 			},
+
+			scrollTo(key = "") {
+				const ref = this.$refs[`key${key}`];
+
+				if (!ref) return;
+
+				ref.$el.scrollIntoView({ behavior: "smooth", block: "start" });
+			},
 		},
 		mounted() {
 			this.invalidateProduct();
@@ -327,6 +335,7 @@
 			>
 				<LayoutProductViewerImagePreview
 					class="LayoutProductViewer-image"
+					ref="keyimage"
 					v-if="imagePreview"
 					:image="imagePreview"
 					:hasImagePrevious="hasImagePrevious"
@@ -437,6 +446,7 @@
 
 			<!-- specification -->
 			<LayoutProductViewerSection
+				ref="keyspecification"
 				v-if="isEditable || productSpecifications.length"
 				:primaryColor="primaryColor.toString()"
 				:menu="
@@ -476,6 +486,7 @@
 
 			<!-- include -->
 			<LayoutProductViewerSection
+				ref="keyinclude"
 				v-if="isEditable || whatIncludeds.length"
 				:primaryColor="primaryColor.toString()"
 				:title="isEditable ? `What's Included` : ''"
@@ -502,6 +513,7 @@
 
 			<!-- description -->
 			<LayoutProductViewerSection
+				ref="keydescription"
 				class="LayoutProductViewer-descriptionParent"
 				v-if="isEditable || description"
 				:primaryColor="primaryColor.toString()"
@@ -535,8 +547,13 @@
 			</LayoutProductViewerSection>
 
 			<!-- price -->
-			<LayoutProductViewerPriceViewer :product="product" v-if="!isEditable" />
+			<LayoutProductViewerPriceViewer
+				ref="keyprice"
+				:product="product"
+				v-if="!isEditable"
+			/>
 			<LayoutProductViewerPriceEditor
+				ref="keyprice"
 				:product="product"
 				v-if="isEditable"
 				@click-product-priceUpdate="
@@ -670,7 +687,7 @@
 <style lang="scss" scoped>
 	.LayoutProductViewer {
 		width: 100%;
-		// position: relative;
+		position: relative;
 		background: hsl(0, 0%, 90%);
 		color: #2a4858;
 		font-size: 1.2rem;
@@ -952,7 +969,7 @@
 			z-index: 2;
 			width: 100%;
 			height: 100%;
-			// position: relative;
+			position: relative;
 
 			background-color: hsl(0, 0%, 90%);
 
@@ -962,7 +979,7 @@
 			justify-content: center;
 			.LayoutProductViewer-emtpy-cardBackground {
 				z-index: 1;
-				// position: absolute;
+				position: absolute;
 				width: 100%;
 				height: 100%;
 
@@ -1013,7 +1030,7 @@
 		grid-template-columns: 45% 1fr;
 
 		.LayoutProductViewer-header {
-			// position: sticky;
+			position: sticky;
 			left: 1.5rem;
 			top: 1.5rem;
 			margin: 1.5rem;
@@ -1031,6 +1048,7 @@
 		}
 		.LayoutProductViewer-info {
 			padding-bottom: 0;
+			padding-top: 1.5rem;
 		}
 	}
 </style>
