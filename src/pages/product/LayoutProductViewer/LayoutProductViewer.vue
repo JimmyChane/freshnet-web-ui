@@ -73,7 +73,9 @@
 				if (!this.product) return [];
 
 				const tabs = [
-					this.imagePreview ? { key: "image", title: "Image" } : null,
+					!this.isWide && this.imagePreview
+						? { key: "image", title: "Image" }
+						: null,
 					this.isEditable ? { key: "brand", title: "Brand" } : null,
 					this.isEditable ? { key: "title", title: "Title" } : null,
 					// { key: "capability", title: "Capability" },
@@ -103,7 +105,8 @@
 
 			hasImagePrevious: (context) =>
 				context.images.length > 0 && context.imagePreviewIndex > 0,
-			hasImageNext: (context) => context.images.length - 1 > context.imagePreviewIndex,
+			hasImageNext: (context) =>
+				context.images.length - 1 > context.imagePreviewIndex,
 			hasProductPrevious: (context) => !!context.productPrevious,
 			hasProductNext: (context) => !!context.productNext,
 
@@ -132,11 +135,15 @@
 			brandId: (context) => (context.product ? context.product.brandId : ""),
 			brandTitle: (context) => (context.brand ? context.brand.title : ""),
 			brandIcon: (context) => (context.brand ? context.brand.icon : null),
-			brandIconUrl: (context) => (context.brandIcon ? context.brandIcon.toUrl() : ""),
+			brandIconUrl: (context) =>
+				context.brandIcon ? context.brandIcon.toUrl() : "",
 
-			categoryId: (context) => (context.product ? context.product.categoryId : ""),
-			categoryTitle: (context) => (context.category ? context.category.title : ""),
-			categoryIcon: (context) => (context.category ? context.category.icon : null),
+			categoryId: (context) =>
+				context.product ? context.product.categoryId : "",
+			categoryTitle: (context) =>
+				context.category ? context.category.title : "",
+			categoryIcon: (context) =>
+				context.category ? context.category.icon : null,
 			categoryIconUrl: (context) =>
 				context.categoryIcon ? context.categoryIcon.toUrl() : "",
 
@@ -215,7 +222,9 @@
 						index1 = index1 >= 0 ? index1 : context.specificationKeys.length;
 						index2 = index2 >= 0 ? index2 : context.specificationKeys.length;
 
-						return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
+						return index1 !== index2
+							? index1 - index2
+							: key1.localeCompare(key2);
 					});
 			},
 
@@ -250,6 +259,9 @@
 			},
 		},
 		watch: {
+			isWide() {
+				setTimeout(() => this.invalidateBound(), 500);
+			},
 			product() {
 				this.invalidateBound();
 				this.invalidateProduct();
@@ -413,7 +425,6 @@
 		<div
 			class="LayoutProductViewer-toolbar"
 			:style="{ 'background-color': actionbarColor }"
-			v-if="!isWide"
 		>
 			<Actionbar
 				class="LayoutProductViewer-actionbar"
@@ -513,12 +524,16 @@
 							v-if="brandIconUrl"
 							:src="brandIconUrl"
 						/>
-						<span class="LayoutProductViewer-brand-item-title" v-if="brandTitle">{{
-							brandTitle
-						}}</span>
+						<span
+							class="LayoutProductViewer-brand-item-title"
+							v-if="brandTitle"
+							>{{ brandTitle }}</span
+						>
 					</div>
 
-					<span class="LayoutProductViewer-brand-noContent" v-else>No Brand</span>
+					<span class="LayoutProductViewer-brand-noContent" v-else
+						>No Brand</span
+					>
 				</div>
 			</LayoutProductViewerSection>
 
@@ -542,7 +557,9 @@
 				<div class="LayoutProductViewer-title">
 					<span v-if="title">{{ title }}</span>
 
-					<span class="LayoutProductViewer-title-noContent" v-else>No Title</span>
+					<span class="LayoutProductViewer-title-noContent" v-else
+						>No Title</span
+					>
 				</div>
 			</LayoutProductViewerSection>
 
@@ -594,7 +611,10 @@
 				title="What's Included"
 			>
 				<div class="LayoutProductViewer-whatIncluded">
-					<div class="LayoutProductViewer-whatIncludeds" v-if="whatIncludeds.length">
+					<div
+						class="LayoutProductViewer-whatIncludeds"
+						v-if="whatIncludeds.length"
+					>
 						<div
 							class="LayoutProductViewer-whatIncludeds-item"
 							v-for="whatIncludeds of whatIncludeds"
@@ -633,9 +653,11 @@
 				"
 			>
 				<div class="LayoutProductViewer-description">
-					<p class="LayoutProductViewer-description-content" v-if="description">{{
-						description
-					}}</p>
+					<p
+						class="LayoutProductViewer-description-content"
+						v-if="description"
+						>{{ description }}</p
+					>
 
 					<span class="LayoutProductViewer-description-noContent" v-else
 						>No Description</span
@@ -653,7 +675,9 @@
 				ref="keyprice"
 				:product="product"
 				v-if="isEditable"
-				@click-product-priceUpdate="(x) => $emit('click-product-priceUpdate', x)"
+				@click-product-priceUpdate="
+					(x) => $emit('click-product-priceUpdate', x)
+				"
 			/>
 
 			<!-- stock -->
@@ -799,20 +823,22 @@
 
 <style lang="scss" scoped>
 	.LayoutProductViewer {
+		--color-transition-duration: 3s;
+
+		position: relative;
+
 		width: 100%;
 		height: 100%;
-		position: relative;
-		background: hsl(0, 0%, 90%);
-		color: #2a4858;
-		font-size: 1.2rem;
-		display: grid;
-		flex-direction: column;
-		align-items: center;
 
+		display: grid;
+		justify-items: center;
+		align-items: start;
+
+		background: hsl(0, 0%, 90%);
+		font-size: 1.2rem;
 		overflow-y: auto;
 		scroll-padding-top: 8rem;
-
-		transition: background-color 2s;
+		transition: background-color var(--color-transition-duration);
 
 		.LayoutProductViewer-toolbar {
 			grid-area: toolbar;
@@ -821,10 +847,10 @@
 			position: sticky;
 			border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
 			top: 0;
-			transition: background-color 2s;
+			transition: background-color var(--color-transition-duration);
 			.LayoutProductViewer-actionbar {
 				border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
-				transition: background-color 2s;
+				transition: background-color var(--color-transition-duration);
 				.LayoutProductViewer-actionbar-title {
 					display: flex;
 					flex-direction: column;
@@ -846,58 +872,55 @@
 					width: 100%;
 				}
 			}
-			.LayoutProductViewer-tabs {
-			}
 		}
-
 		.LayoutProductViewer-header {
+			--padding: 1.2rem;
+
 			width: 100%;
 			z-index: 1;
 			grid-area: header;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+			padding: var(--padding);
+			gap: 1rem;
 
 			.LayoutProductViewer-preview {
-				z-index: 1;
+				width: 100%;
+				height: 100%;
 
 				display: flex;
 				flex-direction: column;
 				align-items: center;
 				justify-content: center;
 				overflow: hidden;
-				transition: background-color 2s;
-
-				.LayoutProductViewer-image {
-					z-index: 1;
-				}
-
-				.LayoutProductViewer-thumbnails {
-					z-index: 2;
-				}
+				transition: background-color var(--color-transition-duration);
+				border-radius: 1.5rem;
 
 				.LayoutProductViewer-text {
-					z-index: 3;
 					width: 100%;
-					max-width: 90rem;
 					color: white;
 					font-size: 2.2rem;
 					font-weight: 600;
 					text-align: center;
 					padding: 2rem;
-
-					transition: color 2s;
+					transition: color var(--color-transition-duration);
 
 					@media (max-width: 480px) {
 						font-size: 1.6rem;
 					}
 				}
 			}
+			.LayoutProductViewer-contact {
+				width: 100%;
+			}
 		}
-
 		.LayoutProductViewer-info {
+			--padding: 1.2rem;
+
 			grid-area: info;
 
+			width: 100%;
 			z-index: 2;
 			gap: 1.5rem;
 			color: black;
@@ -906,10 +929,8 @@
 			flex-direction: column;
 			align-items: center;
 			justify-content: flex-start;
-
-			& > * {
-				max-width: 50rem;
-			}
+			padding: var(--padding);
+			padding-bottom: 10rem;
 
 			.LayoutProductViewer-brand {
 				width: 100%;
@@ -1124,7 +1145,6 @@
 				}
 			}
 		}
-
 		.LayoutProductViewer-emtpy {
 			z-index: 2;
 			width: 100%;
@@ -1154,7 +1174,6 @@
 				opacity: 0.4;
 			}
 		}
-
 		.LayoutProductViewer-backToTop {
 			--size: 3rem;
 			--margin: 0.8rem;
@@ -1180,7 +1199,8 @@
 			--parent-scrollTop: 0;
 
 			top: calc(
-				var(--parent-height) - var(--margin) - var(--size) + var(--parent-scrollTop)
+				var(--parent-height) - var(--margin) - var(--size) +
+					var(--parent-scrollTop)
 			);
 
 			&:hover {
@@ -1202,68 +1222,40 @@
 	}
 
 	.LayoutProductViewer-isThin {
-		grid-template-areas: "toolbar" "header" "info";
 		grid-template-rows: 8rem max-content minmax(1fr, max-content);
 		grid-template-columns: 100%;
+		grid-template-areas:
+			"toolbar"
+			"header"
+			"info";
 
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		padding-bottom: 10rem;
-
-		.LayoutProductViewer-toolbar {
-		}
 		.LayoutProductViewer-header {
-			.LayoutProductViewer-preview {
-				border-radius: 1.5rem;
-				margin: 1rem;
-				width: calc(100% - 2rem);
-				max-width: 50rem;
-				height: max-content;
-			}
-			.LayoutProductViewer-contact {
-				max-width: 52rem;
-			}
+			max-width: 50rem;
 		}
 		.LayoutProductViewer-info {
-			padding-bottom: 10rem;
-			margin: 1rem;
-			width: calc(100% - 2rem);
+			max-width: 50rem;
 		}
 	}
 	.LayoutProductViewer-isWide {
-		grid-template-areas: "toolbar toolbar" "header info";
-		grid-template-rows: 1fr;
+		--actionbar-height: 5.5rem;
+		grid-template-rows: var(--actionbar-height) 1fr;
 		grid-template-columns: 45% 55%;
-		justify-content: center;
-		justify-items: center;
-		align-items: start;
-
+		grid-template-areas:
+			"toolbar toolbar"
+			"header info";
 		.LayoutProductViewer-header {
-			--padding: 1.5rem;
-
-			height: 100vh;
-			max-height: 100vh;
-
-			padding: 1.5rem;
-			gap: 1rem;
-
+			height: calc(100vh - var(--actionbar-height));
 			position: sticky;
-			left: var(--padding);
-			top: var(--padding);
-
-			.LayoutProductViewer-preview {
-				height: calc(100% - 2rem);
-				border-radius: 2rem;
-			}
-			.LayoutProductViewer-contact {
-				width: calc(100% + 3rem);
-			}
+			left: 0;
+			top: var(--actionbar-height);
+		}
+		.LayoutProductViewer-header {
+			--padding: 2rem;
+			padding-right: calc(var(--padding) / 2);
 		}
 		.LayoutProductViewer-info {
-			--padding: 1.5rem;
-			--width: calc(100% - calc(var(--padding) * 2));
-			width: var(--width);
+			--padding: 2rem;
+			padding-left: calc(var(--padding) / 2);
 		}
 	}
 </style>
