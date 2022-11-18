@@ -63,6 +63,9 @@
 				brand: null,
 
 				tabKeyNow: "",
+
+				height: 0,
+				scrollTop: 0,
 			};
 		},
 		computed: {
@@ -100,8 +103,7 @@
 
 			hasImagePrevious: (context) =>
 				context.images.length > 0 && context.imagePreviewIndex > 0,
-			hasImageNext: (context) =>
-				context.images.length - 1 > context.imagePreviewIndex,
+			hasImageNext: (context) => context.images.length - 1 > context.imagePreviewIndex,
 			hasProductPrevious: (context) => !!context.productPrevious,
 			hasProductNext: (context) => !!context.productNext,
 
@@ -130,15 +132,11 @@
 			brandId: (context) => (context.product ? context.product.brandId : ""),
 			brandTitle: (context) => (context.brand ? context.brand.title : ""),
 			brandIcon: (context) => (context.brand ? context.brand.icon : null),
-			brandIconUrl: (context) =>
-				context.brandIcon ? context.brandIcon.toUrl() : "",
+			brandIconUrl: (context) => (context.brandIcon ? context.brandIcon.toUrl() : ""),
 
-			categoryId: (context) =>
-				context.product ? context.product.categoryId : "",
-			categoryTitle: (context) =>
-				context.category ? context.category.title : "",
-			categoryIcon: (context) =>
-				context.category ? context.category.icon : null,
+			categoryId: (context) => (context.product ? context.product.categoryId : ""),
+			categoryTitle: (context) => (context.category ? context.category.title : ""),
+			categoryIcon: (context) => (context.category ? context.category.icon : null),
 			categoryIconUrl: (context) =>
 				context.categoryIcon ? context.categoryIcon.toUrl() : "",
 
@@ -217,9 +215,7 @@
 						index1 = index1 >= 0 ? index1 : context.specificationKeys.length;
 						index2 = index2 >= 0 ? index2 : context.specificationKeys.length;
 
-						return index1 !== index2
-							? index1 - index2
-							: key1.localeCompare(key2);
+						return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
 					});
 			},
 
@@ -255,6 +251,7 @@
 		},
 		watch: {
 			product() {
+				this.invalidateBound();
 				this.invalidateProduct();
 			},
 			imagePreview() {
@@ -262,6 +259,10 @@
 			},
 		},
 		methods: {
+			invalidateBound() {
+				this.scrollTop = this._self.$el.scrollTop;
+				this.height = this._self.$el.offsetHeight;
+			},
 			async invalidateProduct() {
 				this._self.$el.scrollTop = 0;
 				this.tabKeyNow = this.tabs.length ? this.tabs[0].key : "";
@@ -340,12 +341,18 @@
 				}
 			},
 
+			scrollToTop() {
+				if (!this.tabs.length) return;
+				const tab = this.tabs[0];
+				this.scrollTo(tab.key);
+			},
 			scrollTo(key = "") {
 				const ref = this.$refs[`key${key}`];
 				if (!ref) return;
 				ref.$el.scrollIntoView({ behavior: "smooth", block: "start" });
 			},
 			scrolling(event) {
+				this.invalidateBound();
 				const getOffset = (target) => {
 					return {
 						width: target.offsetWidth,
@@ -381,6 +388,7 @@
 			},
 		},
 		mounted() {
+			this.invalidateBound();
 			this.invalidateProduct();
 			this.invalidateImagePreview();
 		},
@@ -505,16 +513,12 @@
 							v-if="brandIconUrl"
 							:src="brandIconUrl"
 						/>
-						<span
-							class="LayoutProductViewer-brand-item-title"
-							v-if="brandTitle"
-							>{{ brandTitle }}</span
-						>
+						<span class="LayoutProductViewer-brand-item-title" v-if="brandTitle">{{
+							brandTitle
+						}}</span>
 					</div>
 
-					<span class="LayoutProductViewer-brand-noContent" v-else
-						>No Brand</span
-					>
+					<span class="LayoutProductViewer-brand-noContent" v-else>No Brand</span>
 				</div>
 			</LayoutProductViewerSection>
 
@@ -538,9 +542,7 @@
 				<div class="LayoutProductViewer-title">
 					<span v-if="title">{{ title }}</span>
 
-					<span class="LayoutProductViewer-title-noContent" v-else
-						>No Title</span
-					>
+					<span class="LayoutProductViewer-title-noContent" v-else>No Title</span>
 				</div>
 			</LayoutProductViewerSection>
 
@@ -592,10 +594,7 @@
 				title="What's Included"
 			>
 				<div class="LayoutProductViewer-whatIncluded">
-					<div
-						class="LayoutProductViewer-whatIncludeds"
-						v-if="whatIncludeds.length"
-					>
+					<div class="LayoutProductViewer-whatIncludeds" v-if="whatIncludeds.length">
 						<div
 							class="LayoutProductViewer-whatIncludeds-item"
 							v-for="whatIncludeds of whatIncludeds"
@@ -634,11 +633,9 @@
 				"
 			>
 				<div class="LayoutProductViewer-description">
-					<p
-						class="LayoutProductViewer-description-content"
-						v-if="description"
-						>{{ description }}</p
-					>
+					<p class="LayoutProductViewer-description-content" v-if="description">{{
+						description
+					}}</p>
 
 					<span class="LayoutProductViewer-description-noContent" v-else
 						>No Description</span
@@ -656,9 +653,7 @@
 				ref="keyprice"
 				:product="product"
 				v-if="isEditable"
-				@click-product-priceUpdate="
-					(x) => $emit('click-product-priceUpdate', x)
-				"
+				@click-product-priceUpdate="(x) => $emit('click-product-priceUpdate', x)"
 			/>
 
 			<!-- stock -->
@@ -783,6 +778,22 @@
 			<div class="LayoutProductViewer-emtpy-cardBackground"></div>
 			<span class="LayoutProductViewer-emtpy-title">Viewer</span>
 		</div>
+
+		<button
+			:class="[
+				'LayoutProductViewer-backToTop',
+				scrollTop > 10 ? '' : 'LayoutProductViewer-backToTop-isHidden',
+			]"
+			:style="{
+				'--parent-height': `${height}px`,
+				'--parent-scrollTop': `${scrollTop}px`,
+				'background-color': actionbarColor,
+				'box-shadow': `0 0 1rem ${headerBackgroundColor}`,
+			}"
+			@click="() => scrollToTop()"
+		>
+			<img :src="host.res('icon/arrow-left-000000.svg')" />
+		</button>
 	</div>
 </template>
 
@@ -801,41 +812,47 @@
 		overflow-y: auto;
 		scroll-padding-top: 8rem;
 
+		transition: background-color 2s;
+
 		.LayoutProductViewer-toolbar {
 			grid-area: toolbar;
-			z-index: 3;
+			z-index: 4;
 			width: 100%;
 			position: sticky;
 			border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
 			top: 0;
+			transition: background-color 2s;
 			.LayoutProductViewer-actionbar {
 				border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
-			}
-			.LayoutProductViewer-actionbar-title {
-				display: flex;
-				flex-direction: column;
-				align-items: flex-start;
-				justify-content: center;
-				gap: 0.1rem;
-				line-height: 1.1rem;
+				transition: background-color 2s;
+				.LayoutProductViewer-actionbar-title {
+					display: flex;
+					flex-direction: column;
+					align-items: flex-start;
+					justify-content: center;
+					gap: 0.1rem;
+					line-height: 1.1rem;
 
-				font-weight: 600;
-				font-size: 1rem;
+					font-weight: 600;
+					font-size: 1rem;
 
-				overflow: hidden;
-				color: black;
-				text-align: start;
-				text-overflow: clip;
+					overflow: hidden;
+					color: black;
+					text-align: start;
+					text-overflow: clip;
 
-				white-space: nowrap;
+					white-space: nowrap;
 
-				width: 100%;
+					width: 100%;
+				}
 			}
 			.LayoutProductViewer-tabs {
 			}
 		}
 
 		.LayoutProductViewer-header {
+			width: 100%;
+			z-index: 1;
 			grid-area: header;
 			display: flex;
 			flex-direction: column;
@@ -849,6 +866,7 @@
 				align-items: center;
 				justify-content: center;
 				overflow: hidden;
+				transition: background-color 2s;
 
 				.LayoutProductViewer-image {
 					z-index: 1;
@@ -867,6 +885,8 @@
 					font-weight: 600;
 					text-align: center;
 					padding: 2rem;
+
+					transition: color 2s;
 
 					@media (max-width: 480px) {
 						font-size: 1.6rem;
@@ -999,7 +1019,7 @@
 					font-size: 1rem;
 
 					border-radius: 0.6rem;
-					// background: hsla(0, 0%, 100%, 0.6);
+					background: hsla(0, 0%, 100%, 0.6);
 					padding: 1.2rem;
 					font-size: 1rem;
 					.LayoutProductViewer-description-noContent {
@@ -1134,11 +1154,56 @@
 				opacity: 0.4;
 			}
 		}
+
+		.LayoutProductViewer-backToTop {
+			--size: 3rem;
+			--margin: 0.8rem;
+			width: var(--size);
+			height: var(--size);
+
+			z-index: 3;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 50%;
+			position: absolute;
+			top: 0;
+			right: var(--margin);
+
+			border: none;
+			background: none;
+			cursor: pointer;
+
+			transition: var(--animation-duration);
+
+			--parent-height: 0;
+			--parent-scrollTop: 0;
+
+			top: calc(
+				var(--parent-height) - var(--margin) - var(--size) + var(--parent-scrollTop)
+			);
+
+			&:hover {
+				transform: scale(1.1);
+			}
+
+			& > * {
+				--size: 1.2rem;
+				width: var(--size);
+				height: var(--size);
+				transform: rotate(90deg);
+			}
+		}
+		.LayoutProductViewer-backToTop-isHidden {
+			transform: scale(0);
+			pointer-events: none;
+			opacity: 0;
+		}
 	}
 
 	.LayoutProductViewer-isThin {
 		grid-template-areas: "toolbar" "header" "info";
-		grid-template-rows: max-content minmax(1fr, max-content);
+		grid-template-rows: 8rem max-content minmax(1fr, max-content);
 		grid-template-columns: 100%;
 
 		display: flex;
@@ -1146,8 +1211,9 @@
 		align-items: center;
 		padding-bottom: 10rem;
 
+		.LayoutProductViewer-toolbar {
+		}
 		.LayoutProductViewer-header {
-			width: 100%;
 			.LayoutProductViewer-preview {
 				border-radius: 1.5rem;
 				margin: 1rem;
@@ -1166,18 +1232,25 @@
 		}
 	}
 	.LayoutProductViewer-isWide {
-		grid-template-areas: "header info";
-		grid-template-rows: minmax(1fr, max-content);
-		grid-template-columns: 45% 1fr;
+		grid-template-areas: "toolbar toolbar" "header info";
+		grid-template-rows: 1fr;
+		grid-template-columns: 45% 55%;
+		justify-content: center;
+		justify-items: center;
+		align-items: start;
 
 		.LayoutProductViewer-header {
-			position: sticky;
-			left: 1.5rem;
-			top: 1.5rem;
-			margin: 1.5rem;
-			height: calc(100vh - 3rem);
-			max-height: calc(100vh - 3rem);
+			--padding: 1.5rem;
+
+			height: 100vh;
+			max-height: 100vh;
+
+			padding: 1.5rem;
 			gap: 1rem;
+
+			position: sticky;
+			left: var(--padding);
+			top: var(--padding);
 
 			.LayoutProductViewer-preview {
 				height: calc(100% - 2rem);
@@ -1188,8 +1261,9 @@
 			}
 		}
 		.LayoutProductViewer-info {
-			padding-bottom: 0;
-			padding-top: 1.5rem;
+			--padding: 1.5rem;
+			--width: calc(100% - calc(var(--padding) * 2));
+			width: var(--width);
 		}
 	}
 </style>
