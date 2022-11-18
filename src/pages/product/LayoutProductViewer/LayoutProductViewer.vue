@@ -823,7 +823,7 @@
 
 <style lang="scss" scoped>
 	.LayoutProductViewer {
-		--color-transition-duration: 3s;
+		--color-transition-duration: 2s;
 
 		position: relative;
 

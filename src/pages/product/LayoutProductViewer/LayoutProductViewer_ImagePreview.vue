@@ -37,13 +37,16 @@
 			onImage() {
 				this.imageUrl = "";
 				if (this.image) {
-					this.imageIsFetching = true;
-					setTimeout(() => {
-						this.imageIsFetching = false;
-						this.imageUrl = this.image.toUrl({
-							height: this.isThin ? 350 : 1200,
-						});
-					}, 200);
+					this.imageUrl = this.image.toUrl({
+						height: this.isThin ? 350 : 1200,
+					});
+					// this.imageIsFetching = true;
+					// setTimeout(() => {
+					// 	this.imageIsFetching = false;
+					// 	this.imageUrl = this.image.toUrl({
+					// 		height: this.isThin ? 350 : 1200,
+					// 	});
+					// }, 200);
 				}
 			},
 			onImageMouseEnter(event) {
@@ -79,7 +82,9 @@
 	<div
 		:class="[
 			'LayoutProductViewerImagePreview',
-			`LayoutProductViewerImagePreview-${imageIsShowing ? 'isShown' : 'isHidden'}`,
+			`LayoutProductViewerImagePreview-${
+				imageIsShowing ? 'isShown' : 'isHidden'
+			}`,
 		]"
 	>
 		<img
