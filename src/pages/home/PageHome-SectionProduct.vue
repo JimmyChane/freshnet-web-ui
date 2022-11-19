@@ -1,7 +1,9 @@
 <script>
 	import Category from "@/items/Category";
+	import ImageView from "@/components/ImageView.vue";
 
 	export default {
+		components: { ImageView },
 		props: { isThin: { type: Boolean, default: false } },
 		data() {
 			return {
@@ -55,6 +57,7 @@
 							group.category.key === Category.Key.Printer
 						);
 					})
+					.sort((group1, group2) => group1.category.compare(group2.category))
 					.reduce((products, group) => {
 						products.push(...group.items);
 						return products;
@@ -88,7 +91,11 @@
 		]"
 	>
 		<span class="HomeSectionProduct-title">{{ itemTitle }}</span>
-		<img class="HomeSectionProduct-img" v-if="itemImageUrl" :src="itemImageUrl" />
+		<ImageView
+			class="HomeSectionProduct-img"
+			v-if="itemImageUrl"
+			:src="itemImageUrl"
+		/>
 		<div class="HomeSectionProduct-footer">
 			<div class="HomeSectionProduct-dummy"></div>
 			<div class="HomeSectionProduct-indexes" v-if="products.length > 1">

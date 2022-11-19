@@ -1,8 +1,10 @@
 <script>
 	import Image from "@/items/Image";
 	import ServiceImage from "@/items/ServiceImage";
+	import ImageView from "@/components/ImageView.vue";
 
 	export default {
+		components: { ImageView },
 		props: {
 			width: { type: Number, default: 0 },
 			height: { type: Number, default: 0 },
@@ -57,7 +59,7 @@
 </script>
 
 <template>
-	<img
+	<ImageView
 		v-if="parsedImages.length === 1"
 		class="ImageViews-item"
 		:style="{
@@ -80,7 +82,7 @@
 			'grid-template-areas': cssGridTemplateAreas,
 		}"
 	>
-		<img
+		<ImageView
 			:class="['ImageViews-item']"
 			:style="{
 				'width': '100%',

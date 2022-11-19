@@ -1,16 +1,18 @@
 <script>
+	import ImageView from "@/components/ImageView.vue";
 	import MenuButton from "@/components/button/MenuButton.vue";
+
 	export default {
 		emits: ["click", "click-remove"],
-		components: { MenuButton },
+		components: { ImageView, MenuButton },
 		props: { src: { type: String, default: "" } },
 	};
 </script>
 
 <template>
 	<div class="ButtonImage">
-		<button class="ButtonImage-image-button">
-			<img class="ButtonImage-image" :src="src" @click="$emit('click', src)" />
+		<button class="ButtonImage-image-button" @click="$emit('click', src)">
+			<ImageView class="ButtonImage-image" :src="src" />
 		</button>
 		<div class="ButtonImage-foreground"></div>
 		<div class="ButtonImage-option">

@@ -1,7 +1,8 @@
 <script>
-	import ItemDevice from "@/pages/customer/ItemDevice.vue";
+	import ImageView from "@/components/ImageView.vue";
+
 	export default {
-		components: { ItemDevice },
+		components: { ImageView },
 		emits: ["click-remove", "click-previous", "click-next"],
 		props: {
 			image: { type: Object, default: () => null },
@@ -87,7 +88,7 @@
 			}`,
 		]"
 	>
-		<img
+		<ImageView
 			:class="[
 				'LayoutProductViewerImagePreview-preview',
 				`LayoutProductViewerImagePreview-preview-${
@@ -284,7 +285,7 @@
 	}
 	.LayoutProductViewerImagePreview-isShown {
 		.LayoutProductViewerImagePreview-preview {
-			opacity: 1;
+			// opacity: 1;
 		}
 	}
 	.LayoutProductViewerImagePreview-isHidden {
@@ -292,7 +293,7 @@
 		.LayoutProductViewerImagePreview-preview {
 			pointer-events: none;
 			height: inherit;
-			opacity: 0;
+			// opacity: 0;
 		}
 	}
 </style>

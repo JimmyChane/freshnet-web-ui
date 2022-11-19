@@ -4,6 +4,49 @@
 	export default {
 		components: { Tab },
 		props: { items: { type: Array, default: () => [] } },
+		computed: {
+			item() {
+				return this.items.find((item) => item.isSelected());
+			},
+		},
+		watch: {
+			item() {
+				this.onItemChange();
+			},
+		},
+		methods: {
+			onItemChange() {
+				const { item } = this;
+				setTimeout(() => {
+					if (item === this.item) this.scrollToItem();
+				}, 300);
+			},
+			scrollToItem() {
+				const { item } = this;
+
+				const element = this._self.$el;
+				const childElement = this._self.$children[this.items.indexOf(item)].$el;
+
+				const offsetParent = this.getOffset(element);
+				const offsetChild = this.getOffset(childElement);
+
+				const parentHalfWidth = offsetParent.width / 2;
+				const childCenter = offsetChild.left + offsetChild.width / 2;
+
+				element.scrollTo({
+					left: childCenter - parentHalfWidth,
+					behavior: "smooth",
+				});
+			},
+			getOffset(target) {
+				return {
+					width: target.offsetWidth,
+					height: target.offsetHeight,
+					left: target.offsetLeft,
+					top: target.offsetTop,
+				};
+			},
+		},
 	};
 </script>
 
@@ -25,6 +68,7 @@
 		flex-direction: row;
 		align-items: center;
 		overflow-x: auto;
+		overflow-y: hidden;
 		padding: 0 0.5rem;
 	}
 	.LayoutProductViewerTabs {

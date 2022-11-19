@@ -276,7 +276,8 @@
 				this.height = this._self.$el.offsetHeight;
 			},
 			async invalidateProduct() {
-				this._self.$el.scrollTop = 0;
+				if (this.product) this.scrollToTop();
+				// this._self.$el.scrollTop = 0;
 				this.tabKeyNow = this.tabs.length ? this.tabs[0].key : "";
 
 				if (this.product) this.addArrowListener();
@@ -354,9 +355,12 @@
 			},
 
 			scrollToTop() {
-				if (!this.tabs.length) return;
-				const tab = this.tabs[0];
-				this.scrollTo(tab.key);
+				const ref = this.$refs.toolbar;
+				if (ref) {
+					setTimeout(() => {
+						ref.scrollIntoView({ behavior: "smooth", block: "start" });
+					}, 300);
+				}
 			},
 			scrollTo(key = "") {
 				const ref = this.$refs[`key${key}`];
@@ -365,17 +369,9 @@
 			},
 			scrolling(event) {
 				this.invalidateBound();
-				const getOffset = (target) => {
-					return {
-						width: target.offsetWidth,
-						height: target.offsetHeight,
-						left: target.offsetLeft,
-						top: target.offsetTop,
-					};
-				};
 
 				const parent = event.target;
-				const parentOffset = getOffset(parent);
+				const parentOffset = this.getOffset(parent);
 				const pointHeight = parentOffset.height / 4;
 
 				for (const tab of this.tabs) {
@@ -397,6 +393,14 @@
 						continue;
 					}
 				}
+			},
+			getOffset(element) {
+				return {
+					width: element.offsetWidth,
+					height: element.offsetHeight,
+					left: element.offsetLeft,
+					top: element.offsetTop,
+				};
 			},
 		},
 		mounted() {
@@ -444,7 +448,7 @@
 			/>
 		</div>
 
-		<div class="LayoutProductViewer-header">
+		<div class="LayoutProductViewer-header" ref="toolbar">
 			<div
 				class="LayoutProductViewer-preview"
 				v-if="product"
@@ -931,6 +935,7 @@
 			justify-content: flex-start;
 			padding: var(--padding);
 			padding-bottom: 10rem;
+			padding-bottom: 80vh;
 
 			.LayoutProductViewer-brand {
 				width: 100%;
