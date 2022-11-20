@@ -79,6 +79,13 @@
 			initRightMenus() {
 				const menus = [];
 
+				if (!this.isOver550px) {
+					menus.push({
+						title: "Search",
+						icon: this.host.res("icon/search-2A4858.svg"),
+						click: () => this.$emit("click-search"),
+					});
+				}
 				if (Array.isArray(this.rightMenus)) menus.push(...this.rightMenus);
 				if (
 					!Array.isArray(this.rightMenus) &&
@@ -105,57 +112,29 @@
 </script>
 
 <template>
-	<div class="ActionbarProduct">
-		<Actionbar
-			class="ActionbarProduct-actionbar"
-			:leftMenus="initLeftMenus"
-			:rightMenus="initRightMenus"
+	<Actionbar
+		class="ActionbarProduct"
+		:leftMenus="initLeftMenus"
+		:rightMenus="initRightMenus"
+	>
+		<SearchInput
+			v-if="isOver550px"
+			class="ActionbarProduct-search"
+			placeholder="Search products"
+			:list="productSearches"
+			@callback-search="(text) => (searchText = text)"
+			v-slot="{ list }"
 		>
-			<div class="ActionbarProduct-search" v-if="isOver550px">
-				<SearchInput
-					class="ActionbarProduct-searchInput"
-					placeholder="Search products"
-					:list="productSearches"
-					@callback-search="(text) => (searchText = text)"
-					v-slot="{ list }"
-				>
-					<router-link
-						class="ActionbarProduct-search-item-link"
-						v-for="product in list"
-						:key="product.id"
-						:to="{ query: { productId: product.id } }"
-					>
-						<ItemSearchProduct
-							class="ActionbarProduct-search-item"
-							:item="product"
-						/>
-					</router-link>
-				</SearchInput>
-			</div>
-		</Actionbar>
-
-		<div class="ActionbarProduct-outside" v-if="!isOver550px">
-			<SearchInput
-				class="ActionbarProduct-searchInput"
-				placeholder="Search products"
-				:list="productSearches"
-				@callback-search="(text) => (searchText = text)"
-				v-slot="{ list }"
+			<router-link
+				class="ActionbarProduct-search-item-link"
+				v-for="product in list"
+				:key="product.id"
+				:to="{ query: { productId: product.id } }"
 			>
-				<router-link
-					class="ActionbarProduct-search-item-link"
-					v-for="product in list"
-					:key="product.id"
-					:to="{ query: { productId: product.id } }"
-				>
-					<ItemSearchProduct
-						class="ActionbarProduct-search-item"
-						:item="product"
-					/>
-				</router-link>
-			</SearchInput>
-		</div>
-	</div>
+				<ItemSearchProduct class="ActionbarProduct-search-item" :item="product" />
+			</router-link>
+		</SearchInput>
+	</Actionbar>
 </template>
 
 <style lang="scss" scoped>
@@ -163,61 +142,19 @@
 		width: 100%;
 		position: sticky;
 		top: 0;
-		.ActionbarProduct-actionbar {
-			width: 100%;
 
-			.ActionbarProduct-search {
-				width: 100%;
+		.ActionbarProduct-search {
+			flex-grow: 1;
+			z-index: 1;
+			max-width: 40em;
+			border: none;
+			--background: white;
+			.ActionbarProduct-search-item-link {
+				text-decoration: none;
 				display: flex;
-				flex-direction: row;
-				flex-wrap: nowrap;
-				align-items: center;
-				justify-content: center;
-				gap: 0.8rem;
-
-				.ActionbarProduct-searchInput {
-					flex-grow: 1;
-					z-index: 1;
-					max-width: 40em;
-					border: none;
-					--background: white;
-					.ActionbarProduct-search-item-link {
-						text-decoration: none;
-						display: flex;
-						width: 100%;
-						.ActionbarProduct-search-item {
-							width: 100%;
-						}
-					}
-				}
-			}
-		}
-
-		.ActionbarProduct-outside {
-			width: 100%;
-			display: flex;
-			flex-direction: row;
-			flex-wrap: nowrap;
-			align-items: center;
-			justify-content: center;
-			gap: 0.8rem;
-			background-color: #e2e8eb;
-
-			.ActionbarProduct-searchInput {
-				flex-grow: 1;
-				z-index: 1;
-				max-width: 40em;
-				border: none;
-				--background: white;
-				--border: none;
-				--border-radius: 0;
-				.ActionbarProduct-search-item-link {
-					text-decoration: none;
-					display: flex;
+				width: 100%;
+				.ActionbarProduct-search-item {
 					width: 100%;
-					.ActionbarProduct-search-item {
-						width: 100%;
-					}
 				}
 			}
 		}

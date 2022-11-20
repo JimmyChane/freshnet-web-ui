@@ -40,8 +40,7 @@
 		data() {
 			return {
 				actions: {
-					onClickClose: () =>
-						this.$root.nextRoute({ query: { service: null } }),
+					onClickClose: () => this.$root.nextRoute({ query: { service: null } }),
 					onClickRemove: (x) => this.clickDeleteService(x),
 					onClickAddEvent: (x) => this.clickAddEvent(x),
 					onClickRemoveEvent: (x) => this.clickRemoveEvent(x),
@@ -451,12 +450,7 @@
 
 <template>
 	<div class="PageService">
-		<div
-			:class="[
-				'PageService-panels',
-				`PageService-${isWide ? 'isWide' : 'isThin'}`,
-			]"
-		>
+		<div :class="['PageService-panels', `PageService-${isWide ? 'isWide' : 'isThin'}`]">
 			<PanelServices
 				class="PageService-PanelServices"
 				:menus="actionMenus"
@@ -490,6 +484,7 @@
 
 		<WindowSearch
 			class="PageService-window"
+			v-if="$root.window.innerWidth <= 600"
 			:isShowing="popup.search.isShowing"
 			:items="services"
 			@click-dismiss="() => windowAction('search', 'dismiss')"
@@ -556,9 +551,7 @@
 			<WindowUpdateCustomer
 				class="PageService-window-child"
 				:value="popup.customer.value"
-				@callback-change="
-					(customer) => windowAction('customer', 'ok', customer)
-				"
+				@callback-change="(customer) => windowAction('customer', 'ok', customer)"
 				@callback-cancel="() => windowAction('customer', 'dismiss')"
 			/>
 		</PopupWindow>

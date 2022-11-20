@@ -105,8 +105,7 @@
 
 			hasImagePrevious: (context) =>
 				context.images.length > 0 && context.imagePreviewIndex > 0,
-			hasImageNext: (context) =>
-				context.images.length - 1 > context.imagePreviewIndex,
+			hasImageNext: (context) => context.images.length - 1 > context.imagePreviewIndex,
 			hasProductPrevious: (context) => !!context.productPrevious,
 			hasProductNext: (context) => !!context.productNext,
 
@@ -135,15 +134,11 @@
 			brandId: (context) => (context.product ? context.product.brandId : ""),
 			brandTitle: (context) => (context.brand ? context.brand.title : ""),
 			brandIcon: (context) => (context.brand ? context.brand.icon : null),
-			brandIconUrl: (context) =>
-				context.brandIcon ? context.brandIcon.toUrl() : "",
+			brandIconUrl: (context) => (context.brandIcon ? context.brandIcon.toUrl() : ""),
 
-			categoryId: (context) =>
-				context.product ? context.product.categoryId : "",
-			categoryTitle: (context) =>
-				context.category ? context.category.title : "",
-			categoryIcon: (context) =>
-				context.category ? context.category.icon : null,
+			categoryId: (context) => (context.product ? context.product.categoryId : ""),
+			categoryTitle: (context) => (context.category ? context.category.title : ""),
+			categoryIcon: (context) => (context.category ? context.category.icon : null),
 			categoryIconUrl: (context) =>
 				context.categoryIcon ? context.categoryIcon.toUrl() : "",
 
@@ -222,9 +217,7 @@
 						index1 = index1 >= 0 ? index1 : context.specificationKeys.length;
 						index2 = index2 >= 0 ? index2 : context.specificationKeys.length;
 
-						return index1 !== index2
-							? index1 - index2
-							: key1.localeCompare(key2);
+						return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
 					});
 			},
 
@@ -277,7 +270,6 @@
 			},
 			async invalidateProduct() {
 				if (this.product) this.scrollToTop();
-				// this._self.$el.scrollTop = 0;
 				this.tabKeyNow = this.tabs.length ? this.tabs[0].key : "";
 
 				if (this.product) this.addArrowListener();
@@ -355,12 +347,9 @@
 			},
 
 			scrollToTop() {
-				const ref = this.$refs.toolbar;
-				if (ref) {
-					setTimeout(() => {
-						ref.scrollIntoView({ behavior: "smooth", block: "start" });
-					}, 300);
-				}
+				setTimeout(() => {
+					this._self.$el.scrollTo({ top: 0, behavior: "smooth" });
+				}, 300);
 			},
 			scrollTo(key = "") {
 				const ref = this.$refs[`key${key}`];
@@ -371,36 +360,25 @@
 				this.invalidateBound();
 
 				const parent = event.target;
-				const parentOffset = this.getOffset(parent);
-				const pointHeight = parentOffset.height / 4;
+				// const pointHeight = parent.offsetHeight / 4;
+				const pointHeight = 156; // 156px
 
-				for (const tab of this.tabs) {
+				this.tabKeyNow = this.tabs.reduce((tabKeyNow, tab) => {
 					const ref = this.$refs[`key${tab.key}`];
-					if (!ref) continue;
+					if (!ref) return tabKeyNow;
 					const target = ref.$el;
-					if (!target) continue;
+					if (!target) return tabKeyNow;
 
 					const bound = target.getBoundingClientRect();
 
 					const start = bound.y;
-					if (0 < start && start < pointHeight) {
-						this.tabKeyNow = tab.key;
-						continue;
-					}
+					if (0 < start && start < pointHeight) return tab.key;
+
 					const end = bound.y + bound.height;
-					if (0 < end && end < pointHeight) {
-						this.tabKeyNow = tab.key;
-						continue;
-					}
-				}
-			},
-			getOffset(element) {
-				return {
-					width: element.offsetWidth,
-					height: element.offsetHeight,
-					left: element.offsetLeft,
-					top: element.offsetTop,
-				};
+					if (0 < end && end < pointHeight) return tab.key;
+
+					return tabKeyNow;
+				}, this.tabKeyNow);
 			},
 		},
 		mounted() {
@@ -528,16 +506,12 @@
 							v-if="brandIconUrl"
 							:src="brandIconUrl"
 						/>
-						<span
-							class="LayoutProductViewer-brand-item-title"
-							v-if="brandTitle"
-							>{{ brandTitle }}</span
-						>
+						<span class="LayoutProductViewer-brand-item-title" v-if="brandTitle">{{
+							brandTitle
+						}}</span>
 					</div>
 
-					<span class="LayoutProductViewer-brand-noContent" v-else
-						>No Brand</span
-					>
+					<span class="LayoutProductViewer-brand-noContent" v-else>No Brand</span>
 				</div>
 			</LayoutProductViewerSection>
 
@@ -561,9 +535,7 @@
 				<div class="LayoutProductViewer-title">
 					<span v-if="title">{{ title }}</span>
 
-					<span class="LayoutProductViewer-title-noContent" v-else
-						>No Title</span
-					>
+					<span class="LayoutProductViewer-title-noContent" v-else>No Title</span>
 				</div>
 			</LayoutProductViewerSection>
 
@@ -615,10 +587,7 @@
 				title="What's Included"
 			>
 				<div class="LayoutProductViewer-whatIncluded">
-					<div
-						class="LayoutProductViewer-whatIncludeds"
-						v-if="whatIncludeds.length"
-					>
+					<div class="LayoutProductViewer-whatIncludeds" v-if="whatIncludeds.length">
 						<div
 							class="LayoutProductViewer-whatIncludeds-item"
 							v-for="whatIncludeds of whatIncludeds"
@@ -657,11 +626,9 @@
 				"
 			>
 				<div class="LayoutProductViewer-description">
-					<p
-						class="LayoutProductViewer-description-content"
-						v-if="description"
-						>{{ description }}</p
-					>
+					<p class="LayoutProductViewer-description-content" v-if="description">{{
+						description
+					}}</p>
 
 					<span class="LayoutProductViewer-description-noContent" v-else
 						>No Description</span
@@ -679,9 +646,7 @@
 				ref="keyprice"
 				:product="product"
 				v-if="isEditable"
-				@click-product-priceUpdate="
-					(x) => $emit('click-product-priceUpdate', x)
-				"
+				@click-product-priceUpdate="(x) => $emit('click-product-priceUpdate', x)"
 			/>
 
 			<!-- stock -->
@@ -1204,8 +1169,7 @@
 			--parent-scrollTop: 0;
 
 			top: calc(
-				var(--parent-height) - var(--margin) - var(--size) +
-					var(--parent-scrollTop)
+				var(--parent-height) - var(--margin) - var(--size) + var(--parent-scrollTop)
 			);
 
 			&:hover {

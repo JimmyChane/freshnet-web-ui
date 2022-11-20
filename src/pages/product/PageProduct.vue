@@ -8,6 +8,7 @@
 
 	import PanelProducts from "./PanelProducts.vue";
 	import PanelProduct from "./PanelProduct.vue";
+	import WindowSearch from "./WindowSearch.vue";
 	import WindowAddProduct from "./WindowAddProduct.vue";
 	import WindowRemoveProduct from "./WindowRemoveProduct.vue";
 	import WindowRemoveImage from "./WindowRemoveImage.vue";
@@ -69,6 +70,7 @@
 			PanelProducts,
 			PanelProduct,
 
+			WindowSearch,
 			WindowAddProduct,
 			WindowRemoveProduct,
 			WindowRemoveImage,
@@ -82,6 +84,22 @@
 			return {
 				scrollTop: 0,
 				popup: {
+					search: {
+						context: null,
+						isShowing: false,
+						show(input) {
+							this.isShowing = true;
+						},
+						dismiss() {
+							this.isShowing = false;
+						},
+						cancel() {
+							this.isShowing = false;
+						},
+						confirm(output) {
+							this.isShowing = false;
+						},
+					},
 					productAdd: {
 						context: null,
 						isShowing: false,
@@ -527,9 +545,7 @@
 
 				const categories = await this.categoryStore.dispatch("getItems");
 				categories.forEach((category) => {
-					const group = groups.find(
-						(group) => group.category.id === category.id,
-					);
+					const group = groups.find((group) => group.category.id === category.id);
 					if (!group) groups.push({ category, items: [] });
 				});
 
@@ -610,7 +626,8 @@
 			<PanelProducts
 				class="PageProduct-products"
 				:products="products"
-				@click-productAdd="popup.productAdd.show()"
+				@click-productAdd="() => popup.productAdd.show()"
+				@click-search="() => popup.search.show()"
 			/>
 
 			<div class="PageProduct-PanelRightEmpty">
@@ -653,6 +670,15 @@
 				/>
 			</Drawer>
 		</div>
+
+		<WindowSearch
+			class="PageService-window"
+			v-if="$root.window.innerWidth <= 550"
+			:isShowing="popup.search.isShowing"
+			:items="products"
+			@click-dismiss="() => popup.search.dismiss()"
+			@click-item="(item) => clickProduct(item)"
+		/>
 
 		<!-- Popup Product Add -->
 		<WindowAddProduct
@@ -706,9 +732,7 @@
 			:input="popup.productDescriptionUpdate.input"
 			@click-dismiss="() => popup.productDescriptionUpdate.dismiss()"
 			@click-cancel="() => popup.productDescriptionUpdate.cancel()"
-			@click-confirm="
-				(output) => popup.productDescriptionUpdate.confirm(output)
-			"
+			@click-confirm="(output) => popup.productDescriptionUpdate.confirm(output)"
 		/>
 		<!-- Popup Product Category Update -->
 		<WindowUpdateCategory
@@ -726,9 +750,7 @@
 			:input="popup.productSpecificationsUpdate.input"
 			@click-dismiss="() => popup.productSpecificationsUpdate.dismiss()"
 			@click-cancel="() => popup.productSpecificationsUpdate.cancel()"
-			@click-confirm="
-				(output) => popup.productSpecificationsUpdate.confirm(output)
-			"
+			@click-confirm="(output) => popup.productSpecificationsUpdate.confirm(output)"
 		/>
 	</div>
 </template>
