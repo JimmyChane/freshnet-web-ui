@@ -1,43 +1,88 @@
 <script>
+	import Image from "@/items/Image";
+	import ServiceImage from "@/items/ServiceImage";
+
 	export default {
 		props: {
-			src: { type: String, defualt: "" },
+			src: { type: [String, Image, ServiceImage], defualt: "" },
 			alt: { type: String, defualt: "" },
 		},
 		data() {
 			return {
-				isShowing: false,
-				bindSrc: "",
+				transitionDuration: 300,
 
+				isShowing: false,
 				isError: false,
+
+				requestOption: null,
+				bindUrl: "",
+
+				distance: 100,
 			};
+		},
+		computed: {
+			url() {
+				if (this.isSrcString()) return this.src;
+				if (this.isSrcItem()) return this.src.toUrl(this.requestOption);
+				return "";
+			},
 		},
 		watch: {
 			src() {
-				this.invalidate();
+				this.onSrc();
 			},
 		},
 		mounted() {
-			this.invalidate();
+			this.onSrc();
 		},
 		methods: {
-			invalidate() {
+			isSrcString() {
+				return typeof this.src === "string";
+			},
+			isSrcItem() {
+				return this.src instanceof Image || this.src instanceof ServiceImage;
+			},
+
+			async onSrc() {
+				if (this.isSrcString()) {
+					this.requestOption = null;
+					this.onUrl();
+					return;
+				}
+				setTimeout(() => {
+					const width = Math.max(this._self.$el.offsetWidth, 0);
+					const height = Math.max(this._self.$el.offsetHeight, 0);
+
+					if (width > height) {
+						this.requestOption = { width: this.extractValue(width) };
+					} else if (width < height) {
+						this.requestOption = { height: this.extractValue(height) };
+					}
+					this.onUrl();
+				}, 10);
+			},
+			async onUrl() {
 				this.isShowing = false;
 				this.isError = false;
 
-				// if bind is empty
-				if (this.bindSrc === "") {
-					this.bindSrc = this.src;
+				// bind if empty, else animate then bind
+				if (this.bindUrl === "") {
+					this.bindUrl = this.url;
 					this.isShowing = true;
 				} else {
-					const src = this.src;
+					const url = this.url;
 					setTimeout(() => {
-						if (src !== this.src) return;
-						this.bindSrc = "";
-						this.bindSrc = this.src;
+						if (url !== this.url) return;
+						this.bindUrl = "";
+						this.bindUrl = this.url;
 						this.isShowing = true;
-					}, 300);
+					}, this.transitionDuration);
 				}
+			},
+
+			extractValue(size) {
+				const divide = size / this.distance;
+				return this.distance * Math.max(Math.round(divide), 1);
 			},
 
 			onLoad(event) {
@@ -67,8 +112,9 @@
 			'ImageView2-img',
 			isShowing ? 'ImageView2-img-isShowing' : 'ImageView2-img-isHiding',
 		]"
+		:style="{ 'var(--animation-duration)': `${transitionDuration}ms` }"
 		ref="img"
-		:src="bindSrc"
+		:src="bindUrl"
 		:alt="alt"
 		@load="(event) => onLoad(event)"
 		@error="(event) => onError(event)"
@@ -91,7 +137,7 @@
 	.ImageView2-img {
 		display: flex;
 
-		transition: var(--animation-duration);
+		transition: all var(--animation-duration);
 	}
 	.ImageView2-img-isShowing {
 		transform: scale(1);

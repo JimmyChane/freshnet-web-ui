@@ -27,24 +27,14 @@
 				const element = this._self.$el;
 				const childElement = this._self.$children[this.items.indexOf(item)].$el;
 
-				const offsetParent = this.getOffset(element);
-				const offsetChild = this.getOffset(childElement);
-
-				const parentHalfWidth = offsetParent.width / 2;
-				const childCenter = offsetChild.left + offsetChild.width / 2;
+				const parentHalfWidth = element.offsetWidth / 2;
+				const childCenter =
+					childElement.offsetLeft + childElement.offsetWidth / 2;
 
 				element.scrollTo({
 					left: childCenter - parentHalfWidth,
 					behavior: "smooth",
 				});
-			},
-			getOffset(target) {
-				return {
-					width: target.offsetWidth,
-					height: target.offsetHeight,
-					left: target.offsetLeft,
-					top: target.offsetTop,
-				};
 			},
 		},
 	};

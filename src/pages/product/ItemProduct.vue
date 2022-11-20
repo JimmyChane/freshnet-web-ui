@@ -6,12 +6,14 @@
 	import ProductPrice from "@/items/ProductPrice.js";
 	import ProductPreset from "@/items/tools/ProductPreset";
 
+	import ImageView from "@/components/ImageView.vue";
 	import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
 	export default {
 		Mode,
 
 		emits: ["click"],
+		components: { ImageView },
 		data() {
 			return { primaryColorHex: "" };
 		},
@@ -137,11 +139,7 @@
 		:ref="product.id"
 		@click="$emit('click', product)"
 	>
-		<img
-			class="ItemProduct-preview"
-			v-if="preview"
-			:src="preview ? preview.toUrl({ width: isList ? 120 : 250 }) : ''"
-		/>
+		<ImageView class="ItemProduct-preview" v-if="preview" :src="preview" />
 		<div :class="['ItemProduct-preview', 'ItemProduct-previewEmpty']" v-else>
 			<span>No Preview</span>
 		</div>

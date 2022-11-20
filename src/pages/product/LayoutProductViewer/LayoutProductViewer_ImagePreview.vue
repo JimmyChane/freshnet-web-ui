@@ -41,13 +41,6 @@
 					this.imageUrl = this.image.toUrl({
 						height: this.isThin ? 350 : 1200,
 					});
-					// this.imageIsFetching = true;
-					// setTimeout(() => {
-					// 	this.imageIsFetching = false;
-					// 	this.imageUrl = this.image.toUrl({
-					// 		height: this.isThin ? 350 : 1200,
-					// 	});
-					// }, 200);
 				}
 			},
 			onImageMouseEnter(event) {
@@ -88,7 +81,7 @@
 			}`,
 		]"
 	>
-		<ImageView
+		<!-- <ImageView
 			:class="[
 				'LayoutProductViewerImagePreview-preview',
 				`LayoutProductViewerImagePreview-preview-${
@@ -96,6 +89,15 @@
 				}`,
 			]"
 			:src="imageUrl"
+		/> -->
+		<ImageView
+			:class="[
+				'LayoutProductViewerImagePreview-preview',
+				`LayoutProductViewerImagePreview-preview-${
+					this.image ? 'isShown' : 'isHidden'
+				}`,
+			]"
+			:src="this.image"
 		/>
 
 		<button
@@ -283,17 +285,11 @@
 			aspect-ratio: 16/10;
 		}
 	}
-	.LayoutProductViewerImagePreview-isShown {
-		.LayoutProductViewerImagePreview-preview {
-			// opacity: 1;
-		}
-	}
 	.LayoutProductViewerImagePreview-isHidden {
 		height: 6rem;
 		.LayoutProductViewerImagePreview-preview {
 			pointer-events: none;
 			height: inherit;
-			// opacity: 0;
 		}
 	}
 </style>
