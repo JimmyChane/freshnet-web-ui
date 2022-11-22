@@ -5,7 +5,7 @@
 	export default {
 		emits: ["click", "click-remove"],
 		components: { ImageView, MenuButton },
-		props: { src: { type: String, default: "" } },
+		props: { src: { default: "" } },
 	};
 </script>
 

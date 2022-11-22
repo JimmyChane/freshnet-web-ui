@@ -25,7 +25,8 @@ class Image {
 		return 0;
 	}
 	toUrl(option = { width: 0, height: 0 }) {
-		let { width = 0, height = 0 } = option;
+		let { width = 0, height = 0 } =
+			typeof option === "object" && option !== null ? option : {};
 		let method = this.method;
 		let path = this.path;
 

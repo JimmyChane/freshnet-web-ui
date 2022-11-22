@@ -61,7 +61,6 @@
 			@click="() => toggle()"
 			@blur="() => collapse(200)"
 		>
-			<img src="" alt="" />
 			<span class="LabelMenus-title">{{ title }}</span>
 			<span class="LabelMenus-content">
 				<img class="LabelMenus-content-icon" v-if="menuIcon" :src="menuIcon" />

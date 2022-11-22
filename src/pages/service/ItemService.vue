@@ -5,6 +5,7 @@
 	import Button3 from "@/components/button/Button3.vue";
 	import LabelCount from "@/components/LabelCount.vue";
 	import ImageViews from "@/components/ImageViews.vue";
+	import ImageView from "@/components/ImageView.vue";
 
 	import ServicePrice from "@/items/ServicePrice";
 	import ServiceState from "@/items/tools/ServiceState.js";
@@ -16,7 +17,7 @@
 	export default {
 		Mode,
 
-		components: { MenuButton, Button3, LabelCount, ImageViews },
+		components: { MenuButton, Button3, LabelCount, ImageViews, ImageView },
 		emits: ["click"],
 		props: {
 			mode: { type: Number, default: Mode.List },
@@ -113,11 +114,11 @@
 
 			<div class="ItemServiceGrid-middle">
 				<div class="ItemServiceGrid-images">
-					<img
+					<ImageView
 						class="ItemServiceGrid-image"
 						v-for="image of images"
 						:key="image.name"
-						:src="image.toUrl({ height: 30 })"
+						:src="image"
 					/>
 				</div>
 			</div>
@@ -161,9 +162,7 @@
 
 			<div class="ItemServiceList-middle">
 				<div class="ItemServiceList-description">
-					<span class="ItemServiceList-description-body">{{
-						description
-					}}</span>
+					<span class="ItemServiceList-description-body">{{ description }}</span>
 				</div>
 				<ImageViews :width="40" :height="40" :images="images" />
 			</div>

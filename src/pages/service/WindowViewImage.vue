@@ -1,9 +1,10 @@
 <script>
 	import PopupWindow from "@/components/window/PopupWindow.vue";
 	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
+	import ImageView from "@/components/ImageView.vue";
 
 	export default {
-		components: { PopupWindow, Actionbar },
+		components: { PopupWindow, Actionbar, ImageView },
 		emits: ["click-close"],
 		props: {
 			isShowing: { type: Boolean, default: false },
@@ -28,11 +29,7 @@
 				this.indexNow = this.index;
 			},
 			indexNow() {
-				if (!this.image) {
-					this.imageUrl = "";
-					return;
-				}
-				this.imageUrl = this.image.toUrl();
+				this.imageUrl = !this.image ? "" : this.image.toUrl();
 			},
 		},
 		methods: {
@@ -51,9 +48,7 @@
 			thumbnailIndex(image) {
 				return this.imageFiles.indexOf(image);
 			},
-			thumbnailUrl(image) {
-				return image.toUrl({ height: 160 });
-			},
+			thumbnailUrl: (image) => image.toUrl({ height: 160 }),
 			isThumbnailNow(image) {
 				return this.thumbnailIndex(image) === this.indexNow;
 			},
@@ -84,11 +79,7 @@
 				@click-dismiss="() => clickClose()"
 			>
 				<div class="WindowViewImage-body">
-					<img
-						class="WindowViewImage-image"
-						v-if="imageUrl"
-						:src="imageUrl"
-					/>
+					<ImageView class="WindowViewImage-image" v-if="imageUrl" :src="imageUrl" />
 				</div>
 			</PopupWindow>
 		</div>
@@ -105,10 +96,7 @@
 				:key="imageFile.name"
 				@click="() => clickImage(imageFile)"
 			>
-				<img
-					class="WindowViewImage-thumbnail"
-					:src="thumbnailUrl(imageFile)"
-				/>
+				<ImageView class="WindowViewImage-thumbnail" :src="imageFile" />
 			</button>
 		</div>
 	</div>

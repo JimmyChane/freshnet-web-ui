@@ -10,14 +10,13 @@
 		data() {
 			return {
 				transitionDuration: 300,
+				distance: 100,
 
 				isShowing: false,
 				isError: false,
 
 				requestOption: null,
-				bindUrl: "",
-
-				distance: 100,
+				requestUrl: "",
 			};
 		},
 		computed: {
@@ -57,6 +56,11 @@
 						this.requestOption = { width: this.extractValue(width) };
 					} else if (width < height) {
 						this.requestOption = { height: this.extractValue(height) };
+					} else {
+						this.requestOption = {
+							width: this.extractValue(width),
+							height: this.extractValue(height),
+						};
 					}
 					this.onUrl();
 				}, 10);
@@ -66,15 +70,15 @@
 				this.isError = false;
 
 				// bind if empty, else animate then bind
-				if (this.bindUrl === "") {
-					this.bindUrl = this.url;
+				if (this.requestUrl === "") {
+					this.requestUrl = this.url;
 					this.isShowing = true;
 				} else {
 					const url = this.url;
 					setTimeout(() => {
 						if (url !== this.url) return;
-						this.bindUrl = "";
-						this.bindUrl = this.url;
+						this.requestUrl = "";
+						this.requestUrl = this.url;
 						this.isShowing = true;
 					}, this.transitionDuration);
 				}
@@ -106,15 +110,17 @@
 
 <template>
 	<span v-if="isError" class="ImageView2-error">Error</span>
+	<div class="ImageView2-empty" v-else-if="requestUrl === ''"></div>
 	<img
 		v-else
-		:class="[
-			'ImageView2-img',
-			isShowing ? 'ImageView2-img-isShowing' : 'ImageView2-img-isHiding',
-		]"
-		:style="{ 'var(--animation-duration)': `${transitionDuration}ms` }"
+		class="ImageView2-img"
+		:style="{
+			'var(--animation-duration)': `${transitionDuration}ms`,
+			opacity: isShowing ? '1' : '0.2',
+			transform: isShowing ? 'scale(1)' : 'scale(0.9)',
+		}"
 		ref="img"
-		:src="bindUrl"
+		:src="requestUrl"
 		:alt="alt"
 		@load="(event) => onLoad(event)"
 		@error="(event) => onError(event)"
@@ -131,20 +137,14 @@
 		text-align: center;
 
 		font-size: 0.8em;
-		background: hsla(0, 0%, 0%, 0.1);
+		background-color: hsla(0, 0%, 0%, 0.1);
 		color: hsla(0, 0%, 0%, 0.6);
+	}
+	.ImageView2-empty {
+		background-color: hsla(0, 0%, 0%, 0.1);
 	}
 	.ImageView2-img {
 		display: flex;
-
 		transition: all var(--animation-duration);
-	}
-	.ImageView2-img-isShowing {
-		transform: scale(1);
-		opacity: 1;
-	}
-	.ImageView2-img-isHiding {
-		transform: scale(0.9);
-		opacity: 0.2;
 	}
 </style>

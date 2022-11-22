@@ -1,15 +1,14 @@
 <script>
 	import ServiceState from "@/items/tools/ServiceState.js";
+	import ImageView from "@/components/ImageView.vue";
 
 	export default {
-		props: {
-			item: { type: Object, default: null },
-		},
+		components: { ImageView },
+		props: { item: { type: Object, default: null } },
 		computed: {
-			thumbnail: (c) => {
-				const imageFiles = c.item ? c.item.imageFiles : [];
-				const imageFile = imageFiles.length ? imageFiles[0] : null;
-				return imageFile ? imageFile.toUrl({ height: 30 }) : "";
+			thumbnail() {
+				const imageFiles = this.item ? this.item.imageFiles : [];
+				return imageFiles.length ? imageFiles[0] : null;
 			},
 			stateTitle: (c) => {
 				const key = c.item ? c.item.state : "";
@@ -33,7 +32,7 @@
 			class="ItemSearchService-image"
 			:class="[thumbnail ? '' : 'ItemSearchService-image-noImage']"
 		>
-			<img class="ItemSearchProduct-thumbnail" :src="thumbnail" />
+			<ImageView class="ItemSearchProduct-thumbnail" :src="thumbnail" />
 		</div>
 		<div class="ItemSearchService-body">
 			<div class="ItemSearchService-labels">

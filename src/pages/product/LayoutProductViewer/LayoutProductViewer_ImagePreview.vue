@@ -76,20 +76,9 @@
 	<div
 		:class="[
 			'LayoutProductViewerImagePreview',
-			`LayoutProductViewerImagePreview-${
-				imageIsShowing ? 'isShown' : 'isHidden'
-			}`,
+			`LayoutProductViewerImagePreview-${imageIsShowing ? 'isShown' : 'isHidden'}`,
 		]"
 	>
-		<!-- <ImageView
-			:class="[
-				'LayoutProductViewerImagePreview-preview',
-				`LayoutProductViewerImagePreview-preview-${
-					imageUrl ? 'isShown' : 'isHidden'
-				}`,
-			]"
-			:src="imageUrl"
-		/> -->
 		<ImageView
 			:class="[
 				'LayoutProductViewerImagePreview-preview',

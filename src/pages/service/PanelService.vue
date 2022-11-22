@@ -355,7 +355,7 @@
 									class="PanelService-section-image-item"
 									v-for="imageFile in imageFiles"
 									:key="imageFile.name"
-									:src="imageFile.toUrl({ height: 160 })"
+									:src="imageFile"
 									@click="actions.onClickOpenImage(imageFile)"
 									@click-remove="actions.onClickRemoveImage(imageFile)"
 								/>

@@ -1,6 +1,9 @@
 <script>
+	import ImageView from "@/components/ImageView.vue";
+
 	export default {
 		emtis: ["callback-click"],
+		components: { ImageView },
 		props: {
 			item: { type: Object, default: null },
 		},
@@ -10,9 +13,10 @@
 		computed: {
 			thumbnail() {
 				const thumbnail = this.item.toImageThumbnail();
-				if (thumbnail) return thumbnail.toUrl({ width: 100 });
+				if (thumbnail) return thumbnail.toUrl({ width: 200 });
 				return "";
 			},
+			thumbnail: (context) => context.item.toImageThumbnail(),
 		},
 		watch: {
 			item() {
@@ -45,7 +49,7 @@
 			class="ItemSearchProduct-image"
 			:class="[thumbnail ? '' : 'ItemSearchProduct-image-noImage']"
 		>
-			<img class="ItemSearchProduct-thumbnail" :src="thumbnail" />
+			<ImageView class="ItemSearchProduct-thumbnail" :src="thumbnail" />
 		</div>
 		<div class="ItemSearchProduct-body">
 			<div class="ItemSearchProduct-labels">

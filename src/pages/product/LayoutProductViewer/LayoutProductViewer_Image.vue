@@ -1,5 +1,8 @@
 <script>
+	import ImageView from "@/components/ImageView.vue";
+
 	export default {
+		components: { ImageView },
 		props: {
 			image: { type: Object, default: null },
 			isSelected: { type: Boolean, default: false },
@@ -14,14 +17,8 @@
 			`LayoutProductViewerImage-${isSelected ? 'isSelected' : 'isDeselected'}`,
 		]"
 	>
-		<button
-			class="LayoutProductViewerImage-item"
-			@click="() => $emit('click', image)"
-		>
-			<img
-				class="LayoutProductViewerImage-item-img"
-				:src="image.toUrl({ height: 80 })"
-			/>
+		<button class="LayoutProductViewerImage-item" @click="() => $emit('click', image)">
+			<ImageView class="LayoutProductViewerImage-item-img" :src="image" />
 		</button>
 	</div>
 </template>
@@ -60,9 +57,7 @@
 		--box-padding: 0.18rem;
 
 		--width: calc(var(--image-width) + var(--box-padding) + var(--box-padding));
-		--height: calc(
-			var(--image-height) + var(--box-padding) + var(--box-padding)
-		);
+		--height: calc(var(--image-height) + var(--box-padding) + var(--box-padding));
 
 		width: var(--width);
 		height: var(--height);

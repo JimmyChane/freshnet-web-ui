@@ -1,8 +1,9 @@
 <script>
+	import ImageView from "@/components/ImageView.vue";
+
 	export default {
-		props: {
-			item: { type: Object, default: null },
-		},
+		components: { ImageView },
+		props: { item: { type: Object, default: null } },
 		computed: {
 			thumbnail: (c) => c.host.cloudinary({ url: `ps2/disc/${c.code}.jpg` }),
 			title: (c) => (c.item ? c.item.title : ""),
@@ -17,7 +18,7 @@
 			class="ItemSearchPs2Disc-image"
 			:class="[thumbnail ? '' : 'ItemSearchPs2Disc-image-noImage']"
 		>
-			<img class="ItemSearchProduct-thumbnail" :src="thumbnail" />
+			<ImageView class="ItemSearchProduct-thumbnail" :src="thumbnail" />
 		</div>
 		<div class="ItemSearchPs2Disc-body">
 			<div class="ItemSearchPs2Disc-labels">
