@@ -6,9 +6,7 @@
 	export default {
 		components: { Bottomsheet, Actionbar, ImageView },
 		data() {
-			return {
-				isZoomedIn: false,
-			};
+			return { isZoomedIn: false };
 		},
 		computed: {
 			isShowing() {
@@ -46,6 +44,7 @@
 					click: () => clickDismiss(),
 				}"
 			/>
+
 			<div
 				class="ImageViewer-main"
 				:style="{
@@ -71,6 +70,7 @@
 					"
 				/>
 			</div>
+
 			<div class="ImageView-footer" v-if="thumbnails.length > 1">
 				<div class="ImageView-images">
 					<button
@@ -170,7 +170,8 @@
 					--scrollbar-track-color-hover: 0;
 
 					scrollbar-width: var(--scrollbar-size);
-					scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+					scrollbar-color: var(--scrollbar-thumb-color)
+						var(--scrollbar-track-color);
 					&::-webkit-scrollbar {
 						height: var(--scrollbar-size);
 						width: var(--scrollbar-size);

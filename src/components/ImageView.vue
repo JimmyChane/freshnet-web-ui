@@ -72,14 +72,12 @@
 				// bind if empty, else animate then bind
 				if (this.requestUrl === "") {
 					this.requestUrl = this.url;
-					this.isShowing = true;
 				} else {
 					const url = this.url;
 					setTimeout(() => {
 						if (url !== this.url) return;
 						this.requestUrl = "";
 						this.requestUrl = this.url;
-						this.isShowing = true;
 					}, this.transitionDuration);
 				}
 			},
@@ -90,6 +88,7 @@
 			},
 
 			onLoad(event) {
+				this.isShowing = true;
 				const { img } = this.$refs;
 				if (img) {
 					this.isError = img.completed;
