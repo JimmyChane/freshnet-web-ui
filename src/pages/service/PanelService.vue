@@ -277,11 +277,9 @@
 										},
 									}"
 								>
-									<span
-										class="PanelService-section-customer-item"
-										v-if="name"
-										>{{ name }}</span
-									>
+									<span class="PanelService-section-customer-item" v-if="name">{{
+										name
+									}}</span>
 									<span
 										class="PanelService-section-customer-item"
 										v-if="phoneNumberStr"
@@ -330,10 +328,7 @@
 								click: () => actions.onClickUpdateBelongings(belongings),
 							}"
 						>
-							<div
-								class="PanelService-section-belonging"
-								v-if="belongings.length"
-							>
+							<div class="PanelService-section-belonging" v-if="belongings.length">
 								<ItemBelonging
 									v-for="belonging in belongings"
 									:key="belonging.title"
@@ -356,7 +351,7 @@
 									v-for="imageFile in imageFiles"
 									:key="imageFile.name"
 									:src="imageFile"
-									@click="actions.onClickOpenImage(imageFile)"
+									@click="() => $root.imageViewerShow(imageFile, imageFiles)"
 									@click-remove="actions.onClickRemoveImage(imageFile)"
 								/>
 								<div

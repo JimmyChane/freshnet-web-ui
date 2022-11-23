@@ -5,6 +5,7 @@
 	import PageManage from "@/pages/manage/PageManage.vue";
 
 	import LeftNav from "./LeftNav.vue";
+	import ImageViewer from "./ImageViewer.vue";
 	import Snackbar from "./Snackbar.vue";
 
 	export default {
@@ -14,7 +15,7 @@
 			return [PageHome, PageProduct, PagePs2, PageManage];
 		},
 
-		components: { LeftNav, Snackbar },
+		components: { LeftNav, ImageViewer, Snackbar },
 		data() {
 			return { statusIsShown: false, layoutLoginIsShown: false };
 		},
@@ -63,6 +64,8 @@
 			`App-${statusIsShown ? 'isShowingStatus' : 'isHidingStatus'}`,
 		]"
 	>
+		<div class="App-background"></div>
+
 		<div class="App-body">
 			<div class="App-layout">
 				<div
@@ -92,14 +95,18 @@
 			</div>
 		</div>
 
+		<div class="App-overflow">
+			<div class="App-overflow-body">
+				<ImageViewer class="App-imageViewer" />
+			</div>
+		</div>
+
 		<Snackbar
 			class="App-Snackbar"
 			v-for="snackbar of $root.snackbars"
 			:key="snackbar.key"
 			:item="snackbar"
 		/>
-
-		<div class="App-background"></div>
 	</div>
 </template>
 
@@ -148,16 +155,6 @@
 			// --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.6);
 			// --scrollbar-track-color: hsla(0, 0%, 0%, 0.1);
 			// --scrollbar-track-color-hover: hsla(0, 0%, 0%, 0.2);
-
-			// --scrollbar-size: inherit;
-			// --scrollbar-thumb-radius: inherit;
-			// --scrollbar-thumb-radius: inherit;
-			// --scrollbar-track-margin: inherit;
-
-			// --scrollbar-thumb-color: inherit;
-			// --scrollbar-thumb-color-hover: inherit;
-			// --scrollbar-track-color: inherit;
-			// --scrollbar-track-color-hover: inherit;
 
 			// scrollbar-width: var(--scrollbar-size);
 			// scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
@@ -220,12 +217,23 @@
 		color: black;
 		width: 100%;
 		height: 100%;
+		height: 100vh;
+		max-height: 100vh;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		background: none;
 		transition: var(--transition-duration);
+		overflow: hidden;
 
+		.App-background {
+			z-index: 1;
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			transition: var(--transition-duration);
+		}
 		.App-body {
 			z-index: 2;
 			width: 100%;
@@ -235,6 +243,8 @@
 			align-items: center;
 			justify-content: center;
 			transition: var(--transition-duration);
+			overflow: hidden;
+
 			.App-layout {
 				width: 100%;
 				height: 100%;
@@ -301,18 +311,30 @@
 				}
 			}
 		}
-
-		.App-Snackbar {
-			z-index: 3;
-		}
-
-		.App-background {
-			z-index: 1;
+		.App-overflow {
+			z-index: auto;
 			position: absolute;
-			width: 100%;
-			height: 100%;
-			pointer-events: none;
-			transition: var(--transition-duration);
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			width: 100vw;
+			height: 100vh;
+			display: flex;
+			overflow: hidden;
+			.App-overflow-body {
+				position: relative;
+				width: 100vw;
+				height: 100vh;
+				display: flex;
+				overflow: hidden;
+				.App-imageViewer {
+					z-index: 3;
+				}
+			}
+		}
+		.App-Snackbar {
+			z-index: 4;
 		}
 	}
 
@@ -368,9 +390,6 @@
 					max-height: 0;
 					opacity: 0;
 				}
-				// .App-layout-body {
-				//    height: 100%;
-				// }
 			}
 		}
 	}

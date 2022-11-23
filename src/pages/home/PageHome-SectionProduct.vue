@@ -91,7 +91,12 @@
 		]"
 	>
 		<span class="HomeSectionProduct-title">{{ itemTitle }}</span>
-		<ImageView class="HomeSectionProduct-img" v-if="itemImage" :src="itemImage" />
+		<ImageView
+			class="HomeSectionProduct-img"
+			v-if="itemImage"
+			:src="itemImage"
+			@click="() => $root.imageViewerShow(itemImage)"
+		/>
 		<div class="HomeSectionProduct-footer">
 			<div class="HomeSectionProduct-dummy"></div>
 			<div class="HomeSectionProduct-indexes" v-if="products.length > 1">

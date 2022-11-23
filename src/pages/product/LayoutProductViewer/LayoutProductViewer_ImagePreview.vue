@@ -3,7 +3,7 @@
 
 	export default {
 		components: { ImageView },
-		emits: ["click-remove", "click-previous", "click-next"],
+		emits: ["click-image", "click-remove", "click-previous", "click-next"],
 		props: {
 			image: { type: Object, default: () => null },
 
@@ -82,11 +82,10 @@
 		<ImageView
 			:class="[
 				'LayoutProductViewerImagePreview-preview',
-				`LayoutProductViewerImagePreview-preview-${
-					this.image ? 'isShown' : 'isHidden'
-				}`,
+				`LayoutProductViewerImagePreview-preview-${image ? 'isShown' : 'isHidden'}`,
 			]"
-			:src="this.image"
+			:src="image"
+			@click="$emit('click-image', image)"
 		/>
 
 		<button

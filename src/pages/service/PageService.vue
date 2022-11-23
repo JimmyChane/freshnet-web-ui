@@ -44,7 +44,7 @@
 					onClickRemove: (x) => this.clickDeleteService(x),
 					onClickAddEvent: (x) => this.clickAddEvent(x),
 					onClickRemoveEvent: (x) => this.clickRemoveEvent(x),
-					onClickOpenImage: (x) => this.clickImage(x),
+					// onClickOpenImage: (x) => this.clickImage(x),
 					onClickRemoveImage: (x) => this.clickRemoveImage(x),
 					onClickUpdateCustomer: (x) => this.clickUpdateCustomer(x),
 					onClickUpdateDescription: (x) => this.clickUpdateDescription(x),
@@ -177,24 +177,24 @@
 								});
 						},
 					},
-					viewImage: {
-						isShowing: false,
-						value: null,
-						start: (context, self, data) => {
-							const imageFiles = context.currentService.imageFiles;
-							const index = imageFiles.indexOf(data);
+					// viewImage: {
+					// 	isShowing: false,
+					// 	value: null,
+					// 	start: (context, self, data) => {
+					// 		const imageFiles = context.currentService.imageFiles;
+					// 		const index = imageFiles.indexOf(data);
 
-							self.isShowing = true;
-							self.value = { imageFiles, index };
-						},
-						dismiss: (context, self, data) => {
-							self.isShowing = false;
-							self.value = null;
-						},
-						ok: (context, self, data) => {
-							self.isShowing = false;
-						},
-					},
+					// 		self.isShowing = true;
+					// 		self.value = { imageFiles, index };
+					// 	},
+					// 	dismiss: (context, self, data) => {
+					// 		self.isShowing = false;
+					// 		self.value = null;
+					// 	},
+					// 	ok: (context, self, data) => {
+					// 		self.isShowing = false;
+					// 	},
+					// },
 					removeImage: {
 						isShowing: false,
 						value: null,
@@ -433,9 +433,9 @@
 			clickUpdateBelongings(belongings) {
 				this.windowAction("belongings", "start", belongings);
 			},
-			clickImage(image) {
-				this.windowAction("viewImage", "start", image);
-			},
+			// clickImage(image) {
+			// 	this.windowAction("viewImage", "start", image);
+			// },
 			clickRemoveImage(image) {
 				this.windowAction("removeImage", "start", image);
 			},
@@ -492,14 +492,14 @@
 		/>
 
 		<!-- View Image Window -->
-		<WindowViewImage
+		<!-- <WindowViewImage
 			class="PageService-window"
 			v-if="drawerService && popup.viewImage.value !== null"
 			:isShowing="popup.viewImage.isShowing"
 			:imageFiles="popup.viewImage.value.imageFiles"
 			:index="popup.viewImage.value.index"
 			@click-close="() => windowAction('viewImage', 'dismiss')"
-		/>
+		/> -->
 
 		<!-- Import Service Window -->
 		<PopupWindow

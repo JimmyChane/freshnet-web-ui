@@ -442,6 +442,7 @@
 					:hasProductPrevious="false"
 					:hasProductNext="false"
 					:isEditable="isEditable"
+					@click-image="(image) => $root.imageViewerShow(image, images)"
 					@click-previous="clickPrevious"
 					@click-next="clickNext"
 					@click-remove="

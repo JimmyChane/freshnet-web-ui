@@ -133,6 +133,11 @@ new Vue({
 			appLayout: null,
 			navigation: null,
 			snackbars: [],
+			imageViewer: {
+				isShowing: false,
+				image: null,
+				thumbnails: [],
+			},
 		};
 	},
 	computed: {
@@ -283,6 +288,19 @@ new Vue({
 		},
 	},
 	methods: {
+		imageViewerShow(image = null, thumbnails = []) {
+			this.imageViewer.image = image;
+			this.imageViewer.thumbnails = thumbnails;
+			this.imageViewer.isShowing = true;
+		},
+		imageViewerHide() {
+			this.imageViewer.isShowing = false;
+			setTimeout(() => {
+				this.imageViewer.thumbnails = [];
+				this.imageViewer.image = null;
+			}, 300);
+		},
+
 		// app layout
 		setAppLayout(layout) {
 			this.appLayout.setLayout(layout);
