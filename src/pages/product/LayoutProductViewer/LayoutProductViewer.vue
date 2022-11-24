@@ -18,6 +18,9 @@
 
 	import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
+	const Size = { Auto: 0, A4: 1, A5: 2 };
+	const Orientation = { Auto: 0, Portrait: 1, Landscape: 2 };
+
 	export default {
 		components: {
 			LayoutProductViewerSection,
@@ -41,6 +44,9 @@
 			"click-product-specificationsUpdate",
 		],
 		props: {
+			size: { type: Number, default: Size.Auto },
+			orientation: { type: Number, default: Orientation.Auto },
+
 			isWide: { type: Boolean, default: false },
 			isEditable: { type: Boolean, default: false },
 
@@ -69,6 +75,26 @@
 			};
 		},
 		computed: {
+			classSize() {
+				if (this.orientation === Orientation.Portrait && this.size === Size.A4)
+					return "LayoutProductViewer-isPortrait-isSizeA4";
+				if (this.orientation === Orientation.Landscape && this.size === Size.A4)
+					return "LayoutProductViewer-isLandscape-isSizeA4";
+				if (this.orientation === Orientation.Portrait && this.size === Size.A5)
+					return "LayoutProductViewer-isPortrait-isSizeA5";
+				if (this.orientation === Orientation.Landscape && this.size === Size.A5)
+					return "LayoutProductViewer-isLandscape-isSizeA5";
+				return "";
+			},
+			classWide() {
+				return this.isWide
+					? "LayoutProductViewer-isWide"
+					: "LayoutProductViewer-isThin";
+			},
+			classes() {
+				return ["LayoutProductViewer", this.classWide, this.classSize];
+			},
+
 			tabs() {
 				if (!this.product) return [];
 
@@ -103,6 +129,14 @@
 				});
 			},
 
+			imagePreview: (context) => {
+				if (context.imagePreviewIndex >= context.images.length)
+					context.imagePreviewIndex = 0;
+				return context.images.length
+					? context.images[context.imagePreviewIndex]
+					: null;
+			},
+			images: (context) => (!context.product ? [] : context.product.images),
 			hasImagePrevious: (context) =>
 				context.images.length > 0 && context.imagePreviewIndex > 0,
 			hasImageNext: (context) => context.images.length - 1 > context.imagePreviewIndex,
@@ -121,15 +155,6 @@
 			},
 
 			title: (context) => (context.product ? context.product.title : ""),
-
-			imagePreview: (context) => {
-				if (context.imagePreviewIndex >= context.images.length)
-					context.imagePreviewIndex = 0;
-				return context.images.length
-					? context.images[context.imagePreviewIndex]
-					: null;
-			},
-			images: (context) => (!context.product ? [] : context.product.images),
 
 			brandId: (context) => (context.product ? context.product.brandId : ""),
 			brandTitle: (context) => (context.brand ? context.brand.title : ""),
@@ -394,10 +419,7 @@
 
 <template>
 	<div
-		:class="[
-			'LayoutProductViewer',
-			`LayoutProductViewer-${isWide ? 'isWide' : 'isThin'}`,
-		]"
+		:class="classes"
 		:style="{
 			'--primary-color': primaryColor,
 			'background-color': backgroundColor,
@@ -426,7 +448,7 @@
 			/>
 		</div>
 
-		<div class="LayoutProductViewer-header" ref="toolbar">
+		<div class="LayoutProductViewer-header">
 			<div
 				class="LayoutProductViewer-preview"
 				v-if="product"
@@ -1227,5 +1249,46 @@
 			--padding: 2rem;
 			padding-left: calc(var(--padding) / 2);
 		}
+	}
+
+	.LayoutProductViewer-isPortrait-isSizeA4 {
+		--width: 210mm;
+		--height: 297mm;
+		width: var(--width);
+		height: var(--height);
+		min-width: var(--width);
+		min-height: var(--height);
+		max-width: var(--width);
+		max-height: var(--height);
+	}
+	.LayoutProductViewer-isLandscape-isSizeA4 {
+		--width: 297mm;
+		--height: 210mm;
+		width: var(--width);
+		height: var(--height);
+		min-width: var(--width);
+		min-height: var(--height);
+		max-width: var(--width);
+		max-height: var(--height);
+	}
+	.LayoutProductViewer-isPortrait-isSizeA5 {
+		--width: 148.5mm;
+		--height: 210mm;
+		width: var(--width);
+		height: var(--height);
+		min-width: var(--width);
+		min-height: var(--height);
+		max-width: var(--width);
+		max-height: var(--height);
+	}
+	.LayoutProductViewer-isLandscape-isSizeA5 {
+		--width: 210mm;
+		--height: 148.5mm;
+		width: var(--width);
+		height: var(--height);
+		min-width: var(--width);
+		min-height: var(--height);
+		max-width: var(--width);
+		max-height: var(--height);
 	}
 </style>

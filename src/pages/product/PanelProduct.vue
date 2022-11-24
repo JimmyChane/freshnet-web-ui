@@ -55,15 +55,6 @@
 						icon: this.host.res("icon/copy-000000.svg"),
 						click: () => this.clickCopyLink(),
 					},
-					// {
-					// 	key: "print",
-					// 	title: "Print",
-					// 	icon: this.host.res("icon/printer-000000.svg"),
-					// 	click: () => {
-					// 		console.log("print");
-					// 		this.$root.print(this.$refs.PanelProduct);
-					// 	},
-					// },
 				];
 			},
 		},
@@ -99,8 +90,9 @@
 </script>
 
 <template>
-	<div class="PanelProduct" ref="PanelProduct">
+	<div class="PanelProduct">
 		<LayoutProductViewer
+			ref="Viewer"
 			:isWide="isWide"
 			:isEditable="isEditable"
 			:leftMenus="actionbarLeftMenus"
@@ -116,9 +108,7 @@
 			@click-product-descriptionUpdate="
 				(x) => $emit('click-product-descriptionUpdate', x)
 			"
-			@click-product-categoryUpdate="
-				(x) => $emit('click-product-categoryUpdate', x)
-			"
+			@click-product-categoryUpdate="(x) => $emit('click-product-categoryUpdate', x)"
 			@click-product-specificationsUpdate="
 				(x) => $emit('click-product-specificationsUpdate', x)
 			"

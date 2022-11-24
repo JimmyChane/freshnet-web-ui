@@ -133,11 +133,7 @@ new Vue({
 			appLayout: null,
 			navigation: null,
 			snackbars: [],
-			imageViewer: {
-				isShowing: false,
-				image: null,
-				thumbnails: [],
-			},
+			imageViewer: { isShowing: false, image: null, thumbnails: [] },
 		};
 	},
 	computed: {
@@ -374,9 +370,10 @@ new Vue({
 			document.body.removeChild(element);
 		},
 		print(element) {
-			// let PHE = require("print-html-element"); // https://www.npmjs.com/package/simple-print
-			// PHE.printElement(element);
-
+			// this.printUsingNative(element);
+			this.printUsingPHE(element);
+		},
+		printUsingNative(element) {
 			const eWindow = window.open("", "PRINT", "height=400,width=600");
 
 			eWindow.document.write("<html>");
@@ -409,6 +406,22 @@ new Vue({
 
 			eWindow.print();
 			eWindow.close();
+		},
+		printUsingPHE(element) {
+			// let PHE = require("simple-print"); // https://www.npmjs.com/package/simple-print
+			let PHE = require("print-html-element"); // https://www.npmjs.com/package/print-html-element
+
+			const options = {
+				printMode: "iframe", // 'iframe', 'popup'
+				// pageTitle: "",
+				// templateString: "",
+				popupProperties: "scrollbars=false",
+				// stylesheets: "" | [""],
+				// styles: "" | [""],
+			};
+
+			PHE.printElement(element, options);
+			// PHE.printHtml(element);
 		},
 
 		// routes
