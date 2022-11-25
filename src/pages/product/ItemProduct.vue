@@ -15,7 +15,7 @@
 		emits: ["click"],
 		components: { ImageView },
 		data() {
-			return { primaryColorHex: "" };
+			return { primaryColorHex: "", fullTitle: "" };
 		},
 		props: {
 			mode: { type: Number, default: Mode.Grid },
@@ -26,33 +26,17 @@
 			isList: (c) => c.mode === Mode.List,
 			isGrid: (c) => c.mode === Mode.Grid,
 
+			primaryColor() {
+				return chroma.valid(this.primaryColorHex)
+					? chroma(this.primaryColorHex)
+					: chroma("294656");
+			},
+
 			user: (c) => c.loginStore.getters.user,
 			userType: (c) => (c.user ? c.user.userType : User.Type.None),
 			isUserAdmin: (c) => c.userType === User.Type.Admin,
 			isUserStaff: (c) => c.userType === User.Type.Staff,
-			isEditable: (c) => c.isUserAdmin || c.isUserStaff,
-
-			product: (c) => c.item,
-
-			productImages: (c) => c.product.images,
-			preview: (c) => (c.productImages.length ? c.productImages[0] : ""),
-
-			productTitle: (c) => (c.product ? c.product.title : ""),
-			productBrandId: (c) => (c.product ? c.product.brandId : ""),
-			productBrand: (c) =>
-				c.brandStore.getters.items.find((brand) => {
-					return brand.id === c.productBrandId;
-				}),
-			brandTitle: (c) => (c.productBrand ? c.productBrand.title : ""),
-			fullTitle: (c) => {
-				let { productTitle, brandTitle } = c;
-				if (productTitle && brandTitle) return `${brandTitle} ${productTitle}`;
-				if (productTitle) return productTitle;
-				if (brandTitle) return brandTitle;
-				return "";
-			},
-
-			isAvailable: (c) => (c.product ? c.product.isStockAvailable() : false),
+			allowEdit: (c) => c.isUserAdmin || c.isUserStaff,
 
 			shouldShowPrice: (c) => {
 				let setting = c.settingStore.getters.items.find((setting) => {
@@ -61,9 +45,13 @@
 				return setting ? setting.value : false;
 			},
 
+			preview: (c) => (c.item ? c.item.toImageThumbnail() : null),
+			productBrandId: (c) => (c.item ? c.item.brandId : ""),
+			isAvailable: (c) => (c.item ? c.item.isStockAvailable() : false),
+
 			productPrice: (c) => {
-				if (!c.isEditable && !c.shouldShowPrice) return null;
-				return c.product.price;
+				if (!c.allowEdit && !c.shouldShowPrice) return null;
+				return c.item.price;
 			},
 			productPriceNormal: (c) => {
 				return c.productPrice && c.productPrice.normal
@@ -76,7 +64,7 @@
 					: new ProductPrice();
 			},
 			price: (c) => {
-				if (!c.isEditable && !c.shouldShowPrice) return null;
+				if (!c.allowEdit && !c.shouldShowPrice) return null;
 
 				let normal = c.productPriceNormal;
 				let promotion = c.productPricePromotion;
@@ -88,26 +76,31 @@
 					return { from: normal, to: promotion };
 				return null;
 			},
-
-			priceLabels: (c) => ProductPreset.generateStockLabels(c.product),
-			specLabels: (c) => ProductPreset.generateSpecificationLabels(c.product),
-
-			primaryColor() {
-				return chroma.valid(this.primaryColorHex)
-					? chroma(this.primaryColorHex)
-					: chroma("294656");
-			},
+			priceLabels: (c) => ProductPreset.generateStockLabels(c.item),
+			specLabels: (c) => ProductPreset.generateSpecificationLabels(c.item),
 		},
 		watch: {
 			preview() {
 				this.invalidatePreview();
 			},
+			item() {
+				this.invalidateFullTitle();
+			},
+			productBrandId() {
+				this.invalidateFullTitle();
+			},
 		},
 		mounted() {
 			this.settingStore.dispatch("getItems");
+			this.invalidateFullTitle();
 			this.invalidatePreview();
 		},
 		methods: {
+			async invalidateFullTitle() {
+				this.fullTitle = "";
+				if (!this.item) return;
+				this.fullTitle = await this.item.fetchFullTitle();
+			},
 			async invalidatePreview() {
 				const color = this.preview
 					? await this.preview.fetchColor().catch(() => null)
@@ -125,7 +118,6 @@
 			'ItemProduct',
 			isList ? 'ItemProduct-modeList' : '',
 			isGrid ? 'ItemProduct-modeGrid' : '',
-			`ItemProduct-${productImages.length ? 'hasImages' : 'noImages'}`,
 			`ItemProduct-${isSelected ? 'isSelected' : 'isNotSelected'}`,
 		]"
 		:style="{
@@ -136,8 +128,8 @@
 			'--background-color-card': primaryColor.mix('ffffff', 0.8),
 			'--background-color-card-hover': primaryColor.mix('ffffff', 0.8),
 		}"
-		:ref="product.id"
-		@click="$emit('click', product)"
+		:ref="item.id"
+		@click="$emit('click', item)"
 	>
 		<ImageView class="ItemProduct-preview" v-if="preview" :src="preview" />
 		<div :class="['ItemProduct-preview', 'ItemProduct-previewEmpty']" v-else>
