@@ -2,7 +2,7 @@
 	import Empty from "@/components/Empty.vue";
 	import LoadingDots from "@/components/LoadingDots.vue";
 	import LabelMenus from "@/components/LabelMenus.vue";
-	import Footer from "@/app/Footer.vue";
+	import Footer from "@/app/footer/Footer.vue";
 
 	import ActionbarProduct from "./ActionBarProduct.vue";
 	import ItemProduct from "./ItemProduct.vue";

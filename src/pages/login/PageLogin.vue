@@ -2,8 +2,8 @@
    import Loadingv1 from "@/components/Loading";
    import Input from "@/components/Input.vue";
    import Button2 from "@/components/button/Button2.vue";
-   import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
-   import Footer from "@/app/Footer.vue";
+   import Actionbar from "@/components/actionbar/Actionbar.vue";
+   import Footer from "@/app/footer/Footer.vue";
 
    export default {
       title: "Staff Login",

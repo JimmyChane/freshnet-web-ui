@@ -1,9 +1,9 @@
 <script>
 	import AppHost from "@/host/AppHost.js";
-	import LayoutProductViewer from "@/pages/product/LayoutProductViewer/LayoutProductViewer.vue";
+	import ViewerProduct from "@/pages/product/viewerProduct/ViewerProduct.vue";
 
 	export default {
-		components: { LayoutProductViewer },
+		components: { ViewerProduct },
 		emits: [
 			"click-dismiss",
 			"click-productRemove",
@@ -91,7 +91,7 @@
 
 <template>
 	<div class="PanelProduct">
-		<LayoutProductViewer
+		<ViewerProduct
 			ref="Viewer"
 			:isWide="isWide"
 			:isEditable="isEditable"
@@ -108,7 +108,9 @@
 			@click-product-descriptionUpdate="
 				(x) => $emit('click-product-descriptionUpdate', x)
 			"
-			@click-product-categoryUpdate="(x) => $emit('click-product-categoryUpdate', x)"
+			@click-product-categoryUpdate="
+				(x) => $emit('click-product-categoryUpdate', x)
+			"
 			@click-product-specificationsUpdate="
 				(x) => $emit('click-product-specificationsUpdate', x)
 			"

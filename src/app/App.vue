@@ -4,8 +4,8 @@
 	import PagePs2 from "@/pages/ps2/PagePs2.vue";
 	import PageManage from "@/pages/manage/PageManage.vue";
 
-	import LeftNav from "./LeftNav.vue";
-	import ImageViewer from "./ImageViewer.vue";
+	import LeftNav from "./leftNav/LeftNav.vue";
+	import ViewerImage from "./ViewerImage.vue";
 	import Snackbar from "./Snackbar.vue";
 
 	export default {
@@ -15,7 +15,7 @@
 			return [PageHome, PageProduct, PagePs2, PageManage];
 		},
 
-		components: { LeftNav, ImageViewer, Snackbar },
+		components: { LeftNav, ViewerImage, Snackbar },
 		data() {
 			return { statusIsShown: false, layoutLoginIsShown: false };
 		},
@@ -97,7 +97,7 @@
 
 		<div class="App-overflow">
 			<div class="App-overflow-body">
-				<ImageViewer class="App-imageViewer" />
+				<ViewerImage class="App-imageViewer" />
 			</div>
 		</div>
 

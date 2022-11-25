@@ -1,5 +1,5 @@
 <script>
-	import ActionbarMenus from "@/components/navigation/actionbar2/ActionbarMenus.vue";
+	import ActionbarMenus from "@/components/actionbar/ActionbarMenus.vue";
 	import SearchInput from "@/components/SearchInput.vue";
 	import ItemCustomerSearch from "./ItemCustomerSearch.vue";
 

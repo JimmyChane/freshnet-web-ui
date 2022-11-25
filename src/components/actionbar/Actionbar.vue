@@ -6,23 +6,17 @@
 			title: { type: String, default: "" },
 			leftMenus: { default: () => [] },
 			rightMenus: { default: () => [] },
-			hasShadow: { type: Boolean, default: false },
 		},
 		computed: {
-			LeftMenus: (c) => c.parseMenus(c.leftMenus),
-			RightMenus: (c) => c.parseMenus(c.rightMenus),
-			hasSlot: (c) => !c.$slots.footer,
+			LeftMenus: (context) => context.parseMenus(context.leftMenus),
+			RightMenus: (context) => context.parseMenus(context.rightMenus),
+			hasSlot: (context) => !context.$slots.footer,
 		},
 		methods: {
 			parseMenus(menus) {
-				if (Array.isArray(menus)) {
+				if (Array.isArray(menus))
 					return menus.filter((menu) => typeof menu === "object" && menu);
-				}
-
-				if (typeof menus === "object") {
-					return [menus];
-				}
-
+				if (typeof menus === "object") return [menus];
 				return [];
 			},
 		},
@@ -30,17 +24,14 @@
 </script>
 
 <template>
-	<div :class="['Actionbar', hasShadow ? 'Actionbar-hasShadow' : '']">
+	<div class="Actionbar">
 		<ActionbarMenus
 			class="Actionbar-leftMenus"
 			v-if="LeftMenus.length > 0"
 			:menus="LeftMenus"
 		/>
-
 		<span class="Actionbar-title" v-if="title">{{ title }}</span>
-
 		<slot v-if="hasSlot" />
-
 		<ActionbarMenus
 			class="Actionbar-rightMenus"
 			v-if="RightMenus.length"
@@ -57,11 +48,10 @@
 		flex-wrap: nowrap;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1rem;
+		gap: 0.5rem;
 		position: sticky;
 		top: 0;
-		z-index: 3;
-		padding: 1rem 1.2rem;
+		padding: 0.6rem 0.8rem;
 		transition: var(--animation-duration);
 		color: var(--primary-color);
 
@@ -71,7 +61,7 @@
 		--actionbar-background-color-dark: var(--actionbar-color);
 
 		@media (max-width: 800px) {
-			padding: 0.6rem 0.8rem;
+			padding: 0.4rem 0.6rem;
 		}
 
 		.Actionbar-leftMenus {
@@ -88,8 +78,7 @@
 			align-items: center;
 			justify-content: flex-start;
 
-			font-size: 1.6rem;
-			font-weight: 400;
+			font-size: 1rem;
 			font-weight: 600;
 			white-space: nowrap;
 			text-overflow: clip;
@@ -99,8 +88,5 @@
 				font-size: 1.4rem;
 			}
 		}
-	}
-	.Actionbar-hasShadow {
-		box-shadow: 0 0 6rem hsla(0, 0%, 0%, 0.4);
 	}
 </style>

@@ -1,5 +1,5 @@
 <script>
-	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
+	import Actionbar from "@/components/actionbar/Actionbar.vue";
 	import LinkIcon from "@/components/button/LinkIcon.vue";
 	import ButtonOption from "@/components/button/ButtonOption.vue";
 	import Selector from "@/components/selector/Selector.vue";

@@ -14,30 +14,27 @@
 </script>
 
 <template>
-	<button class="ItemProductSuggest2" @click="$emit('click', item)">
-		<!-- <div class="ItemProductSuggest2-thumbnail" v-if="itemThumbnailUrl"> </div> -->
+	<div class="ItemProductSuggest2">
+		<span class="ItemProductSuggest2-title">{{ itemTitle }}</span>
 		<img
-			class="ItemProductSuggest2-thumbnail-img"
+			class="ItemProductSuggest2-thumbnail"
 			v-if="itemThumbnailUrl"
 			:src="itemThumbnailUrl"
 		/>
-
-		<div class="ItemProductSuggest2-header">
-			<span class="ItemProductSuggest2-title">{{ itemTitle }}</span>
-		</div>
-	</button>
+	</div>
 </template>
 
 <style lang="scss" scoped>
 	.ItemProductSuggest2 {
 		width: 100%;
-		min-height: 4rem;
+		height: 6rem;
+		min-height: 6rem;
 		border-radius: 0.5rem;
 		border: none;
 		background: hsla(0, 0%, 100%, 0.6);
-		cursor: pointer;
 		transition: var(--animation-duration);
 
+		cursor: pointer;
 		display: flex;
 		flex-direction: row;
 		justify-content: flex-start;
@@ -48,7 +45,7 @@
 		}
 
 		.ItemProductSuggest2-thumbnail {
-			height: 4rem;
+			height: 6rem;
 			aspect-ratio: 16/10;
 			overflow: hidden;
 			background-color: white;
@@ -57,21 +54,13 @@
 			object-fit: cover;
 		}
 
-		.ItemProductSuggest2-header {
+		.ItemProductSuggest2-title {
+			width: fit-content;
 			padding: 0 2rem;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			.ItemProductSuggest2-hint {
-				width: fit-content;
-			}
-			.ItemProductSuggest2-title {
-				width: fit-content;
-				line-height: 1rem;
-				font-weight: 600;
-				font-size: 1rem;
-			}
+			line-height: 1rem;
+			font-weight: 600;
+			font-size: 1rem;
+			flex-grow: 1;
 		}
 	}
 </style>

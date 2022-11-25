@@ -1,5 +1,5 @@
 <script>
-	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
+	import Actionbar from "@/components/actionbar/Actionbar.vue";
 	import SearchInput from "@/components/SearchInput.vue";
 
 	import ItemSearchProduct from "./ItemSearchProduct.vue";
@@ -121,23 +121,23 @@
 <template>
 	<Actionbar
 		class="HomeActionbar"
-		:leftMenus="
+		:leftMenus="[
+			isThin
+				? {
+						icon: host.res('img/freshnet-enterprise-logo.svg'),
+						click: () => {},
+				  }
+				: null,
 			$root.navigation.isDrawer()
 				? {
 						title: 'Hamburger Menu',
 						icon: host.res('icon/hamburgerMenu-000000.svg'),
 						click: () => $root.openNavigationDrawer(),
 				  }
-				: null
-		"
+				: null,
+		]"
 	>
 		<div class="HomeActionbar-body">
-			<img
-				class="Home-actionbar-logo"
-				v-if="isThin"
-				:src="host.res('img/freshnet-enterprise-logo.svg')"
-			/>
-
 			<!-- <router-link class="HomeActionbar-nav" v-if="!isThin" :to="{ path: '/product' }"
 				>Product</router-link
 			>
@@ -231,13 +231,6 @@
 		gap: 1rem;
 		padding: 0.2rem 1.5rem;
 		background-color: white;
-	}
-
-	.Home-actionbar-logo {
-		--logo-size: 2rem;
-		width: var(--logo-size);
-		height: var(--logo-size);
-		padding: 0.4rem;
 	}
 
 	.HomeActionbar-nav {

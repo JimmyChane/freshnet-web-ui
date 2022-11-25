@@ -1,9 +1,9 @@
 <script>
-	import LayoutProductViewer from "@/pages/product/LayoutProductViewer/LayoutProductViewer.vue";
+	import ViewerProduct from "@/pages/product/viewerProduct/ViewerProduct.vue";
 	import LoadingDots from "@/components/LoadingDots.vue";
 
 	export default {
-		components: { LayoutProductViewer, LoadingDots },
+		components: { ViewerProduct, LoadingDots },
 		data() {
 			return { product: null };
 		},
@@ -28,7 +28,9 @@
 		},
 		mounted() {
 			this.$root.setAppLayout(this.$root.APP_LAYOUT_MODE.FULL);
-			this.$root.setNavigationDrawerVisibiliy(this.$root.DRAWER_VISIBILITY.NONE);
+			this.$root.setNavigationDrawerVisibiliy(
+				this.$root.DRAWER_VISIBILITY.NONE,
+			);
 
 			this.invalidate();
 		},
@@ -49,7 +51,7 @@
 
 <template>
 	<div class="PageProductView">
-		<LayoutProductViewer
+		<ViewerProduct
 			ref="Viewer"
 			:product="product"
 			:isWide="isOver1200px"

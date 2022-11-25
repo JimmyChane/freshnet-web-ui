@@ -1,6 +1,6 @@
 <script>
 	import Bottomsheet from "@/components/window/BottomsheetWindow.vue";
-	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
+	import Actionbar from "@/components/actionbar/Actionbar.vue";
 	import ImageView from "@/components/ImageView.vue";
 
 	export default {
@@ -29,16 +29,16 @@
 
 <template>
 	<Bottomsheet
-		class="ImageViewer"
+		class="ViewerImage"
 		:isShowing="isShowing"
 		@click-dismiss="() => clickDismiss()"
 		:style="{
 			'--thumbnails-height': thumbnails.length > 1 ? '5rem' : '0',
 		}"
 	>
-		<div class="ImageViewer-body">
+		<div class="ViewerImage-body">
 			<Actionbar
-				class="ImageViewer-actionbar"
+				class="ViewerImage-actionbar"
 				:leftMenus="{
 					icon: host.res('icon/close-000000.svg'),
 					click: () => clickDismiss(),
@@ -46,7 +46,7 @@
 			/>
 
 			<div
-				class="ImageViewer-main"
+				class="ViewerImage-main"
 				:style="{
 					height:
 						thumbnails.length > 1
@@ -55,7 +55,7 @@
 				}"
 			>
 				<ImageView
-					class="ImageViewer-image"
+					class="ViewerImage-image"
 					v-if="image"
 					:src="image.toUrl()"
 					:style="{
@@ -97,7 +97,7 @@
 </template>
 
 <style lang="scss" scoped>
-	.ImageViewer {
+	.ViewerImage {
 		--default-size-top: 0;
 		--default-size-right: 0;
 		--default-size-bottom: 0;
@@ -107,21 +107,21 @@
 		--thumbnails-height: 5rem;
 		--thumbnail-height: 4.2rem;
 
-		.ImageViewer-body {
+		.ViewerImage-body {
 			width: 100%;
 			height: 100%;
 			display: flex;
 			flex-direction: column;
 			overflow: hidden;
 			background-color: hsla(0, 0%, 100%, 0.9);
-			.ImageViewer-actionbar {
+			.ViewerImage-actionbar {
 				z-index: 3;
 				background: none;
 				color: black;
 				height: var(--actionbar-height);
 				position: absolute;
 			}
-			.ImageViewer-main {
+			.ViewerImage-main {
 				z-index: 2;
 				width: 100vw;
 				height: calc(100vh - var(--thumbnails-height));
@@ -130,7 +130,7 @@
 				align-items: center;
 				justify-content: center;
 				padding: 1rem;
-				.ImageViewer-image {
+				.ViewerImage-image {
 					z-index: 2;
 					width: 100%;
 					height: 100%;

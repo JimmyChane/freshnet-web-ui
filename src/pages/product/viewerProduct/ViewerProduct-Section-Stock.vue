@@ -1,0 +1,73 @@
+<script>
+	import Section from "./ViewerProduct-Section.vue";
+	import Checkbox from "./ViewerProduct-StockCheckbox.vue";
+
+	export default {
+		components: { Section, Checkbox },
+		props: {
+			primaryColor: { type: Object },
+			allowEdit: { type: Boolean, default: false },
+			product: { type: Object, default: () => null },
+		},
+		computed: {
+			productIsAvailable() {
+				if (!this.product) return true;
+				return this.product.isStockAvailable();
+			},
+			productIsSecondHand() {
+				if (!this.product) return false;
+				return this.product.isStockSecondHand();
+			},
+		},
+	};
+</script>
+
+<template>
+	<Section :primaryColor="primaryColor" title="Stock" v-if="allowEdit">
+		<div class="SectionStock">
+			<Checkbox
+				class="SectionStock-outOfStock"
+				title="Out of Stock"
+				:checked="!productIsAvailable"
+				@click="
+					() => {
+						productStore.dispatch('updateAvailabilityOfId', {
+							id: product.id,
+							isAvailable: !productIsAvailable,
+						});
+					}
+				"
+			/>
+			<Checkbox
+				class="SectionStock-secondHand"
+				title="Second Hand"
+				:checked="productIsSecondHand"
+				@click="
+					() => {
+						productStore.dispatch('updateSecondHandOfId', {
+							id: product.id,
+							isSecondHand: !productIsSecondHand,
+						});
+					}
+				"
+			/>
+		</div>
+	</Section>
+</template>
+
+<style lang="scss" scoped>
+	.SectionStock {
+		grid-area: stock;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		align-items: flex-start;
+		gap: 0.5rem;
+		.SectionStock-outOfStock {
+			--primary-color: #ff4b33;
+		}
+		.SectionStock-secondHand {
+			--primary-color: #249696;
+		}
+	}
+</style>

@@ -5,17 +5,17 @@
 </script>
 
 <template>
-	<dir class="LayoutProductViewerImageSelector">
-		<div class="LayoutProductViewerImageSelector-body">
-			<div class="LayoutProductViewerImageSelector-button">
+	<dir class="ProductViewerImageSelector">
+		<div class="ProductViewerImageSelector-body">
+			<div class="ProductViewerImageSelector-button">
 				<img
-					class="LayoutProductViewerImageSelector-icon"
+					class="ProductViewerImageSelector-icon"
 					:src="host.res('icon/add-000000.svg')"
 				/>
 			</div>
 
 			<input
-				class="LayoutProductViewerImageSelector-input"
+				class="ProductViewerImageSelector-input"
 				type="file"
 				accept="image/jpeg, image/jpg, image/png"
 				@change="
@@ -32,7 +32,7 @@
 </template>
 
 <style lang="scss" scoped>
-	.LayoutProductViewerImageSelector {
+	.ProductViewerImageSelector {
 		--size: 3rem;
 		@media (max-width: 480px) {
 			--size: 2.9rem;
@@ -52,7 +52,7 @@
 		align-items: center;
 		justify-content: center;
 
-		.LayoutProductViewerImageSelector-body {
+		.ProductViewerImageSelector-body {
 			width: var(--size);
 			height: var(--size);
 			min-width: var(--size);
@@ -71,7 +71,7 @@
 				background: hsla(0, 0%, 100%, 0.8);
 			}
 
-			.LayoutProductViewerImageSelector-button {
+			.ProductViewerImageSelector-button {
 				position: absolute;
 				top: 0;
 				bottom: 0;
@@ -88,7 +88,7 @@
 				align-content: center;
 				justify-content: center;
 
-				.LayoutProductViewerImageSelector-icon {
+				.ProductViewerImageSelector-icon {
 					--size: 1em;
 					width: var(--size);
 					height: var(--size);
@@ -105,7 +105,7 @@
 				}
 			}
 
-			.LayoutProductViewerImageSelector-input {
+			.ProductViewerImageSelector-input {
 				position: absolute;
 				top: 0;
 				bottom: 0;

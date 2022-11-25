@@ -17,7 +17,10 @@
 			`LayoutProductViewerImage-${isSelected ? 'isSelected' : 'isDeselected'}`,
 		]"
 	>
-		<button class="LayoutProductViewerImage-item" @click="() => $emit('click', image)">
+		<button
+			class="LayoutProductViewerImage-item"
+			@click="() => $emit('click', image)"
+		>
 			<ImageView class="LayoutProductViewerImage-item-img" :src="image" />
 		</button>
 	</div>
@@ -25,15 +28,15 @@
 
 <style lang="scss" scoped>
 	.LayoutProductViewerImage-isDeselected {
-		--image-width: 5rem;
+		--image-width: 4.5rem;
 		--image-height: 3rem;
 		@media (max-width: 480px) {
-			--image-width: calc(3.8rem * 1.3);
-			--image-height: calc(2.2rem * 1.3);
+			--image-width: 3.8rem;
+			--image-height: 2.2rem;
 		}
 
 		.LayoutProductViewerImage-item {
-			background: hsla(0, 0%, 100%, 0.6);
+			background: hsla(0, 0%, 100%, 0.4);
 			cursor: pointer;
 			&:hover {
 				background: hsla(0, 0%, 100%, 0.8);
@@ -41,23 +44,29 @@
 		}
 	}
 	.LayoutProductViewerImage-isSelected {
-		--image-width: calc(5rem * 1.3);
-		--image-height: calc(3rem * 1.3);
+		--image-width: 7rem;
+		--image-height: 3rem;
 
 		@media (max-width: 480px) {
-			--image-width: calc(3.8rem * 1.3);
-			--image-height: calc(2.2rem * 1.3);
+			--image-width: 3.8rem;
+			--image-height: 2.2rem;
 		}
 
 		.LayoutProductViewerImage-item {
 			background: hsla(0, 0%, 100%, 0.8);
+
+			& > * {
+				opacity: 0;
+			}
 		}
 	}
 	.LayoutProductViewerImage {
 		--box-padding: 0.18rem;
 
 		--width: calc(var(--image-width) + var(--box-padding) + var(--box-padding));
-		--height: calc(var(--image-height) + var(--box-padding) + var(--box-padding));
+		--height: calc(
+			var(--image-height) + var(--box-padding) + var(--box-padding)
+		);
 
 		width: var(--width);
 		height: var(--height);

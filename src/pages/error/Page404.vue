@@ -1,6 +1,6 @@
 <script>
-   import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
-   import Footer from "@/app/Footer.vue";
+   import Actionbar from "@/components/actionbar/Actionbar.vue";
+   import Footer from "@/app/footer/Footer.vue";
 
    export default {
       rtitle: "Page Not Found",

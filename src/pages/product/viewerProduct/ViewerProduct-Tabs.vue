@@ -1,5 +1,5 @@
 <script>
-	import Tab from "./LayoutProductViewer-Tabs-Tab.vue";
+	import Tab from "./ViewerProduct-Tabs-Tab.vue";
 
 	export default {
 		components: { Tab },
@@ -41,7 +41,7 @@
 </script>
 
 <template>
-	<div class="LayoutProductViewerTabs">
+	<div class="ProductViewerTabs">
 		<Tab
 			v-for="item of items"
 			:key="item.title"
@@ -52,7 +52,7 @@
 </template>
 
 <style lang="scss" scoped>
-	.LayoutProductViewerTabs {
+	.ProductViewerTabs {
 		width: 100%;
 		display: flex;
 		flex-direction: row;
@@ -61,7 +61,7 @@
 		overflow-y: hidden;
 		padding: 0 0.5rem;
 	}
-	.LayoutProductViewerTabs {
+	.ProductViewerTabs {
 		--scrollbar-size: 0;
 		--scrollbar-thumb-radius: 0;
 		--scrollbar-thumb-radius: 0;

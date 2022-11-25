@@ -1,7 +1,7 @@
 <script>
 	import SearchInput from "@/components/SearchInput.vue";
 	import PopupWindow from "@/components/window/PopupWindow.vue";
-	import Footer from "@/app/Footer.vue";
+	import Footer from "@/app/footer/Footer.vue";
 
 	import Actionbar from "./PageHome-Actionbar.vue";
 	import Header from "./PageHome-Header.vue";

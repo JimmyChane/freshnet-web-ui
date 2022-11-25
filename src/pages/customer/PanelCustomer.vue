@@ -1,5 +1,5 @@
 <script>
-	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
+	import Actionbar from "@/components/actionbar/Actionbar.vue";
 	import Loadingv1 from "@/components/Loading.vue";
 
 	import Section from "./PanelCustomer_Section.vue";

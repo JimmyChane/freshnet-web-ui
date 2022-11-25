@@ -1,5 +1,5 @@
 <script>
-	import ActionbarMenus from "@/components/navigation/actionbar2/ActionbarMenus.vue";
+	import ActionbarMenus from "@/components/actionbar/ActionbarMenus.vue";
 	import SearchInput from "@/components/SearchInput.vue";
 	import LayoutViewSelector from "@/pages/service/PageService_LayoutViewSelector.vue";
 	import LabelMenus from "@/components/LabelMenus.vue";

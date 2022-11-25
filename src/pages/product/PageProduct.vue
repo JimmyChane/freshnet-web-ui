@@ -4,7 +4,7 @@
 
 	import Navigation from "@/tools/Navigation.js";
 
-	import Footer from "@/app/Footer.vue";
+	import Footer from "@/app/footer/Footer.vue";
 
 	import PanelProducts from "./PanelProducts.vue";
 	import PanelProduct from "./PanelProduct.vue";
@@ -410,7 +410,7 @@
 			},
 
 			productPrevious() {
-				return null;
+				// return null;
 				const { products } = this;
 				const categoryProducts = products.filter((product) => {
 					if (!this.product) return true;
@@ -429,7 +429,7 @@
 				return null;
 			},
 			productNext() {
-				return null;
+				// return null;
 				const products = this.products;
 				const categoryProducts = products.filter((product) => {
 					if (!this.product) return true;

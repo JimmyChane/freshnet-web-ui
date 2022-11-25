@@ -7,22 +7,22 @@
 		props: {
 			title: { type: String, default: "" },
 			menu: { type: Object, default: () => null },
-			primaryColor: { type: String, default: "" },
+			primaryColor: { type: chroma, default: () => null },
 		},
 		computed: {
 			titleColor() {
-				if (!chroma.valid(this.primaryColor)) return "#4E504D";
-				return chroma(this.primaryColor).mix("000000", 0.9).toString();
+				if (!this.primaryColor) return "#4E504D";
+				return this.primaryColor.mix("000000", 0.9).toString();
 			},
 		},
 	};
 </script>
 
 <template>
-	<div class="LayoutProductViewerSection">
-		<div class="LayoutProductViewerSection-header" v-if="title || menu">
+	<div class="ProductViewerSection">
+		<div class="ProductViewerSection-header" v-if="title || menu">
 			<span
-				class="LayoutProductViewerSection-title"
+				class="ProductViewerSection-title"
 				v-if="title"
 				:style="{ color: titleColor }"
 				>{{ title }}</span
@@ -34,12 +34,12 @@
 </template>
 
 <style lang="scss" scoped>
-	.LayoutProductViewerSection {
+	.ProductViewerSection {
 		width: 100%;
 		display: flex;
 		flex-direction: column;
 
-		.LayoutProductViewerSection-header {
+		.ProductViewerSection-header {
 			width: 100%;
 			display: flex;
 			flex-direction: row;
@@ -48,7 +48,7 @@
 			gap: 0.5rem;
 			padding: 0 1.2rem;
 
-			.LayoutProductViewerSection-title {
+			.ProductViewerSection-title {
 				font-weight: 600;
 				font-size: 1rem;
 				padding: 0.8rem 0;

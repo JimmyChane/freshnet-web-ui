@@ -1,10 +1,10 @@
 <script>
-	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
+	import Actionbar from "@/components/actionbar/Actionbar.vue";
 	import LoadingDots from "@/components/LoadingDots.vue";
 	import ButtonIcon from "@/components/button/ButtonIcon.vue";
 	import Empty from "@/components/Empty.vue";
 	import PopupWindow from "@/components/window/PopupWindow.vue";
-	import Footer from "@/app/Footer.vue";
+	import Footer from "@/app/footer/Footer.vue";
 
 	import WindowItemPs2Disc from "./WindowItemPs2Disc.vue";
 	import ItemPs2Disc from "./ItemPs2Disc.vue";

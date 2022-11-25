@@ -1,6 +1,6 @@
 <script>
 	import PopupWindow from "@/components/window/PopupWindow.vue";
-	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
+	import Actionbar from "@/components/actionbar/Actionbar.vue";
 	import ImageView from "@/components/ImageView.vue";
 
 	export default {

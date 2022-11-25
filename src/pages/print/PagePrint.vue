@@ -1,7 +1,7 @@
 <script>
-	import Actionbar from "@/components/navigation/actionbar2/Actionbar.vue";
+	import Actionbar from "@/components/actionbar/Actionbar.vue";
 	import Layer from "./PagePrint_Layer1.vue";
-	import Footer from "@/app/Footer.vue";
+	import Footer from "@/app/footer/Footer.vue";
 
 	class Layer1 {
 		constructor(title = "", layers = []) {

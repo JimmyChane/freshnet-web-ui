@@ -1,9 +1,9 @@
 <script>
-	import LayoutProductViewerImage from "./LayoutProductViewer_Image.vue";
-	import LayoutProductViewerImageSelector from "./LayoutProductViewer_ImageSelector.vue";
+	import ProductViewerImage from "./ViewerProduct-Images-Image.vue";
+	import ProductViewerImageSelector from "./ViewerProduct-Images-Selector.vue";
 
 	export default {
-		components: { LayoutProductViewerImage, LayoutProductViewerImageSelector },
+		components: { ProductViewerImage, ProductViewerImageSelector },
 		emits: ["click-image", "click-add-image-file"],
 		props: {
 			indexAt: { type: Number, default: -1 },
@@ -14,16 +14,16 @@
 </script>
 
 <template>
-	<div class="LayoutProductViewerImages">
-		<div class="LayoutProductViewerImages-list">
-			<LayoutProductViewerImage
+	<div class="ProductViewerImages">
+		<div class="ProductViewerImages-list">
+			<ProductViewerImage
 				v-for="image of images"
 				:image="image"
 				:key="image.toUrl()"
 				:isSelected="images.indexOf(image) === indexAt"
 				@click="() => $emit('click-image', image)"
 			/>
-			<LayoutProductViewerImageSelector
+			<ProductViewerImageSelector
 				v-if="isEditable"
 				@click-file="(file) => $emit('click-add-image-file', file)"
 			/>
@@ -32,18 +32,17 @@
 </template>
 
 <style lang="scss" scoped>
-	.LayoutProductViewerImages {
+	.ProductViewerImages {
 		width: 100%;
 		display: flex;
 		flex-direction: row;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: center;
 
 		overflow-x: auto;
 		overflow-y: hidden;
 		padding-left: 1.75rem;
 		padding-right: 1.75rem;
-		padding-bottom: 0.3rem;
 
 		--scrollbar-size: 0.3rem;
 		--scrollbar-thumb-radius: 0.2rem;
@@ -74,10 +73,11 @@
 			}
 		}
 
-		.LayoutProductViewerImages-list {
+		.ProductViewerImages-list {
+			--height: 4rem;
 			max-width: 100%;
-			height: calc(3.5rem * 1.3);
-			min-height: calc(3.5rem * 1.3);
+			height: var(--height);
+			min-height: var(--height);
 
 			display: flex;
 			flex-direction: row;

@@ -1,10 +1,16 @@
 <script>
 	import ImageView from "@/components/ImageView.vue";
+	import Arrow from "./ViewerProduct-ImagePreview-Arrow.vue";
+	import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
 	export default {
-		components: { ImageView },
+		components: { ImageView, Arrow },
 		emits: ["click-image", "click-remove", "click-previous", "click-next"],
 		props: {
+			primaryColor: { type: Object },
+			allowEdit: { type: Boolean, default: false },
+			product: { type: Object, default: () => null },
+
 			image: { type: Object, default: () => null },
 
 			hasImagePrevious: { type: Boolean, default: false },
@@ -12,17 +18,24 @@
 
 			hasProductPrevious: { type: Boolean, default: false },
 			hasProductNext: { type: Boolean, default: false },
-
-			isEditable: { type: Boolean, default: false },
 		},
 		data() {
 			return {
 				imageStyle: { scale: "1", x: "0%", y: "0%" },
 				imageUrl: "",
 				imageIsFetching: false,
+
+				ArrowDirection: Arrow.Direction,
 			};
 		},
 		computed: {
+			primaryColorIsDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 60,
+
+			arrowIcon: (c) =>
+				c.primaryColorIsDark
+					? c.host.res("icon/arrowDown-white.svg")
+					: c.host.res("icon/arrowDown-black.svg"),
+
 			isThin: (c) => c.$root.window.innerWidth < 550,
 			imageIsShowing() {
 				if (this.imageIsFetching) return true;
@@ -76,55 +89,42 @@
 	<div
 		:class="[
 			'LayoutProductViewerImagePreview',
-			`LayoutProductViewerImagePreview-${imageIsShowing ? 'isShown' : 'isHidden'}`,
+			`LayoutProductViewerImagePreview-${
+				imageIsShowing ? 'isShown' : 'isHidden'
+			}`,
 		]"
 	>
 		<ImageView
 			:class="[
 				'LayoutProductViewerImagePreview-preview',
-				`LayoutProductViewerImagePreview-preview-${image ? 'isShown' : 'isHidden'}`,
+				image
+					? 'LayoutProductViewerImagePreview-preview-isShown'
+					: 'LayoutProductViewerImagePreview-preview-isHidden',
 			]"
 			:src="image"
 			@click="$emit('click-image', image)"
 		/>
 
-		<button
-			:class="[
-				'LayoutProductViewerImagePreview-arrowParent',
-				`LayoutProductViewerImagePreview-arrowParent-${
-					hasImagePrevious || hasProductPrevious ? 'isShown' : 'isHidden'
-				}`,
-				'LayoutProductViewerImagePreview-toLeft',
-			]"
-			@click="(event) => $emit('click-previous')"
-		>
-			<img
-				class="LayoutProductViewerImagePreview-arrow"
-				:src="host.res('icon/arrowDown-black.svg')"
-			/>
-		</button>
-
-		<button
-			:class="[
-				'LayoutProductViewerImagePreview-arrowParent',
-				`LayoutProductViewerImagePreview-arrowParent-${
-					hasImageNext || hasProductNext ? 'isShown' : 'isHidden'
-				}`,
-				'LayoutProductViewerImagePreview-toRight',
-			]"
-			@click="(event) => $emit('click-next')"
-		>
-			<img
-				class="LayoutProductViewerImagePreview-arrow"
-				:src="host.res('icon/arrowDown-black.svg')"
-			/>
-		</button>
+		<Arrow
+			class="LayoutProductViewerImagePreview-arrow"
+			:primaryColor="primaryColor"
+			:direction="ArrowDirection.Left"
+			:isShowing="hasImagePrevious || hasProductPrevious"
+			@click="() => $emit('click-previous')"
+		/>
+		<Arrow
+			class="LayoutProductViewerImagePreview-arrow"
+			:primaryColor="primaryColor"
+			:direction="ArrowDirection.Right"
+			:isShowing="hasImageNext || hasProductNext"
+			@click="() => $emit('click-next')"
+		/>
 
 		<div
 			:class="[
 				'LayoutProductViewerImagePreview-tool',
 				`LayoutProductViewerImagePreview-tool-${
-					isEditable && image ? 'isShown' : 'isHidden'
+					allowEdit && image ? 'isShown' : 'isHidden'
 				}`,
 			]"
 		>
@@ -167,7 +167,6 @@
 				display: flex;
 				flex-direction: row;
 				background: red;
-				// padding: 0.2rem 1.2rem;
 				background-color: hsla(0, 0%, 100%, 0.6);
 				border: 0.1rem solid hsla(0, 0%, 0%, 0.2);
 				box-shadow: 0 0 0.5rem hsla(0, 0%, 0%, 0.2);
@@ -201,62 +200,8 @@
 			pointer-events: none;
 		}
 
-		.LayoutProductViewerImagePreview-arrowParent {
+		.LayoutProductViewerImagePreview-arrow {
 			z-index: 2;
-
-			width: 4rem;
-			height: 100%;
-
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			transition: var(--animation-duration);
-			background: none;
-			border: none;
-			cursor: pointer;
-
-			display: flex;
-			align-items: center;
-			justify-content: center;
-
-			.LayoutProductViewerImagePreview-arrow {
-				width: 1.8rem;
-				height: 1.8rem;
-				opacity: 0.66;
-				transition: var(--animation-duration);
-				pointer-events: none;
-			}
-		}
-		.LayoutProductViewerImagePreview-arrowParent-isHidden {
-			opacity: 0;
-			pointer-events: none;
-		}
-
-		.LayoutProductViewerImagePreview-toLeft {
-			left: 0;
-
-			.LayoutProductViewerImagePreview-arrow {
-				transform: rotate(90deg);
-			}
-
-			&:hover {
-				img {
-					transform: rotate(90deg) scale(1.3);
-				}
-			}
-		}
-		.LayoutProductViewerImagePreview-toRight {
-			right: 0;
-
-			.LayoutProductViewerImagePreview-arrow {
-				transform: rotate(-90deg);
-			}
-
-			&:hover {
-				img {
-					transform: rotate(-90deg) scale(1.3);
-				}
-			}
 		}
 
 		.LayoutProductViewerImagePreview-preview {
@@ -274,10 +219,14 @@
 		}
 	}
 	.LayoutProductViewerImagePreview-isHidden {
-		height: 6rem;
+		height: 12rem;
 		.LayoutProductViewerImagePreview-preview {
 			pointer-events: none;
 			height: inherit;
 		}
+	}
+
+	.LayoutProductViewerImagePreview-preview-isHidden {
+		opacity: 0;
 	}
 </style>
