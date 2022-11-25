@@ -63,13 +63,13 @@
 					menus.push({
 						key: "home",
 						title: "Home",
-						icon: this.host.res("icon/home-2A4858.svg"),
+						icon: this.host.res("icon/home-000000.svg"),
 						click: () => this.$router.push("/home"),
 					});
 					menus.push({
 						key: "hamburgerMenu",
 						title: "Hamburger Menu",
-						icon: this.host.res("icon/hamburgerMenu-2A4858.svg"),
+						icon: this.host.res("icon/hamburgerMenu-000000.svg"),
 						click: () => this.$root.openNavigationDrawer(),
 					});
 				}
@@ -82,7 +82,7 @@
 				if (!this.isOver550px) {
 					menus.push({
 						title: "Search",
-						icon: this.host.res("icon/search-2A4858.svg"),
+						icon: this.host.res("icon/search-000000.svg"),
 						click: () => this.$emit("click-search"),
 					});
 				}
@@ -98,7 +98,7 @@
 				menus.push({
 					key: "refresh",
 					title: "Refresh",
-					icon: this.host.res("icon/refresh-2A4858.svg"),
+					icon: this.host.res("icon/refresh-000000.svg"),
 					click: () => {
 						this.categoryStore.dispatch("refresh");
 						this.productStore.dispatch("refresh");
@@ -131,7 +131,10 @@
 				:key="product.id"
 				:to="{ query: { productId: product.id } }"
 			>
-				<ItemSearchProduct class="ActionbarProduct-search-item" :item="product" />
+				<ItemSearchProduct
+					class="ActionbarProduct-search-item"
+					:item="product"
+				/>
 			</router-link>
 		</SearchInput>
 	</Actionbar>

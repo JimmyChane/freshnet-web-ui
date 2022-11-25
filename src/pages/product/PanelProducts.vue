@@ -6,6 +6,7 @@
 
 	import ActionbarProduct from "./ActionBarProduct.vue";
 	import ItemProduct from "./ItemProduct.vue";
+	import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
 	class MenuGroup {
 		context = null;
@@ -56,6 +57,8 @@
 		props: { products: { type: Array, default: () => [] } },
 		data() {
 			return {
+				labelMenuPrimaryColor: chroma("000000"),
+
 				scrollTop: 0,
 				currentProductId: "",
 
@@ -67,7 +70,9 @@
 				return this.$root.window.innerWidth < 550;
 			},
 			layoutMode() {
-				return this.isLayoutThin ? ItemProduct.Mode.List : ItemProduct.Mode.Grid;
+				return this.isLayoutThin
+					? ItemProduct.Mode.List
+					: ItemProduct.Mode.Grid;
 			},
 
 			isLoading: (context) => context.productStore.getters.isLoading,
@@ -83,7 +88,7 @@
 				if (!this.isEditable) return null;
 				return {
 					title: "Add",
-					icon: this.host.res("icon/add-2A4858.svg"),
+					icon: this.host.res("icon/add-000000.svg"),
 					click: () => this.$emit("click-productAdd"),
 				};
 			},
@@ -149,7 +154,9 @@
 				const categoryGroups = await this.productStore.dispatch(
 					"getGroupsByCategory",
 				);
-				const brandGroups = await this.productStore.dispatch("getGroupsByBrand");
+				const brandGroups = await this.productStore.dispatch(
+					"getGroupsByBrand",
+				);
 
 				const categoryMenus = categoryGroups
 					.filter((group) => {
@@ -258,7 +265,10 @@
 </script>
 
 <template>
-	<div class="PanelProducts" @scroll="(event) => (scrollTop = event.target.scrollTop)">
+	<div
+		class="PanelProducts"
+		@scroll="(event) => (scrollTop = event.target.scrollTop)"
+	>
 		<ActionbarProduct
 			class="PanelProducts-actionbar"
 			:products="products"
@@ -274,6 +284,7 @@
 				]"
 			>
 				<LabelMenus
+					:primaryColor="labelMenuPrimaryColor"
 					v-for="filterMenuGroup of filterMenuGroups"
 					:key="filterMenuGroup.title"
 					:title="filterMenuGroup.title"
@@ -322,10 +333,13 @@
 		align-items: flex-start;
 		overflow-y: auto;
 
+		background-color: #dddddd;
+
 		.PanelProducts-actionbar {
 			z-index: 2;
 			transition: var(--animation-duration);
 			border-bottom: 1px solid hsl(0, 0%, 80%);
+			background-color: #eeeeee;
 		}
 		.PanelProducts-body {
 			z-index: 1;
@@ -346,7 +360,7 @@
 				justify-content: flex-start;
 			}
 			.PanelProducts-filters-isThin {
-				padding: 1rem 0.5rem;
+				padding: 1rem;
 				padding-top: 1.3rem;
 				gap: 0.2rem;
 			}
@@ -370,14 +384,16 @@
 			.PanelProducts-products-isThin {
 				display: flex;
 				flex-direction: column;
-				gap: 0.2rem;
-				padding: 0.2rem;
+				gap: 0.5rem;
+				padding: 1rem;
 			}
 			.PanelProducts-products-isWide {
 				padding: 1rem;
 				display: grid;
 				grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-				gap: 1rem 0.5rem;
+				grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+				gap: 1rem;
+				gap: 1.5rem 1rem;
 			}
 
 			.PanelProducts-loading {

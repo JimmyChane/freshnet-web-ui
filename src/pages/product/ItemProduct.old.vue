@@ -4,6 +4,7 @@
 	import User from "@/items/User.js";
 	import Setting from "@/items/data/Setting.js";
 	import ProductPrice from "@/items/ProductPrice.js";
+	import ProductPreset from "@/items/tools/ProductPreset";
 
 	import ImageView from "@/components/ImageView.vue";
 	import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
@@ -28,7 +29,7 @@
 			primaryColor() {
 				return chroma.valid(this.primaryColorHex)
 					? chroma(this.primaryColorHex)
-					: chroma("cccccc");
+					: chroma("294656");
 			},
 
 			user: (c) => c.loginStore.getters.user,
@@ -75,6 +76,8 @@
 					return { from: normal, to: promotion };
 				return null;
 			},
+			priceLabels: (c) => ProductPreset.generateStockLabels(c.item),
+			specLabels: (c) => ProductPreset.generateSpecificationLabels(c.item),
 		},
 		watch: {
 			preview() {
@@ -115,7 +118,7 @@
 			'ItemProduct',
 			isList ? 'ItemProduct-modeList' : '',
 			isGrid ? 'ItemProduct-modeGrid' : '',
-			isSelected ? 'ItemProduct-isSelected' : 'ItemProduct-isDeselected',
+			`ItemProduct-${isSelected ? 'isSelected' : 'isNotSelected'}`,
 		]"
 		:style="{
 			'--available-opacity': isAvailable ? '1' : '0.1',
@@ -128,18 +131,21 @@
 		:ref="item.id"
 		@click="$emit('click', item)"
 	>
-		<div class="ItemProduct-preview">
-			<ImageView
-				:class="['ItemProduct-preview-image']"
-				v-if="preview"
-				:src="preview"
-			/>
-			<span :class="['ItemProduct-preview-empty']" v-else>No Preview</span>
+		<ImageView class="ItemProduct-preview" v-if="preview" :src="preview" />
+		<div :class="['ItemProduct-preview', 'ItemProduct-previewEmpty']" v-else>
+			<span>No Preview</span>
 		</div>
 
-		<div class="ItemProduct-title">
-			<span class="ItemProduct-title-text">{{ fullTitle }}</span>
-			<span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
+		<div class="ItemProduct-card">
+			<div class="ItemProduct-title">
+				<span class="ItemProduct-title-text">{{ fullTitle }}</span>
+				<span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
+			</div>
+			<div class="ItemProduct-specs" v-if="specLabels.length">
+				<span v-for="label in specLabels" :key="label.text">{{
+					label.text
+				}}</span>
+			</div>
 		</div>
 	</div>
 </template>
@@ -152,118 +158,147 @@
 		transition: var(--animation-duration);
 		text-decoration: none;
 		border: none;
+		border-radius: var(--border-radius);
+		overflow: hidden;
 
 		display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
 		justify-content: flex-start;
-		border-radius: var(--border-radius);
+
+		background-color: var(--background-color);
+		background-color: hsla(0, 0%, 100%, 0.15);
 
 		.ItemProduct-preview {
+			opacity: var(--available-opacity);
 			flex-grow: 0;
+			overflow: hidden;
 			object-fit: cover;
-			border-radius: var(--border-radius);
-			aspect-ratio: 16/12;
-			// filter: drop-shadow(0px 0px 20px hsla(0, 0%, 0%, 0.2));
-			.ItemProduct-preview-image {
-				width: 100%;
-				height: 100%;
-				object-fit: contain;
-				aspect-ratio: 16/12;
-			}
-			.ItemProduct-preview-empty {
-				width: 100%;
-				height: 100%;
-				background-color: hsla(0, 0%, 100%, 0.3);
-				border-radius: var(--border-radius);
-				color: hsla(0, 0%, 0%, 0.3);
-				font-size: 0.8rem;
-				font-weight: 600;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				aspect-ratio: 16/12;
-			}
+		}
+		.ItemProduct-previewEmpty {
+			color: rgba(0, 0, 0, 0.3);
+			font-size: 0.8rem;
+			font-weight: 600;
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
 
-		.ItemProduct-title {
+		.ItemProduct-card {
+			height: 100%;
+			color: black;
+			background: var(--background-color-card);
+			opacity: var(--available-opacity);
+			transition: var(--animation-duration);
+			gap: 0.5rem;
+			padding: 1rem;
+
 			display: flex;
 			flex-direction: column;
-			justify-content: flex-start;
 
-			gap: 0.3rem;
-			color: black;
-
-			.ItemProduct-title-text {
-				min-height: 1.1rem;
-				max-height: 2.2rem;
-				flex-grow: 1;
-				font-size: 1rem;
-				font-weight: 600;
-				line-height: 1.1rem;
-				overflow: hidden;
+			& > * {
+				width: max-content;
+				max-width: 100%;
 				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
 			}
-			.ItemProduct-title-price {
-				font-size: 0.8rem;
+
+			.ItemProduct-title {
+				width: 100%;
+				text-align: start;
+
+				display: flex;
+				flex-direction: row;
+				flex-grow: 1;
+				align-items: flex-start;
+				justify-content: center;
+				gap: 0.5rem;
+
+				.ItemProduct-title-text {
+					font-size: 1rem;
+					font-weight: 600;
+					flex-grow: 1;
+				}
+				.ItemProduct-title-price {
+					font-size: 0.8rem;
+				}
+			}
+			.ItemProduct-specs {
+				flex-grow: 0;
+				gap: 0.1rem;
+				& > * {
+					min-width: max-content;
+					width: max-content;
+					padding: 0.2rem 0.4rem;
+					padding: 0.1rem 0.2rem;
+					color: black;
+					background-color: hsl(0, 0%, 95%);
+					background-color: hsla(0, 0%, 100%, 0.4);
+					border-radius: 0.2rem;
+					font-size: 0.7rem;
+					font-weight: 400;
+				}
 			}
 		}
 	}
 
 	.ItemProduct-modeList {
-		--border-radius: 0.8rem;
-		--height: 5rem;
-
-		min-height: var(--height);
-		max-height: var(--height);
-
+		--border-radius: 0.2rem;
 		flex-direction: row;
 		align-items: center;
 		justify-content: flex-start;
 
 		.ItemProduct-preview {
-			height: 100%;
+			width: 26%;
+			aspect-ratio: 16/12;
+			border-radius: var(--border-radius) 0 0 var(--border-radius);
 		}
-		.ItemProduct-title {
-			flex-grow: 1;
-			text-align: start;
-			padding: 1rem;
-			align-items: flex-start;
+		.ItemProduct-card {
+			width: 74%;
+			border-radius: 0 var(--border-radius) var(--border-radius) 0;
+			padding: 0.8rem;
 		}
 	}
 	.ItemProduct-modeGrid {
 		--border-radius: 0.8rem;
+		min-height: 6rem;
 		flex-direction: column;
 		align-items: flex-start;
-		justify-content: flex-start;
-		aspect-ratio: 17/18;
+		justify-content: center;
 
 		.ItemProduct-preview {
 			width: 100%;
+			aspect-ratio: 4/3;
+			border-radius: var(--border-radius) var(--border-radius) 0 0;
 		}
-		.ItemProduct-title {
+		.ItemProduct-card {
 			width: 100%;
-			text-align: center;
-			padding: 1rem 0.5rem;
-			align-items: center;
+			flex-grow: 1;
+			height: max-content;
+			border-radius: 0 0 var(--border-radius) var(--border-radius);
 		}
 	}
 
-	.ItemProduct-isDeselected {
+	.ItemProduct-isNotSelected {
 		cursor: pointer;
 		&:hover,
 		&:focus,
 		&:focus-within {
 			background-color: var(--background-color-hover);
+			.ItemProduct-card {
+				background-color: var(--background-color-card-hover);
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+			}
 		}
 	}
 	.ItemProduct-isSelected {
-		.ItemProduct-preview {
-			opacity: 0;
-		}
-		.ItemProduct-title {
-			opacity: 0;
-		}
 		background-color: var(--primary-color);
+
+		.ItemProduct-card {
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
 	}
 </style>

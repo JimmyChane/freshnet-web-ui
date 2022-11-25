@@ -7,6 +7,7 @@
 		State,
 
 		props: {
+			primaryColor: { type: chroma, default: () => chroma("2ead87") },
 			title: { type: String, default: "" },
 			menu: { type: Object, default: () => null },
 			menus: { default: () => [] },
@@ -27,9 +28,9 @@
 			menuTitle: (c) => (c.menu ? c.menu.title : ""),
 			menuIcon: (c) => (c.menu ? c.menu.icon : ""),
 
-			primaryColorBackground: () => chroma("2ead87").mix("ffffff", 0.8),
-			primaryColorBackgroundHover: () => chroma("2ead87").mix("ffffff", 0.6),
-			primaryColorBackgroundSelected: () => chroma("2ead87").mix("ffffff", 0.4),
+			primaryColorBackground: (c) => c.primaryColor.mix("ffffff", 0.8),
+			primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),
+			primaryColorBackgroundSelected: (c) => c.primaryColor.mix("ffffff", 0.4),
 		},
 		methods: {
 			toggle() {
@@ -55,6 +56,7 @@
 			'LabelMenus',
 			`LabelMenus-${isExpand ? 'isExpand' : 'isCollapse'}`,
 		]"
+		:style="{ '--primary-color': primaryColor.toString() }"
 	>
 		<button
 			class="LabelMenus-main"
@@ -104,7 +106,6 @@
 
 <style lang="scss" scoped>
 	.LabelMenus {
-		--primary-color: #52e7de;
 		--primary-color: #2ead87;
 
 		width: max-content;

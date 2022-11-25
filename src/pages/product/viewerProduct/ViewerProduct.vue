@@ -210,7 +210,7 @@
 			primaryColor() {
 				return chroma.valid(this.primaryColorHex)
 					? chroma(this.primaryColorHex)
-					: chroma("294656");
+					: chroma("cccccc");
 			},
 			primaryColorIsDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 60,
 			actionbarColor: (c) => c.primaryColor.mix("ffffff", 0.6),
