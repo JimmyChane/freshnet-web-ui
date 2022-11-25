@@ -55,6 +55,18 @@
 						icon: this.host.res("icon/copy-000000.svg"),
 						click: () => this.clickCopyLink(),
 					},
+					this.isEditable
+						? {
+								key: "print",
+								title: "Print",
+								icon: this.host.res("icon/printer-000000.svg"),
+								click: () =>
+									this.$router.push({
+										path: "/product/export",
+										query: { productId: this.product.id },
+									}),
+						  }
+						: null,
 				];
 			},
 		},

@@ -429,16 +429,16 @@ new Vue({
 			// let PHE = require("simple-print"); // https://www.npmjs.com/package/simple-print
 			let PHE = require("print-html-element"); // https://www.npmjs.com/package/print-html-element
 
-			const options = {
-				printMode: "iframe", // 'iframe', 'popup'
-				// pageTitle: "",
-				// templateString: "",
-				popupProperties: "scrollbars=false",
-				// stylesheets: "" | [""],
-				// styles: "" | [""],
-			};
+			// const options = {
+			// 	// printMode: "iframe", // 'iframe', 'popup'
+			// 	// pageTitle: "",
+			// 	// templateString: "",
+			// 	// popupProperties: "scrollbars=false",
+			// 	// stylesheets: "" | [""],
+			// 	// styles: "" | [""],
+			// };
 
-			PHE.printElement(element, options);
+			PHE.printElement(element);
 			// PHE.printHtml(element);
 		},
 

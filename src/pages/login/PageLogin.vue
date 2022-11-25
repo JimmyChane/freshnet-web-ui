@@ -46,7 +46,7 @@
          let user = await this.loginStore.dispatch("getUser");
          if (!user) return;
          if (!this.$route.query.redirect) return;
-         this.$router.push({ path: this.$route.query.redirect });
+         this.$router.replace({ path: this.$route.query.redirect });
       },
    };
 </script>

@@ -11,15 +11,6 @@
 			isLoading: (context) => context.productStore.getters.isLoading,
 			isOver1200px: (context) => context.$root.window.innerWidth > 1200,
 			productId: (context) => context.$route.query.productId,
-			actionbarRightMenus() {
-				return [];
-				return {
-					key: "print",
-					title: "Print",
-					icon: this.host.res("icon/printer-000000.svg"),
-					click: () => this.$root.print(this.$refs.Viewer.$el),
-				};
-			},
 		},
 		watch: {
 			productId() {
@@ -52,11 +43,9 @@
 <template>
 	<div class="PageProductView">
 		<ViewerProduct
-			ref="Viewer"
 			:product="product"
 			:isWide="isOver1200px"
 			:isEditable="false"
-			:rightMenus="actionbarRightMenus"
 		/>
 
 		<LoadingDots class="PageProductView-loading" v-if="isLoading" />

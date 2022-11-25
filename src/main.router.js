@@ -10,6 +10,7 @@ import Page404 from "@/pages/error/Page404.vue";
 
 import PageProduct from "./pages/product/PageProduct.vue";
 import PageProductView from "./pages/product/PageProductView.vue";
+import PageProductExport from "./pages/product/PageProductExport.vue";
 
 import PageManage from "./pages/manage/PageManage";
 import PageCustomer from "./pages/customer/PageCustomer.vue";
@@ -60,6 +61,7 @@ const productRoutes = () => [
 		],
 	},
 	{ path: "/product/view", component: PageProductView },
+	{ path: "/product/export", component: PageProductExport },
 ];
 const manageRoutes = () => [
 	{

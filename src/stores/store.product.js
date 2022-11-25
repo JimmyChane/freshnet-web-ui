@@ -69,7 +69,7 @@ export default {
 						let items = await context.dispatch("getItems");
 						let item = items.find((item) => item.id === id);
 						if (!item) {
-							items = await context.dispatch("refreshItems");
+							items = await context.dispatch("refresh");
 							item = items.find((item) => item.id === id);
 						}
 						return item;
