@@ -4,8 +4,10 @@
 	import Footer from "@/app/footer/Footer.vue";
 
 	import Actionbar from "./PageHome-Actionbar.vue";
+	import Header from "./PageHome-Header.vue";
 
 	import SectionProduct from "./PageHome-SectionProduct.vue";
+	import SectionContact from "./PageHome-SectionContact.vue";
 	import SectionPrint from "./PageHome-SectionPrint.vue";
 	import SectionLocation from "./PageHome-SectionLocation.vue";
 	import SectionAboutUs from "./PageHome-SectionAboutUs.vue";
@@ -24,98 +26,182 @@
 		icon: { light: "home-FFFFFF", dark: "home-2A4858" },
 
 		components: {
-			Actionbar,
-			PopupWindow,
 			SearchInput,
+			PopupWindow,
+			Footer,
+			Actionbar,
+			Header,
 			ItemSearchProduct,
 			ItemSearchCategory,
 			ItemSearchBrand,
 			ItemSearchPs2Disc,
 			ItemSearchService,
 			SectionProduct,
+			SectionContact,
 			SectionPrint,
 			SectionLocation,
 			SectionAboutUs,
 			SectionFeedback,
-			Footer,
-		},
-		data() {
-			return { scrollTop: 0 };
 		},
 		computed: {
-			isScrolledDown: (c) => c.scrollTop > 50,
 			whatsappLink: (c) => {
 				let phone = "60167959444";
 				return `https://api.whatsapp.com/send?phone=${phone}`;
 			},
 
 			isThin: (c) => c.$root.navigation.isDrawer(),
+
+			classes() {
+				if (this.$root.window.innerWidth > 1170) return "Home-isHorizontal";
+				return "Home-isVertical";
+			},
+
+			contacts() {
+				return [
+					{
+						title: "Support Contact",
+						title: "Office (Mobile)",
+						description: "014-631 5353",
+						links: [
+							{
+								title: "Call",
+								icon: this.host.res("icon/call-color.svg"),
+								href: "tel:+60146315353",
+							},
+							{
+								title: "Whatsapp",
+								icon: this.host.res("icon/whatsapp-color.svg"),
+								href: "https://api.whatsapp.com/send?phone=60146315353",
+								target: "__blank,",
+							},
+							{
+								title: "Telegram",
+								icon: this.host.res("icon/telegram-color.svg"),
+								href: "https://t.me/FreshnetEnterprise",
+								target: "__blank",
+							},
+						],
+					},
+					{
+						title: "Mr Beh",
+						description: "016-795 9444",
+						links: [
+							{
+								title: "Call",
+								icon: this.host.res("icon/call-color.svg"),
+								href: "tel:+60167959444",
+							},
+							{
+								title: "Whatsapp",
+								icon: this.host.res("icon/whatsapp-color.svg"),
+								href: "https://api.whatsapp.com/send?phone=60167959444",
+								target: "__blank,",
+							},
+						],
+					},
+					{
+						title: "Office 1",
+						description: "03-3281 1526",
+						links: [
+							{
+								title: "Telephone",
+								icon: this.host.res("icon/telephone-color.svg"),
+								href: "tel:+60332811526",
+							},
+						],
+					},
+					{
+						title: "Office 2",
+						description: "03-3289 7297",
+						links: [
+							{
+								title: "Telephone",
+								icon: this.host.res("icon/telephone-color.svg"),
+								href: "tel:+60332897297",
+							},
+						],
+					},
+				];
+			},
+		},
+		mounted() {
+			document.title = "Freshnet Enterprise";
 		},
 	};
 </script>
 
 <template>
-	<div :class="['PageHome', `Home-${isThin ? 'isThin' : 'isWide'}`]">
-		<div
-			class="Home-scroll"
-			@scroll="(event) => (scrollTop = event.target.scrollTop)"
-		>
-			<div class="Home-header-background">
-				<div class="Home-header-background-body">
-					<img
-						class="Home-header-background-image"
-						:style="{ transform: `translateY(${scrollTop / 3}px)` }"
-						:src="host.res('background/store_front.webp')"
-					/>
-					<div class="Home-header-background-tint"></div>
-				</div>
-			</div>
-
-			<Actionbar
-				class="Home-actionbar"
-				:isTop="!isScrolledDown"
-				:isThin="isThin"
-			/>
+	<div :class="['PageHome', classes]">
+		<div class="Home-scroll">
+			<Actionbar class="Home-actionbar" :isThin="isThin" />
 
 			<div class="Home-body">
-				<div class="Home-header">
-					<div class="Home-header-body">
-						<div class="Home-header-title">
-							<span class="Home-header-title-name">Freshnet Enterprise</span>
-							<span class="Home-header-title-description">
-								We sell notebooks, printers, repairs, and more
-							</span>
-						</div>
-					</div>
-				</div>
+				<Header
+					class="Home-header"
+					:style="{
+						'grid-column': '1 / -1',
+						'grid-row': '1 / span 1',
+					}"
+				/>
 
-				<div class="Home-body-card">
-					<div class="Home-sections">
-						<SectionProduct :isThin="isThin" />
-						<SectionPrint :isThin="isThin" />
-						<SectionLocation :isThin="isThin" />
-						<SectionAboutUs :isThin="isThin" v-if="false" />
-						<SectionFeedback :isThin="isThin" v-if="false" />
-					</div>
-
-					<Footer />
-				</div>
+				<SectionProduct
+					:style="{
+						'grid-column': 'auto / span 2',
+						'grid-row': 'auto / span 4',
+					}"
+					:isThin="isThin"
+				/>
+				<SectionPrint
+					:style="{
+						'grid-column': 'auto / span 2',
+						'grid-row': 'auto / span 2',
+					}"
+					:isThin="isThin"
+				/>
+				<SectionLocation
+					:style="{
+						'grid-column': 'auto / span 2',
+						'grid-row': 'auto / span 2',
+					}"
+					:isThin="isThin"
+				/>
+				<SectionContact
+					v-for="contact of contacts"
+					:key="contact.title"
+					:style="{
+						'grid-column': 'auto / span 1',
+						'grid-row': 'auto / span 2',
+					}"
+					:isThin="isThin"
+					:title="contact.title"
+					:description="contact.description"
+					:links="contact.links"
+				/>
+				<SectionAboutUs
+					:style="{ 'grid-area': 'about' }"
+					:isThin="isThin"
+					v-if="false"
+				/>
+				<SectionFeedback
+					:style="{ 'grid-area': 'feedback' }"
+					:isThin="isThin"
+					v-if="false"
+				/>
 			</div>
+
+			<Footer />
 		</div>
 	</div>
 </template>
 
 <style lang="scss" scoped>
 	.PageHome {
-		background-color: hsl(0, 0%, 90%);
+		background: linear-gradient(130.76deg, #edeff3 0%, #e4e4e4 100%);
 
-		position: relative;
 		display: flex;
 		flex-direction: row;
 		align-items: stretch;
 		color: black;
-
-		--header-background-height: 20rem;
 
 		.Home-scroll {
 			flex-grow: 1;
@@ -128,131 +214,56 @@
 
 			display: flex;
 			flex-direction: column;
-			align-items: stretch;
-		}
-		.Home-header-background {
-			z-index: 1;
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			min-height: var(--header-background-height);
-			height: var(--header-background-height);
-
-			.Home-header-background-body {
-				position: relative;
-				width: 100%;
-				height: 100%;
-				overflow: hidden;
-				.Home-header-background-image {
-					z-index: 1;
-					position: absolute;
-					width: 100%;
-					height: 100%;
-					object-fit: cover;
-				}
-				.Home-header-background-tint {
-					z-index: 2;
-					position: absolute;
-					width: 100%;
-					height: 100%;
-					background: hsla(0, 0%, 0%, 0.8);
-					background: hsla(202, 86%, 6%, 0.9);
-				}
-			}
-		}
-
-		.Home-actionbar {
-			position: sticky;
-			top: 0;
-			z-index: 2;
-		}
-
-		.Home-body {
-			z-index: 1;
-			flex-grow: 5;
-			width: 100%;
-			display: flex;
-			flex-direction: column;
 			align-items: center;
-			justify-content: flex-start;
-		}
-		.Home-header {
-			z-index: 1;
-			width: 100%;
-			line-height: 1.2;
-			min-height: calc(
-				var(--header-background-height) - var(--actionbar-height)
-			);
 
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			position: relative;
-			transition: var(--animation-duration);
-
-			.Home-header-body {
+			.Home-actionbar {
+				position: sticky;
+				top: 0;
 				z-index: 2;
+			}
+			.Home-body {
+				z-index: 1;
 				width: 100%;
-				max-width: 700px;
-				padding: 1em 2em;
-				padding-bottom: 1.5em;
-
-				display: flex;
-				flex-direction: row;
-				align-items: stretch;
-				justify-content: space-between;
-				column-gap: 1em;
-				.Home-header-title {
-					display: flex;
-					flex-direction: column;
-					text-align: center;
-					align-items: flex-start;
-					row-gap: 0.4em;
-					color: white;
-					transition: var(--animation-duration);
-
-					.Home-header-title-name {
-						font-size: 2.7em;
-						text-align: start;
-						line-height: 1;
-					}
-					.Home-header-title-description {
-						font-size: 1.2em;
-						text-align: start;
-						line-height: 1;
-					}
-				}
+				gap: 0.8rem;
 			}
 		}
-		.Home-body-card {
-			z-index: 2;
-			width: 100%;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			row-gap: 1rem;
-			background-color: rgb(237, 239, 243);
-			border-radius: 1em 1em 0 0;
-			margin-top: -2rem;
-			padding-top: 2rem;
-			overflow: hidden;
-		}
-		.Home-sections {
-			margin-top: -2em;
-			width: 100%;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-
-			padding: 1rem 0.5rem;
-		}
 	}
 
-	.Home-isThin {
+	.Home-isVertical {
 		--actionbar-height: 6rem;
+		.Home-scroll {
+			.Home-body {
+				padding: 1rem;
+
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				grid-auto-flow: row;
+
+				justify-content: center;
+				align-items: center;
+				justify-items: center;
+				align-content: center;
+			}
+		}
 	}
-	.Home-isWide {
+	.Home-isHorizontal {
 		--actionbar-height: 3.5rem;
+		.Home-scroll {
+			.Home-body {
+				height: max-content;
+				max-width: 80rem;
+				padding: 2rem;
+
+				display: grid;
+				// grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+				grid-template-columns: 1fr 1fr 1fr 1fr;
+				grid-auto-flow: row;
+
+				justify-content: center;
+				align-items: center;
+				justify-items: center;
+				align-content: center;
+			}
+		}
 	}
 </style>

@@ -3,6 +3,67 @@
 
 	export default {
 		components: { Contact },
+		data() {
+			return {
+				contacts: [
+					{
+						title: "Office",
+						subtitle: "014-631 5353",
+						links: [
+							{
+								icon: this.host.res("icon/call-color.svg"),
+								href: "tel:+60146315353",
+							},
+							{
+								icon: this.host.res("icon/whatsapp-color.svg"),
+								href: "https://api.whatsapp.com/send?phone=60146315353",
+								target: "__blank,",
+							},
+							{
+								icon: this.host.res("icon/telegram-color.svg"),
+								href: "https://t.me/FreshnetEnterprise",
+								target: "__blank",
+							},
+						],
+					},
+					{
+						title: "Mr Beh",
+						subtitle: "016-795 9444",
+						links: [
+							{
+								icon: this.host.res("icon/call-color.svg"),
+								href: "tel:+60167959444",
+							},
+							{
+								icon: this.host.res("icon/whatsapp-color.svg"),
+								href: "https://api.whatsapp.com/send?phone=60167959444",
+								target: "__blank,",
+							},
+						],
+					},
+					// {
+					// 	title: "Office",
+					// 	subtitle: "03-3281 1526",
+					// 	links: [
+					// 		{
+					// 			icon: this.host.res("icon/telephone-color.svg"),
+					// 			href: "tel:+60332811526",
+					// 		},
+					// 	],
+					// },
+					{
+						title: "Office",
+						subtitle: "03-3289 7297",
+						links: [
+							{
+								icon: this.host.res("icon/telephone-color.svg"),
+								href: "tel:+60332897297",
+							},
+						],
+					},
+				],
+			};
+		},
 	};
 </script>
 
@@ -29,59 +90,11 @@
 					<div class="PageHomeFooter-section">
 						<span class="PageHomeFooter-section-title">Contacts</span>
 						<Contact
-							title="Office"
-							subtitle="014-631 5353"
-							:links="[
-								{
-									icon: host.res('icon/call-color.svg'),
-									href: 'tel:+60146315353',
-								},
-								{
-									icon: host.res('icon/whatsapp-color.svg'),
-									href: 'https://api.whatsapp.com/send?phone=60146315353',
-									target: '__blank,',
-								},
-								{
-									icon: host.res('icon/telegram-color.svg'),
-									href: 'https://t.me/FreshnetEnterprise',
-									target: '__blank',
-								},
-							]"
-						/>
-						<Contact
-							title="Mr Beh"
-							subtitle="016-795 9444"
-							:links="[
-								{
-									icon: host.res('icon/call-color.svg'),
-									href: 'tel:+60167959444',
-								},
-								{
-									icon: host.res('icon/whatsapp-color.svg'),
-									href: 'https://api.whatsapp.com/send?phone=60167959444',
-									target: '__blank,',
-								},
-							]"
-						/>
-						<Contact
-							title="Office"
-							subtitle="03-3281 1526"
-							:links="[
-								{
-									icon: host.res('icon/telephone-color.svg'),
-									href: 'tel:+60332811526',
-								},
-							]"
-						/>
-						<Contact
-							title="Office"
-							subtitle="03-3289 7297"
-							:links="[
-								{
-									icon: host.res('icon/telephone-color.svg'),
-									href: 'tel:+60332897297',
-								},
-							]"
+							v-for="contact of contacts"
+							:key="contact.subtitle"
+							:title="contact.title"
+							:subtitle="contact.subtitle"
+							:links="contact.links"
 						/>
 					</div>
 				</div>
@@ -120,7 +133,7 @@
 		background: black;
 		background-color: var(--primary-color);
 		color: white;
-      color: #1b303d;
+		color: #1b303d;
 
 		display: flex;
 		flex-direction: column;

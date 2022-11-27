@@ -1,69 +1,83 @@
 <template>
-	<!-- <div class="Home-header"> -->
-	<div class="HomeHeader-body">
-		<span class="HomeHeader-name">Freshnet Enterprise</span>
-		<span class="HomeHeader-description">
-			We sell notebooks, printers, repairs, and more
+	<div class="HomeHeader">
+		<span class="HomeHeader-title">
+			<span class="HomeHeader-name">Freshnet Enterprise</span>
+			<span class="HomeHeader-classification">Computer Store</span>
 		</span>
+		<!-- <span class="HomeHeader-description"
+			>We sell notebooks, printers, repairs, and more</span
+		> -->
+		<span class="HomeHeader-greeting">Hi, how can we help you?</span>
 	</div>
-	<!-- </div> -->
 </template>
 
 <style lang="scss" scoped>
-	.Home-header {
-		z-index: 1;
-		width: 100%;
-		line-height: 1.2;
+	.HomeHeader {
+		column-gap: 1em;
+		row-gap: 0.4em;
+		color: black;
+		text-align: center;
 
-		min-height: 10rem;
-
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		transition: var(--animation-duration);
-		padding: 1rem 2.5rem;
-		padding-bottom: 0;
-		padding: 1rem;
-	}
-
-	.HomeHeader-body {
 		z-index: 2;
 		width: 100%;
 
-		column-gap: 1em;
-
+		display: flex;
 		flex-direction: column;
 		text-align: center;
-		align-items: flex-start;
+		align-items: center;
 		justify-content: center;
-		color: black;
-		row-gap: 0.4em;
-		transition: var(--animation-duration);
 
-		.HomeHeader-name {
-			font-weight: 600;
-			font-size: 1.6rem;
-			text-align: start;
-			line-height: 1;
+		gap: 4rem;
+		padding: 4rem 0;
+		padding-top: 2rem;
 
-			@media (min-width: 320px) {
-				font-size: 1.7rem;
+		font-size: 1rem;
+
+		.HomeHeader-title {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			.HomeHeader-name {
+				font-weight: 600;
+				font-size: 1.6em;
+				line-height: 1;
 			}
-			@media (min-width: 340px) {
-				font-size: 1.85rem;
-			}
-			@media (min-width: 380px) {
-				font-size: 2rem;
-			}
-			@media (min-width: 460px) {
-				font-size: 2.6rem;
+			.HomeHeader-classification {
+				font-size: 0.4em;
+				line-height: 1em;
 			}
 		}
 		.HomeHeader-description {
-			font-size: 1rem;
-			text-align: start;
-			line-height: 1;
+			font-size: 1em;
+			line-height: 1em;
+		}
+		.HomeHeader-greeting {
+			font-size: 0.7em; 
+
+			display: flex;
+			align-items: inherit;
+			justify-content: inherit;
+		}
+
+		@media (min-width: 320px) {
+			font-size: 1.1rem;
+		}
+		@media (min-width: 340px) {
+			font-size: 1.2rem;
+		}
+		@media (min-width: 350px) {
+			font-size: 1.3rem;
+		}
+		@media (min-width: 380px) {
+			font-size: 1.4rem;
+		}
+		@media (min-width: 480px) {
+			font-size: 1.8rem;
+		}
+		@media (min-width: 500px) {
+			font-size: 1.9rem;
 		}
 	}
 </style>

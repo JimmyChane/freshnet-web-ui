@@ -99,17 +99,17 @@
 							},
 						],
 					},
-					{
-						title: "Office 1",
-						description: "03-3281 1526",
-						links: [
-							{
-								title: "Telephone",
-								icon: this.host.res("icon/telephone-color.svg"),
-								href: "tel:+60332811526",
-							},
-						],
-					},
+					// {
+					// 	title: "Office 1",
+					// 	description: "03-3281 1526",
+					// 	links: [
+					// 		{
+					// 			title: "Telephone",
+					// 			icon: this.host.res("icon/telephone-color.svg"),
+					// 			href: "tel:+60332811526",
+					// 		},
+					// 	],
+					// },
 					{
 						title: "Office 2",
 						description: "03-3289 7297",
@@ -136,57 +136,74 @@
 			<Actionbar class="Home-actionbar" :isThin="isThin" />
 
 			<div class="Home-body">
-				<Header
-					class="Home-header"
-					:style="{
-						'grid-column': '1 / -1',
-						'grid-row': '1 / span 1',
-					}"
-				/>
+				<div class="Home-section-0">
+					<Header
+						class="Home-header"
+						:style="{
+							'grid-column': '1 / -1',
+							'grid-row': '1 / span 1',
+						}"
+					/>
+				</div>
 
-				<SectionProduct
-					:style="{
-						'grid-column': 'auto / span 2',
-						'grid-row': 'auto / span 4',
-					}"
-					:isThin="isThin"
-				/>
-				<SectionPrint
-					:style="{
-						'grid-column': 'auto / span 2',
-						'grid-row': 'auto / span 2',
-					}"
-					:isThin="isThin"
-				/>
-				<SectionLocation
-					:style="{
-						'grid-column': 'auto / span 2',
-						'grid-row': 'auto / span 2',
-					}"
-					:isThin="isThin"
-				/>
-				<SectionContact
-					v-for="contact of contacts"
-					:key="contact.title"
-					:style="{
-						'grid-column': 'auto / span 1',
-						'grid-row': 'auto / span 2',
-					}"
-					:isThin="isThin"
-					:title="contact.title"
-					:description="contact.description"
-					:links="contact.links"
-				/>
-				<SectionAboutUs
-					:style="{ 'grid-area': 'about' }"
-					:isThin="isThin"
-					v-if="false"
-				/>
-				<SectionFeedback
-					:style="{ 'grid-area': 'feedback' }"
-					:isThin="isThin"
-					v-if="false"
-				/>
+				<div class="Home-section-1">
+					<SectionProduct
+						:style="{
+							'grid-column': 'auto / span 2',
+							'grid-row': 'auto / span 4',
+						}"
+						:isThin="isThin"
+					/>
+					<SectionPrint
+						:style="{
+							'grid-column': 'auto / span 2',
+							'grid-row': 'auto / span 2',
+						}"
+						:isThin="isThin"
+					/>
+					<SectionLocation
+						:style="{
+							'grid-column': 'auto / span 2',
+							'grid-row': 'auto / span 2',
+						}"
+						:isThin="isThin"
+					/>
+				</div>
+
+				<div class="Home-section-2">
+					<span
+						class="Home-section-title"
+						:style="{
+							'grid-column': '1 / -1',
+							'grid-row': '1 / span 1',
+						}"
+						>Contact Us</span
+					>
+
+					<SectionContact
+						v-for="contact of contacts"
+						:key="contact.title"
+						:style="{
+							'grid-column': 'auto / span 1',
+							'grid-row': 'auto / span 2',
+						}"
+						:isThin="isThin"
+						:title="contact.title"
+						:description="contact.description"
+						:links="contact.links"
+					/>
+				</div>
+
+				<!-- <div class="Home-section-2">
+					<span
+						class="Home-section-title"
+						:style="{
+							'grid-column': '1 / -1',
+							'grid-row': '1 / span 1',
+						}"
+						>Business Hour</span
+					>
+				</div> -->
 			</div>
 
 			<Footer />
@@ -197,6 +214,7 @@
 <style lang="scss" scoped>
 	.PageHome {
 		background: linear-gradient(130.76deg, #edeff3 0%, #e4e4e4 100%);
+		background: #e4e4e4;
 
 		display: flex;
 		flex-direction: row;
@@ -224,7 +242,36 @@
 			.Home-body {
 				z-index: 1;
 				width: 100%;
-				gap: 0.8rem;
+				gap: 1rem;
+
+				display: flex;
+				flex-direction: column;
+				align-items: stretch;
+
+				.Home-section-0 {
+				}
+				.Home-section-1 {
+					width: 100%;
+					gap: 0.5rem;
+				}
+				.Home-section-2 {
+					width: 100%;
+					gap: 0.5rem;
+
+					.Home-section-title {
+						font-size: 1.4rem;
+						font-weight: 500;
+
+						--height: 6rem;
+						min-height: var(--height);
+						max-height: var(--height);
+
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						text-align: center;
+					}
+				}
 			}
 		}
 	}
@@ -233,16 +280,28 @@
 		--actionbar-height: 6rem;
 		.Home-scroll {
 			.Home-body {
-				padding: 1rem;
+				padding: 1.2rem;
 
-				display: grid;
-				grid-template-columns: 1fr 1fr;
-				grid-auto-flow: row;
+				.Home-section-1 {
+					display: grid;
+					grid-template-columns: 1fr 1fr;
+					grid-auto-flow: row;
 
-				justify-content: center;
-				align-items: center;
-				justify-items: center;
-				align-content: center;
+					justify-content: center;
+					align-items: center;
+					justify-items: center;
+					align-content: center;
+				}
+				.Home-section-2 {
+					display: grid;
+					grid-template-columns: 1fr 1fr;
+					grid-auto-flow: row;
+
+					justify-content: center;
+					align-items: center;
+					justify-items: center;
+					align-content: center;
+				}
 			}
 		}
 	}
@@ -252,17 +311,29 @@
 			.Home-body {
 				height: max-content;
 				max-width: 80rem;
+				max-width: 70rem;
 				padding: 2rem;
 
-				display: grid;
-				// grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-				grid-template-columns: 1fr 1fr 1fr 1fr;
-				grid-auto-flow: row;
+				.Home-section-1 {
+					display: grid;
+					grid-template-columns: 1fr 1fr 1fr 1fr;
+					grid-auto-flow: row;
 
-				justify-content: center;
-				align-items: center;
-				justify-items: center;
-				align-content: center;
+					justify-content: center;
+					align-items: center;
+					justify-items: center;
+					align-content: center;
+				}
+				.Home-section-2 {
+					display: grid;
+					grid-template-columns: 1fr 1fr 1fr 1fr;
+					grid-auto-flow: row;
+
+					justify-content: center;
+					align-items: center;
+					justify-items: center;
+					align-content: center;
+				}
 			}
 		}
 	}

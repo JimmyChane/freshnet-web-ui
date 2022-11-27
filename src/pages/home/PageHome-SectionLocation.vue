@@ -48,12 +48,8 @@
 
 		&:hover,
 		&:focus {
-			transform: scale(1.01);
+			// transform: scale(1.01);
 			box-shadow: 0px 0px 1.5rem #278b73;
-			text-decoration: underline;
-			.HomeSectionLocation-img {
-				box-shadow: 0px 0px 1.5rem #278b73;
-			}
 		}
 
 		.HomeSectionLocation-main {

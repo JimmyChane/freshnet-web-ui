@@ -54,7 +54,7 @@
 
 			<ButtonIcon
 				:src="
-					host.res(search ? 'icon/close-2A4858.svg' : 'icon/search-2A4858.svg')
+					host.res(search ? 'icon/close-000000.svg' : 'icon/search-000000.svg')
 				"
 				alt="Clear"
 				@click="
@@ -126,7 +126,7 @@
 			transition: var(--animation-duration);
 			width: 100%;
 			height: 100%;
-			padding: 0.2rem;
+			padding: 0.2rem 0.4rem;
 			background: var(--background);
 			border: var(--border);
 
@@ -153,7 +153,9 @@
 		}
 		.SearchInput-body-isExpand {
 			background: white;
-			border-radius: var(--border-radius) var(--border-radius) 0 0;
+
+			border-radius: calc(var(--border-radius) / 2)
+				calc(var(--border-radius) / 2) 0 0;
 		}
 		.SearchInput-body-isCollapsed {
 			border-radius: var(--border-radius);
@@ -163,7 +165,8 @@
 			width: 100%;
 			height: 0;
 			background-color: white;
-			border-radius: var(--border-radius);
+			border-radius: 0 0 calc(var(--border-radius) / 2)
+				calc(var(--border-radius) / 2);
 			z-index: 1;
 
 			.SearchInput-main-background {
@@ -186,7 +189,7 @@
 				height: 100vh;
 				max-height: 80vh;
 				box-shadow: 0 0 60px hsla(0, 0%, 0%, 0.1);
-				border-radius: var(--border-radius);
+				border-radius: calc(var(--border-radius) / 2);
 				padding-top: 3rem;
 				background-color: white;
 				background-color: #e4e4e4;
@@ -200,7 +203,8 @@
 					align-items: center;
 					gap: 0.4rem;
 
-					border-radius: 0 0 var(--border-radius) var(--border-radius);
+					border-radius: 0 0 calc(var(--border-radius) / 2)
+						calc(var(--border-radius) / 2);
 
 					overflow-y: auto;
 					overflow-x: hidden;

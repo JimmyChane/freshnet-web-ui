@@ -95,8 +95,11 @@
 			class="HomeSectionProduct-img"
 			v-if="itemImage"
 			:src="itemImage"
-			@click="() => $root.imageViewerShow(itemImage)"
+			@click="
+				() => $router.push({ path: '/product', query: { productId: itemId } })
+			"
 		/>
+
 		<div class="HomeSectionProduct-footer">
 			<div class="HomeSectionProduct-dummy"></div>
 			<div class="HomeSectionProduct-indexes" v-if="products.length > 1">
@@ -181,11 +184,11 @@
 			flex-grow: 1;
 			object-fit: scale-down;
 			// object-fit: cover;
-			// background-color: red;
+			cursor: pointer;
 
 			margin: 1em;
 			border-radius: 1rem;
-			// filter: drop-shadow(0 0 0.4rem var(--primary-color));
+			filter: drop-shadow(0 0 1rem hsla(0, 0%, 0%, 0.2));
 		}
 		.HomeSectionProduct-footer {
 			height: 4em;
@@ -195,8 +198,6 @@
 			align-items: center;
 			justify-content: flex-end;
 			padding: 1em;
-			.HomeSectionProduct-dummy {
-			}
 			.HomeSectionProduct-indexes {
 				width: 100%;
 				display: flex;
@@ -242,11 +243,11 @@
 				padding: 0.6em 1.2em;
 				border-radius: 3em;
 				transition: var(--animation-duration);
+				text-decoration: underline;
 
 				&:hover {
-					transform: scale(1.01);
-					box-shadow: 0px 0px 1.5rem var(--primary-color);
-					text-decoration: underline;
+					// transform: scale(1.01);
+					box-shadow: 0px 0px 0.2rem var(--primary-color);
 				}
 			}
 		}

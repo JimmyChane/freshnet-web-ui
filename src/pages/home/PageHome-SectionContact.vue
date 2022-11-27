@@ -80,9 +80,8 @@
 
 		&:hover,
 		&:focus {
-			transform: scale(1.01);
-			box-shadow: 0px 0px 1.5rem hsla(0, 0%, 0%, 0.05);
-			text-decoration: underline;
+			// transform: scale(1.05);
+			box-shadow: 0px 0px 1.5rem hsla(0, 0%, 0%, 0.1);
 		}
 
 		.HomeSectionContact-main {
