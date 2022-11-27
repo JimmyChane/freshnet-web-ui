@@ -27,10 +27,7 @@
 		align-items: center;
 		justify-content: center;
 
-		gap: 4rem;
-		padding: 4rem 0;
-		padding-top: 2rem;
-
+		margin-top: 2rem;
 		font-size: 1rem;
 
 		.HomeHeader-title {
@@ -54,7 +51,11 @@
 			line-height: 1em;
 		}
 		.HomeHeader-greeting {
-			font-size: 0.7em; 
+			font-size: 0.7em;
+
+			--height: 6rem;
+			min-height: var(--height);
+			max-height: var(--height);
 
 			display: flex;
 			align-items: inherit;

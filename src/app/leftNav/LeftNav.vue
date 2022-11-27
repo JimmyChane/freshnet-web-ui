@@ -170,7 +170,9 @@
 			align-items: stretch;
 			overflow-y: auto;
 			overflow-x: hidden;
-			background: #dfe8ee;
+			background: hsl(204, 31%, 90%);
+			background: #b1b1b1;
+			background: hsl(204, 10%, 70%);
 			position: relative;
 			transition: var(--animation-duration);
 
