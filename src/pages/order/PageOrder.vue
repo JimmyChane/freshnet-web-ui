@@ -14,7 +14,7 @@
 		key: "order",
 		name: "ViewOrder",
 		title: "Orders",
-		icon: { light: "order-FFFFFF", dark: "order-2A4858" },
+		icon: { light: "order-FFFFFF", dark: "order-000000" },
 		userPermissions: ["admin", "staff"],
 
 		components: {

@@ -8,7 +8,7 @@
 	export default {
 		key: "database",
 		title: "Database",
-		icon: { light: "database-FFFFFF", dark: "database-2A4858" },
+		icon: { light: "database-FFFFFF", dark: "database-000000" },
 		userPermissions: ["admin"],
 
 		components: { Loadingv1, PopupWindow, Empty, ActionBarManage, ItemDatabase },

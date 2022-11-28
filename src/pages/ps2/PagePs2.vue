@@ -13,7 +13,7 @@
 		key: "ps2",
 		name: "PagePs2",
 		title: "PS2 Disc",
-		icon: { light: "playstation-FFFFFF", dark: "playstation-2A4858" },
+		icon: { light: "playstation-FFFFFF", dark: "playstation-000000" },
 
 		components: {
 			Actionbar,

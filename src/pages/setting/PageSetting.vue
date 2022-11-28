@@ -7,7 +7,7 @@
    export default {
       key: "setting",
       title: "Settings",
-      icon: { light: "setting-FFFFFF", dark: "setting-2A4858" },
+      icon: { light: "setting-FFFFFF", dark: "setting-000000" },
       userPermissions: ["admin"],
 
       components: { ActionBarManage, Empty, GroupSetting },

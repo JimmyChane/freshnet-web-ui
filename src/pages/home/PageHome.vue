@@ -11,6 +11,7 @@
 	import SectionPrint from "./PageHome-SectionPrint.vue";
 	import SectionLocation from "./PageHome-SectionLocation.vue";
 	import SectionHour from "./PageHome-SectionHour.vue";
+	import SectionWhatElse from "./PageHome-SectionWhatElse.vue";
 	import SectionAboutUs from "./PageHome-SectionAboutUs.vue";
 	import SectionFeedback from "./PageHome-SectionFeedback.vue";
 
@@ -24,7 +25,7 @@
 		key: "home",
 		name: "Home",
 		title: "Home",
-		icon: { light: "home-FFFFFF", dark: "home-2A4858" },
+		icon: { light: "home-FFFFFF", dark: "home-000000" },
 
 		components: {
 			SearchInput,
@@ -42,6 +43,7 @@
 			SectionPrint,
 			SectionLocation,
 			SectionHour,
+			SectionWhatElse,
 			SectionAboutUs,
 			SectionFeedback,
 		},
@@ -148,6 +150,24 @@
 						:isThin="isThin"
 					/>
 				</div>
+
+				<div class="Home-section-3">
+					<span
+						class="Home-section-title"
+						:style="{
+							'grid-column': '1 / -1',
+							'grid-row': '1 / span 1',
+						}"
+						>What else can we do?</span
+					>
+					<SectionWhatElse
+						:style="{
+							'grid-column': 'auto / span 2',
+							'grid-row': 'auto / span 2',
+						}"
+						:isThin="isThin"
+					/>
+				</div>
 			</div>
 
 			<Footer />
@@ -206,9 +226,8 @@
 						font-size: 1.4rem;
 						font-weight: 500;
 
-						// --height: 6rem;
-						// min-height: var(--height);
-						// max-height: var(--height);
+						font-size: 2rem;
+						color: hsl(0, 0%, 13%);
 
 						padding-top: 3rem;
 						padding-bottom: 2rem;

@@ -13,7 +13,7 @@
 	export default {
 		key: "users",
 		title: "Other Users",
-		icon: { light: "users-FFFFFF", dark: "users-2A4858" },
+		icon: { light: "users-FFFFFF", dark: "users-000000" },
 		userPermissions: ["admin"],
 
 		components: {

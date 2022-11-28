@@ -119,8 +119,10 @@
 		cursor: default;
 		.LeftNavLink-body {
 			background: var(--primary-color);
+			background: hsla(0, 0%, 0%, 0.1);
 			.LeftNavLink-item-parent {
 				color: #2a4858;
+				color: black;
 			}
 			.LeftNavLink-arrow {
 				pointer-events: none;
@@ -133,12 +135,14 @@
 		&:focus {
 			.LeftNavLink-body {
 				box-shadow: var(--default-box-shadow);
-				background: #cdd9e6;
+				background: hsl(211, 33%, 85%);
+				background: hsla(0, 0%, 0%, 0.1);
 			}
 		}
 		.LeftNavLink-body {
 			.LeftNavLink-item-parent {
 				color: #2a4858;
+				color: black;
 			}
 			.LeftNavLink-arrow {
 				.LeftNavLink-arrow-button {
@@ -152,6 +156,7 @@
 		cursor: default;
 		.LeftNavLink-body {
 			background: var(--primary-color);
+			background-color: hsla(0, 0%, 0%, 0.8);
 			.LeftNavLink-item-parent {
 				color: white;
 			}

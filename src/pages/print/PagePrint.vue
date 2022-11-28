@@ -10,10 +10,6 @@
 		}
 	}
 
-	// class Layer2 {
-	// 	constructor(title = "", icon = "") {}
-	// }
-
 	export default {
 		key: "print",
 		title: "Printing",
@@ -329,6 +325,11 @@
 
 			display: grid;
 			grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+		}
+		.PagePrint-layers {
+			display: flex;
+			flex-direction: column;
+			max-width: 30rem;
 		}
 	}
 </style>

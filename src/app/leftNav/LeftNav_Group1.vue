@@ -95,7 +95,7 @@
 	}
 
 	.LeftNavGroup1-hasSectionsAndIsSelected {
-		margin-bottom: 1rem;
+		// margin-bottom: 1rem;
 	}
 	.LeftNavGroup1-hasNoSectionsAndIsSelected {
 		.LeftNavGroup1-group2s {
@@ -135,8 +135,8 @@
 		&-isSelected {
 			width: 100%;
 			border-radius: 0.5rem;
-			margin-bottom: 1rem;
-			margin-top: 1rem;
+			// margin-bottom: 1rem;
+			// margin-top: 1rem;
 			.LeftNavGroup1-header {
 				border-radius: 0;
 			}
@@ -190,8 +190,8 @@
 
 		&-isSelected {
 			width: 100%;
-			margin-bottom: 1rem;
-			margin-top: 1rem;
+			// margin-bottom: 1rem;
+			// margin-top: 1rem;
 			.LeftNavGroup1-group2s {
 				display: flex;
 			}

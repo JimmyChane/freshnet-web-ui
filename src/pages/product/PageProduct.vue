@@ -21,7 +21,7 @@
 	export default {
 		key: "product",
 		title: "Products",
-		icon: { light: "products-FFFFFF", dark: "products-2A4858" },
+		icon: { light: "products-FFFFFF", dark: "products-000000" },
 
 		_queries_old() {
 			return [

@@ -25,10 +25,6 @@
 <style lang="scss" scoped>
 	.PagePrint-Layer1 {
 		gap: 2px;
-		height: 100%;
-
-		border-radius: 0.8rem;
-		overflow: hidden;
 
 		display: flex;
 		flex-direction: column;
@@ -40,7 +36,6 @@
 			width: 100%;
 			gap: 0.5rem;
 			padding: 1rem;
-			background-color: var(--card-background-color);
 
 			display: flex;
 			flex-direction: row;
@@ -56,6 +51,8 @@
 			width: 100%;
 			height: 100%;
 			gap: 2px;
+			border-radius: 0.8rem;
+			overflow: hidden;
 
 			display: flex;
 			flex-direction: column;

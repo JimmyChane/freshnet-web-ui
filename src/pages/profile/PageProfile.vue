@@ -8,7 +8,7 @@
 	export default {
 		key: "profile",
 		title: "Your Profile",
-		icon: { light: "profile-FFFFFF", dark: "profile-2A4858" },
+		icon: { light: "profile-FFFFFF", dark: "profile-000000" },
 
 		components: { ActionBarManage, Loadingv1, ButtonIcon, PopupWindowAction, Input },
 		emits: ["callback-side-expand"],

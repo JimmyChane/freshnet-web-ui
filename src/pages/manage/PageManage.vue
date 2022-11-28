@@ -11,7 +11,7 @@
 		key: "manage",
 		name: "Manage",
 		title: "Manage",
-		icon: { light: "manage-FFFFFF", dark: "manage-2A4858" },
+		icon: { light: "manage-FFFFFF", dark: "manage-000000" },
 
 		_children() {
 			return [PageProfile];

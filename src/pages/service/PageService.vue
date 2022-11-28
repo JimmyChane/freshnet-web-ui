@@ -17,7 +17,7 @@
 	export default {
 		key: "service",
 		title: "Services",
-		icon: { light: "service-FFFFFF", dark: "service-2A4858" },
+		icon: { light: "service-FFFFFF", dark: "service-000000" },
 		userPermissions: ["admin", "staff"],
 
 		components: {

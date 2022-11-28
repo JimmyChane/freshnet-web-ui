@@ -170,6 +170,7 @@
 			overflow-y: auto;
 			overflow-x: hidden;
 			background-color: #dfe8ee;
+			background-color: hsl(0, 0%, 84%);
 			position: relative;
 			transition: var(--animation-duration);
 
@@ -203,6 +204,7 @@
 						font-weight: 600;
 						letter-spacing: 0.25rem;
 						line-height: 1;
+						color: black;
 					}
 				}
 			}
@@ -217,7 +219,7 @@
 				padding-bottom: 4em;
 
 				.LeftNav-group1-marginTop {
-					margin-top: 1em;
+					// margin-top: 1em;
 				}
 			}
 			.LeftNav-login {

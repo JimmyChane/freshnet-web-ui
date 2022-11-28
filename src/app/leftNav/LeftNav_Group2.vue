@@ -45,8 +45,9 @@
 			font-size: 0.7em;
 			font-weight: 600;
 			opacity: 1;
-			letter-spacing: 0.4em;
+			letter-spacing: 0.3em;
 			color: var(--primary-color);
+			color: hsla(0, 0%, 0%, 0.7);
 		}
 
 		.LeftNavGroup2-groups {

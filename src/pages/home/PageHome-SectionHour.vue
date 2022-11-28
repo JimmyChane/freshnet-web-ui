@@ -8,15 +8,6 @@
 		props: { isThin: { type: Boolean, default: false } },
 		data() {
 			return {
-				// items: [
-				// 	{ index: 1, title: "Monday", content: "9am - 7pm" },
-				// 	{ index: 2, title: "Tuesday", content: "9am - 7pm" },
-				// 	{ index: 3, title: "Wednesday", content: "9am - 7pm" },
-				// 	{ index: 4, title: "Thursday", content: "9am - 7pm" },
-				// 	{ index: 5, title: "Friday", content: "9am - 7pm" },
-				// 	{ index: 6, title: "Saturday", content: "9am - 7pm" },
-				// 	{ index: 0, title: "Sunday", content: "10am - 6:30pm" },
-				// ],
 				items: Company.BusinessHours.toArray().map((item) => {
 					return {
 						index: item.day,
@@ -35,8 +26,10 @@
 
 <template>
 	<div
-		:class="['HomeSectionHour', `HomeSectionHour-${isThin ? 'isThin' : 'isWide'}`]"
-		:to="{ path: '/print' }"
+		:class="[
+			'HomeSectionHour',
+			`HomeSectionHour-${isThin ? 'isThin' : 'isWide'}`,
+		]"
 	>
 		<div class="HomeSectionyHour-body">
 			<Item

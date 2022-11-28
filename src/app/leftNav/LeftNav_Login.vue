@@ -70,6 +70,7 @@
 		gap: 2px;
 		padding: 1rem;
 		border-top: 1px solid hsla(0, 0%, 0%, 0.1);
+		background-color: hsl(0, 0%, 84%);
 
 		.LeftNavigationLogin-loggedIn {
 			display: flex;
@@ -97,6 +98,7 @@
 					--accent-color: #ca4242;
 
 					background-color: var(--primary-color);
+					background-color: hsla(0, 0%, 0%, 0.8);
 
 					&:hover {
 						background-color: var(--accent-color);
