@@ -1,68 +1,33 @@
 <script>
 	import Contact from "./Footer_Contact.vue";
+	import Company from "@/host/Company";
 
 	export default {
 		components: { Contact },
 		data() {
 			return {
-				contacts: [
-					{
-						title: "Office",
-						subtitle: "014-631 5353",
-						links: [
-							{
-								icon: this.host.res("icon/call-color.svg"),
-								href: "tel:+60146315353",
-							},
-							{
-								icon: this.host.res("icon/whatsapp-color.svg"),
-								href: "https://api.whatsapp.com/send?phone=60146315353",
-								target: "__blank,",
-							},
-							{
-								icon: this.host.res("icon/telegram-color.svg"),
-								href: "https://t.me/FreshnetEnterprise",
-								target: "__blank",
-							},
-						],
-					},
-					{
-						title: "Mr Beh",
-						subtitle: "016-795 9444",
-						links: [
-							{
-								icon: this.host.res("icon/call-color.svg"),
-								href: "tel:+60167959444",
-							},
-							{
-								icon: this.host.res("icon/whatsapp-color.svg"),
-								href: "https://api.whatsapp.com/send?phone=60167959444",
-								target: "__blank,",
-							},
-						],
-					},
-					// {
-					// 	title: "Office",
-					// 	subtitle: "03-3281 1526",
-					// 	links: [
-					// 		{
-					// 			icon: this.host.res("icon/telephone-color.svg"),
-					// 			href: "tel:+60332811526",
-					// 		},
-					// 	],
-					// },
-					{
-						title: "Office",
-						subtitle: "03-3289 7297",
-						links: [
-							{
-								icon: this.host.res("icon/telephone-color.svg"),
-								href: "tel:+60332897297",
-							},
-						],
-					},
-				],
+				address1: Company.Location.toLine1().toStringWithSeparator(),
+				address2: Company.Location.toLine2().toStringWithSeparator(),
+				address3: Company.Location.toLine3(),
+				addressHref: Company.Location.toHref(),
 			};
+		},
+		computed: {
+			contacts() {
+				return Company.Contacts.toArray().map((contact) => {
+					return {
+						title: contact.title,
+						subtitle: contact.links[0].id,
+						links: contact.links.map((link) => {
+							return {
+								icon: link.category.icon,
+								href: link.toHtmlHref(),
+								target: link.toHtmlTarget(),
+							};
+						}),
+					};
+				});
+			},
 		},
 	};
 </script>
@@ -104,10 +69,9 @@
 						<span class="PageHomeFooter-section-title">Location</span>
 						<a
 							class="PageHomeFooter-section-item"
-							href="https://maps.google.com/maps/dir//Freshnet+Enterprise+No.+14,+Ground+Floor+Jalan+Melati+3%2F3+Bandar+Melawati,+45000+Kuala+Selangor,+Selangor/@3.3296638,101.2565481,15z/data=!4m5!4m4!1m0!1m2!1m1!1s0x31ccf49e980c2d07:0xadf4850c7c433d0a"
+							:href="addressHref"
 							target="__blank"
-							>No. 14, Ground Floor, Jalan Melati 3/3,<br />Bandar Melawati,
-							45000,<br />Kuala Selangor, Selangor Darul Ehsan</a
+							>{{ address1 }}<br />{{ address2 }}<br />{{ address3 }}</a
 						>
 					</div>
 				</div>

@@ -63,7 +63,7 @@
 					menus.push({
 						key: "home",
 						title: "Home",
-						icon: this.host.res("icon/home-000000.svg"),
+						icon: this.host.res("img/freshnet-enterprise-logo.svg"),
 						click: () => this.$router.push("/home"),
 					});
 					menus.push({

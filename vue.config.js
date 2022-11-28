@@ -9,9 +9,9 @@ module.exports = {
 	devServer: {
 		disableHostCheck: true,
 		port: config.devPort,
-		// public: "0.0.0.0:8080",
+		public: "0.0.0.0:8080",
 		// open: process.platform === "darwin",
-		// host: "0.0.0.0",
+		host: "0.0.0.0",
 		// https: false,
 		// hotOnly: false,
 	},

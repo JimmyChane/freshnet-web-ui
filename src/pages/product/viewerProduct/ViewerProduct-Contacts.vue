@@ -1,4 +1,6 @@
 <script>
+	import Company from "@/host/Company";
+
 	export default {
 		props: {
 			product: { type: Object, default: () => null },
@@ -7,9 +9,20 @@
 		data() {
 			return {
 				whatsappLink: "",
+
+				callTypeTitle: "",
+				callTitle: "",
+				callHref: "",
+				callTarget: "",
+				callIcon: "",
+
+				whatsappTypeTitle: "",
+				whatsappTitle: "",
+				whatsappHref: "",
+				whatsappTarget: "",
+				whatsappIcon: "",
 			};
 		},
-		computed: {},
 		watch: {
 			product() {
 				this.invalidate();
@@ -20,13 +33,28 @@
 		},
 		methods: {
 			async invalidate() {
-				this.whatsappLink = "";
+				const contact = Company.Contacts.findByTitle("Beh Aik Keong");
 
-				let phone = "60167959444";
+				const contactCall = contact.links.find(
+					(link) => link.category.title === "Call",
+				);
+				this.callTypeTitle = contactCall.category.title;
+				this.callTitle = contact.title;
+				this.callHref = contactCall.toHtmlHref();
+				this.callTarget = contactCall.toHtmlTarget();
+				this.callIcon = contactCall.category.icon;
+
+				const contactWhatsapp = contact.links.find(
+					(link) => link.category.title === "Whatsapp",
+				);
+				this.whatsappTypeTitle = contactWhatsapp.category.title;
+				this.whatsappTitle = contact.title;
+				this.whatsappTarget = contactWhatsapp.toHtmlTarget();
+				this.whatsappIcon = contactWhatsapp.category.icon;
 
 				let { product } = this;
 				if (!product) {
-					this.whatsappLink = `https://api.whatsapp.com/send?phone=${phone}`;
+					this.whatsappHref = contactWhatsapp.toHtmlHref();
 					return;
 				}
 
@@ -36,11 +64,9 @@
 				let text = `Hi, I am interested in this product`;
 				if (title) text += `\n\n${title}`;
 				if (productLink) text += `\n${productLink}`;
-
 				const textUri = encodeURIComponent(text);
-				const phoneUri = encodeURIComponent(phone);
 
-				this.whatsappLink = `https://api.whatsapp.com/send?phone=${phoneUri}&text=${textUri}`;
+				this.whatsappHref = `${contactWhatsapp.toHtmlHref()}&text=${textUri}`;
 			},
 		},
 	};
@@ -50,35 +76,32 @@
 	<div :class="['Contacts', isWide ? 'Contacts-isWide' : 'Contacts-isThin']">
 		<a
 			class="Contacts-item"
-			href="tel:+60 16-795-9444"
+			:href="callHref"
 			:style="{
 				'--primary-color': '#2196f3',
 				'--primary-background-color': '#dff1ff',
 			}"
 		>
-			<img class="Contacts-item-icon" :src="host.res('icon/call-color.svg')" />
+			<img class="Contacts-item-icon" :src="callIcon" />
 			<div class="Contacts-item-body">
-				<span class="Contacts-item-title">Call</span>
-				<span class="Contacts-item-content">Mr Beh</span>
+				<span class="Contacts-item-title">{{ callTypeTitle }}</span>
+				<span class="Contacts-item-content">{{ callTitle }}</span>
 			</div>
 		</a>
 
 		<a
 			class="Contacts-item"
-			target="__blank"
-			:href="whatsappLink"
+			:target="whatsappTarget"
+			:href="whatsappHref"
 			:style="{
 				'--primary-color': '#4caf50',
 				'--primary-background-color': '#f3fff4',
 			}"
 		>
-			<img
-				class="Contacts-item-icon"
-				:src="host.res('icon/whatsapp-color.svg')"
-			/>
+			<img class="Contacts-item-icon" :src="whatsappIcon" />
 			<div class="Contacts-item-body">
-				<span class="Contacts-item-title">Whatsapp</span>
-				<span class="Contacts-item-content">Mr Beh</span>
+				<span class="Contacts-item-title">{{ whatsappTypeTitle }}</span>
+				<span class="Contacts-item-content">{{ whatsappTitle }}</span>
 			</div>
 		</a>
 	</div>
@@ -88,6 +111,7 @@
 	.Contacts {
 		display: flex;
 		flex-direction: row;
+		flex-wrap: wrap;
 		align-items: center;
 		justify-content: flex-end;
 

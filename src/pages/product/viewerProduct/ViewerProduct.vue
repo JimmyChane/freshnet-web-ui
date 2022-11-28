@@ -79,22 +79,11 @@
 			};
 		},
 		computed: {
-			classSize() {
-				if (this.orientation === Orientation.Portrait && this.size === Size.A4)
-					return "ViewerProduct-isPortrait-isSizeA4";
-				if (this.orientation === Orientation.Landscape && this.size === Size.A4)
-					return "ViewerProduct-isLandscape-isSizeA4";
-				if (this.orientation === Orientation.Portrait && this.size === Size.A5)
-					return "ViewerProduct-isPortrait-isSizeA5";
-				if (this.orientation === Orientation.Landscape && this.size === Size.A5)
-					return "ViewerProduct-isLandscape-isSizeA5";
-				return "";
-			},
 			classWide() {
 				return this.isWide ? "ViewerProduct-isWide" : "ViewerProduct-isThin";
 			},
 			classes() {
-				return ["ViewerProduct", this.classWide, this.classSize];
+				return ["ViewerProduct", this.classWide];
 			},
 
 			tabs() {
@@ -141,8 +130,7 @@
 			images: (context) => (!context.product ? [] : context.product.images),
 			hasImagePrevious: (context) =>
 				context.images.length > 0 && context.imagePreviewIndex > 0,
-			hasImageNext: (context) =>
-				context.images.length - 1 > context.imagePreviewIndex,
+			hasImageNext: (context) => context.images.length - 1 > context.imagePreviewIndex,
 
 			settings() {
 				let settings = this.settingStore.getters.items;
@@ -160,8 +148,7 @@
 				return context.product ? context.product.price : null;
 			},
 
-			description: (context) =>
-				context.product ? context.product.description : "",
+			description: (context) => (context.product ? context.product.description : ""),
 
 			specificationKeys: () => {
 				return Object.keys(ProductSpecType.Key).map((key) => {
@@ -184,9 +171,7 @@
 						index1 = index1 >= 0 ? index1 : context.specificationKeys.length;
 						index2 = index2 >= 0 ? index2 : context.specificationKeys.length;
 
-						return index1 !== index2
-							? index1 - index2
-							: key1.localeCompare(key2);
+						return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
 					});
 			},
 
@@ -369,10 +354,7 @@
 		}"
 		@scroll="(event) => scrolling(event)"
 	>
-		<div
-			class="ViewerProduct-toolbar"
-			:style="{ 'background-color': actionbarColor }"
-		>
+		<div class="ViewerProduct-toolbar" :style="{ 'background-color': actionbarColor }">
 			<Actionbar
 				class="ViewerProduct-actionbar"
 				:leftMenus="leftMenus"
@@ -698,8 +680,7 @@
 			--parent-scrollTop: 0;
 
 			top: calc(
-				var(--parent-height) - var(--margin) - var(--size) +
-					var(--parent-scrollTop)
+				var(--parent-height) - var(--margin) - var(--size) + var(--parent-scrollTop)
 			);
 
 			&:hover {
@@ -756,46 +737,5 @@
 			--padding: 2rem;
 			padding-left: calc(var(--padding) / 2);
 		}
-	}
-
-	.ViewerProduct-isPortrait-isSizeA4 {
-		--width: 210mm;
-		--height: 297mm;
-		width: var(--width);
-		height: var(--height);
-		min-width: var(--width);
-		min-height: var(--height);
-		max-width: var(--width);
-		max-height: var(--height);
-	}
-	.ViewerProduct-isLandscape-isSizeA4 {
-		--width: 297mm;
-		--height: 210mm;
-		width: var(--width);
-		height: var(--height);
-		min-width: var(--width);
-		min-height: var(--height);
-		max-width: var(--width);
-		max-height: var(--height);
-	}
-	.ViewerProduct-isPortrait-isSizeA5 {
-		--width: 148.5mm;
-		--height: 210mm;
-		width: var(--width);
-		height: var(--height);
-		min-width: var(--width);
-		min-height: var(--height);
-		max-width: var(--width);
-		max-height: var(--height);
-	}
-	.ViewerProduct-isLandscape-isSizeA5 {
-		--width: 210mm;
-		--height: 148.5mm;
-		width: var(--width);
-		height: var(--height);
-		min-width: var(--width);
-		min-height: var(--height);
-		max-width: var(--width);
-		max-height: var(--height);
 	}
 </style>

@@ -285,7 +285,7 @@
 				{
 					key: 'home',
 					title: 'Home',
-					icon: this.host.res('icon/home-2A4858.svg'),
+					icon: this.host.res('img/freshnet-enterprise-logo.svg'),
 					click: () => this.$router.push('/home'),
 				},
 				{

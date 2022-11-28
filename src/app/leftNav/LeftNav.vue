@@ -33,8 +33,7 @@
 					nav.isSelected = () => this.selectedPageKey === nav.key;
 					nav.isWide = () => this.isWide;
 					nav.clickExpand = () => {
-						this.expandedPageKey =
-							this.expandedPageKey === nav.key ? "" : nav.key;
+						this.expandedPageKey = this.expandedPageKey === nav.key ? "" : nav.key;
 					};
 					nav.click = () => this.emitCollapse();
 
@@ -170,9 +169,7 @@
 			align-items: stretch;
 			overflow-y: auto;
 			overflow-x: hidden;
-			background: hsl(204, 31%, 90%);
-			background: #b1b1b1;
-			background: hsl(204, 10%, 70%);
+			background-color: #dfe8ee;
 			position: relative;
 			transition: var(--animation-duration);
 
@@ -239,8 +236,6 @@
 					.LeftNav-icon {
 						width: 2rem;
 						height: 2rem;
-					}
-					.LeftNav-title {
 					}
 				}
 			}

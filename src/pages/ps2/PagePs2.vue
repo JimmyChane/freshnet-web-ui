@@ -77,7 +77,7 @@
 						? [
 								{
 									title: 'Home',
-									icon: host.res('icon/home-2A4858.svg'),
+									icon: host.res('img/freshnet-enterprise-logo.svg'),
 									click: () => $router.push({ name: 'home' }),
 								},
 								{

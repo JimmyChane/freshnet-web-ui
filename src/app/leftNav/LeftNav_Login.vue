@@ -68,8 +68,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
-		// background: white;
-		// background: #e2e9ed;
 		padding: 1rem;
 		border-top: 1px solid hsla(0, 0%, 0%, 0.1);
 

@@ -1,8 +1,23 @@
+<script>
+	import Company from "@/host/Company";
+	export default {
+		data() {
+			return {
+				companyTitle: Company.name,
+				companyCategory: Company.category,
+				addressHref: Company.Location.toHref(),
+			};
+		},
+	};
+</script>
+
 <template>
 	<div class="HomeHeader">
 		<span class="HomeHeader-title">
-			<span class="HomeHeader-name">Freshnet Enterprise</span>
-			<span class="HomeHeader-classification">Computer Store</span>
+			<span class="HomeHeader-name">{{ companyTitle }}</span>
+			<a class="HomeHeader-classification" :href="addressHref" target="__blank"
+				>{{ companyCategory }}<br />Kuala Selangor District</a
+			>
 		</span>
 		<!-- <span class="HomeHeader-description"
 			>We sell notebooks, printers, repairs, and more</span
@@ -44,6 +59,13 @@
 			.HomeHeader-classification {
 				font-size: 0.4em;
 				line-height: 1em;
+				cursor: pointer;
+				color: inherit;
+				text-decoration: inherit;
+
+				&:hover {
+					text-decoration: underline;
+				}
 			}
 		}
 		.HomeHeader-description {
