@@ -36,11 +36,7 @@ class U {
 			if (current && current.value !== query.value) {
 				current.value = query.value;
 				isChanged = true;
-			} else if (
-				!current &&
-				query.value !== null &&
-				query.value !== undefined
-			) {
+			} else if (!current && query.value !== null && query.value !== undefined) {
 				nextQueries.push({ key: query.key, value: query.value });
 				isChanged = true;
 			}
@@ -123,9 +119,7 @@ new Vue({
 		return {
 			console: {
 				log(param1, param2) {
-					param2 === undefined
-						? console.log(param1)
-						: console.log(param1, param2);
+					param2 === undefined ? console.log(param1) : console.log(param1, param2);
 				},
 				error(param1, param2) {
 					param2 === undefined
@@ -167,13 +161,11 @@ new Vue({
 				const queries = typeof _queries === "function" ? _queries() : [];
 
 				// parsing
-				const parsedChildren = U.parseGroup2s([{ values: children }]).map(
-					(obj) => {
-						obj.isLink = true;
-						obj.isQuery = false;
-						return obj;
-					},
-				);
+				const parsedChildren = U.parseGroup2s([{ values: children }]).map((obj) => {
+					obj.isLink = true;
+					obj.isQuery = false;
+					return obj;
+				});
 				const parsedGroups = U.parseGroup2s(groups).map((obj) => {
 					obj.isLink = true;
 					obj.isQuery = false;
@@ -221,9 +213,7 @@ new Vue({
 
 						let found = groups.find((group) => group.key === key);
 						if (!found) {
-							groups.push(
-								(found = { key, title, isLink, isQuery, groups: [] }),
-							);
+							groups.push((found = { key, title, isLink, isQuery, groups: [] }));
 						}
 						found.groups.push(...views);
 
@@ -379,9 +369,7 @@ new Vue({
 		},
 		pushDownload(filename, content) {
 			const element = document.createElement("a");
-			element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
-				content,
-			)}`;
+			element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`;
 			element.download = filename;
 			document.body.appendChild(element);
 			element.click();
@@ -426,7 +414,6 @@ new Vue({
 			eWindow.close();
 		},
 		printUsingPHE(element) {
-			// let PHE = require("simple-print"); // https://www.npmjs.com/package/simple-print
 			let PHE = require("print-html-element"); // https://www.npmjs.com/package/print-html-element
 
 			// const options = {
@@ -438,8 +425,8 @@ new Vue({
 			// 	// styles: "" | [""],
 			// };
 
+			// PHE.printElement(element, options);
 			PHE.printElement(element);
-			// PHE.printHtml(element);
 		},
 
 		// routes

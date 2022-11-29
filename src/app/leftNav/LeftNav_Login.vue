@@ -124,6 +124,7 @@
 				justify-content: center;
 
 				--primary-color: #2683d8;
+				--primary-color: hsla(0, 0%, 0%, 0.8);
 
 				background: none;
 				border: 0.1em solid var(--primary-color);

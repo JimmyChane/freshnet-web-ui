@@ -5,7 +5,11 @@
 
 	export default {
 		components: { Item },
-		props: { product: { type: Object, default: () => null } },
+		props: {
+			width: { type: Number, default: 0 },
+			height: { type: Number, default: 0 },
+			product: { type: Object, default: () => null },
+		},
 		data() {
 			return { fullTitle: "" };
 		},
@@ -38,9 +42,7 @@
 						index1 = index1 >= 0 ? index1 : context.specificationKeys.length;
 						index2 = index2 >= 0 ? index2 : context.specificationKeys.length;
 
-						return index1 !== index2
-							? index1 - index2
-							: key1.localeCompare(key2);
+						return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
 					});
 			},
 
@@ -101,7 +103,13 @@
 </script>
 
 <template>
-	<div class="ExportLayoutOne">
+	<div
+		class="ExportLayoutOne"
+		:style="{
+			'--width': `${width}px`,
+			'--height': `${height}px`,
+		}"
+	>
 		<span class="ExportLayoutOne-title">{{ fullTitle }}</span>
 
 		<div class="ExportLayoutOne-items">
@@ -112,16 +120,21 @@
 			/>
 		</div>
 
-		<span class="ExportLayoutOne-price" v-if="price && price.to">
-			{{ price.to }}</span
-		>
+		<span class="ExportLayoutOne-price" v-if="price && price.to"> {{ price.to }}</span>
 	</div>
 </template>
 
 <style lang="scss" scoped>
 	.ExportLayoutOne {
-		width: 100%;
-		height: 100%;
+		width: var(--width);
+		height: var(--height);
+		min-width: var(--width);
+		min-height: var(--height);
+		max-width: var(--width);
+		max-height: var(--height);
+
+		overflow: hidden;
+
 		padding: 60px;
 		gap: 30px;
 

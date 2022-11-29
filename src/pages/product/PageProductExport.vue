@@ -3,22 +3,26 @@
 	import ExportLayoutOption from "./PageProductExport-LayoutOption.vue";
 	import ExportButton from "./PageProductExport-Export.vue";
 
-	import ViewerProduct from "@/pages/product/viewerProduct/ViewerProduct.vue";
 	import LayoutOne from "./PageProductExport-Layout-One.vue";
 
 	export default {
-		components: {
-			ExportOption,
-			ExportLayoutOption,
-			ExportButton,
-			ViewerProduct,
-			LayoutOne,
-		},
+		components: { ExportOption, ExportLayoutOption, ExportButton, LayoutOne },
 		data() {
 			return {
 				product: null,
 
 				options: [
+					{
+						title: "Orientation",
+						items: [{ title: "Portrait" }, { title: "Landscape" }],
+						click: () => {
+							const items = this.options[0].items;
+							const index = items.indexOf(this.orientation);
+							const nextIndex = index + 1;
+							this.orientation = items[nextIndex >= items.length ? 0 : nextIndex];
+							this.invalidateCard();
+						},
+					},
 					{
 						title: "size",
 						items: [
@@ -34,7 +38,7 @@
 							},
 						],
 						click: () => {
-							const items = this.options[0].items;
+							const items = this.options[1].items;
 							const index = items.indexOf(this.size);
 							const nextIndex = index + 1;
 							this.size = items[nextIndex >= items.length ? 0 : nextIndex];
@@ -42,14 +46,30 @@
 						},
 					},
 					{
-						title: "Orientation",
-						items: [{ title: "Portrait" }, { title: "Landscape" }],
+						title: "Rows",
+						items: [
+							{ title: "1", count: 1 },
+							{ title: "2", count: 2 },
+						],
 						click: () => {
-							const items = this.options[1].items;
-							const index = items.indexOf(this.orientation);
+							const items = this.options[2].items;
+							const index = items.indexOf(this.row);
 							const nextIndex = index + 1;
-							this.orientation =
-								items[nextIndex >= items.length ? 0 : nextIndex];
+							this.row = items[nextIndex >= items.length ? 0 : nextIndex];
+							this.invalidateCard();
+						},
+					},
+					{
+						title: "Columns",
+						items: [
+							{ title: "1", count: 1 },
+							{ title: "2", count: 2 },
+						],
+						click: () => {
+							const items = this.options[3].items;
+							const index = items.indexOf(this.column);
+							const nextIndex = index + 1;
+							this.column = items[nextIndex >= items.length ? 0 : nextIndex];
 							this.invalidateCard();
 						},
 					},
@@ -62,8 +82,12 @@
 
 				size: null,
 				orientation: null,
+				row: null,
+				column: null,
 
-				cardScale: 0,
+				bodyWidth: 0,
+				bodyHeight: 0,
+				canvasScale: 0,
 			};
 		},
 		computed: {
@@ -80,8 +104,13 @@
 			isA5: (c) => c.orientation.title === "A5",
 			isA4: (c) => c.orientation.title === "A4",
 
-			cardWidth: (c) => (c.isPortrait ? c.size.width : c.size.height),
-			cardHeight: (c) => (c.isPortrait ? c.size.height : c.size.width),
+			canvasWidth: (c) => (c.isPortrait ? c.size.width : c.size.height),
+			canvasHeight: (c) => (c.isPortrait ? c.size.height : c.size.width),
+			canvasRowCount: (c) => c.row.count,
+			canvasColumnCount: (c) => c.column.count,
+
+			itemWidth: (c) => c.canvasWidth / c.canvasColumnCount,
+			itemHeight: (c) => c.canvasHeight / c.canvasRowCount,
 		},
 		watch: {
 			productId() {
@@ -95,14 +124,22 @@
 		},
 		created() {
 			this.options[0].items.forEach((item) => {
-				item.isSelected = () => item === this.size;
-			});
-			this.options[1].items.forEach((item) => {
 				item.isSelected = () => item === this.orientation;
 			});
+			this.options[1].items.forEach((item) => {
+				item.isSelected = () => item === this.size;
+			});
+			this.options[2].items.forEach((item) => {
+				item.isSelected = () => item === this.row;
+			});
+			this.options[3].items.forEach((item) => {
+				item.isSelected = () => item === this.column;
+			});
 
-			this.size = this.options[0].items[0];
-			this.orientation = this.options[1].items[1];
+			this.orientation = this.options[0].items[0];
+			this.size = this.options[1].items[1];
+			this.row = this.options[2].items[1];
+			this.column = this.options[3].items[0];
 
 			window.addEventListener("resize", this.listenerResize);
 		},
@@ -144,15 +181,18 @@
 				this.product = product;
 			},
 			invalidateCard(repeatTimeout = 300) {
-				const ref = this.$refs.canvas;
+				const ref = this.$refs.body;
 				if (!ref) return;
-				const { offsetWidth, offsetHeight } = ref;
-				const { cardWidth, cardHeight } = this;
 
-				const scaleWidth = offsetWidth / cardWidth;
-				const scaleHeight = offsetHeight / cardHeight;
+				this.bodyWidth = ref.offsetWidth;
+				this.bodyHeight = ref.offsetHeight;
 
-				this.cardScale = scaleWidth > scaleHeight ? scaleHeight : scaleWidth;
+				const { canvasWidth, canvasHeight } = this;
+
+				const scaleWidth = this.bodyWidth / canvasWidth;
+				const scaleHeight = this.bodyHeight / canvasHeight;
+
+				this.canvasScale = scaleWidth > scaleHeight ? scaleHeight : scaleWidth;
 
 				if (repeatTimeout) {
 					setTimeout(() => this.invalidateCard(0), repeatTimeout);
@@ -160,7 +200,7 @@
 			},
 
 			clickExport() {
-				const ref = this.$refs.card;
+				const ref = this.$refs.canvas;
 				if (!ref) return;
 				this.$root.print(ref);
 			},
@@ -177,28 +217,32 @@
 
 <template>
 	<div class="PageProductExport" v-if="allowEdit">
-		<div class="PageProductExport-canvas" ref="canvas">
+		<div class="PageProductExport-body" ref="body">
 			<div
-				class="PageProductExport-card"
-				ref="card"
+				class="PageProductExport-canvas"
+				ref="canvas"
 				:style="{
-					'--width': `${cardWidth}px`,
-					'--height': `${cardHeight}px`,
-					'--scale': `${cardScale}`,
+					'--body-width': `${bodyWidth}px`,
+					'--body-height': `${bodyHeight}px`,
+
+					'--canvas-width': `${canvasWidth}px`,
+					'--canvas-height': `${canvasHeight}px`,
+					'--canvas-scale': `${canvasScale}`,
+
+					'--item-width': `${itemWidth}px`,
+					'--item-height': `${itemHeight}px`,
+
+					'--row-count': `${canvasRowCount}`,
+					'--column-count': `${canvasColumnCount}`,
 				}"
 			>
-				<!-- <ViewerProduct :product="product" :isWide="isLandscape" /> -->
-				<LayoutOne :product="product" />
+				<LayoutOne :width="itemWidth" :height="itemHeight" :product="product" />
 			</div>
 		</div>
 
 		<div class="PageProductExport-toolbar">
 			<div class="PageProductExport-options">
-				<ExportOption
-					v-for="option of options"
-					:key="option.title"
-					:menu="option"
-				/>
+				<ExportOption v-for="option of options" :key="option.title" :menu="option" />
 			</div>
 
 			<ExportButton @click="() => clickExport()" />
@@ -221,38 +265,40 @@
 
 		display: grid;
 		grid-template-areas:
-			"canvas layouts"
+			"body layouts"
 			"toolbar layouts";
 		grid-template-rows: 1fr 4rem;
-		// grid-template-columns: 1fr 12rem;
 		grid-template-columns: 1fr;
 
-		.PageProductExport-canvas {
-			grid-area: canvas;
+		.PageProductExport-body {
+			grid-area: body;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			position: relative;
 			margin: 1rem;
 
-			.PageProductExport-card {
-				width: var(--width);
-				height: var(--height);
-				min-width: var(--width);
-				min-height: var(--height);
-				max-width: var(--width);
-				max-height: var(--height);
+			.PageProductExport-canvas {
+				width: var(--canvas-width);
+				height: var(--canvas-height);
+				min-width: var(--canvas-width);
+				min-height: var(--canvas-height);
+				max-width: var(--canvas-width);
+				max-height: var(--canvas-height);
 
 				background: white;
 				box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.2);
-				transform: scale(var(--scale));
+				transform: scale(var(--canvas-scale));
 				position: absolute;
-				top: calc(0 - var(--height) * var(--scale));
-				left: calc(0 - var(--width) * var(--scale));
+				top: calc(0 - var(--canvas-height) * var(--canvas-scale));
+				left: calc(0 - var(--canvas-width) * var(--canvas-scale));
 
-				display: flex;
 				align-items: center;
 				justify-content: center;
+
+				display: grid;
+				grid-template-rows: repeat(var(--row-count), 1fr);
+				grid-template-columns: repeat(var(--column-count), 1fr);
 
 				overflow: hidden;
 			}
@@ -295,11 +341,20 @@
 	// 	body * {
 	// 		visibility: hidden;
 	// 	}
-	// 	.PageProductExport-card,
-	// 	.PageProductExport-card * {
+	// 	.App {
+	// 		visibility: hidden;
+	// 	}
+	// 	.PageProductExport {
+	// 		visibility: hidden;
+	// 	}
+	// 	.PageProductExport-body {
+	// 		visibility: hidden;
+	// 	}
+	// 	.PageProductExport-canvas,
+	// 	.PageProductExport-canvas * {
 	// 		visibility: visible;
 	// 	}
-	// 	.PageProductExport-card {
+	// 	.PageProductExport-canvas {
 	// 		position: absolute;
 	// 		left: 0;
 	// 		top: 0;
