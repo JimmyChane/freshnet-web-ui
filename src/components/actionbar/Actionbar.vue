@@ -42,27 +42,28 @@
 
 <style lang="scss" scoped>
 	.Actionbar {
+		--actionbar-background-color-translucent: var(--actionbar-background-color);
+		--actionbar-background-color-light: var(--actionbar-color);
+		--actionbar-background-color-dark: var(--actionbar-color);
+		transition: var(--animation-duration);
+		color: black;
+		background-color: #f3f3f3;
+
+		position: sticky;
+		top: 0;
+
+		--height: 3.8rem;
+
 		width: 100%;
+		min-height: var(--height);
+		max-height: var(--height);
+		padding: 0.6rem;
+
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
 		align-items: center;
-		justify-content: space-between;
-		gap: 0.5rem;
-		position: sticky;
-		top: 0;
-		padding: 0.6rem 0.8rem;
-		transition: var(--animation-duration);
-		color: var(--primary-color);
-
-		background-color: #e5ecee;
-		--actionbar-background-color-translucent: var(--actionbar-background-color);
-		--actionbar-background-color-light: var(--actionbar-color);
-		--actionbar-background-color-dark: var(--actionbar-color);
-
-		@media (max-width: 800px) {
-			padding: 0.4rem 0.6rem;
-		}
+		justify-content: flex-start;
 
 		.Actionbar-leftMenus {
 			min-width: max-content;
@@ -71,22 +72,20 @@
 			min-width: max-content;
 		}
 		.Actionbar-title {
-			overflow: hidden;
-			display: flex;
-			flex-direction: row;
-			flex-grow: 0;
-			align-items: center;
-			justify-content: flex-start;
-
-			font-size: 1rem;
+			font-size: 1.3rem;
 			font-weight: 600;
 			white-space: nowrap;
 			text-overflow: clip;
 			color: inherit;
 
-			@media (max-width: 800px) {
-				font-size: 1.4rem;
-			}
+			margin: 0 0.8rem;
+			overflow: hidden;
+
+			display: flex;
+			flex-direction: row;
+			flex-grow: 1;
+			align-items: center;
+			justify-content: flex-start;
 		}
 	}
 </style>

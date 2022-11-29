@@ -270,27 +270,30 @@
 				],
 			};
 		},
+		computed: {
+			leftMenus() {
+				if (!this.$root.navigation.isDrawer()) return [];
+
+				return [
+					{
+						title: "Home",
+						icon: this.host.res("img/freshnet-enterprise-logo.svg"),
+						click: () => this.$router.push("/home"),
+					},
+					{
+						title: "Hamburger Menu",
+						icon: this.host.res(`icon/hamburgerMenu-000000.svg`),
+						click: () => this.$root.openNavigationDrawer(),
+					},
+				];
+			},
+		},
 	};
 </script>
 
 <template>
 	<div class="PagePrint">
-		<Actionbar
-			v-if="$root.navigation.isDrawer()"
-			:leftMenus="[
-				{
-					key: 'home',
-					title: 'Home',
-					icon: this.host.res('img/freshnet-enterprise-logo.svg'),
-					click: () => this.$router.push('/home'),
-				},
-				{
-					title: 'Hamburger Menu',
-					icon: host.res(`icon/hamburgerMenu-2A4858.svg`),
-					click: () => $root.openNavigationDrawer(),
-				},
-			]"
-		/>
+		<Actionbar :title="$options.title" :leftMenus="leftMenus" />
 
 		<div class="PagePrint-layers">
 			<Layer
@@ -310,7 +313,6 @@
 		--card-background-color: #eef5f8;
 
 		width: 100%;
-		background-color: #c9d7df;
 		overflow-y: auto;
 
 		display: flex;
