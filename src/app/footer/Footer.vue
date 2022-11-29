@@ -84,7 +84,9 @@
 
 <style lang="scss" scoped>
 	.PageHomeFooter {
-		--primary-color: #b6c4ce;
+		// --primary-color: #b6c4ce;
+		// --primary-color: black;
+		--primary-color: hsl(0, 0%, 20%);
 
 		width: 100%;
 		margin-top: 4rem;
@@ -96,8 +98,8 @@
 		text-decoration: none;
 		background: black;
 		background-color: var(--primary-color);
+		// color: #1b303d;
 		color: white;
-		color: #1b303d;
 
 		display: flex;
 		flex-direction: column;

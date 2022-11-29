@@ -177,8 +177,8 @@
 
 <style lang="scss" scoped>
 	.PageHome {
-		background: linear-gradient(130.76deg, #edeff3 0%, #e4e4e4 100%);
-		background: #e4e4e4;
+		// background: linear-gradient(130.76deg, #edeff3 0%, #e4e4e4 100%);
+		// background-color: #e4e4e4;
 
 		display: flex;
 		flex-direction: row;
