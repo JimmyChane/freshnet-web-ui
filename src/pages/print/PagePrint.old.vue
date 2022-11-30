@@ -1,6 +1,5 @@
 <script>
 	import Actionbar from "@/components/actionbar/Actionbar.vue";
-	import Tabs from "./PagePrint-Tabs.vue";
 	import Layer from "./PagePrint_Layer1.vue";
 	import Footer from "@/app/footer/Footer.vue";
 
@@ -14,7 +13,7 @@
 	export default {
 		key: "print",
 		title: "Printing",
-		components: { Actionbar, Tabs, Layer, Footer },
+		components: { Actionbar, Layer, Footer },
 		data() {
 			return {
 				layers: [
@@ -269,10 +268,6 @@
 						},
 					]),
 				],
-
-				tab0: null,
-				tab1: null,
-				tab2: null,
 			};
 		},
 		computed: {
@@ -292,117 +287,21 @@
 					},
 				];
 			},
-
-			tabs0() {
-				return this.layers.map((layer) => {
-					const tab = { title: layer.title };
-					tab.isSelected = () => tab === this.tab0;
-					tab.click = () => (this.tab0 = tab);
-					return tab;
-				});
-			},
-			tabs1() {
-				if (this.tabs0.length === 0) return [];
-
-				const layer = this.layers.find((layer) => {
-					return layer.title === this.tab0.title;
-				});
-
-				if (!layer) return [];
-				if (!Array.isArray(layer.layers)) return [];
-				if (layer.layers.length === 0) return [];
-
-				return layer.layers.map((layer) => {
-					const tab = { title: layer.title };
-					tab.isSelected = () => tab === this.tab1;
-					tab.click = () => (this.tab1 = tab);
-					return tab;
-				});
-			},
-			tabs2() {
-				if (this.tabs1.length === 0) return [];
-
-				const layer = this.layers
-					.find((layer) => layer.title === this.tab0.title)
-					.layers.find((layer) => layer.title === this.tab1.title);
-
-				if (!layer) return [];
-				if (!Array.isArray(layer.layers)) return [];
-				if (layer.layers.length === 0) return [];
-
-				return layer.layers.map((layer) => {
-					const tab = { title: layer.title };
-					tab.isSelected = () => tab === this.tab2;
-					tab.click = () => (this.tab2 = tab);
-					return tab;
-				});
-			},
-
-			currentLayer() {
-				if (this.tabs1.length === 0) return null;
-
-				const layer1 = this.layers.find((layer) => {
-					return layer.title === this.tab0.title;
-				});
-				const layer2 = layer1.layers.find((layer) => {
-					return layer.title === this.tab1.title;
-				});
-				const layer3 = layer2.layers.find((layer) => {
-					return layer.title === this.tab2.title;
-				});
-
-				if (layer2) return layer2;
-				if (layer1) return layer1;
-				if (layer3) return layer3;
-
-				console.log(layer);
-
-				return layer;
-			},
-		},
-		created() {
-			this.tab0 = this.tabs0[0];
-			this.tab1 = this.tabs1[0];
-			this.tab2 = this.tabs2[0];
 		},
 	};
 </script>
 
 <template>
 	<div class="PagePrint">
-		<Actionbar
-			class="PagePrint-actionbar"
-			:title="$options.title"
-			:leftMenus="leftMenus"
-		/>
+		<Actionbar :title="$options.title" :leftMenus="leftMenus" />
 
-		<Tabs v-if="tabs0.length" :items="tabs0" />
-		<Tabs v-if="tabs1.length" :items="tabs1" />
-		<!-- <Tabs v-if="tabs2.length" :items="tabs2" /> -->
-
-		<div class="PagePrint-body" v-if="currentLayer">
-			<div
+		<div class="PagePrint-layers">
+			<Layer
 				class="PagePrint-layer"
-				v-for="layer of currentLayer.layers"
+				v-for="layer of layers"
 				:key="layer.title"
-			>
-				<div class="PagePrint-layer-header">
-					<img class="PagePrint-layer-icon" :src="layer.icon" />
-					<span class="PagePrint-layer-title">{{ layer.title }}</span>
-				</div>
-
-				<div class="PagePrint-items">
-					<div
-						class="PagePrint-item"
-						v-for="layer1 of layer.layers"
-						:key="layer1.title"
-					>
-						<img class="PagePrint-item-icon" :src="layer1.icon" />
-						<span class="PagePrint-item-title">{{ layer1.title }}</span>
-						<span class="PagePrint-item-price">{{ layer1.price }}</span>
-					</div>
-				</div>
-			</div>
+				:item="layer"
+			/>
 		</div>
 
 		<Footer />
@@ -421,75 +320,18 @@
 		align-items: center;
 		justify-content: flex-start;
 
-		.PagePrint-actionbar {
-			z-index: 2;
-		}
-
-		.PagePrint-body {
-			z-index: 1;
-
-			height: 100%;
-			max-height: 100%;
-			gap: 2rem;
+		.PagePrint-layers {
+			width: 100%;
 			padding: 1rem;
+			gap: 1rem;
 
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+		}
+		.PagePrint-layers {
 			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			align-items: flex-start;
-			justify-content: center;
-
-			.PagePrint-layer {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: flex-start;
-
-				.PagePrint-layer-header {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					justify-content: center;
-					padding: 1rem;
-					gap: 0.5rem;
-
-					.PagePrint-layer-icon {
-						--size: 3rem;
-						width: var(--size);
-						height: var(--size);
-					}
-					.PagePrint-layer-title {
-						font-size: 1.2rem;
-						font-weight: 500;
-					}
-				}
-				.PagePrint-items {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					justify-content: flex-start;
-					gap: 0.5rem;
-
-					.PagePrint-item {
-						width: 100%;
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-						gap: 0.5rem;
-
-						.PagePrint-item-icon {
-							width: 2rem;
-							height: 2rem;
-						}
-						.PagePrint-item-title {
-							flex-grow: 1;
-						}
-						.PagePrint-item-price {
-							margin-left: 2rem;
-						}
-					}
-				}
-			}
+			flex-direction: column;
+			max-width: 30rem;
 		}
 	}
 </style>
