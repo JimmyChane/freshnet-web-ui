@@ -1,6 +1,5 @@
 <script>
 	import SearchInput from "@/components/SearchInput.vue";
-	import PopupWindow from "@/components/window/PopupWindow.vue";
 	import Footer from "@/app/footer/Footer.vue";
 
 	import Actionbar from "./PageHome-Actionbar.vue";
@@ -15,12 +14,6 @@
 	import SectionAboutUs from "./PageHome-SectionAboutUs.vue";
 	import SectionFeedback from "./PageHome-SectionFeedback.vue";
 
-	import ItemSearchProduct from "./ItemSearchProduct.vue";
-	import ItemSearchCategory from "./ItemSearchCategory.vue";
-	import ItemSearchBrand from "./ItemSearchBrand.vue";
-	import ItemSearchPs2Disc from "./ItemSearchPs2Disc.vue";
-	import ItemSearchService from "./ItemSearchService.vue";
-
 	export default {
 		key: "home",
 		name: "Home",
@@ -29,15 +22,9 @@
 
 		components: {
 			SearchInput,
-			PopupWindow,
 			Footer,
 			Actionbar,
 			Header,
-			ItemSearchProduct,
-			ItemSearchCategory,
-			ItemSearchBrand,
-			ItemSearchPs2Disc,
-			ItemSearchService,
 			SectionProduct,
 			SectionContact,
 			SectionPrint,
@@ -51,11 +38,6 @@
 			return { scrollTop: 0 };
 		},
 		computed: {
-			whatsappLink: (c) => {
-				let phone = "60167959444";
-				return `https://api.whatsapp.com/send?phone=${phone}`;
-			},
-
 			isThin: (c) => c.$root.navigation.isDrawer(),
 
 			classes() {
@@ -81,14 +63,8 @@
 			/>
 
 			<div class="Home-body">
-				<div class="Home-section-0">
-					<Header
-						class="Home-header"
-						:style="{
-							'grid-column': '1 / -1',
-							'grid-row': '1 / span 1',
-						}"
-					/>
+				<div>
+					<Header class="Home-header" />
 				</div>
 
 				<div class="Home-section-1">
@@ -115,58 +91,19 @@
 					/>
 				</div>
 
-				<div class="Home-section-2">
-					<span
-						class="Home-section-title"
-						:style="{
-							'grid-column': '1 / -1',
-							'grid-row': '1 / span 1',
-						}"
-						>Contact Us</span
-					>
-					<SectionContact
-						:style="{
-							'grid-column': 'auto / span 1',
-							'grid-row': 'auto / span 2',
-						}"
-						:isThin="isThin"
-					/>
+				<div>
+					<span class="Home-section-title">Contact Us</span>
+					<SectionContact :isThin="isThin" />
 				</div>
 
-				<div class="Home-section-3">
-					<span
-						class="Home-section-title"
-						:style="{
-							'grid-column': '1 / -1',
-							'grid-row': '1 / span 1',
-						}"
-						>Business Hours</span
-					>
-					<SectionHour
-						:style="{
-							'grid-column': 'auto / span 2',
-							'grid-row': 'auto / span 2',
-						}"
-						:isThin="isThin"
-					/>
+				<div>
+					<span class="Home-section-title">Business Hours</span>
+					<SectionHour :isThin="isThin" />
 				</div>
 
-				<div class="Home-section-3">
-					<span
-						class="Home-section-title"
-						:style="{
-							'grid-column': '1 / -1',
-							'grid-row': '1 / span 1',
-						}"
-						>What else can we do?</span
-					>
-					<SectionWhatElse
-						:style="{
-							'grid-column': 'auto / span 2',
-							'grid-row': 'auto / span 2',
-						}"
-						:isThin="isThin"
-					/>
+				<div>
+					<span class="Home-section-title">What else can we do?</span>
+					<SectionWhatElse :isThin="isThin" />
 				</div>
 			</div>
 
@@ -177,9 +114,6 @@
 
 <style lang="scss" scoped>
 	.PageHome {
-		// background: linear-gradient(130.76deg, #edeff3 0%, #e4e4e4 100%);
-		// background-color: #e4e4e4;
-
 		display: flex;
 		flex-direction: row;
 		align-items: stretch;
@@ -237,15 +171,6 @@
 						justify-content: center;
 						text-align: center;
 					}
-				}
-
-				.Home-section-0 {
-				}
-				.Home-section-1 {
-				}
-				.Home-section-2 {
-				}
-				.Home-section-3 {
 				}
 			}
 		}

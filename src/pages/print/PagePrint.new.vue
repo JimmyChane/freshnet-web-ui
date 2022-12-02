@@ -1,6 +1,7 @@
 <script>
 	import Actionbar from "@/components/actionbar/Actionbar.vue";
-	import Layer from "./PagePrint_Layer1.vue";
+	import Tabs from "./PagePrint-Tabs.vue";
+	import Preview from "./PagePrint-Preview.vue";
 	import Footer from "@/app/footer/Footer.vue";
 
 	class Layer1 {
@@ -13,7 +14,7 @@
 	export default {
 		key: "print",
 		title: "Printing",
-		components: { Actionbar, Layer, Footer },
+		components: { Actionbar, Tabs, Preview, Footer },
 		data() {
 			return {
 				layers: [
@@ -268,6 +269,10 @@
 						},
 					]),
 				],
+
+				tab0: null,
+				tab1: null,
+				tab2: null,
 			};
 		},
 		computed: {
@@ -287,20 +292,99 @@
 					},
 				];
 			},
+
+			tabs0() {
+				return this.layers.map((layer) => {
+					const tab = { title: layer.title };
+					tab.isSelected = () => tab === this.tab0;
+					tab.click = () => (this.tab0 = tab);
+					return tab;
+				});
+			},
+			tabs1() {
+				if (this.tabs0.length === 0) return [];
+
+				const layer = this.layers.find((layer) => {
+					return layer.title === this.tab0.title;
+				});
+
+				if (!layer) return [];
+				if (!Array.isArray(layer.layers)) return [];
+				if (layer.layers.length === 0) return [];
+
+				return layer.layers.map((layer) => {
+					const tab = { title: layer.title };
+					tab.isSelected = () => tab === this.tab1;
+					tab.click = () => (this.tab1 = tab);
+					return tab;
+				});
+			},
+			tabs2() {
+				if (this.tabs1.length === 0) return [];
+
+				const layer = this.layers
+					.find((layer) => layer.title === this.tab0.title)
+					.layers.find((layer) => layer.title === this.tab1.title);
+
+				if (!layer) return [];
+				if (!Array.isArray(layer.layers)) return [];
+				if (layer.layers.length === 0) return [];
+
+				return layer.layers.map((layer) => {
+					const tab = { title: layer.title };
+					tab.isSelected = () => tab === this.tab2;
+					tab.click = () => (this.tab2 = tab);
+					return tab;
+				});
+			},
+
+			currentLayer() {
+				if (this.tabs1.length === 0) return null;
+
+				const layer1 = this.layers.find((layer) => {
+					return layer.title === this.tab0.title;
+				});
+				const layer2 = layer1.layers.find((layer) => {
+					return layer.title === this.tab1.title;
+				});
+				const layer3 = layer2.layers.find((layer) => {
+					return layer.title === this.tab2.title;
+				});
+
+				if (layer2) return layer2;
+				if (layer1) return layer1;
+				if (layer3) return layer3;
+
+				console.log(layer);
+
+				return layer;
+			},
+		},
+		created() {
+			this.tab0 = this.tabs0[0];
+			this.tab1 = this.tabs1[0];
+			this.tab2 = this.tabs2[0];
 		},
 	};
 </script>
 
 <template>
 	<div class="PagePrint">
-		<Actionbar :title="$options.title" :leftMenus="leftMenus" />
+		<Actionbar
+			class="PagePrint-actionbar"
+			:title="$options.title"
+			:leftMenus="leftMenus"
+		/>
 
-		<div class="PagePrint-layers">
-			<Layer
-				class="PagePrint-layer"
-				v-for="layer of layers"
-				:key="layer.title"
-				:item="layer"
+		<Tabs v-if="tabs0.length" :items="tabs0" />
+		<Tabs v-if="tabs1.length" :items="tabs1" />
+		<!-- <Tabs v-if="tabs2.length" :items="tabs2" /> -->
+
+		<div class="PagePrint-body" v-if="currentLayer">
+			<Preview
+				v-for="preview of currentLayer.layers"
+				:key="preview.title"
+				:preview="preview"
 			/>
 		</div>
 
@@ -320,18 +404,23 @@
 		align-items: center;
 		justify-content: flex-start;
 
-		.PagePrint-layers {
-			width: 100%;
-			padding: 1rem;
-			gap: 1rem;
-
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+		.PagePrint-actionbar {
+			z-index: 2;
 		}
-		.PagePrint-layers {
+
+		.PagePrint-body {
+			z-index: 1;
+
+			height: 100%;
+			max-height: 100%;
+			gap: 2rem;
+			padding: 1rem;
+
 			display: flex;
-			flex-direction: column;
-			max-width: 30rem;
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: flex-start;
+			justify-content: center;
 		}
 	}
 </style>
