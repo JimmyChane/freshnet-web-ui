@@ -4,20 +4,28 @@
 	export default {
 		components: { Item },
 		props: { preview: { type: Object } },
+		computed: {
+			title() {
+				return this.preview.title;
+			},
+			icon() {
+				return this.preview.icon;
+			},
+		},
 	};
 </script>
 
 <template>
-	<div class="PagePrint-preview">
-		<div class="PagePrint-preview-header">
-			<img class="PagePrint-preview-icon" :src="preview.icon" />
-			<span class="PagePrint-preview-title">{{ preview.title }}</span>
+	<div class="PagePrint-card">
+		<div class="PagePrint-card-header" v-if="icon || title">
+			<img class="PagePrint-card-icon" v-if="icon" :src="icon" />
+			<span class="PagePrint-card-title" v-if="title">{{ title }}</span>
 		</div>
 
 		<div class="PagePrint-items">
 			<Item
 				class="PagePrint-item"
-				v-for="item of preview.layers"
+				v-for="item of preview.items"
 				:key="item.title"
 				:item="item"
 			/>
@@ -26,26 +34,31 @@
 </template>
 
 <style lang="scss" scoped>
-	.PagePrint-preview {
+	.PagePrint-card {
+		background-color: #f3f3f3;
+
+		padding: 1rem;
+		gap: 1rem;
+		border-radius: 0.5rem;
+
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: flex-start;
 
-		.PagePrint-preview-header {
+		.PagePrint-card-header {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
-			padding: 1rem;
 			gap: 0.5rem;
 
-			.PagePrint-preview-icon {
+			.PagePrint-card-icon {
 				--size: 3rem;
 				width: var(--size);
 				height: var(--size);
 			}
-			.PagePrint-preview-title {
+			.PagePrint-card-title {
 				font-size: 1.2rem;
 				font-weight: 500;
 			}

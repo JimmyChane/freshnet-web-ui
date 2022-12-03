@@ -1,13 +1,21 @@
 <script>
 	export default {
 		props: { item: { type: Object } },
+		computed: {
+			title() {
+				return this.item.title;
+			},
+			icon() {
+				return this.item.icon;
+			},
+		},
 	};
 </script>
 
 <template>
 	<div class="PagePrint-item">
-		<img class="PagePrint-item-icon" :src="item.icon" />
-		<span class="PagePrint-item-title">{{ item.title }}</span>
+		<img class="PagePrint-item-icon" v-if="icon" :src="icon" />
+		<span class="PagePrint-item-title" v-if="title">{{ title }}</span>
 		<span class="PagePrint-item-price">{{ item.price }}</span>
 	</div>
 </template>

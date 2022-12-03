@@ -1,7 +1,12 @@
 <script>
 	import Actionbar from "@/components/actionbar/Actionbar.vue";
-	import Layer from "./PagePrint_Layer1.vue";
+	import Tabs from "./PagePrint-Tabs.vue";
+	import Card from "./PagePrint-Card.vue";
 	import Footer from "@/app/footer/Footer.vue";
+
+	import PaperSide from "./PaperSide";
+	import Paper from "./Paper";
+	import Printout from "./Printout";
 
 	class Layer1 {
 		constructor(title = "", layers = []) {
@@ -10,216 +15,111 @@
 		}
 	}
 
+	class Item {
+		constructor(paperSide, price) {
+			this.title = paperSide.title;
+			this.icon = paperSide.icon;
+			this.price = price;
+		}
+	}
+	class Preview {
+		constructor(printout, items) {
+			this.title = printout.toString();
+			this.icon = printout.color.icon;
+			this.items = items;
+		}
+	}
+
 	export default {
 		key: "print",
 		title: "Printing",
-		components: { Actionbar, Layer, Footer },
+		components: { Actionbar, Tabs, Card, Footer },
 		data() {
 			return {
 				layers: [
 					new Layer1("Photostat", [
 						{
-							title: "Plain Paper A4",
-							icon: this.host.res("icon/paper-a4.svg"),
-							size: "210mm x 297mm",
+							title: Paper.PlainA4.toString(),
+							icon: Paper.PlainA4.paperType.icon,
+							size: Paper.PlainA4.paperType,
 							layers: [
-								{
-									title: "Black & White",
-									icon: this.host.res("icon/palette-bw.svg"),
-									layers: [
-										{
-											title: "1 Side",
-											icon: this.host.res("icon/paper-1sided.svg"),
-											price: "RM 0.10",
-										},
-										{
-											title: "2 Side",
-											icon: this.host.res("icon/paper-2sided.svg"),
-											price: "RM 0.20",
-										},
-										{
-											title: "1 Side IC Full Copy",
-											icon: this.host.res("icon/paper-a4-1sided-ic.svg"),
-											price: "RM 0.20",
-										},
-									],
-								},
-								{
-									title: "Color",
-									icon: this.host.res("icon/palette-cmyk.svg"),
-									layers: [
-										{
-											title: "1 Side",
-											icon: this.host.res("icon/paper-1sided.svg"),
-											price: "RM 1.00",
-										},
-										{
-											title: "2 Side",
-											icon: this.host.res("icon/paper-2sided.svg"),
-											price: "RM 2.00",
-										},
-										{
-											title: "1 Side IC Full Copy",
-											icon: this.host.res("icon/paper-a4-1sided-ic.svg"),
-											price: "RM 2.00",
-										},
-									],
-								},
+								new Preview(Printout.BlackWhite, [
+									new Item(PaperSide.Front, "RM 0.10"),
+									new Item(PaperSide.FrontBack, "RM 0.20"),
+									new Item(PaperSide.FrontIc, "RM 0.20"),
+								]),
+								new Preview(Printout.Colorful, [
+									new Item(PaperSide.Front, "RM 1.00"),
+									new Item(PaperSide.FrontBack, "RM 1.00"),
+									new Item(PaperSide.FrontIc, "RM 2.00"),
+								]),
 							],
 						},
 						{
-							title: "Plain Paper A3",
-							icon: this.host.res("icon/paper-a3.svg"),
-							size: "297mm x 420mm",
+							title: Paper.PlainA3.toString(),
+							icon: Paper.PlainA3.paperType.icon,
+							size: Paper.PlainA3.paperType,
 							layers: [
-								{
-									title: "Black & White",
-									icon: this.host.res("icon/palette-bw.svg"),
-									layers: [
-										{
-											title: "1 Side",
-											icon: this.host.res("icon/paper-1sided.svg"),
-											price: "RM 0.20",
-										},
-										{
-											title: "2 Side",
-											icon: this.host.res("icon/paper-2sided.svg"),
-											price: "RM 0.40",
-										},
-									],
-								},
-								{
-									title: "Color",
-									icon: this.host.res("icon/palette-cmyk.svg"),
-									layers: [
-										{
-											title: "1 Side",
-											icon: this.host.res("icon/paper-1sided.svg"),
-											price: "RM 2.00",
-										},
-										{
-											title: "2 Side",
-											icon: this.host.res("icon/paper-2sided.svg"),
-											price: "RM 4.00",
-										},
-									],
-								},
+								new Preview(Printout.BlackWhite, [
+									new Item(PaperSide.Front, "RM 0.20"),
+									new Item(PaperSide.FrontBack, "RM 0.40"),
+								]),
+								new Preview(Printout.Colorful, [
+									new Item(PaperSide.Front, "RM 2.00"),
+									new Item(PaperSide.FrontBack, "RM 4.00"),
+								]),
 							],
 						},
 					]),
 					new Layer1("Computer Print", [
 						{
-							title: "Plain Paper A4",
-							icon: this.host.res("icon/paper-a4.svg"),
-							size: "210mm x 297mm",
+							title: Paper.PlainA4.toString(),
+							icon: Paper.PlainA4.paperType.icon,
+							size: Paper.PlainA4.paperType,
 							layers: [
-								{
-									title: "Black & White",
-									icon: this.host.res("icon/palette-bw.svg"),
-									layers: [
-										{
-											title: "1 Side",
-											icon: this.host.res("icon/paper-1sided.svg"),
-											price: "RM 0.50",
-										},
-										{
-											title: "2 Side",
-											icon: this.host.res("icon/paper-2sided.svg"),
-											price: "RM 1.00",
-										},
-									],
-								},
-								{
-									title: "Color",
-									icon: this.host.res("icon/palette-cmyk.svg"),
-									layers: [
-										{
-											title: "1 Side",
-											icon: this.host.res("icon/paper-1sided.svg"),
-											price: "RM 1.00",
-										},
-										{
-											title: "2 Side",
-											icon: this.host.res("icon/paper-2sided.svg"),
-											price: "RM 2.00",
-										},
-									],
-								},
+								new Preview(Printout.BlackWhite, [
+									new Item(PaperSide.Front, "RM 0.50"),
+									new Item(PaperSide.FrontBack, "RM 1.00"),
+								]),
+								new Preview(Printout.Colorful, [
+									new Item(PaperSide.Front, "RM 1.00"),
+									new Item(PaperSide.FrontBack, "RM 2.00"),
+								]),
 							],
 						},
 						{
-							title: "Plain Paper A3",
-							icon: this.host.res("icon/paper-a3.svg"),
-							size: "297mm x 420mm",
+							title: Paper.PlainA3.toString(),
+							icon: Paper.PlainA3.paperType.icon,
+							size: Paper.PlainA3.paperType,
 							layers: [
-								{
-									title: "Black & White",
-									icon: this.host.res("icon/palette-bw.svg"),
-									layers: [
-										{
-											title: "1 Side",
-											icon: this.host.res("icon/paper-1sided.svg"),
-											price: "RM 1.00",
-										},
-										{
-											title: "2 Side",
-											icon: this.host.res("icon/paper-2sided.svg"),
-											price: "RM 2.00",
-										},
-									],
-								},
-								{
-									title: "Color",
-									icon: this.host.res("icon/palette-cmyk.svg"),
-									layers: [
-										{
-											title: "1 Side",
-											icon: this.host.res("icon/paper-1sided.svg"),
-											price: "RM 2.00",
-										},
-										{
-											title: "2 Side",
-											icon: this.host.res("icon/paper-2sided.svg"),
-											price: "RM 4.00",
-										},
-									],
-								},
+								new Preview(Printout.BlackWhite, [
+									new Item(PaperSide.Front, "RM 1.00"),
+									new Item(PaperSide.FrontBack, "RM 2.00"),
+								]),
+								new Preview(Printout.Colorful, [
+									new Item(PaperSide.Front, "RM 2.00"),
+									new Item(PaperSide.FrontBack, "RM 4.00"),
+								]),
 							],
 						},
 						{
-							title: "Photo Paper 4R",
-							icon: this.host.res("icon/paper-a4.svg"),
-							size: "10.2cm x 15.2cm",
+							title: Paper.Photo4R.toString(),
+							icon: Paper.Photo4R.paperType.icon,
+							size: Paper.Photo4R.paperType,
 							layers: [
-								{
-									title: "Color Borderless",
-									icon: this.host.res("icon/palette-cmyk.svg"),
-									layers: [
-										{
-											title: "1 Side",
-											icon: this.host.res("icon/paper-1sided.svg"),
-											price: "RM 1.50",
-										},
-									],
-								},
+								new Preview(Printout.BorderlessColorful, [
+									new Item(PaperSide.Front, "RM 1.50"),
+								]),
 							],
 						},
 						{
-							title: "Photo Paper A4",
-							icon: "",
-							size: "10.2cm x 15.2cm",
+							title: Paper.PhotoA4.toString(),
+							icon: Paper.PhotoA4.paperType.icon,
+							size: Paper.PhotoA4.paperType,
 							layers: [
-								{
-									title: "Color Borderless",
-									icon: this.host.res("icon/palette-cmyk.svg"),
-									layers: [
-										{
-											title: "1 Side",
-											icon: this.host.res("icon/paper-1sided.svg"),
-											price: "RM 4.00",
-										},
-									],
-								},
+								new Preview(Printout.BorderlessColorful, [
+									new Item(PaperSide.Front, "RM 4.00"),
+								]),
 							],
 						},
 					]),
@@ -268,6 +168,10 @@
 						},
 					]),
 				],
+
+				tab0: null,
+				tab1: null,
+				tab2: null,
 			};
 		},
 		computed: {
@@ -287,20 +191,103 @@
 					},
 				];
 			},
+
+			tabs0() {
+				return this.layers.map((layer) => {
+					const tab = { title: layer.title };
+					tab.isSelected = () => tab === this.tab0;
+					tab.click = () => {
+						this.tab0 = tab;
+						this.tab1 = this.tabs1[0];
+					};
+					return tab;
+				});
+			},
+			tabs1() {
+				if (this.tabs0.length === 0) return [];
+
+				const layer = this.layers.find((layer) => {
+					return layer.title === this.tab0.title;
+				});
+
+				if (!layer) return [];
+				if (!Array.isArray(layer.layers)) return [];
+				if (layer.layers.length === 0) return [];
+
+				return layer.layers.map((layer) => {
+					const tab = { title: layer.title };
+					tab.isSelected = () => tab === this.tab1;
+					tab.click = () => (this.tab1 = tab);
+					return tab;
+				});
+			},
+			tabs2() {
+				if (this.tabs1.length === 0) return [];
+
+				const layer = this.layers
+					.find((layer) => layer.title === this.tab0.title)
+					.layers.find((layer) => layer.title === this.tab1.title);
+
+				if (!layer) return [];
+				if (!Array.isArray(layer.layers)) return [];
+				if (layer.layers.length === 0) return [];
+
+				return layer.layers.map((layer) => {
+					const tab = { title: layer.title };
+					tab.isSelected = () => tab === this.tab2;
+					tab.click = () => (this.tab2 = tab);
+					return tab;
+				});
+			},
+
+			currentLayer() {
+				if (this.tabs1.length === 0) return null;
+
+				const layer1 = this.layers.find((layer) => {
+					return layer.title === this.tab0.title;
+				});
+				const layer2 = layer1.layers.find((layer) => {
+					return layer.title === this.tab1.title;
+				});
+				const layer3 = layer2.layers.find((layer) => {
+					return layer.title === this.tab2.title;
+				});
+
+				if (layer2) return layer2;
+				if (layer1) return layer1;
+				if (layer3) return layer3;
+
+				console.log(layer);
+
+				return layer;
+			},
+		},
+		created() {
+			this.tab0 = this.tabs0[0];
+			this.tab1 = this.tabs1[0];
+			this.tab2 = this.tabs2[0];
 		},
 	};
 </script>
 
 <template>
 	<div class="PagePrint">
-		<Actionbar :title="$options.title" :leftMenus="leftMenus" />
+		<Actionbar
+			class="PagePrint-actionbar"
+			:title="$options.title"
+			:leftMenus="leftMenus"
+		/>
 
-		<div class="PagePrint-layers">
-			<Layer
-				class="PagePrint-layer"
-				v-for="layer of layers"
-				:key="layer.title"
-				:item="layer"
+		<div class="PagePrint-tabs">
+			<Tabs v-if="tabs0.length" :items="tabs0" />
+			<Tabs v-if="tabs1.length" :items="tabs1" />
+		</div>
+
+		<div class="PagePrint-body" v-if="currentLayer">
+			<Card
+				v-for="preview of currentLayer.layers"
+				:key="preview.title"
+				:preview="preview"
 			/>
 		</div>
 
@@ -310,8 +297,6 @@
 
 <style lang="scss" scoped>
 	.PagePrint {
-		--card-background-color: #eef5f8;
-
 		width: 100%;
 		overflow-y: auto;
 
@@ -320,18 +305,29 @@
 		align-items: center;
 		justify-content: flex-start;
 
-		.PagePrint-layers {
-			width: 100%;
-			padding: 1rem;
-			gap: 1rem;
-
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+		.PagePrint-actionbar {
+			z-index: 2;
 		}
-		.PagePrint-layers {
+
+		.PagePrint-tabs {
 			display: flex;
 			flex-direction: column;
-			max-width: 30rem;
+			align-items: center;
+			justify-content: flex-start;
+			margin-bottom: 1rem;
+		}
+
+		.PagePrint-body {
+			z-index: 1;
+			gap: 2rem;
+			padding: 1rem;
+
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			flex-grow: 1;
+			align-items: flex-start;
+			justify-content: center;
 		}
 	}
 </style>
