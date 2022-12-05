@@ -792,6 +792,7 @@
 			.PageProduct-PanelRightEmpty {
 				z-index: 2;
 				background-color: #adb8bb;
+				background-color: hsla(0, 0%, 0%, 0.6);
 				display: flex;
 				flex-direction: column;
 				align-items: center;
