@@ -1,45 +1,45 @@
+import Price from "@/objects/Price";
+
 export default class ServicePrice {
-	amount = 0;
-	currency = "rm";
+	#price = null;
+
+	get amount() {
+		return this.#price.amount;
+	}
+	get currency() {
+		return this.#price.currency;
+	}
 
 	fromData(data) {
-		this.amount = isNaN(data.amount) ? 0 : Number(data.amount);
-		this.currency = data.currency ? data.currency : "rm";
+		this.#price = new Price(data.amount, data.currency ? data.currency : "rm");
 		return this;
 	}
 	toData() {
 		return {
-			amount: this.amount,
-			currency: this.currency,
+			amount: this.#price.amount,
+			currency: this.#price.currency,
 		};
 	}
 	toCount(strs) {
 		return 0;
 	}
 	toString() {
-		let currency = this.currency ? this.currency.toUpperCase() : "RM";
-		let amount = (this.amount ? Number(this.amount) : 0).toFixed(2);
-		return `${currency} ${amount}`;
+		return this.#price.toString();
 	}
 
 	plus(value) {
-		if (value instanceof ServicePrice) {
-			return new ServicePrice().fromData({
-				amount: Number(this.amount) + Number(value.amount),
-				currency: this.currency,
-			});
-		} else {
-			const plus = isNaN(value) ? 0 : Number(value);
-			const newAmount = this.amount + plus;
+		const price =
+			value instanceof ServicePrice
+				? this.#price.plus(value.#price)
+				: this.#price.plus(value);
 
-			return new ServicePrice().fromData({
-				amount: newAmount,
-				currency: this.currency,
-			});
-		}
+		return new ServicePrice().fromData({
+			amount: price.amount,
+			currency: price.currency,
+		});
 	}
 
 	compare(item) {
-		return this.amount - item.amount;
+		return this.#price.compare(item.#price);
 	}
 }

@@ -8,6 +8,7 @@
 	import Paper from "./Paper";
 	import Output from "./Output";
 	import PaperSize from "./PaperSize";
+	import Price from "@/objects/Price";
 
 	class Media {
 		constructor(title = "", items = []) {
@@ -34,29 +35,6 @@
 			this.title = res ? res.title : "";
 			this.icon = res ? res.icon : "";
 			this.price = price;
-		}
-	}
-	class Price {
-		constructor(value = 0, currency = "RM") {
-			this.currency =
-				typeof currency === "string" ? currency.trim().replace(" ", "") : "";
-			this.value = typeof value === "number" ? value : 0;
-		}
-
-		toString() {
-			const { value, currency } = this;
-
-			let text = value.toFixed(2);
-			let comaIndex = text.indexOf(".") - 3;
-			while (comaIndex > 0) {
-				text = `${text.substring(0, comaIndex)},${text.substring(
-					comaIndex,
-					text.length,
-				)}`;
-				comaIndex = comaIndex - 3;
-			}
-
-			return currency ? `${currency} ${text}` : `${text}`;
 		}
 	}
 
