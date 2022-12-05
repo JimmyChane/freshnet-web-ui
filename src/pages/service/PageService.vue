@@ -10,7 +10,6 @@
 	import WindowAddEvent from "./WindowAddEvent.vue";
 	import WindowUpdateDescription from "./WindowUpdateDescription.vue";
 	import WindowUpdateBelonging from "./WindowUpdateBelonging.vue";
-	import WindowViewImage from "./WindowViewImage.vue";
 	import WindowUpdateCustomer from "./WindowUpdateCustomer.vue";
 	import Drawer from "@/components/Drawer.vue";
 
@@ -30,7 +29,6 @@
 			WindowAddService,
 			WindowAddEvent,
 			WindowUpdateCustomer,
-			WindowViewImage,
 			WindowUpdateDescription,
 			WindowUpdateBelonging,
 			WindowRemove,
@@ -40,7 +38,8 @@
 		data() {
 			return {
 				actions: {
-					onClickClose: () => this.$root.nextRoute({ query: { service: null } }),
+					onClickClose: () =>
+						this.$root.nextRoute({ query: { service: null } }),
 					onClickRemove: (x) => this.clickDeleteService(x),
 					onClickAddEvent: (x) => this.clickAddEvent(x),
 					onClickRemoveEvent: (x) => this.clickRemoveEvent(x),
@@ -68,7 +67,10 @@
 					},
 					newService: {
 						isShowing: false,
-						start: (context, self, data) => (self.isShowing = true),
+						start: (context, self, data) => {
+							self.isShowing = true;
+							context.$refs.WindowAddService.focus();
+						},
 						dismiss: (context, self, data) => (self.isShowing = false),
 						ok: (context, self, data) => {
 							context.serviceStore
@@ -111,7 +113,10 @@
 					},
 					newEvent: {
 						isShowing: false,
-						start: (context, self, data) => (self.isShowing = true),
+						start: (context, self, data) => {
+							self.isShowing = true;
+							context.$refs.WindowAddEvent.focus();
+						},
 						dismiss: (context, self, data) => (self.isShowing = false),
 						ok: (context, self, data) => {
 							context.serviceStore
@@ -157,6 +162,7 @@
 						start: (context, self, data) => {
 							self.isShowing = true;
 							self.value = data;
+							context.$refs.WindowUpdateCustomer.focus();
 						},
 						dismiss: (context, self, data) => {
 							self.isShowing = false;
@@ -177,24 +183,6 @@
 								});
 						},
 					},
-					// viewImage: {
-					// 	isShowing: false,
-					// 	value: null,
-					// 	start: (context, self, data) => {
-					// 		const imageFiles = context.currentService.imageFiles;
-					// 		const index = imageFiles.indexOf(data);
-
-					// 		self.isShowing = true;
-					// 		self.value = { imageFiles, index };
-					// 	},
-					// 	dismiss: (context, self, data) => {
-					// 		self.isShowing = false;
-					// 		self.value = null;
-					// 	},
-					// 	ok: (context, self, data) => {
-					// 		self.isShowing = false;
-					// 	},
-					// },
 					removeImage: {
 						isShowing: false,
 						value: null,
@@ -228,6 +216,7 @@
 						start: (context, self, data) => {
 							self.isShowing = true;
 							self.value = data;
+							context.$refs.WindowUpdateDescription.focus();
 						},
 						dismiss: (context, self, data) => {
 							self.isShowing = false;
@@ -254,6 +243,7 @@
 						start: (context, self, data) => {
 							self.isShowing = true;
 							self.values = data;
+							context.$refs.WindowUpdateBelonging.focus();
 						},
 						dismiss: (context, self, data) => {
 							self.isShowing = false;
@@ -433,9 +423,6 @@
 			clickUpdateBelongings(belongings) {
 				this.windowAction("belongings", "start", belongings);
 			},
-			// clickImage(image) {
-			// 	this.windowAction("viewImage", "start", image);
-			// },
 			clickRemoveImage(image) {
 				this.windowAction("removeImage", "start", image);
 			},
@@ -450,7 +437,12 @@
 
 <template>
 	<div class="PageService">
-		<div :class="['PageService-panels', `PageService-${isWide ? 'isWide' : 'isThin'}`]">
+		<div
+			:class="[
+				'PageService-panels',
+				`PageService-${isWide ? 'isWide' : 'isThin'}`,
+			]"
+		>
 			<PanelServices
 				class="PageService-PanelServices"
 				:menus="actionMenus"
@@ -522,6 +514,7 @@
 		>
 			<WindowAddService
 				class="PageService-window-child"
+				ref="WindowAddService"
 				@callback-create="(data) => windowAction('newService', 'ok', data)"
 				@callback-cancel="() => windowAction('newService', 'dismiss')"
 			/>
@@ -536,6 +529,7 @@
 		>
 			<WindowAddEvent
 				class="PageService-window-child"
+				ref="WindowAddEvent"
 				@callback-create="(event) => windowAction('newEvent', 'ok', event)"
 				@callback-cancel="() => windowAction('newEvent', 'dismiss')"
 			/>
@@ -550,8 +544,11 @@
 		>
 			<WindowUpdateCustomer
 				class="PageService-window-child"
+				ref="WindowUpdateCustomer"
 				:value="popup.customer.value"
-				@callback-change="(customer) => windowAction('customer', 'ok', customer)"
+				@callback-change="
+					(customer) => windowAction('customer', 'ok', customer)
+				"
 				@callback-cancel="() => windowAction('customer', 'dismiss')"
 			/>
 		</PopupWindow>
@@ -565,6 +562,7 @@
 		>
 			<WindowUpdateDescription
 				class="PageService-window-child"
+				ref="WindowUpdateDescription"
 				:description="popup.editDescription.value"
 				@callback-change="
 					(description) => windowAction('editDescription', 'ok', description)
@@ -582,6 +580,7 @@
 		>
 			<WindowUpdateBelonging
 				class="PageService-window-child"
+				ref="WindowUpdateBelonging"
 				:values="popup.belongings.values"
 				@callback-change="
 					(belongings) => windowAction('belongings', 'ok', belongings)

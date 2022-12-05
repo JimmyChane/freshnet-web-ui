@@ -100,6 +100,10 @@
 					this.onUser();
 				}
 			},
+
+			focus() {
+				this.$refs.InputCustomerName.focus();
+			},
 		},
 	};
 </script>
@@ -136,6 +140,7 @@
 				<Input
 					class="WindowService-input"
 					label="Customer Name"
+					ref="InputCustomerName"
 					:isRequired="true"
 					:bindValue="data.customerName"
 					@input="(comp) => (data.customerName = comp.value)"

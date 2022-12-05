@@ -46,6 +46,10 @@
 					this.customerPhoneNumber.length - 1,
 				);
 			},
+
+			focus() {
+				this.$refs.InputName.focus();
+			},
 		},
 	};
 </script>
@@ -60,6 +64,7 @@
 		<Input
 			class="WindowCustomer-input"
 			label="Name"
+			ref="InputName"
 			:isRequired="true"
 			:bindValue="customerName"
 			@input="(comp) => (customerName = comp.value)"

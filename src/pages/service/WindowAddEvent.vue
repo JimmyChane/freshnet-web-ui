@@ -50,8 +50,21 @@
 					this.nameOfUser = this.nameOfUser.trim().replace(" ", "");
 				}
 			},
+			eventMethod() {
+				setTimeout(() => this.invalidateMethod(), 10);
+			},
+		},
+		mounted() {
+			this.reset();
 		},
 		methods: {
+			invalidateMethod() {
+				const { InputStatus, InputAmount } = this.$refs;
+				if (this.isMethodInfo) InputStatus.focus();
+				if (this.isMethodQuotation || this.isMethodPurchase)
+					InputAmount.focus();
+			},
+
 			reset() {
 				this.nameOfUser = "";
 				this.eventMethod = ModuleEvent.Method.Info;
@@ -103,9 +116,10 @@
 					this.reset();
 				}
 			},
-		},
-		mounted() {
-			this.reset();
+
+			focus() {
+				this.$refs.InputDescription.focus();
+			},
 		},
 	};
 </script>
@@ -120,7 +134,7 @@
 				reset();
 			}
 		"
-		@click-ok="submit()"
+		@click-ok="() => submit()"
 	>
 		<div class="WindowEvent-body">
 			<div class="WindowEvent-user" v-if="isUserDefault">
@@ -139,6 +153,7 @@
 				<TextArea
 					class="WindowEvent-input"
 					label="Description"
+					ref="InputDescription"
 					:isRequired="true"
 					:bindValue="eventDescription"
 					@input="(comp) => (eventDescription = comp.value)"
@@ -172,6 +187,7 @@
 					v-if="isMethodInfo"
 					label="Status"
 					:bindValue="eventStatus"
+					ref="InputStatus"
 					@input="(comp) => (eventStatus = comp.value)"
 				/>
 
@@ -185,6 +201,7 @@
 							label="RM"
 							type="number"
 							:bindValue="eventAmount"
+							ref="InputAmount"
 							@input="(comp) => (eventAmount = comp.value)"
 						/>
 					</div>
