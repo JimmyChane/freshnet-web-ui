@@ -1,9 +1,9 @@
 import Color from "./Color";
 
-export default class Printout {
-	static BlackWhite = new Printout("", Color.BlackWhite);
-	static Colorful = new Printout("", Color.Colorful);
-	static BorderlessColorful = new Printout("Borderless", Color.Colorful);
+export default class Output {
+	static BlackWhite = new Output("", Color.BlackWhite);
+	static Colorful = new Output("", Color.Colorful);
+	static BorderlessColorful = new Output("Borderless", Color.Colorful);
 
 	constructor(title, color) {
 		this.title = title;

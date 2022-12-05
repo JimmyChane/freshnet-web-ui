@@ -30,7 +30,7 @@
 			v-if="LeftMenus.length > 0"
 			:menus="LeftMenus"
 		/>
-		<span class="Actionbar-title" v-if="title">{{ title }}</span>
+		<span class="Actionbar-title">{{ title }}</span>
 		<slot v-if="hasSlot" />
 		<ActionbarMenus
 			class="Actionbar-rightMenus"

@@ -6,27 +6,57 @@
 
 	import PaperSide from "./PaperSide";
 	import Paper from "./Paper";
-	import Printout from "./Printout";
+	import Output from "./Output";
+	import PaperSize from "./PaperSize";
 
-	class Layer1 {
-		constructor(title = "", layers = []) {
+	class Media {
+		constructor(title = "", items = []) {
 			this.title = title;
-			this.layers = layers;
+			this.items = items;
 		}
 	}
-
+	class Category {
+		constructor(res, items) {
+			this.title = res ? res.toString() : "";
+			this.icon = res ? res.paperType.icon : "";
+			this.items = items;
+		}
+	}
+	class Subcategory {
+		constructor(res, items) {
+			this.title = res ? res.toString() : "";
+			this.icon = res ? res.color.icon : "";
+			this.items = items;
+		}
+	}
 	class Item {
-		constructor(paperSide, price) {
-			this.title = paperSide.title;
-			this.icon = paperSide.icon;
+		constructor(res, price) {
+			this.title = res ? res.title : "";
+			this.icon = res ? res.icon : "";
 			this.price = price;
 		}
 	}
-	class Preview {
-		constructor(printout, items) {
-			this.title = printout.toString();
-			this.icon = printout.color.icon;
-			this.items = items;
+	class Price {
+		constructor(value = 0, currency = "RM") {
+			this.currency =
+				typeof currency === "string" ? currency.trim().replace(" ", "") : "";
+			this.value = typeof value === "number" ? value : 0;
+		}
+
+		toString() {
+			const { value, currency } = this;
+
+			let text = value.toFixed(2);
+			let comaIndex = text.indexOf(".") - 3;
+			while (comaIndex > 0) {
+				text = `${text.substring(0, comaIndex)},${text.substring(
+					comaIndex,
+					text.length,
+				)}`;
+				comaIndex = comaIndex - 3;
+			}
+
+			return currency ? `${currency} ${text}` : `${text}`;
 		}
 	}
 
@@ -36,136 +66,93 @@
 		components: { Actionbar, Tabs, Card, Footer },
 		data() {
 			return {
-				layers: [
-					new Layer1("Photostat", [
-						{
-							title: Paper.PlainA4.toString(),
-							icon: Paper.PlainA4.paperType.icon,
-							size: Paper.PlainA4.paperType,
-							layers: [
-								new Preview(Printout.BlackWhite, [
-									new Item(PaperSide.Front, "RM 0.10"),
-									new Item(PaperSide.FrontBack, "RM 0.20"),
-									new Item(PaperSide.FrontIc, "RM 0.20"),
-								]),
-								new Preview(Printout.Colorful, [
-									new Item(PaperSide.Front, "RM 1.00"),
-									new Item(PaperSide.FrontBack, "RM 1.00"),
-									new Item(PaperSide.FrontIc, "RM 2.00"),
-								]),
-							],
-						},
-						{
-							title: Paper.PlainA3.toString(),
-							icon: Paper.PlainA3.paperType.icon,
-							size: Paper.PlainA3.paperType,
-							layers: [
-								new Preview(Printout.BlackWhite, [
-									new Item(PaperSide.Front, "RM 0.20"),
-									new Item(PaperSide.FrontBack, "RM 0.40"),
-								]),
-								new Preview(Printout.Colorful, [
-									new Item(PaperSide.Front, "RM 2.00"),
-									new Item(PaperSide.FrontBack, "RM 4.00"),
-								]),
-							],
-						},
+				items: [
+					new Media("Photostat", [
+						new Category(Paper.PlainA4, [
+							new Subcategory(Output.BlackWhite, [
+								new Item(PaperSide.Front, new Price(0.1)),
+								new Item(PaperSide.FrontBack, new Price(0.2)),
+								new Item(PaperSide.FrontIc, new Price(0.2)),
+							]),
+							new Subcategory(Output.Colorful, [
+								new Item(PaperSide.Front, new Price(1)),
+								new Item(PaperSide.FrontBack, new Price(2)),
+								new Item(PaperSide.FrontIc, new Price(2)),
+							]),
+						]),
+						new Category(Paper.PlainA3, [
+							new Subcategory(Output.BlackWhite, [
+								new Item(PaperSide.Front, new Price(0.2)),
+								new Item(PaperSide.FrontBack, new Price(0.4)),
+							]),
+							new Subcategory(Output.Colorful, [
+								new Item(PaperSide.Front, new Price(2)),
+								new Item(PaperSide.FrontBack, new Price(4)),
+							]),
+						]),
 					]),
-					new Layer1("Computer Print", [
-						{
-							title: Paper.PlainA4.toString(),
-							icon: Paper.PlainA4.paperType.icon,
-							size: Paper.PlainA4.paperType,
-							layers: [
-								new Preview(Printout.BlackWhite, [
-									new Item(PaperSide.Front, "RM 0.50"),
-									new Item(PaperSide.FrontBack, "RM 1.00"),
-								]),
-								new Preview(Printout.Colorful, [
-									new Item(PaperSide.Front, "RM 1.00"),
-									new Item(PaperSide.FrontBack, "RM 2.00"),
-								]),
-							],
-						},
-						{
-							title: Paper.PlainA3.toString(),
-							icon: Paper.PlainA3.paperType.icon,
-							size: Paper.PlainA3.paperType,
-							layers: [
-								new Preview(Printout.BlackWhite, [
-									new Item(PaperSide.Front, "RM 1.00"),
-									new Item(PaperSide.FrontBack, "RM 2.00"),
-								]),
-								new Preview(Printout.Colorful, [
-									new Item(PaperSide.Front, "RM 2.00"),
-									new Item(PaperSide.FrontBack, "RM 4.00"),
-								]),
-							],
-						},
-						{
-							title: Paper.Photo4R.toString(),
-							icon: Paper.Photo4R.paperType.icon,
-							size: Paper.Photo4R.paperType,
-							layers: [
-								new Preview(Printout.BorderlessColorful, [
-									new Item(PaperSide.Front, "RM 1.50"),
-								]),
-							],
-						},
-						{
-							title: Paper.PhotoA4.toString(),
-							icon: Paper.PhotoA4.paperType.icon,
-							size: Paper.PhotoA4.paperType,
-							layers: [
-								new Preview(Printout.BorderlessColorful, [
-									new Item(PaperSide.Front, "RM 4.00"),
-								]),
-							],
-						},
+					new Media("Computer Print", [
+						new Category(Paper.PlainA4, [
+							new Subcategory(Output.BlackWhite, [
+								new Item(PaperSide.Front, new Price(0.5)),
+								new Item(PaperSide.FrontBack, new Price(1.0)),
+							]),
+							new Subcategory(Output.Colorful, [
+								new Item(PaperSide.Front, new Price(1.0)),
+								new Item(PaperSide.FrontBack, new Price(2.0)),
+							]),
+						]),
+						new Category(Paper.PlainA3, [
+							new Subcategory(Output.BlackWhite, [
+								new Item(PaperSide.Front, new Price(1.0)),
+								new Item(PaperSide.FrontBack, new Price(2.0)),
+							]),
+							new Subcategory(Output.Colorful, [
+								new Item(PaperSide.Front, new Price(2.0)),
+								new Item(PaperSide.FrontBack, new Price(4.0)),
+							]),
+						]),
+						new Category(Paper.Photo4R, [
+							new Subcategory(Output.BorderlessColorful, [
+								new Item(PaperSide.Front, new Price(1.5)),
+							]),
+						]),
+						new Category(Paper.PhotoA4, [
+							new Subcategory(Output.BorderlessColorful, [
+								new Item(PaperSide.Front, new Price(4.0)),
+							]),
+						]),
 					]),
-					new Layer1("Laminate Document", [
-						{
-							layers: [
-								{
-									layers: [
-										{ title: "A4", price: "RM 2.00" },
-										{ title: "A3", price: "RM 4.00" },
-									],
-								},
-							],
-						},
+					new Media("Laminate Document", [
+						new Category(null, [
+							new Subcategory(null, [
+								new Item(PaperSize.A4, new Price(2.0)),
+								new Item(PaperSize.A3, new Price(4.0)),
+							]),
+						]),
 					]),
-					new Layer1("Scan Document", [
-						{
-							layers: [
-								{
-									layers: [
-										{ title: "A4", price: "RM 0.50" },
-										{ title: "A3", price: "RM 0.50" },
-									],
-								},
-							],
-						},
+					new Media("Scan Document", [
+						new Category(null, [
+							new Subcategory(null, [
+								new Item(PaperSize.A4, new Price(0.5)),
+								new Item(PaperSize.A3, new Price(0.5)),
+							]),
+						]),
 					]),
-					new Layer1("Binding", [
-						{
-							layers: [
-								{
-									title: "Comb",
-									layers: [
-										{ title: "8mm", price: "RM 1.00" },
-										{ title: "10mm", price: "RM 1.00" },
-										{ title: "12mm", price: "RM 1.50" },
-										{ title: "14mm", price: "RM 2.00" },
-										{ title: "16mm", price: "RM 2.00" },
-										{ title: "25mm", price: "RM 3.00" },
-									],
-								},
-								{
-									layers: [{ title: "Tape & Staple", price: "RM 1.00" }],
-								},
-							],
-						},
+					new Media("Binding", [
+						new Category(null, [
+							new Subcategory({ toString: () => "Comb", color: { icon: "" } }, [
+								new Item({ title: "8mm" }, new Price(1.0)),
+								new Item({ title: "10mm" }, new Price(1.0)),
+								new Item({ title: "12mm" }, new Price(1.5)),
+								new Item({ title: "14mm" }, new Price(2.0)),
+								new Item({ title: "16mm" }, new Price(2.0)),
+								new Item({ title: "25mm" }, new Price(3.0)),
+							]),
+							new Subcategory(null, [
+								new Item({ title: "Tape & Staple" }, new Price(1.0)),
+							]),
+						]),
 					]),
 				],
 
@@ -193,7 +180,7 @@
 			},
 
 			tabs0() {
-				return this.layers.map((layer) => {
+				return this.items.map((layer) => {
 					const tab = { title: layer.title };
 					tab.isSelected = () => tab === this.tab0;
 					tab.click = () => {
@@ -206,15 +193,15 @@
 			tabs1() {
 				if (this.tabs0.length === 0) return [];
 
-				const layer = this.layers.find((layer) => {
+				const layer = this.items.find((layer) => {
 					return layer.title === this.tab0.title;
 				});
 
 				if (!layer) return [];
-				if (!Array.isArray(layer.layers)) return [];
-				if (layer.layers.length === 0) return [];
+				if (!Array.isArray(layer.items)) return [];
+				if (layer.items.length === 0) return [];
 
-				return layer.layers.map((layer) => {
+				return layer.items.map((layer) => {
 					const tab = { title: layer.title };
 					tab.isSelected = () => tab === this.tab1;
 					tab.click = () => (this.tab1 = tab);
@@ -224,15 +211,15 @@
 			tabs2() {
 				if (this.tabs1.length === 0) return [];
 
-				const layer = this.layers
+				const layer = this.items
 					.find((layer) => layer.title === this.tab0.title)
-					.layers.find((layer) => layer.title === this.tab1.title);
+					.items.find((layer) => layer.title === this.tab1.title);
 
 				if (!layer) return [];
-				if (!Array.isArray(layer.layers)) return [];
-				if (layer.layers.length === 0) return [];
+				if (!Array.isArray(layer.items)) return [];
+				if (layer.items.length === 0) return [];
 
-				return layer.layers.map((layer) => {
+				return layer.items.map((layer) => {
 					const tab = { title: layer.title };
 					tab.isSelected = () => tab === this.tab2;
 					tab.click = () => (this.tab2 = tab);
@@ -243,13 +230,13 @@
 			currentLayer() {
 				if (this.tabs1.length === 0) return null;
 
-				const layer1 = this.layers.find((layer) => {
+				const layer1 = this.items.find((layer) => {
 					return layer.title === this.tab0.title;
 				});
-				const layer2 = layer1.layers.find((layer) => {
+				const layer2 = layer1.items.find((layer) => {
 					return layer.title === this.tab1.title;
 				});
-				const layer3 = layer2.layers.find((layer) => {
+				const layer3 = layer2.items.find((layer) => {
 					return layer.title === this.tab2.title;
 				});
 
@@ -285,7 +272,7 @@
 
 		<div class="PagePrint-body" v-if="currentLayer">
 			<Card
-				v-for="preview of currentLayer.layers"
+				v-for="preview of currentLayer.items"
 				:key="preview.title"
 				:preview="preview"
 			/>
@@ -310,10 +297,13 @@
 		}
 
 		.PagePrint-tabs {
+			width: 100%;
+			max-width: max-content;
 			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: flex-start;
+			margin-top: 1rem;
 			margin-bottom: 1rem;
 		}
 
