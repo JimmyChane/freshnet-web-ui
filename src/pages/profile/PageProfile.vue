@@ -10,7 +10,13 @@
 		title: "Your Profile",
 		icon: { light: "profile-FFFFFF", dark: "profile-000000" },
 
-		components: { ActionBarManage, Loadingv1, ButtonIcon, PopupWindowAction, Input },
+		components: {
+			ActionBarManage,
+			Loadingv1,
+			ButtonIcon,
+			PopupWindowAction,
+			Input,
+		},
 		emits: ["callback-side-expand"],
 		data() {
 			return {
@@ -31,7 +37,6 @@
 		computed: {
 			name: (c) => c.user.name,
 			username: (c) => c.user.username,
-			type: (c) => c.user.userType,
 			typeDisplay() {
 				if (this.user.isTypeAdmin()) return "Admin";
 				if (this.user.isTypeStaff()) return "Staff";
@@ -100,7 +105,9 @@
 					<div class="PageProfile-introduction-body">
 						<span class="PageProfile-user-name">Hello, {{ name }}</span>
 						<div class="PageProfile-user-main">
-							<span class="PageProfile-section-title">{{ `@${username}` }}</span>
+							<span class="PageProfile-section-title">{{
+								`@${username}`
+							}}</span>
 							<span class="PageProfile-section-title">{{ typeDisplay }}</span>
 						</div>
 					</div>
@@ -114,7 +121,9 @@
 				<div class="PageProfile-section">
 					<div class="PageProfile-section-changePassword">
 						<div class="PageProfile-section-changePassword-body">
-							<span class="PageProfile-section-title">Change Your Password</span>
+							<span class="PageProfile-section-title"
+								>Change Your Password</span
+							>
 							<span class="PageProfile-section-main"
 								>Also signing out other session</span
 							>

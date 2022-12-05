@@ -1,6 +1,6 @@
 import ModuleUser, { Type } from "./data/User.js";
 
-class User {
+export default class User {
 	static Type = ModuleUser.Type;
 	static ReservedUsername = ModuleUser.ReservedUsername;
 
@@ -39,9 +39,7 @@ class User {
 	isTypeNone() {
 		return (
 			this.userType === User.Type.None ||
-			!this.isTypeAdmin() ||
-			!this.isTypeStaff() ||
-			!this.isTypeCustomer()
+			(!this.isTypeAdmin() && !this.isTypeStaff() && !this.isTypeCustomer())
 		);
 	}
 	isTypeAdmin() {
@@ -60,5 +58,3 @@ class User {
 		);
 	}
 }
-
-export default User;

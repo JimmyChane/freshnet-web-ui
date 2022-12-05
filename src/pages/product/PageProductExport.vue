@@ -19,7 +19,8 @@
 							const items = this.options[0].items;
 							const index = items.indexOf(this.orientation);
 							const nextIndex = index + 1;
-							this.orientation = items[nextIndex >= items.length ? 0 : nextIndex];
+							this.orientation =
+								items[nextIndex >= items.length ? 0 : nextIndex];
 							this.invalidateCard();
 						},
 					},
@@ -92,9 +93,7 @@
 		},
 		computed: {
 			user: (c) => c.loginStore.getters.user,
-			isUserAdmin: (c) => (c.user ? c.user.isTypeAdmin() : false),
-			isUserStaff: (c) => (c.user ? c.user.isTypeStaff() : false),
-			allowEdit: (c) => c.isUserAdmin || c.isUserStaff,
+			allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
 			productId: (context) => context.$route.query.productId,
 
@@ -242,7 +241,11 @@
 
 		<div class="PageProductExport-toolbar">
 			<div class="PageProductExport-options">
-				<ExportOption v-for="option of options" :key="option.title" :menu="option" />
+				<ExportOption
+					v-for="option of options"
+					:key="option.title"
+					:menu="option"
+				/>
 			</div>
 
 			<ExportButton @click="() => clickExport()" />

@@ -38,7 +38,7 @@
 		},
 		watch: {
 			user(userNow, userWas) {
-				if (userWas && !userNow) {
+				if (!userWas.isTypeNone() && userNow.isTypeNone()) {
 					this.redirectToLogin();
 				}
 			},
@@ -58,7 +58,7 @@
 		async mounted() {
 			try {
 				const user = await this.loginStore.dispatch("getUser");
-				if (!user) this.redirectToLogin();
+				if (user.isTypeNone()) this.redirectToLogin();
 			} catch (error) {
 				this.redirectToLogin();
 			}

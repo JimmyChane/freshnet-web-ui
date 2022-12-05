@@ -15,13 +15,22 @@ const onNewCredentail = (context, arg = { token, user }, Stores) => {
 	context.commit("lastModified", Date.now());
 	return newUser;
 };
+const noneUser = new ItemUser().fromData({
+	username: "",
+	name: "",
+	userType: ItemUser.Type.None,
+});
 
 export default {
 	init(Stores) {
 		const { store } = Stores;
 
 		const loginStore = new Vuex.Store({
-			state: { lastModified: 0, user: null, loader: new Processor() },
+			state: {
+				lastModified: Date.now(),
+				user: noneUser,
+				loader: new Processor(),
+			},
 			mutations: {
 				lastModified: (state, time) => (state.lastModified = time),
 				user: (state, user) => (state.user = user),
@@ -38,16 +47,62 @@ export default {
 						await context.dispatch("getUser");
 					});
 				},
+				async login(context, arg = { username, password }) {
+					return context.state.loader.acquire("login", async () => {
+						try {
+							deleteToken();
+							let api = await ApiHost.request()
+								.POST()
+								.url("session/login/")
+								.body({
+									username: arg.username,
+									password: arg.password,
+								})
+								.send();
+							let error = api.getError();
+							let content = api.getContent();
+							if (error || !content) throw new Error();
+							const { token, user } = content;
+							const newUser = onNewCredentail(context, { token, user }, Stores);
+							store.dispatch("restartSocket");
+							return newUser;
+						} catch (error) {
+							deleteToken();
+							context.commit("user", noneUser);
+							context.commit("lastModified", Date.now());
+							throw error;
+						}
+					});
+				},
+				async logout(context) {
+					return context.state.loader.acquire("logout", async () => {
+						try {
+							deleteToken();
+							store.dispatch("restartSocket");
+							let user = context.getters.user;
+							context.commit("user", noneUser);
+							context.commit("lastModified", Date.now());
+							return context.state.user;
+						} catch (error) {
+							deleteToken();
+							context.commit("user", noneUser);
+							context.commit("lastModified", Date.now());
+							throw error;
+						}
+					});
+				},
 
 				async getUser(context) {
 					return context.state.loader.acquire("getUser", async () => {
 						try {
 							const token = getToken();
 							if (!token) {
-								context.commit("user", null);
-								context.commit("lastModified", Date.now());
+								if (context.state.user !== noneUser) {
+									context.commit("user", noneUser);
+									context.commit("lastModified", Date.now());
+								}
 								deleteToken();
-								return null;
+								return context.state.user;
 							}
 
 							const api = await ApiHost.request()
@@ -76,10 +131,12 @@ export default {
 							return user;
 						} catch (error) {
 							if (error.message === "not signed in") {
-								context.commit("user", null);
-								context.commit("lastModified", Date.now());
+								if (context.state.user !== noneUser) {
+									context.commit("user", noneUser);
+									context.commit("lastModified", Date.now());
+								}
 								deleteToken();
-								return null;
+								return context.state.user;
 							}
 							throw error;
 						}
@@ -105,51 +162,6 @@ export default {
 						store.dispatch("restartSocket");
 
 						return user;
-					});
-				},
-
-				async login(context, arg = { username, password }) {
-					return context.state.loader.acquire("login", async () => {
-						try {
-							deleteToken();
-							let api = await ApiHost.request()
-								.POST()
-								.url("session/login/")
-								.body({
-									username: arg.username,
-									password: arg.password,
-								})
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error || !content) throw new Error();
-							const { token, user } = content;
-							const newUser = onNewCredentail(context, { token, user }, Stores);
-							store.dispatch("restartSocket");
-							return newUser;
-						} catch (error) {
-							deleteToken();
-							context.commit("user", null);
-							context.commit("lastModified", Date.now());
-							throw error;
-						}
-					});
-				},
-				async logout(context) {
-					return context.state.loader.acquire("logout", async () => {
-						try {
-							deleteToken();
-							store.dispatch("restartSocket");
-							let user = context.getters.user;
-							context.commit("user", null);
-							context.commit("lastModified", Date.now());
-							return user;
-						} catch (error) {
-							deleteToken();
-							context.commit("user", null);
-							context.commit("lastModified", Date.now());
-							throw error;
-						}
 					});
 				},
 			},

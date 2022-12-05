@@ -116,7 +116,8 @@
 		:style="{
 			'var(--animation-duration)': `${transitionDuration}ms`,
 			opacity: isShowing ? '1' : '0.2',
-			transform: isShowing ? 'scale(1)' : 'scale(0.9)',
+			// transform: isShowing ? 'scale(1)' : 'scale(0.9)',
+			transform: isShowing ? 'scale(1)' : 'scale(0.98)',
 		}"
 		ref="img"
 		:src="requestUrl"

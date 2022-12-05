@@ -33,10 +33,7 @@
 			},
 
 			user: (c) => c.loginStore.getters.user,
-			userType: (c) => (c.user ? c.user.userType : User.Type.None),
-			isUserAdmin: (c) => c.userType === User.Type.Admin,
-			isUserStaff: (c) => c.userType === User.Type.Staff,
-			allowEdit: (c) => c.isUserAdmin || c.isUserStaff,
+			allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
 			shouldShowPrice: (c) => {
 				let setting = c.settingStore.getters.items.find((setting) => {

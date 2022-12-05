@@ -48,9 +48,11 @@
 			isLoading: (c) => c.userStore.getters.isLoading,
 			user: (c) => c.loginStore.getters.user,
 			users: (c) => {
-				return (c.user ? c.userStore.getters.items : []).filter((userParse) => {
-					return userParse.username !== c.user.username;
-				});
+				return (!c.user.isTypeNone() ? c.userStore.getters.items : []).filter(
+					(userParse) => {
+						return userParse.username !== c.user.username;
+					},
+				);
 			},
 		},
 		mounted() {
@@ -182,7 +184,10 @@
 </script>
 
 <template>
-	<div class="PageUsers" @scroll="(event) => (scrollTop = event.target.scrollTop)">
+	<div
+		class="PageUsers"
+		@scroll="(event) => (scrollTop = event.target.scrollTop)"
+	>
 		<ActionBarManage
 			:hasShadow="scrollTop > 0"
 			:title="$options.title"
@@ -203,9 +208,19 @@
 			@click-drawer-expand="$emit('click-drawer-expand')"
 		/>
 
-		<div class="PageUsers-body" v-if="user && user.isTypeAdmin() && users.length">
-			<div class="PageUsers-user-root" v-for="user in users" :key="user.username">
-				<div class="PageUsers-user-root-separator" v-if="users.indexOf(user) !== 0" />
+		<div
+			class="PageUsers-body"
+			v-if="user && user.isTypeAdmin() && users.length"
+		>
+			<div
+				class="PageUsers-user-root"
+				v-for="user in users"
+				:key="user.username"
+			>
+				<div
+					class="PageUsers-user-root-separator"
+					v-if="users.indexOf(user) !== 0"
+				/>
 
 				<div class="PageUsers-user">
 					<span class="PageUsers-title">{{ user.name }}</span>

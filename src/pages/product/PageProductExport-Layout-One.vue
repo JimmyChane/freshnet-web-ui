@@ -15,9 +15,7 @@
 		},
 		computed: {
 			user: (c) => c.loginStore.getters.user,
-			isUserAdmin: (c) => (c.user ? c.user.isTypeAdmin() : false),
-			isUserStaff: (c) => (c.user ? c.user.isTypeStaff() : false),
-			allowEdit: (c) => c.isUserAdmin || c.isUserStaff,
+			allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
 			brandId: (c) => (c.product ? c.product.brandId : ""),
 
@@ -42,7 +40,9 @@
 						index1 = index1 >= 0 ? index1 : context.specificationKeys.length;
 						index2 = index2 >= 0 ? index2 : context.specificationKeys.length;
 
-						return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
+						return index1 !== index2
+							? index1 - index2
+							: key1.localeCompare(key2);
 					});
 			},
 
@@ -120,7 +120,9 @@
 			/>
 		</div>
 
-		<span class="ExportLayoutOne-price" v-if="price && price.to"> {{ price.to }}</span>
+		<span class="ExportLayoutOne-price" v-if="price && price.to">
+			{{ price.to }}</span
+		>
 	</div>
 </template>
 

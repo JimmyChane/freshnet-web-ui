@@ -44,7 +44,7 @@
 		},
 		async mounted() {
 			let user = await this.loginStore.dispatch("getUser");
-			if (!user) return;
+			if (user.isTypeNone()) return;
 			if (!this.$route.query.redirect) return;
 			this.$router.replace({ path: this.$route.query.redirect });
 		},

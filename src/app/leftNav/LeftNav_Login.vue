@@ -7,7 +7,7 @@
 		},
 		computed: {
 			user: (context) => context.loginStore.getters.user,
-			userName: (context) => (context.user ? context.user.name : ""),
+			userName: (context) => context.user.name,
 			isLoginPage: (context) => context.$root.currentPageKey === "login",
 		},
 		watch: {
@@ -35,9 +35,9 @@
 			'LeftNavigationLogin',
 			`LeftNavigationLogin-${isWide ? 'isWide' : 'isThin'}`,
 		]"
-		v-if="!isLoginPage || !user"
+		v-if="!isLoginPage || user.isTypeNone()"
 	>
-		<div class="LeftNavigationLogin-loggedIn" v-if="user">
+		<div class="LeftNavigationLogin-loggedIn" v-if="!user.isTypeNone()">
 			<span class="LeftNavigationLogin-loggedIn-user">{{ userName }}</span>
 			<div class="LeftNavigationLogin-loggedIn-body">
 				<button
@@ -49,7 +49,10 @@
 			</div>
 		</div>
 
-		<div class="LeftNavigationLogin-loggedOut" v-if="!isLoginPage && !user">
+		<div
+			class="LeftNavigationLogin-loggedOut"
+			v-if="!isLoginPage && user.isTypeNone()"
+		>
 			<router-link
 				class="LeftNavigationLogin-loggedOut-login"
 				:to="{ path: '/login', query: { redirect } }"

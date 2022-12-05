@@ -36,7 +36,11 @@ class U {
 			if (current && current.value !== query.value) {
 				current.value = query.value;
 				isChanged = true;
-			} else if (!current && query.value !== null && query.value !== undefined) {
+			} else if (
+				!current &&
+				query.value !== null &&
+				query.value !== undefined
+			) {
 				nextQueries.push({ key: query.key, value: query.value });
 				isChanged = true;
 			}
@@ -64,12 +68,9 @@ class U {
 	static isPassed(user, permissions) {
 		permissions = Array.isArray(permissions) ? permissions : [];
 
-		const isAdmin = user ? user.isTypeAdmin() : false;
-		const isStaff = user ? user.isTypeStaff() : false;
-
 		if (permissions.length > 0) {
-			if (isAdmin && !permissions.includes("admin")) return false;
-			if (isStaff && !permissions.includes("staff")) return false;
+			if (user.isTypeAdmin() && !permissions.includes("admin")) return false;
+			if (user.isTypeStaff() && !permissions.includes("staff")) return false;
 		}
 
 		return true;
@@ -119,7 +120,9 @@ new Vue({
 		return {
 			console: {
 				log(param1, param2) {
-					param2 === undefined ? console.log(param1) : console.log(param1, param2);
+					param2 === undefined
+						? console.log(param1)
+						: console.log(param1, param2);
 				},
 				error(param1, param2) {
 					param2 === undefined
@@ -161,11 +164,13 @@ new Vue({
 				const queries = typeof _queries === "function" ? _queries() : [];
 
 				// parsing
-				const parsedChildren = U.parseGroup2s([{ values: children }]).map((obj) => {
-					obj.isLink = true;
-					obj.isQuery = false;
-					return obj;
-				});
+				const parsedChildren = U.parseGroup2s([{ values: children }]).map(
+					(obj) => {
+						obj.isLink = true;
+						obj.isQuery = false;
+						return obj;
+					},
+				);
 				const parsedGroups = U.parseGroup2s(groups).map((obj) => {
 					obj.isLink = true;
 					obj.isQuery = false;
@@ -213,7 +218,9 @@ new Vue({
 
 						let found = groups.find((group) => group.key === key);
 						if (!found) {
-							groups.push((found = { key, title, isLink, isQuery, groups: [] }));
+							groups.push(
+								(found = { key, title, isLink, isQuery, groups: [] }),
+							);
 						}
 						found.groups.push(...views);
 
@@ -369,7 +376,9 @@ new Vue({
 		},
 		pushDownload(filename, content) {
 			const element = document.createElement("a");
-			element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`;
+			element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
+				content,
+			)}`;
 			element.download = filename;
 			document.body.appendChild(element);
 			element.click();
