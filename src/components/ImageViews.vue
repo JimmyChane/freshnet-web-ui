@@ -107,6 +107,6 @@
 	}
 	.ImageViews-item {
 		object-fit: cover;
-		border: 1px solid hsl(0, 0%, 80%);
+		// border: 1px solid hsl(0, 0%, 80%);
 	}
 </style>

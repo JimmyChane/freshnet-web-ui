@@ -39,6 +39,12 @@
 				this.onConnectionChange();
 			},
 		},
+		mounted() {
+			setTimeout(() => this.onConnectionChange(), 3000);
+
+			window.addEventListener("resize", () => this.invalidateHeight());
+			this.invalidateHeight();
+		},
 		methods: {
 			onConnectionChange() {
 				if (!this.isConnected) {
@@ -55,9 +61,12 @@
 					this.$root.feedback(`${user.name} is now logged out`);
 				});
 			},
-		},
-		mounted() {
-			setTimeout(() => this.onConnectionChange(), 3000);
+
+			invalidateHeight() {
+				// We execute the same script as before
+				let vh = window.innerHeight * 0.01;
+				document.body.style.setProperty("--vh", `${vh}px`);
+			},
 		},
 	};
 </script>
@@ -135,6 +144,7 @@
 		body {
 			width: 100%;
 			height: 100%;
+
 			p {
 				white-space: pre-line;
 			}
@@ -233,6 +243,10 @@
 		transition: var(--transition-duration);
 		overflow: hidden;
 
+		// height: -webkit-fill-available; // fix for ios - test
+		height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+		height: calc(var(--vh, 1vh) * 100);
+
 		.App-background {
 			z-index: 1;
 			position: absolute;
@@ -329,12 +343,18 @@
 			height: 100vh;
 			display: flex;
 			overflow: hidden;
+
 			.App-overflow-body {
 				position: relative;
 				width: 100vw;
 				height: 100vh;
 				display: flex;
 				overflow: hidden;
+
+				// height: -webkit-fill-available; // fix for ios - test
+				height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+				height: calc(var(--vh, 1vh) * 100);
+
 				.App-imageViewer {
 					z-index: 3;
 				}
