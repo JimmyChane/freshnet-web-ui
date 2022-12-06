@@ -36,8 +36,8 @@
 <template>
 	<div class="SearchInput-root">
 		<div
-			class="SearchInput-body"
 			:class="[
+				'SearchInput-body',
 				searchExpand
 					? 'SearchInput-body-isExpand'
 					: 'SearchInput-body-isCollapsed',
@@ -123,6 +123,7 @@
 			display: flex;
 			flex-direction: row;
 			align-items: stretch;
+			align-items: center;
 			transition: var(--animation-duration);
 			width: 100%;
 			height: 100%;

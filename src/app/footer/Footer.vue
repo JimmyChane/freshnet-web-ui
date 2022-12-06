@@ -173,6 +173,9 @@
 			font-size: 0.8rem;
 			color: white;
 			opacity: 0.7;
+
+			text-align: center;
+			width: 100%;
 		}
 	}
 </style>

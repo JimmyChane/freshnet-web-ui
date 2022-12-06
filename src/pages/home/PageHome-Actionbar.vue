@@ -123,17 +123,17 @@
 	<Actionbar
 		class="HomeActionbar"
 		:leftMenus="[
-			isThin
-				? {
-						icon: host.res('img/freshnet-enterprise-logo.svg'),
-						click: () => {},
-				  }
-				: null,
 			$root.navigation.isDrawer()
 				? {
 						title: 'Hamburger Menu',
 						icon: host.res('icon/hamburgerMenu-000000.svg'),
 						click: () => $root.openNavigationDrawer(),
+				  }
+				: null,
+			isThin
+				? {
+						icon: host.res('img/freshnet-enterprise-logo.svg'),
+						click: () => {},
 				  }
 				: null,
 		]"

@@ -65,15 +65,15 @@
 				v-if="$root.navigation.isDrawer()"
 				:leftMenus="[
 					{
+						title: 'Hamburger Menu',
+						icon: host.res('icon/hamburgerMenu-2A4858.svg'),
+						click: () => $root.openNavigationDrawer(),
+					},
+					{
 						key: 'home',
 						title: 'Home',
 						icon: this.host.res('img/freshnet-enterprise-logo.svg'),
 						click: () => this.$router.push('/home'),
-					},
-					{
-						title: 'Hamburger Menu',
-						icon: host.res('icon/hamburgerMenu-2A4858.svg'),
-						click: () => $root.openNavigationDrawer(),
 					},
 				]"
 			/>

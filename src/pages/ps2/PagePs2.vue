@@ -76,16 +76,14 @@
 					$root.navigation.isDrawer()
 						? [
 								{
+									title: 'Hamburger Menu',
+									icon: host.res('icon/hamburgerMenu-2A4858.svg'),
+									click: () => $root.openNavigationDrawer(),
+								},
+								{
 									title: 'Home',
 									icon: host.res('img/freshnet-enterprise-logo.svg'),
 									click: () => $router.push({ name: 'home' }),
-								},
-								{
-									title: 'Hamburger Menu',
-									icon: host.res('icon/hamburgerMenu-2A4858.svg'),
-									click: () => {
-										$root.openNavigationDrawer();
-									},
 								},
 						  ]
 						: []
@@ -106,7 +104,10 @@
 							alt="Clear"
 							@click="searchKeyword = ''"
 						/>
-						<ButtonIcon :src="host.res('icon/search-2A4858.svg')" alt="Search" />
+						<ButtonIcon
+							:src="host.res('icon/search-2A4858.svg')"
+							alt="Search"
+						/>
 					</div>
 				</div>
 			</Actionbar>

@@ -1,5 +1,8 @@
 <script>
 	import Company from "@/host/Company";
+
+	import { getHours } from "date-fns";
+
 	export default {
 		data() {
 			return {
@@ -8,6 +11,26 @@
 				addressHref: Company.Location.toHref(),
 			};
 		},
+		computed: {
+			greetTitle() {
+				const periods = [
+					{ title: "Good Midnight", start: 0, end: 4 },
+					{ title: "Good Dawn", start: 5, end: 6 },
+					{ title: "Good Morning", start: 7, end: 11 },
+					{ title: "Good Afternoon", start: 12, end: 15 },
+					{ title: "Good Evening", start: 16, end: 18 },
+					{ title: "Good Night", start: 19, end: 23 },
+				];
+
+				const hour = getHours(Date.now());
+
+				const period = periods.find((period) => {
+					return period.start <= hour && hour <= period.end;
+				});
+
+				return period ? period.title : "Hi";
+			},
+		},
 	};
 </script>
 
@@ -15,14 +38,17 @@
 	<div class="HomeHeader">
 		<span class="HomeHeader-title">
 			<span class="HomeHeader-name">{{ companyTitle }}</span>
-			<a class="HomeHeader-classification" :href="addressHref" target="__blank"
+			<a class="HomeHeader-classification" :href="addressHref" target="_blank"
 				>{{ companyCategory }}<br />Kuala Selangor District</a
 			>
 		</span>
 		<!-- <span class="HomeHeader-description"
 			>We sell notebooks, printers, repairs, and more</span
 		> -->
-		<span class="HomeHeader-greeting">Hi, how can we help you?</span>
+		<div class="HomeHeader-greet">
+			<span class="HomeHeader-greetTitle">{{ greetTitle }}</span>
+			<span class="HomeHeader-greetHelp">How can we help you?</span>
+		</div>
 	</div>
 </template>
 
@@ -72,16 +98,23 @@
 			font-size: 1em;
 			line-height: 1em;
 		}
-		.HomeHeader-greeting {
-			font-size: 0.7em;
-
+		.HomeHeader-greet {
 			--height: 6rem;
 			min-height: var(--height);
 			max-height: var(--height);
 
 			display: flex;
+			flex-direction: column;
+			align-items: center;
 			align-items: inherit;
 			justify-content: inherit;
+
+			.HomeHeader-greetTitle {
+				font-size: 0.7em;
+			}
+			.HomeHeader-greetHelp {
+				font-size: 0.7em;
+			}
 		}
 
 		@media (min-width: 320px) {

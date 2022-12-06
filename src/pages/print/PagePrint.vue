@@ -145,14 +145,14 @@
 
 				return [
 					{
-						title: "Home",
-						icon: this.host.res("img/freshnet-enterprise-logo.svg"),
-						click: () => this.$router.push("/home"),
-					},
-					{
 						title: "Hamburger Menu",
 						icon: this.host.res(`icon/hamburgerMenu-000000.svg`),
 						click: () => this.$root.openNavigationDrawer(),
+					},
+					{
+						title: "Home",
+						icon: this.host.res("img/freshnet-enterprise-logo.svg"),
+						click: () => this.$router.push("/home"),
 					},
 				];
 			},

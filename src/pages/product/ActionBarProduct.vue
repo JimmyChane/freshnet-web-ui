@@ -61,16 +61,16 @@
 
 				if (this.$root.navigation.isDrawer()) {
 					menus.push({
-						key: "home",
-						title: "Home",
-						icon: this.host.res("img/freshnet-enterprise-logo.svg"),
-						click: () => this.$router.push("/home"),
-					});
-					menus.push({
 						key: "hamburgerMenu",
 						title: "Hamburger Menu",
 						icon: this.host.res("icon/hamburgerMenu-000000.svg"),
 						click: () => this.$root.openNavigationDrawer(),
+					});
+					menus.push({
+						key: "home",
+						title: "Home",
+						icon: this.host.res("img/freshnet-enterprise-logo.svg"),
+						click: () => this.$router.push("/home"),
 					});
 				}
 
