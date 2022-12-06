@@ -72,12 +72,11 @@ class ServiceEvent {
 	}
 	async fetchName() {
 		const user = await this.fetchUser();
+		const username = user ? user.username : "";
 
-		if (user && this.name) {
-			return `${this.name}(${user.username})`;
-		}
-		if (!user && this.name) return this.name;
-		if (user && !this.name) return user.name;
+		if (username.length && this.name) return `${this.name}(${username})`;
+		if (!username.length && this.name) return this.name;
+		if (username.length && !this.name) return username;
 
 		throw new Error("unknown");
 	}

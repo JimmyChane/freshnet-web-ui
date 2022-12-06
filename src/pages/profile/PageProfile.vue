@@ -62,12 +62,8 @@
 
 				this.loginStore
 					.dispatch("changePassword", { passwordVerify, passwordNew })
-					.then((user) => {
-						this.onDiscardChangePassword();
-					})
-					.catch((error) => {
-						this.$root.feedback("Changing Password Error");
-					});
+					.then((user) => this.onDiscardChangePassword())
+					.catch((error) => this.$root.feedback("Changing Password Error"));
 			},
 		},
 		async mounted() {

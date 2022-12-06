@@ -145,7 +145,7 @@
 		async mounted() {
 			try {
 				const user = await this.loginStore.dispatch("getUser");
-				if (!user) this.redirectToLogin();
+				if (user.isTypeNone()) this.redirectToLogin();
 			} catch (error) {
 				this.redirectToLogin();
 			}

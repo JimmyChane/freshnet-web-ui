@@ -38,7 +38,8 @@
 		data() {
 			return {
 				actions: {
-					onClickClose: () => this.$root.nextRoute({ query: { service: null } }),
+					onClickClose: () =>
+						this.$root.nextRoute({ query: { service: null } }),
 					onClickRemove: (x) => this.clickDeleteService(x),
 					onClickAddEvent: (x) => this.clickAddEvent(x),
 					onClickRemoveEvent: (x) => this.clickRemoveEvent(x),
@@ -323,29 +324,15 @@
 				return actionMenus;
 			},
 
-			currentUser() {
-				return this.loginStore.getters.user;
-			},
-			isCurrentUserAdmin() {
-				return this.currentUser ? this.currentUser.isTypeAdmin() : false;
-			},
-			isCurrentUserDefault() {
-				return this.currentUser ? this.currentUser.isDefault() : false;
-			},
+			currentUser: (c) => c.loginStore.getters.user,
+			isCurrentUserAdmin: (c) => c.currentUser.isTypeAdmin(),
+			isCurrentUserDefault: (c) => c.currentUser.isDefault(),
 
-			currentState() {
-				return this.$route.query.state;
-			},
-			isCurrentStatePending() {
-				return this.currentState === "pending";
-			},
+			currentState: (c) => c.$route.query.state,
+			isCurrentStatePending: (c) => c.currentState === "pending",
 
-			services() {
-				return this.serviceStore.getters.items;
-			},
-			currentServiceId() {
-				return this.$route.query.service;
-			},
+			services: (c) => c.serviceStore.getters.items,
+			currentServiceId: (c) => c.$route.query.service,
 		},
 		watch: {
 			services() {
@@ -436,7 +423,12 @@
 
 <template>
 	<div class="PageService">
-		<div :class="['PageService-panels', `PageService-${isWide ? 'isWide' : 'isThin'}`]">
+		<div
+			:class="[
+				'PageService-panels',
+				`PageService-${isWide ? 'isWide' : 'isThin'}`,
+			]"
+		>
 			<PanelServices
 				class="PageService-PanelServices"
 				:menus="actionMenus"
@@ -540,7 +532,9 @@
 				class="PageService-window-child"
 				ref="WindowUpdateCustomer"
 				:value="popup.customer.value"
-				@callback-change="(customer) => windowAction('customer', 'ok', customer)"
+				@callback-change="
+					(customer) => windowAction('customer', 'ok', customer)
+				"
 				@callback-cancel="() => windowAction('customer', 'dismiss')"
 			/>
 		</PopupWindow>

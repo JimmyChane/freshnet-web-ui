@@ -138,9 +138,11 @@ class Service {
 	async fetchName() {
 		const user = await this.fetchUser();
 
-		if (user && this.name) return `${this.name}(${user.username})`;
-		if (!user && this.name) return this.name;
-		if (user && !this.name) return user.name;
+		const username = user ? user.username : "";
+
+		if (username.length && this.name) return `${this.name}(${username})`;
+		if (!username.length && this.name) return this.name;
+		if (username.length && !this.name) return username;
 
 		throw new Error("unknown");
 	}

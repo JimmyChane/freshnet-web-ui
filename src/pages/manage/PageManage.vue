@@ -45,8 +45,9 @@
 		},
 		methods: {
 			clickLogout() {
-				if (this.user)
+				if (!this.user.isTypeNone()) {
 					this.loginStore.dispatch("logout").then(() => this.redirectToLogin());
+				}
 			},
 			redirectToLogin() {
 				this.$router.replace({
@@ -70,7 +71,7 @@
 	<div class="PageManage">
 		<router-view
 			class="PageManage-view"
-			v-if="user"
+			v-if="!user.isTypeNone()"
 			@click-drawer-expand="$root.openNavigationDrawer()"
 		/>
 	</div>

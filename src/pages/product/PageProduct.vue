@@ -375,7 +375,6 @@
 
 			isEditable() {
 				const { user } = this.loginStore.getters;
-				if (!user) return false;
 				return user.isTypeAdmin() || user.isTypeStaff();
 			},
 			isLoading() {
@@ -605,12 +604,6 @@
 			setProductId(productId) {
 				this.$root.nextRoute({
 					query: { productId: productId ? productId : null },
-				});
-			},
-
-			clickLogout() {
-				this.userStore.dispatch("logout").then((user) => {
-					this.$root.feedback(`${user.name} is now logged out`);
 				});
 			},
 		},

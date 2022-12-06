@@ -49,9 +49,7 @@
 			user: (c) => c.loginStore.getters.user,
 			users: (c) => {
 				return (!c.user.isTypeNone() ? c.userStore.getters.items : []).filter(
-					(userParse) => {
-						return userParse.username !== c.user.username;
-					},
+					(userParse) => userParse.username !== c.user.username,
 				);
 			},
 		},
@@ -208,10 +206,7 @@
 			@click-drawer-expand="$emit('click-drawer-expand')"
 		/>
 
-		<div
-			class="PageUsers-body"
-			v-if="user && user.isTypeAdmin() && users.length"
-		>
+		<div class="PageUsers-body" v-if="user.isTypeAdmin() && users.length">
 			<div
 				class="PageUsers-user-root"
 				v-for="user in users"

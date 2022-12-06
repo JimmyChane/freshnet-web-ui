@@ -35,7 +35,6 @@
 		computed: {
 			user: (c) => c.loginStore.getters.user,
 			nameUserType: (c) => {
-				if (!c.user) return "";
 				if (c.user.isTypeAdmin()) return "Admin";
 				if (c.user.isTypeStaff()) return "Staff";
 				return "unknowna";

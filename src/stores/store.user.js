@@ -15,7 +15,7 @@ export default {
 					.processor(() => store.state.processor)
 					.loadData(async () => {
 						const user = await loginStore.dispatch("getUser");
-						if (!user || !user.isTypeAdmin()) throw new Error();
+						if (!user.isTypeAdmin()) throw new Error();
 						const api = await ApiHost.request().url("users").send();
 						const contents = api.getContent();
 						return contents.map((data) => new ItemUser(Stores).fromData(data));
@@ -69,7 +69,7 @@ export default {
 					return context.state.processor.acquire("addUser", async () => {
 						let user = await loginStore.dispatch("getUser");
 
-						if (!user && !user.isTypeAdmin()) throw new Error();
+						if (!user.isTypeAdmin()) throw new Error();
 
 						let api = await ApiHost.request()
 							.url("users/user")
@@ -98,7 +98,7 @@ export default {
 						async () => {
 							let user = await loginStore.dispatch("getUser");
 
-							if (!user && !user.isTypeAdmin()) throw new Error();
+							if (!user.isTypeAdmin()) throw new Error();
 
 							let api = await ApiHost.request()
 								.DELETE()
@@ -127,7 +127,7 @@ export default {
 							try {
 								let user = await loginStore.dispatch("getUser");
 
-								if (!user && !user.isTypeAdmin()) throw new Error();
+								if (!user.isTypeAdmin()) throw new Error();
 
 								let { username, userType } = arg;
 

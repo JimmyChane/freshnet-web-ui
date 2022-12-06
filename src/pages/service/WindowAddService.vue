@@ -27,17 +27,10 @@
 		},
 		computed: {
 			user: (c) => c.loginStore.getters.user,
-			userIsAdmin: (c) => {
-				if (!c.user) return false;
-				return c.user.isTypeAdmin() && c.user.username === "admin";
-			},
-			userIsStaff: (c) => {
-				if (!c.user) return false;
-				return c.user.isTypeStaff() && c.user.username === "staff";
-			},
+			userIsAdmin: (c) => c.user.isTypeAdmin() && c.user.username === "admin",
+			userIsStaff: (c) => c.user.isTypeStaff() && c.user.username === "staff",
 			userIsDefault: (c) => c.userIsAdmin || c.userIsStaff,
 			nameUserType: (c) => {
-				if (!c.user) return "";
 				if (c.user.isTypeAdmin()) return "admin";
 				if (c.user.isTypeStaff()) return "staff";
 				return "unknown";
@@ -46,7 +39,7 @@
 		watch: {
 			user() {
 				let user = this.user;
-				if (user) {
+				if (!user.isTypeNone()) {
 					this.nameOfUser = this.userIsDefault ? "" : user.name;
 				}
 			},

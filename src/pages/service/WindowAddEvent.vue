@@ -23,7 +23,7 @@
 		computed: {
 			user: (c) => c.loginStore.getters.user,
 			isUserDefault: (c) => {
-				if (!c.user) return false;
+				if (c.user.isTypeNone()) return false;
 				const isUserAdmin = c.user.isTypeAdmin() && c.user.username === "admin";
 				const isUserStaff = c.user.isTypeStaff() && c.user.username === "staff";
 				return isUserAdmin || isUserStaff;
@@ -32,7 +32,6 @@
 			isMethodQuotation: (c) => c.eventMethod === ModuleEvent.Method.Quotation,
 			isMethodPurchase: (c) => c.eventMethod === ModuleEvent.Method.Purchase,
 			nameUserType: (c) => {
-				if (!c.user) return "";
 				if (c.user.isTypeAdmin()) return "admin";
 				if (c.user.isTypeStaff()) return "staff";
 				return "unknown";
@@ -41,7 +40,7 @@
 		watch: {
 			user() {
 				let user = this.user;
-				if (user) {
+				if (!user.isTypeNone()) {
 					this.nameOfUser = this.isUserDefault ? "" : user.name;
 				}
 			},

@@ -78,7 +78,6 @@
 			isLoading: (context) => context.productStore.getters.isLoading,
 			isEditable() {
 				const { user } = this.loginStore.getters;
-				if (!user) return false;
 				return user.isTypeAdmin() || user.isTypeStaff();
 			},
 			categoryKey: (c) => c.$route.params.category,
