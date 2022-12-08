@@ -77,7 +77,7 @@
 						? [
 								{
 									title: 'Hamburger Menu',
-									icon: host.res('icon/hamburgerMenu-2A4858.svg'),
+									icon: host.res('icon/hamburgerMenu-000000.svg'),
 									click: () => $root.openNavigationDrawer(),
 								},
 								{

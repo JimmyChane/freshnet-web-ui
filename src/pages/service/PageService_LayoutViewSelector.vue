@@ -32,8 +32,8 @@
 		position: relative;
 		width: max-content;
 		height: max-content;
-		background-color: #e5ecee;
-		box-shadow: inset 0px 0px 0.2rem hsla(0, 0%, 0%, 0.5);
+		background-color: #e4e4e4;
+		border: 1px solid hsla(0, 0%, 0%, 0.1);
 		border-radius: 0.3rem;
 
 		display: flex;

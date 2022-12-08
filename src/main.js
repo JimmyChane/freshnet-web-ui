@@ -36,11 +36,7 @@ class U {
 			if (current && current.value !== query.value) {
 				current.value = query.value;
 				isChanged = true;
-			} else if (
-				!current &&
-				query.value !== null &&
-				query.value !== undefined
-			) {
+			} else if (!current && query.value !== null && query.value !== undefined) {
 				nextQueries.push({ key: query.key, value: query.value });
 				isChanged = true;
 			}
@@ -120,9 +116,7 @@ new Vue({
 		return {
 			console: {
 				log(param1, param2) {
-					param2 === undefined
-						? console.log(param1)
-						: console.log(param1, param2);
+					param2 === undefined ? console.log(param1) : console.log(param1, param2);
 				},
 				error(param1, param2) {
 					param2 === undefined
@@ -164,13 +158,11 @@ new Vue({
 				const queries = typeof _queries === "function" ? _queries() : [];
 
 				// parsing
-				const parsedChildren = U.parseGroup2s([{ values: children }]).map(
-					(obj) => {
-						obj.isLink = true;
-						obj.isQuery = false;
-						return obj;
-					},
-				);
+				const parsedChildren = U.parseGroup2s([{ values: children }]).map((obj) => {
+					obj.isLink = true;
+					obj.isQuery = false;
+					return obj;
+				});
 				const parsedGroups = U.parseGroup2s(groups).map((obj) => {
 					obj.isLink = true;
 					obj.isQuery = false;
@@ -218,9 +210,7 @@ new Vue({
 
 						let found = groups.find((group) => group.key === key);
 						if (!found) {
-							groups.push(
-								(found = { key, title, isLink, isQuery, groups: [] }),
-							);
+							groups.push((found = { key, title, isLink, isQuery, groups: [] }));
 						}
 						found.groups.push(...views);
 
@@ -296,7 +286,64 @@ new Vue({
 			this.closeNavigationDrawer();
 		},
 	},
+	created() {
+		this.appLayout = new AppLayout(this);
+		this.navigation = new Navigation(this);
+		window.addEventListener("resize", this.invalidateWindow);
+
+		// todo implement inheritable onBack functions
+		// window.addEventListener("keyup", (event) => {
+		//    console.log(event);
+		// });
+		// window.onhashchange = () => {
+		// 	console.log("onhashchange");
+		// };
+		// window.addEventListener(
+		// 	"popstate",
+		// 	(event) => {
+		// 		console.log("popstate", event);
+
+		// 		if (this.onBackPressed()) {
+		// 			// history.go(1);
+
+		// 			// return false;
+
+		// 			// history.pushState(null, document.title, location.href);
+
+		// 			event.preventDefault = true;
+		// 		} else {
+		// 			// history.back();
+		// 		}
+
+		// 		// if (!this.onBackPressed()) history.back();
+		// 		// else history.go(1);
+		// 	},
+		// 	false,
+		// );
+		// window.onpopstate = (event) => {
+		// 	console.log("onpopstate", event);
+
+		// 	return;
+
+		// 	// "event" object seems to contain value only when the back button is clicked
+		// 	// and if the pop state event fires due to clicks on a button
+		// 	// or a link it comes up as "undefined"
+
+		// 	if (event) {
+		// 		// Code to handle back button or prevent from navigation
+		// 	} else {
+		// 		// Continue user action through link or button
+		// 	}
+		// };
+	},
+	mounted() {
+		this.invalidateWindow();
+	},
 	methods: {
+		onBackPressed() {
+			return true;
+		},
+
 		imageViewerShow(image = null, thumbnails = []) {
 			this.imageViewer.image = image;
 			this.imageViewer.thumbnails = thumbnails;
@@ -376,9 +423,7 @@ new Vue({
 		},
 		pushDownload(filename, content) {
 			const element = document.createElement("a");
-			element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
-				content,
-			)}`;
+			element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`;
 			element.download = filename;
 			document.body.appendChild(element);
 			element.click();
@@ -456,19 +501,6 @@ new Vue({
 			this.window.innerWidth = window.innerWidth;
 			this.window.innerHeight = window.innerHeight;
 		},
-	},
-	created() {
-		this.appLayout = new AppLayout(this);
-		this.navigation = new Navigation(this);
-		window.addEventListener("resize", this.invalidateWindow);
-
-		// todo implement inheritable onBack functions
-		// window.addEventListener("keyup", (event) => {
-		//    console.log(event);
-		// });
-	},
-	mounted() {
-		this.invalidateWindow();
 	},
 
 	render: (createElement) => createElement(App),

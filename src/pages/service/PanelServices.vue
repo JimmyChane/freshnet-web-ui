@@ -223,7 +223,7 @@
 			flex-grow: 0;
 			z-index: 2;
 			transition: var(--animation-duration);
-			border-bottom: 1px solid #e5ecee;
+			border-bottom: 1px solid #e4e4e4;
 		}
 		.PanelServices-actionbar-shadow {
 			border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);

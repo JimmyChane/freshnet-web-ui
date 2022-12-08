@@ -216,6 +216,7 @@
 	.HomeActionbar {
 		width: 100%;
 		background-color: hsla(0, 0%, 89%, 0.96);
+		background-color: hsl(0, 0%, 89%);
 
 		// @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
 		// 	--blur: 0.5rem;

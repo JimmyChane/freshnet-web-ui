@@ -41,6 +41,8 @@
 	export default {
 		key: "print",
 		title: "Printing",
+		icon: { light: "paper-FFFFFF", dark: "paper-000000" },
+
 		components: { Actionbar, Tabs, Card, Footer },
 		data() {
 			return {

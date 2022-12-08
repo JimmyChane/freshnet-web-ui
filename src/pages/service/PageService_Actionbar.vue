@@ -5,6 +5,7 @@
 	import LabelMenus from "@/components/LabelMenus.vue";
 
 	import ItemService from "./ItemService.vue";
+	import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
 	export default {
 		components: {
@@ -30,7 +31,7 @@
 			sortMenuIndex: { type: Number, default: -1 },
 		},
 		data() {
-			return { results: [] };
+			return { results: [], primaryColorLabel: chroma("black") };
 		},
 		computed: {
 			isWide: (c) => c.$root.window.innerWidth > 600,
@@ -95,7 +96,7 @@
 						{
 							key: 'hamburgerMenu',
 							title: 'Hamburger Menu',
-							icon: host.res('icon/hamburgerMenu-2A4858.svg'),
+							icon: host.res('icon/hamburgerMenu-000000.svg'),
 							click: () => $emit('click-drawer-expand'),
 						},
 					]"
@@ -130,7 +131,7 @@
 							? null
 							: {
 									title: 'Search',
-									icon: host.res('icon/search-2A4858.svg'),
+									icon: host.res('icon/search-000000.svg'),
 									click: () => $emit('click-search'),
 							  },
 						...menus,
@@ -144,6 +145,8 @@
 				<LayoutViewSelector :menus="layoutMenus" :index="layoutMenuIndex" />
 				<LabelMenus
 					title="Sort"
+					:style="{ '--primary-color': primaryColorLabel.toString() }"
+					:primaryColor="primaryColorLabel"
 					:menu="sortMenus[sortMenuIndex] ? sortMenus[sortMenuIndex] : null"
 					:menus="sortMenus"
 				/>
@@ -170,7 +173,8 @@
 <style lang="scss" scoped>
 	.Actionbar {
 		height: max-content;
-		background-color: #c9d7df;
+		// background-color: #c9d7df;
+		background-color: #f3f3f3;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -313,7 +317,8 @@
 				}
 
 				.Actionbar-tab-isSelected {
-					background-color: #e5ecee;
+					// background-color: #e5ecee;
+					background-color: #e4e4e4;
 
 					// .Actionbar-tab-title {
 					// 	width: 4.8rem;
@@ -330,7 +335,8 @@
 					// }
 
 					&:hover {
-						background-color: hsla(0, 0%, 96%, 0.5);
+						// background-color: hsla(0, 0%, 96%, 0.5);
+						background-color: #e2e2e2;
 					}
 				}
 			}

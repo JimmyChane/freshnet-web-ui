@@ -75,7 +75,7 @@
 				{
 					key: 'hamburgerMenu',
 					title: 'Hamburger Menu',
-					icon: host.res('icon/hamburgerMenu-2A4858.svg'),
+					icon: host.res('icon/hamburgerMenu-000000.svg'),
 					click: () => $emit('click-drawer-expand'),
 				},
 			]"
@@ -111,12 +111,12 @@
 			:menus="[
 				{
 					title: 'Add',
-					icon: host.res('icon/add-2A4858.svg'),
+					icon: host.res('icon/add-000000.svg'),
 					click: () => $emit('click-item-add'),
 				},
 				{
 					title: 'Refresh',
-					icon: host.res('icon/refresh-2A4858.svg'),
+					icon: host.res('icon/refresh-000000.svg'),
 					click: () => $emit('click-refresh'),
 				},
 			]"
@@ -126,7 +126,7 @@
 
 <style lang="scss" scoped>
 	.Actionbar {
-		background-color: #e5ecee;
+		background-color: #f3f3f3;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
@@ -162,7 +162,7 @@
 			font-weight: 600;
 			white-space: nowrap;
 			text-overflow: clip;
-			color: var(--primary-color);
+			color: black;
 		}
 	}
 </style>

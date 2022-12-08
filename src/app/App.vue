@@ -39,11 +39,16 @@
 				this.onConnectionChange();
 			},
 		},
-		mounted() {
-			setTimeout(() => this.onConnectionChange(), 3000);
-
+		created() {
 			window.addEventListener("resize", () => this.invalidateHeight());
 			this.invalidateHeight();
+		},
+		mounted() {
+			setTimeout(() => this.onConnectionChange(), 3000);
+		},
+		unmounted() {},
+		destroyed() {
+			window.removeEventListener("resize", this.invalidateHeight);
 		},
 		methods: {
 			onConnectionChange() {
@@ -63,7 +68,6 @@
 			},
 
 			invalidateHeight() {
-				// We execute the same script as before
 				let vh = window.innerHeight * 0.01;
 				document.body.style.setProperty("--vh", `${vh}px`);
 			},

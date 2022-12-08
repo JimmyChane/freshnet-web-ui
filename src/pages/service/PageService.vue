@@ -295,7 +295,7 @@
 					actionMenus.push({
 						key: "add",
 						title: "Add",
-						icon: this.host.res("icon/add-2A4858.svg"),
+						icon: this.host.res("icon/add-000000.svg"),
 						click: this.clickAddService,
 					});
 				}
@@ -316,7 +316,7 @@
 					actionMenus.push({
 						key: "refresh",
 						title: "Refresh",
-						icon: this.host.res("icon/refresh-2A4858.svg"),
+						icon: this.host.res("icon/refresh-000000.svg"),
 						click: this.clickRefresh,
 					});
 				}
@@ -643,7 +643,7 @@
 		max-width: 100%;
 		max-height: 100%;
 		position: relative;
-		background-color: #e5ecee;
+		// background-color: #e5ecee;
 
 		--body-padding: 0.9rem;
 
