@@ -134,11 +134,11 @@
 				'border-bottom': `1px solid ${actionbarBorder}`,
 			}"
 			:leftMenus="{
-				icon: host.res('icon/close-2A4858.svg'),
+				icon: host.res('icon/close-000000.svg'),
 				click: () => actions.onClickClose(),
 			}"
 			:rightMenus="{
-				icon: host.res('icon/trash-2A4858.svg'),
+				icon: host.res('icon/trash-000000.svg'),
 				click: () => actions.onClickRemove(service),
 			}"
 		>
