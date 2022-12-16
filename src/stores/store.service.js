@@ -72,15 +72,24 @@ export default {
 				},
 			},
 			actions: {
-				// socketNotify(context, data) {
-				// 	const { key, content } = data;
-				// 	console.log("service", { key, content });
-
-				// 	if (key === "item-add") {
-				// 		let service = new Service(Stores).fromData(content);
-				// 		new CollectionUpdater(context).onId((item) => item.id).getItem(service);
-				// 	}
-				// },
+				socketNotify(context, data) {
+					const { key, content } = data;
+					switch (key) {
+						case "item-add":
+							const service = new Service(Stores).fromData(content);
+							new CollectionUpdater(context).onId((item) => item.id).getItem(service);
+							break;
+						case "item-remove":
+							const id = new Service(Stores).fromData(content).id;
+							const found = context.state.items.find((service) => service.id === id);
+							if (!found) return;
+							const items = context.state.items;
+							items.splice(items.indexOf(found), 1);
+							context.commit("items", items);
+							context.commit("lastModified", Date.now());
+							break;
+					}
+				},
 
 				async refresh(context) {
 					return context.state.processor.acquire("refresh", async () => {
@@ -204,45 +213,39 @@ export default {
 					});
 				},
 				async updateDescriptionOfId(context, arg = { serviceID, description }) {
-					return context.state.processor.acquire(
-						"updateDescriptionOfId",
-						async () => {
-							let { serviceID, description } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url(`service_v2/item/${serviceID}/update/description/`)
-								.body({ content: description })
-								.send();
-							let error = api.getError();
-							if (error) throw new Error();
+					return context.state.processor.acquire("updateDescriptionOfId", async () => {
+						let { serviceID, description } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url(`service_v2/item/${serviceID}/update/description/`)
+							.body({ content: description })
+							.send();
+						let error = api.getError();
+						if (error) throw new Error();
 
-							return new CollectionUpdater(context)
-								.onId((item) => item.id)
-								.onUpdate((item) => (item.description = description))
-								.getItemById(serviceID);
-						},
-					);
+						return new CollectionUpdater(context)
+							.onId((item) => item.id)
+							.onUpdate((item) => (item.description = description))
+							.getItemById(serviceID);
+					});
 				},
 				async updateBelongingsOfId(context, arg = { serviceID, belongings }) {
-					return context.state.processor.acquire(
-						"updateBelongingsOfId",
-						async () => {
-							let { serviceID, belongings } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url(`service_v2/item/${serviceID}/update/belonging/`)
-								.body({ content: belongings })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) throw new Error();
+					return context.state.processor.acquire("updateBelongingsOfId", async () => {
+						let { serviceID, belongings } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url(`service_v2/item/${serviceID}/update/belonging/`)
+							.body({ content: belongings })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) throw new Error();
 
-							return new CollectionUpdater(context)
-								.onId((item) => item.id)
-								.onUpdate((item) => (item.belongings = content.belongings))
-								.getItemById(serviceID);
-						},
-					);
+						return new CollectionUpdater(context)
+							.onId((item) => item.id)
+							.onUpdate((item) => (item.belongings = content.belongings))
+							.getItemById(serviceID);
+					});
 				},
 				async updateCustomerOfId(context, arg = { serviceID, customer }) {
 					return context.state.processor.acquire("updateCustomerOfId", async () => {
