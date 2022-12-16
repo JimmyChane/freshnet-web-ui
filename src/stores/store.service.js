@@ -10,6 +10,24 @@ import Vuex from "vuex";
 import ServiceModule from "@/items/data/Service.js";
 import ApiHost from "@/host/ApiHost.js";
 
+class Event {
+	constructor(key, manager) {}
+}
+const events = [
+	new Event("service", "item-add"),
+	new Event("service", "item-remove"),
+	new Event("service", "item-image-add"),
+	new Event("service", "item-image-remove"),
+	new Event("service", "item-event-add"),
+	new Event("service", "item-event-remove"),
+	new Event("service", "item-label-add"),
+	new Event("service", "item-label-remove"),
+	new Event("service", "item-state-update"),
+	new Event("service", "item-description-update"),
+	new Event("service", "item-belongings-update"),
+	new Event("service", "item-customer-update"),
+];
+
 export default {
 	init(Stores) {
 		const storeService = new Vuex.Store({
@@ -18,9 +36,7 @@ export default {
 				dataLoader: new DataLoader({ timeout: 1000 * 60 * 10 }) // 10min
 					.processor(() => storeService.state.processor)
 					.loadData(async () => {
-						const api = await ApiHost.request()
-							.url("service_v2/get/items")
-							.send();
+						const api = await ApiHost.request().url("service_v2/get/items").send();
 						const error = api.getError();
 						const content = api.getContent();
 						if (error) throw new Error(error);
@@ -56,6 +72,16 @@ export default {
 				},
 			},
 			actions: {
+				// socketNotify(context, data) {
+				// 	const { key, content } = data;
+				// 	console.log("service", { key, content });
+
+				// 	if (key === "item-add") {
+				// 		let service = new Service(Stores).fromData(content);
+				// 		new CollectionUpdater(context).onId((item) => item.id).getItem(service);
+				// 	}
+				// },
+
 				async refresh(context) {
 					return context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
@@ -152,9 +178,7 @@ export default {
 							.send();
 						let error = api.getError();
 						if (error) throw new Error();
-						let found = context.state.items.find(
-							(service) => service.id === id,
-						);
+						let found = context.state.items.find((service) => service.id === id);
 						if (!found) throw new Error();
 						let items = context.state.items;
 						items.splice(items.indexOf(found), 1);
@@ -163,24 +187,21 @@ export default {
 					});
 				},
 				async updateStateOfId(context, arg = { serviceID, state }) {
-					return context.state.processor.acquire(
-						"updateStateOfId",
-						async () => {
-							let { serviceID, state } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url(`service_v2/item/${serviceID}/update/state/`)
-								.body({ content: state })
-								.send();
-							let error = api.getError();
-							if (error) throw new Error();
+					return context.state.processor.acquire("updateStateOfId", async () => {
+						let { serviceID, state } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url(`service_v2/item/${serviceID}/update/state/`)
+							.body({ content: state })
+							.send();
+						let error = api.getError();
+						if (error) throw new Error();
 
-							return new CollectionUpdater(context)
-								.onId((item) => item.id)
-								.onUpdate((item) => (item.state = state))
-								.getItemById(serviceID);
-						},
-					);
+						return new CollectionUpdater(context)
+							.onId((item) => item.id)
+							.onUpdate((item) => (item.state = state))
+							.getItemById(serviceID);
+					});
 				},
 				async updateDescriptionOfId(context, arg = { serviceID, description }) {
 					return context.state.processor.acquire(
@@ -224,29 +245,26 @@ export default {
 					);
 				},
 				async updateCustomerOfId(context, arg = { serviceID, customer }) {
-					return context.state.processor.acquire(
-						"updateCustomerOfId",
-						async () => {
-							let { serviceID, customer } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url(`service_v2/item/${serviceID}/update/customer/`)
-								.body({ content: customer })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) throw new Error();
+					return context.state.processor.acquire("updateCustomerOfId", async () => {
+						let { serviceID, customer } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url(`service_v2/item/${serviceID}/update/customer/`)
+							.body({ content: customer })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) throw new Error();
 
-							return new CollectionUpdater(context)
-								.onId((item) => item.id)
-								.onUpdate((item) => {
-									return (item.customer = new ServiceCustomer(Stores).fromData(
-										content.customer,
-									));
-								})
-								.getItemById(serviceID);
-						},
-					);
+						return new CollectionUpdater(context)
+							.onId((item) => item.id)
+							.onUpdate((item) => {
+								return (item.customer = new ServiceCustomer(Stores).fromData(
+									content.customer,
+								));
+							})
+							.getItemById(serviceID);
+					});
 				},
 
 				async addEventToId(context, arg = { serviceID, data }) {
@@ -275,81 +293,68 @@ export default {
 					});
 				},
 				async removeEventFromId(context, arg = { serviceID, time }) {
-					return context.state.processor.acquire(
-						"removeEventFromId",
-						async () => {
-							let { serviceID, time } = arg;
-							let api = await ApiHost.request()
-								.DELETE()
-								.url(`service_v2/item/${serviceID}/delete/event/`)
-								.body({ serviceID, time })
-								.send();
-							let error = api.getError();
-							if (error) throw new Error();
+					return context.state.processor.acquire("removeEventFromId", async () => {
+						let { serviceID, time } = arg;
+						let api = await ApiHost.request()
+							.DELETE()
+							.url(`service_v2/item/${serviceID}/delete/event/`)
+							.body({ serviceID, time })
+							.send();
+						let error = api.getError();
+						if (error) throw new Error();
 
-							return new CollectionUpdater(context)
-								.onId((item) => item.id)
-								.onUpdate((item) => {
-									item.events = item.events.filter((event) => {
-										return event.timestamp.time !== time;
-									});
-								})
-								.getItemById(serviceID);
-						},
-					);
+						return new CollectionUpdater(context)
+							.onId((item) => item.id)
+							.onUpdate((item) => {
+								item.events = item.events.filter((event) => {
+									return event.timestamp.time !== time;
+								});
+							})
+							.getItemById(serviceID);
+					});
 				},
 
 				async updateUrgentOfId(context, arg = { serviceID, isUrgent }) {
-					console.warn(
-						"updateUrgentOfId is deprecated, please use addLabelToId",
-					);
-					return context.state.processor.acquire(
-						"updateUrgentOfId",
-						async () => {
-							let { serviceID, isUrgent } = arg;
-							const api = await ApiHost.request()
-								.PUT()
-								.url("service/urgent")
-								.body({ serviceID, isUrgent })
-								.send();
+					console.warn("updateUrgentOfId is deprecated, please use addLabelToId");
+					return context.state.processor.acquire("updateUrgentOfId", async () => {
+						let { serviceID, isUrgent } = arg;
+						const api = await ApiHost.request()
+							.PUT()
+							.url("service/urgent")
+							.body({ serviceID, isUrgent })
+							.send();
 
-							let error = api.getError();
-							if (error) throw new Error();
-							const content = api.getContent();
+						let error = api.getError();
+						if (error) throw new Error();
+						const content = api.getContent();
 
-							let service = new Service(Stores).fromData(content);
-							return new CollectionUpdater(context)
-								.onId((item) => item.id)
-								.onUpdate((item) => item.setUrgent(service.isUrgent()))
-								.getItemById(service.id);
-						},
-					);
+						let service = new Service(Stores).fromData(content);
+						return new CollectionUpdater(context)
+							.onId((item) => item.id)
+							.onUpdate((item) => item.setUrgent(service.isUrgent()))
+							.getItemById(service.id);
+					});
 				},
 				async updateWarrantyOfId(context, arg = { serviceID, isWarranty }) {
-					console.warn(
-						"updateWarrantyOfId is deprecated, please use addLabelToId",
-					);
-					return context.state.processor.acquire(
-						"updateWarrantyOfId",
-						async () => {
-							let { serviceID, isWarranty } = arg;
-							const api = await ApiHost.request()
-								.PUT()
-								.url("service/warranty")
-								.body({ serviceID, isWarranty })
-								.send();
+					console.warn("updateWarrantyOfId is deprecated, please use addLabelToId");
+					return context.state.processor.acquire("updateWarrantyOfId", async () => {
+						let { serviceID, isWarranty } = arg;
+						const api = await ApiHost.request()
+							.PUT()
+							.url("service/warranty")
+							.body({ serviceID, isWarranty })
+							.send();
 
-							let error = api.getError();
-							if (error) throw new Error();
-							const content = api.getContent();
+						let error = api.getError();
+						if (error) throw new Error();
+						const content = api.getContent();
 
-							let service = new Service(Stores).fromData(content);
-							return new CollectionUpdater(context)
-								.onId((item) => item.id)
-								.onUpdate((item) => item.setWarranty(service.isWarranty()))
-								.getItemById(service.id);
-						},
-					);
+						let service = new Service(Stores).fromData(content);
+						return new CollectionUpdater(context)
+							.onId((item) => item.id)
+							.onUpdate((item) => item.setWarranty(service.isWarranty()))
+							.getItemById(service.id);
+					});
 				},
 
 				async addLabelToId(context, arg = { serviceID, label }) {
@@ -368,39 +373,36 @@ export default {
 					});
 				},
 				async removeLabelFromId(context, arg = { serviceID, label }) {
-					return context.state.processor.acquire(
-						"removeLabelFromId",
-						async () => {
-							let { serviceID, label } = arg;
-							const api = await ApiHost.request()
-								.DELETE()
-								.url(`service_v2/item/${serviceID}/delete/label/`)
-								.body({ label: label.toData() })
-								.send();
+					return context.state.processor.acquire("removeLabelFromId", async () => {
+						let { serviceID, label } = arg;
+						const api = await ApiHost.request()
+							.DELETE()
+							.url(`service_v2/item/${serviceID}/delete/label/`)
+							.body({ label: label.toData() })
+							.send();
 
-							let error = api.getError();
-							if (error) throw new Error(error);
-							const content = api.getContent();
+						let error = api.getError();
+						if (error) throw new Error(error);
+						const content = api.getContent();
 
-							let service = new Service(Stores).fromData(content);
-							let items = context.state.items;
-							let item = items.find((item) => {
-								return item.id === service.id;
-							});
+						let service = new Service(Stores).fromData(content);
+						let items = context.state.items;
+						let item = items.find((item) => {
+							return item.id === service.id;
+						});
 
-							if (!item) {
-								items.push(service);
-								item = service;
-							} else {
-								item.setLabels(service.labels);
-							}
+						if (!item) {
+							items.push(service);
+							item = service;
+						} else {
+							item.setLabels(service.labels);
+						}
 
-							context.commit("items", items);
-							context.commit("lastModified", Date.now());
+						context.commit("items", items);
+						context.commit("lastModified", Date.now());
 
-							return item;
-						},
-					);
+						return item;
+					});
 				},
 
 				async addImageToId(context, arg = { serviceID, imageFile }) {
@@ -428,30 +430,27 @@ export default {
 					});
 				},
 				async removeImageFromId(context, arg = { serviceID, image }) {
-					return context.state.processor.acquire(
-						"removeImageFromId",
-						async () => {
-							let { serviceID, image } = arg;
-							// let api = await ApiHost.imgFile.remove(image.name);
-							// if (api.error) throw new Error();
-							let api = ApiHost.request()
-								.DELETE()
-								.url(`service_v2/item/${serviceID}/delete/image/`)
-								.body({ content: image.toData() })
-								.send();
-							let error = api.error;
-							if (error) throw new Error();
+					return context.state.processor.acquire("removeImageFromId", async () => {
+						let { serviceID, image } = arg;
+						// let api = await ApiHost.imgFile.remove(image.name);
+						// if (api.error) throw new Error();
+						let api = ApiHost.request()
+							.DELETE()
+							.url(`service_v2/item/${serviceID}/delete/image/`)
+							.body({ content: image.toData() })
+							.send();
+						let error = api.error;
+						if (error) throw new Error();
 
-							return new CollectionUpdater(context)
-								.onId((item) => item.id)
-								.onUpdate((item) => {
-									item.imageFiles = item.imageFiles.filter(
-										(imageFile) => imageFile.name !== image.name,
-									);
-								})
-								.getItemById(serviceID);
-						},
-					);
+						return new CollectionUpdater(context)
+							.onId((item) => item.id)
+							.onUpdate((item) => {
+								item.imageFiles = item.imageFiles.filter(
+									(imageFile) => imageFile.name !== image.name,
+								);
+							})
+							.getItemById(serviceID);
+					});
 				},
 			},
 		});

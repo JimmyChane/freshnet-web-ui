@@ -2,17 +2,13 @@ import Vue from "vue";
 import Vuex from "vuex";
 import socketIo from "socket.io-client";
 import ApiHost from "../host/ApiHost.js";
-import SocketData from "@/items/data/SocketData.js";
 
 Vue.use(Vuex);
 
 export default {
 	init(Stores) {
 		const store = new Vuex.Store({
-			state: {
-				socket: null,
-				// listeners: [],
-			},
+			state: { socket: null },
 			mutations: {
 				socket: (state, socket) => (state.socket = socket),
 			},
@@ -23,31 +19,17 @@ export default {
 				openSocket(context) {
 					if (context.getters.isConnected) return;
 
-					let socket = socketIo(ApiHost.origin, {
+					const socket = socketIo(ApiHost.origin, {
 						extraHeaders: {
 							authorization: window.localStorage.getItem("userToken"),
 						},
 					});
-					// socket.on("connect_error", () => console.info("connect error"));
-					// socket.on("connect", () => console.info("connected"));
-					// socket.on("disconnect", (reason) => console.info("disconnected"));
-					socket.on("emit", (body) => {
-						const { content, key } = body ? body : {};
-						const data = new SocketData(content, key);
-
-						console.log(data);
-
-						// for (let listener of store.state.listeners) {
-						//    if (data.key === listener.key) {
-						//       listener.tell(data.content);
-						//       return;
-						//    }
-						//    if (!listener.key && !listener.key) {
-						//       listener.tell(data.content);
-						//       return;
-						//    }
-						// }
-					});
+					// socket.on("connect_error", () => console.info("Socket", "Connect Error"));
+					// socket.on("connect", () => console.info("Socket", "Connected"));
+					// socket.on("disconnect", (reason) =>
+					// 	console.info("Socket", "Disconnected"),
+					// );
+					// socket.on("notify", (body) => context.dispatch("socketNotify", body));
 
 					context.commit("socket", socket);
 				},
@@ -62,10 +44,12 @@ export default {
 					context.dispatch("closeSocket");
 					context.dispatch("openSocket");
 				},
-
-				test(context) {
-					return "hi";
-				},
+				// socketNotify(context, body) {
+				// 	const { manager, key, content } = body ? body : {};
+				// 	if (manager === "service") {
+				// 		Stores.service.dispatch("socketNotify", { key, content });
+				// 	}
+				// },
 			},
 		});
 
