@@ -42,12 +42,12 @@ export default {
 				token: () => getToken(),
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return context.state.loader.acquire("refresh", async () => {
 						await context.dispatch("getUser");
 					});
 				},
-				async login(context, arg = { username, password }) {
+				login: async (context, arg = { username, password }) => {
 					return context.state.loader.acquire("login", async () => {
 						try {
 							deleteToken();
@@ -74,7 +74,7 @@ export default {
 						}
 					});
 				},
-				async logout(context) {
+				logout: async (context) => {
 					return context.state.loader.acquire("logout", async () => {
 						try {
 							deleteToken();
@@ -92,7 +92,7 @@ export default {
 					});
 				},
 
-				async getUser(context) {
+				getUser: async (context) => {
 					return context.state.loader.acquire("getUser", async () => {
 						try {
 							const token = getToken();
@@ -142,7 +142,7 @@ export default {
 						}
 					});
 				},
-				async changePassword(context, arg = {}) {
+				changePassword: async (context, arg = {}) => {
 					return context.state.loader.acquire("changePassword", async () => {
 						let { user } = context.getters;
 						if (!user || !user.username) {

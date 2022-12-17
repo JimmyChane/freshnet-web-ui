@@ -40,13 +40,13 @@ export default {
 				items: (state) => state.items,
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("getItems");
 					});
 				},
-				async getItems(context) {
+				getItems: async (context) => {
 					return context.state.processor.acquire("getItems", async () => {
 						return context.state.dataLoader.data();
 					});

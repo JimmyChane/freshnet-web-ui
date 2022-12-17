@@ -14,14 +14,6 @@ const apiThenContent = (api) => {
 	if (friendlyError) throw new Error(friendlyError);
 	return api.getContent();
 };
-const updateThenItem = (context, id, callback) => {
-	const items = context.state.items;
-	const item = items.find((item) => item.id === id);
-	callback(item);
-	context.commit("items", items);
-	context.commit("lastModified", Date.now());
-	return item;
-};
 const getItemOfId = async (context, id = "") => {
 	return context.state.processor.acquire("getItemOfId", async () => {
 		if (typeof id !== "string") return null;
@@ -77,26 +69,26 @@ export default {
 				items: (state) => state.items,
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("getItems");
 					});
 				},
 
-				async getItems(context) {
+				getItems: async (context) => {
 					return context.state.processor.acquire("getItems", async () => {
 						return context.state.dataLoader.data();
 					});
 				},
-				async getItemOfId(context, id = "") {
+				getItemOfId: async (context, id = "") => {
 					return getItemOfId(context, id);
 				},
-				async getItemsOfIds(context, ids = []) {
+				getItemsOfIds: async (context, ids = []) => {
 					return getItemsOfIds(context, ids);
 				},
 
-				async addItem(context, arg = {}) {
+				addItem: async (context, arg = {}) => {
 					return context.state.processor.acquire("addItem", async () => {
 						let data = new ItemCustomerDevice(Stores).fromData(arg).toData();
 						delete data.id;
@@ -118,7 +110,7 @@ export default {
 						return item;
 					});
 				},
-				async removeItemOfId(context, arg = {}) {
+				removeItemOfId: async (context, arg = {}) => {
 					return context.state.processor.acquire("removeItemById", async () => {
 						let api = await ApiHost.request()
 							.DELETE()
@@ -138,15 +130,15 @@ export default {
 						customer.deviceIds = customer.deviceIds.filter((deviceId) => {
 							return deviceId !== item.id;
 						});
-						let items = context.state.items;
-						items = items.filter((existing) => existing.id !== item.id);
-						context.commit("items", items);
-						context.commit("lastModified", Date.now());
-						return item;
+
+						return new CollectionUpdater(context)
+							.toRemove()
+							.withItem(item)
+							.commitThenGetItem();
 					});
 				},
 
-				async updateSpecificationsOfId(context, arg = { _id, specifications }) {
+				updateSpecificationsOfId: async (context, arg = { _id, specifications }) => {
 					return context.state.processor.acquire("updateSpecificationsOfId", async () => {
 						let { _id, specifications } = arg;
 						let api = await ApiHost.request()
@@ -155,27 +147,30 @@ export default {
 							.body({ content: { _id, specifications } })
 							.send();
 						let content = apiThenContent(api);
-						let item = new ItemCustomerDevice(Stores).fromData(content);
-						item = updateThenItem(context, item.id, (itemNow) => {
-							return (itemNow.specifications = item.specifications);
-						});
-						return item;
+
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withItem(new ItemCustomerDevice(Stores).fromData(content))
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.specifications = newItem.specifications;
+							});
 					});
 				},
-				async updateDescriptionOfId(context, arg = { _id, description }) {
+				updateDescriptionOfId: async (context, arg = { _id, description }) => {
 					return context.state.processor.acquire("updateDescriptionOfId", async () => {
-						let { _id, description } = arg;
-						let api = await ApiHost.request()
+						const { _id, description } = arg;
+						const api = await ApiHost.request()
 							.PUT()
 							.url("customer/device/update/description")
 							.body({ content: { _id, description } })
 							.send();
-						let content = apiThenContent(api);
-						let item = new ItemCustomerDevice(Stores).fromData(content);
-						item = updateThenItem(context, item.id, (itemNow) => {
-							return (itemNow.description = item.description);
-						});
-						return item;
+						const content = apiThenContent(api);
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withItem(new ItemCustomerDevice(Stores).fromData(content))
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.description = newItem.description;
+							});
 					});
 				},
 			},

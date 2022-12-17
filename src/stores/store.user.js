@@ -41,31 +41,28 @@ export default {
 				items: (state) => state.items.map((user) => user),
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("getUsers");
 					});
 				},
 
-				async getUsers(context) {
+				getUsers: async (context) => {
 					return context.state.processor.acquire("getUsers", async () => {
 						return await context.state.dataLoader.data();
 					});
 				},
-				async getUserByUsername(context, username = "") {
-					return context.state.processor.acquire(
-						"getUserByUsername",
-						async () => {
-							const users = await context.dispatch("getUsers");
-							return users.find((user) => user.username === username);
-						},
-					);
+				getUserByUsername: async (context, username = "") => {
+					return context.state.processor.acquire("getUserByUsername", async () => {
+						const users = await context.dispatch("getUsers");
+						return users.find((user) => user.username === username);
+					});
 				},
-				async addUser(
+				addUser: async (
 					context,
 					arg = { username, name, passwordNew, passwordRepeat },
-				) {
+				) => {
 					return context.state.processor.acquire("addUser", async () => {
 						let user = await loginStore.dispatch("getUser");
 
@@ -92,35 +89,29 @@ export default {
 						return newUser;
 					});
 				},
-				async removeUserByUsername(context, arg = { username }) {
-					return context.state.processor.acquire(
-						"removeUserByUsername",
-						async () => {
-							let user = await loginStore.dispatch("getUser");
+				removeUserByUsername: async (context, arg = { username }) => {
+					return context.state.processor.acquire("removeUserByUsername", async () => {
+						let user = await loginStore.dispatch("getUser");
 
-							if (!user.isTypeAdmin()) throw new Error();
+						if (!user.isTypeAdmin()) throw new Error();
 
-							let api = await ApiHost.request()
-								.DELETE()
-								.url("users/user")
-								.body({ username: arg.username })
-								.send();
+						let api = await ApiHost.request()
+							.DELETE()
+							.url("users/user")
+							.body({ username: arg.username })
+							.send();
 
-							let content = api.getContent();
-							if (content !== "ok") throw new Error();
-							let users = context.getters.items.filter((user) => {
-								return user.username !== arg.username;
-							});
-							context.commit("items", users);
-							context.commit("lastModified", Date.now());
-							return true;
-						},
-					);
+						let content = api.getContent();
+						if (content !== "ok") throw new Error();
+						let users = context.getters.items.filter((user) => {
+							return user.username !== arg.username;
+						});
+						context.commit("items", users);
+						context.commit("lastModified", Date.now());
+						return true;
+					});
 				},
-				async updateTypeOfUserByUsername(
-					context,
-					arg = { username, userType },
-				) {
+				updateTypeOfUserByUsername: async (context, arg = { username, userType }) => {
 					return context.state.processor.acquire(
 						"updateTypeOfUserByUsername",
 						async () => {
@@ -141,9 +132,7 @@ export default {
 								let userChange = new ItemUser(Stores).fromData(content);
 								if (!userChange) throw new Error();
 								let users = context.getters.items.map((user) => {
-									return user.username === userChange.username
-										? userChange
-										: user;
+									return user.username === userChange.username ? userChange : user;
 								});
 								context.commit("items", users);
 								context.commit("lastModified", Date.now());

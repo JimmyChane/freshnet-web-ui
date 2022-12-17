@@ -42,20 +42,20 @@ export default {
 				items: (state) => (Array.isArray(state.items) ? state.items : []),
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("getItems");
 					});
 				},
 
-				async getItems(context) {
+				getItems: async (context) => {
 					return context.state.processor.acquire("getItems", async () => {
 						return context.state.dataLoader.data();
 					});
 				},
 
-				async getGroupsByCustomer(context) {
+				getGroupsByCustomer: async (context) => {
 					const items = await context.dispatch("getItems");
 					const groups = items.reduce((groups, item) => {
 						let group = groups.find((group) => {
@@ -73,7 +73,7 @@ export default {
 
 					return groups;
 				},
-				async getGroupsByStatus(context) {
+				getGroupsByStatus: async (context) => {
 					const items = await context.dispatch("getItems");
 					const groups = items.reduce((groups, item) => {
 						let group = groups.find((group) => group.status === item.status);
@@ -90,7 +90,7 @@ export default {
 					return groups;
 				},
 
-				async addItem(context, arg = { data }) {
+				addItem: async (context, arg = { data }) => {
 					return context.state.processor.acquire("addItem", async () => {
 						let { data } = arg;
 						if (!data) return null;
@@ -105,18 +105,16 @@ export default {
 							.commitThenGetItem();
 					});
 				},
-				async removeOItemOfId(context, arg = { id }) {
+				removeOItemOfId: async (context, arg = { id }) => {
 					return context.state.processor.acquire("removeOItemOfId", async () => {
 						let { id } = arg;
 						let api = await ApiHost.request().DELETE().url("order/").body({ id }).send();
 						let error = api.getError();
 						if (error) throw new Error();
-						let items = context.state.items.filter((item) => item.id !== id);
-						context.commit("items", items);
-						context.commit("lastModified", Date.now());
+						new CollectionUpdater(context).toRemove().withId(id).commitThenGetItem();
 					});
 				},
-				async updateStatusOfId(context, arg = { id, status }) {
+				updateStatusOfId: async (context, arg = { id, status }) => {
 					return context.state.processor.acquire("updateStatusOfId", async () => {
 						let { id, status } = arg;
 						let api = await ApiHost.request()
@@ -135,13 +133,13 @@ export default {
 							});
 					});
 				},
-				async updateToPendingOfId(context, id = "") {
+				updateToPendingOfId: async (context, id = "") => {
 					return context.dispatch("updateStatusOfId", {
 						id,
 						status: Order.STATUS.PENDING,
 					});
 				},
-				async updateToCompletedOfId(context, id = "") {
+				updateToCompletedOfId: async (context, id = "") => {
 					return context.dispatch("updateStatusOfId", {
 						id,
 						status: Order.STATUS.PENDING,

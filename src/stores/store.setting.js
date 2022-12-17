@@ -21,9 +21,7 @@ export default {
 						if (content === undefined || content === null)
 							throw new Error("content not valid");
 						const contents = Array.isArray(content) ? content : [];
-						const settings = contents.map(
-							(content) => new SettingModule(content),
-						);
+						const settings = contents.map((content) => new SettingModule(content));
 						return settings;
 					})
 					.setData((data) => {
@@ -44,18 +42,18 @@ export default {
 				items: (state) => state.items,
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("getItems");
 					});
 				},
-				async getItems(context) {
+				getItems: async (context) => {
 					return context.state.processor.acquire("getItems", async () => {
 						return context.state.dataLoader.data();
 					});
 				},
-				async updateItem(context, arg = { key: "", value }) {
+				updateItem: async (context, arg = { key: "", value }) => {
 					if (api_url === "settingv3") {
 						return context.dispatch("updateItemV2", arg);
 					}
@@ -96,7 +94,7 @@ export default {
 						return context.getters.items;
 					});
 				},
-				async updateItemV2(context, arg = { key: "", value }) {
+				updateItemV2: async (context, arg = { key: "", value }) => {
 					return context.state.processor.acquire("updateItemV2", async () => {
 						const { key, value } = arg;
 						const setting = new SettingModule({ key, value });

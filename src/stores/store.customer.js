@@ -78,7 +78,7 @@ export default {
 				devices: () => deviceStore.getters.items,
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					await context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("getItems");
@@ -86,19 +86,19 @@ export default {
 					await deviceStore.dispatch("refresh");
 				},
 
-				async getItems(context) {
+				getItems: async (context) => {
 					return context.state.processor.acquire("getItems", async () => {
 						return context.state.dataLoader.data();
 					});
 				},
-				async getItemOfId(context, id = "") {
+				getItemOfId: async (context, id = "") => {
 					return getItemOfId(context, id);
 				},
-				async getItemsOfIds(context, ids = []) {
+				getItemsOfIds: async (context, ids = []) => {
 					return getItemsOfIds(context, ids);
 				},
 
-				async generateCustomersAcross(context) {
+				generateCustomersAcross: async (context) => {
 					const customers = (await context.dispatch("getItems")).map((customer) => {
 						customer = new ItemCustomer(Stores).fromData(customer.toData());
 						customer.services = [];
@@ -141,7 +141,7 @@ export default {
 					return customers;
 				},
 
-				async addItem(context, arg = {}) {
+				addItem: async (context, arg = {}) => {
 					return context.state.processor.acquire("addItem", async () => {
 						const data = new ItemCustomer(Stores).fromData(arg).toData();
 						delete data.id;
@@ -151,14 +151,13 @@ export default {
 							.body({ content: data })
 							.send();
 						const content = apiThenContent(api);
-
 						return new CollectionUpdater(context)
 							.toAdd()
 							.withItem(new ItemCustomer(Stores).fromData(content))
 							.commitThenGetItem();
 					});
 				},
-				async removeItemOfId(context, arg = { _id }) {
+				removeItemOfId: async (context, arg = { _id }) => {
 					return context.state.processor.acquire("removeItemOfId", async () => {
 						const { _id } = arg;
 						const api = await ApiHost.request()
@@ -167,17 +166,14 @@ export default {
 							.body({ content: { _id } })
 							.send();
 						const content = apiThenContent(api);
-						const item = new ItemCustomer(Stores).fromData(content);
-						const items = context.state.items.filter((x) => {
-							return x.id !== item.id;
-						});
-						context.commit("items", items);
-						context.commit("lastModified", Date.now());
-						return item;
+						return new CollectionUpdater(context)
+							.toRemove()
+							.withItem(new ItemCustomer(Stores).fromData(content))
+							.commitThenGetItem();
 					});
 				},
 
-				async updateNamePhoneNumberOfId(context, arg = { _id, name, phoneNumber }) {
+				updateNamePhoneNumberOfId: async (context, arg = { _id, name, phoneNumber }) => {
 					return context.state.processor.acquire(
 						"updateNamePhoneNumberOfItemId",
 						async () => {
@@ -199,7 +195,7 @@ export default {
 						},
 					);
 				},
-				async updateDescriptionOfId(context, arg = { _id, description }) {
+				updateDescriptionOfId: async (context, arg = { _id, description }) => {
 					return context.state.processor.acquire("updateDescriptionOfId", async () => {
 						const { _id, description } = arg;
 						const api = await ApiHost.request()

@@ -3,8 +3,7 @@ import ApiHost from "@/host/ApiHost.js";
 import DataLoader from "./tools/DataLoader";
 import Processor from "./tools/Processor.js";
 
-const urlCollections = (database) =>
-	`database/database/${database}/collections`;
+const urlCollections = (database) => `database/database/${database}/collections`;
 const urlDocuments = (database, collection) =>
 	`database/database/${database}/collection/${collection}/documents`;
 const urlImports = () => `database/imports`;
@@ -17,10 +16,7 @@ export default {
 				dataLoader: new DataLoader({ timeout: 1000 * 5 }) // 5sec
 					.processor(() => store.state.processor)
 					.loadData(async () => {
-						const api = await ApiHost.request()
-							.POST()
-							.url("database/info")
-							.send();
+						const api = await ApiHost.request().POST().url("database/info").send();
 						const baseInfo = api.getContent();
 						store.dispatch("loadDatabases");
 						return baseInfo;
@@ -46,27 +42,24 @@ export default {
 				items: (state) => state.items,
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("loadBaseInfo");
 					});
 				},
 
-				async loadBaseInfo(context) {
+				loadBaseInfo: async (context) => {
 					return context.state.processor.acquire("loadBaseInfo", async () => {
 						return context.state.dataLoader.data();
 					});
 				},
-				async loadDatabases(context) {
+				loadDatabases: async (context) => {
 					return context.state.processor.acquire("loadDatabases", async () => {
 						try {
 							context.commit("items", []);
 							context.commit("lastModified", Date.now());
-							let api = await ApiHost.request()
-								.POST()
-								.url("database/databases")
-								.send();
+							let api = await ApiHost.request().POST().url("database/databases").send();
 							let content = api.getContent();
 							let items = content.map((database) => {
 								return { name: database, collections: [] };
@@ -85,37 +78,31 @@ export default {
 						}
 					});
 				},
-				async loadCollections(context, arg = {}) {
-					return context.state.processor.acquire(
-						"loadCollections",
-						async () => {
-							let { database } = arg;
-							let api = await ApiHost.request()
-								.POST()
-								.url(urlCollections(database))
-								.send();
-							let content = api.getContent();
-							let collections = content.map((collection) => {
-								return { name: collection, documents: [] };
+				loadCollections: async (context, arg = {}) => {
+					return context.state.processor.acquire("loadCollections", async () => {
+						let { database } = arg;
+						let api = await ApiHost.request().POST().url(urlCollections(database)).send();
+						let content = api.getContent();
+						let collections = content.map((collection) => {
+							return { name: collection, documents: [] };
+						});
+						let dbFound = await context.dispatch("findDatabase", {
+							database,
+						});
+						while (dbFound.collections.length) {
+							dbFound.collections.splice(0, dbFound.collections.length);
+						}
+						dbFound.collections.push(...collections);
+						for (let collection of dbFound.collections) {
+							context.dispatch("loadDocuments", {
+								database: dbFound.name,
+								collection: collection.name,
 							});
-							let dbFound = await context.dispatch("findDatabase", {
-								database,
-							});
-							while (dbFound.collections.length) {
-								dbFound.collections.splice(0, dbFound.collections.length);
-							}
-							dbFound.collections.push(...collections);
-							for (let collection of dbFound.collections) {
-								context.dispatch("loadDocuments", {
-									database: dbFound.name,
-									collection: collection.name,
-								});
-							}
-							return dbFound.collections;
-						},
-					);
+						}
+						return dbFound.collections;
+					});
 				},
-				async loadDocuments(context, arg = {}) {
+				loadDocuments: async (context, arg = {}) => {
 					return context.state.processor.acquire("loadDocuments", async () => {
 						let { database, collection } = arg;
 						let api = await ApiHost.request()
@@ -128,17 +115,14 @@ export default {
 							collection,
 						});
 						while (collectionFound.documents.length) {
-							collectionFound.documents.splice(
-								0,
-								collectionFound.documents.length,
-							);
+							collectionFound.documents.splice(0, collectionFound.documents.length);
 						}
 						collectionFound.documents.push(...documents);
 						return collectionFound.documents;
 					});
 				},
 
-				async imports(context, arg = {}) {
+				imports: async (context, arg = {}) => {
 					return context.state.processor.acquire("imports", async () => {
 						let { json } = arg;
 						let api = await ApiHost.request()
@@ -149,7 +133,7 @@ export default {
 						throw new Error();
 					});
 				},
-				async exportDatabase(context, arg = {}) {
+				exportDatabase: async (context, arg = {}) => {
 					return context.state.processor.acquire("exportDatabase", async () => {
 						let { database } = arg;
 						let api = await ApiHost.request()
@@ -160,7 +144,7 @@ export default {
 					});
 				},
 
-				async findDatabase(context, arg = {}) {
+				findDatabase: async (context, arg = {}) => {
 					return context.state.processor.acquire("findDatabase", async () => {
 						let { database } = arg;
 						const dbFound = context.state.items.find((db) => {
@@ -171,7 +155,7 @@ export default {
 						return dbFound;
 					});
 				},
-				async findCollection(context, arg = {}) {
+				findCollection: async (context, arg = {}) => {
 					return context.state.processor.acquire("findCollection", async () => {
 						let { database, collection } = arg;
 						let dbFound = await context.dispatch("findDatabase", {

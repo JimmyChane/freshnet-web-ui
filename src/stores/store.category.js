@@ -13,9 +13,7 @@ export default {
 				dataLoader: new DataLoader({ timeout: 1000 * 60 * 10 }) // 10min
 					.processor(() => store.state.processor)
 					.loadData(async () => {
-						const api = await ApiHost.request()
-							.url("productv2/category/list/")
-							.send();
+						const api = await ApiHost.request().url("productv2/category/list/").send();
 						const error = api.getError();
 						const content = api.getContent();
 						if (error) throw new Error(error);
@@ -42,25 +40,25 @@ export default {
 				items: (state) => state.items,
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("getItems");
 					});
 				},
 
-				async getItems(context) {
+				getItems: async (context) => {
 					return context.state.processor.acquire("getItems", async () => {
 						return context.state.dataLoader.data();
 					});
 				},
-				async getItemOfId(context, id = "") {
+				getItemOfId: async (context, id = "") => {
 					return context.state.processor.acquire("getItemOfId", async () => {
 						const items = await context.dispatch("getItems");
 						return items.find((item) => item.id === id);
 					});
 				},
-				async getItemOfKey(context, key = "") {
+				getItemOfKey: async (context, key = "") => {
 					return context.state.processor.acquire("getItemOfKey", async () => {
 						const items = await context.dispatch("getItems");
 						return items.find((item) => item.key === key);

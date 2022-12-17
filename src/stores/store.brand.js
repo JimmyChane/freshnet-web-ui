@@ -40,18 +40,18 @@ export default {
 				items: (state) => U.optArray(state.items),
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("getItems");
 					});
 				},
-				async getItems(context) {
+				getItems: async (context) => {
 					return context.state.processor.acquire("getItems", async () => {
 						return context.state.dataLoader.data();
 					});
 				},
-				async getItemOfId(context, id = "") {
+				getItemOfId: async (context, id = "") => {
 					return context.state.processor.acquire("getItemOfId", async () => {
 						let items = await context.dispatch("getItems");
 						return items.find((item) => item.id === id);

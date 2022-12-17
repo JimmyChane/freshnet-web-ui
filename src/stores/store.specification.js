@@ -40,18 +40,18 @@ export default {
 				items: (state) => (Array.isArray(state.items) ? state.items : []),
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("getItems");
 					});
 				},
-				async getItems(context) {
+				getItems: async (context) => {
 					return context.state.processor.acquire("getItems", async () => {
 						return context.state.dataLoader.data();
 					});
 				},
-				async getItemOfKey(context, key = "") {
+				getItemOfKey: async (context, key = "") => {
 					return context.state.processor.acquire("getItemOfKey", async () => {
 						const items = await context.dispatch("getItems");
 						return items.find((item) => item.key === key);

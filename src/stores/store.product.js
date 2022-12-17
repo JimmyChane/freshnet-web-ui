@@ -51,19 +51,19 @@ export default {
 				items: (state) => state.items,
 			},
 			actions: {
-				async refresh(context) {
+				refresh: async (context) => {
 					return await context.state.processor.acquire("refresh", async () => {
 						context.state.dataLoader.doTimeout();
 						await context.dispatch("getItems");
 					});
 				},
 
-				async getItems(context) {
+				getItems: async (context) => {
 					return context.state.processor.acquire("getItems", async () => {
 						return context.state.dataLoader.data();
 					});
 				},
-				async getItemOfId(context, id = "") {
+				getItemOfId: async (context, id = "") => {
 					return context.state.processor.acquire("getItemOfId", async () => {
 						let items = await context.dispatch("getItems");
 						let item = items.find((item) => item.id === id);
@@ -75,7 +75,7 @@ export default {
 					});
 				},
 
-				async getGroupsByCategory(context) {
+				getGroupsByCategory: async (context) => {
 					const items = await context.dispatch("getItems");
 
 					const categoryOther = await categoryStore.dispatch(
@@ -102,7 +102,7 @@ export default {
 
 					return groups;
 				},
-				async getGroupsByBrand(context) {
+				getGroupsByBrand: async (context) => {
 					const items = await context.dispatch("getItems");
 
 					const groups = [];
@@ -123,7 +123,7 @@ export default {
 					return groups;
 				},
 
-				async addItem(context, arg = { data }) {
+				addItem: async (context, arg = { data }) => {
 					return context.state.processor
 						.acquire("addItem", async () => {
 							let { data } = arg;
@@ -146,7 +146,7 @@ export default {
 							throw error;
 						});
 				},
-				async removeItemOfId(context, arg = { id }) {
+				removeItemOfId: async (context, arg = { id }) => {
 					return context.state.processor.acquire("removeItemOfId", async () => {
 						let { id } = arg;
 						let api = await ApiHost.request()
@@ -156,25 +156,12 @@ export default {
 							.send();
 						let error = api.getError();
 						if (error) throw new Error(error);
-						let items = context.state.items.filter((item) => {
-							return item.id !== id;
-						});
-						context.commit("items", items);
-						context.commit("lastModified", Date.now());
+						new CollectionUpdater(context).toRemove().withId(id).commitThenGetItem();
 						return true;
 					});
 				},
 
-				async onUpdateItem(context, arg = { id, callback }) {
-					return context.state.processor.acquire("onUpdateItem", async () => {
-						let { id, callback } = arg;
-						let item = await context.dispatch("getItemOfId", id);
-						if (item) callback(item);
-						return item;
-					});
-				},
-
-				async updateTitleOfId(context, arg = { id, title }) {
+				updateTitleOfId: async (context, arg = { id, title }) => {
 					return context.state.processor.acquire("updateTitleOfId", async () => {
 						let { id, title } = arg;
 						let api = await ApiHost.request()
@@ -184,19 +171,16 @@ export default {
 							.send();
 						let error = api.getError();
 						let content = api.getContent();
-						if (error) {
-							throw new Error(error);
-						}
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => {
-								item.title = U.optString(content.title);
-							},
-						});
-						return item;
+						if (error) throw new Error(error);
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.title = U.optString(content.title);
+							});
 					});
 				},
-				async updateDescriptionOfId(context, arg = { id, description }) {
+				updateDescriptionOfId: async (context, arg = { id, description }) => {
 					return context.state.processor.acquire("updateDescriptionOfId", async () => {
 						let { id, description } = arg;
 						let api = await ApiHost.request()
@@ -209,18 +193,17 @@ export default {
 						if (error) {
 							throw new Error(error);
 						}
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => {
-								item.description = U.isString(content.description)
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.description = U.isString(content.description)
 									? content.description.trim()
 									: "";
-							},
-						});
-						return item;
+							});
 					});
 				},
-				async updateBrandIdOfId(context, arg = { id, brandId }) {
+				updateBrandIdOfId: async (context, arg = { id, brandId }) => {
 					return context.state.processor.acquire("updateBrandIdOfId", async () => {
 						let { id, brandId } = arg;
 						let api = await ApiHost.request()
@@ -230,17 +213,16 @@ export default {
 							.send();
 						let error = api.getError();
 						let content = api.getContent();
-						if (error) {
-							throw new Error(error);
-						}
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => item.setBrandId(content.brandId),
-						});
-						return item;
+						if (error) throw new Error(error);
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.setBrandId(content.brandId);
+							});
 					});
 				},
-				async updateCategoryIdOfId(context, arg = { id, categoryId }) {
+				updateCategoryIdOfId: async (context, arg = { id, categoryId }) => {
 					return context.state.processor.acquire("updateCategoryIdOfId", async () => {
 						let { id, categoryId } = arg;
 						let api = await ApiHost.request()
@@ -250,17 +232,16 @@ export default {
 							.send();
 						let error = api.getError();
 						let content = api.getContent();
-						if (error) {
-							throw new Error(error);
-						}
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => item.setCategoryId(content.categoryId),
-						});
-						return item;
+						if (error) throw new Error(error);
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.setCategoryId(content.categoryId);
+							});
 					});
 				},
-				async updateAvailabilityOfId(context, arg = { id, isAvailable }) {
+				updateAvailabilityOfId: async (context, arg = { id, isAvailable }) => {
 					return context.state.processor.acquire("updateAvailabilityOfId", async () => {
 						let { id, isAvailable } = arg;
 						let api = await ApiHost.request()
@@ -270,19 +251,16 @@ export default {
 							.send();
 						let error = api.getError();
 						let content = api.getContent();
-						if (error) {
-							throw new Error(error);
-						}
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => {
-								item.stock.isAvailable = content.isAvailable;
-							},
-						});
-						return item;
+						if (error) throw new Error(error);
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.stock.isAvailable = content.isAvailable;
+							});
 					});
 				},
-				async updateSecondHandOfId(context, arg = { id, isSecondHand }) {
+				updateSecondHandOfId: async (context, arg = { id, isSecondHand }) => {
 					return context.state.processor.acquire("updateSecondHandOfId", async () => {
 						let { id, isSecondHand } = arg;
 						let api = await ApiHost.request()
@@ -292,19 +270,16 @@ export default {
 							.send();
 						let error = api.getError();
 						let content = api.getContent();
-						if (error) {
-							throw new Error(error);
-						}
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => {
-								item.stock.isSecondHand = content.isSecondHand;
-							},
-						});
-						return item;
+						if (error) throw new Error(error);
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.stock.isSecondHand = content.isSecondHand;
+							});
 					});
 				},
-				async updatePriceOfId(context, arg = { id, price }) {
+				updatePriceOfId: async (context, arg = { id, price }) => {
 					return context.state.processor.acquire("updatePriceOfId", async () => {
 						let { id, price } = arg;
 						price = ModulePrice.trim(price);
@@ -317,20 +292,19 @@ export default {
 						let error = api.getError();
 						let content = api.getContent();
 						if (error) throw new Error(error);
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => {
-								item.setPrice({
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.setPrice({
 									normal: content.price.normal,
 									promotion: content.price.promotion,
 								});
-							},
-						});
-						return item;
+							});
 					});
 				},
 
-				async addBundleOfId(context, arg = { id, bundle }) {
+				addBundleOfId: async (context, arg = { id, bundle }) => {
 					return context.state.processor.acquire("addBundleOfId", async () => {
 						let { id, bundle } = arg;
 						let api = await ApiHost.request()
@@ -341,16 +315,15 @@ export default {
 						let error = api.getError();
 						let content = api.getContent();
 						if (error) throw new Error(error);
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => {
-								item.addBundle(ModuleBundle.trim(content.bundle));
-							},
-						});
-						return item;
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.addBundle(ModuleBundle.trim(content.bundle));
+							});
 					});
 				},
-				async removeBundleOfId(context, arg = { id, bundle }) {
+				removeBundleOfId: async (context, arg = { id, bundle }) => {
 					return context.state.processor.acquire("removeBundleOfId", async () => {
 						let { id, bundle } = arg;
 						let api = await ApiHost.request()
@@ -366,15 +339,16 @@ export default {
 						let error = api.getError();
 						let content = api.getContent();
 						if (error) throw new Error(error);
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => item.removeBundle(content.bundle),
-						});
-						return item;
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.removeBundle(content.bundle);
+							});
 					});
 				},
 
-				async addGiftOfId(context, arg = { id, gift }) {
+				addGiftOfId: async (context, arg = { id, gift }) => {
 					return context.state.processor.acquire("addGiftOfId", async () => {
 						let { id, gift } = arg;
 						let api = await ApiHost.request()
@@ -384,17 +358,16 @@ export default {
 							.send();
 						let error = api.getError();
 						let content = api.getContent();
-						if (error) {
-							throw new Error(error);
-						}
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => item.addGift(content.gift),
-						});
-						return item;
+						if (error) throw new Error(error);
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.addGift(content.gift);
+							});
 					});
 				},
-				async removeGiftOfId(context, arg = { id, gift }) {
+				removeGiftOfId: async (context, arg = { id, gift }) => {
 					return context.state.processor.acquire("removeGiftOfId", async () => {
 						let { id, gift } = arg;
 						let api = await ApiHost.request()
@@ -404,18 +377,17 @@ export default {
 							.send();
 						let error = api.getError();
 						let content = api.getContent();
-						if (error) {
-							throw new Error(error);
-						}
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback: (item) => item.removeGift(content.gift),
-						});
-						return item;
+						if (error) throw new Error(error);
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.removeGift(content.gift);
+							});
 					});
 				},
 
-				async addSpecificationOfId(context, arg = { id, specification }) {
+				addSpecificationOfId: async (context, arg = { id, specification }) => {
 					return context.state.processor.acquire("addSpecificationOfId", async () => {
 						let { id, specification } = arg;
 						let api = await ApiHost.request()
@@ -426,16 +398,15 @@ export default {
 						let error = api.getError();
 						let content = api.getContent();
 						if (error) throw new Error(error);
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback(item) {
-								item.addSpecification(content.specification);
-							},
-						});
-						return item;
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.addSpecification(content.specification);
+							});
 					});
 				},
-				async removeSpecificationOfId(context, arg = { id, specification }) {
+				removeSpecificationOfId: async (context, arg = { id, specification }) => {
 					return context.state.processor.acquire("removeSpecificationOfId", async () => {
 						let { id, specification } = arg;
 						specification =
@@ -451,16 +422,15 @@ export default {
 						let error = api.getError();
 						let content = api.getContent();
 						if (error) throw new Error(error);
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback(item) {
-								item.removeSpecification(content.specification);
-							},
-						});
-						return item;
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.removeSpecification(content.specification);
+							});
 					});
 				},
-				async updateSpecificationsOfId(context, arg = { id, specifications }) {
+				updateSpecificationsOfId: async (context, arg = { id, specifications }) => {
 					return context.state.processor.acquire("updateSpecificationsOfId", async () => {
 						let { id, specifications } = arg;
 						let api = await ApiHost.request()
@@ -471,17 +441,16 @@ export default {
 						let error = api.getError();
 						let content = api.getContent();
 						if (error) throw new Error(error);
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback(item) {
-								item.setSpecifications(content.specifications);
-							},
-						});
-						return item;
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.setSpecifications(content.specifications);
+							});
 					});
 				},
 
-				async addImageOfId(context, arg = { id, imageFile }) {
+				addImageOfId: async (context, arg = { id, imageFile }) => {
 					return context.state.processor.acquire("addImageOfId", async () => {
 						let { id, imageFile } = arg;
 						const imageFileForm = new FormData();
@@ -493,16 +462,15 @@ export default {
 						});
 						if (api.error) throw new Error(api.error);
 						let { content } = api;
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback(item) {
-								item.addImages(content.images);
-							},
-						});
-						return item;
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.addImages(content.images);
+							});
 					});
 				},
-				async removeImageOfId(context, arg = { id, image }) {
+				removeImageOfId: async (context, arg = { id, image }) => {
 					return context.state.processor.acquire("removeImageOfId", async () => {
 						let { id, image } = arg;
 						image = image instanceof Image ? image.toData() : image;
@@ -514,13 +482,12 @@ export default {
 						let error = api.getError();
 						let content = api.getContent();
 						if (error) throw new Error(error);
-						let item = await context.dispatch("onUpdateItem", {
-							id: content.productId,
-							callback(item) {
-								item.removeImage(content.image);
-							},
-						});
-						return item;
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(content.productId)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.removeImage(content.image);
+							});
 					});
 				},
 			},

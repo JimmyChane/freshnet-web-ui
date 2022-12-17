@@ -12,7 +12,7 @@ export default {
 			mutations: { socket: (state, socket) => (state.socket = socket) },
 			getters: { isConnected: (state) => state.socket && state.socket.connected },
 			actions: {
-				socketNotify(context, body) {
+				socketNotify: (context, body) => {
 					const { manager, key, content } = body ? body : {};
 					switch (manager) {
 						case "service":
@@ -20,7 +20,7 @@ export default {
 							break;
 					}
 				},
-				openSocket(context) {
+				openSocket: (context) => {
 					if (context.getters.isConnected) return;
 
 					const socket = socketIo(ApiHost.origin, {
@@ -34,13 +34,13 @@ export default {
 						.on("notify", (body) => context.dispatch("socketNotify", body));
 					context.commit("socket", socket);
 				},
-				closeSocket(context) {
+				closeSocket: (context) => {
 					if (!context.getters.isConnected) return;
 					const socket = context.state.socket;
 					context.commit("socket", null);
 					socket.close();
 				},
-				restartSocket(context) {
+				restartSocket: (context) => {
 					context.dispatch("closeSocket");
 					context.dispatch("openSocket");
 				},
