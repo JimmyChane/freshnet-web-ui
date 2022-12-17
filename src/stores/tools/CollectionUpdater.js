@@ -1,55 +1,123 @@
-module.exports = class CollectionUpdater {
+class ItemAdder {
 	#context;
-
-	#itemIdGetter;
-	#updater;
 
 	constructor(context) {
 		this.#context = context;
 	}
 
-	onId(itemIdGetter) {
-		this.#itemIdGetter = itemIdGetter;
-		return this;
-	}
-	onUpdate(updater) {
-		this.#updater = updater;
+	#eItem;
+
+	withItem(item) {
+		this.#eItem = item;
 		return this;
 	}
 
-	getItem(itemOccured) {
-		const items = this.#context.getters.items;
-		const existingItem = items.find(
-			(item) => this.#itemIdGetter(item) === this.#itemIdGetter(itemOccured),
-		);
+	commitThenGetItem() {
+		const { items } = this.#context.state;
+		const existingItem = items.find((item) => item.id === this.#eItem.id);
 
 		if (existingItem) {
-			if (this.#updater) {
-				this.#updater(existingItem, itemOccured);
-				return existingItem;
-			} else {
-				const existingIndex = items.indexOf(existingItem);
-				items[existingIndex] = itemOccured;
-				return itemOccured;
-			}
-		} else {
-			items.push(itemOccured);
+			const index = items.indexOf(existingItem);
+			items[index] = this.#eItem;
 			this.#context.commit("items", items);
 			this.#context.commit("lastModified", Date.now());
-			return itemOccured;
+			return this.#eItem;
 		}
+
+		items.push(this.#eItem);
+		this.#context.commit("items", items);
+		this.#context.commit("lastModified", Date.now());
+
+		return this.#eItem;
+	}
+}
+class ItemRemover {
+	#context;
+
+	constructor(context) {
+		this.#context = context;
 	}
 
-	getItemById(id) {
-		const items = this.#context.getters.items;
-		const existingItem = items.find((item) => this.#itemIdGetter(item) === id);
+	#eItem;
+	#eId;
 
-		if (existingItem) {
-			if (this.#updater) {
-				this.#updater(existingItem);
-				return existingItem;
-			}
-		}
-		return null;
+	withItem(item) {
+		this.#eItem = item;
+		return this;
 	}
-};
+	withId(id) {
+		this.#eId = id;
+		return this;
+	}
+
+	commitThenGetItem() {
+		const id = this.#eItem ? this.#eItem.id : this.#eId;
+		const { items } = this.#context.state;
+		const existingItem = items.find((item) => item.id === id);
+
+		if (!existingItem) return this.#eItem;
+
+		const index = items.indexOf(existingItem);
+		items.splice(index, 1);
+		this.#context.commit("items", items);
+		this.#context.commit("lastModified", Date.now());
+
+		return existingItem;
+	}
+}
+class ItemUpdater {
+	#context;
+
+	constructor(context) {
+		this.#context = context;
+	}
+
+	#eItem;
+	#eId;
+
+	withItem(item) {
+		this.#eItem = item;
+		return this;
+	}
+	withId(id) {
+		this.#eId = id;
+		return this;
+	}
+
+	updateThenCommitThenGetItem(updater = (existingItem, item) => {}) {
+		const id = this.#eItem ? this.#eItem.id : this.#eId;
+		const { items } = this.#context.state;
+		const existingItem = items.find((item) => item.id === id);
+
+		if (!existingItem) {
+			if (!this.#eItem) return this.#eItem;
+			items.push(this.#eItem);
+			this.#context.commit("items", items);
+			this.#context.commit("lastModified", Date.now());
+			return this.#eItem;
+		}
+
+		updater(existingItem, this.#eItem);
+		this.#context.commit("items", items);
+		this.#context.commit("lastModified", Date.now());
+		return existingItem;
+	}
+}
+
+export default class CollectionUpdater {
+	#context;
+
+	constructor(context) {
+		this.#context = context;
+	}
+
+	toAdd() {
+		return new ItemAdder(this.#context);
+	}
+	toRemove() {
+		return new ItemRemover(this.#context);
+	}
+	toUpdate() {
+		return new ItemUpdater(this.#context);
+	}
+}

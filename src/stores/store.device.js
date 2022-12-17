@@ -51,9 +51,7 @@ export default {
 				dataLoader: new DataLoader({ timeout: 1000 * 60 * 10 }) // 10min
 					.processor(() => deviceStore.state.processor)
 					.loadData(async () => {
-						let api = await ApiHost.request()
-							.url("customer/device/list")
-							.send();
+						let api = await ApiHost.request().url("customer/device/list").send();
 						let content = apiThenContent(api);
 						let contents = Array.isArray(content) ? content : [];
 						let items = contents.map((content) => {
@@ -108,15 +106,14 @@ export default {
 							.body({ content: data })
 							.send();
 						let content = apiThenContent(api);
-						let item = new ItemCustomerDevice(Stores).fromData(content);
-						item = new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.getItem(item);
-						let customer = Stores.customer.getters.customers.find(
-							(customer) => {
-								return customer.id === item.ownerCustomerId;
-							},
-						);
+
+						const item = new CollectionUpdater(context)
+							.toAdd()
+							.withItem(new ItemCustomerDevice(Stores).fromData(content))
+							.commitThenGetItem();
+						const customer = Stores.customer.getters.items.find((customer) => {
+							return customer.id === item.ownerCustomerId;
+						});
 						if (customer) customer.deviceIds.push(item.id);
 						return item;
 					});
@@ -135,11 +132,9 @@ export default {
 							.send();
 						let content = apiThenContent(api);
 						let item = new ItemCustomerDevice(Stores).fromData(content);
-						let customer = Stores.customer.getters.customers.find(
-							(customer) => {
-								return customer.id === item.ownerCustomerId;
-							},
-						);
+						let customer = Stores.customer.getters.customers.find((customer) => {
+							return customer.id === item.ownerCustomerId;
+						});
 						customer.deviceIds = customer.deviceIds.filter((deviceId) => {
 							return deviceId !== item.id;
 						});
@@ -152,42 +147,36 @@ export default {
 				},
 
 				async updateSpecificationsOfId(context, arg = { _id, specifications }) {
-					return context.state.processor.acquire(
-						"updateSpecificationsOfId",
-						async () => {
-							let { _id, specifications } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url("customer/device/update/specifications")
-								.body({ content: { _id, specifications } })
-								.send();
-							let content = apiThenContent(api);
-							let item = new ItemCustomerDevice(Stores).fromData(content);
-							item = updateThenItem(context, item.id, (itemNow) => {
-								return (itemNow.specifications = item.specifications);
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("updateSpecificationsOfId", async () => {
+						let { _id, specifications } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url("customer/device/update/specifications")
+							.body({ content: { _id, specifications } })
+							.send();
+						let content = apiThenContent(api);
+						let item = new ItemCustomerDevice(Stores).fromData(content);
+						item = updateThenItem(context, item.id, (itemNow) => {
+							return (itemNow.specifications = item.specifications);
+						});
+						return item;
+					});
 				},
 				async updateDescriptionOfId(context, arg = { _id, description }) {
-					return context.state.processor.acquire(
-						"updateDescriptionOfId",
-						async () => {
-							let { _id, description } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url("customer/device/update/description")
-								.body({ content: { _id, description } })
-								.send();
-							let content = apiThenContent(api);
-							let item = new ItemCustomerDevice(Stores).fromData(content);
-							item = updateThenItem(context, item.id, (itemNow) => {
-								return (itemNow.description = item.description);
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("updateDescriptionOfId", async () => {
+						let { _id, description } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url("customer/device/update/description")
+							.body({ content: { _id, description } })
+							.send();
+						let content = apiThenContent(api);
+						let item = new ItemCustomerDevice(Stores).fromData(content);
+						item = updateThenItem(context, item.id, (itemNow) => {
+							return (itemNow.description = item.description);
+						});
+						return item;
+					});
 				},
 			},
 		});

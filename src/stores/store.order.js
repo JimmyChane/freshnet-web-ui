@@ -94,62 +94,46 @@ export default {
 					return context.state.processor.acquire("addItem", async () => {
 						let { data } = arg;
 						if (!data) return null;
-						let api = await ApiHost.request()
-							.POST()
-							.url("order/")
-							.body(data)
-							.send();
+						let api = await ApiHost.request().POST().url("order/").body(data).send();
 						let error = api.getError();
 						let content = api.getContent();
 						if (error) throw new Error();
-						let order = new Order().fromData(content);
 
-						order = new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.getItem(order);
-
-						return order;
+						return new CollectionUpdater(context)
+							.toAdd()
+							.withItem(new Order().fromData(content))
+							.commitThenGetItem();
 					});
 				},
 				async removeOItemOfId(context, arg = { id }) {
-					return context.state.processor.acquire(
-						"removeOItemOfId",
-						async () => {
-							let { id } = arg;
-							let api = await ApiHost.request()
-								.DELETE()
-								.url("order/")
-								.body({ id })
-								.send();
-							let error = api.getError();
-							if (error) throw new Error();
-							let items = context.state.items.filter((item) => item.id !== id);
-							context.commit("items", items);
-							context.commit("lastModified", Date.now());
-						},
-					);
+					return context.state.processor.acquire("removeOItemOfId", async () => {
+						let { id } = arg;
+						let api = await ApiHost.request().DELETE().url("order/").body({ id }).send();
+						let error = api.getError();
+						if (error) throw new Error();
+						let items = context.state.items.filter((item) => item.id !== id);
+						context.commit("items", items);
+						context.commit("lastModified", Date.now());
+					});
 				},
 				async updateStatusOfId(context, arg = { id, status }) {
-					return context.state.processor.acquire(
-						"updateStatusOfId",
-						async () => {
-							let { id, status } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url("order/")
-								.body({ id, status })
-								.send();
-							let error = api.getError();
-							if (error) throw new Error();
+					return context.state.processor.acquire("updateStatusOfId", async () => {
+						let { id, status } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url("order/")
+							.body({ id, status })
+							.send();
+						let error = api.getError();
+						if (error) throw new Error();
 
-							let order = new CollectionUpdater(context)
-								.onId((item) => item.id)
-								.onUpdate((item) => (item.status = status))
-								.getItemById(id);
-
-							return order;
-						},
-					);
+						return new CollectionUpdater(context)
+							.toUpdate()
+							.withId(id)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.status = status;
+							});
+					});
 				},
 				async updateToPendingOfId(context, id = "") {
 					return context.dispatch("updateStatusOfId", {

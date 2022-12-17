@@ -3,7 +3,6 @@ import ProductSpecContent from "../items/ProductSpecContent.js";
 import Image from "../items/Image.js";
 
 import DataLoader from "./tools/DataLoader";
-import CollectionUpdater from "./tools/CollectionUpdater";
 import Processor from "./tools/Processor.js";
 
 import ModuleBundle from "@/items/data/ProductBundle.js";
@@ -13,6 +12,7 @@ import Category from "@/items/Category.js";
 import Vuex from "vuex";
 import ApiHost from "@/host/ApiHost.js";
 import U from "@/U.js";
+import CollectionUpdater from "./tools/CollectionUpdater.js";
 
 export default {
 	init(Stores) {
@@ -28,8 +28,7 @@ export default {
 						const error = api.getError();
 						const contents = api.getContent();
 						if (error) throw new Error(error);
-						if (!Array.isArray(contents))
-							throw new Error("content is not array");
+						if (!Array.isArray(contents)) throw new Error("content is not array");
 						return Promise.all(
 							contents.map((content) => new Product(Stores).fromData(content)),
 						);
@@ -137,11 +136,10 @@ export default {
 							let error = api.getError();
 							let content = api.getContent();
 							if (error) throw new Error(error);
-							let productNew = new Product(Stores).fromData(content);
-							let item = new CollectionUpdater(context)
-								.onId((item) => item.id)
-								.getItem(productNew);
-							return item;
+							return new CollectionUpdater(context)
+								.toAdd()
+								.withItem(new Product(Stores).fromData(content))
+								.commitThenGetItem();
 						})
 						.catch((error) => {
 							console.error(error);
@@ -177,180 +175,159 @@ export default {
 				},
 
 				async updateTitleOfId(context, arg = { id, title }) {
-					return context.state.processor.acquire(
-						"updateTitleOfId",
-						async () => {
-							let { id, title } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url("productv2/title/")
-								.body({ content: { productId: id, title } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) {
-								throw new Error(error);
-							}
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback: (item) => {
-									item.title = U.optString(content.title);
-								},
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("updateTitleOfId", async () => {
+						let { id, title } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url("productv2/title/")
+							.body({ content: { productId: id, title } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) {
+							throw new Error(error);
+						}
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback: (item) => {
+								item.title = U.optString(content.title);
+							},
+						});
+						return item;
+					});
 				},
 				async updateDescriptionOfId(context, arg = { id, description }) {
-					return context.state.processor.acquire(
-						"updateDescriptionOfId",
-						async () => {
-							let { id, description } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url("productv2/description/")
-								.body({ content: { productId: id, description } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) {
-								throw new Error(error);
-							}
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback: (item) => {
-									item.description = U.isString(content.description)
-										? content.description.trim()
-										: "";
-								},
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("updateDescriptionOfId", async () => {
+						let { id, description } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url("productv2/description/")
+							.body({ content: { productId: id, description } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) {
+							throw new Error(error);
+						}
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback: (item) => {
+								item.description = U.isString(content.description)
+									? content.description.trim()
+									: "";
+							},
+						});
+						return item;
+					});
 				},
 				async updateBrandIdOfId(context, arg = { id, brandId }) {
-					return context.state.processor.acquire(
-						"updateBrandIdOfId",
-						async () => {
-							let { id, brandId } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url("productv2/brandId/")
-								.body({ content: { productId: id, brandId } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) {
-								throw new Error(error);
-							}
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback: (item) => item.setBrandId(content.brandId),
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("updateBrandIdOfId", async () => {
+						let { id, brandId } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url("productv2/brandId/")
+							.body({ content: { productId: id, brandId } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) {
+							throw new Error(error);
+						}
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback: (item) => item.setBrandId(content.brandId),
+						});
+						return item;
+					});
 				},
 				async updateCategoryIdOfId(context, arg = { id, categoryId }) {
-					return context.state.processor.acquire(
-						"updateCategoryIdOfId",
-						async () => {
-							let { id, categoryId } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url("productv2/categoryId/")
-								.body({ content: { productId: id, categoryId } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) {
-								throw new Error(error);
-							}
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback: (item) => item.setCategoryId(content.categoryId),
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("updateCategoryIdOfId", async () => {
+						let { id, categoryId } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url("productv2/categoryId/")
+							.body({ content: { productId: id, categoryId } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) {
+							throw new Error(error);
+						}
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback: (item) => item.setCategoryId(content.categoryId),
+						});
+						return item;
+					});
 				},
 				async updateAvailabilityOfId(context, arg = { id, isAvailable }) {
-					return context.state.processor.acquire(
-						"updateAvailabilityOfId",
-						async () => {
-							let { id, isAvailable } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url("productv2/isAvailable/")
-								.body({ content: { productId: id, isAvailable } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) {
-								throw new Error(error);
-							}
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback: (item) => {
-									item.stock.isAvailable = content.isAvailable;
-								},
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("updateAvailabilityOfId", async () => {
+						let { id, isAvailable } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url("productv2/isAvailable/")
+							.body({ content: { productId: id, isAvailable } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) {
+							throw new Error(error);
+						}
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback: (item) => {
+								item.stock.isAvailable = content.isAvailable;
+							},
+						});
+						return item;
+					});
 				},
 				async updateSecondHandOfId(context, arg = { id, isSecondHand }) {
-					return context.state.processor.acquire(
-						"updateSecondHandOfId",
-						async () => {
-							let { id, isSecondHand } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url("productv2/isSecondHand/")
-								.body({ content: { productId: id, isSecondHand } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) {
-								throw new Error(error);
-							}
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback: (item) => {
-									item.stock.isSecondHand = content.isSecondHand;
-								},
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("updateSecondHandOfId", async () => {
+						let { id, isSecondHand } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url("productv2/isSecondHand/")
+							.body({ content: { productId: id, isSecondHand } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) {
+							throw new Error(error);
+						}
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback: (item) => {
+								item.stock.isSecondHand = content.isSecondHand;
+							},
+						});
+						return item;
+					});
 				},
 				async updatePriceOfId(context, arg = { id, price }) {
-					return context.state.processor.acquire(
-						"updatePriceOfId",
-						async () => {
-							let { id, price } = arg;
-							price = ModulePrice.trim(price);
+					return context.state.processor.acquire("updatePriceOfId", async () => {
+						let { id, price } = arg;
+						price = ModulePrice.trim(price);
 
-							let api = await ApiHost.request()
-								.PUT()
-								.url("productv2/price/")
-								.body({ content: { productId: id, price } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) throw new Error(error);
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback: (item) => {
-									item.setPrice({
-										normal: content.price.normal,
-										promotion: content.price.promotion,
-									});
-								},
-							});
-							return item;
-						},
-					);
+						let api = await ApiHost.request()
+							.PUT()
+							.url("productv2/price/")
+							.body({ content: { productId: id, price } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) throw new Error(error);
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback: (item) => {
+								item.setPrice({
+									normal: content.price.normal,
+									promotion: content.price.promotion,
+								});
+							},
+						});
+						return item;
+					});
 				},
 
 				async addBundleOfId(context, arg = { id, bundle }) {
@@ -374,30 +351,27 @@ export default {
 					});
 				},
 				async removeBundleOfId(context, arg = { id, bundle }) {
-					return context.state.processor.acquire(
-						"removeBundleOfId",
-						async () => {
-							let { id, bundle } = arg;
-							let api = await ApiHost.request()
-								.DELETE()
-								.url("productv2/bundle/")
-								.body({
-									content: {
-										productId: id,
-										bundle: ModuleBundle.trim(bundle),
-									},
-								})
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) throw new Error(error);
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback: (item) => item.removeBundle(content.bundle),
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("removeBundleOfId", async () => {
+						let { id, bundle } = arg;
+						let api = await ApiHost.request()
+							.DELETE()
+							.url("productv2/bundle/")
+							.body({
+								content: {
+									productId: id,
+									bundle: ModuleBundle.trim(bundle),
+								},
+							})
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) throw new Error(error);
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback: (item) => item.removeBundle(content.bundle),
+						});
+						return item;
+					});
 				},
 
 				async addGiftOfId(context, arg = { id, gift }) {
@@ -442,78 +416,69 @@ export default {
 				},
 
 				async addSpecificationOfId(context, arg = { id, specification }) {
-					return context.state.processor.acquire(
-						"addSpecificationOfId",
-						async () => {
-							let { id, specification } = arg;
-							let api = await ApiHost.request()
-								.POST()
-								.url("productv2/specification/")
-								.body({ content: { productId: id, specification } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) throw new Error(error);
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback(item) {
-									item.addSpecification(content.specification);
-								},
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("addSpecificationOfId", async () => {
+						let { id, specification } = arg;
+						let api = await ApiHost.request()
+							.POST()
+							.url("productv2/specification/")
+							.body({ content: { productId: id, specification } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) throw new Error(error);
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback(item) {
+								item.addSpecification(content.specification);
+							},
+						});
+						return item;
+					});
 				},
 				async removeSpecificationOfId(context, arg = { id, specification }) {
-					return context.state.processor.acquire(
-						"removeSpecificationOfId",
-						async () => {
-							let { id, specification } = arg;
-							specification =
-								specification instanceof ProductSpecContent
-									? specification.toData()
-									: specification;
-							specification.type = specification.key;
-							let api = await ApiHost.request()
-								.DELETE()
-								.url("productv2/specification/")
-								.body({ content: { productId: id, specification } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) throw new Error(error);
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback(item) {
-									item.removeSpecification(content.specification);
-								},
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("removeSpecificationOfId", async () => {
+						let { id, specification } = arg;
+						specification =
+							specification instanceof ProductSpecContent
+								? specification.toData()
+								: specification;
+						specification.type = specification.key;
+						let api = await ApiHost.request()
+							.DELETE()
+							.url("productv2/specification/")
+							.body({ content: { productId: id, specification } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) throw new Error(error);
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback(item) {
+								item.removeSpecification(content.specification);
+							},
+						});
+						return item;
+					});
 				},
 				async updateSpecificationsOfId(context, arg = { id, specifications }) {
-					return context.state.processor.acquire(
-						"updateSpecificationsOfId",
-						async () => {
-							let { id, specifications } = arg;
-							let api = await ApiHost.request()
-								.PUT()
-								.url("productv2/specification/list")
-								.body({ content: { productId: id, specifications } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) throw new Error(error);
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback(item) {
-									item.setSpecifications(content.specifications);
-								},
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("updateSpecificationsOfId", async () => {
+						let { id, specifications } = arg;
+						let api = await ApiHost.request()
+							.PUT()
+							.url("productv2/specification/list")
+							.body({ content: { productId: id, specifications } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) throw new Error(error);
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback(item) {
+								item.setSpecifications(content.specifications);
+							},
+						});
+						return item;
+					});
 				},
 
 				async addImageOfId(context, arg = { id, imageFile }) {
@@ -538,28 +503,25 @@ export default {
 					});
 				},
 				async removeImageOfId(context, arg = { id, image }) {
-					return context.state.processor.acquire(
-						"removeImageOfId",
-						async () => {
-							let { id, image } = arg;
-							image = image instanceof Image ? image.toData() : image;
-							let api = await ApiHost.request()
-								.DELETE()
-								.url(`productv2/id/${id}/image/`)
-								.body({ content: { image } })
-								.send();
-							let error = api.getError();
-							let content = api.getContent();
-							if (error) throw new Error(error);
-							let item = await context.dispatch("onUpdateItem", {
-								id: content.productId,
-								callback(item) {
-									item.removeImage(content.image);
-								},
-							});
-							return item;
-						},
-					);
+					return context.state.processor.acquire("removeImageOfId", async () => {
+						let { id, image } = arg;
+						image = image instanceof Image ? image.toData() : image;
+						let api = await ApiHost.request()
+							.DELETE()
+							.url(`productv2/id/${id}/image/`)
+							.body({ content: { image } })
+							.send();
+						let error = api.getError();
+						let content = api.getContent();
+						if (error) throw new Error(error);
+						let item = await context.dispatch("onUpdateItem", {
+							id: content.productId,
+							callback(item) {
+								item.removeImage(content.image);
+							},
+						});
+						return item;
+					});
 				},
 			},
 		});

@@ -1,5 +1,5 @@
 import DataLoader from "./tools/DataLoader";
-import CollectionUpdater2 from "./tools/CollectionUpdater2";
+import CollectionUpdater from "./tools/CollectionUpdater";
 import Processor from "./tools/Processor.js";
 
 import Service from "@/items/Service.js";
@@ -75,13 +75,13 @@ export default {
 					const { key, content } = data;
 
 					if (key === "item-add")
-						new CollectionUpdater2(context)
-							.tryItemAdd()
+						new CollectionUpdater(context)
+							.toAdd()
 							.withItem(new Service(Stores).fromData(content))
 							.commitThenGetItem();
 					if (key === "item-remove")
-						new CollectionUpdater2(context)
-							.tryItemRemove()
+						new CollectionUpdater(context)
+							.toRemove()
 							.withItem(new Service(Stores).fromData(content))
 							.commitThenGetItem();
 				},
@@ -168,8 +168,8 @@ export default {
 						if (error) throw new Error();
 						let service = new Service(Stores).fromData(content);
 
-						return new CollectionUpdater2(context)
-							.tryItemAdd()
+						return new CollectionUpdater(context)
+							.toAdd()
 							.withItem(service)
 							.commitThenGetItem();
 					});
@@ -184,8 +184,8 @@ export default {
 						let error = api.getError();
 						if (error) throw new Error();
 
-						new CollectionUpdater2(context)
-							.tryItemRemove()
+						new CollectionUpdater(context)
+							.toRemove()
 							.withId(id)
 							.commitThenGetItem();
 					});
@@ -201,8 +201,8 @@ export default {
 						let error = api.getError();
 						if (error) throw new Error();
 
-						return new CollectionUpdater2(context)
-							.tryItemUpdate()
+						return new CollectionUpdater(context)
+							.toUpdate()
 							.withId(serviceID)
 							.updateThenCommitThenGetItem((oldItem) => {
 								oldItem.state = state;
@@ -222,8 +222,8 @@ export default {
 							let error = api.getError();
 							if (error) throw new Error();
 
-							return new CollectionUpdater2(context)
-								.tryItemUpdate()
+							return new CollectionUpdater(context)
+								.toUpdate()
 								.withId(serviceID)
 								.updateThenCommitThenGetItem((oldItem) => {
 									oldItem.description = description;
@@ -245,8 +245,8 @@ export default {
 							let content = api.getContent();
 							if (error) throw new Error();
 
-							return new CollectionUpdater2(context)
-								.tryItemUpdate()
+							return new CollectionUpdater(context)
+								.toUpdate()
 								.withItem(new Service(Stores).fromData(content))
 								.updateThenCommitThenGetItem((oldItem, newItem) => {
 									oldItem.belongings = newItem.belongings;
@@ -266,8 +266,8 @@ export default {
 						let content = api.getContent();
 						if (error) throw new Error();
 
-						return new CollectionUpdater2(context)
-							.tryItemUpdate()
+						return new CollectionUpdater(context)
+							.toUpdate()
 							.withItem(new Service(Stores).fromData(content))
 							.updateThenCommitThenGetItem((oldItem, newItem) => {
 								oldItem.customer = newItem.customer;
@@ -288,8 +288,8 @@ export default {
 						let content = api.getContent();
 						if (error) throw new Error();
 
-						return new CollectionUpdater2(context)
-							.tryItemUpdate()
+						return new CollectionUpdater(context)
+							.toUpdate()
 							.withItem(new Service(Stores).fromData(content))
 							.updateThenCommitThenGetItem((oldItem, newItem) => {
 								const events = newItem.events.sort((event1, event2) => {
@@ -310,8 +310,8 @@ export default {
 						let error = api.getError();
 						if (error) throw new Error();
 
-						return new CollectionUpdater2(context)
-							.tryItemUpdate()
+						return new CollectionUpdater(context)
+							.toUpdate()
 							.withId(serviceID)
 							.updateThenCommitThenGetItem((oldItem, newItem) => {
 								oldItem.events = oldItem.events.filter((event) => {
@@ -335,8 +335,8 @@ export default {
 						if (error) throw new Error();
 						const content = api.getContent();
 
-						return new CollectionUpdater2(context)
-							.tryItemUpdate()
+						return new CollectionUpdater(context)
+							.toUpdate()
 							.withItem(new Service(Stores).fromData(content))
 							.updateThenCommitThenGetItem((oldItem, newItem) => {
 								oldItem.setUrgent(newItem.isUrgent());
@@ -357,8 +357,8 @@ export default {
 						if (error) throw new Error();
 						const content = api.getContent();
 
-						return new CollectionUpdater2(context)
-							.tryItemUpdate()
+						return new CollectionUpdater(context)
+							.toUpdate()
 							.withItem(new Service(Stores).fromData(content))
 							.updateThenCommitThenGetItem((oldItem, newItem) => {
 								oldItem.setWarranty(newItem.isWarranty());
@@ -394,8 +394,8 @@ export default {
 						if (error) throw new Error(error);
 						const content = api.getContent();
 
-						return new CollectionUpdater2(context)
-							.tryItemUpdate()
+						return new CollectionUpdater(context)
+							.toUpdate()
 							.withItem(new Service(Stores).fromData(content))
 							.updateThenCommitThenGetItem((oldItem, newItem) => {
 								oldItem.setLabels(newItem.labels);
@@ -417,8 +417,8 @@ export default {
 						const { content } = api;
 						const { items, fail_count } = content;
 
-						return new CollectionUpdater2(context)
-							.tryItemUpdate()
+						return new CollectionUpdater(context)
+							.toUpdate()
 							.withId(serviceID)
 							.updateThenCommitThenGetItem((oldItem, newItem) => {
 								const images = items.map((image) => {
@@ -441,8 +441,8 @@ export default {
 						let error = api.error;
 						if (error) throw new Error();
 
-						return new CollectionUpdater2(context)
-							.tryItemUpdate()
+						return new CollectionUpdater(context)
+							.toUpdate()
 							.withId(serviceID)
 							.updateThenCommitThenGetItem((oldItem, newItem) => {
 								oldItem.imageFiles = oldItem.imageFiles.filter((imageFile) => {
