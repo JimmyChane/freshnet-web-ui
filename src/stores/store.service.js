@@ -1,9 +1,8 @@
 import DataLoader from "./tools/DataLoader";
-import CollectionUpdater from "./tools/CollectionUpdater";
+import CollectionUpdater2 from "./tools/CollectionUpdater2";
 import Processor from "./tools/Processor.js";
 
 import Service from "@/items/Service.js";
-import ServiceCustomer from "@/items/ServiceCustomer";
 import ServiceImage from "@/items/ServiceImage";
 
 import Vuex from "vuex";
@@ -74,21 +73,17 @@ export default {
 			actions: {
 				socketNotify(context, data) {
 					const { key, content } = data;
-					switch (key) {
-						case "item-add":
-							const service = new Service(Stores).fromData(content);
-							new CollectionUpdater(context).onId((item) => item.id).getItem(service);
-							break;
-						case "item-remove":
-							const id = new Service(Stores).fromData(content).id;
-							const found = context.state.items.find((service) => service.id === id);
-							if (!found) return;
-							const items = context.state.items;
-							items.splice(items.indexOf(found), 1);
-							context.commit("items", items);
-							context.commit("lastModified", Date.now());
-							break;
-					}
+
+					if (key === "item-add")
+						new CollectionUpdater2(context)
+							.tryItemAdd()
+							.withItem(new Service(Stores).fromData(content))
+							.commitThenGetItem();
+					if (key === "item-remove")
+						new CollectionUpdater2(context)
+							.tryItemRemove()
+							.withItem(new Service(Stores).fromData(content))
+							.commitThenGetItem();
 				},
 
 				async refresh(context) {
@@ -173,9 +168,10 @@ export default {
 						if (error) throw new Error();
 						let service = new Service(Stores).fromData(content);
 
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.getItem(service);
+						return new CollectionUpdater2(context)
+							.tryItemAdd()
+							.withItem(service)
+							.commitThenGetItem();
 					});
 				},
 				async removeItemOfId(context, arg = { id }) {
@@ -187,12 +183,11 @@ export default {
 							.send();
 						let error = api.getError();
 						if (error) throw new Error();
-						let found = context.state.items.find((service) => service.id === id);
-						if (!found) throw new Error();
-						let items = context.state.items;
-						items.splice(items.indexOf(found), 1);
-						context.commit("items", items);
-						context.commit("lastModified", Date.now());
+
+						new CollectionUpdater2(context)
+							.tryItemRemove()
+							.withId(id)
+							.commitThenGetItem();
 					});
 				},
 				async updateStateOfId(context, arg = { serviceID, state }) {
@@ -206,46 +201,58 @@ export default {
 						let error = api.getError();
 						if (error) throw new Error();
 
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.onUpdate((item) => (item.state = state))
-							.getItemById(serviceID);
+						return new CollectionUpdater2(context)
+							.tryItemUpdate()
+							.withId(serviceID)
+							.updateThenCommitThenGetItem((oldItem) => {
+								oldItem.state = state;
+							});
 					});
 				},
 				async updateDescriptionOfId(context, arg = { serviceID, description }) {
-					return context.state.processor.acquire("updateDescriptionOfId", async () => {
-						let { serviceID, description } = arg;
-						let api = await ApiHost.request()
-							.PUT()
-							.url(`service_v2/item/${serviceID}/update/description/`)
-							.body({ content: description })
-							.send();
-						let error = api.getError();
-						if (error) throw new Error();
+					return context.state.processor.acquire(
+						"updateDescriptionOfId",
+						async () => {
+							let { serviceID, description } = arg;
+							let api = await ApiHost.request()
+								.PUT()
+								.url(`service_v2/item/${serviceID}/update/description/`)
+								.body({ content: description })
+								.send();
+							let error = api.getError();
+							if (error) throw new Error();
 
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.onUpdate((item) => (item.description = description))
-							.getItemById(serviceID);
-					});
+							return new CollectionUpdater2(context)
+								.tryItemUpdate()
+								.withId(serviceID)
+								.updateThenCommitThenGetItem((oldItem) => {
+									oldItem.description = description;
+								});
+						},
+					);
 				},
 				async updateBelongingsOfId(context, arg = { serviceID, belongings }) {
-					return context.state.processor.acquire("updateBelongingsOfId", async () => {
-						let { serviceID, belongings } = arg;
-						let api = await ApiHost.request()
-							.PUT()
-							.url(`service_v2/item/${serviceID}/update/belonging/`)
-							.body({ content: belongings })
-							.send();
-						let error = api.getError();
-						let content = api.getContent();
-						if (error) throw new Error();
+					return context.state.processor.acquire(
+						"updateBelongingsOfId",
+						async () => {
+							let { serviceID, belongings } = arg;
+							let api = await ApiHost.request()
+								.PUT()
+								.url(`service_v2/item/${serviceID}/update/belonging/`)
+								.body({ content: belongings })
+								.send();
+							let error = api.getError();
+							let content = api.getContent();
+							if (error) throw new Error();
 
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.onUpdate((item) => (item.belongings = content.belongings))
-							.getItemById(serviceID);
-					});
+							return new CollectionUpdater2(context)
+								.tryItemUpdate()
+								.withItem(new Service(Stores).fromData(content))
+								.updateThenCommitThenGetItem((oldItem, newItem) => {
+									oldItem.belongings = newItem.belongings;
+								});
+						},
+					);
 				},
 				async updateCustomerOfId(context, arg = { serviceID, customer }) {
 					return context.state.processor.acquire("updateCustomerOfId", async () => {
@@ -259,14 +266,12 @@ export default {
 						let content = api.getContent();
 						if (error) throw new Error();
 
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.onUpdate((item) => {
-								return (item.customer = new ServiceCustomer(Stores).fromData(
-									content.customer,
-								));
-							})
-							.getItemById(serviceID);
+						return new CollectionUpdater2(context)
+							.tryItemUpdate()
+							.withItem(new Service(Stores).fromData(content))
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.customer = newItem.customer;
+							});
 					});
 				},
 
@@ -283,16 +288,15 @@ export default {
 						let content = api.getContent();
 						if (error) throw new Error();
 
-						let serviceParse = new Service(Stores).fromData(content);
-
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.onUpdate((item1, item2) => {
-								item1.events = item2.events.sort((event1, event2) =>
-									event1.compare(event2),
-								);
-							})
-							.getItem(serviceParse);
+						return new CollectionUpdater2(context)
+							.tryItemUpdate()
+							.withItem(new Service(Stores).fromData(content))
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								const events = newItem.events.sort((event1, event2) => {
+									return event1.compare(event2);
+								});
+								oldItem.events = events;
+							});
 					});
 				},
 				async removeEventFromId(context, arg = { serviceID, time }) {
@@ -306,14 +310,14 @@ export default {
 						let error = api.getError();
 						if (error) throw new Error();
 
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.onUpdate((item) => {
-								item.events = item.events.filter((event) => {
+						return new CollectionUpdater2(context)
+							.tryItemUpdate()
+							.withId(serviceID)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.events = oldItem.events.filter((event) => {
 									return event.timestamp.time !== time;
 								});
-							})
-							.getItemById(serviceID);
+							});
 					});
 				},
 
@@ -331,11 +335,12 @@ export default {
 						if (error) throw new Error();
 						const content = api.getContent();
 
-						let service = new Service(Stores).fromData(content);
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.onUpdate((item) => item.setUrgent(service.isUrgent()))
-							.getItemById(service.id);
+						return new CollectionUpdater2(context)
+							.tryItemUpdate()
+							.withItem(new Service(Stores).fromData(content))
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.setUrgent(newItem.isUrgent());
+							});
 					});
 				},
 				async updateWarrantyOfId(context, arg = { serviceID, isWarranty }) {
@@ -352,11 +357,12 @@ export default {
 						if (error) throw new Error();
 						const content = api.getContent();
 
-						let service = new Service(Stores).fromData(content);
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.onUpdate((item) => item.setWarranty(service.isWarranty()))
-							.getItemById(service.id);
+						return new CollectionUpdater2(context)
+							.tryItemUpdate()
+							.withItem(new Service(Stores).fromData(content))
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.setWarranty(newItem.isWarranty());
+							});
 					});
 				},
 
@@ -388,23 +394,12 @@ export default {
 						if (error) throw new Error(error);
 						const content = api.getContent();
 
-						let service = new Service(Stores).fromData(content);
-						let items = context.state.items;
-						let item = items.find((item) => {
-							return item.id === service.id;
-						});
-
-						if (!item) {
-							items.push(service);
-							item = service;
-						} else {
-							item.setLabels(service.labels);
-						}
-
-						context.commit("items", items);
-						context.commit("lastModified", Date.now());
-
-						return item;
+						return new CollectionUpdater2(context)
+							.tryItemUpdate()
+							.withItem(new Service(Stores).fromData(content))
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.setLabels(newItem.labels);
+							});
 					});
 				},
 
@@ -422,14 +417,15 @@ export default {
 						const { content } = api;
 						const { items, fail_count } = content;
 
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.onUpdate((item) =>
-								item.imageFiles.push(
-									...items.map((image) => new ServiceImage().fromData(image)),
-								),
-							)
-							.getItemById(serviceID);
+						return new CollectionUpdater2(context)
+							.tryItemUpdate()
+							.withId(serviceID)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								const images = items.map((image) => {
+									return new ServiceImage().fromData(image);
+								});
+								oldItem.imageFiles.push(...images);
+							});
 					});
 				},
 				async removeImageFromId(context, arg = { serviceID, image }) {
@@ -445,14 +441,14 @@ export default {
 						let error = api.error;
 						if (error) throw new Error();
 
-						return new CollectionUpdater(context)
-							.onId((item) => item.id)
-							.onUpdate((item) => {
-								item.imageFiles = item.imageFiles.filter(
-									(imageFile) => imageFile.name !== image.name,
-								);
-							})
-							.getItemById(serviceID);
+						return new CollectionUpdater2(context)
+							.tryItemUpdate()
+							.withId(serviceID)
+							.updateThenCommitThenGetItem((oldItem, newItem) => {
+								oldItem.imageFiles = oldItem.imageFiles.filter((imageFile) => {
+									return imageFile.name !== image.name;
+								});
+							});
 					});
 				},
 			},
