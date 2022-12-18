@@ -1,10 +1,10 @@
 <script>
 	import ItemSpec from "./ItemSpec.vue";
-	import Selector3 from "@/components/selector/Selector3.vue";
+	import Selector4 from "@/components/selector/Selector4.vue";
 	import SpecificationType from "@/items/ProductSpecType.js";
 
 	export default {
-		components: { ItemSpec, Selector3 },
+		components: { ItemSpec, Selector4 },
 		props: {
 			items: { type: Array, default: () => [] },
 		},
@@ -72,7 +72,7 @@
 				@click-remove="(item) => removeItem(item)"
 			/>
 		</div>
-		<Selector3
+		<Selector4
 			:menus="SpecificationMenus"
 			@click-menu="(menu) => addItem({ content: '', typeKey: menu.key })"
 		/>
@@ -84,6 +84,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1em;
+		--primary-color: hsl(0, 0%, 30%);
 		.SpecificationInputs-contents {
 			display: flex;
 			flex-direction: column;

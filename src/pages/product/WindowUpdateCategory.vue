@@ -1,9 +1,9 @@
 <script>
 	import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
-	import Selector3 from "@/components/selector/Selector3.vue";
+	import Selector4 from "@/components/selector/Selector4.vue";
 
 	export default {
-		components: { PopupWindowAction, Selector3 },
+		components: { PopupWindowAction, Selector4 },
 		props: {
 			isShowing: { type: Boolean, default: false },
 			input: { type: Object, default: null },
@@ -69,7 +69,7 @@
 		@click-ok="clickConfirm()"
 	>
 		<div class="WindowUpdateCategory-body">
-			<Selector3
+			<Selector4
 				:menus="itemMenus"
 				:selectedKey="outputCategoryId"
 				@click-menu="
@@ -85,7 +85,7 @@
 
 <style lang="scss" scoped>
 	.WindowUpdateCategory-body {
-		width: 26rem;
+		width: 35rem;
 		max-width: 100%;
 		display: flex;
 		flex-direction: column;
