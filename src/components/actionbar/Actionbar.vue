@@ -30,7 +30,7 @@
 			v-if="LeftMenus.length > 0"
 			:menus="LeftMenus"
 		/>
-		<span class="Actionbar-title">{{ title }}</span>
+		<span class="Actionbar-title" v-if="title">{{ title }}</span>
 		<slot v-if="hasSlot" />
 		<ActionbarMenus
 			class="Actionbar-rightMenus"
@@ -63,13 +63,25 @@
 		flex-direction: row;
 		flex-wrap: nowrap;
 		align-items: center;
-		justify-content: flex-start;
+		justify-content: space-between;
 
 		.Actionbar-leftMenus {
+			width: 100%;
 			min-width: max-content;
+			max-width: max-content;
+
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
 		}
 		.Actionbar-rightMenus {
+			width: 100%;
 			min-width: max-content;
+			max-width: max-content;
+
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-end;
 		}
 		.Actionbar-title {
 			font-size: 1.3rem;
