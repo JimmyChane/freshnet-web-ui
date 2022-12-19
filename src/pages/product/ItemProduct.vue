@@ -4,6 +4,7 @@
 	import User from "@/items/User.js";
 	import Setting from "@/items/data/Setting.js";
 	import ProductPrice from "@/items/ProductPrice.js";
+	import ProductPreset from "@/items/tools/ProductPreset";
 
 	import ImageView from "@/components/ImageView.vue";
 	import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
@@ -72,6 +73,7 @@
 					return { from: normal, to: promotion };
 				return null;
 			},
+			specLabels: (c) => ProductPreset.generateSpecificationLabels(c.item),
 		},
 		watch: {
 			preview() {
@@ -136,6 +138,9 @@
 
 		<div class="ItemProduct-title">
 			<span class="ItemProduct-title-text">{{ fullTitle }}</span>
+			<div class="ItemProduct-title-specs" v-if="specLabels.length">
+				<span v-for="label in specLabels" :key="label.text">{{ label.text }}</span>
+			</div>
 			<span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
 		</div>
 	</div>
@@ -165,21 +170,27 @@
 			.ItemProduct-preview-image {
 				width: 100%;
 				height: 100%;
+
 				object-fit: contain;
 				aspect-ratio: 16/12;
+
+				background-color: hsla(0, 0%, 100%, 0.3);
+				border-radius: var(--border-radius);
 			}
 			.ItemProduct-preview-empty {
 				width: 100%;
 				height: 100%;
+				font-size: 0.8rem;
+				font-weight: 600;
+
 				background-color: hsla(0, 0%, 100%, 0.3);
 				border-radius: var(--border-radius);
 				color: hsla(0, 0%, 0%, 0.3);
-				font-size: 0.8rem;
-				font-weight: 600;
+				aspect-ratio: 16/12;
+
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				aspect-ratio: 16/12;
 			}
 		}
 
@@ -194,15 +205,42 @@
 			.ItemProduct-title-text {
 				min-height: 1.1rem;
 				max-height: 2.2rem;
-				flex-grow: 1;
+				line-height: 1.1rem;
+
 				font-size: 1rem;
 				font-weight: 600;
-				line-height: 1.1rem;
+				text-align: start;
 				overflow: hidden;
+
 				display: flex;
+				flex-direction: column;
+				flex-grow: 1;
+				align-items: flex-start;
+			}
+			.ItemProduct-title-specs {
+				width: 100%;
+				gap: 0.1rem;
+				font-size: 0.6rem;
+				font-weight: 400;
+				color: black;
+				margin: -0.1rem;
+
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				justify-content: flex-start;
+				align-items: flex-start;
+
+				& > * {
+					min-width: max-content;
+					width: max-content;
+					padding: 0.15rem 0.2rem;
+					background-color: hsla(0, 0%, 100%, 0.4);
+					border-radius: 0.2rem;
+				}
 			}
 			.ItemProduct-title-price {
-				font-size: 0.8rem;
+				font-size: 0.7rem;
 			}
 		}
 	}
@@ -223,9 +261,7 @@
 		}
 		.ItemProduct-title {
 			flex-grow: 1;
-			text-align: start;
 			padding: 1rem;
-			align-items: flex-start;
 		}
 	}
 	.ItemProduct-modeGrid {
@@ -240,9 +276,7 @@
 		}
 		.ItemProduct-title {
 			width: 100%;
-			text-align: center;
 			padding: 1rem 0.5rem;
-			align-items: center;
 		}
 	}
 
@@ -256,7 +290,7 @@
 	}
 	.ItemProduct-isSelected {
 		.ItemProduct-preview {
-			opacity: 0;
+			opacity: 0.5;
 		}
 		.ItemProduct-title {
 			opacity: 0;

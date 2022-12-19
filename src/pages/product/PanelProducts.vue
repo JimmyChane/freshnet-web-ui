@@ -70,9 +70,7 @@
 				return this.$root.window.innerWidth < 550;
 			},
 			layoutMode() {
-				return this.isLayoutThin
-					? ItemProduct.Mode.List
-					: ItemProduct.Mode.Grid;
+				return this.isLayoutThin ? ItemProduct.Mode.List : ItemProduct.Mode.Grid;
 			},
 
 			isLoading: (context) => context.productStore.getters.isLoading,
@@ -153,9 +151,7 @@
 				const categoryGroups = await this.productStore.dispatch(
 					"getGroupsByCategory",
 				);
-				const brandGroups = await this.productStore.dispatch(
-					"getGroupsByBrand",
-				);
+				const brandGroups = await this.productStore.dispatch("getGroupsByBrand");
 
 				const categoryMenus = categoryGroups
 					.filter((group) => {
@@ -264,10 +260,7 @@
 </script>
 
 <template>
-	<div
-		class="PanelProducts"
-		@scroll="(event) => (scrollTop = event.target.scrollTop)"
-	>
+	<div class="PanelProducts" @scroll="(event) => (scrollTop = event.target.scrollTop)">
 		<ActionbarProduct
 			class="PanelProducts-actionbar"
 			:products="products"
@@ -389,10 +382,9 @@
 			.PanelProducts-products-isWide {
 				padding: 1rem;
 				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
 				grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-				gap: 1rem;
 				gap: 1.5rem 1rem;
+				gap: 0.5rem 0.5rem;
 			}
 
 			.PanelProducts-loading {
