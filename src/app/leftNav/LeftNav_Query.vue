@@ -90,7 +90,7 @@
          flex-direction: row;
          align-items: center;
          justify-content: flex-start;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
          text-decoration: none;
          background: none;
          border: none;

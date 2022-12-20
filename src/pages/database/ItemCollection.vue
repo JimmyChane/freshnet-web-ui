@@ -50,7 +50,7 @@
          align-items: center;
          gap: 0.2rem;
          padding-bottom: 0.3rem;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
          border-width: 0 0 2px 0;
          border-style: solid;
          border-color: transparent;

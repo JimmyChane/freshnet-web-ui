@@ -161,7 +161,7 @@
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			.LayoutProductViewerImagePreview-tool-body {
 				display: flex;
@@ -182,7 +182,7 @@
 					justify-content: center;
 					border-radius: 50%;
 					border-radius: 0.5rem;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 					cursor: pointer;
 					&:hover {
 						background: hsla(0, 0%, 0%, 0.2);

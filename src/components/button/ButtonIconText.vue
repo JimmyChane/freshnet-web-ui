@@ -26,7 +26,7 @@
       padding: 0.6em;
       background: none;
       border: none;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       cursor: pointer;
       color: black;
 

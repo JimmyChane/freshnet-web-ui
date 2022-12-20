@@ -202,7 +202,7 @@
 					border: none;
 					border: 1px solid hsla(0, 0%, 0%, 0.1);
 					background: none;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 					font-size: 1rem;
 					display: flex;
 					cursor: pointer;

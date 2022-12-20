@@ -79,7 +79,7 @@
 			background: #d6e1e5;
 			position: sticky;
 			flex-grow: 0;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			.Home-top-body {
 				width: 100%;
@@ -104,7 +104,7 @@
 					cursor: pointer;
 					padding: 0.6rem;
 					border-radius: 50%;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 					display: flex;
 					flex-grow: 0;
 					flex-direction: row;

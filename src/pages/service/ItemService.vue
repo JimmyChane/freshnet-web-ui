@@ -290,7 +290,7 @@
 			display: flex;
 			flex-direction: column;
 			align-items: stretch;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			border-radius: 0 0.5em 0.5em 0;
 			border: 0.1em solid transparent;
 
@@ -325,7 +325,7 @@
 
 						text-decoration: none;
 						cursor: pointer;
-						transition: var(--animation-duration);
+						transition: var(--transition-duration);
 
 						&:hover {
 							background-color: #ebebeb;
@@ -437,7 +437,7 @@
 			display: flex;
 			flex-direction: column;
 			align-items: stretch;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			border-radius: 0 0.5em 0.5em 0;
 			border: 0.1em solid transparent;
 
@@ -471,7 +471,7 @@
 
 						text-decoration: none;
 						cursor: pointer;
-						transition: var(--animation-duration);
+						transition: var(--transition-duration);
 
 						&:hover {
 							background-color: #ebebeb;
@@ -569,7 +569,7 @@
 			color: black;
 			text-align: start;
 			line-height: 1.1;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			border-radius: 0 0.5em 0.5em 0;
 			border: 0.1em solid transparent;
 

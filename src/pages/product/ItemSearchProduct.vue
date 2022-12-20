@@ -62,7 +62,7 @@
 		border-radius: 8px;
 		padding: 10px;
 		cursor: pointer;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		border: none;
 		background: none;
 		&:hover,

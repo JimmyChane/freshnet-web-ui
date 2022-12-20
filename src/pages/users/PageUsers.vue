@@ -193,13 +193,13 @@
 				{
 					key: 'addUser',
 					title: 'Add User',
-					icon: host.res('icon/add-2A4858.svg'),
+					icon: host.res('icon/add-000000.svg'),
 					click: onIntentAddUser,
 				},
 				{
 					key: 'refresh',
 					title: 'Refresh',
-					icon: host.res('icon/refresh-2A4858.svg'),
+					icon: host.res('icon/refresh-000000.svg'),
 					click: () => onIntentRefresh(),
 				},
 			]"
@@ -423,7 +423,7 @@
 					border-radius: 50%;
 					background: none;
 					cursor: pointer;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 					&:hover,
 					&:focus {
 						background: hsla(0, 0%, 0%, 0.1);

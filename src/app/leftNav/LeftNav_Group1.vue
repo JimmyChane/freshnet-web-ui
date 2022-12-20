@@ -70,7 +70,7 @@
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		.LeftNavGroup1-group2s {
 			display: flex;
 			flex-direction: column;

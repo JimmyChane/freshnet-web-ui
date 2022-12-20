@@ -40,7 +40,7 @@
       align-items: center;
       justify-content: flex-end;
       pointer-events: none;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       overflow: hidden;
       min-height: 12rem;
       max-height: 12rem;
@@ -53,7 +53,7 @@
          align-items: center;
          justify-content: flex-end;
          pointer-events: none;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
          overflow: hidden;
          min-height: 12rem;
          max-height: 12rem;
@@ -63,7 +63,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(180deg, hsla(0, 0%, 0%, 0.7), transparent);
-            transition: var(--animation-duration);
+            transition: var(--transition-duration);
             transition-delay: 150ms;
          }
 
@@ -75,7 +75,7 @@
             padding: 0.6rem 1.2rem;
             padding-bottom: 4rem;
             pointer-events: none;
-            transition: var(--animation-duration);
+            transition: var(--transition-duration);
             overflow: hidden;
             min-height: 12rem;
             max-height: 12rem;
@@ -85,14 +85,14 @@
                flex-direction: column;
                align-items: center;
                border-radius: 0.4rem;
-               transition: var(--animation-duration);
+               transition: var(--transition-duration);
                .Feedback-card-body {
                   position: relative;
                   width: 100%;
                   display: flex;
                   flex-direction: column;
                   align-items: center;
-                  transition: var(--animation-duration);
+                  transition: var(--transition-duration);
                   .Feedback-card-background {
                      position: absolute;
                      min-width: 100%;
@@ -104,7 +104,7 @@
                      background: hsla(0, 0%, 0%, 0.5);
                      backdrop-filter: blur(4px);
                      border-radius: 0.4rem;
-                     transition: var(--animation-duration);
+                     transition: var(--transition-duration);
                   }
                   .Feedback-card-content {
                      z-index: 1;
@@ -118,7 +118,7 @@
                      text-align: center;
                      line-height: 1.2;
                      color: white;
-                     transition: var(--animation-duration);
+                     transition: var(--transition-duration);
                   }
                }
             }

@@ -134,7 +134,7 @@
 			overflow: hidden;
 			background-color: var(--primary-color);
 
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			&:hover {
 				background-color: var(--primary-background-color);

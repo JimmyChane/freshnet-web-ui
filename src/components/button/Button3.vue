@@ -27,7 +27,7 @@
 		height: 100%;
 		border: none;
 		background: white;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		border-radius: 0.4rem;
 
 		display: flex;
@@ -54,7 +54,7 @@
 			border-top-left-radius: 0.3rem;
 			border-bottom-left-radius: 0.3rem;
 
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 		}
 		.Button3-background {
 			position: absolute;
@@ -65,7 +65,7 @@
 			opacity: 0;
 			pointer-events: none;
 			background-color: var(--primary-color);
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 		}
 	}
 

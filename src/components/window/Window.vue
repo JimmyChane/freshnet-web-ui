@@ -76,7 +76,7 @@
          align-items: flex-start;
          justify-content: center;
          text-align: start;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
 
          @media screen and (max-height: 30rem) {
             padding: 1rem 1.8rem;
@@ -113,7 +113,7 @@
          position: absolute;
          background: white;
          opacity: 0;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
          pointer-events: none;
       }
 

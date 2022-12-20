@@ -130,7 +130,7 @@
 		justify-content: space-between;
 
 		background: none;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		text-align: start;
 		cursor: pointer;
 		border: 1px solid transparent;
@@ -204,7 +204,7 @@
 					outline: none;
 					border-radius: 50%;
 					padding: 10px;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 
 					padding: 0px;
 					--size: 16px;
@@ -229,7 +229,7 @@
 			margin-top: 0;
 			pointer-events: none;
 			opacity: 0;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			& > * {
 				min-height: 100%;
@@ -237,7 +237,7 @@
 				max-height: unset;
 				padding: 10px;
 				flex-grow: 1;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 			}
 		}
 		.ItemOrder-option-expand {

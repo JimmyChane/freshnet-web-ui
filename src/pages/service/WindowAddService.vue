@@ -254,7 +254,7 @@
 						color: var(--type-color);
 						padding: 4px 16px;
 						background-color: white;
-						transition: var(--animation-duration);
+						transition: var(--transition-duration);
 						cursor: pointer;
 						&:hover,
 						&:focus {

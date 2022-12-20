@@ -33,7 +33,7 @@
 		color: white;
 		border-radius: 0.6rem;
 		cursor: pointer;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		&:hover,
 		&:focus {

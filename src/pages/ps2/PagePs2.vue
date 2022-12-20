@@ -217,7 +217,7 @@
 				width: 100%;
 				// background: #d6e1e5;
 				// background: white;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 				border-bottom: 1px solid hsl(0, 0%, 80%);
 				overflow: initial;
 				.PagePs2-header-body {
@@ -235,7 +235,7 @@
 						flex-direction: row;
 						align-items: center;
 						border-radius: 8px;
-						transition: var(--animation-duration);
+						transition: var(--transition-duration);
 						padding: 0.2rem 0.5rem;
 						padding-top: 0.4rem;
 
@@ -268,7 +268,7 @@
 				.PagePs2-section {
 					width: 100%;
 					padding: 1.6rem;
-					transition: all var(--animation-duration) linear;
+					transition: all var(--transition-duration) linear;
 					font-size: 1rem;
 					display: flex;
 					flex-direction: column;
@@ -326,7 +326,7 @@
 								text-align: start;
 								border: none;
 								background: none;
-								transition: var(--animation-duration);
+								transition: var(--transition-duration);
 								cursor: pointer;
 
 								&:hover,

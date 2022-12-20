@@ -235,7 +235,7 @@
 			background-color: white;
 		}
 		.HomeActionbar-nav {
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			padding: 0.5rem;
 			font-size: 1rem;
 			font-weight: 600;
@@ -260,7 +260,7 @@
 				.Home-actionbar-search {
 					max-width: 24rem;
 					flex-grow: 1;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 					--border-radius: 4rem;
 
 					--background: hsla(0, 0%, 100%, 0.9);
@@ -283,7 +283,7 @@
 							border: none;
 							background: none;
 							border-radius: 0.5em;
-							transition: var(--animation-duration);
+							transition: var(--transition-duration);
 
 							&:hover {
 								background: rgba(255, 255, 255, 0.5);

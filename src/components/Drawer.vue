@@ -113,7 +113,7 @@
 
 			background-color: hsla(0, 0%, 0%, 0.7);
 			pointer-events: none;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			// @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
 			//    font-size: 1rem;
@@ -142,7 +142,7 @@
 		position: sticky;
 
 		.Drawer-body {
-			transition-duration: var(--animation-duration);
+			transition-duration: var(--transition-duration);
 			transition-timing-function: cubic-bezier(1, 0, 0, 1);
 			transform: translateX(var(--x-end)) translateY(var(--y-end));
 		}
@@ -153,7 +153,7 @@
 		position: sticky;
 
 		.Drawer-body {
-			transition-duration: var(--animation-duration);
+			transition-duration: var(--transition-duration);
 			transition-timing-function: cubic-bezier(1, 0, 0, 1);
 			transform: translateX(var(--x-start)) translateY(var(--y-start));
 			box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.2);
@@ -166,7 +166,7 @@
 		position: absolute;
 
 		.Drawer-body {
-			transition-duration: var(--animation-duration);
+			transition-duration: var(--transition-duration);
 			transition-timing-function: cubic-bezier(1, 0, 0, 1);
 			transform: translateX(var(--x-end)) translateY(var(--y-end));
 			box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.2);
@@ -185,7 +185,7 @@
 		pointer-events: none;
 
 		.Drawer-body {
-			transition-duration: var(--animation-duration);
+			transition-duration: var(--transition-duration);
 			transition-timing-function: cubic-bezier(1, 0, 0, 1);
 			transform: translateX(var(--x-start)) translateY(var(--y-start));
 			box-shadow: none;

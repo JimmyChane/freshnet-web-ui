@@ -76,7 +76,7 @@
 			border-color: hsla(0, 0%, 0%, 0.1);
 			background: none;
 			flex-grow: 1;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			display: flex;
 			flex-direction: row;

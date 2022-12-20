@@ -165,7 +165,7 @@
 				bottom: 0;
 				right: calc(var(--size) * 1.5);
 
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 			}
 		}
 
@@ -182,7 +182,7 @@
 			background-color: white;
 			transform: translateY(-1.25rem);
 			border-radius: 0.2rem;
-			transition: var(--animation-duration) cubic-bezier(1, 0, 0, 1);
+			transition: var(--transition-duration) cubic-bezier(1, 0, 0, 1);
 			padding: 0.625rem 0;
 			box-shadow: 0 0 0.625rem 0 hsla(0, 0%, 30%, 0.7);
 
@@ -225,7 +225,7 @@
 				row-gap: 0.1;
 				column-gap: 0.5rem;
 				padding: 0.8rem 1.2rem;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 				border: none;
 				background: none;
 				text-align: start;

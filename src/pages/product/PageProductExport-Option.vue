@@ -32,7 +32,7 @@
 		justify-content: center;
 		font-size: 1rem;
 		cursor: pointer;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		background: none;
 		border: none;
 		border-radius: 0.2rem;

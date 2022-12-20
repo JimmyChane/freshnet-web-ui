@@ -32,7 +32,7 @@
 		border-radius: 0.5rem;
 		border: none;
 		background: hsla(0, 0%, 100%, 0.6);
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		cursor: pointer;
 		display: flex;

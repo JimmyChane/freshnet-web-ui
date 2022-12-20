@@ -45,7 +45,7 @@
 		--actionbar-background-color-translucent: var(--actionbar-background-color);
 		--actionbar-background-color-light: var(--actionbar-color);
 		--actionbar-background-color-dark: var(--actionbar-color);
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		color: black;
 		background-color: #f3f3f3;
 

@@ -14,7 +14,7 @@
 		font-size: 1rem;
 		border: none;
 		cursor: pointer;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		&:hover {
 			background-color: #257bad;

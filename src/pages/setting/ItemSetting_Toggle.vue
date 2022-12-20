@@ -54,7 +54,7 @@
       padding: 1rem 0.8rem;
 
       background-color: hsla(0, 0%, 100%, 0.6);
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       cursor: pointer;
 
       &:hover {

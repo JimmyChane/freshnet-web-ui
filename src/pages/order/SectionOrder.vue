@@ -47,7 +47,7 @@
 		background-color: white;
 		box-shadow: 0 2px 4px var(--shadow-light);
 		padding: 10px;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		.SectionOrder-header {
 			margin: 8px 0 2px 0;
@@ -60,17 +60,26 @@
 			justify-content: flex-start;
 			gap: 0.4rem;
 			.SectionOrder-count {
-				background: var(--primary-color);
+				--width: 1.6em;
+				--height: 1.6em;
+				width: var(--width);
+				height: var(--height);
+				min-width: var(--width);
+				min-height: var(--height);
+				max-width: var(--width);
+				max-height: var(--height);
+
+				background-color: hsla(0, 0%, 0%, 0.8);
 				font-size: 0.7em;
-				width: 1.6em;
-				height: 1.6em;
-				border-radius: 50%;
 				color: white;
+				border-radius: 50%;
+				text-align: center;
+				word-break: keep-all;
+				line-height: 1em;
+
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				text-align: center;
-				word-break: keep-all;
 			}
 		}
 
@@ -93,7 +102,7 @@
 				.SectionOrder-list-item-body {
 					padding: 10px 0;
 					border-radius: 10px;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 					cursor: pointer;
 
 					&:hover {

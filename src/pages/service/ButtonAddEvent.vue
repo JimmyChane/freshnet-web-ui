@@ -18,7 +18,7 @@
 
       border: none;
       background: white;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       // border: 0.1em solid hsl(0, 0%, 70%);
       border-radius: 0.5rem;
       cursor: pointer;
@@ -30,7 +30,7 @@
       .ButtonAddEvent-icon {
          width: 1em;
          height: 1em;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
       }
    }
 </style>

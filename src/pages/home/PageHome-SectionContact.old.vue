@@ -75,7 +75,7 @@
 
 		text-decoration: none;
 		position: relative;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		aspect-ratio: 16/8;
 
 		&:hover,
@@ -119,7 +119,7 @@
 					display: flex;
 					border-radius: 50%;
 					border: 1px solid transparent;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 					&:hover {
 						background-color: hsla(0, 0%, 0%, 0.05);
 						border: 1px solid hsla(0, 0%, 0%, 0.1);

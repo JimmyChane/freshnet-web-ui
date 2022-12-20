@@ -200,7 +200,7 @@
 						justify-content: center;
 						border-radius: 0.2rem;
 						overflow: hidden;
-						transition: var(--animation-duration);
+						transition: var(--transition-duration);
 						padding: 0.2rem;
 						.ImageView-images-item {
 							height: 100%;

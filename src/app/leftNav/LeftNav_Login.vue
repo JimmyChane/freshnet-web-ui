@@ -119,7 +119,7 @@
 				border: none;
 				cursor: pointer;
 				padding: 0.3em;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 
 				display: flex;
 				text-decoration: none;

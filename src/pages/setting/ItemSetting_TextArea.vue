@@ -49,7 +49,7 @@
       gap: 2rem;
 
       background-color: hsla(0, 0%, 100%, 0.6);
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
 
       &:hover {
          background-color: white;

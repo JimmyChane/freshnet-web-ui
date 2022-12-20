@@ -674,7 +674,7 @@
 			background: none;
 			cursor: pointer;
 
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			--parent-height: 0;
 			--parent-scrollTop: 0;

@@ -40,8 +40,8 @@
 			},
 		},
 		created() {
-			window.addEventListener("resize", () => this.invalidateHeight());
-			this.invalidateHeight();
+			window.addEventListener("resize", () => this.invalidateHeight()) &&
+				this.invalidateHeight();
 		},
 		mounted() {
 			setTimeout(() => this.onConnectionChange(), 3000);
@@ -204,34 +204,9 @@
 		// color schemas
 		.App {
 			--primary-color: #294656;
-			--primary-color-translucent: #81b6ca66;
-			--primary-color-shadow: #49748940;
-			--primary-color-light: var(--primary-color);
-			--primary-color-dark: var(--primary-color);
-
 			--accent-color: #fc8237;
-			--accent-color-light: var(--accent-color);
-			--accent-color-dark: var(--accent-color);
-
 			--statusbar-color: #384a6a;
-
-			--transition-duration: 500ms;
 			--transition-duration: 300ms;
-			--animation-duration: var(--transition-duration);
-
-			--App-primary-color: var(--primary-color);
-			--App-primary-color-light: var(--primary-color-light);
-			--App-primary-color-dark: var(--primary-color-dark);
-			--App-background-color: var(--background-color);
-			--App-accent-color: (--accent-color);
-
-			--Home-primary-color-light: var(--primary-color-light);
-			--Home-primary-color: var(--primary-color);
-			--Home-primary-color-dark: var(--primary-color-dark);
-
-			--Manage-primary-color-light: var(--primary-color-light);
-			--Manage-primary-color: var(--primary-color);
-			--Manage-primary-color-dark: var(--primary-color-dark);
 		}
 	}
 
@@ -249,7 +224,7 @@
 		transition: var(--transition-duration);
 		overflow: hidden;
 
-		// height: -webkit-fill-available; // fix for ios - test
+		height: -webkit-fill-available; // fix for ios - test
 		height: 100vh; /* Fallback for browsers that do not support Custom Properties */
 		height: calc(var(--vh, 1vh) * 100);
 
@@ -295,7 +270,7 @@
 					width: 100%;
 					color: white;
 					pointer-events: none;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 					background: var(--primary-color);
 					--background-disconnected: #e73c2f;
 					--background-connected: #0c8d0c;

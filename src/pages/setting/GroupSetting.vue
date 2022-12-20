@@ -76,7 +76,7 @@
                background: none;
                border: none;
                cursor: pointer;
-               transition: var(--animation-duration);
+               transition: var(--transition-duration);
                border-radius: 50%;
                padding: 0.5rem;
                aspect-ratio: 1/1;
@@ -92,7 +92,7 @@
                   width: 1rem;
                   height: 1rem;
                   aspect-ratio: 1/1;
-                  transition: var(--animation-duration);
+                  transition: var(--transition-duration);
                }
             }
          }

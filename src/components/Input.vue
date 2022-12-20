@@ -141,12 +141,12 @@
       // background: hsla(0, 0%, 100%, 0.2);
       background: hsla(0, 0%, 0%, 0.03);
       border-radius: 0.2em;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
 
       .Input-sign {
          font-size: 0.7em;
          font-weight: 600;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
       }
 
       .Input-sign-required {
@@ -186,7 +186,7 @@
 
          font-size: 1em;
 
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
       }
       .Input-label-isHidden {
          top: calc(50% - 0.5em);
@@ -220,7 +220,7 @@
          font-weight: 400;
          font-size: 1em;
          color: black;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
       }
 
       .Input-dummy {

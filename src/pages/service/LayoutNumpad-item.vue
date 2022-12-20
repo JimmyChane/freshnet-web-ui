@@ -77,7 +77,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		& > * {
 			pointer-events: none;

@@ -11,7 +11,13 @@
 		icon: { light: "database-FFFFFF", dark: "database-000000" },
 		userPermissions: ["admin"],
 
-		components: { Loadingv1, PopupWindow, Empty, ActionBarManage, ItemDatabase },
+		components: {
+			Loadingv1,
+			PopupWindow,
+			Empty,
+			ActionBarManage,
+			ItemDatabase,
+		},
 		emits: ["callback-side-expand"],
 		data() {
 			return {
@@ -77,7 +83,10 @@
 </script>
 
 <template>
-	<div class="PageDatabase" @scroll="(event) => (scrollTop = event.target.scrollTop)">
+	<div
+		class="PageDatabase"
+		@scroll="(event) => (scrollTop = event.target.scrollTop)"
+	>
 		<ActionBarManage
 			class="PageDatabase-actionbar"
 			:hasShadow="scrollTop > 0"
@@ -86,7 +95,7 @@
 				{
 					key: 'refresh',
 					title: 'Refresh',
-					icon: host.res('icon/refresh-2A4858.svg'),
+					icon: host.res('icon/refresh-000000.svg'),
 					click: () => actionRefresh(),
 				},
 			]"
@@ -149,7 +158,7 @@
 	.PageDatabase-title {
 		font-weight: 600;
 		font-size: 1.4rem;
-		color: var(--primary-color);
+		color: hsla(0, 0%, 0%, 0.8);
 		letter-spacing: 0.1rem;
 	}
 

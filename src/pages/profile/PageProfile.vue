@@ -126,7 +126,7 @@
 						</div>
 						<ButtonIcon
 							class="PageProfile-section-changePassword-arrow"
-							:src="host.res('icon/down-arrow-grey.svg')"
+							:src="host.res('icon/arrowDown-000000.svg')"
 							@click="window.changePassword.isShowing = true"
 						/>
 					</div>
@@ -235,7 +235,7 @@
 					.PageProfile-introduction-body {
 						width: 20em;
 						max-width: 100%;
-						background: var(--primary-color);
+						background-color: hsla(0, 0%, 0%, 0.8);
 						color: white;
 						display: flex;
 						flex-direction: column;

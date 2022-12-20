@@ -96,7 +96,7 @@
 				align-items: center;
 				justify-content: center;
 				border-radius: 50%;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 				cursor: pointer;
 				&:hover {
 					background-color: hsl(0, 0%, 90%);

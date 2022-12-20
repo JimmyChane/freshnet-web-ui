@@ -203,7 +203,7 @@
 				flex-grow: 1;
 				background: hsla(0, 0%, 0%, 0.03);
 				padding: 0.6rem 0.4rem;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 
 				padding: inherit;
 
@@ -216,7 +216,7 @@
 				font-weight: 400;
 				font-size: 1em;
 				color: black;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 			}
 
 			.BelongingListEdit-item-quantity-controller {
@@ -237,7 +237,7 @@
 					border-radius: 0.4rem;
 					padding: 4%;
 					background-color: transparent;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 					cursor: pointer;
 					&:hover {
 						background-color: hsl(0, 0%, 90%);

@@ -20,7 +20,7 @@
       height: 100vh;
       z-index: 1;
       align-items: center;
-      transition: var(--animation-duration) cubic-bezier(1, 0, 0, 1);
+      transition: var(--transition-duration) cubic-bezier(1, 0, 0, 1);
 
       // @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
       //    -webkit-backdrop-filter: blur(10px);

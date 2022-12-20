@@ -163,7 +163,7 @@
 				border-radius: 0.3rem;
 				background: none;
 				border: none;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 				padding: 0.3rem;
 
 				.WindowViewImage-thumbnail {

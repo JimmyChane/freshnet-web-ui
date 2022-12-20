@@ -60,7 +60,7 @@
 		width: 4rem;
 		height: 100%;
 
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		background: none;
 		border: none;
 		cursor: pointer;
@@ -73,7 +73,7 @@
 			width: 1.8rem;
 			height: 1.8rem;
 			opacity: 0.66;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			pointer-events: none;
 
 			transform: rotate(var(--rotation));

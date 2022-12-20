@@ -269,7 +269,7 @@
 				.Actionbar-tab {
 					height: 2.4rem;
 					border-radius: 0.8rem 0.8rem 0 0;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 
 					border: none;
 					background: none;
@@ -283,7 +283,7 @@
 
 					.Actionbar-tab-title {
 						z-index: 1;
-						transition: var(--animation-duration);
+						transition: var(--transition-duration);
 						text-align: center;
 						text-overflow: ellipsis;
 						white-space: nowrap;

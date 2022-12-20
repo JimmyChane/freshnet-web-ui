@@ -107,7 +107,7 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       font-weight: 600;
 
       .ButtonOption-main {
@@ -117,7 +117,7 @@
          width: inherit;
          height: inherit;
          cursor: pointer;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
          border: none;
          background: none;
 
@@ -167,7 +167,7 @@
          flex-wrap: nowrap;
          align-items: stretch;
          pointer-events: none;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
          transform: translateX(0%) translateY(0%) scale(0);
          .ButtonOption-dropdown-item {
             font-size: inherit;
@@ -186,7 +186,7 @@
             align-items: center;
             gap: 1em;
             cursor: pointer;
-            transition: var(--animation-duration);
+            transition: var(--transition-duration);
             &:hover {
                background-color: hsla(0, 0%, 0%, 0.05);
             }

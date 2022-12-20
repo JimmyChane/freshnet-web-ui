@@ -173,7 +173,7 @@
 			background-color: #dfe8ee;
 			background-color: hsl(0, 0%, 84%);
 			position: relative;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			.LeftNav-header {
 				padding: 1.4rem;
@@ -191,7 +191,7 @@
 					cursor: pointer;
 					text-decoration: none;
 					color: var(--primary-color);
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 					background: none;
 
 					&:hover {
@@ -199,7 +199,7 @@
 					}
 
 					.LeftNav-icon {
-						transition: var(--animation-duration);
+						transition: var(--transition-duration);
 					}
 					.LeftNav-title {
 						font-weight: 600;

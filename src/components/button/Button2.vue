@@ -33,7 +33,7 @@
 
 <style lang="scss" scoped>
    .Button2-root {
-      --Button2-color: var(--primary-color-dark);
+      --Button2-color: var(--primary-color);
       --Button2-color-text: var(--Button2-color);
 
       box-shadow: 0.5px 0.5px 4px hsla(0, 0%, 0%, 0.2);
@@ -46,20 +46,20 @@
       gap: 12px;
       padding: 0.25em 1em;
       background-color: white;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       cursor: pointer;
 
       .Button2-icon {
          width: 18px;
          height: 18px;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
       }
 
       .Button2-text {
          color: var(--Button2-color-text);
          font-weight: 800;
          font-size: 1em;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
       }
 
       &:hover,

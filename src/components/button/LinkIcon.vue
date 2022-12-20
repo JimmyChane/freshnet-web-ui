@@ -29,7 +29,7 @@
       padding: 0.7em;
       background: none;
       border: none;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       cursor: pointer;
 
       display: flex;

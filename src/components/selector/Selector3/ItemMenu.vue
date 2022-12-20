@@ -30,7 +30,7 @@
       box-shadow: 0 0 4px hsl(0, 0%, 90%);
       font-size: 0.8em;
       padding: 0.6em 1.8em;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       display: flex;
       flex-direction: row;
       align-items: center;

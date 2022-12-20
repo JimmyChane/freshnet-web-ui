@@ -124,7 +124,7 @@
 			flex-direction: row;
 			align-items: stretch;
 			align-items: center;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			width: 100%;
 			height: 100%;
 			padding: 0.2rem 0.4rem;
@@ -144,7 +144,7 @@
 				padding: 0.5rem 0.7rem;
 				border: none;
 				background: none;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 				display: flex;
 				flex-direction: row;
 				&::placeholder {
@@ -180,7 +180,7 @@
 				right: 0;
 				background-color: hsla(0, 0%, 0%, 0.6);
 				display: grid;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 			}
 
 			.SearchInput-main-container {

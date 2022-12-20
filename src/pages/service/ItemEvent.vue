@@ -203,7 +203,7 @@
 				font-size: 0.8rem;
 				padding: 0.4rem;
 				border-radius: 0.3rem;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 			}
 
 			.ItemEvent-menu {

@@ -36,7 +36,7 @@
          font-size: 0.8rem;
          background-color: transparent;
          color: var(--action-color);
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
          cursor: pointer;
          border-radius: 6px;
          &:hover,

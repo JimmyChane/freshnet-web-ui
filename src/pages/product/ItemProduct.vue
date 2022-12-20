@@ -151,7 +151,7 @@
 		--available-opacity: 1;
 
 		width: 100%;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		text-decoration: none;
 		border: none;
 

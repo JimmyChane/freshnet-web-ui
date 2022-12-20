@@ -61,7 +61,7 @@
 			position: relative;
 			background: hsla(0, 0%, 100%, 0.6);
 			border-radius: 0.4rem;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			display: flex;
 			align-items: center;

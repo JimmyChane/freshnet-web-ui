@@ -42,7 +42,7 @@
 
 		text-decoration: none;
 		position: relative;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		&:hover,
 		&:focus {

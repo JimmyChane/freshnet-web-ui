@@ -44,7 +44,7 @@
 
 		text-decoration: none;
 		position: relative;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		&:hover,
 		&:focus {
@@ -93,7 +93,7 @@
 			top: 0;
 			bottom: 0;
 			border-radius: 0.5rem;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 		}
 	}
 	.HomeSectionLocation-isThin {

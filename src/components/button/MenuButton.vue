@@ -30,7 +30,7 @@
 <style lang="scss" scoped>
 	.MenuButton {
 		border-radius: 50%;
-		transition: all var(--animation-duration) ease-out;
+		transition: all var(--transition-duration) ease-out;
 		font-weight: 600;
 		font-size: 1rem;
 

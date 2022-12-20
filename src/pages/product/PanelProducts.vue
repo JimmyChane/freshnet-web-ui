@@ -329,7 +329,7 @@
 
 		.PanelProducts-actionbar {
 			z-index: 2;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			border-bottom: 1px solid hsl(0, 0%, 80%);
 			background-color: #eeeeee;
 		}

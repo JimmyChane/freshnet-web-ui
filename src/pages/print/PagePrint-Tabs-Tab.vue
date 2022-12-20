@@ -34,7 +34,7 @@
 		font-weight: 600;
 		font-size: 0.9rem;
 		padding: 0.5rem 0.7rem;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 	}
 	.Tabs-Tab-isDeselected {
 		transform: scale(0.8);

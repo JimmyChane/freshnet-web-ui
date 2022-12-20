@@ -61,7 +61,7 @@
 			background: white;
 			box-shadow: 0px 0px 0.3rem hsla(0, 0%, 0%, 0.25);
 			border-radius: 0.2rem;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 		}
 
 		.LayoutViewSelector-item {
@@ -72,7 +72,7 @@
 			background: none;
 			font-size: 1rem;
 			border-radius: 0.2rem;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			display: flex;
 			align-items: center;
@@ -82,7 +82,7 @@
 				width: calc(var(--item-size) * 0.8);
 				height: calc(var(--item-size) * 0.8);
 				border-radius: 0.2rem;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 
 				padding: calc(var(--item-size) * 0.2);
 			}

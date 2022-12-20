@@ -120,13 +120,13 @@
       // background: hsla(0, 0%, 100%, 0.2);
       background: hsla(0, 0%, 0%, 0.03);
       border-radius: 0.2em;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       resize: none;
 
       .InputTextArea-sign {
          font-size: 0.7em;
          font-weight: 600;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
       }
 
       .InputTextArea-sign-required {
@@ -166,7 +166,7 @@
 
          font-size: 1em;
 
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
       }
       .InputTextArea-label-isHidden {
          top: 0.6em;
@@ -200,7 +200,7 @@
          font-weight: 400;
          font-size: 1em;
          color: black;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
          resize: inherit;
       }
 

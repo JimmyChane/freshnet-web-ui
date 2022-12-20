@@ -26,7 +26,7 @@
 		flex-wrap: nowrap;
 		align-items: stretch;
 		gap: 1rem;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 	}
 
 	.PageHomeSection-title {
@@ -36,7 +36,7 @@
 		align-items: flex-start;
 		justify-content: center;
 		gap: 0.2rem;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		font-size: 1.6rem;
 		font-weight: 600;

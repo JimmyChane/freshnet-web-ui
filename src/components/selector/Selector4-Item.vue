@@ -31,7 +31,7 @@
 
 		border: 1px solid var(--primary-color);
 		border-radius: 0.4rem;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		display: flex;
 		flex-direction: row;

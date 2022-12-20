@@ -65,7 +65,7 @@
 				flex-direction: row;
 				border-radius: inherit;
 				border: 1px solid hsl(0, 0%, 80%);
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 			}
 		}
 		.ButtonImage-foreground {
@@ -85,7 +85,7 @@
 			pointer-events: none;
 			background: hsla(0, 0%, 100%, 0.7);
 			opacity: 0;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 		}
 		.ButtonImage-option {
 			z-index: 3;

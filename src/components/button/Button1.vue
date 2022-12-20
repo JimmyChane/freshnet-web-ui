@@ -66,7 +66,7 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       cursor: pointer;
       gap: 12px;
 

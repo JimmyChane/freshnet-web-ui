@@ -17,6 +17,6 @@
       right: 0;
       margin: auto;
       pointer-events: none;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
    }
 </style>

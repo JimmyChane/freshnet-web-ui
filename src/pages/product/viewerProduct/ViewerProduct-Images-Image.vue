@@ -74,7 +74,7 @@
 		min-height: var(--height);
 
 		overflow: hidden;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		display: flex;
 		flex-direction: row;
@@ -90,7 +90,7 @@
 			border: none;
 			border-radius: 0.4rem;
 
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			display: flex;
 			justify-content: center;
@@ -101,7 +101,7 @@
 				width: var(--image-width);
 				border-radius: 0.4rem;
 				object-fit: contain;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 			}
 		}
 	}

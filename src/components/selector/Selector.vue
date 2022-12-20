@@ -147,7 +147,7 @@
 		--root-shadow: 0px 0px 10px 0px hsla(0, 0%, 30%, 0.7);
 
 		font-size: 1rem;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		position: relative;
 	}
 
@@ -172,7 +172,7 @@
 		background-color: var(--item-color);
 		// box-shadow: 0 0 4px hsl(0, 0%, 70%);
 		border: 1px solid hsl(0, 0%, 80%);
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		overflow: hidden;
 		&-selected {
 			// box-shadow: var(--root-shadow);
@@ -192,14 +192,14 @@
 			font-weight: 400;
 			font-size: 1rem;
 			cursor: pointer;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			&:hover {
 				background-color: hsla(0, 0%, 0%, 0.1);
 			}
 
 			.Selector-title {
 				flex-grow: 100;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 			}
 			.Selector-separator {
 				min-width: 2px;
@@ -207,13 +207,13 @@
 				background-color: hsla(0, 0%, 0%, 0.1);
 				display: flex;
 				flex-direction: row;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 			}
 			.Selector-arrow {
 				width: var(--icon-size);
 				height: var(--icon-size);
 				padding: 0.3rem;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 				display: flex;
 				flex-direction: row;
 				align-items: center;
@@ -236,7 +236,7 @@
 		opacity: 0;
 		border-radius: var(--border-radius);
 		box-shadow: var(--root-shadow);
-		transition: var(--animation-duration) cubic-bezier(1, 0, 0, 1);
+		transition: var(--transition-duration) cubic-bezier(1, 0, 0, 1);
 		padding: 10px 0;
 		.Selector-item {
 			width: 100%;
@@ -245,7 +245,7 @@
 			align-items: center;
 			gap: 1em;
 			padding: 0.6em 1em;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			cursor: pointer;
 			border: none;
 			background-color: transparent;
@@ -258,7 +258,7 @@
 		}
 		.Selector-item-selected {
 			background-color: hsl(0, 0%, 90%);
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 		}
 	}
 </style>

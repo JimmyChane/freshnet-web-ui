@@ -32,7 +32,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: hsla(0, 0%, 0%, 0.7);
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		--default-size-top: 0.5rem;
 		--default-size-right: 0;
@@ -50,7 +50,7 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: flex-start;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 		}
 	}
 	.BottomsheetWindow-expand {

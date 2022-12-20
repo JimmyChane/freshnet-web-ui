@@ -129,7 +129,7 @@
 				border: none;
 				border-radius: 0.6rem;
 				background: none;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 				&:hover {
 					background: rgba(0, 0, 0, 0.05);
 				}

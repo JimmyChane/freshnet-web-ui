@@ -38,7 +38,7 @@
 		text-decoration: none;
 		font-size: 1rem;
 		color: black;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		&:hover {
 			background-color: aqua;

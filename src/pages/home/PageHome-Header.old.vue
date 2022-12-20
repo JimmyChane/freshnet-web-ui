@@ -19,7 +19,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		padding: 1rem 2.5rem;
 		padding-bottom: 0;
 		padding: 1rem;
@@ -37,7 +37,7 @@
 		justify-content: center;
 		color: black;
 		row-gap: 0.4em;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		.HomeHeader-name {
 			font-weight: 600;

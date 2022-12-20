@@ -152,7 +152,7 @@
 		--available-opacity: 1;
 
 		width: 100%;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		text-decoration: none;
 		border: none;
 		border-radius: var(--border-radius);
@@ -186,7 +186,7 @@
 			color: black;
 			background: var(--background-color-card);
 			opacity: var(--available-opacity);
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			gap: 0.5rem;
 			padding: 1rem;
 

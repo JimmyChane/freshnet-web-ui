@@ -237,7 +237,7 @@
 		height: 100%;
 		width: 100%;
 		padding-bottom: 80px;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		main {
 			width: 100%;
@@ -252,7 +252,7 @@
 				background-color: white;
 				box-shadow: 0 2px 4px #b5b5b5;
 				padding: 10px;
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 			}
 			@media (min-width: 550px) {
 				padding-left: 20px;
@@ -334,7 +334,7 @@
 					color: white;
 					font-weight: 600;
 					background-color: var(--accent-color);
-					transition: all var(--animation-duration) linear;
+					transition: all var(--transition-duration) linear;
 
 					cursor: pointer;
 

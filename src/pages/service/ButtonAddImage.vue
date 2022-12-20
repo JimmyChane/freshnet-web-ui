@@ -26,7 +26,7 @@
       position: relative;
       border: none;
       background: white;
-      transition: var(--animation-duration);
+      transition: var(--transition-duration);
       cursor: pointer;
       display: flex;
       flex-direction: row;
@@ -39,7 +39,7 @@
       .ButtonImageAdd-icon {
          width: 20%;
          height: 20%;
-         transition: var(--animation-duration);
+         transition: var(--transition-duration);
          cursor: pointer;
       }
       .ButtonImageAdd-pick {

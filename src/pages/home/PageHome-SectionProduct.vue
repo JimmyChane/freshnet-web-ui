@@ -188,7 +188,7 @@
 		border-radius: 1em;
 		overflow: hidden;
 		text-decoration: none;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 		background-color: var(--color0);
 		color: var(--color3);
 
@@ -253,7 +253,7 @@
 
 					border-radius: 50%;
 					border: none;
-					transition: var(--animation-duration);
+					transition: var(--transition-duration);
 				}
 				.HomeSectionProduct-indexes-item-isSelected {
 					transform: scale(1.5);
@@ -279,7 +279,7 @@
 				padding: 0.6em 1.2em;
 				border-radius: 3em;
 				background-color: var(--color3);
-				transition: var(--animation-duration);
+				transition: var(--transition-duration);
 
 				&:hover {
 					box-shadow: 0px 0px 0.2rem var(--color3);
@@ -308,7 +308,7 @@
 			max-width: var(--size);
 			max-height: var(--size);
 
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 
 			& > * {
 				width: calc(var(--size) - calc(var(--padding) * 2));

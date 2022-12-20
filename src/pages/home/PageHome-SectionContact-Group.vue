@@ -40,7 +40,7 @@
 		color: black;
 		text-decoration: none;
 		position: relative;
-		transition: var(--animation-duration);
+		transition: var(--transition-duration);
 
 		width: 100%;
 		height: 100%;

@@ -153,7 +153,6 @@
                            time: data.event.timestamp.time,
                         })
                         .then((result) => {
-                           context.clickService(data.service);
                            self.dismiss(context, self);
                         });
                   },

@@ -385,7 +385,7 @@
 		.PanelService-actionbar {
 			--actionbar-background-color-translucent: white;
 			z-index: 3;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 			.PanelService-actionbar-title {
 				width: 100%;
 				display: flex;
@@ -462,13 +462,13 @@
 								padding-left: 0.5em;
 								border: none;
 								.PanelService-section-labels-item-title {
-									transition: var(--animation-duration);
+									transition: var(--transition-duration);
 								}
 								.PanelService-section-labels-item-close {
 									width: 0.8em;
 									height: 0.8em;
 									opacity: 0;
-									transition: var(--animation-duration);
+									transition: var(--transition-duration);
 								}
 								&:hover {
 									.PanelService-section-labels-item-title {

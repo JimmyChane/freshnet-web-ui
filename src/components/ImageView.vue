@@ -114,7 +114,7 @@
 		v-else
 		class="ImageView2-img"
 		:style="{
-			'var(--animation-duration)': `${transitionDuration}ms`,
+			'var(--transition-duration)': `${transitionDuration}ms`,
 			opacity: isShowing ? '1' : '0.2',
 			// transform: isShowing ? 'scale(1)' : 'scale(0.9)',
 			transform: isShowing ? 'scale(1)' : 'scale(0.98)',
@@ -145,6 +145,6 @@
 	}
 	.ImageView2-img {
 		display: flex;
-		transition: all var(--animation-duration);
+		transition: all var(--transition-duration);
 	}
 </style>

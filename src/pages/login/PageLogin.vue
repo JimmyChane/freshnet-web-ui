@@ -138,7 +138,7 @@
 			z-index: 2;
 			width: 100%;
 			position: sticky;
-			transition: var(--animation-duration);
+			transition: var(--transition-duration);
 		}
 
 		.PageLogin-main {
