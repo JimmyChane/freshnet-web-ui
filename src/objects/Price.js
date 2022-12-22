@@ -1,8 +1,7 @@
 export default class Price {
 	static #parseCurrency(content) {
 		const indexStart = content.indexOf(this.DefaultCurrency);
-		const indexEnd =
-			indexStart === -1 ? -1 : indexStart + this.DefaultCurrency.length;
+		const indexEnd = indexStart === -1 ? -1 : indexStart + this.DefaultCurrency.length;
 		return {
 			indexStart,
 			indexEnd,
@@ -77,6 +76,8 @@ export default class Price {
 			typeof currency === "string"
 				? currency.trim().replace(" ", "").toUpperCase()
 				: "";
+		this.#currency =
+			this.#currency.length === 0 ? this.DefaultCurrency : this.#currency;
 		this.#amount = isNaN(amount) ? 0 : Number(amount);
 	}
 
