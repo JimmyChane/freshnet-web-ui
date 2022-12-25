@@ -18,6 +18,102 @@
 	import WindowUpdateCategory from "./WindowUpdateCategory.vue";
 	import WindowUpdateSpecifications from "./WindowUpdateSpecifications.vue";
 
+	class PopupContext {
+		context = null;
+		isShowing = false;
+		input = null;
+
+		onShowCallback;
+		onDismissCallback;
+		onCancelCallback;
+		onConfirmCallback;
+
+		constructor(context) {
+			this.context = context;
+		}
+		show(input) {
+			const accept = () => {
+				this.isShowing = true;
+				this.input = input;
+			};
+			if (typeof this.onShowCallback !== "function") {
+				accept();
+				return;
+			}
+			const reject = (error, reason) => {
+				if (typeof reason === "string" && reason.length)
+					this.context.$root.feedback(reason);
+				if (error !== undefined) console.error(error);
+			};
+			this.onShowCallback(accept, reject, input);
+		}
+		dismiss() {
+			const accept = () => {
+				this.isShowing = false;
+				this.input = null;
+			};
+			if (typeof this.onDismissCallback !== "function") {
+				accept();
+				return;
+			}
+			const reject = (error, reason) => {
+				if (typeof reason === "string" && reason.length)
+					this.context.$root.feedback(reason);
+				if (error !== undefined) console.error(error);
+			};
+			this.onDismissCallback(accept, reject);
+		}
+		cancel() {
+			const accept = () => {
+				this.isShowing = false;
+				this.input = null;
+			};
+			if (typeof this.onCancelCallback !== "function") {
+				accept();
+				return;
+			}
+			const reject = (error, reason) => {
+				if (typeof reason === "string" && reason.length)
+					this.context.$root.feedback(reason);
+				if (error !== undefined) console.error(error);
+			};
+			this.onCancelCallback(accept, reject);
+		}
+		confirm(output) {
+			const accept = () => {
+				this.isShowing = false;
+				this.input = null;
+			};
+			if (typeof this.onConfirmCallback !== "function") {
+				accept();
+				return;
+			}
+			const reject = (error, reason) => {
+				if (typeof reason === "string" && reason.length)
+					this.context.$root.feedback(reason);
+				if (error !== undefined) console.error(error);
+			};
+			this.onConfirmCallback(accept, reject, output);
+		}
+
+		onShow(fun) {
+			this.onShowCallback = fun;
+			return this;
+		}
+		onDismiss(fun) {
+			this.onDismissCallback = fun;
+			return this;
+		}
+		onCancel(fun) {
+			this.onCancelCallback = fun;
+			return this;
+		}
+		onConfirm(fun) {
+			this.onConfirmCallback = fun;
+			return this;
+		}
+	}
+
 	export default {
 		key: "product",
 		title: "Products",
@@ -84,223 +180,78 @@
 			return {
 				scrollTop: 0,
 				popup: {
-					search: {
-						context: null,
-						isShowing: false,
-						show(input) {
-							this.isShowing = true;
-						},
-						dismiss() {
-							this.isShowing = false;
-						},
-						cancel() {
-							this.isShowing = false;
-						},
-						confirm(output) {
-							this.isShowing = false;
-						},
-					},
-					productAdd: {
-						context: null,
-						isShowing: false,
-						input: null,
-
-						show(input) {
-							this.isShowing = true;
-							this.input = input;
-						},
-						dismiss() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						cancel() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						confirm(output) {
-							this.context.productStore
-								.dispatch("addItem", { data: output })
-								.then((product) => {
-									this.dismiss();
-									this.context.setProduct(product);
-								})
-								.catch((error) => {
-									this.context.$root.feedback("Product Creation Failed");
-									console.error(error);
-								});
-						},
-					},
-					productRemove: {
-						context: null,
-						isShowing: false,
-						input: null,
-
-						show(input) {
-							this.isShowing = true;
-							this.input = input;
-						},
-						dismiss() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						cancel() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						confirm(input) {
-							this.context.productStore
+					search: new PopupContext(this),
+					productAdd: new PopupContext(this).onConfirm((accept, reject, output) => {
+						this.productStore
+							.dispatch("addItem", { data: output })
+							.then((product) => {
+								accept();
+								this.setProduct(product);
+							})
+							.catch((error) => reject(error, "Product Creation Failed"));
+					}),
+					productRemove: new PopupContext(this).onConfirm(
+						(accept, reject, input) => {
+							this.productStore
 								.dispatch("removeItemOfId", { id: input.productId })
 								.then(() => {
-									this.dismiss();
-									this.context.setProduct(null);
+									accept();
+									this.setProduct(null);
 								})
-								.catch((error) => {
-									this.context.$root.feedback("Product Deletion Failed");
-									console.error(error);
-								});
+								.catch((error) => reject(error, "Product Deletion Failed"));
 						},
-					},
-					productImageRemove: {
-						context: null,
-						isShowing: false,
-						input: null,
-
-						show(input) {
-							this.isShowing = true;
-							this.input = input;
-						},
-						dismiss() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						cancel() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						confirm(input) {
-							let { product, image } = input;
-
-							this.context.productStore
+					),
+					productImageRemove: new PopupContext(this).onConfirm(
+						(accept, reject, input) => {
+							const { product, image } = input;
+							this.productStore
 								.dispatch("removeImageOfId", { id: product.id, image })
-								.then(() => this.dismiss());
+								.then(() => accept())
+								.catch(() => reject());
 						},
-					},
-					productTitleBrandUpdate: {
-						context: null,
-						isShowing: false,
-						input: null,
-
-						show(input) {
-							this.isShowing = true;
-							this.input = input;
+					),
+					productTitleBrandUpdate: new PopupContext(this).onConfirm(
+						(accept, reject, input) => {
+							const { product, title, brandId } = input;
+							Promise.all([
+								this.productStore.dispatch("updateTitleOfId", {
+									id: product.id,
+									title,
+								}),
+								this.productStore.dispatch("updateBrandIdOfId", {
+									id: product.id,
+									brandId,
+								}),
+							])
+								.then(() => accept())
+								.catch((error) => reject(error, "Some Cannot Update"));
 						},
-						dismiss() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						cancel() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						confirm(input) {
-							let { product, title, brandId } = input;
-
-							this.context.productStore
-								.dispatch("updateTitleOfId", { id: product.id, title })
-								.then((product) => this.dismiss())
-								.catch((error) => {
-									this.context.$root.feedback("Cannot Update");
-									console.error(error);
-								});
-
-							this.context.productStore
-								.dispatch("updateBrandIdOfId", { id: product.id, brandId })
-								.then((product) => this.dismiss())
-								.catch((error) => {
-									this.context.$root.feedback("Cannot Update");
-									console.error(error);
-								});
-						},
-					},
-					productPriceUpdate: {
-						context: null,
-						isShowing: false,
-						input: null,
-						show(input) {
-							this.isShowing = true;
-							this.input = input;
-						},
-						dismiss() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						cancel() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						confirm(input) {
-							let { product, price } = input;
-
-							this.context.productStore
+					),
+					productPriceUpdate: new PopupContext(this).onConfirm(
+						(accept, reject, input) => {
+							const { product, price } = input;
+							this.productStore
 								.dispatch("updatePriceOfId", { id: product.id, price })
-								.then((product) => this.dismiss())
-								.catch((error) => {
-									this.context.$root.feedback("Cannot Update");
-									console.error(error);
-								});
+								.then((product) => accept())
+								.catch((error) => reject(error, "Cannot Update"));
 						},
-					},
-					productDescriptionUpdate: {
-						context: null,
-						isShowing: false,
-						input: null,
-						show(input) {
-							this.isShowing = true;
-							this.input = input;
-						},
-						dismiss() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						cancel() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						confirm(input) {
-							let { product, description } = input;
-
-							this.context.productStore
+					),
+					productDescriptionUpdate: new PopupContext(this).onConfirm(
+						(accept, reject, input) => {
+							const { product, description } = input;
+							this.productStore
 								.dispatch("updateDescriptionOfId", {
 									id: product.id,
 									description,
 								})
-								.then((product) => this.dismiss())
-								.catch((error) => {
-									this.context.$root.feedback("Cannot Update");
-									console.error(error);
-								});
+								.then((product) => accept())
+								.catch((error) => reject(error, "Cannot Update"));
 						},
-					},
-					productSpecificationsUpdate: {
-						context: null,
-						isShowing: false,
-						input: null,
-						show(input) {
-							this.isShowing = true;
-							this.input = input;
-						},
-						dismiss() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						cancel() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						confirm(input) {
-							let { product, specifications } = input;
-
-							this.context.productStore
+					),
+					productSpecificationsUpdate: new PopupContext(this).onConfirm(
+						(accept, reject, input) => {
+							const { product, specifications } = input;
+							this.productStore
 								.dispatch("updateSpecificationsOfId", {
 									id: product.id,
 									specifications: specifications.map((specification) => {
@@ -310,44 +261,22 @@
 										};
 									}),
 								})
-								.then((product) => this.dismiss())
-								.catch((error) => {
-									this.context.$root.feedback("Cannot Update");
-									console.error(error);
-								});
+								.then((product) => accept())
+								.catch((error) => reject(error, "Cannot Update"));
 						},
-					},
-					productCategoryUpdate: {
-						context: null,
-						isShowing: false,
-						input: null,
-						show(input) {
-							this.isShowing = true;
-							this.input = input;
-						},
-						dismiss() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						cancel() {
-							this.isShowing = false;
-							this.input = null;
-						},
-						confirm(input) {
-							let { product, categoryId } = input;
-
-							this.context.productStore
+					),
+					productCategoryUpdate: new PopupContext(this).onConfirm(
+						(accept, reject, input) => {
+							const { product, categoryId } = input;
+							this.productStore
 								.dispatch("updateCategoryIdOfId", {
 									id: product.id,
 									categoryId,
 								})
-								.then((product) => this.dismiss())
-								.catch((error) => {
-									this.context.$root.feedback("Cannot Update");
-									console.error(error);
-								});
+								.then((product) => accept())
+								.catch((error) => reject(error, "Cannot Update"));
 						},
-					},
+					),
 				},
 
 				product: null,
@@ -496,6 +425,11 @@
 					openRemoveBundle: (bundle) => {
 						c.popup.productBundleDelete.isShowing = true;
 					},
+
+					productDescriptionUpdate: new PopupContext(this).onConfirm(
+						(accept, reject, input) => {},
+					),
+
 					openAddGift: () => {
 						c.popup.productGiftAdd.isShowing = true;
 					},
@@ -544,9 +478,7 @@
 
 				const categories = await this.categoryStore.dispatch("getItems");
 				categories.forEach((category) => {
-					const group = groups.find(
-						(group) => group.category.id === category.id,
-					);
+					const group = groups.find((group) => group.category.id === category.id);
 					if (!group) groups.push({ category, items: [] });
 				});
 
@@ -727,9 +659,7 @@
 			:input="popup.productDescriptionUpdate.input"
 			@click-dismiss="() => popup.productDescriptionUpdate.dismiss()"
 			@click-cancel="() => popup.productDescriptionUpdate.cancel()"
-			@click-confirm="
-				(output) => popup.productDescriptionUpdate.confirm(output)
-			"
+			@click-confirm="(output) => popup.productDescriptionUpdate.confirm(output)"
 		/>
 		<!-- Popup Product Category Update -->
 		<WindowUpdateCategory
@@ -747,9 +677,7 @@
 			:input="popup.productSpecificationsUpdate.input"
 			@click-dismiss="() => popup.productSpecificationsUpdate.dismiss()"
 			@click-cancel="() => popup.productSpecificationsUpdate.cancel()"
-			@click-confirm="
-				(output) => popup.productSpecificationsUpdate.confirm(output)
-			"
+			@click-confirm="(output) => popup.productSpecificationsUpdate.confirm(output)"
 		/>
 	</div>
 </template>
