@@ -284,6 +284,9 @@
 				productBrand: null,
 
 				groups: [],
+
+				stylePanelProducts: {},
+				stylePanelEmpty: {},
 			};
 		},
 		computed: {
@@ -446,8 +449,12 @@
 			},
 		},
 		watch: {
+			isOver1200px() {
+				this.invalidateStyle();
+			},
 			product() {
 				this.onProduct();
+				this.invalidateStyle();
 			},
 			productId() {
 				this.onProductId();
@@ -468,6 +475,7 @@
 			this.invalidate();
 			this.onProduct();
 			this.onProductId();
+			this.invalidateStyle();
 			this.$root.navigation.setLayout(Navigation.Layout.THIN);
 		},
 		methods: {
@@ -506,6 +514,38 @@
 				});
 
 				this.groups = groups;
+			},
+			async invalidateStyle() {
+				this.invalidateStylePanelProducts();
+				this.invalidateStylePanelEmpty();
+			},
+			async invalidateStylePanelProducts() {
+				if (this.isOver1200px) {
+					this.stylePanelProducts = {};
+					return;
+				}
+
+				if (this.product) {
+					setTimeout(() => {
+						this.stylePanelProducts = { display: "none" };
+					}, 700);
+					return;
+				}
+				this.stylePanelProducts = { display: "flex" };
+			},
+			async invalidateStylePanelEmpty() {
+				if (!this.isOver1200px) {
+					this.stylePanelEmpty = {};
+					return;
+				}
+
+				if (this.product) {
+					setTimeout(() => {
+						this.stylePanelEmpty = { display: "none" };
+					}, 700);
+					return;
+				}
+				this.stylePanelEmpty = { display: "flex" };
 			},
 
 			async onProduct() {
@@ -552,12 +592,13 @@
 		>
 			<PanelProducts
 				class="PageProduct-products"
+				:style="stylePanelProducts"
 				:products="products"
 				@click-productAdd="() => popup.productAdd.show()"
 				@click-search="() => popup.search.show()"
 			/>
 
-			<div class="PageProduct-PanelRightEmpty">
+			<div class="PageProduct-PanelRightEmpty" :style="stylePanelEmpty">
 				<span class="PageProduct-PanelRightEmpty-text">Select to view</span>
 			</div>
 
