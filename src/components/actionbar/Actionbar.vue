@@ -57,7 +57,7 @@
 		width: 100%;
 		min-height: var(--height);
 		max-height: var(--height);
-		padding: 0.6rem;
+		// padding: 0.6rem;
 
 		display: flex;
 		flex-direction: row;

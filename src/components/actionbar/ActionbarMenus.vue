@@ -40,19 +40,21 @@
 <style lang="scss" scoped>
 	.ActionBar2Menus {
 		width: max-content;
-		flex-grow: 0;
+		padding: 0.4rem;
+
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
+		flex-grow: 0;
 		align-items: center;
 		justify-content: end;
-		gap: 0.2rem;
-		gap: 0;
+
 		.ActionBar2Menus-menu {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 			justify-content: center;
+
 			.ActionBar2Menus-menu-icon {
 				font-size: 1.2rem;
 			}

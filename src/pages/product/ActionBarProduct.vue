@@ -131,10 +131,7 @@
 				:key="product.id"
 				:to="{ query: { productId: product.id } }"
 			>
-				<ItemSearchProduct
-					class="ActionbarProduct-search-item"
-					:item="product"
-				/>
+				<ItemSearchProduct class="ActionbarProduct-search-item" :item="product" />
 			</router-link>
 		</SearchInput>
 	</Actionbar>
@@ -145,13 +142,17 @@
 		width: 100%;
 		position: sticky;
 		top: 0;
+		padding: 0.2rem;
 
 		.ActionbarProduct-search {
 			flex-grow: 1;
 			z-index: 1;
-			max-width: 40em;
+			max-width: 30em;
 			border: none;
-			--background: white;
+			--background-color: transparent;
+			--background-color-focus: transparent;
+			--border: 1px solid transparent;
+
 			.ActionbarProduct-search-item-link {
 				text-decoration: none;
 				display: flex;

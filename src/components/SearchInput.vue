@@ -18,9 +18,7 @@
 				const date = new Date();
 				const time = date.getTime();
 
-				if (time < this.searchLastCharTime) {
-					return;
-				}
+				if (time < this.searchLastCharTime) return;
 
 				this.searchLastCharTime = time;
 				setTimeout(
@@ -34,34 +32,26 @@
 </script>
 
 <template>
-	<div class="SearchInput-root">
+	<div class="SearchInput">
 		<div
-			:class="[
-				'SearchInput-body',
-				searchExpand
-					? 'SearchInput-body-isExpand'
-					: 'SearchInput-body-isCollapsed',
-			]"
+			:class="['SearchInput-body', searchExpand ? 'SearchInput-body-isActive' : '']"
 			@click="$refs['SearchInput-keyword'].focus()"
 		>
-			<input
-				class="SearchInput-keyword"
-				ref="SearchInput-keyword"
-				v-model="search"
-				:placeholder="placeholder"
-				@focus="searchExpand = search"
-			/>
-
 			<ButtonIcon
-				:src="
-					host.res(search ? 'icon/close-000000.svg' : 'icon/search-000000.svg')
-				"
+				:src="host.res(search ? 'icon/close-000000.svg' : 'icon/search-000000.svg')"
 				alt="Clear"
 				@click="
 					search = '';
 					searchExpand = false;
 					$refs['SearchInput-keyword'].focus();
 				"
+			/>
+			<input
+				class="SearchInput-keyword"
+				ref="SearchInput-keyword"
+				v-model="search"
+				:placeholder="placeholder"
+				@focus="searchExpand = search"
 			/>
 		</div>
 
@@ -80,21 +70,9 @@
 					<p v-if="!list || list.length <= 0">No Result</p>
 
 					<slot
-						:clear="
-							() => {
-								search = '';
-							}
-						"
-						:expand="
-							() => {
-								searchExpand = true;
-							}
-						"
-						:collapse="
-							() => {
-								searchExpand = false;
-							}
-						"
+						:clear="() => (search = '')"
+						:expand="() => (searchExpand = true)"
+						:collapse="() => (searchExpand = false)"
 						:list="list"
 					/>
 				</div>
@@ -104,15 +82,20 @@
 </template>
 
 <style lang="scss" scoped>
-	.SearchInput-root {
-		--background: hsla(0, 0%, 100%, 0.3);
+	.SearchInput {
+		--background-color: hsla(0, 0%, 100%, 0.3);
+		--background-color-active: white;
+		--background-color-focus: white;
+
 		--border-radius: 0.4rem;
+		--border-radius-active: 0.4rem;
+
 		--border: 1px solid hsla(0, 0%, 0%, 0.15);
+		--border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
 
 		display: flex;
 		flex-direction: column;
 		align-items: stretch;
-		border-radius: var(--border-radius);
 		width: 100%;
 		height: 100%;
 		position: relative;
@@ -128,12 +111,8 @@
 			width: 100%;
 			height: 100%;
 			padding: 0.2rem 0.4rem;
-			background: var(--background);
+			padding: 0.4rem;
 			border: var(--border);
-
-			&:focus-within {
-				background: white;
-			}
 
 			.SearchInput-keyword {
 				width: 100%;
@@ -142,6 +121,7 @@
 				border: none;
 				outline: none;
 				padding: 0.5rem 0.7rem;
+				padding: 0.5rem;
 				border: none;
 				background: none;
 				transition: var(--transition-duration);
@@ -152,22 +132,28 @@
 				}
 			}
 		}
-		.SearchInput-body-isExpand {
-			background: white;
-
-			border-radius: calc(var(--border-radius) / 2)
-				calc(var(--border-radius) / 2) 0 0;
-		}
-		.SearchInput-body-isCollapsed {
+		.SearchInput-body {
+			background-color: var(--background-color);
 			border-radius: var(--border-radius);
+			&:focus-within {
+				background-color: var(--background-color-focus);
+				border: var(--border-focus);
+			}
+		}
+		.SearchInput-body-isActive {
+			background-color: var(--background-color-active);
+			border-radius: var(--border-radius-active) var(--border-radius-active) 0 0;
+			&:focus-within {
+				background-color: var(--background-color-active);
+				border: var(--border-active);
+			}
 		}
 
 		.SearchInput-main {
 			width: 100%;
 			height: 0;
 			background-color: white;
-			border-radius: 0 0 calc(var(--border-radius) / 2)
-				calc(var(--border-radius) / 2);
+			border-radius: 0 0 var(--border-radius-active) var(--border-radius-active);
 			z-index: 1;
 
 			.SearchInput-main-background {
@@ -190,11 +176,11 @@
 				height: 100vh;
 				max-height: 80vh;
 				box-shadow: 0 0 60px hsla(0, 0%, 0%, 0.1);
-				border-radius: calc(var(--border-radius) / 2);
+				border-radius: var(--border-radius-active);
 				padding-top: 3rem;
-				background-color: white;
 				background-color: #e4e4e4;
 				overflow: hidden;
+
 				.SearchInput-main-body {
 					width: 100%;
 					height: 100%;
@@ -204,8 +190,7 @@
 					align-items: center;
 					gap: 0.4rem;
 
-					border-radius: 0 0 calc(var(--border-radius) / 2)
-						calc(var(--border-radius) / 2);
+					border-radius: 0 0 var(--border-radius-active) var(--border-radius-active);
 
 					overflow-y: auto;
 					overflow-x: hidden;
