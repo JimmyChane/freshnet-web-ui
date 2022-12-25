@@ -262,8 +262,7 @@
 					flex-grow: 1;
 					transition: var(--transition-duration);
 					--border-radius: 4rem;
-
-					--background: hsla(0, 0%, 100%, 0.9);
+					--background-color: hsla(0, 0%, 100%, 0.9);
 
 					.Home-actionbar-search-item {
 						width: 100%;
