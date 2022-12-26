@@ -1,46 +1,116 @@
-import HostRequest from "./HostRequest.js";
-import HostResponse from "./HostResponse.js";
 import Text from "@/items/data/Text.js";
-
 import config from "@/../freshnet.config";
+
+class HostRequest {
+	#bind = { method: "GET", url: "", headers: {}, body: undefined };
+
+	GET() {
+		return this.method("GET");
+	}
+	POST() {
+		return this.method("POST");
+	}
+	PUT() {
+		return this.method("PUT");
+	}
+	DELETE() {
+		return this.method("DELETE");
+	}
+	method(method = "GET") {
+		this.#bind.method = method;
+		return this;
+	}
+
+	headers(headers = {}) {
+		this.#bind.headers = headers;
+		return this;
+	}
+	contentTypeJson() {
+		if (typeof this.#bind.headers !== "object" || Array.isArray(this.#bind.headers)) {
+			this.#bind.headers = {};
+		}
+		this.#bind.headers["Content-Type"] = "application/json;charset=UTF-8";
+		return this;
+	}
+
+	url(url = "") {
+		this.#bind.url = url;
+		return this;
+	}
+
+	body(body = undefined) {
+		this.#bind.body = body ? JSON.stringify(body) : undefined;
+		return this;
+	}
+	bodyObject(body = undefined) {
+		this.#bind.body = body;
+		return this;
+	}
+
+	async send() {
+		this.contentTypeJson();
+
+		let { method = "GET", url = "", headers = {}, body = undefined } = this.#bind;
+
+		if (url) url = `${config.hostApi}/${url}`;
+		if (window.localStorage.getItem("userToken")) {
+			headers.authorization = window.localStorage.getItem("userToken");
+		}
+
+		const response = await fetch(url, { method, headers, body });
+		const json = await response.json();
+		const hostResponse = new HostResponse(json);
+
+		if (hostResponse.getError()) throw new Error(hostResponse.getError());
+		return hostResponse;
+	}
+	async sendNotJson() {
+		let { method = "GET", url = "", headers = {}, body = undefined } = this.#bind;
+
+		if (url) url = `${config.hostApi}/${url}`;
+		if (window.localStorage.getItem("userToken")) {
+			headers.authorization = window.localStorage.getItem("userToken");
+		}
+
+		const response = await fetch(url, { method, headers, body });
+		const json = await response.json();
+		const hostResponse = new HostResponse(json);
+
+		if (hostResponse.getError()) throw new Error(hostResponse.getError());
+		return hostResponse;
+	}
+}
+class HostResponse {
+	#apiJson = null;
+
+	constructor(apiJson) {
+		this.#apiJson = apiJson;
+	}
+
+	getError() {
+		return this.#apiJson.error;
+	}
+	getErrorFriendly() {
+		return this.#apiJson.friendlyError;
+	}
+	getContent() {
+		return this.#apiJson.content;
+	}
+
+	get error() {
+		return this.getError();
+	}
+	get friendlyError() {
+		return this.getErrorFriendly();
+	}
+	get content() {
+		return this.getContent();
+	}
+}
 
 class ApiHost {
 	get origin() {
 		return config.host;
-	}
-	get imgFile() {
-		return {
-			name: (name, option = {}) => {
-				let { width = 0, height = 0 } = option;
-				width = width > 0 ? width : 0;
-				height = height > 0 ? height : 0;
-
-				let query = "";
-				if (width != 0 && height == 0) {
-					query = `?width=${width}`;
-				} else if (width == 0 && height != 0) {
-					query = `?height=${height}`;
-				} else if (width > 0 && height > 0) {
-					query = `?width=${width}&height=${height}`;
-				}
-
-				return `${config.hostApi}/image/name/${name}${query}`;
-			},
-			list: () => this.api({ url: `image/list` }).then((json) => json.content),
-			upload: (images = []) => {
-				const formData = new FormData();
-				images.forEach((image) => formData.append(image.name, image));
-
-				return this.fetch({
-					method: "POST",
-					url: `image/upload`,
-					body: formData,
-				});
-			},
-			remove: (name) => {
-				return this.request().DELETE().url(`image/delete/${name}`).send();
-			},
-		};
 	}
 
 	res(url) {
@@ -52,40 +122,8 @@ class ApiHost {
 		if (url === "") return "";
 		return `${config.cloudinaryRes}/${url}`;
 	}
-
 	request() {
-		return new HostRequest(this);
-	}
-	api(param = { method: "GET", url: "", headers: {}, body: undefined }) {
-		return this.request()
-			.method(param.method)
-			.url(param.url)
-			.headers(param.headers)
-			.body(param.body)
-			.send();
-	} //legacy
-	async fetch(param = {}) {
-		let { method = "GET", url = "", headers = {}, body = undefined } = param;
-
-		if (url) url = `${config.hostApi}/${url}`;
-		if (window.localStorage.getItem("userToken")) {
-			headers.authorization = window.localStorage.getItem("userToken");
-		}
-
-		try {
-			let response = await fetch(url, { method, headers, body });
-			let json = await response.json();
-			let hostResponse = new HostResponse(json);
-
-			if (hostResponse.getError()) {
-				console.error("ApiHost Response:", hostResponse.getError());
-			}
-
-			return hostResponse;
-		} catch (error) {
-			console.error("Fetch:", error);
-			throw error;
-		}
+		return new HostRequest();
 	}
 }
 

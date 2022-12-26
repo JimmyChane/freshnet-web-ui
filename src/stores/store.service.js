@@ -141,13 +141,6 @@ export default {
 						let { data } = arg;
 						if (!data) return null;
 						if (!data) throw new Error("invalid data");
-						let images =
-							!Array.isArray(data.imageFiles) || data.imageFiles.length <= 0
-								? []
-								: await ApiHost.imgFile
-										.upload(data.imageFiles)
-										.then((json) => json.content);
-						data.imageFiles = images;
 						let api = await ApiHost.request()
 							.POST()
 							.url("service_v2/add/item/")
@@ -395,11 +388,11 @@ export default {
 						const { serviceID, imageFile } = arg;
 						const imageFileForm = new FormData();
 						imageFileForm.append(imageFile.name, imageFile);
-						const api = await ApiHost.fetch({
-							method: "POST",
-							url: `service_v2/item/${serviceID}/add/image_files/`,
-							body: imageFileForm,
-						});
+						const api = await ApiHost.request()
+							.POST()
+							.url(`service_v2/item/${serviceID}/add/image_files/`)
+							.bodyObject(imageFileForm)
+							.sendNotJson();
 						if (api.error) throw new Error(api.error);
 						const { content } = api;
 						const { items, fail_count } = content;
@@ -418,8 +411,6 @@ export default {
 				removeImageFromId: async (context, arg = { serviceID, image }) => {
 					return context.state.processor.acquire("removeImageFromId", async () => {
 						let { serviceID, image } = arg;
-						// let api = await ApiHost.imgFile.remove(image.name);
-						// if (api.error) throw new Error();
 						let api = ApiHost.request()
 							.DELETE()
 							.url(`service_v2/item/${serviceID}/delete/image/`)

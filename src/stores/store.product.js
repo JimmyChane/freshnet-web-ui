@@ -156,7 +156,10 @@ export default {
 							.send();
 						let error = api.getError();
 						if (error) throw new Error(error);
-						new CollectionUpdater(context).toRemove().withId(id).commitThenGetItem();
+						new CollectionUpdater(context)
+							.toRemove()
+							.withId(id)
+							.commitThenGetItem();
 						return true;
 					});
 				},
@@ -181,27 +184,30 @@ export default {
 					});
 				},
 				updateDescriptionOfId: async (context, arg = { id, description }) => {
-					return context.state.processor.acquire("updateDescriptionOfId", async () => {
-						let { id, description } = arg;
-						let api = await ApiHost.request()
-							.PUT()
-							.url("productv2/description/")
-							.body({ content: { productId: id, description } })
-							.send();
-						let error = api.getError();
-						let content = api.getContent();
-						if (error) {
-							throw new Error(error);
-						}
-						return new CollectionUpdater(context)
-							.toUpdate()
-							.withId(content.productId)
-							.updateThenCommitThenGetItem((oldItem, newItem) => {
-								oldItem.description = U.isString(content.description)
-									? content.description.trim()
-									: "";
-							});
-					});
+					return context.state.processor.acquire(
+						"updateDescriptionOfId",
+						async () => {
+							let { id, description } = arg;
+							let api = await ApiHost.request()
+								.PUT()
+								.url("productv2/description/")
+								.body({ content: { productId: id, description } })
+								.send();
+							let error = api.getError();
+							let content = api.getContent();
+							if (error) {
+								throw new Error(error);
+							}
+							return new CollectionUpdater(context)
+								.toUpdate()
+								.withId(content.productId)
+								.updateThenCommitThenGetItem((oldItem, newItem) => {
+									oldItem.description = U.isString(content.description)
+										? content.description.trim()
+										: "";
+								});
+						},
+					);
 				},
 				updateBrandIdOfId: async (context, arg = { id, brandId }) => {
 					return context.state.processor.acquire("updateBrandIdOfId", async () => {
@@ -223,61 +229,70 @@ export default {
 					});
 				},
 				updateCategoryIdOfId: async (context, arg = { id, categoryId }) => {
-					return context.state.processor.acquire("updateCategoryIdOfId", async () => {
-						let { id, categoryId } = arg;
-						let api = await ApiHost.request()
-							.PUT()
-							.url("productv2/categoryId/")
-							.body({ content: { productId: id, categoryId } })
-							.send();
-						let error = api.getError();
-						let content = api.getContent();
-						if (error) throw new Error(error);
-						return new CollectionUpdater(context)
-							.toUpdate()
-							.withId(content.productId)
-							.updateThenCommitThenGetItem((oldItem, newItem) => {
-								oldItem.setCategoryId(content.categoryId);
-							});
-					});
+					return context.state.processor.acquire(
+						"updateCategoryIdOfId",
+						async () => {
+							let { id, categoryId } = arg;
+							let api = await ApiHost.request()
+								.PUT()
+								.url("productv2/categoryId/")
+								.body({ content: { productId: id, categoryId } })
+								.send();
+							let error = api.getError();
+							let content = api.getContent();
+							if (error) throw new Error(error);
+							return new CollectionUpdater(context)
+								.toUpdate()
+								.withId(content.productId)
+								.updateThenCommitThenGetItem((oldItem, newItem) => {
+									oldItem.setCategoryId(content.categoryId);
+								});
+						},
+					);
 				},
 				updateAvailabilityOfId: async (context, arg = { id, isAvailable }) => {
-					return context.state.processor.acquire("updateAvailabilityOfId", async () => {
-						let { id, isAvailable } = arg;
-						let api = await ApiHost.request()
-							.PUT()
-							.url("productv2/isAvailable/")
-							.body({ content: { productId: id, isAvailable } })
-							.send();
-						let error = api.getError();
-						let content = api.getContent();
-						if (error) throw new Error(error);
-						return new CollectionUpdater(context)
-							.toUpdate()
-							.withId(content.productId)
-							.updateThenCommitThenGetItem((oldItem, newItem) => {
-								oldItem.stock.isAvailable = content.isAvailable;
-							});
-					});
+					return context.state.processor.acquire(
+						"updateAvailabilityOfId",
+						async () => {
+							let { id, isAvailable } = arg;
+							let api = await ApiHost.request()
+								.PUT()
+								.url("productv2/isAvailable/")
+								.body({ content: { productId: id, isAvailable } })
+								.send();
+							let error = api.getError();
+							let content = api.getContent();
+							if (error) throw new Error(error);
+							return new CollectionUpdater(context)
+								.toUpdate()
+								.withId(content.productId)
+								.updateThenCommitThenGetItem((oldItem, newItem) => {
+									oldItem.stock.isAvailable = content.isAvailable;
+								});
+						},
+					);
 				},
 				updateSecondHandOfId: async (context, arg = { id, isSecondHand }) => {
-					return context.state.processor.acquire("updateSecondHandOfId", async () => {
-						let { id, isSecondHand } = arg;
-						let api = await ApiHost.request()
-							.PUT()
-							.url("productv2/isSecondHand/")
-							.body({ content: { productId: id, isSecondHand } })
-							.send();
-						let error = api.getError();
-						let content = api.getContent();
-						if (error) throw new Error(error);
-						return new CollectionUpdater(context)
-							.toUpdate()
-							.withId(content.productId)
-							.updateThenCommitThenGetItem((oldItem, newItem) => {
-								oldItem.stock.isSecondHand = content.isSecondHand;
-							});
-					});
+					return context.state.processor.acquire(
+						"updateSecondHandOfId",
+						async () => {
+							let { id, isSecondHand } = arg;
+							let api = await ApiHost.request()
+								.PUT()
+								.url("productv2/isSecondHand/")
+								.body({ content: { productId: id, isSecondHand } })
+								.send();
+							let error = api.getError();
+							let content = api.getContent();
+							if (error) throw new Error(error);
+							return new CollectionUpdater(context)
+								.toUpdate()
+								.withId(content.productId)
+								.updateThenCommitThenGetItem((oldItem, newItem) => {
+									oldItem.stock.isSecondHand = content.isSecondHand;
+								});
+						},
+					);
 				},
 				updatePriceOfId: async (context, arg = { id, price }) => {
 					return context.state.processor.acquire("updatePriceOfId", async () => {
@@ -388,66 +403,75 @@ export default {
 				},
 
 				addSpecificationOfId: async (context, arg = { id, specification }) => {
-					return context.state.processor.acquire("addSpecificationOfId", async () => {
-						let { id, specification } = arg;
-						let api = await ApiHost.request()
-							.POST()
-							.url("productv2/specification/")
-							.body({ content: { productId: id, specification } })
-							.send();
-						let error = api.getError();
-						let content = api.getContent();
-						if (error) throw new Error(error);
-						return new CollectionUpdater(context)
-							.toUpdate()
-							.withId(content.productId)
-							.updateThenCommitThenGetItem((oldItem, newItem) => {
-								oldItem.addSpecification(content.specification);
-							});
-					});
+					return context.state.processor.acquire(
+						"addSpecificationOfId",
+						async () => {
+							let { id, specification } = arg;
+							let api = await ApiHost.request()
+								.POST()
+								.url("productv2/specification/")
+								.body({ content: { productId: id, specification } })
+								.send();
+							let error = api.getError();
+							let content = api.getContent();
+							if (error) throw new Error(error);
+							return new CollectionUpdater(context)
+								.toUpdate()
+								.withId(content.productId)
+								.updateThenCommitThenGetItem((oldItem, newItem) => {
+									oldItem.addSpecification(content.specification);
+								});
+						},
+					);
 				},
 				removeSpecificationOfId: async (context, arg = { id, specification }) => {
-					return context.state.processor.acquire("removeSpecificationOfId", async () => {
-						let { id, specification } = arg;
-						specification =
-							specification instanceof ProductSpecContent
-								? specification.toData()
-								: specification;
-						specification.type = specification.key;
-						let api = await ApiHost.request()
-							.DELETE()
-							.url("productv2/specification/")
-							.body({ content: { productId: id, specification } })
-							.send();
-						let error = api.getError();
-						let content = api.getContent();
-						if (error) throw new Error(error);
-						return new CollectionUpdater(context)
-							.toUpdate()
-							.withId(content.productId)
-							.updateThenCommitThenGetItem((oldItem, newItem) => {
-								oldItem.removeSpecification(content.specification);
-							});
-					});
+					return context.state.processor.acquire(
+						"removeSpecificationOfId",
+						async () => {
+							let { id, specification } = arg;
+							specification =
+								specification instanceof ProductSpecContent
+									? specification.toData()
+									: specification;
+							specification.type = specification.key;
+							let api = await ApiHost.request()
+								.DELETE()
+								.url("productv2/specification/")
+								.body({ content: { productId: id, specification } })
+								.send();
+							let error = api.getError();
+							let content = api.getContent();
+							if (error) throw new Error(error);
+							return new CollectionUpdater(context)
+								.toUpdate()
+								.withId(content.productId)
+								.updateThenCommitThenGetItem((oldItem, newItem) => {
+									oldItem.removeSpecification(content.specification);
+								});
+						},
+					);
 				},
 				updateSpecificationsOfId: async (context, arg = { id, specifications }) => {
-					return context.state.processor.acquire("updateSpecificationsOfId", async () => {
-						let { id, specifications } = arg;
-						let api = await ApiHost.request()
-							.PUT()
-							.url("productv2/specification/list")
-							.body({ content: { productId: id, specifications } })
-							.send();
-						let error = api.getError();
-						let content = api.getContent();
-						if (error) throw new Error(error);
-						return new CollectionUpdater(context)
-							.toUpdate()
-							.withId(content.productId)
-							.updateThenCommitThenGetItem((oldItem, newItem) => {
-								oldItem.setSpecifications(content.specifications);
-							});
-					});
+					return context.state.processor.acquire(
+						"updateSpecificationsOfId",
+						async () => {
+							let { id, specifications } = arg;
+							let api = await ApiHost.request()
+								.PUT()
+								.url("productv2/specification/list")
+								.body({ content: { productId: id, specifications } })
+								.send();
+							let error = api.getError();
+							let content = api.getContent();
+							if (error) throw new Error(error);
+							return new CollectionUpdater(context)
+								.toUpdate()
+								.withId(content.productId)
+								.updateThenCommitThenGetItem((oldItem, newItem) => {
+									oldItem.setSpecifications(content.specifications);
+								});
+						},
+					);
 				},
 
 				addImageOfId: async (context, arg = { id, imageFile }) => {
@@ -455,11 +479,11 @@ export default {
 						let { id, imageFile } = arg;
 						const imageFileForm = new FormData();
 						imageFileForm.append(imageFile.name, imageFile);
-						let api = await ApiHost.fetch({
-							method: "POST",
-							url: `productv2/id/${id}/image/`,
-							body: imageFileForm,
-						});
+						let api = await ApiHost.request()
+							.POST()
+							.url(`productv2/id/${id}/image/`)
+							.bodyObject(imageFileForm)
+							.sendNotJson();
 						if (api.error) throw new Error(api.error);
 						let { content } = api;
 						return new CollectionUpdater(context)

@@ -4,6 +4,16 @@ import ModuleImage from "./data/Image.js";
 const getColors = require("get-image-colors"); // https://www.npmjs.com/package/get-image-colors
 
 class Image {
+	static dimensionToQuery(width = 0, height = 0) {
+		width = width > 0 ? width : 0;
+		height = height > 0 ? height : 0;
+
+		if (width != 0 && height == 0) return `width=${width}`;
+		if (width == 0 && height != 0) return `height=${height}`;
+		if (width > 0 && height > 0) return `width=${width}&height=${height}`;
+		return "";
+	}
+
 	static Method = ModuleImage.Method;
 
 	method;
@@ -36,7 +46,9 @@ class Image {
 			if (method === Image.Method.StorageImage) {
 				const prefix = "/api/image/name/";
 				const name = path.substring(prefix.length, path.length);
-				return ApiHost.imgFile.name(name, { width, height });
+				const dimensionQuery = Image.dimensionToQuery(width, height);
+				const query = dimensionQuery.length ? `?${dimensionQuery}` : "";
+				return `${ApiHost.origin}/api/image/name/${name}${query}`;
 			}
 		}
 		return "";
