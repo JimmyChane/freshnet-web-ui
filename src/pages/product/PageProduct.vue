@@ -526,12 +526,14 @@
 				}
 
 				if (this.product) {
+					const compare = this.product;
 					setTimeout(() => {
-						this.stylePanelProducts = { display: "none" };
+						if (compare === this.product)
+							this.stylePanelProducts = { display: "none" };
 					}, 700);
 					return;
 				}
-				this.stylePanelProducts = { display: "flex" };
+				this.stylePanelProducts = {};
 			},
 			async invalidateStylePanelEmpty() {
 				if (!this.isOver1200px) {
@@ -540,12 +542,14 @@
 				}
 
 				if (this.product) {
+					const compare = this.product;
 					setTimeout(() => {
-						this.stylePanelEmpty = { display: "none" };
+						if (compare === this.product)
+							this.stylePanelEmpty = { display: "none" };
 					}, 700);
 					return;
 				}
-				this.stylePanelEmpty = { display: "flex" };
+				this.stylePanelEmpty = {};
 			},
 
 			async onProduct() {
