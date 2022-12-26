@@ -26,22 +26,22 @@ self.addEventListener("install", async (event) => {
 	event.waitUntil(promise);
 });
 // self.addEventListener("activate", async (event) => {});
-// self.addEventListener("fetch", async (event) => {
-// 	if (event.request.method !== "GET") return;
+self.addEventListener("fetch", async (event) => {
+	if (event.request.method !== "GET") return;
 
-// 	const promise = Promise.resolve()
-// 		.then(async () => {
-// 			const cacheStore = await caches.open(cacheName);
-// 			try {
-// 				const response = await fetch(event.request);
-// 				event.waitUntil(cacheStore.put(event.request, response.clone()));
-// 				return response;
-// 			} catch (error) {
-// 				return await cacheStore.match(event.request);
-// 			}
-// 		})
-// 		.then((response) => {
-// 			if (response instanceof Response) return response;
-// 		});
-// 	event.respondWith(promise);
-// });
+	const promise = Promise.resolve()
+		.then(async () => {
+			const cacheStore = await caches.open(cacheName);
+			try {
+				const response = await fetch(event.request);
+				cacheStore.put(event.request, response.clone());
+				return response;
+			} catch (error) {
+				return await cacheStore.match(event.request);
+			}
+		})
+		.then((response) => {
+			if (response instanceof Response) return response;
+		});
+	event.respondWith(promise);
+});
