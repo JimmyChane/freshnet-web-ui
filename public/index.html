@@ -1,59 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="utf-8" />
+	<head>
+		<meta charset="utf-8" />
 
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-      <!-- Cache Control -->
-      <meta
-         http-equiv="Cache-Control"
-         content="max-age=21600, s-maxage=21600, public"
-      />
-      <meta http-equiv="Expires" content="0" />
+		<!-- Cache Control -->
+		<meta http-equiv="Cache-Control" content="max-age=21600, s-maxage=21600, public" />
+		<meta http-equiv="Expires" content="0" />
 
-      <!-- Link Previews -->
-      <!-- <meta property="og:url" content="https://freshnet.app" /> -->
-      <meta property="og:site_name" content="Freshnet Enterprise" />
-      <meta property="og:type" content="website" />
-      <meta property="og:title" content="Home" />
-      <meta property="og:image" content="logos-512.png" />
-      <meta
-         property="og:description"
-         content="We sell notebooks, printers, repairs, and more."
-      />
-      <meta
-         name="description"
-         content="We sell notebooks, printers, repairs, and more."
-      />
+		<!-- Link Previews -->
+		<!-- <meta property="og:url" content="https://freshnet.app" /> -->
+		<meta property="og:site_name" content="Freshnet Enterprise" />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content="Home" />
+		<meta property="og:image" content="logos-512.png" />
+		<meta
+			property="og:description"
+			content="We sell notebooks, printers, repairs, and more."
+		/>
+		<meta
+			name="description"
+			content="We sell notebooks, printers, repairs, and more."
+		/>
 
-      <!-- Viewport -->
-      <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+		<!-- Viewport -->
+		<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 
-      <!-- Theme -->
-      <meta name="theme-color" content="#2f579d" />
+		<!-- Theme -->
+		<meta name="theme-color" content="#2f579d" />
 
-      <!-- Manifest -->
-      <link rel="manifest" href="manifest.webmanifest" />
+		<!-- Manifest -->
+		<link rel="manifest" href="manifest.webmanifest" />
 
-      <!-- Style -->
-      <link
-         rel="stylesheet"
-         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
-      />
-      <link href="<%= BASE_URL %>favicon.ico" rel="icon" />
+		<!-- Style -->
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
+		/>
+		<link href="<%= BASE_URL %>favicon.ico" rel="icon" />
 
-      <!-- Title (Webpack) -->
-      <title><%= htmlWebpackPlugin.options.title %></title>
-   </head>
-   <body>
-      <noscript>
-         <strong>
-            We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
-            properly without JavaScript enabled. Please enable it to continue.
-         </strong>
-      </noscript>
+		<!-- Title (Webpack) -->
+		<title><%= htmlWebpackPlugin.options.title %></title>
+	</head>
+	<body>
+		<noscript>
+			<strong>
+				We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly
+				without JavaScript enabled. Please enable it to continue.
+			</strong>
+		</noscript>
 
-      <div id="app"></div>
-   </body>
+		<script>
+			window.addEventListener("load", () => {
+				if ("serviceWorker" in navigator) {
+					navigator.serviceWorker.register("./service-worker.js");
+				}
+			});
+		</script>
+		<div id="app"></div>
+	</body>
 </html>
