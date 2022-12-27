@@ -2,6 +2,7 @@
 	import ActionbarMenus from "@/components/actionbar/ActionbarMenus.vue";
 	import SearchInput from "@/components/SearchInput.vue";
 	import ItemCustomerSearch from "./ItemCustomerSearch.vue";
+	import Searcher from "@/tools/Searcher";
 
 	export default {
 		components: { ActionbarMenus, SearchInput, ItemCustomerSearch },
@@ -15,6 +16,8 @@
 		},
 		methods: {
 			searchResults(str) {
+				return Searcher.withItems(this.items).search(str);
+
 				const strs = str
 					.toLowerCase()
 					.split(/[\s,]+/)

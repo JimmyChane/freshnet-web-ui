@@ -6,6 +6,7 @@
 
 	import ItemService from "./ItemService.vue";
 	import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+	import Searcher from "@/tools/Searcher";
 
 	export default {
 		components: {
@@ -50,6 +51,8 @@
 			},
 
 			searchResults(str) {
+				return Searcher.withItems(this.services).search(str);
+
 				const strs = str
 					.toLowerCase()
 					.split(/[\s,]+/)

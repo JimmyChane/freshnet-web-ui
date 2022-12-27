@@ -36,10 +36,15 @@
 			databases: (c) => c.databaseStore.getters.items,
 		},
 		mounted() {
-			this.loginStore.dispatch("refresh").catch((error) => {
-				this.$root.feedback("Your login credential could be invalid");
-				throw error;
-			});
+			this.loginStore
+				.dispatch("refresh")
+				.then(() => {
+					this.actionRefresh();
+				})
+				.catch((error) => {
+					this.$root.feedback("Your login credential could be invalid");
+					throw error;
+				});
 		},
 		watch: {
 			user() {

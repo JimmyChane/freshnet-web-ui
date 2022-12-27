@@ -2,6 +2,7 @@
 	import Actionbar from "@/components/actionbar/Actionbar.vue";
 	import SearchInput from "@/components/SearchInput.vue";
 	import ItemSearchProduct from "./ItemSearchProduct.vue";
+	import Searcher from "@/tools/Searcher";
 
 	export default {
 		components: { Actionbar, SearchInput, ItemSearchProduct },
@@ -23,6 +24,8 @@
 				return paths[paths.length - 1];
 			},
 			productSearches() {
+				return Searcher.withItems(this.products).search(this.searchText);
+
 				const str = this.searchText;
 
 				if (!str) return [];
@@ -131,7 +134,10 @@
 				:key="product.id"
 				:to="{ query: { productId: product.id } }"
 			>
-				<ItemSearchProduct class="ActionbarProduct-search-item" :item="product" />
+				<ItemSearchProduct
+					class="ActionbarProduct-search-item"
+					:item="product"
+				/>
 			</router-link>
 		</SearchInput>
 	</Actionbar>
