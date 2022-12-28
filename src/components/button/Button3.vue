@@ -9,7 +9,10 @@
 
 <template>
 	<button
-		:class="['Button3', `Button3-${isSelected ? 'isSelected' : 'isDeselected'}`]"
+		:class="[
+			'Button3',
+			`Button3-${isSelected ? 'isSelected' : 'isDeselected'}`,
+		]"
 		@click="$emit('click')"
 		@focus="$emit('focus')"
 	>
@@ -28,7 +31,8 @@
 		border: none;
 		background: white;
 		transition: var(--transition-duration);
-		border-radius: 0.4rem;
+		border-radius: 1rem;
+		overflow: hidden;
 
 		display: flex;
 		flex-direction: row;

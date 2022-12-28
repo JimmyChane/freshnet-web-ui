@@ -200,6 +200,8 @@
 
 					& > * {
 						width: 100%;
+						height: max-content;
+						overflow: initial;
 					}
 				}
 			}

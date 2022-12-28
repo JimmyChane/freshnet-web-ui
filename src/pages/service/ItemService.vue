@@ -87,28 +87,28 @@
 				`ItemServiceGrid-body-${isSelected ? 'isSelected' : 'isDeselected'}`,
 			]"
 		>
-			<div class="ItemServiceGrid-top">
-				<div class="ItemServiceGrid-top-customer">
+			<div class="ItemService-top">
+				<div class="ItemService-top-customer">
 					<router-link
-						class="ItemServiceList-link-customer"
+						class="ItemService-link-customer"
 						:to="{
 							path: '/manage/customer',
 							query: { name: name, phoneNumber: phoneNumberStr },
 						}"
 					>
-						<span class="ItemServiceList-link-customer-name">{{ name }}</span>
+						<span class="ItemService-link-customer-name">{{ name }}</span>
 						<div
-							class="ItemServiceList-link-customer-dot"
+							class="ItemService-link-customer-dot"
 							v-if="name && phoneNumberStr"
 						/>
-						<span class="ItemServiceList-link-customer-phoneNumber">{{
+						<span class="ItemService-link-customer-phoneNumber">{{
 							phoneNumberStr
 						}}</span>
 					</router-link>
 				</div>
 
-				<div class="ItemServiceGrid-top-dot-body">
-					<div class="ItemServiceGrid-state-dot"></div>
+				<div class="ItemService-top-dot-body">
+					<div class="ItemService-state-dot"></div>
 				</div>
 			</div>
 
@@ -135,34 +135,36 @@
 				`ItemServiceList-body-${isSelected ? 'isSelected' : 'isDeselected'}`,
 			]"
 		>
-			<div class="ItemServiceList-top">
-				<div class="ItemServiceList-top-customer">
+			<div class="ItemService-top">
+				<div class="ItemService-top-customer">
 					<router-link
-						class="ItemServiceList-link-customer"
+						class="ItemService-link-customer"
 						:to="{
 							path: '/manage/customer',
 							query: { name: name, phoneNumber: phoneNumberStr },
 						}"
 					>
-						<span class="ItemServiceList-link-customer-name">{{ name }}</span>
+						<span class="ItemService-link-customer-name">{{ name }}</span>
 						<div
-							class="ItemServiceList-link-customer-dot"
+							class="ItemService-link-customer-dot"
 							v-if="name && phoneNumberStr"
 						/>
-						<span class="ItemServiceList-link-customer-phoneNumber">{{
+						<span class="ItemService-link-customer-phoneNumber">{{
 							phoneNumberStr
 						}}</span>
 					</router-link>
 				</div>
 
-				<div class="ItemServiceList-top-dot-body">
-					<div class="ItemServiceList-state-dot"></div>
+				<div class="ItemService-top-dot-body">
+					<div class="ItemService-state-dot"></div>
 				</div>
 			</div>
 
 			<div class="ItemServiceList-middle">
 				<div class="ItemServiceList-description">
-					<span class="ItemServiceList-description-body">{{ description }}</span>
+					<span class="ItemServiceList-description-body">{{
+						description
+					}}</span>
 				</div>
 				<ImageViews :width="40" :height="40" :images="images" />
 			</div>
@@ -274,10 +276,151 @@
 </template>
 
 <style lang="scss" scoped>
+	.ItemService-top {
+		padding: 0.5rem;
+		margin-right: 0.6em;
+		border-bottom: 0.05em solid hsla(0, 0%, 0%, 0.1);
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		.ItemService-top-customer {
+			display: flex;
+			flex-direction: row;
+			flex-grow: 1;
+			align-items: center;
+
+			.ItemService-link-customer {
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				justify-content: center;
+
+				gap: 0.6rem;
+				padding: 0.3rem 0.5rem;
+				color: black;
+				border: 1px solid #dddddd;
+				border-radius: 1em;
+				background-color: #f4f4f4;
+				font-weight: 600;
+				font-size: 0.8rem;
+
+				text-decoration: none;
+				cursor: pointer;
+				transition: var(--transition-duration);
+
+				&:hover {
+					background-color: #ebebeb;
+				}
+
+				.ItemService-link-customer-icon {
+					width: 0.5rem;
+					height: 0.5rem;
+				}
+				.ItemService-link-customer-dot {
+					--size: 0.3em;
+					width: var(--size);
+					height: var(--size);
+					min-height: var(--size);
+					max-width: var(--size);
+					min-width: var(--size);
+					max-height: var(--size);
+					display: flex;
+					background: hsla(0, 0%, 0%, 0.3);
+					border-radius: 50%;
+				}
+			}
+		}
+		.ItemService-top-dot-body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: flex-end;
+			.ItemService-state-dot {
+				--size: 0.5em;
+				min-width: var(--size);
+				min-height: var(--size);
+				width: var(--size);
+				height: var(--size);
+				background: var(--primary-color);
+				border-radius: var(--size);
+			}
+		}
+	}
+
 	.ItemService {
 		width: 100%;
 		background: white;
 
+		.ItemServiceGrid-body {
+			width: 100%;
+			height: 100%;
+			font-weight: 400;
+			font-size: 1em;
+			color: black;
+			text-align: start;
+			line-height: 1.1;
+			gap: 0.5rem;
+			padding: 0.6rem 0.2rem;
+
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+			transition: var(--transition-duration);
+			border-radius: 0 0.5em 0.5em 0;
+			border: 0.1em solid transparent;
+
+			.ItemService-top {
+				padding: 0;
+				padding-bottom: 0.6rem;
+			}
+			.ItemServiceGrid-middle {
+				width: 100%;
+				height: 100%;
+				gap: 0.7em;
+				font-weight: 400;
+				font-size: 1em;
+				color: black;
+				text-align: start;
+				line-height: 1.1;
+				overflow: hidden;
+
+				display: flex;
+				flex-direction: row;
+				flex-direction: column;
+				flex-wrap: wrap;
+				flex-grow: 1;
+				align-items: flex-start;
+				justify-content: space-between;
+
+				.ItemServiceGrid-images {
+					flex-grow: 0;
+					display: flex;
+					flex-direction: row;
+					flex-wrap: wrap;
+					align-items: flex-start;
+					justify-content: flex-start;
+					gap: 0.2em;
+					overflow: hidden;
+					.ItemServiceGrid-image {
+						height: 40px;
+					}
+				}
+			}
+			.ItemServiceGrid-bottom {
+				width: 100%;
+				display: flex;
+				flex-direction: row;
+				align-items: flex-end;
+				justify-content: flex-start;
+				gap: 1rem;
+
+				.ItemServiceGrid-timestamp {
+					font-size: 0.8em;
+					color: rgb(112, 112, 112);
+					text-align: start;
+				}
+			}
+		}
 		.ItemServiceList-body {
 			width: 100%;
 			height: 100%;
@@ -294,77 +437,6 @@
 			border-radius: 0 0.5em 0.5em 0;
 			border: 0.1em solid transparent;
 
-			.ItemServiceList-top {
-				padding: 1rem;
-				border-bottom: 0.05em solid hsla(0, 0%, 0%, 0.1);
-				margin-right: 0.6em;
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-
-				.ItemServiceList-top-customer {
-					display: flex;
-					flex-direction: row;
-					flex-grow: 1;
-					align-items: center;
-
-					.ItemServiceList-link-customer {
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-						justify-content: center;
-
-						gap: 0.6rem;
-						padding: 0.2rem 0.3rem;
-						color: black;
-						border: 1px solid #dddddd;
-						border-radius: 0.2rem;
-						background-color: #f4f4f4;
-						font-weight: 600;
-						font-size: 0.8rem;
-
-						text-decoration: none;
-						cursor: pointer;
-						transition: var(--transition-duration);
-
-						&:hover {
-							background-color: #ebebeb;
-						}
-
-						.ItemServiceList-link-customer-icon {
-							width: 0.5rem;
-							height: 0.5rem;
-						}
-						.ItemServiceList-link-customer-dot {
-							--size: 0.3em;
-							width: var(--size);
-							height: var(--size);
-							min-height: var(--size);
-							max-width: var(--size);
-							min-width: var(--size);
-							max-height: var(--size);
-							display: flex;
-							background: hsla(0, 0%, 0%, 0.3);
-							border-radius: 50%;
-						}
-					}
-				}
-				.ItemServiceList-top-dot-body {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					justify-content: flex-end;
-					.ItemServiceList-state-dot {
-						--size: 0.5em;
-						min-width: var(--size);
-						min-height: var(--size);
-						width: var(--size);
-						height: var(--size);
-						background: var(--primary-color);
-						border-radius: var(--size);
-					}
-				}
-			}
 			.ItemServiceList-middle {
 				width: 100%;
 				height: 100%;
@@ -416,146 +488,15 @@
 					flex-wrap: wrap;
 					font-size: 0.8rem;
 					gap: 0.1rem;
+
+					& > * {
+						border-radius: 0.5rem;
+						padding: 0.4rem;
+					}
 				}
 				.ItemServiceList-timestamp {
 					font-size: 0.8em;
 					color: rgb(112, 112, 112);
-				}
-			}
-		}
-		.ItemServiceGrid-body {
-			width: 100%;
-			height: 100%;
-			font-weight: 400;
-			font-size: 1em;
-			color: black;
-			text-align: start;
-			line-height: 1.1;
-			gap: 0.5rem;
-			padding: 0.6rem 0.2rem;
-
-			display: flex;
-			flex-direction: column;
-			align-items: stretch;
-			transition: var(--transition-duration);
-			border-radius: 0 0.5em 0.5em 0;
-			border: 0.1em solid transparent;
-
-			.ItemServiceGrid-top {
-				padding-bottom: 0.6rem;
-				border-bottom: 0.05rem solid hsla(0, 0%, 0%, 0.1);
-				margin-right: 0.6rem;
-				display: flex;
-				flex-direction: row;
-				align-items: flex-start;
-				.ItemServiceGrid-top-customer {
-					display: flex;
-					flex-direction: row;
-					flex-grow: 1;
-					align-items: center;
-
-					.ItemServiceList-link-customer {
-						display: flex;
-						flex-direction: row;
-						align-items: center;
-						justify-content: center;
-
-						gap: 0.6rem;
-						padding: 0.2rem 0.3rem;
-						color: black;
-						border: 1px solid #dddddd;
-						border-radius: 0.2rem;
-						background-color: #f4f4f4;
-						font-weight: 600;
-						font-size: 0.8rem;
-
-						text-decoration: none;
-						cursor: pointer;
-						transition: var(--transition-duration);
-
-						&:hover {
-							background-color: #ebebeb;
-						}
-
-						.ItemServiceList-link-customer-icon {
-							width: 0.5rem;
-							height: 0.5rem;
-						}
-						.ItemServiceList-link-customer-dot {
-							--size: 0.3em;
-							width: var(--size);
-							height: var(--size);
-							min-height: var(--size);
-							max-width: var(--size);
-							min-width: var(--size);
-							max-height: var(--size);
-							display: flex;
-							background: hsla(0, 0%, 0%, 0.3);
-							border-radius: 50%;
-						}
-					}
-				}
-				.ItemServiceGrid-top-dot-body {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					justify-content: flex-end;
-					.ItemServiceGrid-state-dot {
-						--size: 0.5em;
-						min-width: var(--size);
-						min-height: var(--size);
-						width: var(--size);
-						height: var(--size);
-						background: var(--primary-color);
-						border-radius: var(--size);
-					}
-				}
-			}
-			.ItemServiceGrid-middle {
-				width: 100%;
-				height: 100%;
-				gap: 0.7em;
-				font-weight: 400;
-				font-size: 1em;
-				color: black;
-				text-align: start;
-				line-height: 1.1;
-				overflow: hidden;
-
-				display: flex;
-				flex-direction: row;
-				flex-direction: column;
-				flex-wrap: wrap;
-				flex-grow: 1;
-				align-items: flex-start;
-				justify-content: space-between;
-
-				.ItemServiceGrid-images {
-					flex-grow: 0;
-					display: flex;
-					flex-direction: row;
-					flex-wrap: wrap;
-					align-items: flex-start;
-					justify-content: flex-start;
-					gap: 0.2em;
-					overflow: hidden;
-					.ItemServiceGrid-image {
-						height: 40px;
-					}
-				}
-			}
-			.ItemServiceGrid-bottom {
-				width: 100%;
-				display: flex;
-				flex-direction: row;
-				align-items: flex-end;
-				justify-content: flex-start;
-				gap: 1rem;
-
-				.ItemServiceGrid-timestamp {
-					font-size: 0.8em;
-					color: rgb(112, 112, 112);
-					text-align: start;
 				}
 			}
 		}

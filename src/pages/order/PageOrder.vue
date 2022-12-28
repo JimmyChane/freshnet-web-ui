@@ -258,7 +258,7 @@
 				padding-left: 20px;
 				padding-right: 20px;
 				.main-section {
-					border-radius: 6px;
+					border-radius: 1rem;
 				}
 			}
 		}

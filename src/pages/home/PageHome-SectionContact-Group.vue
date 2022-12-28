@@ -63,7 +63,7 @@
 		.ContactGroup-main {
 			flex-grow: 1;
 			height: 100%;
-			gap: 0.5em;
+			gap: 0.2em;
 
 			display: flex;
 			flex-direction: column;
@@ -72,6 +72,7 @@
 			.ContactGroup-title {
 				font-weight: 600;
 				font-size: 1em;
+				padding: 0.5em 0.7em;
 			}
 		}
 		.ContactGroup-icon {

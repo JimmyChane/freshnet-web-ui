@@ -49,16 +49,23 @@
 		padding: 10px;
 		transition: var(--transition-duration);
 
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: flex-start;
+
 		.SectionOrder-header {
-			margin: 8px 0 2px 0;
-			padding: 10px;
+			margin: 0.5rem 0 0.5rem 0;
+			padding: 0.625rem;
 			font-weight: 600;
 			font-size: 1.2rem;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
 			justify-content: flex-start;
+			line-height: 1rem;
 			gap: 0.4rem;
+
 			.SectionOrder-count {
 				--width: 1.6em;
 				--height: 1.6em;
@@ -102,6 +109,8 @@
 				.SectionOrder-list-item-body {
 					padding: 10px 0;
 					border-radius: 10px;
+					border-radius: 0.625rem;
+					border-radius: 1rem;
 					transition: var(--transition-duration);
 					cursor: pointer;
 

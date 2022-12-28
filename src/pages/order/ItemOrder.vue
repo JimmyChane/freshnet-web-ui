@@ -56,7 +56,10 @@
 
 <template>
 	<div
-		:class="['ItemOrder', isExpanded ? 'ItemOrder-showOption' : 'ItemOrder-hideOption']"
+		:class="[
+			'ItemOrder',
+			isExpanded ? 'ItemOrder-showOption' : 'ItemOrder-hideOption',
+		]"
 		@click="$emit(isExpanded ? 'onCollapse' : 'onExpand')"
 	>
 		<div class="ItemOrder-main">
@@ -84,7 +87,9 @@
 				<img
 					class="ItemOrder-button"
 					:class="[
-						isExpanded ? 'ItemOrder-button-expanded' : 'ItemOrder-button-collapsed',
+						isExpanded
+							? 'ItemOrder-button-expanded'
+							: 'ItemOrder-button-collapsed',
 					]"
 					:alt="isExpanded ? 'Expand' : 'Collapse'"
 					:src="host.res('icon/down-arrow-grey.svg')"
@@ -134,6 +139,7 @@
 		text-align: start;
 		cursor: pointer;
 		border: 1px solid transparent;
+		border-radius: 1rem;
 
 		&:hover,
 		&:focus {
@@ -173,7 +179,7 @@
 					gap: 1rem;
 
 					border: 1px solid #dddddd;
-					border-radius: 0.2rem;
+					border-radius: 1rem;
 					background-color: #f4f4f4;
 					text-decoration: none;
 					text-align: start;
@@ -250,14 +256,10 @@
 	}
 	.ItemOrder-hideOption {
 		box-shadow: none;
-		padding: 10px 10px;
-		border-radius: 4px;
-		margin: 0 0 6px 0;
+		padding: 0.625rem;
 	}
 	.ItemOrder-showOption {
-		padding: 25px 16px;
-		border-radius: 6px;
-		margin: 20px 0;
+		padding: 1.2rem;
 		font-size: 1.2rem;
 		border: 2px solid hsla(0, 0%, 0%, 0.1);
 	}

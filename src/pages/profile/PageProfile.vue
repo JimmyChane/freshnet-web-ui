@@ -241,7 +241,7 @@
 						flex-direction: column;
 						gap: 1em;
 						padding: 2em;
-						border-radius: 0.5em;
+						border-radius: 1em;
 						.PageProfile-user-name {
 							font-size: 2em;
 						}

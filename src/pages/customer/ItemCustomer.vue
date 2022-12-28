@@ -38,14 +38,20 @@
 			async invalidate() {
 				this.itemDeviceGroups = [];
 				if (!this.item) return;
-				this.itemDeviceGroups = await this.item.fetchDeviceGroups("categoryKey");
+				this.itemDeviceGroups = await this.item.fetchDeviceGroups(
+					"categoryKey",
+				);
 			},
 		},
 	};
 </script>
 
 <template>
-	<Button3 class="ItemCustomer" :isSelected="selected" @focus="$emit('click', { item })">
+	<Button3
+		class="ItemCustomer"
+		:isSelected="selected"
+		@focus="$emit('click', { item })"
+	>
 		<div class="ItemCustomer-body">
 			<div class="ItemCustomer-header">
 				<span class="ItemCustomer-name">{{ name }}</span>
@@ -63,7 +69,9 @@
 				"
 			>
 				<div class="ItemCustomer-description" v-if="item.description">
-					<span class="ItemCustomer-description-body">{{ item.description }}</span>
+					<span class="ItemCustomer-description-body">{{
+						item.description
+					}}</span>
 				</div>
 
 				<div class="ItemCustomer-labels">
@@ -92,7 +100,6 @@
 <style lang="scss" scoped>
 	.ItemCustomer {
 		width: 100%;
-		border-radius: 0.3rem;
 		background-color: white;
 
 		.ItemCustomer-body {
@@ -167,6 +174,11 @@
 					align-items: flex-start;
 					font-size: 1rem;
 					gap: 0.1rem;
+					& > * {
+						--primary-color: #444;
+						border-radius: 0.5rem;
+						padding: 0.4rem;
+					}
 				}
 			}
 		}

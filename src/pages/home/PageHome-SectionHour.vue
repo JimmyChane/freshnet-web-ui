@@ -56,7 +56,7 @@
 		justify-content: center;
 
 		.HomeSectionyHour-body {
-			padding: 1.8em;
+			padding: 1.8em 1.3em;
 			gap: 0.5em;
 
 			display: flex;

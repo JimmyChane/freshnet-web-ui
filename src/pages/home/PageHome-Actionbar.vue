@@ -215,7 +215,8 @@
 <style lang="scss" scoped>
 	.HomeActionbar {
 		width: 100%;
-		background-color: hsla(0, 0%, 89%, 0.96);
+
+		--height: max-content;
 		background-color: hsl(0, 0%, 89%);
 
 		// @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
@@ -246,6 +247,7 @@
 
 		.HomeActionbar-body {
 			width: 100%;
+
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -256,6 +258,7 @@
 				flex-direction: row;
 				justify-content: center;
 				align-items: center;
+				padding: 1rem 0.5rem;
 
 				.Home-actionbar-search {
 					max-width: 24rem;

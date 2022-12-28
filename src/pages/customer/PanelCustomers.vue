@@ -41,7 +41,10 @@
 </script>
 
 <template>
-	<div class="PanelCustomers" @scroll="(event) => (scrollTop = event.target.scrollTop)">
+	<div
+		class="PanelCustomers"
+		@scroll="(event) => (scrollTop = event.target.scrollTop)"
+	>
 		<Actionbar
 			class="PanelCustomers-top"
 			:hasShadow="scrollTop > 0"
@@ -98,7 +101,7 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			gap: 0.5rem;
+			gap: 0.2rem;
 
 			.PanelCustomers-item {
 				width: 100%;

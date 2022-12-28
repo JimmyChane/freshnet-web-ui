@@ -119,6 +119,12 @@
 <template>
 	<div class="ListServices">
 		<div class="ListServices-group" v-for="group of groups" :key="group.title">
+			<div
+				class="ListServices-group-line"
+				v-if="groups.indexOf(group) !== 0"
+				:style="{ 'max-width': isListView ? '32rem' : '100%' }"
+			></div>
+
 			<span class="ListServices-group-title" v-if="group.title">{{
 				group.title
 			}}</span>
@@ -208,6 +214,7 @@
 		align-items: center;
 		padding: 1rem;
 		padding-top: 0;
+		padding-top: 0.8rem;
 
 		.ListServices-group {
 			width: 100%;
@@ -215,6 +222,13 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
+
+			.ListServices-group-line {
+				width: 100%;
+				min-height: 1px;
+				background-color: rgba(0, 0, 0, 0.1);
+				display: flex;
+			}
 
 			.ListServices-group-title {
 				font-size: 0.8rem;
@@ -226,7 +240,7 @@
 
 				position: sticky;
 				z-index: 1;
-				top: 9.5rem;
+				top: 11rem;
 			}
 
 			.PanelServices-items {
@@ -240,9 +254,10 @@
 			.PanelServices-items-gridView {
 				max-width: var(--max-width);
 				margin-top: -0.5rem;
-				gap: 0.5rem;
+				gap: 0.2rem;
 				display: grid;
 				grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+				grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 
 				.PanelServices-items-header {
 					grid-column: 1 / -1;
@@ -253,9 +268,8 @@
 				}
 			}
 			.PanelServices-items-listView {
-				max-width: 28rem;
 				max-width: 32rem;
-				gap: 0.5rem;
+				gap: 0.2rem;
 				display: flex;
 				flex-direction: column;
 				align-items: center;
@@ -269,7 +283,7 @@
 				flex-direction: column;
 				align-items: flex-start;
 				justify-content: flex-start;
-				gap: 0.1rem;
+				gap: 0.2rem;
 
 				.PanelServices-items-header {
 					gap: 0.5rem;
