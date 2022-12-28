@@ -1,60 +1,69 @@
 <script>
-   import WindowTitle from "./WindowTitle.vue";
-   import WindowBottom from "./WindowBottom.vue";
+	import WindowBottom from "./WindowBottom.vue";
 
-   export default {
-      components: { WindowTitle, WindowBottom },
-      emits: ["click-ok", "click-cancel"],
-      props: {
-         title: { type: String, default: "" },
-         message: { type: String, default: "" },
-         value: { type: Object, default: null },
-      },
-   };
+	export default {
+		components: { WindowBottom },
+		emits: ["click-ok", "click-cancel"],
+		props: {
+			title: { type: String, default: "" },
+			message: { type: String, default: "" },
+			value: { type: Object, default: null },
+		},
+	};
 </script>
 
 <template>
-   <div class="WindowRemove-root">
-      <div class="WindowRemove-main">
-         <div class="WindowRemove-header">
-            <WindowTitle :title="title" />
-         </div>
+	<div class="WindowRemove">
+		<div class="WindowRemove-header">
+			<span class="WindowRemove-header-title">{{ title }}</span>
+		</div>
 
-         <span class="WindowRemove-body">{{ message }}</span>
-      </div>
+		<div class="WindowRemove-main">
+			<span class="WindowRemove-body">{{ message }}</span>
+		</div>
 
-      <WindowBottom
-         @click-cancel="$emit('click-cancel')"
-         @click-ok="$emit('click-ok', value)"
-      />
-   </div>
+		<WindowBottom
+			@click-cancel="$emit('click-cancel')"
+			@click-ok="$emit('click-ok', value)"
+		/>
+	</div>
 </template>
 
 <style lang="scss" scoped>
-   .WindowRemove-root {
-      position: relative;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 40px;
+	.WindowRemove {
+		position: relative;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
 
-      .WindowRemove-main {
-         width: 100%;
-         display: flex;
-         flex-direction: column;
-         gap: 40px;
-         padding: 30px 40px;
+		.WindowRemove-header {
+			padding: 1.2rem 1.8rem;
+			position: sticky;
+			top: 0;
+			left: 0;
+			right: 0;
 
-         .WindowRemove-header {
-            display: flex;
-            flex-direction: row;
-            justify-content: stretch;
-            flex-wrap: wrap;
-            column-gap: 80px;
-            row-gap: 20px;
-            font-weight: 600;
-            font-size: 1.4rem;
-         }
-      }
-   }
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			text-align: start;
+			transition: var(--transition-duration);
+			border-bottom: 1px solid transparent;
+
+			.WindowRemove-header-title {
+				font-weight: 600;
+				font-size: 1.5rem;
+				color: black;
+			}
+		}
+
+		.WindowRemove-main {
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			padding: 1.8rem 2.5rem;
+			margin-bottom: 1.2rem;
+		}
+	}
 </style>

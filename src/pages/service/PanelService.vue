@@ -240,7 +240,6 @@
 				</div>
 
 				<PanelEvents
-					class="PanelService-PanelEvents"
 					v-if="service"
 					:service="service"
 					@click-add-event="actions.onClickAddEvent()"
@@ -277,9 +276,11 @@
 										},
 									}"
 								>
-									<span class="PanelService-section-customer-item" v-if="name">{{
-										name
-									}}</span>
+									<span
+										class="PanelService-section-customer-item"
+										v-if="name"
+										>{{ name }}</span
+									>
 									<span
 										class="PanelService-section-customer-item"
 										v-if="phoneNumberStr"
@@ -328,7 +329,10 @@
 								click: () => actions.onClickUpdateBelongings(belongings),
 							}"
 						>
-							<div class="PanelService-section-belonging" v-if="belongings.length">
+							<div
+								class="PanelService-section-belonging"
+								v-if="belongings.length"
+							>
 								<ItemBelonging
 									v-for="belonging in belongings"
 									:key="belonging.title"
@@ -502,7 +506,9 @@
 					flex-direction: column;
 					align-items: stretch;
 
-					border-radius: 0.5rem;
+					border: 1px solid rgba(0, 0, 0, 0.05);
+					border-bottom: none;
+					border-radius: 1rem;
 					overflow: hidden;
 
 					.PanelService-section-collectedBy {
@@ -536,10 +542,10 @@
 							align-items: flex-start;
 
 							border: 1px solid #dddddd;
-							border-radius: 0.2rem;
+							border-radius: 1rem;
 							background-color: #f4f4f4;
 
-							padding: 0.2rem 0.3rem;
+							padding: 0.5rem 0.7rem;
 							text-decoration: none;
 							color: inherit;
 
@@ -581,7 +587,7 @@
 						display: flex;
 						flex-direction: column;
 						gap: 0.2rem;
-						border-radius: 0.6rem;
+						// border-radius: 0.6rem;
 						overflow: hidden;
 					}
 					.PanelService-section-belonging-empty {

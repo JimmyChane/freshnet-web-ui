@@ -123,7 +123,7 @@
 				:leftMenus="{
 					key: 'close',
 					title: 'Close',
-					icon: host.res('icon/close-2A4858.svg'),
+					icon: host.res('icon/close-000000.svg'),
 					click: () => $emit('click-item-close', { item }),
 				}"
 				:rightMenus="
@@ -131,7 +131,7 @@
 						? {
 								key: 'remove',
 								title: 'Delete',
-								icon: host.res('icon/trash-2A4858.svg'),
+								icon: host.res('icon/trash-000000.svg'),
 								click: () => $emit('click-item-remove', { item }),
 						  }
 						: null
@@ -280,7 +280,7 @@
 				row-gap: 0.5rem;
 
 				& > * {
-					border-radius: 0.2rem;
+					border-radius: 1rem;
 					overflow: hidden;
 				}
 			}
@@ -338,9 +338,9 @@
 					display: flex;
 					flex-direction: column;
 					gap: 0.2rem;
-					padding: 0.5rem;
+					padding: 1rem;
 
-					border-radius: 0.5rem;
+					border-radius: 1rem;
 					background: white;
 					border: 1px solid hsla(0, 0%, 0%, 0.2);
 					font-size: 1rem;
@@ -364,9 +364,9 @@
 					display: flex;
 					flex-direction: column;
 					gap: 0.2rem;
-					padding: 0.5rem;
+					padding: 1rem;
 
-					border-radius: 0.5rem;
+					border-radius: 1rem;
 					background: white;
 					border: 1px solid hsla(0, 0%, 0%, 0.2);
 					font-size: 1rem;

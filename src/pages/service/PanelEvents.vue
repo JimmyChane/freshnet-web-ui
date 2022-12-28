@@ -59,13 +59,16 @@
 	.PanelEvents {
 		width: 100%;
 		max-width: 40rem;
+		margin: 1.2rem;
 		z-index: 1;
+
 		display: flex;
 		flex-direction: column;
 		align-items: stretch;
 		justify-content: flex-start;
-		margin: 1.2rem;
-		border-radius: 0.6rem;
+
+		border: 1px solid rgba(0, 0, 0, 0.05);
+		border-radius: 1rem;
 		overflow: hidden;
 
 		.PanelEvents-header {

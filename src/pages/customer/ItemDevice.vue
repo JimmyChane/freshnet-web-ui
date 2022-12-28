@@ -34,7 +34,9 @@
 						class="ItemDevice-header-category-icon"
 						:src="category.icon.toUrl()"
 					/>
-					<span class="ItemDevice-header-category-title">{{ category.title }}</span>
+					<span class="ItemDevice-header-category-title">{{
+						category.title
+					}}</span>
 				</div>
 				<span class="ItemDevice-header-category-notFound" v-if="!category"
 					>Category Not Found</span
@@ -60,7 +62,7 @@
 								interact: () => $emit('click-remove', { item }),
 							},
 						]"
-						:icon="host.res('icon/option-2A4858.svg')"
+						:icon="host.res('icon/option-000000.svg')"
 					/>
 				</div>
 			</div>
@@ -70,7 +72,9 @@
 				v-if="item.specifications.length || item.description"
 			>
 				<div class="ItemDevice-description" v-if="item.description">
-					<span class="ItemDevice-description-body">{{ item.description }}</span>
+					<span class="ItemDevice-description-body">{{
+						item.description
+					}}</span>
 				</div>
 
 				<div class="ItemDevice-specification" v-if="item.specifications.length">
@@ -108,6 +112,7 @@
 	.ItemDevice {
 		width: 100%;
 		border-radius: 8px;
+		border-radius: 1rem;
 		background: white;
 		border: 1px solid hsla(0, 0%, 0%, 0.2);
 		.ItemDevice-body {
@@ -126,12 +131,13 @@
 				padding: 0.4rem 0.8rem;
 				width: 100%;
 				column-gap: 0.5rem;
-				color: #2a4858;
+				color: black;
 				display: flex;
 				flex-direction: row;
 				flex-wrap: nowrap;
 				align-items: center;
 				.ItemDevice-header-category {
+					font-weight: 600;
 					overflow: hidden;
 					column-gap: 0.5rem;
 					display: flex;
@@ -172,6 +178,7 @@
 					flex-direction: column;
 					border-top: 1px solid hsla(0, 0%, 0%, 0.2);
 					padding: var(--padding);
+					font-weight: 300;
 
 					.ItemDevice-description-body {
 						width: 100%;
