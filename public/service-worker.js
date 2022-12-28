@@ -2,19 +2,19 @@ const cacheName = "static-v1";
 const assets = [
 	"./",
 	"./page/index.html",
+	"./page/manifest.webmanifest",
+	"./page/favicon.ico",
+	"./page/favicons-32.ico",
+	"./page/logo.png",
+	"./page/logos-129.png",
+	"./page/logos-192.png",
+	"./page/logos-512.png",
+	"./page/logos-512.svg",
 
 	// "./page/js/app.js",
 	// "./page/js/app.chunk.js",
 	// "./page/css/style.css",
 	// "./page/css/style.chunk.css",
-
-	"./page/manifest.webmanifest",
-	"./page/favicon.ico",
-	"./page/favicons-32.ico",
-	"./page/logo.png",
-	"./page/logos-192.png",
-	"./page/logos-512.png",
-	"./page/logos-512.svg",
 ];
 
 self.addEventListener("install", async (event) => {
