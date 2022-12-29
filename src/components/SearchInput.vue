@@ -34,11 +34,16 @@
 <template>
 	<div class="SearchInput">
 		<div
-			:class="['SearchInput-body', searchExpand ? 'SearchInput-body-isActive' : '']"
+			:class="[
+				'SearchInput-body',
+				searchExpand ? 'SearchInput-body-isActive' : '',
+			]"
 			@click="$refs['SearchInput-keyword'].focus()"
 		>
 			<ButtonIcon
-				:src="host.res(search ? 'icon/close-000000.svg' : 'icon/search-000000.svg')"
+				:src="
+					host.res(search ? 'icon/close-000000.svg' : 'icon/search-000000.svg')
+				"
 				alt="Clear"
 				@click="
 					search = '';
@@ -171,13 +176,13 @@
 
 			.SearchInput-main-container {
 				position: absolute;
-				top: 0;
+				top: 100%;
 				width: 100%;
 				height: 100vh;
 				max-height: 80vh;
 				box-shadow: 0 0 60px hsla(0, 0%, 0%, 0.1);
-				border-radius: var(--border-radius-active);
-				padding-top: 3rem;
+				border-radius: 0 0 var(--border-radius-active)
+					var(--border-radius-active);
 				background-color: #e4e4e4;
 				overflow: hidden;
 
@@ -190,7 +195,8 @@
 					align-items: center;
 					gap: 0.4rem;
 
-					border-radius: 0 0 var(--border-radius-active) var(--border-radius-active);
+					border-radius: 0 0 var(--border-radius-active)
+						var(--border-radius-active);
 
 					overflow-y: auto;
 					overflow-x: hidden;

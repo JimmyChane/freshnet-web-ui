@@ -52,168 +52,156 @@
 </script>
 
 <template>
-	<div :class="['PageHome', classes]">
-		<div class="Home-scroll" @scroll="(e) => (scrollTop = e.target.scrollTop)">
-			<Actionbar
-				:class="[
-					'Home-actionbar',
-					scrollTop > 0 ? 'Home-actionbar-giveBorderColor' : '',
-				]"
-				:isThin="isThin"
-			/>
+	<div
+		:class="['PageHome', classes, scrollTop > 0 ? 'Home-isScrollUp' : '']"
+		@scroll="(e) => (scrollTop = e.target.scrollTop)"
+	>
+		<Actionbar class="Home-actionbar" :isThin="isThin" />
 
-			<div class="Home-body">
-				<div>
-					<Header class="Home-header" />
-				</div>
-
-				<div class="Home-section-1">
-					<SectionProduct
-						:style="{
-							'grid-column': 'auto / span 2',
-							'grid-row': 'auto / span 4',
-						}"
-						:isThin="isThin"
-					/>
-					<SectionPrint
-						:style="{
-							'grid-column': 'auto / span 2',
-							'grid-row': 'auto / span 2',
-						}"
-						:isThin="isThin"
-					/>
-					<SectionLocation
-						:style="{
-							'grid-column': 'auto / span 2',
-							'grid-row': 'auto / span 2',
-						}"
-						:isThin="isThin"
-					/>
-				</div>
-
-				<div>
-					<span class="Home-section-title">Contact Us</span>
-					<SectionContact :isThin="isThin" />
-				</div>
-
-				<div>
-					<span class="Home-section-title">Business Hours</span>
-					<SectionHour :isThin="isThin" />
-				</div>
-
-				<div>
-					<span class="Home-section-title">What else can we do?</span>
-					<SectionWhatElse :isThin="isThin" />
-				</div>
+		<div class="Home-body">
+			<div>
+				<Header class="Home-header" />
 			</div>
 
-			<Footer />
+			<div class="Home-section-1">
+				<SectionProduct
+					:style="{
+						'grid-column': 'auto / span 2',
+						'grid-row': 'auto / span 4',
+					}"
+					:isThin="isThin"
+				/>
+				<SectionPrint
+					:style="{
+						'grid-column': 'auto / span 2',
+						'grid-row': 'auto / span 2',
+					}"
+					:isThin="isThin"
+				/>
+				<SectionLocation
+					:style="{
+						'grid-column': 'auto / span 2',
+						'grid-row': 'auto / span 2',
+					}"
+					:isThin="isThin"
+				/>
+			</div>
+
+			<div>
+				<span class="Home-section-title">Contact Us</span>
+				<SectionContact :isThin="isThin" />
+			</div>
+
+			<div>
+				<span class="Home-section-title">Business Hours</span>
+				<SectionHour :isThin="isThin" />
+			</div>
+
+			<div>
+				<span class="Home-section-title">What else can we do?</span>
+				<SectionWhatElse :isThin="isThin" />
+			</div>
 		</div>
+
+		<Footer />
 	</div>
 </template>
 
 <style lang="scss" scoped>
 	.PageHome {
+		z-index: 1;
+		width: 100%;
+		height: 100%;
+
 		display: flex;
-		flex-direction: row;
-		align-items: stretch;
+		flex-grow: 1;
+		flex-direction: column;
+		align-items: center;
 		color: black;
 
-		.Home-scroll {
-			flex-grow: 1;
+		position: relative;
+		overflow-x: hidden;
+		overflow-y: auto;
+
+		.Home-actionbar {
+			position: sticky;
+			top: 0;
+			z-index: 2;
+			border-bottom: 1px solid transparent;
+		}
+		.Home-body {
 			z-index: 1;
 			width: 100%;
-			height: 100%;
-			position: relative;
-			overflow-x: hidden;
-			overflow-y: auto;
+			gap: 1rem;
 
 			display: flex;
 			flex-direction: column;
-			align-items: center;
+			align-items: stretch;
 
-			.Home-actionbar {
-				position: sticky;
-				top: 0;
-				z-index: 2;
-				border-bottom: 1px solid transparent;
-			}
-			.Home-actionbar-giveBorderColor {
-				border-bottom: 1px solid #0000001a;
-			}
-			.Home-body {
-				z-index: 1;
+			& > * {
 				width: 100%;
-				gap: 1rem;
-
+				gap: 0.5rem;
 				display: flex;
 				flex-direction: column;
-				align-items: stretch;
 
-				& > * {
-					width: 100%;
-					gap: 0.5rem;
+				.Home-section-title {
+					font-size: 1.4rem;
+					font-weight: 500;
+
+					font-size: 2rem;
+					color: hsl(0, 0%, 13%);
+
+					padding-top: 3rem;
+					padding-bottom: 2rem;
+
 					display: flex;
-					flex-direction: column;
-
-					.Home-section-title {
-						font-size: 1.4rem;
-						font-weight: 500;
-
-						font-size: 2rem;
-						color: hsl(0, 0%, 13%);
-
-						padding-top: 3rem;
-						padding-bottom: 2rem;
-
-						display: flex;
-						align-items: center;
-						justify-content: center;
-						text-align: center;
-					}
+					align-items: center;
+					justify-content: center;
+					text-align: center;
 				}
 			}
+		}
+	}
+	.Home-isScrollUp {
+		.Home-actionbar {
+			border-bottom: 1px solid #0000001a;
 		}
 	}
 
 	.Home-isVertical {
 		--actionbar-height: 6rem;
-		.Home-scroll {
-			.Home-body {
-				padding: 1.2rem;
+		.Home-body {
+			padding: 1.2rem;
 
-				.Home-section-1 {
-					display: grid;
-					grid-template-columns: 1fr 1fr;
-					grid-auto-flow: row;
+			.Home-section-1 {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				grid-auto-flow: row;
 
-					justify-content: center;
-					align-items: center;
-					justify-items: center;
-					align-content: center;
-				}
+				justify-content: center;
+				align-items: center;
+				justify-items: center;
+				align-content: center;
 			}
 		}
 	}
 	.Home-isHorizontal {
 		--actionbar-height: 3.5rem;
-		.Home-scroll {
-			.Home-body {
-				height: max-content;
-				max-width: 80rem;
-				max-width: 70rem;
-				padding: 2rem;
+		.Home-body {
+			height: max-content;
+			max-width: 80rem;
+			max-width: 70rem;
+			padding: 2rem;
 
-				.Home-section-1 {
-					display: grid;
-					grid-template-columns: 1fr 1fr 1fr 1fr;
-					grid-auto-flow: row;
+			.Home-section-1 {
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr 1fr;
+				grid-auto-flow: row;
 
-					justify-content: center;
-					align-items: center;
-					justify-items: center;
-					align-content: center;
-				}
+				justify-content: center;
+				align-items: center;
+				justify-items: center;
+				align-content: center;
 			}
 		}
 	}
