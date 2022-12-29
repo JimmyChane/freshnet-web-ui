@@ -138,6 +138,17 @@
 					/>
 					<span class="LeftNav-title">Freshnet Enterprise</span>
 				</router-link>
+
+				<!-- <button
+					class="LeftNav-collapse"
+					@click="
+						() => {
+							$root.closeNavigationDrawer();
+						}
+					"
+				>
+					<img :src="host.res('icon/arrowDown-000000.svg')" />
+				</button> -->
 			</div>
 
 			<div class="LeftNav-navigations" v-if="navigations.length">
@@ -208,6 +219,30 @@
 						color: black;
 					}
 				}
+				.LeftNav-collapse {
+					background: none;
+					border: none;
+					border-radius: 50%;
+					padding: 0.8rem;
+					display: flex;
+					align-items: center;
+					justify-content: center;
+					cursor: pointer;
+
+					img {
+						widows: 1rem;
+						height: 1rem;
+						transition: var(--animation-duration);
+					}
+					img {
+						transform: rotate(90deg);
+					}
+					&:hover {
+						img {
+							transform: scale(0.9) rotate(90deg);
+						}
+					}
+				}
 			}
 
 			.LeftNav-navigations {
@@ -265,6 +300,9 @@
 	}
 
 	.LeftNav-isWide {
+		.LeftNav-header {
+			flex-direction: row;
+		}
 		.LeftNav-body {
 			.LeftNav-header {
 				.LeftNav-logo {
@@ -286,6 +324,8 @@
 		.LeftNav-body {
 			width: fit-content;
 			.LeftNav-header {
+				flex-direction: column-reverse;
+				gap: 0.5rem;
 				.LeftNav-logo {
 					.LeftNav-icon {
 						width: 1.3rem;
