@@ -10,7 +10,6 @@
 	import ServicePrice from "@/items/ServicePrice";
 	import ServiceState from "@/items/tools/ServiceState.js";
 
-	import EventModule from "@/items/data/ServiceEvent.js";
 	import { format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
 	import U from "@/U";
 
@@ -45,13 +44,18 @@
 			},
 			totalCost: (c) => {
 				return c.events.reduce((cost, event) => {
-					if (event.method === EventModule.Method.Purchase) {
-						cost = cost.plus(event.price);
-					}
+					if (event.isPurchase()) return cost.plus(event.price);
+					return cost;
+				}, new ServicePrice().fromData({ amount: 0 }));
+			},
+			totalQuote: (c) => {
+				return c.events.reduce((cost, event) => {
+					if (event.isQuotation()) return cost.plus(event.price);
 					return cost;
 				}, new ServicePrice().fromData({ amount: 0 }));
 			},
 			totalCostAmount: (c) => (c.totalCost ? c.totalCost.amount : 0),
+			totalQuoteAmount: (c) => (c.totalQuote ? c.totalQuote.amount : 0),
 			timestamp: (c) => c.item.timestamp,
 			timestampText() {
 				if (!this.timestamp) return "";
@@ -185,6 +189,11 @@
 						:style="{ '--primary-color': '#258915' }"
 						v-if="totalCostAmount !== 0"
 						:title="totalCost.toString()"
+					/>
+					<LabelCount
+						:style="{ '--primary-color': '#961d96' }"
+						v-if="totalQuoteAmount !== 0"
+						:title="totalQuote.toString()"
 					/>
 					<LabelCount
 						:style="{ '--primary-color': '#294656' }"

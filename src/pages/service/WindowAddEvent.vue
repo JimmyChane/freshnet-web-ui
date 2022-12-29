@@ -2,44 +2,71 @@
 	import ModuleEvent from "@/items/data/ServiceEvent.js";
 	import TypeSelector from "@/components/selector/TypeSelector.vue";
 	import Window from "@/components/window/Window.vue";
-	import Input from "@/components/Input.vue";
 	import TextArea from "@/components/InputTextArea.vue";
+	import BodyUser from "./WindowUpdateService-user.vue";
+	import BodyDescription from "./WindowUpdateService-description.vue";
+	import LabelMenus from "./WindowAddEvent-LabelMenus.vue";
+	import chroma from "chroma-js";
 
 	export default {
-		components: { Window, TypeSelector, Input, TextArea },
+		components: {
+			Window,
+			TypeSelector,
+			TextArea,
+			BodyUser,
+			BodyDescription,
+			LabelMenus,
+		},
 		emits: ["callback-create", "callback-cancel"],
 		data() {
 			return {
 				ModuleEvent,
 
 				nameOfUser: "unknown",
-				eventMethod: ModuleEvent.Method.Info,
+				eventMethod: ModuleEvent.Method.Quotation,
 
 				eventDescription: "",
 				eventStatus: "",
-				eventAmount: "",
+				eventAmount: 0,
 			};
 		},
 		computed: {
 			user: (c) => c.loginStore.getters.user,
 			isUserDefault: (c) => {
 				if (c.user.isTypeNone()) return false;
-				const isUserAdmin = c.user.isTypeAdmin() && c.user.username === "admin";
-				const isUserStaff = c.user.isTypeStaff() && c.user.username === "staff";
+				const isUserAdmin = c.user.isTypeAdmin() && c.user.isDefault();
+				const isUserStaff = c.user.isTypeStaff() && c.user.isDefault();
 				return isUserAdmin || isUserStaff;
 			},
 			isMethodInfo: (c) => c.eventMethod === ModuleEvent.Method.Info,
 			isMethodQuotation: (c) => c.eventMethod === ModuleEvent.Method.Quotation,
 			isMethodPurchase: (c) => c.eventMethod === ModuleEvent.Method.Purchase,
 			nameUserType: (c) => {
-				if (c.user.isTypeAdmin()) return "admin";
-				if (c.user.isTypeStaff()) return "staff";
+				if (c.user.isTypeAdmin()) return "Admin";
+				if (c.user.isTypeStaff()) return "Staff";
 				return "unknown";
 			},
+
+			methodMenu: (context) =>
+				context.methodMenus.find((menu) => menu.key === context.eventMethod),
+			methodMenus: (context) => [
+				{
+					key: ModuleEvent.Method.Quotation,
+					title: "Quotation",
+					color: chroma("961d96"),
+					click: (menu) => (context.eventMethod = menu.key),
+				},
+				{
+					key: ModuleEvent.Method.Purchase,
+					title: "Purchase",
+					color: chroma("258915"),
+					click: (menu) => (context.eventMethod = menu.key),
+				},
+			],
 		},
 		watch: {
 			user() {
-				let user = this.user;
+				const user = this.user;
 				if (!user.isTypeNone()) {
 					this.nameOfUser = this.isUserDefault ? "" : user.name;
 				}
@@ -66,11 +93,11 @@
 
 			reset() {
 				this.nameOfUser = "";
-				this.eventMethod = ModuleEvent.Method.Info;
+				this.eventMethod = ModuleEvent.Method.Quotation;
 
 				this.eventDescription = "";
 				this.eventStatus = "";
-				this.eventAmount = "";
+				this.eventAmount = 0;
 			},
 
 			toEvent() {
@@ -126,7 +153,7 @@
 <template>
 	<Window
 		class="WindowEvent"
-		title="New Event"
+		title="Add Event"
 		@click-cancel="
 			() => {
 				$emit('callback-cancel');
@@ -136,75 +163,48 @@
 		@click-ok="() => submit()"
 	>
 		<div class="WindowEvent-body">
-			<div class="WindowEvent-user" v-if="isUserDefault">
-				<Input
-					class="WindowEvent-user-name-input WindowEvent-input"
-					:label="`${nameUserType}${
-						nameOfUser.trim() === '' ? ' (Your name here)' : ''
-					}`"
-					:isRequired="true"
-					:bindValue="nameOfUser"
-					@input="(comp) => (nameOfUser = comp.value)"
+			<BodyUser
+				:name="nameOfUser"
+				@input-name="(value) => (nameOfUser = value)"
+			/>
+			<BodyDescription
+				ref="InputDescription"
+				:description="eventDescription"
+				@input-description="(value) => (eventDescription = value)"
+			/>
+			<div
+				class="WindowEvent-amount"
+				:style="{ '--primary-color': methodMenu.color }"
+			>
+				<LabelMenus
+					class="WindowEvent-amount-method"
+					:primaryColor="methodMenu.color"
+					:menu="methodMenu"
+					:menus="methodMenus"
 				/>
-			</div>
-
-			<div class="WindowEvent-description">
-				<TextArea
-					class="WindowEvent-input"
-					label="Description"
-					ref="InputDescription"
-					:isRequired="true"
-					:bindValue="eventDescription"
-					@input="(comp) => (eventDescription = comp.value)"
+				<span class="WindowEvent-amount-currency">RM</span>
+				<div class="WindowEvent-amount-line"></div>
+				<input
+					class="WindowEvent-amount-input"
+					type="number"
+					:v-model="eventAmount"
+					ref="InputAmount"
+					placeholder="0.00"
+					@input="
+						(event) => {
+							let amount = Number.parseFloat(event.target.value);
+							if (Number.isNaN(amount)) amount = 0;
+							eventAmount = amount;
+						}
+					"
+					@change="
+						(event) => {
+							let amount = Number.parseFloat(event.target.value);
+							if (Number.isNaN(amount)) amount = 0;
+							eventAmount = amount;
+						}
+					"
 				/>
-			</div>
-
-			<div class="WindowEvent-additional">
-				<div class="WindowEvent-type">
-					<TypeSelector
-						class="WindowEvent-type-list"
-						:items="[
-							{ key: ModuleEvent.Method.Info, title: 'Info', color: '#0771d2' },
-							{
-								key: ModuleEvent.Method.Quotation,
-								title: 'Quotation',
-								color: '#961d96',
-							},
-							{
-								key: ModuleEvent.Method.Purchase,
-								title: 'Purchase',
-								color: '#258915',
-							},
-						]"
-						:defaultKey="eventMethod"
-						@click-item-key="(key) => (eventMethod = key)"
-					/>
-				</div>
-
-				<Input
-					class="WindowEvent-status WindowEvent-input"
-					v-if="isMethodInfo"
-					label="Status"
-					:bindValue="eventStatus"
-					ref="InputStatus"
-					@input="(comp) => (eventStatus = comp.value)"
-				/>
-
-				<div
-					class="WindowEvent-amount"
-					v-else-if="isMethodQuotation || isMethodPurchase"
-				>
-					<div class="WindowEvent-amount-value">
-						<Input
-							class="WindowEvent-input"
-							label="RM"
-							type="number"
-							:bindValue="eventAmount"
-							ref="InputAmount"
-							@input="(comp) => (eventAmount = comp.value)"
-						/>
-					</div>
-				</div>
 			</div>
 		</div>
 	</Window>
@@ -215,88 +215,62 @@
 		max-width: 100%;
 		width: 35rem;
 		.WindowEvent-body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 1rem;
+			padding-bottom: 4rem;
+
 			font-size: 1rem;
 			font-weight: 400;
 			color: black;
-			display: flex;
-			flex-direction: column;
-			gap: 40px;
 
-			// Abstract
-			.WindowEvent-input {
-				font-size: 1rem;
-				border: none;
-				background: hsla(0, 0%, 0%, 0.03);
-				border-bottom: 1px solid hsl(0, 0%, 70%);
-				border-radius: 0.2rem;
-				padding: 0.6rem 0.4rem;
-				resize: none;
-			}
-
-			.WindowEvent-user {
+			.WindowEvent-amount {
 				width: 100%;
-				display: flex;
-				flex-direction: column;
-				align-items: flex-start;
 
-				.WindowEvent-user-type {
-					font-size: 0.9rem;
-					font-weight: 400;
-					color: hsl(0, 0%, 50%);
-				}
-				.WindowEvent-user-name-input {
-					width: 12rem;
-				}
-			}
-			.WindowEvent-description {
 				display: flex;
-				flex-direction: column;
+				flex-direction: row;
+				flex-wrap: nowrap;
+				align-items: center;
 
-				gap: 0.7rem;
-				& > * {
-					height: 8rem;
-				}
-			}
-			.WindowEvent-additional {
-				font-size: 1rem;
-				font-weight: 400;
+				background-color: transparent;
+				border: 1px solid var(--primary-color);
+				border-radius: 2rem;
+
 				color: black;
-				display: flex;
-				flex-direction: column;
-				.WindowEvent-type {
-					display: flex;
-					flex-direction: column;
-					gap: 0.7rem;
-					&-list {
-						width: 100%;
-					}
-				}
-				.WindowEvent-amount {
-					display: flex;
-					flex-direction: column;
-					gap: 0.7rem;
-					&-value {
-						width: 100%;
-						display: flex;
-						flex-direction: row;
-						align-items: stretch;
 
-						gap: 0.7rem;
-						&-currency {
-							display: flex;
-							flex-direction: row;
-							align-items: center;
-							border-bottom: 1px solid transparent;
-						}
-						.WindowEvent-input {
-							flex-grow: 1;
-						}
-					}
+				.WindowEvent-amount-method {
+					height: calc(100% + 1px);
 				}
-				.WindowEvent-result {
+				.WindowEvent-amount-currency {
+					min-width: max-content;
+					padding: 0.6rem 1rem;
+					font-weight: 600;
+
 					display: flex;
-					flex-direction: column;
-					gap: 0.7rem;
+					flex-grow: 0;
+					flex-direction: row;
+					align-items: center;
+					justify-content: center;
+					text-align: center;
+				}
+				.WindowEvent-amount-line {
+					width: 1px;
+					height: calc(100% - 1rem);
+					background-color: rgba(0, 0, 0, 0.1);
+				}
+				.WindowEvent-amount-input {
+					padding: 0.6rem 1rem;
+					flex-grow: 1;
+					font-size: inherit;
+					color: black;
+					border: none;
+					background: none;
+					resize: none;
+
+					&::placeholder{
+						color: rgba(0, 0, 0, 0.3);
+					}
 				}
 			}
 		}

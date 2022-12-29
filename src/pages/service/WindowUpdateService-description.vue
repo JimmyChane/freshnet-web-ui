@@ -9,6 +9,9 @@
 			onInputDescription(value) {
 				this.$emit("input-description", value);
 			},
+			focus() {
+				this.$refs.input.focus();
+			},
 		},
 	};
 </script>
@@ -18,6 +21,7 @@
 		<span class="WindowUpdateService-title">Description</span>
 		<TextArea
 			class="WindowUpdateService-input"
+			ref="input"
 			:isRequired="true"
 			:bindValue="description"
 			@input="(comp) => onInputDescription(comp.value)"
