@@ -3,20 +3,24 @@
 	import TypeSelector from "@/components/selector/TypeSelector.vue";
 	import ServiceState from "@/items/tools/ServiceState.js";
 	import ModuleService from "@/items/data/Service.js";
-	import BelongingListEdit from "./BelongingListEdit.vue";
-	import Input from "@/components/Input.vue";
-	import TextArea from "@/components/InputTextArea.vue";
 	import LayoutFindCustomer from "./LayoutFindCustomer.vue";
+	import BodyUser from "./WindowUpdateService-user.vue";
+	import BodyCustomer from "./WindowUpdateService-customer.vue";
+	import BodyDescription from "./WindowUpdateService-description.vue";
+	import BodyBelongings from "./WindowUpdateService-belongings.vue";
+	import BodyLine from "./WindowUpdateService-line.vue";
 
 	export default {
 		components: {
 			Window,
-			BelongingListEdit,
 			TypeSelector,
 			ModuleService,
-			Input,
-			TextArea,
 			LayoutFindCustomer,
+			BodyUser,
+			BodyCustomer,
+			BodyDescription,
+			BodyBelongings,
+			BodyLine,
 		},
 		emits: ["click-cancel", "click-ok"],
 		data() {
@@ -122,24 +126,10 @@
 		@click-ok="onOk()"
 	>
 		<div class="WindowService-body">
-			<div class="WindowService-user">
-				<span class="WindowService-title">Who created this?</span>
-				<div class="WindowService-user-name-input-body">
-					<Input
-						class="WindowService-user-name-input WindowService-input"
-						:label="`${nameUserType}${
-							typeof data.nameOfUser === 'string' &&
-							data.nameOfUser.trim() === ''
-								? ' (Your name here)'
-								: ''
-						}`"
-						type="text"
-						:bindValue="data.nameOfUser"
-						:isRequired="true"
-						@input="(comp) => (data.nameOfUser = comp.value)"
-					/>
-				</div>
-			</div>
+			<BodyUser
+				:name="data.nameOfUser"
+				@input-name="(value) => (data.nameOfUser = value)"
+			/>
 
 			<div class="WindowService-datetime">
 				<span class="WindowService-title">Creation Date & Time</span>
@@ -151,6 +141,7 @@
 					/>
 				</div>
 			</div>
+			<BodyLine />
 
 			<div class="WindowService-state">
 				<span class="WindowService-title">States</span>
@@ -161,49 +152,29 @@
 					@click-item-key="(key) => (data.state = key)"
 				/>
 			</div>
+			<BodyLine />
 
-			<div class="WindowService-customer" v-if="data.customer">
-				<Input
-					class="WindowService-input"
-					label="Customer Name"
-					:isRequired="true"
-					:bindValue="data.customer.name"
-					@input="(comp) => (data.customer.name = comp.value)"
-				/>
-				<Input
-					class="WindowService-input"
-					label="Customer Phone Number"
-					type="tel"
-					:bindValue="data.customer.phoneNumber"
-					@input="(comp) => (data.customer.phoneNumber = comp.value)"
-				/>
-			</div>
-
+			<BodyCustomer
+				:name="data.customer.name"
+				:phoneNumber="data.customer.phoneNumber"
+				@input-name="(value) => (data.customer.name = value)"
+				@input-phoneNumber="(value) => (data.customer.phoneNumber = value)"
+			/>
 			<LayoutFindCustomer
 				class="WindowService-findCustomers"
 				:inputName="data.customer.name"
 				:inputPhoneNumber="data.customer.phoneNumber"
 				@click-item="(customer) => clickCustomerSuggestion(customer)"
 			/>
+			<BodyLine />
 
-			<div class="WindowService-description">
-				<TextArea
-					class="WindowService-input"
-					label="Description"
-					:isRequired="true"
-					:bindValue="data.description"
-					@input="(comp) => (data.description = comp.value)"
-				/>
-			</div>
+			<BodyDescription
+				:description="data.description"
+				@input-description="(value) => (data.description = value)"
+			/>
+			<BodyLine />
 
-			<div class="WindowService-belonging">
-				<span class="WindowService-title">Belonging</span>
-				<BelongingListEdit
-					class="WindowService-belonging-list"
-					ref="BelongingListEdit"
-					:values="data.belongings"
-				/>
-			</div>
+			<BodyBelongings :belongings="data.belongings" ref="BelongingListEdit" />
 		</div>
 	</Window>
 </template>
@@ -226,37 +197,7 @@
 				font-size: 1.1rem;
 				font-weight: 600;
 			}
-			// Abstract
-			.WindowService-input {
-				font-size: 1rem;
-				border: none;
-				background: hsla(0, 0%, 0%, 0.03);
-				border-bottom: 1px solid hsl(0, 0%, 70%);
-				border-radius: 0.2rem;
-				padding: 0.6rem 0.4rem;
-			}
 
-			.WindowService-user {
-				width: 100%;
-				display: flex;
-				flex-direction: column;
-				align-items: flex-start;
-				gap: 0.5rem;
-
-				.WindowService-user-title {
-					font-size: 0.9rem;
-					font-weight: 400;
-					color: hsl(0, 0%, 50%);
-				}
-				.WindowService-user-name-input-body {
-					width: 100%;
-					display: flex;
-					flex-direction: column;
-					& > * {
-						width: 12rem;
-					}
-				}
-			}
 			.WindowService-datetime {
 				width: 100%;
 				display: flex;
@@ -291,35 +232,9 @@
 					width: 100%;
 				}
 			}
-			.WindowService-customer {
-				width: 100%;
-				display: flex;
-				flex-direction: column;
-				gap: 0.7rem;
-
-				& > * {
-					width: 100%;
-				}
-			}
 			.WindowService-findCustomers {
 				width: 100%;
 				max-height: 20rem;
-			}
-			.WindowService-description {
-				display: flex;
-				flex-direction: column;
-				gap: 0.7rem;
-				& > * {
-					height: 8rem;
-				}
-			}
-			.WindowService-belonging {
-				display: flex;
-				flex-direction: column;
-				gap: 0.7rem;
-				&-list {
-					width: 100%;
-				}
 			}
 		}
 	}

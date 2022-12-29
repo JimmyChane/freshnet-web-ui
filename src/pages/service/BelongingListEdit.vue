@@ -21,9 +21,7 @@
 
 	export default {
 		components: { Input },
-		props: {
-			values: { type: Array, default: () => [] },
-		},
+		props: { values: { type: Array, default: () => [] } },
 		data() {
 			return { belongings: [] };
 		},
@@ -108,7 +106,7 @@
 				class="BelongingListEdit-item-input"
 				ref="input"
 				type="text"
-				:label="`Item ${belongings.indexOf(belonging) + 1}`"
+				:placeholder="`Item ${belongings.indexOf(belonging) + 1}`"
 				:value="belonging.title"
 				@input="
 					(event) => {
@@ -135,47 +133,32 @@
 					}
 				"
 			/>
-
-			<div class="BelongingListEdit-item-quantity-controller">
-				<div
-					class="BelongingListEdit-item-minus BelongingListEdit-item-quantity-control-button"
-					@click="
-						() => {
-							if (belonging.title.trim() === '') return;
-							belonging.quantity--;
-
-							if (belonging.quantity < 0) belonging.quantity = 0;
-							else if (belonging.quantity === 0) belonging.title = '';
-
-							onInput();
-						}
-					"
-				>
-					<img
-						class="BelongingListEdit-item-quantity-control-button-icon"
-						:src="host.res('page/service/belonging-minus-color.svg')"
-					/>
-				</div>
-				<span class="BelongingListEdit-item-quantity"
-					>x {{ belonging.quantity }}</span
-				>
-				<div
-					class="BelongingListEdit-item-plus BelongingListEdit-item-quantity-control-button"
-					@click="
-						() => {
-							if (belonging.title.trim() === '') return;
-							belonging.quantity++;
-							if (belonging.quantity > 999) belonging.quantity = 999;
-							onInput();
-						}
-					"
-				>
-					<img
-						class="BelongingListEdit-item-quantity-control-button-icon"
-						:src="host.res('page/service/belonging-plus-color.svg')"
-					/>
-				</div>
-			</div>
+			<div class="BelongingListEdit-item-line"></div>
+			<input
+				class="BelongingListEdit-item-count"
+				type="number"
+				:value="belonging.quantity"
+				@change="
+					(event) => {
+						let count = Number.parseInt(event.target.value);
+						if (Number.isNaN(count)) count = 0;
+						if (count < 0) count = 0;
+						if (count > 999) count = 999;
+						event.target.value = count;
+						belonging.quantity = count;
+					}
+				"
+				@input="
+					(event) => {
+						let count = Number.parseInt(event.target.value);
+						if (Number.isNaN(count)) count = 0;
+						if (count < 0) count = 0;
+						if (count > 999) count = 999;
+						event.target.value = count;
+						belonging.quantity = count;
+					}
+				"
+			/>
 		</div>
 	</div>
 </template>
@@ -185,81 +168,51 @@
 		display: flex;
 		flex-direction: column;
 		row-gap: 0.4rem;
+		gap: 0.2rem;
+
 		.BelongingListEdit-item {
+			width: 100%;
+
 			display: flex;
 			flex-direction: row;
-			flex-wrap: wrap;
-			align-items: center;
-			justify-content: center;
-			column-gap: 1rem;
-			row-gap: 0.4rem;
-			border: 1px solid hsl(0, 0%, 90%);
-			border-radius: 4px;
-			padding: 10px;
+
+			border: 0.1em solid rgba(0, 0, 0, 0.05);
+			border-radius: 2em;
+			background: hsla(0, 0%, 0%, 0.03);
+			font-weight: 400;
+			font-size: 1em;
+			color: black;
 
 			.BelongingListEdit-item-input {
-				width: max-content;
-				max-width: 100%;
-				flex-grow: 1;
-				background: hsla(0, 0%, 0%, 0.03);
-				padding: 0.6rem 0.4rem;
-				transition: var(--transition-duration);
-
-				padding: inherit;
-
-				z-index: 2;
 				width: 100%;
-				border: none;
-				border-bottom: 0.1em solid var(--primary-color);
-				border-radius: 0.2em;
+				padding: 0.8em;
+				z-index: 2;
 
-				font-weight: 400;
-				font-size: 1em;
-				color: black;
-				transition: var(--transition-duration);
-			}
-
-			.BelongingListEdit-item-quantity-controller {
 				display: flex;
-				flex-direction: row;
-				flex-wrap: nowrap;
-				flex-grow: 0;
+				flex-grow: 1;
+
+				border: none;
+				background: none;
+				font-size: inherit;
+			}
+			.BelongingListEdit-item-line {
+				min-width: 1px;
+				min-height: calc(100% - 1em);
+				margin: 0.5em 0;
+				background: rgba(0, 0, 0, 0.1);
+			}
+			.BelongingListEdit-item-count {
+				width: 5rem;
+				display: flex;
 				align-items: center;
+				justify-content: center;
+				flex-grow: 0;
 
-				.BelongingListEdit-item-quantity-control-button {
-					--quantity-controller-color: hsl(0, 0%, 50%);
-					--size: 2rem;
-
-					width: var(--size);
-					height: var(--size);
-					display: flex;
-					border: 0.15rem solid var(--quantity-controller-color);
-					border-radius: 0.4rem;
-					padding: 4%;
-					background-color: transparent;
-					transition: var(--transition-duration);
-					cursor: pointer;
-					&:hover {
-						background-color: hsl(0, 0%, 90%);
-					}
-					&-icon {
-						min-width: 100%;
-						min-height: 100%;
-						max-width: 100%;
-						max-height: 100%;
-					}
-				} //abstract
-
-				.BelongingListEdit-item-minus {
-					--quantity-controller-color: hsl(11, 71%, 51%);
-				}
-				.BelongingListEdit-item-quantity {
-					min-width: 3rem;
-					text-align: center;
-				}
-				.BelongingListEdit-item-plus {
-					--quantity-controller-color: hsl(163, 65%, 41%);
-				}
+				padding: 0.8em;
+				border: none;
+				background: none;
+				font-size: inherit;
+				text-align: center;
 			}
 		}
 	}

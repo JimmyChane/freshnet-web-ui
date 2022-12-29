@@ -10,7 +10,7 @@
 		},
 		methods: {
 			onChange() {
-				let belongings = this.$refs.BelongingListEdit.getResults();
+				const belongings = this.$refs.BelongingListEdit.getResults();
 				this.$emit("callback-change", belongings);
 			},
 			focus() {
