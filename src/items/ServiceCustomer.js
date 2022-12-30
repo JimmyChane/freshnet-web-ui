@@ -9,27 +9,55 @@ class ServiceCustomer {
 		this.stores = stores;
 	}
 
-	name = "";
-	phoneNumber = null;
+	names = [];
+	phoneNumbers = [];
+
+	// legacy
+	get name() {
+		return this.names[0];
+	}
+	// legacy
+	get phoneNumber() {
+		return this.phoneNumbers[0];
+	}
 
 	fromData(data) {
-		this.name = U.optString(data.name);
-		this.phoneNumber = data.phoneNumber
-			? new PhoneNumber(this.stores).fromData(data.phoneNumber)
-			: null;
+		this.names = (Array.isArray(data.names) ? data.names : [data.name])
+			.map((name) => U.optString(name))
+			.filter((name) => name.length);
+
+		this.phoneNumbers = (
+			Array.isArray(data.phoneNumbers) ? data.phoneNumbers : [data.phoneNumber]
+		)
+			.map((dataPhoneNumber) => {
+				if (!dataPhoneNumber) return null;
+				return new PhoneNumber(this.stores).fromData(dataPhoneNumber);
+			})
+			.filter((phoneNumber) => phoneNumber !== null);
+
 		return this;
 	}
 	toData() {
 		return {
-			name: this.name,
-			phoneNumber: this.phoneNumber ? this.phoneNumber.toData() : "",
+			name: this.name, // legacy
+			phoneNumber: this.phoneNumber ? this.phoneNumber.toData() : "", // legacy
+			names: this.names.map((name) => name),
+			phoneNumbers: this.phoneNumbers.map((phoneNumber) =>
+				phoneNumber.toData(),
+			),
 		};
 	}
 	toCount(strs) {
 		return strs.reduce((count, str) => {
-			count += textContains("customer", str) ? 1 : 0;
-			count += textContains(this.name, str) ? 1 : 0;
-			count += textContains(this.phoneNumber, str) ? 1 : 0;
+			if (textContains("customer", str)) count++;
+			count += this.names.reduce((count, name) => {
+				if (textContains(name, str)) count++;
+				return count;
+			}, 0);
+			count += this.phoneNumbers.reduce((count, phoneNumber) => {
+				if (textContains(phoneNumber.toString(), str)) count++;
+				return count;
+			}, 0);
 			return count;
 		}, 0);
 	}

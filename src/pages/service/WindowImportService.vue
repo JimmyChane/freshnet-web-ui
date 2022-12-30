@@ -30,7 +30,7 @@
 
 				data: {
 					nameOfUser: "",
-					customer: { name: "", phoneNumber: "" },
+					customer: { names: [], phoneNumbers: [] },
 					description: "",
 					belongings: [],
 				},
@@ -48,7 +48,7 @@
 			resetData() {
 				this.data = {
 					nameOfUser: "",
-					customer: { name: "", phoneNumber: "" },
+					customer: { names: [], phoneNumbers: [] },
 					description: "",
 					belongings: [],
 				};
@@ -64,9 +64,11 @@
 				this.$refs.DateTimeInput.value = now.toISOString().slice(0, -1);
 			},
 			trimData() {
+				const ref = this.$refs.bodyCustomer;
+
 				this.data.nameOfUser = this.data.nameOfUser.trim();
-				this.data.customer.name = this.data.customer.name.trim();
-				this.data.customer.phoneNumber = this.data.customer.phoneNumber.trim();
+				this.data.customer.names = ref.getValueNames();
+				this.data.customer.phoneNumbers = ref.getValuePhoneNumbers();
 				this.data.description = this.data.description.trim();
 				this.data.belongings = this.$refs.BelongingListEdit.getResults();
 				this.data.time = Date.parse(this.$refs.DateTimeInput.value);
@@ -104,10 +106,12 @@
 			},
 
 			clickCustomerSuggestion(customer) {
-				this.data.customer.name = customer.name;
-				this.data.customer.phoneNumber = customer.phoneNumber
-					? customer.phoneNumber.toString()
-					: "";
+				this.data.customerNames
+					.push(customer.name)
+					.filter((name) => name.length);
+				this.data.customerPhoneNumber
+					.push(customer.phoneNumber ? customer.phoneNumber.toString() : "")
+					.filter((phoneNumber) => phoneNumber.length);
 			},
 		},
 		mounted() {
@@ -155,10 +159,9 @@
 			<BodyLine />
 
 			<BodyCustomer
-				:name="data.customer.name"
-				:phoneNumber="data.customer.phoneNumber"
-				@input-name="(value) => (data.customer.name = value)"
-				@input-phoneNumber="(value) => (data.customer.phoneNumber = value)"
+				ref="bodyCustomer"
+				:names="data.customer.names"
+				:phoneNumbers="data.customer.phoneNumbers"
 			/>
 			<LayoutFindCustomer
 				class="WindowService-findCustomers"

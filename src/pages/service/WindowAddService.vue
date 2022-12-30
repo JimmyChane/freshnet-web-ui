@@ -22,8 +22,8 @@
 			return {
 				nameOfUser: "unknown",
 				data: {
-					customerName: "",
-					customerPhoneNumber: "",
+					customerNames: [],
+					customerPhoneNumbers: [],
 					belongings: [],
 					description: "",
 				},
@@ -47,10 +47,12 @@
 		},
 		methods: {
 			clickCustomerSuggestion(customer) {
-				this.data.customerName = customer.name;
-				this.data.customerPhoneNumber = customer.phoneNumber
-					? customer.phoneNumber.toString()
-					: "";
+				this.data.customerNames
+					.push(customer.name)
+					.filter((name) => name.length);
+				this.data.customerPhoneNumber
+					.push(customer.phoneNumber ? customer.phoneNumber.toString() : "")
+					.filter((phoneNumber) => phoneNumber.length);
 			},
 
 			onUser() {
@@ -58,17 +60,19 @@
 			},
 			onReset() {
 				this.data = {
-					customerName: "",
-					customerPhoneNumber: "",
+					customerNames: [],
+					customerPhoneNumbers: [],
 					belongings: [],
 					description: "",
 				};
 			},
 			onCreate() {
+				const ref = this.$refs.bodyCustomer;
+
 				const data = {
 					customer: {
-						name: this.data.customerName.trim(),
-						phoneNumber: this.data.customerPhoneNumber.trim(),
+						names: ref.getValueNames(),
+						phoneNumbers: ref.getValuePhoneNumbers(),
 					},
 					description: this.data.description.trim(),
 					belongings: this.$refs.BelongingListEdit.getResults(),
@@ -76,19 +80,23 @@
 
 				if (this.userIsDefault && !this.nameOfUser.trim()) {
 					this.$root.feedback("You must specify your name");
-				} else if (!data.customer.name) {
-					this.$root.feedback("You must specify customer name");
-				} else if (!data.description) {
-					this.$root.feedback("You must specify description");
-				} else {
-					if (this.userIsDefault && this.nameOfUser.trim()) {
-						data.nameOfUser = this.nameOfUser;
-					}
-
-					this.$emit("callback-create", data);
-					this.onReset();
-					this.onUser();
+					return;
 				}
+				if (!data.customer.names.length) {
+					this.$root.feedback("You must specify customer name");
+					return;
+				}
+				if (!data.description) {
+					this.$root.feedback("You must specify description");
+					return;
+				}
+				if (this.userIsDefault && this.nameOfUser.trim()) {
+					data.nameOfUser = this.nameOfUser;
+				}
+
+				this.$emit("callback-create", data);
+				this.onReset();
+				this.onUser();
 			},
 
 			focus() {
@@ -121,10 +129,8 @@
 
 			<BodyCustomer
 				ref="bodyCustomer"
-				:name="data.customerName"
-				:phoneNumber="data.customerPhoneNumber"
-				@input-name="(value) => (data.customerName = value)"
-				@input-phoneNumber="(value) => (data.customerPhoneNumber = value)"
+				:names="data.customerNames"
+				:phoneNumbers="data.customerPhoneNumbers"
 			/>
 			<LayoutFindCustomer
 				class="WindowService-findCustomers"

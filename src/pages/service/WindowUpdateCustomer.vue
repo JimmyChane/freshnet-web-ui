@@ -1,54 +1,46 @@
 <script>
 	import Window from "@/components/window/Window.vue";
 	import Input from "@/components/Input.vue";
+	import BodyCustomer from "./WindowUpdateService-customer.vue";
 
 	import LayoutNumpad from "./LayoutNumpad.vue";
 
 	import U from "@/U.js";
 
 	export default {
-		components: { Window, Input, LayoutNumpad },
+		components: { Window, Input, BodyCustomer, LayoutNumpad },
 		emits: ["callback-cancel", "callback-change"],
 		props: {
 			value: { type: Object, default: null },
 		},
 		data() {
-			return { customerName: "", customerPhoneNumber: "" };
+			return { customerNames: [], customerPhoneNumbers: [] };
 		},
 		watch: {
-			value: function () {
+			value() {
 				this.onNewValue();
 			},
 		},
 		methods: {
 			onNewValue() {
-				const value = this.value !== null ? this.value : {};
-				this.customerName = U.optString(value.name);
-				this.customerPhoneNumber = value.phoneNumber
-					? value.phoneNumber.toString()
-					: "";
+				const value =
+					this.value !== null ? this.value : { names: [], phoneNumbers: [] };
+				this.customerNames = value.names.map((name) => name);
+				this.customerPhoneNumbers = value.phoneNumbers.map((phoneNumber) =>
+					phoneNumber.toString(),
+				);
 			},
 			onChange() {
+				const ref = this.$refs.bodyCustomer;
+
 				this.$emit("callback-change", {
-					name: this.customerName,
-					phoneNumber: this.customerPhoneNumber,
+					names: ref.getValueNames(),
+					phoneNumbers: ref.getValuePhoneNumbers(),
 				});
 			},
 
-			insertNumber(number) {
-				this.customerPhoneNumber = `${this.customerPhoneNumber}${number}`;
-			},
-			backspaceNumber() {
-				if (this.customerPhoneNumber.length == 0) return;
-
-				this.customerPhoneNumber = this.customerPhoneNumber.substring(
-					0,
-					this.customerPhoneNumber.length - 1,
-				);
-			},
-
 			focus() {
-				this.$refs.InputName.focus();
+				this.$refs.bodyCustomer.focus();
 			},
 		},
 	};
@@ -61,28 +53,11 @@
 		@click-cancel="$emit('callback-cancel')"
 		@click-ok="onChange"
 	>
-		<Input
-			class="WindowCustomer-input"
-			label="Name"
-			ref="InputName"
-			:isRequired="true"
-			:bindValue="customerName"
-			@input="(comp) => (customerName = comp.value)"
+		<BodyCustomer
+			ref="bodyCustomer"
+			:names="customerNames"
+			:phoneNumbers="customerPhoneNumbers"
 		/>
-		<div class="WindowCustomer-phoneNumber">
-			<Input
-				class="WindowCustomer-input"
-				ref="WindowCustomerPhoneNumber"
-				label="Phone Number"
-				type="tel"
-				:bindValue="customerPhoneNumber"
-				@input="(comp) => (customerPhoneNumber = comp.value)"
-			/>
-			<LayoutNumpad
-				@input="(x) => insertNumber(x)"
-				@backspace="() => backspaceNumber()"
-			/>
-		</div>
 	</Window>
 </template>
 
