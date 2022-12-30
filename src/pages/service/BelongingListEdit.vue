@@ -134,6 +134,7 @@
 				"
 			/>
 			<div class="BelongingListEdit-item-line"></div>
+			<span class="BelongingListEdit-item-equation">x</span>
 			<input
 				class="BelongingListEdit-item-count"
 				type="number"
@@ -175,6 +176,7 @@
 
 			display: flex;
 			flex-direction: row;
+			align-items: center;
 
 			border: 0.1em solid rgba(0, 0, 0, 0.05);
 			border-radius: 2em;
@@ -201,18 +203,22 @@
 				margin: 0.5em 0;
 				background: rgba(0, 0, 0, 0.1);
 			}
+			.BelongingListEdit-item-equation {
+				margin-left: 0.8em;
+			}
 			.BelongingListEdit-item-count {
-				width: 5rem;
+				width: 4rem;
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				flex-grow: 0;
 
 				padding: 0.8em;
+				padding-left: 0.2em;
 				border: none;
 				background: none;
 				font-size: inherit;
-				text-align: center;
+				text-align: start;
 			}
 		}
 	}
