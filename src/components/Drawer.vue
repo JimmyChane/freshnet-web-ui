@@ -18,6 +18,16 @@
 			mode: { type: Number, default: Mode.DRAWER_COLLAPSE },
 			edge: { type: Number, default: Mode.DRAWER_COLLAPSE },
 		},
+		data() {
+			return {
+				isDragging: false,
+				dragStart: 0,
+				dragEnd: 0,
+				dragPercent: 0,
+				dragX: 0,
+				dragY: 0,
+			};
+		},
 		computed: {
 			isLeft: (c) => c.edge === Edge.LEFT,
 			isRight: (c) => c.edge === Edge.RIGHT,
@@ -40,39 +50,91 @@
 			},
 
 			classEdge() {
-				if (this.isLeft) return "Drawer-LEFT";
-				if (this.isRight) return "Drawer-RIGHT";
+				if (this.isLeft) return "Drawer-DIRECTION_LEFT";
+				if (this.isRight) return "Drawer-DIRECTION_RIGHT";
 				return "";
 			},
-			classMode() {
-				if (this.isFixedExpand) return "Drawer-FIXED_EXPAND";
-				if (this.isFixedCollapse) return "Drawer-FIXED_COLLAPSE";
-				if (this.isDrawerExpand) return "Drawer-DRAWER_EXPAND";
-				if (this.isDrawerCollapse) return "Drawer-DRAWER_COLLAPSE";
+			classModes() {
+				if (this.isFixedExpand) return ["Drawer-FIXED", "Drawer-FIXED_EXPAND"];
+				if (this.isFixedCollapse)
+					return ["Drawer-FIXED", "Drawer-FIXED_COLLAPSE"];
+				if (this.isDrawerExpand)
+					return ["Drawer-DRAWER", "Drawer-DRAWER_EXPAND"];
+				if (this.isDrawerCollapse)
+					return ["Drawer-DRAWER", "Drawer-DRAWER_COLLAPSE"];
 				return "";
 			},
 
 			style() {
-				return {
+				const style = {
 					"--x-start": this.point.xStart,
 					"--y-start": this.point.yStart,
 					"--x-end": this.point.xEnd,
 					"--y-end": this.point.yEnd,
 				};
+
+				if (!this.isDragging) {
+					style["--body-transition-duration"] = "var(--transition-duration)";
+					style["--body-transition-timing-function"] =
+						"cubic-bezier(1, 0, 0, 1)";
+				}
+
+				if (this.isDragging) {
+					style["--drag-x"] = `${this.dragX}px`;
+					style["--drag-y"] = `${this.dragY}px`;
+					style["--drag-percent"] = `${this.dragPercent}`;
+					style["--body-shadow"] = "box-shadow: 0 0 1rem hsl(0, 0%, 0%);";
+				}
+				if (!this.isDragging && this.isDrawerExpand) {
+					style["--drag-percent"] = 1;
+				}
+				if (!this.isDragging && this.isDrawerCollapse) {
+					style["--drag-percent"] = 0;
+				}
+
+				return style;
 			},
 			styleBody() {
-				if (this.isDrawer) return "none";
+				if (!this.isDragging && this.isDrawer) return "none";
 				if (this.isLeft) return { "border-right": "1px solid hsl(0, 0%, 80%)" };
 				if (this.isRight) return { "border-left": "1px solid hsl(0, 0%, 80%)" };
 				return "none";
+			},
+		},
+		methods: {
+			onDragStart(x, y) {
+				if (!this.isDrawerCollapse) return;
+
+				const Body = this.$refs.Body;
+				if (!Body) return;
+
+				this.isDragging = true;
+				this.dragStart = -Body.offsetWidth;
+				this.dragEnd = 0;
+				this.dragX = x;
+				this.dragY = y;
+			},
+			onDragMove(x, y) {
+				if (!this.isDragging) return;
+
+				this.dragPercent = Math.abs(x / this.dragStart);
+
+				this.dragX = x;
+				this.dragY = y;
+			},
+			onDragEnd(x, y) {
+				if (!this.isDragging) return;
+				this.isDragging = false;
+				this.dragX = 0;
+				this.dragY = 0;
 			},
 		},
 	};
 </script>
 
 <template>
-	<div :class="['Drawer', classEdge, classMode]" :style="style">
-		<div class="Drawer-body" :style="styleBody"><slot /></div>
+	<div :class="['Drawer', classEdge, ...classModes]" :style="style">
+		<div class="Drawer-body" ref="Body" :style="styleBody"><slot /></div>
 
 		<div
 			class="Drawer-dismissableBox"
@@ -115,28 +177,28 @@
 			pointer-events: none;
 			transition: var(--transition-duration);
 
-			// @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-			//    font-size: 1rem;
-			//    -webkit-backdrop-filter: blur(0.4em);
-			//    backdrop-filter: blur(0.4em);
-			// }
+			@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+				font-size: 1rem;
+				-webkit-backdrop-filter: blur(calc(0.4em * var(--dragPercent)));
+				backdrop-filter: blur(calc(0.4em * var(--dragPercent)));
+			}
 		}
 	}
 
-	.Drawer-LEFT {
+	.Drawer-DIRECTION_LEFT {
 		flex-direction: row;
 		top: 0;
 		bottom: 0;
 		left: 0;
 	}
-	.Drawer-RIGHT {
+	.Drawer-DIRECTION_RIGHT {
 		flex-direction: row-reverse;
 		top: 0;
 		bottom: 0;
 		right: 0;
 	}
 
-	.Drawer-FIXED_EXPAND {
+	.Drawer-FIXED {
 		width: max-content;
 		height: 100%;
 		position: sticky;
@@ -144,57 +206,62 @@
 		.Drawer-body {
 			transition-duration: var(--transition-duration);
 			transition-timing-function: cubic-bezier(1, 0, 0, 1);
+		}
+	}
+	.Drawer-FIXED_EXPAND {
+		.Drawer-body {
 			transform: translateX(var(--x-end)) translateY(var(--y-end));
 		}
 	}
 	.Drawer-FIXED_COLLAPSE {
-		width: max-content;
-		height: 100%;
-		position: sticky;
-
 		.Drawer-body {
-			transition-duration: var(--transition-duration);
-			transition-timing-function: cubic-bezier(1, 0, 0, 1);
 			transform: translateX(var(--x-start)) translateY(var(--y-start));
 			box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.2);
 		}
 	}
 
-	.Drawer-DRAWER_EXPAND {
+	.Drawer-DRAWER {
 		height: 100%;
 		width: 100%;
 		position: absolute;
 
+		--drag-x: 0px;
+		--drag-y: 0px;
+		--drag-percent: 0;
+		--body-shadow: unset;
+		--body-transition-duration: unset;
+		--body-transition-timing-function: unset;
 		.Drawer-body {
-			transition-duration: var(--transition-duration);
-			transition-timing-function: cubic-bezier(1, 0, 0, 1);
+			box-shadow: var(--body-shadow);
+			transition-duration: var(--body-transition-duration);
+			transition-timing-function: var(--body-transition-timing-function);
+		}
+		.Drawer-background {
+			opacity: var(--drag-percent);
+			@supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+				font-size: 1rem;
+				-webkit-backdrop-filter: blur(calc(0.4em * var(--dragPercent)));
+				backdrop-filter: blur(calc(0.4em * var(--dragPercent)));
+			}
+		}
+	}
+	.Drawer-DRAWER_EXPAND {
+		position: absolute;
+		.Drawer-body {
 			transform: translateX(var(--x-end)) translateY(var(--y-end));
-			box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.2);
 		}
 		.Drawer-dismissableBox {
 			display: block;
 		}
-		.Drawer-background {
-			opacity: 1;
-		}
 	}
 	.Drawer-DRAWER_COLLAPSE {
-		height: 100%;
-		width: 100%;
-		position: absolute;
 		pointer-events: none;
-
 		.Drawer-body {
-			transition-duration: var(--transition-duration);
-			transition-timing-function: cubic-bezier(1, 0, 0, 1);
-			transform: translateX(var(--x-start)) translateY(var(--y-start));
-			box-shadow: none;
+			transform: translateX(calc(var(--x-start) + var(--drag-x)))
+				translateY(var(--y-start));
 		}
 		.Drawer-dismissableBox {
 			display: none;
-		}
-		.Drawer-background {
-			opacity: 0;
 		}
 	}
 </style>

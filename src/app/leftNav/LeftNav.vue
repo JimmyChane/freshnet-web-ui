@@ -14,7 +14,14 @@
 			selectedViewKey: { type: String, default: "" },
 		},
 		data() {
-			return { expandedPageKey: "" };
+			return {
+				expandedPagey: "",
+
+				isDragging: false,
+				dragTrigger: 20,
+				dragOpen: 80,
+				dragWidth: 0,
+			};
 		},
 		computed: {
 			drawerMode() {
@@ -68,8 +75,70 @@
 
 				return navigations;
 			},
+
+			refDrawer() {
+				return this.$refs.Drawer;
+			},
+			refBody() {
+				return this.$refs.Body;
+			},
+		},
+		mounted() {
+			this.addTouchListeners();
+		},
+		unmounted() {
+			this.removeTouchListeners();
 		},
 		methods: {
+			addTouchListeners() {
+				document.addEventListener("touchstart", this.onTouchStart);
+				document.addEventListener("touchmove", this.onTouchMove);
+				document.addEventListener("touchend", this.onTouchEnd);
+			},
+			removeTouchListeners() {
+				document.removeEventListener("touchstart", this.onTouchStart);
+				document.removeEventListener("touchmove", this.onTouchMove);
+				document.removeEventListener("touchend", this.onTouchEnd);
+			},
+
+			onTouchStart(e) {
+				if (!this.refDrawer) {
+					this.removeTouchListeners();
+					return;
+				}
+				if (!this.refBody) {
+					this.removeTouchListeners();
+					return;
+				}
+
+				this.dragWidth = this.refBody.offsetWidth;
+
+				const touch = [...e.changedTouches][0];
+				let x = touch.pageX;
+				const y = touch.pageY;
+
+				if (x > this.dragTrigger) return;
+				if (x < this.dragTrigger) x = this.dragTrigger;
+				this.refDrawer.onDragStart(x, y);
+				this.isDragging = true;
+			},
+			onTouchMove(e) {
+				if (!this.isDragging) return;
+				const touch = [...e.changedTouches][0];
+				const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
+				const y = touch.pageY;
+				this.refDrawer.onDragMove(x, y);
+			},
+			onTouchEnd(e) {
+				if (!this.isDragging) return;
+				const touch = [...e.changedTouches][0];
+				const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
+				const y = touch.pageY;
+				this.refDrawer.onDragEnd(x, y);
+				if (x > this.dragOpen) this.$root.openNavigationDrawer();
+				this.isDragging = false;
+			},
+
 			emitCollapse() {
 				this.$emit("click-collapse");
 				this.expandedPageKey = "";
@@ -120,12 +189,13 @@
 
 <template>
 	<Drawer
+		ref="Drawer"
 		:class="['LeftNav', `LeftNav-${isWide ? 'isWide' : 'isThin'}`]"
 		:mode="drawerMode"
 		:edge="drawerEdge"
 		@click-collapse="emitCollapse()"
 	>
-		<div class="LeftNav-body">
+		<div class="LeftNav-body" ref="Body">
 			<div class="LeftNav-header">
 				<router-link class="LeftNav-logo" :to="{ path: '/' }">
 					<img

@@ -39,15 +39,13 @@
 				this.onConnectionChange();
 			},
 		},
-		created() {
+		mounted() {
 			window.addEventListener("resize", () => this.invalidateHeight()) &&
 				this.invalidateHeight();
-		},
-		mounted() {
+
 			setTimeout(() => this.onConnectionChange(), 3000);
 		},
-		unmounted() {},
-		destroyed() {
+		unmounted() {
 			window.removeEventListener("resize", this.invalidateHeight);
 		},
 		methods: {
@@ -145,11 +143,13 @@
 		width: 100%;
 		height: 100%;
 		overflow: hidden;
+		overscroll-behavior-x: none;
 
 		body {
 			width: 100%;
 			height: 100%;
 			// overflow: hidden;
+			overscroll-behavior-x: none;
 
 			p {
 				white-space: pre-line;
