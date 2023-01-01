@@ -163,7 +163,7 @@
 			object-fit: cover;
 			border-radius: var(--border-radius);
 			aspect-ratio: 16/12;
-			background-color: hsla(0, 0%, 100%, 0.3);
+			background-color: hsl(0, 0%, 90%);
 			& > * {
 				width: 100%;
 				height: 100%;
@@ -274,7 +274,7 @@
 		&:hover,
 		&:focus,
 		&:focus-within {
-			background-color: var(--background-color-hover);
+			background-color: rgba(0, 0, 0, 0.08);
 		}
 	}
 	.ItemProduct-isSelected {
