@@ -10,7 +10,6 @@ const assets = [
 	"./page/logos-192.png",
 	"./page/logos-512.png",
 	"./page/logos-512.svg",
-
 	// "./page/js/app.js",
 	// "./page/js/app.chunk.js",
 	// "./page/css/style.css",

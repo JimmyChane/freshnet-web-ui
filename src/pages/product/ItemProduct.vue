@@ -119,10 +119,7 @@
 		:style="{
 			'--available-opacity': isAvailable ? '1' : '0.1',
 			'--primary-color': primaryColor,
-			'--background-color': primaryColor.mix('ffffff', 0.94),
 			'--background-color-hover': primaryColor.mix('ffffff', 0.2),
-			'--background-color-card': primaryColor.mix('ffffff', 0.8),
-			'--background-color-card-hover': primaryColor.mix('ffffff', 0.8),
 		}"
 		:ref="item.id"
 		@click="$emit('click', item)"
@@ -166,28 +163,19 @@
 			object-fit: cover;
 			border-radius: var(--border-radius);
 			aspect-ratio: 16/12;
-			// filter: drop-shadow(0px 0px 20px hsla(0, 0%, 0%, 0.2));
-			.ItemProduct-preview-image {
+			background-color: hsl(0, 0%, 90%);
+			& > * {
 				width: 100%;
 				height: 100%;
-
-				object-fit: contain;
 				aspect-ratio: 16/12;
-
-				background-color: hsla(0, 0%, 100%, 0.3);
-				border-radius: var(--border-radius);
+			}
+			.ItemProduct-preview-image {
+				object-fit: contain;
 			}
 			.ItemProduct-preview-empty {
-				width: 100%;
-				height: 100%;
 				font-size: 0.8rem;
 				font-weight: 600;
-
-				background-color: hsla(0, 0%, 100%, 0.3);
-				border-radius: var(--border-radius);
 				color: hsla(0, 0%, 0%, 0.3);
-				aspect-ratio: 16/12;
-
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -237,6 +225,7 @@
 					padding: 0.15rem 0.2rem;
 					background-color: hsla(0, 0%, 100%, 0.4);
 					border-radius: 0.2rem;
+					border: 1px solid hsla(0, 0%, 0%, 0.1);
 				}
 			}
 			.ItemProduct-title-price {
@@ -285,7 +274,7 @@
 		&:hover,
 		&:focus,
 		&:focus-within {
-			background-color: var(--background-color-hover);
+			background-color: rgba(0, 0, 0, 0.08);
 		}
 	}
 	.ItemProduct-isSelected {

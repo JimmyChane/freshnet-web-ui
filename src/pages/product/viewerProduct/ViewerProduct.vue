@@ -197,7 +197,7 @@
 					? chroma(this.primaryColorHex)
 					: chroma("cccccc");
 			},
-			primaryColorIsDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 60,
+			primaryColorIsDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 75,
 			actionbarColor: (c) => c.primaryColor.mix("ffffff", 0.6),
 			backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.3),
 			headerBackgroundColor: (c) => c.primaryColor.mix("000000", 0.4),
@@ -674,7 +674,7 @@
 			background: none;
 			cursor: pointer;
 
-			transition: var(--transition-duration);
+			transition: transform var(--transition-duration);
 
 			--parent-height: 0;
 			--parent-scrollTop: 0;
