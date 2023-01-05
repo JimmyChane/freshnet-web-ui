@@ -65,24 +65,15 @@
 
 			<div class="Home-section-1">
 				<SectionProduct
-					:style="{
-						'grid-column': 'auto / span 2',
-						'grid-row': 'auto / span 4',
-					}"
+					:style="{ 'grid-column': 'auto / span 2', 'grid-row': 'auto / span 4' }"
 					:isThin="isThin"
 				/>
 				<SectionPrint
-					:style="{
-						'grid-column': 'auto / span 2',
-						'grid-row': 'auto / span 2',
-					}"
+					:style="{ 'grid-column': 'auto / span 2', 'grid-row': 'auto / span 2' }"
 					:isThin="isThin"
 				/>
 				<SectionLocation
-					:style="{
-						'grid-column': 'auto / span 2',
-						'grid-row': 'auto / span 2',
-					}"
+					:style="{ 'grid-column': 'auto / span 2', 'grid-row': 'auto / span 2' }"
 					:isThin="isThin"
 				/>
 			</div>

@@ -161,13 +161,14 @@
 		.ItemProduct-preview {
 			flex-grow: 0;
 			object-fit: cover;
-			border-radius: var(--border-radius);
 			aspect-ratio: 16/12;
-			background-color: hsl(0, 0%, 90%);
+
 			& > * {
 				width: 100%;
 				height: 100%;
 				aspect-ratio: 16/12;
+				border-radius: var(--border-radius);
+				background-color: hsl(0, 0%, 90%);
 			}
 			.ItemProduct-preview-image {
 				object-fit: contain;
