@@ -14,12 +14,7 @@
    import SectionAboutUs from "./PageHome-SectionAboutUs.vue";
    import SectionFeedback from "./PageHome-SectionFeedback.vue";
    import Company from "@/host/Company";
-   import {
-      format,
-      differenceInHours,
-      differenceInMinutes,
-      parse,
-   } from "date-fns";
+   import { format, differenceInHours, differenceInMinutes, parse } from "date-fns";
 
    export default {
       key: "home",
@@ -178,6 +173,8 @@
          z-index: 1;
          width: 100%;
          gap: 1rem;
+			gap: 0.5rem;
+			gap: 0;
 
          display: flex;
          flex-direction: column;

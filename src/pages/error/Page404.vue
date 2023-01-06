@@ -26,7 +26,7 @@
 				{
 					title: 'Hamburger Menu',
 					icon: host.res('icon/hamburgerMenu-2A4858.svg'),
-					click: () => $root.openNavigationDrawer(),
+					click: () => $root.navigation.openNavigationDrawer(),
 				},
 			]"
 		/>

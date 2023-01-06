@@ -72,7 +72,7 @@
 		<router-view
 			class="PageManage-view"
 			v-if="!user.isTypeNone()"
-			@click-drawer-expand="$root.openNavigationDrawer()"
+			@click-drawer-expand="$root.navigation.openNavigationDrawer()"
 		/>
 	</div>
 </template>

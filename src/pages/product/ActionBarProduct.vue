@@ -67,7 +67,7 @@
 						key: "hamburgerMenu",
 						title: "Hamburger Menu",
 						icon: this.host.res("icon/hamburgerMenu-000000.svg"),
-						click: () => this.$root.openNavigationDrawer(),
+						click: () => this.$root.navigation.openNavigationDrawer(),
 					});
 					menus.push({
 						key: "home",

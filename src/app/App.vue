@@ -90,7 +90,7 @@
                v-if="false"
                :class="[
                   'App-status',
-                  `App-status-${ isConnected ? 'isConnected' : 'isDisconnected' }`,
+                  `App-status-${isConnected ? 'isConnected' : 'isDisconnected'}`,
                ]"
             >
                <span>{{ isConnected ? "Connected" : "Disconnected" }}</span>
@@ -105,7 +105,7 @@
                   :selectedPageKey="$root.currentPageKey"
                   :selectedViewKey="$root.currentViewKey"
                   :isWide="$root.navigation.isWide()"
-                  @click-collapse="() => $root.closeNavigationDrawer()"
+                  @click-collapse="() => $root.navigation.closeNavigationDrawer()"
                   @click-logout="logout"
                />
                <router-view class="App-routerView" ref="AppRouterView" />

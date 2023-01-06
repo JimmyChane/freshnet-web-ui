@@ -57,7 +57,6 @@ class Navigation {
 
       return request ? request : null;
    }
-
    getCurrentLayoutRequest() {
       const page = this.context.currentPageKey;
       const view = this.context.currentViewKey;
@@ -68,7 +67,6 @@ class Navigation {
 
       return request ? request : null;
    }
-
    getCurrentVisibility() {
       const request = this.getCurrentRequest();
       return request ? request.visibility : Navigation.Visibility.COLLAPSED;
@@ -107,6 +105,16 @@ class Navigation {
       const { window } = this.context;
       const { innerWidth } = window;
       return innerWidth <= 600;
+   }
+
+   openNavigationDrawer() {
+      this.setVisibility(Navigation.Visibility.EXPANDED);
+   }
+   closeNavigationDrawer() {
+      this.setVisibility(Navigation.Visibility.COLLAPSED);
+   }
+   disableNavigationDrawer() {
+      this.setVisibility(Navigation.Visibility.NONE);
    }
 }
 
