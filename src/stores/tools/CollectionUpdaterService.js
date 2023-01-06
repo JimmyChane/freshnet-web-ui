@@ -13,22 +13,9 @@ class ItemAdder {
    }
 
    commitThenGetItem() {
-      const items = this.#context.state.list.items;
-      const existingItem = items.find((item) => item.id === this.#eItem.id);
-
-      if (existingItem) {
-         const index = items.indexOf(existingItem);
-         items[index] = this.#eItem;
-         this.#context.commit("items", items);
-         this.#context.commit("lastModified", Date.now());
-         return this.#eItem;
-      }
-
-      items.push(this.#eItem);
-      this.#context.commit("items", items);
+      const addedItem = this.#context.state.list.addItems(this.#eItem);
       this.#context.commit("lastModified", Date.now());
-
-      return this.#eItem;
+      return addedItem;
    }
 }
 class ItemRemover {
@@ -52,17 +39,12 @@ class ItemRemover {
 
    commitThenGetItem() {
       const id = this.#eItem ? this.#eItem.id : this.#eId;
-      const items = this.#context.state.list.items;
-      const existingItem = items.find((item) => item.id === id);
 
-      if (!existingItem) return this.#eItem;
+      const item = this.#context.state.list.removeItemById(id);
+      if (!item) return this.#eItem;
 
-      const index = items.indexOf(existingItem);
-      items.splice(index, 1);
-      this.#context.commit("items", items);
       this.#context.commit("lastModified", Date.now());
-
-      return existingItem;
+      return item;
    }
 }
 class ItemUpdater {
@@ -91,8 +73,7 @@ class ItemUpdater {
 
       if (!existingItem) {
          if (!this.#eItem) return this.#eItem;
-         items.push(this.#eItem);
-         this.#context.commit("items", items);
+         this.#context.state.list.addItems(this.#eItem);
          this.#context.commit("lastModified", Date.now());
          return this.#eItem;
       }

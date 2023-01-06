@@ -55,7 +55,7 @@ export default {
          },
          mutations: {
             lastModified: (state, time) => (state.lastModified = time),
-            items: (state, items) => state.list.replaceItems(...items),
+            items: (state, items) => state.list.clear().addItems(...items),
          },
          getters: {
             lastModified: (state) => state.lastModified,
