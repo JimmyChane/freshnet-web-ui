@@ -9,6 +9,22 @@ import Vuex from "vuex";
 import ServiceModule from "@/items/data/Service.js";
 import ApiHost from "@/host/ApiHost.js";
 import List from "./tools/List";
+import ServiceCustomer from "@/items/ServiceCustomer";
+
+const Notify = {
+   ItemAdd: "item-add",
+   ItemRemove: "item-remove",
+   ItemImageAdd: "item-image-add",
+   ItemImageRemove: "item-image-remove",
+   ItemEventAdd: "item-event-add",
+   ItemEventRemove: "item-event-remove",
+   ItemLabelAdd: "item-label-add",
+   ItemLabelRemove: "item-label-remove",
+   ItemStateUpdate: "item-state-update",
+   ItemDescriptionUpdate: "item-description-update",
+   ItemBelongingsUpdate: "item-belongings-update",
+   ItemCustomerUpdate: "item-customer-update",
+};
 
 export default {
    init(Stores) {
@@ -58,26 +74,141 @@ export default {
             socketNotify: (context, data) => {
                const { key, content } = data;
 
-               if (key === "item-add")
+               if (key === Notify.ItemAdd) {
                   new CollectionUpdater(context)
                      .toAdd()
                      .withItem(new Service(Stores).fromData(content))
                      .commitThenGetItem();
-               if (key === "item-remove")
+               }
+               if (key === Notify.ItemRemove) {
                   new CollectionUpdater(context)
                      .toRemove()
                      .withItem(new Service(Stores).fromData(content))
                      .commitThenGetItem();
-               if (key === "item-image-add") return;
-               if (key === "item-image-remove") return;
-               if (key === "item-event-add") return;
-               if (key === "item-event-remove") return;
-               if (key === "item-label-add") return;
-               if (key === "item-label-remove") return;
-               if (key === "item-state-update") return;
-               if (key === "item-description-update") return;
-               if (key === "item-belongings-update") return;
-               if (key === "item-customer-update") return;
+               }
+               if (key === Notify.ItemImageAdd) {
+                  const id = content.id;
+                  const dataImages = content.items;
+                  new CollectionUpdater(context)
+                     .toUpdate()
+                     .withId(id)
+                     .updateThenCommitThenGetItem((oldItem, newItem) => {
+                        dataImages
+                           .map((dataImage) => new ServiceImage().fromData(dataImage))
+                           .forEach((image) => {
+                              const existingImage = oldItem.imageFiles.find((img) => {
+                                 return img.name === image.name;
+                              });
+                              if (!existingImage) oldItem.imageFiles.push(image);
+                           });
+                     });
+               }
+               if (key === Notify.ItemImageRemove) {
+                  const { id, image } = content;
+                  console.log({ id, image });
+                  new CollectionUpdater(context)
+                     .toUpdate()
+                     .withId(id)
+                     .updateThenCommitThenGetItem((oldItem, newItem) => {
+                        oldItem.imageFiles = oldItem.imageFiles.filter((imageFile) => {
+                           return imageFile.name !== image.name;
+                        });
+                     });
+               }
+               if (key === Notify.ItemEventAdd) {
+                  new CollectionUpdater(context)
+                     .toUpdate()
+                     .withItem(new Service(Stores).fromData(content))
+                     .updateThenCommitThenGetItem((oldItem, newItem) => {
+                        const events = newItem.events.sort((event1, event2) => {
+                           return event1.compare(event2);
+                        });
+                        oldItem.events = events;
+                     });
+               }
+               if (key === Notify.ItemEventRemove) {
+                  const { id, event } = content;
+                  new CollectionUpdater(context)
+                     .toUpdate()
+                     .withId(id)
+                     .updateThenCommitThenGetItem((oldItem, newItem) => {
+                        oldItem.events = oldItem.events.filter((oldEvent) => {
+                           return oldEvent.timestamp.time !== event.time;
+                        });
+                     });
+               }
+               if (key === Notify.ItemLabelAdd) {
+                  const { id, label } = content;
+
+                  if (label.title === "Urgent")
+                     new CollectionUpdater(context)
+                        .toUpdate()
+                        .withId(id)
+                        .updateThenCommitThenGetItem((oldItem, newItem) => {
+                           oldItem.setUrgent(true);
+                        });
+                  if (label.title === "Warranty")
+                     new CollectionUpdater(context)
+                        .toUpdate()
+                        .withId(id)
+                        .updateThenCommitThenGetItem((oldItem, newItem) => {
+                           oldItem.setWarranty(true);
+                        });
+               }
+               if (key === Notify.ItemLabelRemove) {
+                  const { id, label } = content;
+
+                  if (label.title === "Urgent")
+                     new CollectionUpdater(context)
+                        .toUpdate()
+                        .withId(id)
+                        .updateThenCommitThenGetItem((oldItem, newItem) => {
+                           oldItem.setUrgent(false);
+                        });
+                  if (label.title === "Warranty")
+                     new CollectionUpdater(context)
+                        .toUpdate()
+                        .withId(id)
+                        .updateThenCommitThenGetItem((oldItem, newItem) => {
+                           oldItem.setWarranty(false);
+                        });
+               }
+               if (key === Notify.ItemStateUpdate) {
+                  const { id, state } = content;
+                  new CollectionUpdater(context)
+                     .toUpdate()
+                     .withId(id)
+                     .updateThenCommitThenGetItem((oldItem) => {
+                        oldItem.state = state;
+                     });
+               }
+               if (key === Notify.ItemDescriptionUpdate) {
+                  const { id, description } = content;
+                  new CollectionUpdater(context)
+                     .toUpdate()
+                     .withId(id)
+                     .updateThenCommitThenGetItem((oldItem) => {
+                        oldItem.description = description;
+                     });
+               }
+               if (key === Notify.ItemBelongingsUpdate) {
+                  const { id, belongings } = content;
+                  new CollectionUpdater(context)
+                     .toUpdate()
+                     .withId(id)
+                     .updateThenCommitThenGetItem((oldItem, newItem) => {
+                        oldItem.belongings = belongings;
+                     });
+               }
+               if (key === Notify.ItemCustomerUpdate) {
+                  const { id, customer } = content;
+                  new CollectionUpdater(context)
+                     .toUpdate()
+                     .withId(id)
+                     .updateThenCommitThenGetItem((oldItem, newItem) => {
+                        oldItem.customer = new ServiceCustomer(Stores).fromData(customer);
+                     });
+               }
             },
 
             async refresh(context) {
@@ -397,16 +528,21 @@ export default {
                      .sendNotJson();
                   if (api.error) throw new Error(api.error);
                   const { content } = api;
-                  const { items, fail_count } = content;
 
+                  const id = content.id;
+                  const dataImages = content.items;
                   return new CollectionUpdater(context)
                      .toUpdate()
-                     .withId(serviceID)
+                     .withId(id)
                      .updateThenCommitThenGetItem((oldItem, newItem) => {
-                        const images = items.map((image) => {
-                           return new ServiceImage().fromData(image);
-                        });
-                        oldItem.imageFiles.push(...images);
+                        dataImages
+                           .map((dataImage) => new ServiceImage().fromData(dataImage))
+                           .forEach((image) => {
+                              const existingImage = oldItem.imageFiles.find((img) => {
+                                 return img.name === image.name;
+                              });
+                              if (!existingImage) oldItem.imageFiles.push(image);
+                           });
                      });
                });
             },
