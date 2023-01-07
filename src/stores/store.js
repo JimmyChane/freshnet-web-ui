@@ -31,7 +31,7 @@ export default {
 					// .on("connect", () => console.info("Socket", "Connected"))
 					// .on("connect_error", () => console.info("Socket", "Connect Error"))
 					// .on("disconnect", (reason) => console.info("Socket", "Disconnected"))
-					.on("notify", (body) => context.dispatch("socketNotify", body));
+					// .on("notify", (body) => context.dispatch("socketNotify", body))
 					context.commit("socket", socket);
 				},
 				closeSocket: (context) => {
