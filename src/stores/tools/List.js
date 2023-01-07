@@ -54,4 +54,16 @@ export default class List {
       const removedItems = this.removeItemsByIds(id);
       return removedItems.length > 0 ? removedItems[0] : null;
    }
+
+   updateItemById(id, updater = (item) => {}) {
+      const item = this.items.find((item) => item.id === id);
+      if (!item) return null;
+
+      const inputItem = updater(item);
+      if (inputItem !== null && inputItem !== undefined && inputItem !== item) {
+         this.items[this.items.indexOf(item)] = inputItem;
+      }
+      this.lastModified = Date.now();
+      return item;
+   }
 }

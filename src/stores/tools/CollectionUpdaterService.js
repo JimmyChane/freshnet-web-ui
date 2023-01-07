@@ -13,8 +13,13 @@ class ItemAdder {
    }
 
    commitThenGetItem() {
-      const addedItem = this.#context.state.list.addItems(this.#eItem);
-      this.#context.commit("lastModified", Date.now());
+      const addedItem = this.#context.state.list.addItem(this.#eItem);
+      // this.#context.commit("items", this.#context.state.list.items);
+      // this.#context.commit(
+      //    "lastModified",
+      //    this.#context.state.list.lastModified,
+      // );
+      this.#context.commit("list", this.#context.state.list);
       return addedItem;
    }
 }
@@ -43,7 +48,12 @@ class ItemRemover {
       const item = this.#context.state.list.removeItemById(id);
       if (!item) return this.#eItem;
 
-      this.#context.commit("lastModified", Date.now());
+      // this.#context.commit("items", this.#context.state.list.items);
+      // this.#context.commit(
+      //    "lastModified",
+      //    this.#context.state.list.lastModified,
+      // );
+      this.#context.commit("list", this.#context.state.list);
       return item;
    }
 }
@@ -68,20 +78,33 @@ class ItemUpdater {
 
    updateThenCommitThenGetItem(updater = (existingItem, item) => {}) {
       const id = this.#eItem ? this.#eItem.id : this.#eId;
+
       const items = this.#context.state.list.items;
       const existingItem = items.find((item) => item.id === id);
 
       if (!existingItem) {
          if (!this.#eItem) return this.#eItem;
-         this.#context.state.list.addItems(this.#eItem);
-         this.#context.commit("lastModified", Date.now());
+         this.#context.state.list.addItem(this.#eItem);
+         // this.#context.commit("items", this.#context.state.list.items);
+         // this.#context.commit(
+         //    "lastModified",
+         //    this.#context.state.list.lastModified,
+         // );
+         this.#context.commit("list", this.#context.state.list);
          return this.#eItem;
       }
 
-      updater(existingItem, this.#eItem);
-      this.#context.commit("items", items);
-      this.#context.commit("lastModified", Date.now());
-      return existingItem;
+      const outputItem = this.#context.state.list.updateItemById(id, (item) => {
+         updater(item, this.#eItem);
+         return item;
+      });
+      // this.#context.commit("items", this.#context.state.list.items);
+      // this.#context.commit(
+      //    "lastModified",
+      //    this.#context.state.list.lastModified,
+      // );
+      this.#context.commit("list", this.#context.state.list);
+      return outputItem;
    }
 }
 
