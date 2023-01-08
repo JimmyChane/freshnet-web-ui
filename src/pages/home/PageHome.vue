@@ -14,7 +14,7 @@
    import SectionAboutUs from "./PageHome-SectionAboutUs.vue";
    import SectionFeedback from "./PageHome-SectionFeedback.vue";
    import Company from "@/host/Company";
-   import { format, differenceInHours, differenceInMinutes, parse } from "date-fns";
+   import { format, differenceInMinutes } from "date-fns";
 
    export default {
       key: "home",
@@ -49,7 +49,6 @@
 
          businessHourDescription() {
             const now = new Date();
-            // const now = parse("Monday 11:59pm", "cccc hh:mmaa", new Date());
             const days = Company.BusinessDays.toArray();
 
             const today = days.find((day) => day.isToday());
@@ -173,8 +172,8 @@
          z-index: 1;
          width: 100%;
          gap: 1rem;
-			gap: 0.5rem;
-			gap: 0;
+         gap: 0.5rem;
+         gap: 0;
 
          display: flex;
          flex-direction: column;

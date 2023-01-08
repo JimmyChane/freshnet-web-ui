@@ -143,15 +143,6 @@
             this.expandedPageKey = "";
          },
 
-         shouldMakeSpace(group1) {
-            return (
-               this.selectedPageKey === group1.key &&
-               Array.isArray(group1.groups) &&
-               group1.groups.length > 0 &&
-               this.navigations.indexOf(group1) !== 0
-            );
-         },
-
          hasQueryKey(key) {
             const { query } = this.$route;
             return Object.keys(query).includes(key);
@@ -189,7 +180,7 @@
 <template>
    <Drawer
       ref="Drawer"
-      :class="['LeftNav', `LeftNav-${!isWide ? 'isThin' : 'isWide'}`]"
+      :class="['LeftNav', !isWide ? 'LeftNav-isThin' : 'LeftNav-isWide']"
       :mode="drawerMode"
       :edge="drawerEdge"
       @click-collapse="emitCollapse()"
@@ -215,7 +206,6 @@
 
          <div class="LeftNav-navigations" v-if="navigations.length">
             <LeftNavGroup1
-               :class="[shouldMakeSpace(group1) ? 'LeftNav-group1-marginTop' : '']"
                v-for="group1 of navigations"
                :key="group1.key"
                :group1="group1"
@@ -252,16 +242,18 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding: 0.4rem;
 
             .LeftNav-logo {
                gap: 0.5rem;
-               padding: 1.4rem;
+               padding: 1rem;
 
                display: flex;
                flex-direction: row;
                align-items: center;
                justify-content: center;
+
                cursor: pointer;
                text-decoration: none;
                color: var(--primary-color);
@@ -294,7 +286,7 @@
                   padding: 0.5rem;
                   width: 2rem;
                   height: 2rem;
-                  transition: var(--animation-duration);
+                  transition: var(--transition-duration);
                }
                img {
                   transform: rotate(90deg);
@@ -315,10 +307,6 @@
             justify-content: flex-start;
             padding: 0.4em 0;
             padding-bottom: 4em;
-
-            .LeftNav-group1-marginTop {
-               // margin-top: 1em;
-            }
          }
          .LeftNav-login {
             position: sticky;
@@ -362,9 +350,6 @@
    }
 
    .LeftNav-isWide {
-      .LeftNav-header {
-         flex-direction: row;
-      }
       .LeftNav-body {
          .LeftNav-header {
             .LeftNav-logo {
@@ -386,7 +371,6 @@
       .LeftNav-body {
          width: fit-content;
          .LeftNav-header {
-            flex-direction: column-reverse;
             gap: 0.5rem;
             .LeftNav-logo {
                .LeftNav-icon {
