@@ -1,5 +1,5 @@
-// const host = "http://127.0.0.1";
-const host = "https://www.freshnet.app";
+// const host = "https://www.freshnet.app";
+const host = 'http://192.168.1.21'
 
 module.exports = {
   devPort: 8080,

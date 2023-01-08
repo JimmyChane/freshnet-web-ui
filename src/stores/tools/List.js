@@ -1,3 +1,7 @@
+import U from "@/U";
+
+const isUndefinedOrNull = (value) => value === null || value === undefined;
+
 export default class List {
    lastModified = 0;
    items = [];
@@ -47,23 +51,43 @@ export default class List {
          removedItems.push(item);
       }
 
-      if (removedItems.length > 0) this.lastModified = Date.now();
+      if (removedItems.length > 0) {
+         this.lastModified = Date.now();
+      }
       return removedItems;
    }
    removeItemById(id) {
       const removedItems = this.removeItemsByIds(id);
       return removedItems.length > 0 ? removedItems[0] : null;
    }
+   removeItemByItems(...items) {
+      const ids = items.map((item) => item.id);
+      const removedItems = this.removeItemsByIds(...ids);
+
+      return items.map((item) => {
+         const removedItem = removedItems.find((removedItem) => {
+            return removedItem.id === item.id;
+         });
+         return removedItem ? removedItem : item;
+      });
+   }
+   removeItemByItem(item) {
+      const removedItems = this.removeItemByItems(item);
+      return removedItems.length > 0 ? removedItems[0] : null;
+   }
 
    updateItemById(id, updater = (item) => {}) {
       const item = this.items.find((item) => item.id === id);
-      if (!item) return null;
 
       const inputItem = updater(item);
-      if (inputItem !== null && inputItem !== undefined && inputItem !== item) {
-         this.items[this.items.indexOf(item)] = inputItem;
+      const isReadableObject = !isUndefinedOrNull(inputItem) && U.isObject(inputItem);
+      const inputItemId = isReadableObject ? inputItem.id : "";
+      if (isReadableObject && inputItem !== item && inputItemId === item.id) {
+         const index = this.items.indexOf(item);
+         if (index === -1) this.addItem(inputItem);
+         else this.items[index] = inputItem;
       }
       this.lastModified = Date.now();
-      return item;
+      return inputItem;
    }
 }
