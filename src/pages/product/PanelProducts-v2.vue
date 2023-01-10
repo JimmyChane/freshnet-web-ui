@@ -369,7 +369,6 @@
 
                   font-size: 2.5rem;
                   font-weight: 500;
-                  padding: 0 0.5em;
                   gap: 0.5em;
 
                   .PanelProducts-category-icon {
@@ -390,6 +389,9 @@
             }
          }
          .PanelProducts-categories-isThin {
+            .PanelProducts-category-header {
+               padding: 0 0.9rem;
+            }
             .PanelProducts-category-items {
                padding: 0 0.7rem;
 
@@ -400,7 +402,7 @@
 
                --scrollbar-size: 0.4em;
                --scrollbar-thumb-radius: 0.4em;
-               --scrollbar-track-margin: 0.7rem;
+               --scrollbar-track-margin: 1.3rem;
 
                --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.1);
                --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.6);
@@ -434,6 +436,9 @@
             }
          }
          .PanelProducts-categories-isWide {
+            .PanelProducts-category-header {
+               padding: 0 0.8rem;
+            }
             .PanelProducts-category-items {
                padding: 0 0.5rem;
 

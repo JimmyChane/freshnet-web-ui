@@ -1,7 +1,6 @@
 <script>
    const Mode = { List: 1, Grid: 2 };
 
-   import User from "@/items/User.js";
    import Setting from "@/items/data/Setting.js";
    import ProductPrice from "@/items/ProductPrice.js";
    import ProductPreset from "@/items/tools/ProductPreset";
@@ -197,9 +196,9 @@
          color: black;
 
          .ItemProduct-title-text {
-            min-height: 1.1rem;
-            max-height: 2.2rem;
-            line-height: 1.1rem;
+            min-height: 1em;
+            max-height: 2em;
+            line-height: 1em;
 
             font-size: 1rem;
             font-weight: 600;
@@ -224,6 +223,9 @@
             flex-wrap: wrap;
             justify-content: flex-start;
             align-items: flex-start;
+
+            overflow: hidden;
+            max-height: 2.3rem;
 
             & > * {
                min-width: max-content;
