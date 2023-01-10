@@ -174,7 +174,6 @@
 
          // --scrollbar-size: 0.6em;
          // --scrollbar-thumb-radius: 0.2em;
-         // --scrollbar-thumb-radius: 0;
          // --scrollbar-track-margin: 0;
 
          // --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.4);
