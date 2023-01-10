@@ -39,7 +39,6 @@
 		font-size: 1rem;
 		background: hsla(0, 0%, 100%, 0.6);
 		padding: 1.2rem;
-		border-radius: 0.6rem;
 		font-weight: 600;
 		.ViewerProduct-title-noContent {
 			opacity: 0.6;

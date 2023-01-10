@@ -63,7 +63,6 @@
 			max-width: 30rem;
 			gap: 1px;
 			line-height: 0.8;
-			border-radius: 1rem;
 			overflow: hidden;
 
 			display: flex;
@@ -81,7 +80,6 @@
 		.SectionInclude-noContent {
 			width: 100%;
 			padding: 1.2rem;
-			border-radius: 0.6rem;
 			font-style: italic;
 			font-size: 0.8rem;
 			color: hsla(0, 0%, 0%, 0.6);

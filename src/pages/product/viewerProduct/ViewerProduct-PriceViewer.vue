@@ -110,7 +110,6 @@
 			justify-content: flex-start;
 			gap: 1px;
 			& > * {
-				border-radius: 0.2em;
 				padding: 0.2em 0.6em;
 				color: white;
 			}

@@ -63,7 +63,6 @@
 			justify-content: flex-start;
 
 			gap: 1px;
-			border-radius: 0.6rem;
 			overflow: hidden;
 		}
 	}

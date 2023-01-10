@@ -19,9 +19,6 @@
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
-   const Size = { Auto: 0, A4: 1, A5: 2 };
-   const Orientation = { Auto: 0, Portrait: 1, Landscape: 2 };
-
    export default {
       components: {
          ProductViewerImagePreview,
@@ -48,9 +45,6 @@
          "click-product-specificationsUpdate",
       ],
       props: {
-         size: { type: Number, default: Size.Auto },
-         orientation: { type: Number, default: Orientation.Auto },
-
          isWide: { type: Boolean, default: false },
          isEditable: { type: Boolean, default: false },
 

@@ -29,7 +29,6 @@
 		width: 100%;
 		height: 6rem;
 		min-height: 6rem;
-		border-radius: 0.5rem;
 		border: none;
 		background: hsla(0, 0%, 100%, 0.6);
 		transition: var(--transition-duration);

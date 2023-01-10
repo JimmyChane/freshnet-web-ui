@@ -52,11 +52,10 @@
 		align-items: flex-start;
 		justify-content: flex-start;
 		.SectionDescription {
-			widows: 100%;
+			width: 100%;
 			max-width: 40rem;
 			font-size: 1rem;
 
-			border-radius: 0.6rem;
 			background: hsla(0, 0%, 100%, 0.6);
 			padding: 1.2rem;
 			font-size: 1rem;

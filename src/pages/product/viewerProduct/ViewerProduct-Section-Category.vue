@@ -88,7 +88,6 @@
 			padding: 1.2rem;
 			gap: 1.2rem;
 			background: hsla(0, 0%, 100%, 0.6);
-			border-radius: 0.6rem;
 
 			display: flex;
 			flex-direction: row;
