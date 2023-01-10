@@ -336,6 +336,7 @@
       .PanelProducts-body {
          z-index: 1;
          width: 100%;
+         padding-bottom: 10vh;
          flex-grow: 1;
          display: flex;
          flex-direction: column;
