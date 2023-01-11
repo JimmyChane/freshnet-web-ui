@@ -72,7 +72,6 @@
 
             const nextDay = Company.BusinessDays.getNextWorkingDay(today);
             const nextDayStartDate = nextDay.hours.getDateStart();
-            console.log(format(nextDayStartDate, "cccc"));
             return `Sorry, we're closed\nCome back at ${format(
                nextDayStartDate,
                "h:mmaaa",
