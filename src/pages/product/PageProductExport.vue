@@ -120,44 +120,16 @@
             }
          },
       },
-      created() {
-         this.options[0].items.forEach((item) => {
-            item.isSelected = () => item === this.orientation;
-         });
-         this.options[1].items.forEach((item) => {
-            item.isSelected = () => item === this.size;
-         });
-         this.options[2].items.forEach((item) => {
-            item.isSelected = () => item === this.row;
-         });
-         this.options[3].items.forEach((item) => {
-            item.isSelected = () => item === this.column;
-         });
-
-         this.orientation = this.options[0].items[0];
-         this.size = this.options[1].items[1];
-         this.row = this.options[2].items[1];
-         this.column = this.options[3].items[0];
-
-         window.addEventListener("resize", this.listenerResize);
-      },
-      async mounted() {
-         try {
-            const user = await this.loginStore.dispatch("getUser");
-            if (user.isTypeNone()) this.redirectToLogin();
-         } catch (error) {
-            this.redirectToLogin();
-         }
-
-         this.invalidate();
-         this.invalidateCard();
-      },
-      destroyed() {
-         window.removeEventListener("resize", this.listenerResize);
-      },
       methods: {
          listenerResize() {
             this.invalidateCard();
+         },
+         listenKeyDown(event) {
+            if (event.key === "p" && event.ctrlKey) {
+               if (event.preventDefault) event.preventDefault();
+               if (event.stopPropagation) event.stopPropagation();
+               this.clickExport();
+            }
          },
 
          async invalidate() {
@@ -204,6 +176,44 @@
                query: { redirect: this.$router.currentRoute.fullPath },
             });
          },
+      },
+      created() {
+         this.options[0].items.forEach((item) => {
+            item.isSelected = () => item === this.orientation;
+         });
+         this.options[1].items.forEach((item) => {
+            item.isSelected = () => item === this.size;
+         });
+         this.options[2].items.forEach((item) => {
+            item.isSelected = () => item === this.row;
+         });
+         this.options[3].items.forEach((item) => {
+            item.isSelected = () => item === this.column;
+         });
+
+         this.orientation = this.options[0].items[0];
+         this.size = this.options[1].items[1];
+         this.row = this.options[2].items[1];
+         this.column = this.options[3].items[0];
+      },
+      beforeMount() {
+         window.addEventListener("resize", this.listenerResize);
+         document.addEventListener("keydown", this.listenKeyDown);
+      },
+      async mounted() {
+         try {
+            const user = await this.loginStore.dispatch("getUser");
+            if (user.isTypeNone()) this.redirectToLogin();
+         } catch (error) {
+            this.redirectToLogin();
+         }
+
+         this.invalidate();
+         this.invalidateCard();
+      },
+      beforeDestroy() {
+         window.removeEventListener("resize", this.listenerResize);
+         document.removeEventListener("keydown", this.listenKeyDown);
       },
    };
 </script>
@@ -329,29 +339,4 @@
          justify-content: flex-start;
       }
    }
-
-   // @media print {
-   // 	body * {
-   // 		visibility: hidden;
-   // 	}
-   // 	.App {
-   // 		visibility: hidden;
-   // 	}
-   // 	.PageProductExport {
-   // 		visibility: hidden;
-   // 	}
-   // 	.PageProductExport-body {
-   // 		visibility: hidden;
-   // 	}
-   // 	.PageProductExport-canvas,
-   // 	.PageProductExport-canvas * {
-   // 		visibility: visible;
-   // 	}
-   // 	.PageProductExport-canvas {
-   // 		position: absolute;
-   // 		left: 0;
-   // 		top: 0;
-   // 		transform: scale(1);
-   // 	}
-   // }
 </style>
