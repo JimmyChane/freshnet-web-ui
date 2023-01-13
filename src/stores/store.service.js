@@ -10,6 +10,7 @@ import ApiHost from "@/host/ApiHost.js";
 import List from "./tools/List";
 import ServiceCustomer from "@/items/ServiceCustomer";
 import ServiceEvent from "@/items/ServiceEvent";
+import U from "@/U";
 
 const Notify = {
    ItemAdd: "item-add",
@@ -30,28 +31,16 @@ export default {
    init(Stores) {
       const storeService = new Vuex.Store({
          state: {
-            list: new List(),
-
-            dataLoader: new DataLoader({ timeout: 1000 * 60 * 10 }) // 10min
-               .processor(() => storeService.state.processor)
-               .loadData(async () => {
-                  const api = await ApiHost.request().url("service_v2/get/items").send();
-                  const error = api.getError();
-                  const content = api.getContent();
-                  if (error) throw new Error(error);
-                  const contents = Array.isArray(content) ? content : [];
-                  const items = contents.map((content) => {
-                     return new Service(Stores).fromData(content);
-                  });
-                  return items;
-               })
-               .setData((data) => {
-                  storeService.state.list
-                     .clear()
-                     .addItems(...(Array.isArray(data) ? data : []));
-               })
-               .getData(() => storeService.getters.items),
+            dataLoader: DataLoader.withStore(() => storeService).loadData(async () => {
+               const api = await ApiHost.request().url("service_v2/get/items").send();
+               const error = api.getError();
+               if (error) throw new Error(error);
+               return U.optArray(api.getContent()).map((content) => {
+                  return new Service(Stores).fromData(content);
+               });
+            }),
             processor: new Processor(),
+            list: new List(),
          },
          mutations: { list: (state, list) => (state.list = list) },
          getters: {

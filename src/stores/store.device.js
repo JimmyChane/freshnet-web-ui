@@ -40,21 +40,13 @@ export default {
    init(Stores) {
       const deviceStore = new Vuex.Store({
          state: {
-            dataLoader: new DataLoader({ timeout: 1000 * 60 * 10 }) // 10min
-               .processor(() => deviceStore.state.processor)
-               .loadData(async () => {
-                  let api = await ApiHost.request().url("customer/device/list").send();
-                  let content = apiThenContent(api);
-                  let contents = Array.isArray(content) ? content : [];
-                  let items = contents.map((content) => {
-                     return new ItemCustomerDevice(Stores).fromData(content);
-                  });
-                  return items;
-               })
-               .setData((data) => {
-                  deviceStore.state.list.clear().addItems(...U.optArray(data));
-               })
-               .getData(() => deviceStore.getters.items),
+            dataLoader: DataLoader.withStore(() => deviceStore).loadData(async () => {
+               const api = await ApiHost.request().url("customer/device/list").send();
+               const content = apiThenContent(api);
+               return U.optArray(content).map((content) => {
+                  return new ItemCustomerDevice(Stores).fromData(content);
+               });
+            }),
             processor: new Processor(),
             list: new List(),
          },

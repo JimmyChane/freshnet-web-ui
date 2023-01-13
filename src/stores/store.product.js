@@ -20,22 +20,16 @@ export default {
 
       const productStore = new Vuex.Store({
          state: {
-            dataLoader: new DataLoader({ timeout: 1000 * 60 * 10 }) // 10min
-               .processor(() => productStore.state.processor)
-               .loadData(async () => {
-                  const api = await ApiHost.request().url("productv2/list/").send();
-                  const error = api.getError();
-                  const contents = api.getContent();
-                  if (error) throw new Error(error);
-                  if (!Array.isArray(contents)) throw new Error("content is not array");
-                  return Promise.all(
-                     contents.map((content) => new Product(Stores).fromData(content)),
-                  );
-               })
-               .setData((data) => {
-                  productStore.state.list.clear().addItems(...U.optArray(data));
-               })
-               .getData(() => productStore.getters.items),
+            dataLoader: DataLoader.withStore(() => productStore).loadData(async () => {
+               const api = await ApiHost.request().url("productv2/list/").send();
+               const error = api.getError();
+               if (error) throw new Error(error);
+               return Promise.all(
+                  U.optArray(api.getContent()).map((content) => {
+                     return new Product(Stores).fromData(content);
+                  }),
+               );
+            }),
             processor: new Processor(),
             list: new List(),
          },

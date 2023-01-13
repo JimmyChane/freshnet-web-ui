@@ -11,23 +11,14 @@ export default {
    init(Stores) {
       const store = new Vuex.Store({
          state: {
-            lastModified: 0,
-            dataLoader: new DataLoader({ timeout: 1000 * 60 * 10 }) // 10min
-               .processor(() => store.state.processor)
-               .loadData(async () => {
-                  const api = await ApiHost.request().url("order/").send();
-                  const error = api.getError();
-                  const content = api.getContent();
-                  if (error) throw new Error(error);
-                  const contents = U.optArray(content);
-                  const items = contents.map((data) => new Order(Stores).fromData(data));
-                  return items;
-               })
-               .setData((data) => {
-                  store.state.list.clear().addItems(...U.optArray(data));
-               })
-               .getData(() => store.getters.items),
-            items: [],
+            dataLoader: DataLoader.withStore(() => store).loadData(async () => {
+               const api = await ApiHost.request().url("order/").send();
+               const error = api.getError();
+               if (error) throw new Error(error);
+               return U.optArray(api.getContent()).map((data) => {
+                  return new Order(Stores).fromData(data);
+               });
+            }),
             processor: new Processor(),
             list: new List(),
          },

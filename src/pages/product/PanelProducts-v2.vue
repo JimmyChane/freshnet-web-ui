@@ -107,6 +107,12 @@
          isEditable() {
             this.invalidate();
          },
+         "productStore.getters.lastModified"() {
+            this.invalidate();
+         },
+         "categoryStore.getters.lastModified"() {
+            this.invalidate();
+         },
       },
       mounted() {
          this.invalidate();

@@ -43,20 +43,14 @@ export default {
 
       const customerStore = new Vuex.Store({
          state: {
-            dataLoader: new DataLoader({ timeout: 1000 * 60 * 10 }) // 10min
-               .processor(() => customerStore.state.processor)
-               .loadData(async () => {
-                  const api = await ApiHost.request().url("customer/list").send();
-                  const content = apiThenContent(api);
-                  const items = U.optArray(content).map((content) => {
-                     return new ItemCustomer(Stores).fromData(content);
-                  });
-                  return items;
-               })
-               .setData((data) => {
-                  customerStore.state.list.clear().addItems(...U.optArray(data));
-               })
-               .getData(() => customerStore.getters.items),
+            dataLoader: DataLoader.withStore(() => customerStore).loadData(async () => {
+               const api = await ApiHost.request().url("customer/list").send();
+               const error = api.getError();
+               if (error) throw new Error(error);
+               return U.optArray(apiThenContent(api)).map((content) => {
+                  return new ItemCustomer(Stores).fromData(content);
+               });
+            }),
             processor: new Processor(),
             list: new List(),
          },
