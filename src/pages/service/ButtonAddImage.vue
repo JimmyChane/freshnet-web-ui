@@ -8,7 +8,7 @@
       <input
          class="ButtonImageAdd-pick"
          type="file"
-         accept=".jpeg, .jpg, .png"
+         accept=".jpeg, .jpg, .png, .webp"
          @change="
             (event) => {
                const [file] = event.target.files;
