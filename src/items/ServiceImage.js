@@ -40,11 +40,11 @@ class ServiceImage {
       if (method === "storage-image") {
          const prefix = "/api/image/name/";
          const name = path.substring(prefix.length, path.length);
-         const filename = new Filename(name).replaceExt("webp");
+         const filename = new Filename(name);
          return `${ApiHost.origin}/api/image/name/${filename.toString()}${query}`;
       }
 
-      const filename = new Filename(this.name).replaceExt("webp");
+      const filename = new Filename(this.name);
       return `${ApiHost.origin}/api/service_v2/get/image/${filename.toString()}${query}`;
    }
 }

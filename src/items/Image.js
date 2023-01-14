@@ -49,7 +49,7 @@ class Image {
             const name = path.substring(prefix.length, path.length);
             const dimensionQuery = Image.dimensionToQuery(width, height);
             const query = dimensionQuery.length ? `?${dimensionQuery}` : "";
-            const filename = new Filename(name).replaceExt("webp");
+            const filename = new Filename(name);
             return `${ApiHost.origin}/api/image/name/${filename.toString()}${query}`;
          }
       }
