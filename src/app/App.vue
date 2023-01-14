@@ -40,8 +40,8 @@
          },
       },
       mounted() {
-         window.addEventListener("resize", () => this.invalidateHeight()) &&
-            this.invalidateHeight();
+         window.addEventListener("resize", () => this.invalidateHeight());
+         this.invalidateHeight();
 
          setTimeout(() => this.onConnectionChange(), 3000);
       },
@@ -66,7 +66,8 @@
          },
 
          invalidateHeight() {
-            let vh = window.innerHeight * 0.01;
+            const { innerHeight } = window;
+            const vh = innerHeight * 0.01;
             document.body.style.setProperty("--vh", `${vh}px`);
          },
       },
@@ -150,7 +151,6 @@
       body {
          width: 100%;
          height: 100%;
-         // overflow: hidden;
          overscroll-behavior-x: none;
 
          p {
@@ -165,42 +165,8 @@
 
          outline: none;
          -webkit-tap-highlight-color: transparent;
-         // font-family: 'Poppins';
-         // font-family: "Comic Neue";
-         // font-family: "Dosis", sans-serif;
          font-family: "Roboto", sans-serif;
-         // font-family: arial;
          word-break: break-word;
-
-         // --scrollbar-size: 0.6em;
-         // --scrollbar-thumb-radius: 0.2em;
-         // --scrollbar-track-margin: 0;
-
-         // --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.4);
-         // --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.6);
-         // --scrollbar-track-color: hsla(0, 0%, 0%, 0.1);
-         // --scrollbar-track-color-hover: hsla(0, 0%, 0%, 0.2);
-
-         // scrollbar-width: var(--scrollbar-size);
-         // scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
-         // &::-webkit-scrollbar {
-         //    height: var(--scrollbar-size);
-         //    width: var(--scrollbar-size);
-         //    &-thumb {
-         //       border-radius: var(--scrollbar-thumb-radius);
-         //       background-color: var(--scrollbar-thumb-color);
-         //       &:hover {
-         //          background-color: var(--scrollbar-thumb-color-hover);
-         //       }
-         //    }
-         //    &-track {
-         //       margin: var(--scrollbar-track-margin);
-         //       background-color: var(--scrollbar-track-color);
-         //       &:hover {
-         //          background-color: var(--scrollbar-track-color-hover);
-         //       }
-         //    }
-         // }
       }
 
       // color schemas
