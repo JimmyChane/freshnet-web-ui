@@ -80,7 +80,7 @@
             this.isShowing = false;
             this.isError = false;
 
-            if (this.isImageLoaded) {
+            if (this.url === this.requestUrl && this.isImageLoaded) {
                this.isShowing = true;
                this.invalidateImageCompletion();
                return;
