@@ -4,10 +4,23 @@ import Order from "@/items/Order.js";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
+const requestList = async () => {
+   return ApiHost.request().url("order/").send();
+};
+const requestAdd = async (body) => {
+   return ApiHost.request().POST().url("order/").body(body).send();
+};
+const requestDelete = async (id) => {
+   return ApiHost.request().DELETE().url("order/").body({ id }).send();
+};
+const requestUpdateStatus = async (id, status) => {
+   return ApiHost.request().PUT().url("order/").body({ id, status }).send();
+};
+
 export default {
    init(Stores) {
       const context = new StoreBuilder().onFetchItems(async () => {
-         const api = await ApiHost.request().url("order/").send();
+         const api = await requestList();
          const error = api.getError();
          if (error) throw new Error(error);
          return U.optArray(api.getContent()).map((data) => {
@@ -67,41 +80,30 @@ export default {
 
          addItem: async (context, arg = { data }) => {
             return context.state.processor.acquire("addItem", async () => {
-               let { data } = arg;
+               const { data } = arg;
                if (!data) return null;
-               let api = await ApiHost.request().POST().url("order/").body(data).send();
-               let error = api.getError();
-               let content = api.getContent();
+               const api = await requestAdd(data);
+               const error = api.getError();
+               const content = api.getContent();
                if (error) throw new Error();
-
                return context.state.list.addItem(new Order().fromData(content));
             });
          },
          removeOItemOfId: async (context, arg = { id }) => {
             return context.state.processor.acquire("removeOItemOfId", async () => {
-               let { id } = arg;
-               let api = await ApiHost.request()
-                  .DELETE()
-                  .url("order/")
-                  .body({ id })
-                  .send();
-               let error = api.getError();
+               const { id } = arg;
+               const api = await requestDelete(id);
+               const error = api.getError();
                if (error) throw new Error();
-
                context.state.list.removeItemById(id);
             });
          },
          updateStatusOfId: async (context, arg = { id, status }) => {
             return context.state.processor.acquire("updateStatusOfId", async () => {
-               let { id, status } = arg;
-               let api = await ApiHost.request()
-                  .PUT()
-                  .url("order/")
-                  .body({ id, status })
-                  .send();
-               let error = api.getError();
+               const { id, status } = arg;
+               const api = await requestUpdateStatus(id, status);
+               const error = api.getError();
                if (error) throw new Error();
-
                return context.state.list.updateItemById(id, (item) => {
                   item.status = status;
                });

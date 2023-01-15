@@ -21,6 +21,20 @@ const noneUser = new ItemUser().fromData({
    userType: ItemUser.Type.None,
 });
 
+const requestLogin = async (body) => {
+   return ApiHost.request().POST().url("session/login/").body(body).send();
+};
+const requestUser = async (token) => {
+   return ApiHost.request().POST().url("session/verifyToken/").body({ token }).send();
+};
+const requestUpdatePassword = async (username, passwordVerify, passwordNew) => {
+   return ApiHost.request()
+      .POST()
+      .url(`session/user/${username}/changePassword`)
+      .body({ passwordVerify, passwordNew })
+      .send();
+};
+
 export default {
    init(Stores) {
       const { store } = Stores;
@@ -51,16 +65,12 @@ export default {
                return context.state.loader.acquire("login", async () => {
                   try {
                      deleteToken();
-                     let api = await ApiHost.request()
-                        .POST()
-                        .url("session/login/")
-                        .body({
-                           username: arg.username,
-                           password: arg.password,
-                        })
-                        .send();
-                     let error = api.getError();
-                     let content = api.getContent();
+                     const api = await requestLogin({
+                        username: arg.username,
+                        password: arg.password,
+                     });
+                     const error = api.getError();
+                     const content = api.getContent();
                      if (error || !content) throw new Error();
                      const { token, user } = content;
                      const newUser = onNewCredentail(context, { token, user }, Stores);
@@ -105,12 +115,7 @@ export default {
                         return context.state.user;
                      }
 
-                     const api = await ApiHost.request()
-                        .POST()
-                        .url("session/verifyToken/")
-                        .body({ token })
-                        .send();
-
+                     const api = await requestUser(token);
                      const content = api.getContent();
                      const user = new ItemUser().fromData(content.user);
 
@@ -144,24 +149,27 @@ export default {
             },
             changePassword: async (context, arg = {}) => {
                return context.state.loader.acquire("changePassword", async () => {
-                  let { user } = context.getters;
+                  const { user } = context.getters;
                   if (!user || !user.username) {
                      throw new Error("cannot find username with current user");
                   }
-                  let username = user.username;
-                  let { passwordVerify, passwordNew } = arg;
-                  let api = await ApiHost.request()
-                     .POST()
-                     .url(`session/user/${username}/changePassword`)
-                     .body({ passwordVerify, passwordNew })
-                     .send();
-                  let content = api.getContent();
-                  let { token } = content;
-                  user = content;
-                  user = onNewCredentail(context, { token, user }, Stores);
+                  const username = user.username;
+                  const { passwordVerify, passwordNew } = arg;
+                  const api = await requestUpdatePassword(
+                     username,
+                     passwordVerify,
+                     passwordNew,
+                  );
+                  const content = api.getContent();
+                  const { token } = content;
+                  const outputUser = onNewCredentail(
+                     context,
+                     { token, user: content },
+                     Stores,
+                  );
                   store.dispatch("restartSocket");
 
-                  return user;
+                  return outputUser;
                });
             },
          },

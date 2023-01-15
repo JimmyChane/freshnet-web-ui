@@ -5,6 +5,23 @@ import ItemUser from "../items/User.js";
 import DataLoader from "./tools/DataLoader";
 import Processor from "./tools/Processor.js";
 
+const requestList = async () => {
+   return ApiHost.request().url("users").send();
+};
+const requestAdd = async (username, name, passwordNew, passwordRepeat) => {
+   return ApiHost.request()
+      .url("users/user")
+      .POST()
+      .body({ username, name, passwordNew, passwordRepeat })
+      .send();
+};
+const requestRemove = async (username) => {
+   return ApiHost.request().DELETE().url("users/user").body({ username }).send();
+};
+const requestUpdate = async (username, userType) => {
+   return ApiHost.request().url("users/user").PUT().body({ username, userType }).send();
+};
+
 export default {
    init(Stores) {
       const loginStore = Stores.login;
@@ -17,7 +34,7 @@ export default {
                .loadData(async () => {
                   const user = await loginStore.dispatch("getUser");
                   if (!user.isTypeAdmin() && !user.isTypeStaff()) throw new Error();
-                  const api = await ApiHost.request().url("users").send();
+                  const api = await requestList();
                   return U.optArray(api.getContent()).map((data) => {
                      return new ItemUser(Stores).fromData(data);
                   });
@@ -66,22 +83,18 @@ export default {
                arg = { username, name, passwordNew, passwordRepeat },
             ) => {
                return context.state.processor.acquire("addUser", async () => {
-                  let user = await loginStore.dispatch("getUser");
+                  const user = await loginStore.dispatch("getUser");
 
                   if (!user.isTypeAdmin()) throw new Error();
 
-                  let api = await ApiHost.request()
-                     .url("users/user")
-                     .POST()
-                     .body({
-                        username: arg.username,
-                        name: arg.name,
-                        passwordNew: arg.passwordNew,
-                        passwordRepeat: arg.passwordRepeat,
-                     })
-                     .send();
+                  const api = await requestAdd(
+                     arg.username,
+                     arg.name,
+                     arg.passwordNew,
+                     arg.passwordRepeat,
+                  );
 
-                  let content = api.getContent();
+                  const content = api.getContent();
                   if (!content) throw new Error();
                   const newUser = new ItemUser(Stores).fromData(content);
                   const users = context.getters.items;
@@ -95,19 +108,14 @@ export default {
                return context.state.processor.acquire(
                   "removeUserByUsername",
                   async () => {
-                     let user = await loginStore.dispatch("getUser");
+                     const user = await loginStore.dispatch("getUser");
 
                      if (!user.isTypeAdmin()) throw new Error();
 
-                     let api = await ApiHost.request()
-                        .DELETE()
-                        .url("users/user")
-                        .body({ username: arg.username })
-                        .send();
-
-                     let content = api.getContent();
+                     const api = await requestRemove(arg.username);
+                     const content = api.getContent();
                      if (content !== "ok") throw new Error();
-                     let users = context.getters.items.filter((user) => {
+                     const users = context.getters.items.filter((user) => {
                         return user.username !== arg.username;
                      });
                      context.commit("items", users);
@@ -121,22 +129,16 @@ export default {
                   "updateTypeOfUserByUsername",
                   async () => {
                      try {
-                        let user = await loginStore.dispatch("getUser");
+                        const user = await loginStore.dispatch("getUser");
 
                         if (!user.isTypeAdmin()) throw new Error();
 
-                        let { username, userType } = arg;
-
-                        let api = await ApiHost.request()
-                           .url("users/user")
-                           .PUT()
-                           .body({ username, userType })
-                           .send();
-
-                        let content = api.getContent();
-                        let userChange = new ItemUser(Stores).fromData(content);
+                        const { username, userType } = arg;
+                        const api = await requestUpdate(username, userType);
+                        const content = api.getContent();
+                        const userChange = new ItemUser(Stores).fromData(content);
                         if (!userChange) throw new Error();
-                        let users = context.getters.items.map((user) => {
+                        const users = context.getters.items.map((user) => {
                            return user.username === userChange.username
                               ? userChange
                               : user;

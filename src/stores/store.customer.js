@@ -33,13 +33,16 @@ const getItemsOfIds = async (context, ids = []) => {
       return results;
    });
 };
+const requestApi = () => {
+   return ApiHost.request().url("customer/list");
+};
 
 export default {
    init(Stores) {
       const deviceStore = DeviceStore.init(Stores);
 
       const context = new StoreBuilder().onFetchItems(async () => {
-         const api = await ApiHost.request().url("customer/list").send();
+         const api = await requestApi().send();
          const error = api.getError();
          if (error) throw new Error(error);
          return U.optArray(apiThenContent(api)).map((content) => {

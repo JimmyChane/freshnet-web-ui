@@ -4,10 +4,12 @@ import ProductSpecType from "@/items/ProductSpecType";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
+const requestList = async () => ApiHost.request().url("spec/").send();
+
 export default {
    init(Stores) {
       const context = new StoreBuilder().onFetchItems(async () => {
-         const api = await ApiHost.request().url("spec/").send();
+         const api = await requestList();
          const error = api.getError();
          if (error) throw new Error(error);
          return U.optArray(api.getContent()).map((content) => {

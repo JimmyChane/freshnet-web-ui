@@ -4,10 +4,14 @@ import Brand from "@/items/Brand.js";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
+const requestApi = () => {
+   return ApiHost.request().url("brand/");
+};
+
 export default {
    init(Stores) {
       const context = new StoreBuilder().onFetchItems(async () => {
-         const api = await ApiHost.request().url("brand/").send();
+         const api = await requestApi().send();
          const error = api.getError();
          if (error) throw new Error(error);
          return U.optArray(api.getContent()).map((content) => {

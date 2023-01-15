@@ -23,10 +23,115 @@ const Notify = {
    ItemCustomerUpdate: "item-customer-update",
 };
 
+const requestList = async () => {
+   return ApiHost.request().url("service_v2/get/items").send();
+};
+const requestImport = async (service) => {
+   return ApiHost.request()
+      .POST()
+      .url("service_v2/import/item/")
+      .body({ content: service })
+      .send();
+};
+const requestAdd = async (service) => {
+   return ApiHost.request()
+      .POST()
+      .url("service_v2/add/item/")
+      .body({ content: service })
+      .send();
+};
+const requestRemove = async (id) => {
+   return ApiHost.request().DELETE().url(`service_v2/delete/item/${id}`).send();
+};
+const requestUpdateState = async (id, state) => {
+   return ApiHost.request()
+      .PUT()
+      .url(`service_v2/item/${id}/update/state/`)
+      .body({ content: state })
+      .send();
+};
+const requestUpdateDescription = async (id, description) => {
+   return ApiHost.request()
+      .PUT()
+      .url(`service_v2/item/${id}/update/description/`)
+      .body({ content: description })
+      .send();
+};
+const requestUpdateBelongings = async (id, belongings) => {
+   return ApiHost.request()
+      .PUT()
+      .url(`service_v2/item/${id}/update/belonging/`)
+      .body({ content: belongings })
+      .send();
+};
+const requestUpdateCustomer = async (id, customer) => {
+   return ApiHost.request()
+      .PUT()
+      .url(`service_v2/item/${id}/update/customer/`)
+      .body({ content: customer })
+      .send();
+};
+const requestAddEvent = async (id, event) => {
+   return ApiHost.request()
+      .POST()
+      .url(`service_v2/item/${id}/add/event/`)
+      .body({ content: event })
+      .send();
+};
+const requestRemoveEvent = async (id, eventTime) => {
+   return ApiHost.request()
+      .DELETE()
+      .url(`service_v2/item/${id}/delete/event/`)
+      .body({ serviceID: id, time: eventTime })
+      .send();
+};
+const requestUpdateUrgent = async (id, isUrgent) => {
+   return ApiHost.request()
+      .PUT()
+      .url("service/urgent")
+      .body({ serviceID: id, isUrgent })
+      .send();
+};
+const requestUpdateWarranty = async (id, isWarranty) => {
+   return ApiHost.request()
+      .PUT()
+      .url("service/urgent")
+      .body({ serviceID: id, isWarranty })
+      .send();
+};
+const requestAddLabel = async (id, label) => {
+   return ApiHost.request()
+      .POST()
+      .url(`service_v2/item/${id}/add/label/`)
+      .body({ label })
+      .send();
+};
+const requestRemoveLabel = async (id, label) => {
+   return ApiHost.request()
+      .DELETE()
+      .url(`service_v2/item/${id}/delete/label/`)
+      .body({ label: label.toData() })
+      .send();
+};
+const requestAddImage = async (id, imageForm) => {
+   return ApiHost.request()
+      .POST()
+      .url(`service_v2/item/${id}/add/image_files/`)
+      .bodyObject(imageForm)
+      .sendNotJson();
+};
+const requestRemoveImage = async (id, image) => {
+   return ApiHost.request()
+      .DELETE()
+      .url(`service_v2/item/${id}/delete/image/`)
+      .body({ content: image.toData() })
+      .send();
+};
+
 export default {
    init(Stores) {
       const context = new StoreBuilder().onFetchItems(async () => {
-         const api = await ApiHost.request().url("service_v2/get/items").send();
+         const api = await requestList();
          const error = api.getError();
          if (error) throw new Error(error);
          return U.optArray(api.getContent()).map((content) => {
@@ -172,16 +277,12 @@ export default {
 
          importItem: async (context, arg = { data }) => {
             return context.state.processor.acquire("importItem", async () => {
-               let { data } = arg;
+               const { data } = arg;
                if (!data) throw new Error();
-               let service = ServiceModule.trim(data);
-               let api = await ApiHost.request()
-                  .POST()
-                  .url("service_v2/import/item/")
-                  .body({ content: service })
-                  .send();
-               let error = api.getError();
-               let content = api.getContent();
+               const service = ServiceModule.trim(data);
+               const api = await requestImport(service);
+               const error = api.getError();
+               const content = api.getContent();
                if (error) throw new Error();
 
                const inputItem = new Service(Stores).fromData(content);
@@ -192,16 +293,12 @@ export default {
 
          addItem: async (context, arg = { data }) => {
             return context.state.processor.acquire("addItem", async () => {
-               let { data } = arg;
+               const { data } = arg;
                if (!data) return null;
                if (!data) throw new Error("invalid data");
-               let api = await ApiHost.request()
-                  .POST()
-                  .url("service_v2/add/item/")
-                  .body({ content: data })
-                  .send();
-               let error = api.getError();
-               let content = api.getContent();
+               const api = await requestAdd(data);
+               const error = api.getError();
+               const content = api.getContent();
                if (error) throw new Error();
 
                const inputItem = new Service(Stores).fromData(content);
@@ -211,12 +308,9 @@ export default {
          },
          removeItemOfId: async (context, arg = { id }) => {
             return context.state.processor.acquire("removeItemOfId", async () => {
-               let { id } = arg;
-               let api = await ApiHost.request()
-                  .DELETE()
-                  .url(`service_v2/delete/item/${id}`)
-                  .send();
-               let error = api.getError();
+               const { id } = arg;
+               const api = await requestRemove(id);
+               const error = api.getError();
                if (error) throw new Error();
                const outputItem = context.state.list.removeItemById(id);
                return outputItem;
@@ -224,13 +318,9 @@ export default {
          },
          updateStateOfId: async (context, arg = { serviceID, state }) => {
             return context.state.processor.acquire("updateStateOfId", async () => {
-               let { serviceID, state } = arg;
-               let api = await ApiHost.request()
-                  .PUT()
-                  .url(`service_v2/item/${serviceID}/update/state/`)
-                  .body({ content: state })
-                  .send();
-               let error = api.getError();
+               const { serviceID, state } = arg;
+               const api = await requestUpdateState(serviceID, state);
+               const error = api.getError();
                if (error) throw new Error();
 
                const outputItem = context.state.list.updateItemById(serviceID, (item) => {
@@ -241,15 +331,10 @@ export default {
          },
          updateDescriptionOfId: async (context, arg = { serviceID, description }) => {
             return context.state.processor.acquire("updateDescriptionOfId", async () => {
-               let { serviceID, description } = arg;
-               let api = await ApiHost.request()
-                  .PUT()
-                  .url(`service_v2/item/${serviceID}/update/description/`)
-                  .body({ content: description })
-                  .send();
-               let error = api.getError();
+               const { serviceID, description } = arg;
+               const api = await requestUpdateDescription(serviceID, description);
+               const error = api.getError();
                if (error) throw new Error();
-
                const outputItem = context.state.list.updateItemById(serviceID, (item) => {
                   item.description = description;
                });
@@ -258,14 +343,10 @@ export default {
          },
          updateBelongingsOfId: async (context, arg = { serviceID, belongings }) => {
             return context.state.processor.acquire("updateBelongingsOfId", async () => {
-               let { serviceID, belongings } = arg;
-               let api = await ApiHost.request()
-                  .PUT()
-                  .url(`service_v2/item/${serviceID}/update/belonging/`)
-                  .body({ content: belongings })
-                  .send();
-               let error = api.getError();
-               let content = api.getContent();
+               const { serviceID, belongings } = arg;
+               const api = await requestUpdateBelongings(serviceID, belongings);
+               const error = api.getError();
+               const content = api.getContent();
                if (error) throw new Error();
 
                const inputItem = new Service(Stores).fromData(content);
@@ -281,14 +362,10 @@ export default {
          },
          updateCustomerOfId: async (context, arg = { serviceID, customer }) => {
             return context.state.processor.acquire("updateCustomerOfId", async () => {
-               let { serviceID, customer } = arg;
-               let api = await ApiHost.request()
-                  .PUT()
-                  .url(`service_v2/item/${serviceID}/update/customer/`)
-                  .body({ content: customer })
-                  .send();
-               let error = api.getError();
-               let content = api.getContent();
+               const { serviceID, customer } = arg;
+               const api = await requestUpdateCustomer(serviceID, customer);
+               const error = api.getError();
+               const content = api.getContent();
                if (error) throw new Error();
 
                const inputItem = new Service(Stores).fromData(content);
@@ -305,15 +382,11 @@ export default {
 
          addEventToId: async (context, arg = { serviceID, data }) => {
             return context.state.processor.acquire("addEventToId", async () => {
-               let { serviceID, data } = arg;
+               const { serviceID, data } = arg;
                if (!serviceID || !data) return null;
-               let api = await ApiHost.request()
-                  .POST()
-                  .url(`service_v2/item/${serviceID}/add/event/`)
-                  .body({ content: data })
-                  .send();
-               let error = api.getError();
-               let content = api.getContent();
+               const api = await requestAddEvent(serviceID, data);
+               const error = api.getError();
+               const content = api.getContent();
                if (error) throw new Error();
 
                const inputItem = new Service(Stores).fromData(content);
@@ -331,13 +404,9 @@ export default {
          },
          removeEventFromId: async (context, arg = { serviceID, time }) => {
             return context.state.processor.acquire("removeEventFromId", async () => {
-               let { serviceID, time } = arg;
-               let api = await ApiHost.request()
-                  .DELETE()
-                  .url(`service_v2/item/${serviceID}/delete/event/`)
-                  .body({ serviceID, time })
-                  .send();
-               let error = api.getError();
+               const { serviceID, time } = arg;
+               const api = await requestRemoveEvent(serviceID, time);
+               const error = api.getError();
                if (error) throw new Error();
 
                const outputItem = context.state.list.updateItemById(serviceID, (item) => {
@@ -352,14 +421,10 @@ export default {
          updateUrgentOfId: async (context, arg = { serviceID, isUrgent }) => {
             console.warn("updateUrgentOfId is deprecated, please use addLabelToId");
             return context.state.processor.acquire("updateUrgentOfId", async () => {
-               let { serviceID, isUrgent } = arg;
-               const api = await ApiHost.request()
-                  .PUT()
-                  .url("service/urgent")
-                  .body({ serviceID, isUrgent })
-                  .send();
+               const { serviceID, isUrgent } = arg;
+               const api = await requestUpdateUrgent(serviceID, isUrgent);
 
-               let error = api.getError();
+               const error = api.getError();
                if (error) throw new Error();
                const content = api.getContent();
 
@@ -377,14 +442,10 @@ export default {
          updateWarrantyOfId: async (context, arg = { serviceID, isWarranty }) => {
             console.warn("updateWarrantyOfId is deprecated, please use addLabelToId");
             return context.state.processor.acquire("updateWarrantyOfId", async () => {
-               let { serviceID, isWarranty } = arg;
-               const api = await ApiHost.request()
-                  .PUT()
-                  .url("service/warranty")
-                  .body({ serviceID, isWarranty })
-                  .send();
+               const { serviceID, isWarranty } = arg;
+               const api = await requestUpdateWarranty(serviceID, isWarranty);
 
-               let error = api.getError();
+               const error = api.getError();
                if (error) throw new Error();
                const content = api.getContent();
 
@@ -402,14 +463,10 @@ export default {
 
          addLabelToId: async (context, arg = { serviceID, label }) => {
             return context.state.processor.acquire("addLabelToId", async () => {
-               let { serviceID, label } = arg;
-               const api = await ApiHost.request()
-                  .POST()
-                  .url(`service_v2/item/${serviceID}/add/label/`)
-                  .body({ label })
-                  .send();
+               const { serviceID, label } = arg;
+               const api = await requestAddLabel(serviceID, label);
 
-               let error = api.getError();
+               const error = api.getError();
                if (error) throw new Error(error);
                const content = api.getContent();
                console.warn(content);
@@ -417,14 +474,10 @@ export default {
          },
          removeLabelFromId: async (context, arg = { serviceID, label }) => {
             return context.state.processor.acquire("removeLabelFromId", async () => {
-               let { serviceID, label } = arg;
-               const api = await ApiHost.request()
-                  .DELETE()
-                  .url(`service_v2/item/${serviceID}/delete/label/`)
-                  .body({ label: label.toData() })
-                  .send();
+               const { serviceID, label } = arg;
+               const api = await requestRemoveLabel(serviceID, label);
 
-               let error = api.getError();
+               const error = api.getError();
                if (error) throw new Error(error);
                const content = api.getContent();
 
@@ -445,11 +498,7 @@ export default {
                const { serviceID, imageFile } = arg;
                const imageFileForm = new FormData();
                imageFileForm.append(imageFile.name, imageFile);
-               const api = await ApiHost.request()
-                  .POST()
-                  .url(`service_v2/item/${serviceID}/add/image_files/`)
-                  .bodyObject(imageFileForm)
-                  .sendNotJson();
+               const api = await requestAddImage(serviceID, imageFileForm);
                if (api.error) throw new Error(api.error);
                const { content } = api;
 
@@ -470,13 +519,9 @@ export default {
          },
          removeImageFromId: async (context, arg = { serviceID, image }) => {
             return context.state.processor.acquire("removeImageFromId", async () => {
-               let { serviceID, image } = arg;
-               let api = ApiHost.request()
-                  .DELETE()
-                  .url(`service_v2/item/${serviceID}/delete/image/`)
-                  .body({ content: image.toData() })
-                  .send();
-               let error = api.error;
+               const { serviceID, image } = arg;
+               const api = await requestRemoveImage(serviceID, image);
+               const error = api.error;
                if (error) throw new Error();
 
                const outputItem = context.state.list.updateItemById(serviceID, (item) => {
