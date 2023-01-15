@@ -293,16 +293,15 @@
          display: flex;
          overflow: hidden;
 
+         height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+         height: calc(var(--vh, 1vh) * 100);
+
          .App-overflow-body {
             position: relative;
             width: 100vw;
             height: 100vh;
             display: flex;
             overflow: hidden;
-
-            // height: -webkit-fill-available; // fix for ios - test
-            height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-            height: calc(var(--vh, 1vh) * 100);
 
             .App-imageViewer {
                z-index: 3;

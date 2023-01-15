@@ -49,10 +49,11 @@
       display: flex;
       flex-direction: row;
       align-items: flex-start;
-      justify-content: center;
+      justify-content: flex-start;
 
       overflow-x: auto;
       overflow-y: hidden;
+
       padding-left: 1.75rem;
       padding-right: 1.75rem;
 
@@ -85,14 +86,15 @@
 
       .ProductViewerImages-list {
          --height: 4rem;
-         max-width: 100%;
+         width: 100%;
+         min-width: max-content;
          height: var(--height);
          min-height: var(--height);
 
          display: flex;
          flex-direction: row;
          align-items: center;
-         justify-content: flex-start;
+         justify-content: center;
       }
    }
    .ProductViewerImages-isLight {

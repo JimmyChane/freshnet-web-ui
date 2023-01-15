@@ -199,8 +199,9 @@
             z-index: 2;
             width: 100vw;
             max-width: 100%;
-            max-height: 100%;
+            max-height: calc(100% - var(--thumbnail-height) - var(--actionbar-height));
             padding: 1rem;
+            flex-grow: 1;
 
             display: flex;
             flex-direction: column;
