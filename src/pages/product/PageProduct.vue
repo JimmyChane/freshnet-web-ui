@@ -718,7 +718,6 @@
 
 <style lang="scss" scoped>
    .PageProduct {
-      position: relative;
       width: 100%;
       width: 100vw;
       max-width: 100%;
@@ -737,7 +736,6 @@
          flex-wrap: nowrap;
          justify-content: flex-start;
          overflow: hidden;
-         position: relative;
 
          .PageProduct-products {
             z-index: 1;
@@ -788,6 +786,7 @@
          }
       }
       .PageProduct-body-isOver1200 {
+         position: relative;
          .PageProduct-products {
             width: 100vw;
             max-width: 60%;

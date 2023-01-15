@@ -10,9 +10,9 @@
    import SectionPlaylist from "./ViewerProduct-Section-Playlist.vue";
 
    import Tabs from "./ViewerProduct-Tabs.vue";
-   import Contacts from "./ViewerProduct-Contacts.vue";
    import ProductViewerImagePreview from "./ViewerProduct-ImagePreview.vue";
    import ProductViewerImages from "./ViewerProduct-Images.vue";
+   import BottomActionbar from "./ViewerProduct-BottomActionbar.vue";
 
    import ProductSpecType from "@/items/ProductSpecType.js";
    import SettingModule from "@/items/data/Setting.js";
@@ -23,6 +23,7 @@
       components: {
          ProductViewerImagePreview,
          ProductViewerImages,
+         BottomActionbar,
          SectionBrand,
          SectionTitle,
          SectionSpecification,
@@ -34,7 +35,6 @@
          SectionPlaylist,
          Actionbar,
          Tabs,
-         Contacts,
       },
       emits: [
          "click-product-imageRemove",
@@ -365,9 +365,14 @@
             :rightMenus="rightMenus"
             :style="{ 'background-color': actionbarColor }"
          >
-            <span class="ViewerProduct-actionbar-title" v-if="fullTitle">{{
-               fullTitle
-            }}</span>
+            <span
+               class="ViewerProduct-actionbar-title"
+               v-if="fullTitle"
+               :style="{
+                  padding: !leftMenus.length && !rightMenus.length ? '1.8rem' : '0',
+               }"
+               >{{ fullTitle }}</span
+            >
          </Actionbar>
 
          <Tabs
@@ -422,13 +427,6 @@
                fullTitle
             }}</div>
          </div>
-
-         <Contacts
-            class="ViewerProduct-contact"
-            v-if="product"
-            :product="product"
-            :isWide="isWide"
-         />
       </div>
 
       <div class="ViewerProduct-info">
@@ -516,6 +514,14 @@
       >
          <img :src="host.res('icon/arrow-left-000000.svg')" />
       </button>
+
+      <BottomActionbar
+         class="ViewerProduct-bottomActionbar"
+         v-if="product"
+         :style="{ 'background-color': actionbarColor }"
+         :product="product"
+         :isWide="isWide"
+      />
    </div>
 </template>
 
@@ -607,9 +613,6 @@
                }
             }
          }
-         .ViewerProduct-contact {
-            width: 100%;
-         }
       }
       .ViewerProduct-info {
          --padding: 1.2rem;
@@ -683,7 +686,8 @@
          --parent-scrollTop: 0;
 
          top: calc(
-            var(--parent-height) - var(--margin) - var(--size) + var(--parent-scrollTop)
+            var(--parent-height) - var(--margin) - 3.5rem - var(--size) +
+               var(--parent-scrollTop)
          );
 
          &:hover {
@@ -702,6 +706,11 @@
          pointer-events: none;
          opacity: 0;
       }
+
+      .ViewerProduct-bottomActionbar {
+         z-index: 3;
+         grid-area: bottomactionbar;
+      }
    }
 
    .ViewerProduct-isThin {
@@ -710,7 +719,8 @@
       grid-template-areas:
          "toolbar"
          "header"
-         "info";
+         "info"
+         "bottomactionbar";
 
       .ViewerProduct-header {
          max-width: 50rem;
@@ -725,9 +735,10 @@
       grid-template-columns: 45% 55%;
       grid-template-areas:
          "toolbar toolbar"
-         "header info";
+         "header info"
+         "bottomactionbar bottomactionbar";
       .ViewerProduct-header {
-         height: calc(100vh - var(--actionbar-height));
+         height: calc(100vh - var(--actionbar-height) - 3.5rem);
          position: sticky;
          left: 0;
          top: var(--actionbar-height);

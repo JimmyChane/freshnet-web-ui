@@ -97,7 +97,14 @@
                <span>{{ isConnected ? "Connected" : "Disconnected" }}</span>
             </div>
 
-            <div class="App-layout-body">
+            <div
+               :class="[
+                  'App-layout-body',
+                  $root.navigation.isDrawer()
+                     ? 'App-layout-body-isDrawer'
+                     : 'App-layout-body-isFixed',
+               ]"
+            >
                <LeftNav
                   class="App-LeftNav"
                   v-if="!$root.navigation.isNone()"
@@ -269,14 +276,27 @@
                --background-color-dark: var(--background-color);
                transition: var(--transition-duration);
                .App-LeftNav {
-                  z-index: 2;
                   flex-grow: 0;
                }
                .App-routerView {
-                  z-index: 1;
-                  flex-grow: 1;
                   width: 100%;
                   height: 100%;
+               }
+            }
+            .App-layout-body-isDrawer {
+               .App-LeftNav {
+                  z-index: 2;
+               }
+               .App-routerView {
+                  flex-grow: 1;
+               }
+            }
+            .App-layout-body-isFixed {
+               .App-LeftNav {
+                  z-index: 1;
+               }
+               .App-routerView {
+                  flex-grow: 2;
                }
             }
          }
