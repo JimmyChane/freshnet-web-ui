@@ -37,7 +37,7 @@ class ServiceImage {
       const dimensionQuery = Image.dimensionToQuery(option.width, option.height);
       const query = dimensionQuery.length ? `?${dimensionQuery}` : "";
 
-      if (method === "storage-image") {
+      if (method === Image.Method.StorageImage) {
          const prefix = "/api/image/name/";
          const name = path.substring(prefix.length, path.length);
          const filename = new Filename(name);
