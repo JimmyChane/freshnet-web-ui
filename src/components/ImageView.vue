@@ -33,7 +33,7 @@
             return {
                "var(--transition-duration)": `${this.transitionDuration}ms`,
                opacity: this.isShowing ? "1" : "0.2",
-               transform: this.isShowing ? "scale(1)" : "scale(0.98)",
+               // transform: this.isShowing ? "scale(1)" : "scale(0.98)",
             };
          },
       },

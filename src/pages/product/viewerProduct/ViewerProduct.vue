@@ -285,7 +285,8 @@
          addArrowListener() {
             if (this.onKeyUp === null) {
                this.onKeyUp = (event) => {
-                  if (event.shiftKey || event.altKey || event.ctrlKey) return;
+                  if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey)
+                     return;
                   if (event.key === "ArrowLeft") this.clickPreviousImage();
                   if (event.key === "ArrowRight") this.clickNextImage();
                };
@@ -406,6 +407,7 @@
                :images="images"
                :indexAt="imagePreviewIndex"
                :isEditable="isEditable"
+               :primaryColor="primaryColor"
                @click-image="(image) => (imagePreviewIndex = images.indexOf(image))"
                @click-add-image-file="
                   (file) => {
