@@ -74,44 +74,46 @@
 
 <template>
    <div class="ViewerProduct-BottomActionbar">
-      <a
-         class="ViewerProduct-BottomActionbar-item"
-         :href="callHref"
-         :style="{
-            '--primary-color': '#2196f3',
-            '--primary-background-color': '#dff1ff',
-         }"
-      >
-         <img class="ViewerProduct-BottomActionbar-item-icon" :src="callIcon" />
-         <div class="ViewerProduct-BottomActionbar-item-body">
-            <span class="ViewerProduct-BottomActionbar-item-title">{{
-               callTypeTitle
-            }}</span>
-            <span class="ViewerProduct-BottomActionbar-item-content">{{
-               callTitle
-            }}</span>
-         </div>
-      </a>
+      <div class="ViewerProduct-BottomActionbar-main">
+         <a
+            class="ViewerProduct-BottomActionbar-item"
+            :href="callHref"
+            :style="{
+               '--primary-color': '#2196f3',
+               '--primary-background-color': '#dff1ff',
+            }"
+         >
+            <img class="ViewerProduct-BottomActionbar-item-icon" :src="callIcon" />
+            <div class="ViewerProduct-BottomActionbar-item-body">
+               <span class="ViewerProduct-BottomActionbar-item-title">{{
+                  callTypeTitle
+               }}</span>
+               <span class="ViewerProduct-BottomActionbar-item-content">{{
+                  callTitle
+               }}</span>
+            </div>
+         </a>
 
-      <a
-         class="ViewerProduct-BottomActionbar-item"
-         :target="whatsappTarget"
-         :href="whatsappHref"
-         :style="{
-            '--primary-color': '#4caf50',
-            '--primary-background-color': '#f3fff4',
-         }"
-      >
-         <img class="ViewerProduct-BottomActionbar-item-icon" :src="whatsappIcon" />
-         <div class="ViewerProduct-BottomActionbar-item-body">
-            <span class="ViewerProduct-BottomActionbar-item-title">{{
-               whatsappTypeTitle
-            }}</span>
-            <span class="ViewerProduct-BottomActionbar-item-content">{{
-               whatsappTitle
-            }}</span>
-         </div>
-      </a>
+         <a
+            class="ViewerProduct-BottomActionbar-item"
+            :target="whatsappTarget"
+            :href="whatsappHref"
+            :style="{
+               '--primary-color': '#4caf50',
+               '--primary-background-color': '#f3fff4',
+            }"
+         >
+            <img class="ViewerProduct-BottomActionbar-item-icon" :src="whatsappIcon" />
+            <div class="ViewerProduct-BottomActionbar-item-body">
+               <span class="ViewerProduct-BottomActionbar-item-title">{{
+                  whatsappTypeTitle
+               }}</span>
+               <span class="ViewerProduct-BottomActionbar-item-content">{{
+                  whatsappTitle
+               }}</span>
+            </div>
+         </a>
+      </div>
    </div>
 </template>
 
@@ -121,60 +123,71 @@
       flex-direction: row;
       flex-wrap: nowrap;
       align-items: center;
-      justify-content: center;
+      justify-content: space-evenly;
 
       position: sticky;
       bottom: 0;
       width: 100%;
-      padding: 0.5rem 1rem;
       gap: 2rem;
-      justify-content: space-evenly;
 
       border-top: 1px solid hsla(0, 0%, 0%, 0.1);
+      box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.1);
 
-      .ViewerProduct-BottomActionbar-item {
+      .ViewerProduct-BottomActionbar-main {
+         width: 100%;
+         max-width: 24rem;
          display: flex;
          flex-direction: row;
+         flex-wrap: nowrap;
          align-items: center;
-         justify-content: flex-start;
+         justify-content: center;
+         justify-content: space-evenly;
+         padding: 0.5rem 1rem;
 
-         border: none;
-         cursor: pointer;
-         border-radius: 0.5rem;
-         overflow: hidden;
-         transition: var(--transition-duration);
-
-         text-decoration: none;
-         color: var(--primary-color);
-         font-size: 1rem;
-         font-weight: 600;
-         line-height: 0.9rem;
-         gap: 0.5rem;
-         padding: 0.3rem 0.5rem;
-
-         &:hover {
-            background-color: hsla(0, 0%, 100%, 0.8);
-         }
-
-         .ViewerProduct-BottomActionbar-item-icon {
-            grid-area: icon;
-            width: 1.2rem;
-            height: 1.2rem;
-         }
-         .ViewerProduct-BottomActionbar-item-body {
+         .ViewerProduct-BottomActionbar-item {
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            .ViewerProduct-BottomActionbar-item-title {
-               grid-area: title;
-               display: flex;
-               align-items: center;
-               font-size: 0.9rem;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+
+            border: none;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: var(--transition-duration);
+
+            text-decoration: none;
+            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 0.9rem;
+            gap: 0.5rem;
+            padding: 0.3rem 0.5rem;
+
+            &:hover {
+               background-color: hsla(0, 0%, 100%, 0.8);
             }
-            .ViewerProduct-BottomActionbar-item-content {
-               grid-area: content;
-               font-size: 0.8rem;
+
+            .ViewerProduct-BottomActionbar-item-icon {
+               grid-area: icon;
+               width: 1.2rem;
+               height: 1.2rem;
+            }
+            .ViewerProduct-BottomActionbar-item-body {
+               display: flex;
+               flex-direction: column;
+               align-items: flex-start;
+               justify-content: center;
+               .ViewerProduct-BottomActionbar-item-title {
+                  grid-area: title;
+                  display: flex;
+                  align-items: center;
+                  font-size: 0.9rem;
+               }
+               .ViewerProduct-BottomActionbar-item-content {
+                  grid-area: content;
+                  font-size: 0.8rem;
+               }
             }
          }
       }

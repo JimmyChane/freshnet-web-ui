@@ -74,7 +74,7 @@
                   };
                }
                this.onUrl();
-            }, 10);
+            }, 100);
          },
          async onUrl() {
             this.isShowing = false;
