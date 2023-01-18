@@ -140,209 +140,226 @@ export default {
       });
       context.onGetStore(() => Stores.service);
       context.build();
-      context.actions = {
-         socketNotify: (context, data) => {
-            const { key, content } = data;
+      context.actions.socketNotify = (context, data) => {
+         const { key, content } = data;
 
-            if (key === Notify.ItemAdd) {
-               const inputItem = new Service(Stores).fromData(content);
-               context.state.list.addItem(inputItem);
-            }
-            if (key === Notify.ItemRemove) {
-               const inputItem = new Service(Stores).fromData(content);
-               context.state.list.removeItemByItem(inputItem);
-            }
-            if (key === Notify.ItemImageAdd) {
-               const { id, images } = content;
-               context.state.list.updateItemById(id, (item) => {
-                  images
-                     .map((dataImage) => new ServiceImage().fromData(dataImage))
-                     .forEach((image) => {
-                        const existingImage = item.imageFiles.find((img) => {
-                           return img.name === image.name;
-                        });
-                        if (!existingImage) item.imageFiles.push(image);
+         if (key === Notify.ItemAdd) {
+            const inputItem = new Service(Stores).fromData(content);
+            context.state.list.addItem(inputItem);
+         }
+         if (key === Notify.ItemRemove) {
+            const inputItem = new Service(Stores).fromData(content);
+            context.state.list.removeItemByItem(inputItem);
+         }
+         if (key === Notify.ItemImageAdd) {
+            const { id, images } = content;
+            context.state.list.updateItemById(id, (item) => {
+               images
+                  .map((dataImage) => new ServiceImage().fromData(dataImage))
+                  .forEach((image) => {
+                     const existingImage = item.imageFiles.find((img) => {
+                        return img.name === image.name;
                      });
-               });
-            }
-            if (key === Notify.ItemImageRemove) {
-               const { id, image } = content;
-               context.state.list.updateItemById(id, (item) => {
-                  item.imageFiles = item.imageFiles.filter((imageFile) => {
-                     return imageFile.name !== image.name;
+                     if (!existingImage) item.imageFiles.push(image);
                   });
-               });
-            }
-            if (key === Notify.ItemEventAdd) {
-               const { id, event } = content;
-               context.state.list.updateItemById(id, (item) => {
-                  if (!item) return inputItem;
-                  const inputEvent = new ServiceEvent(Stores).fromData(event);
-                  const found = item.events.find((itemEvent) => {
-                     return itemEvent.timestamp.time === inputEvent.timestamp.time;
-                  });
-                  if (!found) {
-                     item.events.push(inputEvent);
-                     item.events.sort((event1, event2) => event1.compare(event2));
-                  }
-               });
-            }
-            if (key === Notify.ItemEventRemove) {
-               const { id, event } = content;
-               context.state.list.updateItemById(id, (item) => {
-                  const inputEvent = new ServiceEvent(Stores).fromData(event);
-                  const found = item.events.find((itemEvent) => {
-                     return itemEvent.timestamp.time === inputEvent.timestamp.time;
-                  });
-                  if (found) item.events.splice(item.events.indexOf(found), 1);
-               });
-            }
-            if (key === Notify.ItemLabelAdd) {
-               const { id, label } = content;
-               context.state.list.updateItemById(id, (item) => {
-                  if (label.title === "Urgent") item.setUrgent(true);
-                  if (label.title === "Warranty") item.setWarranty(true);
-               });
-            }
-            if (key === Notify.ItemLabelRemove) {
-               const { id, label } = content;
-               context.state.list.updateItemById(id, (item) => {
-                  if (label.title === "Urgent") item.setUrgent(false);
-                  if (label.title === "Warranty") item.setWarranty(false);
-               });
-            }
-            if (key === Notify.ItemStateUpdate) {
-               const { id, state } = content;
-               context.state.list.updateItemById(id, (item) => {
-                  item.state = state;
-               });
-            }
-            if (key === Notify.ItemDescriptionUpdate) {
-               const { id, description } = content;
-               context.state.list.updateItemById(id, (item) => {
-                  item.description = description;
-               });
-            }
-            if (key === Notify.ItemBelongingsUpdate) {
-               const { id, belongings } = content;
-               context.state.list.updateItemById(id, (item) => {
-                  item.belongings = belongings;
-               });
-            }
-            if (key === Notify.ItemCustomerUpdate) {
-               const { id, customer } = content;
-               context.state.list.updateItemById(id, (item) => {
-                  item.customer = new ServiceCustomer(Stores).fromData(customer);
-               });
-            }
-         },
-
-         refresh: async (context) => {
-            return context.state.processor.acquire("refresh", async () => {
-               context.state.dataLoader.doTimeout();
-               await context.dispatch("getItems");
             });
-         },
-
-         getItems: async (context) => {
-            return context.state.processor.acquire("getItems", async () => {
-               return context.state.dataLoader.data();
-            });
-         },
-         getItemOfId: async (context, id = "") => {
-            return context.state.processor.acquire("getItemOfId", async () => {
-               let items = await context.dispatch("getServices");
-               return items.find((service) => service.id === id);
-            });
-         },
-
-         getGroupsByCustomer: async (context) => {
-            const items = await context.dispatch("getItems");
-            const groups = items.reduce((groups, item) => {
-               let group = groups.find((group) => {
-                  return group.customer.isEqual(item.customer);
+         }
+         if (key === Notify.ItemImageRemove) {
+            const { id, image } = content;
+            context.state.list.updateItemById(id, (item) => {
+               item.imageFiles = item.imageFiles.filter((imageFile) => {
+                  return imageFile.name !== image.name;
                });
-
-               if (!group) {
-                  group = { customer: item.customer, items: [] };
-                  groups.push(group);
+            });
+         }
+         if (key === Notify.ItemEventAdd) {
+            const { id, event } = content;
+            context.state.list.updateItemById(id, (item) => {
+               if (!item) return inputItem;
+               const inputEvent = new ServiceEvent(Stores).fromData(event);
+               const found = item.events.find((itemEvent) => {
+                  return itemEvent.timestamp.time === inputEvent.timestamp.time;
+               });
+               if (!found) {
+                  item.events.push(inputEvent);
+                  item.events.sort((event1, event2) => event1.compare(event2));
                }
+            });
+         }
+         if (key === Notify.ItemEventRemove) {
+            const { id, event } = content;
+            context.state.list.updateItemById(id, (item) => {
+               const inputEvent = new ServiceEvent(Stores).fromData(event);
+               const found = item.events.find((itemEvent) => {
+                  return itemEvent.timestamp.time === inputEvent.timestamp.time;
+               });
+               if (found) item.events.splice(item.events.indexOf(found), 1);
+            });
+         }
+         if (key === Notify.ItemLabelAdd) {
+            const { id, label } = content;
+            context.state.list.updateItemById(id, (item) => {
+               if (label.title === "Urgent") item.setUrgent(true);
+               if (label.title === "Warranty") item.setWarranty(true);
+            });
+         }
+         if (key === Notify.ItemLabelRemove) {
+            const { id, label } = content;
+            context.state.list.updateItemById(id, (item) => {
+               if (label.title === "Urgent") item.setUrgent(false);
+               if (label.title === "Warranty") item.setWarranty(false);
+            });
+         }
+         if (key === Notify.ItemStateUpdate) {
+            const { id, state } = content;
+            context.state.list.updateItemById(id, (item) => {
+               item.state = state;
+            });
+         }
+         if (key === Notify.ItemDescriptionUpdate) {
+            const { id, description } = content;
+            context.state.list.updateItemById(id, (item) => {
+               item.description = description;
+            });
+         }
+         if (key === Notify.ItemBelongingsUpdate) {
+            const { id, belongings } = content;
+            context.state.list.updateItemById(id, (item) => {
+               item.belongings = belongings;
+            });
+         }
+         if (key === Notify.ItemCustomerUpdate) {
+            const { id, customer } = content;
+            context.state.list.updateItemById(id, (item) => {
+               item.customer = new ServiceCustomer(Stores).fromData(customer);
+            });
+         }
+      };
+      context.actions.refresh = async (context) => {
+         return context.state.processor.acquire("refresh", async () => {
+            context.state.dataLoader.doTimeout();
+            await context.dispatch("getItems");
+         });
+      };
+      context.actions.getItems = async (context) => {
+         return context.state.processor.acquire("getItems", async () => {
+            return context.state.dataLoader.data();
+         });
+      };
+      context.actions.getItemOfId = async (context, id = "") => {
+         return context.state.processor.acquire("getItemOfId", async () => {
+            let items = await context.dispatch("getServices");
+            return items.find((service) => service.id === id);
+         });
+      };
+      context.actions.getGroupsByCustomer = async (context) => {
+         const items = await context.dispatch("getItems");
+         const groups = items.reduce((groups, item) => {
+            let group = groups.find((group) => {
+               return group.customer.isEqual(item.customer);
+            });
 
-               group.items.push(item);
-               return groups;
-            }, []);
+            if (!group) {
+               group = { customer: item.customer, items: [] };
+               groups.push(group);
+            }
 
+            group.items.push(item);
             return groups;
-         },
+         }, []);
 
-         importItem: async (context, arg = { data }) => {
-            return context.state.processor.acquire("importItem", async () => {
-               const { data } = arg;
-               if (!data) throw new Error();
-               const service = ServiceModule.trim(data);
-               const api = await requestImport(service);
-               const error = api.getError();
-               const content = api.getContent();
-               if (error) throw new Error();
+         return groups;
+      };
+      context.actions.importItem = async (context, arg = { data }) => {
+         return context.state.processor.acquire("importItem", async () => {
+            const { data } = arg;
+            if (!data) throw new Error();
+            const service = ServiceModule.trim(data);
+            const api = await requestImport(service);
+            const error = api.getError();
+            const content = api.getContent();
+            if (error) throw new Error();
 
-               const inputItem = new Service(Stores).fromData(content);
-               const outputItem = context.state.list.addItem(inputItem);
-               return outputItem;
-            });
-         },
+            const inputItem = new Service(Stores).fromData(content);
+            const outputItem = context.state.list.addItem(inputItem);
+            return outputItem;
+         });
+      };
+      context.actions.addItem = async (context, arg = { data }) => {
+         return context.state.processor.acquire("addItem", async () => {
+            const { data } = arg;
+            if (!data) return null;
+            if (!data) throw new Error("invalid data");
+            const api = await requestAdd(data);
+            const error = api.getError();
+            const content = api.getContent();
+            if (error) throw new Error();
 
-         addItem: async (context, arg = { data }) => {
-            return context.state.processor.acquire("addItem", async () => {
-               const { data } = arg;
-               if (!data) return null;
-               if (!data) throw new Error("invalid data");
-               const api = await requestAdd(data);
-               const error = api.getError();
-               const content = api.getContent();
-               if (error) throw new Error();
+            const inputItem = new Service(Stores).fromData(content);
+            const outputItem = context.state.list.addItem(inputItem);
+            return outputItem;
+         });
+      };
+      context.actions.removeItemOfId = async (context, arg = { id }) => {
+         return context.state.processor.acquire("removeItemOfId", async () => {
+            const { id } = arg;
+            const api = await requestRemove(id);
+            const error = api.getError();
+            if (error) throw new Error();
+            const outputItem = context.state.list.removeItemById(id);
+            return outputItem;
+         });
+      };
+      context.actions.updateStateOfId = async (
+         context,
+         arg = { serviceID, state },
+      ) => {
+         return context.state.processor.acquire("updateStateOfId", async () => {
+            const { serviceID, state } = arg;
+            const api = await requestUpdateState(serviceID, state);
+            const error = api.getError();
+            if (error) throw new Error();
 
-               const inputItem = new Service(Stores).fromData(content);
-               const outputItem = context.state.list.addItem(inputItem);
-               return outputItem;
-            });
-         },
-         removeItemOfId: async (context, arg = { id }) => {
-            return context.state.processor.acquire("removeItemOfId", async () => {
-               const { id } = arg;
-               const api = await requestRemove(id);
-               const error = api.getError();
-               if (error) throw new Error();
-               const outputItem = context.state.list.removeItemById(id);
-               return outputItem;
-            });
-         },
-         updateStateOfId: async (context, arg = { serviceID, state }) => {
-            return context.state.processor.acquire("updateStateOfId", async () => {
-               const { serviceID, state } = arg;
-               const api = await requestUpdateState(serviceID, state);
-               const error = api.getError();
-               if (error) throw new Error();
-
-               const outputItem = context.state.list.updateItemById(serviceID, (item) => {
+            const outputItem = context.state.list.updateItemById(
+               serviceID,
+               (item) => {
                   item.state = state;
-               });
-               return outputItem;
-            });
-         },
-         updateDescriptionOfId: async (context, arg = { serviceID, description }) => {
-            return context.state.processor.acquire("updateDescriptionOfId", async () => {
+               },
+            );
+            return outputItem;
+         });
+      };
+      context.actions.updateDescriptionOfId = async (
+         context,
+         arg = { serviceID, description },
+      ) => {
+         return context.state.processor.acquire(
+            "updateDescriptionOfId",
+            async () => {
                const { serviceID, description } = arg;
-               const api = await requestUpdateDescription(serviceID, description);
+               const api = await requestUpdateDescription(
+                  serviceID,
+                  description,
+               );
                const error = api.getError();
                if (error) throw new Error();
-               const outputItem = context.state.list.updateItemById(serviceID, (item) => {
-                  item.description = description;
-               });
+               const outputItem = context.state.list.updateItemById(
+                  serviceID,
+                  (item) => {
+                     item.description = description;
+                  },
+               );
                return outputItem;
-            });
-         },
-         updateBelongingsOfId: async (context, arg = { serviceID, belongings }) => {
-            return context.state.processor.acquire("updateBelongingsOfId", async () => {
+            },
+         );
+      };
+      context.actions.updateBelongingsOfId = async (
+         context,
+         arg = { serviceID, belongings },
+      ) => {
+         return context.state.processor.acquire(
+            "updateBelongingsOfId",
+            async () => {
                const { serviceID, belongings } = arg;
                const api = await requestUpdateBelongings(serviceID, belongings);
                const error = api.getError();
@@ -358,10 +375,16 @@ export default {
                   },
                );
                return outputItem;
-            });
-         },
-         updateCustomerOfId: async (context, arg = { serviceID, customer }) => {
-            return context.state.processor.acquire("updateCustomerOfId", async () => {
+            },
+         );
+      };
+      context.actions.updateCustomerOfId = async (
+         context,
+         arg = { serviceID, customer },
+      ) => {
+         return context.state.processor.acquire(
+            "updateCustomerOfId",
+            async () => {
                const { serviceID, customer } = arg;
                const api = await requestUpdateCustomer(serviceID, customer);
                const error = api.getError();
@@ -377,50 +400,68 @@ export default {
                   },
                );
                return outputItem;
-            });
-         },
+            },
+         );
+      };
+      context.actions.addEventToId = async (
+         context,
+         arg = { serviceID, data },
+      ) => {
+         return context.state.processor.acquire("addEventToId", async () => {
+            const { serviceID, data } = arg;
+            if (!serviceID || !data) return null;
+            const api = await requestAddEvent(serviceID, data);
+            const error = api.getError();
+            const content = api.getContent();
+            if (error) throw new Error();
 
-         addEventToId: async (context, arg = { serviceID, data }) => {
-            return context.state.processor.acquire("addEventToId", async () => {
-               const { serviceID, data } = arg;
-               if (!serviceID || !data) return null;
-               const api = await requestAddEvent(serviceID, data);
-               const error = api.getError();
-               const content = api.getContent();
-               if (error) throw new Error();
-
-               const inputItem = new Service(Stores).fromData(content);
-               const outputItem = context.state.list.updateItemById(
-                  inputItem.id,
-                  (item) => {
-                     if (!item) return inputItem;
-                     item.events = inputItem.events.sort((event1, event2) => {
-                        return event1.compare(event2);
-                     });
-                  },
-               );
-               return outputItem;
-            });
-         },
-         removeEventFromId: async (context, arg = { serviceID, time }) => {
-            return context.state.processor.acquire("removeEventFromId", async () => {
+            const inputItem = new Service(Stores).fromData(content);
+            const outputItem = context.state.list.updateItemById(
+               inputItem.id,
+               (item) => {
+                  if (!item) return inputItem;
+                  item.events = inputItem.events.sort((event1, event2) => {
+                     return event1.compare(event2);
+                  });
+               },
+            );
+            return outputItem;
+         });
+      };
+      context.actions.removeEventFromId = async (
+         context,
+         arg = { serviceID, time },
+      ) => {
+         return context.state.processor.acquire(
+            "removeEventFromId",
+            async () => {
                const { serviceID, time } = arg;
                const api = await requestRemoveEvent(serviceID, time);
                const error = api.getError();
                if (error) throw new Error();
 
-               const outputItem = context.state.list.updateItemById(serviceID, (item) => {
-                  item.events = item.events.filter((event) => {
-                     return event.timestamp.time !== time;
-                  });
-               });
+               const outputItem = context.state.list.updateItemById(
+                  serviceID,
+                  (item) => {
+                     item.events = item.events.filter((event) => {
+                        return event.timestamp.time !== time;
+                     });
+                  },
+               );
                return outputItem;
-            });
-         },
-
-         updateUrgentOfId: async (context, arg = { serviceID, isUrgent }) => {
-            console.warn("updateUrgentOfId is deprecated, please use addLabelToId");
-            return context.state.processor.acquire("updateUrgentOfId", async () => {
+            },
+         );
+      };
+      context.actions.updateUrgentOfId = async (
+         context,
+         arg = { serviceID, isUrgent },
+      ) => {
+         console.warn(
+            "updateUrgentOfId is deprecated, please use addLabelToId",
+         );
+         return context.state.processor.acquire(
+            "updateUrgentOfId",
+            async () => {
                const { serviceID, isUrgent } = arg;
                const api = await requestUpdateUrgent(serviceID, isUrgent);
 
@@ -437,11 +478,19 @@ export default {
                   },
                );
                return outputItem;
-            });
-         },
-         updateWarrantyOfId: async (context, arg = { serviceID, isWarranty }) => {
-            console.warn("updateWarrantyOfId is deprecated, please use addLabelToId");
-            return context.state.processor.acquire("updateWarrantyOfId", async () => {
+            },
+         );
+      };
+      context.actions.updateWarrantyOfId = async (
+         context,
+         arg = { serviceID, isWarranty },
+      ) => {
+         console.warn(
+            "updateWarrantyOfId is deprecated, please use addLabelToId",
+         );
+         return context.state.processor.acquire(
+            "updateWarrantyOfId",
+            async () => {
                const { serviceID, isWarranty } = arg;
                const api = await requestUpdateWarranty(serviceID, isWarranty);
 
@@ -458,22 +507,30 @@ export default {
                   },
                );
                return outputItem;
-            });
-         },
+            },
+         );
+      };
+      context.actions.addLabelToId = async (
+         context,
+         arg = { serviceID, label },
+      ) => {
+         return context.state.processor.acquire("addLabelToId", async () => {
+            const { serviceID, label } = arg;
+            const api = await requestAddLabel(serviceID, label);
 
-         addLabelToId: async (context, arg = { serviceID, label }) => {
-            return context.state.processor.acquire("addLabelToId", async () => {
-               const { serviceID, label } = arg;
-               const api = await requestAddLabel(serviceID, label);
-
-               const error = api.getError();
-               if (error) throw new Error(error);
-               const content = api.getContent();
-               console.warn(content);
-            });
-         },
-         removeLabelFromId: async (context, arg = { serviceID, label }) => {
-            return context.state.processor.acquire("removeLabelFromId", async () => {
+            const error = api.getError();
+            if (error) throw new Error(error);
+            const content = api.getContent();
+            console.warn(content);
+         });
+      };
+      context.actions.removeLabelFromId = async (
+         context,
+         arg = { serviceID, label },
+      ) => {
+         return context.state.processor.acquire(
+            "removeLabelFromId",
+            async () => {
                const { serviceID, label } = arg;
                const api = await requestRemoveLabel(serviceID, label);
 
@@ -490,48 +547,59 @@ export default {
                   },
                );
                return outputItem;
-            });
-         },
+            },
+         );
+      };
+      context.actions.addImageToId = async (
+         context,
+         arg = { serviceID, imageFile },
+      ) => {
+         return context.state.processor.acquire("addImageToId", async () => {
+            const { serviceID, imageFile } = arg;
+            const imageFileForm = new FormData();
+            imageFileForm.append(imageFile.name, imageFile);
+            const api = await requestAddImage(serviceID, imageFileForm);
+            if (api.error) throw new Error(api.error);
+            const { content } = api;
 
-         addImageToId: async (context, arg = { serviceID, imageFile }) => {
-            return context.state.processor.acquire("addImageToId", async () => {
-               const { serviceID, imageFile } = arg;
-               const imageFileForm = new FormData();
-               imageFileForm.append(imageFile.name, imageFile);
-               const api = await requestAddImage(serviceID, imageFileForm);
-               if (api.error) throw new Error(api.error);
-               const { content } = api;
-
-               const id = content.id;
-               const dataImages = content.items;
-               const outputItem = context.state.list.updateItemById(id, (item) => {
-                  dataImages
-                     .map((dataImage) => new ServiceImage().fromData(dataImage))
-                     .forEach((image) => {
-                        const existingImage = item.imageFiles.find((img) => {
-                           return img.name === image.name;
-                        });
-                        if (!existingImage) item.imageFiles.push(image);
+            const id = content.id;
+            const dataImages = content.items;
+            const outputItem = context.state.list.updateItemById(id, (item) => {
+               dataImages
+                  .map((dataImage) => new ServiceImage().fromData(dataImage))
+                  .forEach((image) => {
+                     const existingImage = item.imageFiles.find((img) => {
+                        return img.name === image.name;
                      });
-               });
-               return outputItem;
+                     if (!existingImage) item.imageFiles.push(image);
+                  });
             });
-         },
-         removeImageFromId: async (context, arg = { serviceID, image }) => {
-            return context.state.processor.acquire("removeImageFromId", async () => {
+            return outputItem;
+         });
+      };
+      context.actions.removeImageFromId = async (
+         context,
+         arg = { serviceID, image },
+      ) => {
+         return context.state.processor.acquire(
+            "removeImageFromId",
+            async () => {
                const { serviceID, image } = arg;
                const api = await requestRemoveImage(serviceID, image);
                const error = api.error;
                if (error) throw new Error();
 
-               const outputItem = context.state.list.updateItemById(serviceID, (item) => {
-                  item.imageFiles = item.imageFiles.filter((imageFile) => {
-                     return imageFile.name !== image.name;
-                  });
-               });
+               const outputItem = context.state.list.updateItemById(
+                  serviceID,
+                  (item) => {
+                     item.imageFiles = item.imageFiles.filter((imageFile) => {
+                        return imageFile.name !== image.name;
+                     });
+                  },
+               );
                return outputItem;
-            });
-         },
+            },
+         );
       };
 
       return new Vuex.Store(context);

@@ -19,24 +19,22 @@ export default {
       context.onGetStore(() => Stores.specification);
       context.onIdProperty("key");
       context.build();
-      context.actions = {
-         refresh: async (context) => {
-            return context.state.processor.acquire("refresh", async () => {
-               context.state.dataLoader.doTimeout();
-               await context.dispatch("getItems");
-            });
-         },
-         getItems: async (context) => {
-            return context.state.processor.acquire("getItems", async () => {
-               return context.state.dataLoader.data();
-            });
-         },
-         getItemOfKey: async (context, key = "") => {
-            return context.state.processor.acquire("getItemOfKey", async () => {
-               const items = await context.dispatch("getItems");
-               return items.find((item) => item.key === key);
-            });
-         },
+      context.actions.refresh = async (context) => {
+         return context.state.processor.acquire("refresh", async () => {
+            context.state.dataLoader.doTimeout();
+            await context.dispatch("getItems");
+         });
+      };
+      context.actions.getItems = async (context) => {
+         return context.state.processor.acquire("getItems", async () => {
+            return context.state.dataLoader.data();
+         });
+      };
+      context.actions.getItemOfKey = async (context, key = "") => {
+         return context.state.processor.acquire("getItemOfKey", async () => {
+            const items = await context.dispatch("getItems");
+            return items.find((item) => item.key === key);
+         });
       };
 
       return new Vuex.Store(context);

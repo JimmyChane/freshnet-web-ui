@@ -2,8 +2,6 @@ import U from "@/U.js";
 import Vuex from "vuex";
 import ApiHost from "../host/ApiHost.js";
 import ItemUser from "../items/User.js";
-import DataLoader from "./tools/DataLoader";
-import Processor from "./tools/Processor.js";
 import StoreBuilder from "./tools/StoreBuilder.js";
 
 const requestList = async () => {
@@ -47,77 +45,6 @@ export default {
       context.onIdProperty("username");
       context.build();
       context.getters.token = () => loginStore.getters.token;
-      context.actions = {
-         addUser: async (
-            context,
-            arg = { username, name, passwordNew, passwordRepeat },
-         ) => {
-            return context.state.processor.acquire("addUser", async () => {
-               const user = await loginStore.dispatch("getUser");
-
-               if (!user.isTypeAdmin()) throw new Error();
-
-               const api = await requestAdd(
-                  arg.username,
-                  arg.name,
-                  arg.passwordNew,
-                  arg.passwordRepeat,
-               );
-
-               const content = api.getContent();
-               if (!content) throw new Error();
-               const newUser = new ItemUser(Stores).fromData(content);
-               context.state.list.addItem(newUser);
-               return newUser;
-            });
-         },
-         removeUserByUsername: async (context, arg = { username }) => {
-            return context.state.processor.acquire(
-               "removeUserByUsername",
-               async () => {
-                  const user = await loginStore.dispatch("getUser");
-
-                  if (!user.isTypeAdmin()) throw new Error();
-
-                  const api = await requestRemove(arg.username);
-                  const content = api.getContent();
-                  if (content !== "ok") throw new Error();
-                  context.state.list.removeItemById(arg.username);
-                  return true;
-               },
-            );
-         },
-         updateTypeOfUserByUsername: async (
-            context,
-            arg = { username, userType },
-         ) => {
-            return context.state.processor.acquire(
-               "updateTypeOfUserByUsername",
-               async () => {
-                  try {
-                     const user = await loginStore.dispatch("getUser");
-
-                     if (!user.isTypeAdmin()) throw new Error();
-
-                     const { username, userType } = arg;
-                     const api = await requestUpdate(username, userType);
-                     const content = api.getContent();
-                     const userChange = new ItemUser(Stores).fromData(content);
-                     if (!userChange) throw new Error();
-                     context.state.list.updateItemById(
-                        userChange.username,
-                        (item) => userChange,
-                     );
-
-                     return userChange;
-                  } catch (error) {
-                     context.state.list.clear();
-                     throw error;
-                  }
-               },
-            );
-         },
-      };
       context.actions.refresh = async (context) => {
          return context.state.processor.acquire("refresh", async () => {
             context.state.dataLoader.doTimeout();
@@ -135,6 +62,78 @@ export default {
             async () => {
                const users = await context.dispatch("getUsers");
                return users.find((user) => user.username === username);
+            },
+         );
+      };
+      context.actions.updateTypeOfUserByUsername = async (
+         context,
+         arg = { username, userType },
+      ) => {
+         return context.state.processor.acquire(
+            "updateTypeOfUserByUsername",
+            async () => {
+               try {
+                  const user = await loginStore.dispatch("getUser");
+
+                  if (!user.isTypeAdmin()) throw new Error();
+
+                  const { username, userType } = arg;
+                  const api = await requestUpdate(username, userType);
+                  const content = api.getContent();
+                  const userChange = new ItemUser(Stores).fromData(content);
+                  if (!userChange) throw new Error();
+                  context.state.list.updateItemById(
+                     userChange.username,
+                     (item) => userChange,
+                  );
+
+                  return userChange;
+               } catch (error) {
+                  context.state.list.clear();
+                  throw error;
+               }
+            },
+         );
+      };
+      context.actions.addUser = async (
+         context,
+         arg = { username, name, passwordNew, passwordRepeat },
+      ) => {
+         return context.state.processor.acquire("addUser", async () => {
+            const user = await loginStore.dispatch("getUser");
+
+            if (!user.isTypeAdmin()) throw new Error();
+
+            const api = await requestAdd(
+               arg.username,
+               arg.name,
+               arg.passwordNew,
+               arg.passwordRepeat,
+            );
+
+            const content = api.getContent();
+            if (!content) throw new Error();
+            const newUser = new ItemUser(Stores).fromData(content);
+            context.state.list.addItem(newUser);
+            return newUser;
+         });
+      };
+      context.actions.removeUserByUsername = async (
+         context,
+         arg = { username },
+      ) => {
+         return context.state.processor.acquire(
+            "removeUserByUsername",
+            async () => {
+               const user = await loginStore.dispatch("getUser");
+
+               if (!user.isTypeAdmin()) throw new Error();
+
+               const api = await requestRemove(arg.username);
+               const content = api.getContent();
+               if (content !== "ok") throw new Error();
+               context.state.list.removeItemById(arg.username);
+               return true;
             },
          );
       };
