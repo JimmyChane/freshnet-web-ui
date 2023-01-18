@@ -5,6 +5,7 @@ import Processor from "./Processor";
 export default class StoreBuilder {
    #fetchItems = () => {};
    #getStore = () => {};
+   #idProperty = "id";
 
    onFetchItems(fetchItems = () => {}) {
       this.#fetchItems = fetchItems;
@@ -14,13 +15,17 @@ export default class StoreBuilder {
       this.#getStore = getStore;
       return this;
    }
+   onIdProperty(idProperty = this.#idProperty) {
+      this.#idProperty = idProperty;
+      return this;
+   }
    build() {
       this.state = {
          dataLoader: DataLoader.withStore(() => this.#getStore()).loadData(() =>
             this.#fetchItems(),
          ),
          processor: new Processor(),
-         list: new List(),
+         list: new List(this.#idProperty),
       };
       this.mutations = {};
       this.getters = {

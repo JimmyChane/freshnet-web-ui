@@ -17,6 +17,7 @@ export default {
          });
       });
       context.onGetStore(() => Stores.specification);
+      context.onIdProperty("key");
       context.build();
       context.actions = {
          refresh: async (context) => {

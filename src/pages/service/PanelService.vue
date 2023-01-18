@@ -7,7 +7,7 @@
 	import ButtonAddImage from "./ButtonAddImage.vue";
 	import ButtonImage from "./ButtonImage.vue";
 	import ItemBelonging from "./ItemBelonging.vue";
-	import Section from "./PanelService_Section.vue";
+	import Section from "./PanelService-Section.vue";
 	import PanelEvents from "./PanelEvents.vue";
 
 	import ServiceState from "@/items/tools/ServiceState.js";
