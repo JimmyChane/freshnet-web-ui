@@ -131,21 +131,18 @@
             this.stateMenuIndex = this.stateMenus.indexOf(menu);
          },
 
-         invalidateList() {
-            const filter = (services, key) => {
-               const tab = this.stateMenus.find((tab) => tab.key === key);
-               if (tab) {
-                  tab.list = services.filter((service) => {
-                     return service.state === key;
-                  });
-               }
-            };
+         filterList(services, key) {
+            const tab = this.stateMenus.find((tab) => tab.key === key);
+            if (tab)
+               tab.list = services.filter((service) => service.state === key);
+         },
 
+         invalidateList() {
             const services = Array.isArray(this.services) ? this.services : [];
-            filter(services, State.Pending);
-            filter(services, State.Waiting);
-            filter(services, State.Completed);
-            filter(services, State.Rejected);
+            this.filterList(services, State.Pending);
+            this.filterList(services, State.Waiting);
+            this.filterList(services, State.Completed);
+            this.filterList(services, State.Rejected);
 
             this.invalidateState();
 

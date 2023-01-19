@@ -59,7 +59,9 @@
       methods: {
          search(text) {
             text = this.searchText = text.toLowerCase();
-            let texts = text.split(/[\s,]+/).filter((text) => text.trim().length);
+            let texts = text
+               .split(/[\s,]+/)
+               .filter((text) => text.trim().length);
 
             let productSearches = this.products.map((product) => {
                return {
@@ -142,7 +144,9 @@
          <SearchInput
             :class="[
                'Home-actionbar-search',
-               isThin ? 'Home-actionbar-search-isThin' : 'Home-actionbar-search-isWide',
+               isThin
+                  ? 'Home-actionbar-search-isThin'
+                  : 'Home-actionbar-search-isWide',
             ]"
             placeholder="Search"
             :list="searches"
@@ -224,7 +228,6 @@
          flex-direction: row;
          justify-content: center;
          align-items: center;
-         padding: 0.5rem;
 
          .Home-actionbar-search {
             max-width: 24rem;

@@ -134,7 +134,10 @@
             :key="product.id"
             :to="{ query: { productId: product.id } }"
          >
-            <ItemSearchProduct class="ActionbarProduct-search-item" :item="product" />
+            <ItemSearchProduct
+               class="ActionbarProduct-search-item"
+               :item="product"
+            />
          </router-link>
       </SearchInput>
    </Actionbar>
@@ -142,8 +145,6 @@
 
 <style lang="scss" scoped>
    .ActionbarProduct {
-      padding: 0.2rem;
-
       .ActionbarProduct-search {
          flex-grow: 1;
          z-index: 1;

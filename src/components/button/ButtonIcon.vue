@@ -5,18 +5,32 @@
       props: {
          src: { type: String, default: "" },
          alt: { type: String, default: "" },
+         href: { type: String, default: "" },
+         target: { type: String, default: "_blank" },
       },
    };
 </script>
 
 <template>
-   <button
+   <a
       class="ButtonIcon"
+      v-if="href.length"
+      :href="href"
+      :target="target"
       @click="$emit('click')"
       @mouseover="(x) => $emit('mouseover', x)"
       @mouseleave="(x) => $emit('mouseleave', x)"
    >
-      <Icon class="ButtonIcon-icon" :src="src" :alt="alt" />
+      <Icon :src="src" :alt="alt" />
+   </a>
+   <button
+      class="ButtonIcon"
+      v-else
+      @click="$emit('click')"
+      @mouseover="(x) => $emit('mouseover', x)"
+      @mouseleave="(x) => $emit('mouseleave', x)"
+   >
+      <Icon :src="src" :alt="alt" />
    </button>
 </template>
 
@@ -24,10 +38,13 @@
    .ButtonIcon {
       font-size: 1rem;
 
-      min-width: 2.5em;
-      min-height: 2.5em;
-      width: 2.5em;
-      height: 2.5em;
+      --size: 2.8em;
+      width: var(--size);
+      height: var(--size);
+      min-width: var(--size);
+      min-height: var(--size);
+      max-width: var(--size);
+      max-height: var(--size);
       border-radius: 50%;
       padding: 0.7em;
       background: none;
@@ -38,15 +55,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
+
       &:hover,
       &:focus {
          background: rgba(0, 0, 0, 0.1);
-      }
-
-      .ButtonIcon-icon {
-         font-size: 1em;
-         width: 100%;
-         height: 100%;
       }
    }
 </style>

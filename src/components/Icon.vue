@@ -14,11 +14,12 @@
 <style lang="scss" scoped>
    .Icon {
       font-size: 1rem;
-
-      min-width: 2.5em;
-      min-height: 2.5em;
       width: 2.5em;
       height: 2.5em;
+      min-width: 2.5em;
+      min-height: 2.5em;
+      max-width: 2.5em;
+      max-height: 2.5em;
       padding: 0.7em;
       background: none;
       border: none;
