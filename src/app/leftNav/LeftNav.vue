@@ -1,10 +1,18 @@
 <script>
    import Drawer from "@/components/Drawer.vue";
+   import SearchInput from "@/components/SearchInput.vue";
+   import ButtonIcon from "@/components/button/ButtonIcon.vue";
    import LeftNavGroup1 from "./LeftNav_Group1.vue";
    import LeftNavLogin from "./LeftNav_Login.vue";
 
    export default {
-      components: { Drawer, LeftNavGroup1, LeftNavLogin },
+      components: {
+         Drawer,
+         SearchInput,
+         ButtonIcon,
+         LeftNavGroup1,
+         LeftNavLogin,
+      },
       emits: ["click-collapse", "click-logout"],
       props: {
          isExpand: { type: Boolean, default: false },
@@ -25,8 +33,10 @@
       },
       computed: {
          drawerMode() {
-            if (this.isDrawer && this.isExpand) return Drawer.Mode.DRAWER_EXPAND;
-            if (this.isDrawer && !this.isExpand) return Drawer.Mode.DRAWER_COLLAPSE;
+            if (this.isDrawer && this.isExpand)
+               return Drawer.Mode.DRAWER_EXPAND;
+            if (this.isDrawer && !this.isExpand)
+               return Drawer.Mode.DRAWER_COLLAPSE;
             if (!this.isDrawer) return Drawer.Mode.FIXED;
             return 0;
          },
@@ -40,7 +50,8 @@
                nav.isSelected = () => this.selectedPageKey === nav.key;
                nav.isWide = () => this.isWide;
                nav.clickExpand = () => {
-                  this.expandedPageKey = this.expandedPageKey === nav.key ? "" : nav.key;
+                  this.expandedPageKey =
+                     this.expandedPageKey === nav.key ? "" : nav.key;
                };
                nav.click = () => this.emitCollapse();
 
@@ -124,14 +135,16 @@
          onTouchMove(e) {
             if (!this.isDragging) return;
             const touch = [...e.changedTouches][0];
-            const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
+            const x =
+               touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
             const y = touch.pageY;
             this.refDrawer.onDragMove(x, y);
          },
          onTouchEnd(e) {
             if (!this.isDragging) return;
             const touch = [...e.changedTouches][0];
-            const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
+            const x =
+               touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
             const y = touch.pageY;
             this.refDrawer.onDragEnd(x, y);
             if (x > this.dragOpen) this.$root.navigation.openNavigationDrawer();
@@ -190,7 +203,11 @@
             <router-link class="LeftNav-logo" :to="{ path: '/' }">
                <img
                   class="LeftNav-icon"
-                  :src="host.cloudinary({ url: 'logo/svg/freshnet-enterprise-logo.svg' })"
+                  :src="
+                     host.cloudinary({
+                        url: 'logo/svg/freshnet-enterprise-logo.svg',
+                     })
+                  "
                />
                <span class="LeftNav-title">Freshnet Enterprise</span>
             </router-link>
@@ -203,6 +220,15 @@
                <img :src="host.res('icon/arrowDown-000000.svg')" />
             </button>
          </div>
+
+         <!-- <div class="LeftNav-Search">
+            <ButtonIcon
+               class="LeftNav-Search-button"
+               v-if="!isWide"
+               :src="host.res('icon/search-000000.svg')"
+            />
+            <SearchInput class="LeftNav-Search-comp" v-else />
+         </div> -->
 
          <div class="LeftNav-navigations" v-if="navigations.length">
             <LeftNavGroup1
@@ -237,6 +263,25 @@
          background-color: hsl(0, 0%, 84%);
          position: relative;
          transition: var(--transition-duration);
+
+         .LeftNav-Search {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+
+            --margin: 1.2rem;
+            margin: 0 var(--margin);
+            width: calc(100% - var(--margin) - var(--margin));
+
+            .LeftNav-Search-comp {
+               --background-color: hsl(0, 0%, 94%);
+               --border-radius: 0.8rem;
+               --border: 1px solid transparent;
+               --border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
+               --dropdown-height: calc(100vh - 10rem);
+            }
+         }
 
          .LeftNav-header {
             display: flex;
@@ -327,7 +372,8 @@
          --scrollbar-track-color-hover: hsla(0, 0%, 0%, 0.2);
 
          scrollbar-width: var(--scrollbar-size);
-         scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+         scrollbar-color: var(--scrollbar-thumb-color)
+            var(--scrollbar-track-color);
          &::-webkit-scrollbar {
             height: var(--scrollbar-size);
             width: var(--scrollbar-size);
@@ -356,7 +402,7 @@
                .LeftNav-icon {
                   width: 2rem;
                   height: 2rem;
-                  
+
                   width: 1.8rem;
                   height: 1.8rem;
                }

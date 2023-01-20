@@ -41,6 +41,7 @@
          @click="$refs['SearchInput-keyword'].focus()"
       >
          <ButtonIcon
+            class="SearchInput-icon"
             :src="
                host.res(
                   search ? 'icon/close-000000.svg' : 'icon/search-000000.svg',
@@ -100,6 +101,8 @@
       --border: 1px solid hsla(0, 0%, 0%, 0.15);
       --border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
 
+      --dropdown-height: 80vh;
+
       display: flex;
       flex-direction: column;
       align-items: stretch;
@@ -120,9 +123,14 @@
          padding: 0.2rem;
          border: var(--border);
 
+         font-size: 0.8rem;
+
+         .SearchInput-icon {
+            font-size: 1em;
+         }
          .SearchInput-keyword {
             width: 100%;
-            font-size: 1rem;
+            font-size: 1em;
             flex-grow: 1;
             border: none;
             outline: none;
@@ -182,7 +190,7 @@
             top: 100%;
             width: 100%;
             height: 100vh;
-            max-height: 80vh;
+            max-height: var(--dropdown-height);
             box-shadow: 0 0 60px hsla(0, 0%, 0%, 0.1);
             border-radius: 0 0 var(--border-radius-active)
                var(--border-radius-active);
@@ -192,7 +200,7 @@
             .SearchInput-main-body {
                width: 100%;
                height: 100%;
-               max-height: 80vh;
+               max-height: var(--dropdown-height);
                display: flex;
                flex-direction: column;
                align-items: center;
