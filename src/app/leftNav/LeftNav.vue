@@ -1,18 +1,11 @@
 <script>
    import Drawer from "@/components/Drawer.vue";
-   import SearchInput from "@/components/SearchInput.vue";
-   import ButtonIcon from "@/components/button/ButtonIcon.vue";
+   import Search from "./LeftNav_Search.vue";
    import LeftNavGroup1 from "./LeftNav_Group1.vue";
    import LeftNavLogin from "./LeftNav_Login.vue";
 
    export default {
-      components: {
-         Drawer,
-         SearchInput,
-         ButtonIcon,
-         LeftNavGroup1,
-         LeftNavLogin,
-      },
+      components: { Drawer, Search, LeftNavGroup1, LeftNavLogin },
       emits: ["click-collapse", "click-logout"],
       props: {
          isExpand: { type: Boolean, default: false },
@@ -221,14 +214,7 @@
             </button>
          </div>
 
-         <!-- <div class="LeftNav-Search">
-            <ButtonIcon
-               class="LeftNav-Search-button"
-               v-if="!isWide"
-               :src="host.res('icon/search-000000.svg')"
-            />
-            <SearchInput class="LeftNav-Search-comp" v-else />
-         </div> -->
+         <Search :isWide="isWide" />
 
          <div class="LeftNav-navigations" v-if="navigations.length">
             <LeftNavGroup1
@@ -263,25 +249,6 @@
          background-color: hsl(0, 0%, 84%);
          position: relative;
          transition: var(--transition-duration);
-
-         .LeftNav-Search {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-start;
-
-            --margin: 1.2rem;
-            margin: 0 var(--margin);
-            width: calc(100% - var(--margin) - var(--margin));
-
-            .LeftNav-Search-comp {
-               --background-color: hsl(0, 0%, 94%);
-               --border-radius: 0.8rem;
-               --border: 1px solid transparent;
-               --border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
-               --dropdown-height: calc(100vh - 10rem);
-            }
-         }
 
          .LeftNav-header {
             display: flex;
