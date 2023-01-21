@@ -50,7 +50,9 @@
             return typeof this.src === "string";
          },
          isSrcItem() {
-            return this.src instanceof Image || this.src instanceof ServiceImage;
+            return (
+               this.src instanceof Image || this.src instanceof ServiceImage
+            );
          },
 
          async onSrc() {
@@ -150,6 +152,7 @@
       ref="img"
       :src="requestUrl"
       :alt="alt"
+      loading="lazy"
       @load="(event) => onLoad(event)"
       @error="(event) => onError(event)"
       @abort="(event) => onAbort(event)"
