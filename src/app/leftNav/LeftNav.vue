@@ -1,11 +1,10 @@
 <script>
    import Drawer from "@/components/Drawer.vue";
-   import Search from "./LeftNav_Search.vue";
    import LeftNavGroup1 from "./LeftNav_Group1.vue";
    import LeftNavLogin from "./LeftNav_Login.vue";
 
    export default {
-      components: { Drawer, Search, LeftNavGroup1, LeftNavLogin },
+      components: { Drawer, LeftNavGroup1, LeftNavLogin },
       emits: ["click-collapse", "click-logout"],
       props: {
          isExpand: { type: Boolean, default: false },
@@ -213,8 +212,6 @@
                <img :src="host.res('icon/arrowDown-000000.svg')" />
             </button>
          </div>
-
-         <Search :isWide="isWide" />
 
          <div class="LeftNav-navigations" v-if="navigations.length">
             <LeftNavGroup1
