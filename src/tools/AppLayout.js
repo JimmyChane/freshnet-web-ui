@@ -27,7 +27,7 @@ class AppLayout {
       else this.requests.push({ page, view, mode });
    }
 
-   getCurrentRequest() {
+   getCurrentVisibilityRequest() {
       const page = this.context.currentPageKey;
       const view = this.context.currentViewKey;
 
@@ -38,7 +38,7 @@ class AppLayout {
       return request ? request : null;
    }
    getCurrentLayout() {
-      const request = this.getCurrentRequest();
+      const request = this.getCurrentVisibilityRequest();
       return request ? request.mode : AppLayout.Layout.FULL;
    }
 

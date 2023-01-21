@@ -117,17 +117,22 @@
 </script>
 
 <template>
-   <div class="LeftNav-Search">
+   <div :class="['LeftNav-Search', isWide ? 'LeftNav-Search-isWide' : '']">
       <ButtonIcon
          class="LeftNav-Search-button"
          v-if="!isWide"
          :src="host.res('icon/search-000000.svg')"
+         @click="()=>{
+            $root.navigation.openNavigationDrawer();
+            $root.navigation.disableNavigationDrawer();
+         }"
       />
       <SearchInput
          class="LeftNav-Search-comp"
          v-else
          :list="searches"
          @callback-search="(text) => search(text)"
+         v-slot="{ collapse }"
       >
          <div
             class="Home-actionbar-search-item"
@@ -138,6 +143,7 @@
                class="Home-actionbar-search-item-button"
                v-if="x.dataType === 'product'"
                :to="{ path: '/product', query: { productId: x.item.id } }"
+               @click.native="() => collapse()"
             >
                <ItemSearchProduct :item="x.item" />
             </router-link>
@@ -146,6 +152,7 @@
                class="Home-actionbar-search-item-button"
                v-if="x.dataType === 'category'"
                :to="{ path: '/product', query: { category: x.item.id } }"
+               @click.native="() => collapse()"
             >
                <ItemSearchCategory :item="x.item" />
             </router-link>
@@ -154,6 +161,7 @@
                class="Home-actionbar-search-item-button"
                v-if="x.dataType === 'brand'"
                :to="{ path: '/product', query: { brand: x.item.id } }"
+               @click.native="() => collapse()"
             >
                <ItemSearchBrand :item="x.item" />
             </router-link>
@@ -162,6 +170,7 @@
                class="Home-actionbar-search-item-button"
                v-if="x.dataType === 'ps2Disc'"
                :to="{ path: '/ps2', query: { discCode: x.item.code } }"
+               @click.native="() => collapse()"
             >
                <ItemSearchPs2Disc :item="x.item" />
             </router-link>
@@ -173,6 +182,7 @@
                   path: '/manage/service',
                   query: { service: x.item.id },
                }"
+               @click.native="() => collapse()"
             >
                <ItemSearchService :item="x.item" />
             </router-link>
@@ -186,12 +196,7 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: flex-start;
-
-      --margin: 1.2rem;
-      margin: 0 var(--margin);
-      width: calc(100% - var(--margin) - var(--margin));
-
+      margin: auto;
       .LeftNav-Search-comp {
          --background-color: hsl(0, 0%, 94%);
          --border-radius: 0.8rem;
@@ -225,5 +230,8 @@
             }
          }
       }
+   }
+   .LeftNav-Search-isWide {
+      margin: 0 1.2rem;
    }
 </style>

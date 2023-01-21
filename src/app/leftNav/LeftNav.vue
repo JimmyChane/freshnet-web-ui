@@ -5,17 +5,10 @@
 
    export default {
       components: { Drawer, LeftNavGroup1, LeftNavLogin },
-      emits: ["click-collapse", "click-logout"],
-      props: {
-         isExpand: { type: Boolean, default: false },
-         isDrawer: { type: Boolean, default: true },
-         isWide: { type: Boolean, default: false },
-         selectedPageKey: { type: String, default: "" },
-         selectedViewKey: { type: String, default: "" },
-      },
+      emits: ["click-logout"],
       data() {
          return {
-            expandedPagey: "",
+            expandedPagKey: "",
 
             isDragging: false,
             dragTrigger: 20,
@@ -24,13 +17,17 @@
          };
       },
       computed: {
+         isWide: (context) => context.$root.navigation.isWide(),
+         isDrawer: (context) => context.$root.navigation.isDrawer(),
+         isExpand: (context) => context.$root.navigation.isExpanded(),
+         selectedPageKey: (context) => context.$root.currentPageKey,
+         selectedViewKey: (context) => context.$root.currentViewKey,
+
          drawerMode() {
-            if (this.isDrawer && this.isExpand)
-               return Drawer.Mode.DRAWER_EXPAND;
-            if (this.isDrawer && !this.isExpand)
-               return Drawer.Mode.DRAWER_COLLAPSE;
             if (!this.isDrawer) return Drawer.Mode.FIXED;
-            return 0;
+            return this.isExpand
+               ? Drawer.Mode.DRAWER_EXPAND
+               : Drawer.Mode.DRAWER_COLLAPSE;
          },
          drawerEdge: () => Drawer.Edge.LEFT,
 
@@ -144,7 +141,7 @@
          },
 
          emitCollapse() {
-            this.$emit("click-collapse");
+            this.$root.navigation.closeNavigationDrawer();
             this.expandedPageKey = "";
          },
 
@@ -188,7 +185,7 @@
       :class="['LeftNav', !isWide ? 'LeftNav-isThin' : 'LeftNav-isWide']"
       :mode="drawerMode"
       :edge="drawerEdge"
-      @click-collapse="emitCollapse()"
+      @click-collapse="() => emitCollapse()"
    >
       <div class="LeftNav-body" ref="Body">
          <div class="LeftNav-header">

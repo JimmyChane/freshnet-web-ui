@@ -78,9 +78,9 @@
    <div
       :class="[
          'App',
-         `App-${$root.appLayout.isNormal() ? 'isNormal' : ''}`,
-         `App-${$root.appLayout.isFull() ? 'isFull' : ''}`,
          `App-${statusIsShown ? 'isShowingStatus' : 'isHidingStatus'}`,
+         $root.appLayout.isNormal() ? 'App-isNormal' : '',
+         $root.appLayout.isFull() ? 'App-isFull' : '',
       ]"
    >
       <div class="App-background"></div>
@@ -91,7 +91,9 @@
                v-if="false"
                :class="[
                   'App-status',
-                  `App-status-${isConnected ? 'isConnected' : 'isDisconnected'}`,
+                  `App-status-${
+                     isConnected ? 'isConnected' : 'isDisconnected'
+                  }`,
                ]"
             >
                <span>{{ isConnected ? "Connected" : "Disconnected" }}</span>
@@ -100,21 +102,15 @@
             <div
                :class="[
                   'App-layout-body',
-                  $root.navigation.isDrawer()
-                     ? 'App-layout-body-isDrawer'
-                     : 'App-layout-body-isFixed',
+                  `App-layout-body-${
+                     $root.navigation.isDrawer() ? 'isDrawer' : 'isFixed'
+                  }`,
                ]"
             >
                <LeftNav
                   class="App-LeftNav"
                   v-if="!$root.navigation.isNone()"
-                  :isDrawer="$root.navigation.isDrawer()"
-                  :isExpand="$root.navigation.isExpanded()"
-                  :selectedPageKey="$root.currentPageKey"
-                  :selectedViewKey="$root.currentViewKey"
-                  :isWide="$root.navigation.isWide()"
-                  @click-collapse="() => $root.navigation.closeNavigationDrawer()"
-                  @click-logout="logout"
+                  @click-logout="() => logout()"
                />
                <router-view class="App-routerView" ref="AppRouterView" />
             </div>

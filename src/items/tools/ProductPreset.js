@@ -107,7 +107,7 @@ const graphic = [
    `${Brands.Amd.title} radeon`,
 ];
 
-class ProductPreset {
+export default class ProductPreset {
    static Specifications = {
       processor,
       ram,
@@ -215,7 +215,3 @@ class ProductPreset {
       throw new Error("not supported");
    }
 }
-
-console.log(ProductPreset.Specifications);
-
-export default ProductPreset;

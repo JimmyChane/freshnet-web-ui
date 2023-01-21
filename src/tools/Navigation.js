@@ -4,7 +4,7 @@ class Navigation {
 
    context;
 
-   requests = [];
+   visibilityRequests = [];
    layoutRequests = [];
 
    constructor(context) {
@@ -23,11 +23,11 @@ class Navigation {
       const page = this.context.currentPageKey;
       const view = this.context.currentViewKey;
 
-      const request = this.requests.find((request) => {
+      const request = this.visibilityRequests.find((request) => {
          return request.page === page && request.view === view;
       });
       if (request) request.visibility = visibility;
-      else this.requests.push({ page, view, visibility });
+      else this.visibilityRequests.push({ page, view, visibility });
    }
    setLayout(layout) {
       switch (layout) {
@@ -47,11 +47,11 @@ class Navigation {
       else this.layoutRequests.push({ page, view, layout });
    }
 
-   getCurrentRequest() {
+   getCurrentVisibilityRequest() {
       const page = this.context.currentPageKey;
       const view = this.context.currentViewKey;
 
-      const request = this.requests.find((request) => {
+      const request = this.visibilityRequests.find((request) => {
          return request.page === page && request.view === view;
       });
 
@@ -67,23 +67,16 @@ class Navigation {
 
       return request ? request : null;
    }
+
    getCurrentVisibility() {
-      const request = this.getCurrentRequest();
-      return request ? request.visibility : Navigation.Visibility.COLLAPSED;
+      const request = this.getCurrentVisibilityRequest();
+      if (request) return request.visibility;
+      return Navigation.Visibility.COLLAPSED;
    }
    getCurrentLayout() {
       const request = this.getCurrentLayoutRequest();
-      return request ? request.layout : Navigation.Layout.WIDE;
-   }
-
-   isNone() {
-      return this.getCurrentVisibility() === Navigation.Visibility.NONE;
-   }
-   isExpanded() {
-      return this.getCurrentVisibility() === Navigation.Visibility.EXPANDED;
-   }
-   isCollapsed() {
-      return this.getCurrentVisibility() === Navigation.Visibility.COLLAPSED;
+      if (request) return request.layout;
+      return Navigation.Layout.WIDE;
    }
 
    isWide() {
@@ -102,9 +95,17 @@ class Navigation {
    }
 
    isDrawer() {
-      const { window } = this.context;
-      const { innerWidth } = window;
-      return innerWidth <= 600;
+      return this.context.window.innerWidth <= 600;
+   }
+
+   isNone() {
+      return this.getCurrentVisibility() === Navigation.Visibility.NONE;
+   }
+   isExpanded() {
+      return this.getCurrentVisibility() === Navigation.Visibility.EXPANDED;
+   }
+   isCollapsed() {
+      return this.getCurrentVisibility() === Navigation.Visibility.COLLAPSED;
    }
 
    openNavigationDrawer() {
