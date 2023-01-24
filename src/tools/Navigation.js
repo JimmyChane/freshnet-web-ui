@@ -11,70 +11,80 @@ class Navigation {
       this.context = context;
    }
 
-   setVisibility(visibility) {
-      switch (visibility) {
-         default:
-            return;
-         case Navigation.Visibility.NONE:
-         case Navigation.Visibility.EXPANDED:
-         case Navigation.Visibility.COLLAPSED:
-      }
-
-      const page = this.context.currentPageKey;
-      const view = this.context.currentViewKey;
-
-      const request = this.visibilityRequests.find((request) => {
+   #getCurrentPageKey() {
+      return this.context.currentPageKey;
+   }
+   #getCurrentViewKey() {
+      return this.context.currentViewKey;
+   }
+   #getVisibilityRequest(page = "", view = "") {
+      return this.visibilityRequests.find((request) => {
          return request.page === page && request.view === view;
       });
+   }
+   #getLayoutRequest(page = "", view = "") {
+      return this.layoutRequests.find((request) => {
+         return request.page === page && request.view === view;
+      });
+   }
+
+   setVisibility(visibility = 0) {
+      if (
+         !Object.keys(Navigation.Visibility)
+            .map((key) => Navigation.Visibility[key])
+            .includes(visibility)
+      ) {
+         return;
+      }
+
+      const request = this.#getVisibilityRequest(
+         this.#getCurrentPageKey(),
+         this.#getCurrentViewKey(),
+      );
       if (request) request.visibility = visibility;
       else this.visibilityRequests.push({ page, view, visibility });
    }
-   setLayout(layout) {
-      switch (layout) {
-         default:
-            return;
-         case Navigation.Layout.WIDE:
-         case Navigation.Layout.THIN:
+   setLayout(layout = 0) {
+      if (
+         !Object.keys(Navigation.Layout)
+            .map((key) => Navigation.Layout[key])
+            .includes(layout)
+      ) {
+         return;
       }
 
-      const page = this.context.currentPageKey;
-      const view = this.context.currentViewKey;
-
-      const request = this.layoutRequests.find((request) => {
-         return request.page === page && request.view === view;
-      });
+      const request = this.#getLayoutRequest(
+         this.#getCurrentPageKey(),
+         this.#getCurrentViewKey(),
+      );
       if (request) request.layout = layout;
       else this.layoutRequests.push({ page, view, layout });
    }
 
-   getCurrentVisibilityRequest() {
-      const page = this.context.currentPageKey;
-      const view = this.context.currentViewKey;
-
-      const request = this.visibilityRequests.find((request) => {
-         return request.page === page && request.view === view;
-      });
+   #getCurrentVisibilityRequest() {
+      const request = this.#getVisibilityRequest(
+         this.#getCurrentPageKey(),
+         this.#getCurrentViewKey(),
+      );
 
       return request ? request : null;
    }
-   getCurrentLayoutRequest() {
-      const page = this.context.currentPageKey;
-      const view = this.context.currentViewKey;
-
-      const request = this.layoutRequests.find((request) => {
-         return request.page === page && request.view === view;
-      });
+   #getCurrentLayoutRequest() {
+      const request = this.#getLayoutRequest(
+         this.#getCurrentPageKey(),
+         this.#getCurrentViewKey(),
+      );
 
       return request ? request : null;
    }
 
    getCurrentVisibility() {
-      const request = this.getCurrentVisibilityRequest();
+      const request = this.#getCurrentVisibilityRequest();
       if (request) return request.visibility;
       return Navigation.Visibility.COLLAPSED;
    }
    getCurrentLayout() {
-      const request = this.getCurrentLayoutRequest();
+      const request = this.#getCurrentLayoutRequest();
       if (request) return request.layout;
       return Navigation.Layout.WIDE;
    }
@@ -85,8 +95,7 @@ class Navigation {
    isThin() {
       if (this.isDrawer()) return false;
 
-      const { window } = this.context;
-      const { innerWidth } = window;
+      const { innerWidth } = this.context.window;
 
       if (this.getCurrentLayout() === Navigation.Layout.WIDE) {
          return innerWidth <= 1000;
