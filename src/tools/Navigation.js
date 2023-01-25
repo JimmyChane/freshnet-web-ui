@@ -37,10 +37,9 @@ class Navigation {
          return;
       }
 
-      const request = this.#getVisibilityRequest(
-         this.#getCurrentPageKey(),
-         this.#getCurrentViewKey(),
-      );
+      const page = this.#getCurrentPageKey();
+      const view = this.#getCurrentViewKey();
+      const request = this.#getVisibilityRequest(page, view);
       if (request) request.visibility = visibility;
       else this.visibilityRequests.push({ page, view, visibility });
    }
@@ -53,27 +52,24 @@ class Navigation {
          return;
       }
 
-      const request = this.#getLayoutRequest(
-         this.#getCurrentPageKey(),
-         this.#getCurrentViewKey(),
-      );
+      const page = this.#getCurrentPageKey();
+      const view = this.#getCurrentViewKey();
+      const request = this.#getLayoutRequest(page, view);
       if (request) request.layout = layout;
       else this.layoutRequests.push({ page, view, layout });
    }
 
    #getCurrentVisibilityRequest() {
-      const request = this.#getVisibilityRequest(
-         this.#getCurrentPageKey(),
-         this.#getCurrentViewKey(),
-      );
+      const page = this.#getCurrentPageKey();
+      const view = this.#getCurrentViewKey();
+      const request = this.#getVisibilityRequest(page, view);
 
       return request ? request : null;
    }
    #getCurrentLayoutRequest() {
-      const request = this.#getLayoutRequest(
-         this.#getCurrentPageKey(),
-         this.#getCurrentViewKey(),
-      );
+      const page = this.#getCurrentPageKey();
+      const view = this.#getCurrentViewKey();
+      const request = this.#getLayoutRequest(page, view);
 
       return request ? request : null;
    }

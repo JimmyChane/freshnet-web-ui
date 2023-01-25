@@ -129,10 +129,9 @@
             <span class="Home-section-title">Business Hours</span>
 
             <div class="Home-HourDescription">
-               <p v-if="businessHourDescription">{{ businessHourDescription }}</p>
-               <p class="Home-HourDescription-notice"
-                  >During Chinese New Year, we will not operate on Jan 21 - Jan 25</p
-               >
+               <p v-if="businessHourDescription">{{
+                  businessHourDescription
+               }}</p>
             </div>
 
             <SectionHour :isThin="isThin" />
