@@ -30,10 +30,9 @@ class AppLayout {
          return false;
       }
 
-      const request = this.#getVisibilityRequest(
-         this.#getCurrentPageKey(),
-         this.#getCurrentViewKey(),
-      );
+      const page = this.#getCurrentPageKey();
+      const view = this.#getCurrentViewKey();
+      const request = this.#getVisibilityRequest(page, view);
 
       if (request) request.mode = mode;
       else this.requests.push({ page, view, mode });
