@@ -1,48 +1,43 @@
 class AppLayout {
    static Layout = { NORMAL: -1, FULL: -2 };
 
-   context;
+   // for quick checking arguments
+   static #layouts = Object.keys(this.Layout).map((key) => this.Layout[key]);
 
-   requests = [];
+   #context;
+   #requests = [];
 
    constructor(context) {
-      this.context = context;
+      this.#context = context;
    }
 
    #getCurrentPageKey() {
-      return this.context.currentPageKey;
+      return this.#context.currentPageKey;
    }
    #getCurrentViewKey() {
-      return this.context.currentViewKey;
+      return this.#context.currentViewKey;
    }
    #getVisibilityRequest(page = "", view = "") {
-      return this.requests.find((request) => {
+      return this.#requests.find((request) => {
          return request.page === page && request.view === view;
       });
    }
 
    setLayout(mode = 0) {
-      if (
-         !Object.keys(AppLayout.Layout)
-            .map((key) => AppLayout.Layout[key])
-            .includes(mode)
-      ) {
-         return false;
-      }
+      if (!AppLayout.#layouts.includes(mode)) return false;
 
       const page = this.#getCurrentPageKey();
       const view = this.#getCurrentViewKey();
       const request = this.#getVisibilityRequest(page, view);
 
       if (request) request.mode = mode;
-      else this.requests.push({ page, view, mode });
+      else this.#requests.push({ page, view, mode });
    }
 
    #getCurrentVisibilityRequest() {
-      const request = this.#getVisibilityRequest(
-         this.#getCurrentPageKey(),
-         this.#getCurrentViewKey(),
-      );
+      const page = this.#getCurrentPageKey();
+      const view = this.#getCurrentViewKey();
+      const request = this.#getVisibilityRequest(page, view);
 
       return request ? request : null;
    }
