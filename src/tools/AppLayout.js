@@ -4,21 +4,21 @@ class AppLayout {
    // for quick checking arguments
    static #layouts = Object.keys(this.Layout).map((key) => this.Layout[key]);
 
-   #context;
-   #requests = [];
+   context;
+   requests = [];
 
    constructor(context) {
-      this.#context = context;
+      this.context = context;
    }
 
    #getCurrentPageKey() {
-      return this.#context.currentPageKey;
+      return this.context.currentPageKey;
    }
    #getCurrentViewKey() {
-      return this.#context.currentViewKey;
+      return this.context.currentViewKey;
    }
    #getVisibilityRequest(page = "", view = "") {
-      return this.#requests.find((request) => {
+      return this.requests.find((request) => {
          return request.page === page && request.view === view;
       });
    }
@@ -31,7 +31,7 @@ class AppLayout {
       const request = this.#getVisibilityRequest(page, view);
 
       if (request) request.mode = mode;
-      else this.#requests.push({ page, view, mode });
+      else this.requests.push({ page, view, mode });
    }
 
    #getCurrentVisibilityRequest() {

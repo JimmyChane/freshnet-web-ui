@@ -8,28 +8,28 @@ class Navigation {
    );
    static #layouts = Object.keys(this.Layout).map((key) => this.Layout[key]);
 
-   #context;
-   #visibilityRequests = [];
-   #layoutRequests = [];
+   context;
+   visibilityRequests = [];
+   layoutRequests = [];
 
    constructor(context) {
-      this.#context = context;
+      this.context = context;
    }
 
    #getCurrentPageKey() {
-      return this.#context.currentPageKey;
+      return this.context.currentPageKey;
    }
    #getCurrentViewKey() {
-      return this.#context.currentViewKey;
+      return this.context.currentViewKey;
    }
 
    #getVisibilityRequest(page = "", view = "") {
-      return this.#visibilityRequests.find((request) => {
+      return this.visibilityRequests.find((request) => {
          return request.page === page && request.view === view;
       });
    }
    #getLayoutRequest(page = "", view = "") {
-      return this.#layoutRequests.find((request) => {
+      return this.layoutRequests.find((request) => {
          return request.page === page && request.view === view;
       });
    }
@@ -41,7 +41,7 @@ class Navigation {
       const view = this.#getCurrentViewKey();
       const request = this.#getVisibilityRequest(page, view);
       if (request) request.visibility = visibility;
-      else this.#visibilityRequests.push({ page, view, visibility });
+      else this.visibilityRequests.push({ page, view, visibility });
    }
    setLayout(layout = 0) {
       if (!Navigation.#layouts.includes(layout)) return;
@@ -50,7 +50,7 @@ class Navigation {
       const view = this.#getCurrentViewKey();
       const request = this.#getLayoutRequest(page, view);
       if (request) request.layout = layout;
-      else this.#layoutRequests.push({ page, view, layout });
+      else this.layoutRequests.push({ page, view, layout });
    }
 
    #getCurrentVisibilityRequest() {
@@ -85,7 +85,7 @@ class Navigation {
    isThin() {
       if (this.isDrawer()) return false;
 
-      const { innerWidth } = this.#context.window;
+      const { innerWidth } = this.context.window;
 
       if (this.getCurrentLayout() === Navigation.Layout.WIDE) {
          return innerWidth <= 1000;
@@ -94,7 +94,7 @@ class Navigation {
    }
 
    isDrawer() {
-      return this.#context.window.innerWidth <= 600;
+      return this.context.window.innerWidth <= 600;
    }
 
    isNone() {
