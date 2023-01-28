@@ -1,5 +1,6 @@
 import Text from "@/items/data/Text.js";
 import config from "@/../freshnet.config";
+import U from "@/U";
 
 class HostRequest {
 	#bind = { method: "GET", url: "", headers: {}, body: undefined };
@@ -25,8 +26,8 @@ class HostRequest {
 		this.#bind.headers = headers;
 		return this;
 	}
-	contentTypeJson() {
-		if (typeof this.#bind.headers !== "object" || Array.isArray(this.#bind.headers)) {
+	contentTypeJson() { 
+		if (!U.isObject(this.#bind.headers) || U.isArray(this.#bind.headers)) {
 			this.#bind.headers = {};
 		}
 		this.#bind.headers["Content-Type"] = "application/json;charset=UTF-8";
@@ -112,13 +113,16 @@ class ApiHost {
 	get origin() {
 		return config.host;
 	}
+	get originApi(){
+		return config.hostApi;
+	}
 
 	res(url) {
 		return `${config.hostRes}/${url}`;
 	}
 	cloudinary(param = { url: "" }) {
 		let { url } = param;
-		url = typeof url === "string" ? Text.trim(url, "") : "";
+		url = U.isString(url) ? Text.trim(url, "") : "";
 		if (url === "") return "";
 		return `${config.cloudinaryRes}/${url}`;
 	}

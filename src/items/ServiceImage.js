@@ -34,18 +34,25 @@ class ServiceImage {
    }
    toUrl(option = { width: 0, height: 0 }) {
       const { path, method } = this;
-      const dimensionQuery = Image.dimensionToQuery(option.width, option.height);
+      const dimensionQuery = Image.dimensionToQuery(
+         option.width,
+         option.height,
+      );
       const query = dimensionQuery.length ? `?${dimensionQuery}` : "";
 
       if (method === Image.Method.StorageImage) {
          const prefix = "/api/image/name/";
          const name = path.substring(prefix.length, path.length);
          const filename = new Filename(name);
-         return `${ApiHost.origin}/api/image/name/${filename.toString()}${query}`;
+         return `${
+            ApiHost.originApi
+         }/image/name/${filename.toString()}${query}`;
       }
 
       const filename = new Filename(this.name);
-      return `${ApiHost.origin}/api/service_v2/get/image/${filename.toString()}${query}`;
+      return `${
+         ApiHost.originApi
+      }/service_v2/get/image/${filename.toString()}${query}`;
    }
 }
 

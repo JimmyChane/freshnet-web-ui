@@ -1,4 +1,5 @@
 import ApiHost from "@/host/ApiHost.js";
+import U from "@/U.js";
 import ModuleImage from "./data/Image.js";
 import Filename from "./Filename.js";
 
@@ -27,32 +28,32 @@ class Image {
       return this;
    }
    toData() {
-      return new ModuleImage({
-         method: this.method,
-         path: this.path,
-      });
+      return new ModuleImage({ method: this.method, path: this.path });
    }
    toCount(strs) {
       return 0;
    }
    toUrl(option = { width: 0, height: 0 }) {
       let { width = 0, height = 0 } =
-         typeof option === "object" && option !== null ? option : {};
-      let method = this.method;
-      let path = this.path;
+         U.isObject(option) && option !== null ? option : {};
 
-      if (method && path) {
-         if (method === Image.Method.Local) return `${ApiHost.origin}/${path}`;
-         if (method === Image.Method.Link) return path;
-         if (method === Image.Method.StorageImage) {
-            const prefix = "/api/image/name/";
-            const name = path.substring(prefix.length, path.length);
-            const dimensionQuery = Image.dimensionToQuery(width, height);
-            const query = dimensionQuery.length ? `?${dimensionQuery}` : "";
-            const filename = new Filename(name);
-            return `${ApiHost.origin}/api/image/name/${filename.toString()}${query}`;
-         }
+      const method = this.method;
+      const path = this.path;
+
+      if (!method || !path) return "";
+      if (method === Image.Method.Local) return `${ApiHost.origin}/${path}`;
+      if (method === Image.Method.Link) return path;
+      if (method === Image.Method.StorageImage) {
+         const prefix = "/api/image/name/";
+         const name = path.substring(prefix.length, path.length);
+         const filename = new Filename(name);
+         const dimensionQuery = Image.dimensionToQuery(width, height);
+         const query = dimensionQuery.length ? `?${dimensionQuery}` : "";
+         return `${
+            ApiHost.originApi
+         }/image/name/${filename.toString()}${query}`;
       }
+
       return "";
    }
 
