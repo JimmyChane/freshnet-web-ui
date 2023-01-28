@@ -41,7 +41,19 @@ class Image {
       const path = this.path;
 
       if (!method || !path) return "";
-      if (method === Image.Method.Local) return `${ApiHost.origin}/${path}`;
+      if (method === Image.Method.Local) {
+         let resPath = path;
+         if (resPath.startsWith("."))
+            resPath = resPath.substring(1, resPath.length);
+         if (resPath.startsWith("/"))
+            resPath = resPath.substring(1, resPath.length);
+         if (resPath.startsWith("resource/")) {
+            resPath = resPath.substring("resource/".length, resPath.length);
+            return ApiHost.res(resPath);
+         }
+
+         return `${ApiHost.origin}/${path}`;
+      }
       if (method === Image.Method.Link) return path;
       if (method === Image.Method.StorageImage) {
          const prefix = "/api/image/name/";

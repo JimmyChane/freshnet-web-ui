@@ -1,12 +1,12 @@
-const host = "https://www.freshnet.app";
+const host = "https://api.freshnet.app";
 // const host = "http://localhost";
 
 module.exports = {
    devPort: 8080,
 
    host,
-   hostApi: `${host}/api`,
-   hostRes: `${host}/resource`,
+   hostApi: `${host}`,
+   hostRes: `${host}/res`,
 
    cloudinaryRes: "https://res.cloudinary.com/freshnet/image/upload/resource",
 
