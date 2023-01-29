@@ -10,5 +10,5 @@ module.exports = {
 
    cloudinaryRes: "https://res.cloudinary.com/freshnet/image/upload/resource",
 
-   exportAbsolutePath: "../freshnet-express/public/page",
+   // exportAbsolutePath: "../freshnet-express/public/page",
 };

@@ -1,8 +1,8 @@
 <script>
    import Drawer from "@/components/Drawer.vue";
    import LeftNavHeader from "./LeftNav-Header.vue";
-   import LeftNavGroup1 from "./LeftNav_Group1.vue";
-   import LeftNavLogin from "./LeftNav_Login.vue";
+   import LeftNavGroup1 from "./LeftNav-Group1.vue";
+   import LeftNavLogin from "./LeftNav-Login.vue";
 
    export default {
       components: { Drawer, LeftNavHeader, LeftNavGroup1, LeftNavLogin },

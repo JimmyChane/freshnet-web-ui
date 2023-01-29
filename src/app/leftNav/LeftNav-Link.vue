@@ -1,6 +1,6 @@
 <script>
 	import ButtonIcon from "@/components/button/ButtonIcon.vue";
-	import LeftNavItem from "./LeftNav_Item.vue";
+	import LeftNavItem from "./LeftNav-Item.vue";
 
 	export default {
 		emits: ["click", "click-expand"],

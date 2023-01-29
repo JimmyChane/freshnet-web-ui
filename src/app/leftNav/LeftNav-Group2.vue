@@ -1,5 +1,5 @@
 <script>
-	import LeftNavGroup3 from "./LeftNav_Group3.vue";
+	import LeftNavGroup3 from "./LeftNav-Group3.vue";
 
 	export default {
 		components: { LeftNavGroup3 },
