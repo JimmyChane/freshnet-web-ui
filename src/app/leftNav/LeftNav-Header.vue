@@ -47,7 +47,11 @@
          <span class="LeftNavHeader-title">Freshnet Enterprise</span>
       </router-link>
 
-      <button class="LeftNavHeader-collapse" @click="() => toggleCollapse()">
+      <button
+         class="LeftNavHeader-collapse"
+         v-if="false"
+         @click="() => toggleCollapse()"
+      >
          <img :src="host.res('icon/arrowDown-000000.svg')" />
       </button>
    </div>

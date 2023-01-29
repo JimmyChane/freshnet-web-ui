@@ -13,7 +13,7 @@ class AppHost {
       return AppHost.#parseOrigin(protocol, hostname, port);
    }
    get path() {
-      return port == AppHost.#dev_port ? `${this.origin}/#` : `${ApiHost.origin}/page/#`;
+      return port == AppHost.#dev_port ? `${this.origin}/#` : `${this.origin}/page/#`;
    }
 }
 
