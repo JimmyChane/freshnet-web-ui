@@ -1,10 +1,11 @@
 <script>
    import Drawer from "@/components/Drawer.vue";
+   import LeftNavHeader from "./LeftNav-Header.vue";
    import LeftNavGroup1 from "./LeftNav_Group1.vue";
    import LeftNavLogin from "./LeftNav_Login.vue";
 
    export default {
-      components: { Drawer, LeftNavGroup1, LeftNavLogin },
+      components: { Drawer, LeftNavHeader, LeftNavGroup1, LeftNavLogin },
       emits: ["click-logout"],
       data() {
          return {
@@ -188,27 +189,7 @@
       @click-collapse="() => emitCollapse()"
    >
       <div class="LeftNav-body" ref="Body">
-         <div class="LeftNav-header">
-            <router-link class="LeftNav-logo" :to="{ path: '/' }">
-               <img
-                  class="LeftNav-icon"
-                  :src="
-                     host.cloudinary({
-                        url: 'logo/svg/freshnet-enterprise-logo.svg',
-                     })
-                  "
-               />
-               <span class="LeftNav-title">Freshnet Enterprise</span>
-            </router-link>
-
-            <button
-               class="LeftNav-collapse"
-               v-if="$root.navigation.isDrawer()"
-               @click="() => $root.navigation.closeNavigationDrawer()"
-            >
-               <img :src="host.res('icon/arrowDown-000000.svg')" />
-            </button>
-         </div>
+         <LeftNavHeader :isWide="isWide" />
 
          <div class="LeftNav-navigations" v-if="navigations.length">
             <LeftNavGroup1
@@ -243,67 +224,6 @@
          background-color: hsl(0, 0%, 84%);
          position: relative;
          transition: var(--transition-duration);
-
-         .LeftNav-header {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 0.4rem;
-
-            .LeftNav-logo {
-               gap: 0.5rem;
-               padding: 1rem;
-
-               display: flex;
-               flex-direction: row;
-               align-items: center;
-               justify-content: center;
-
-               cursor: pointer;
-               text-decoration: none;
-               color: var(--primary-color);
-               transition: var(--transition-duration);
-               background: none;
-
-               &:hover {
-                  text-decoration: underline;
-               }
-
-               .LeftNav-icon {
-                  transition: var(--transition-duration);
-               }
-               .LeftNav-title {
-                  font-weight: 600;
-                  line-height: 1;
-                  color: black;
-               }
-            }
-            .LeftNav-collapse {
-               background: none;
-               border: none;
-               border-radius: 50%;
-               padding: 0.8rem;
-               display: flex;
-               align-items: center;
-               justify-content: center;
-               cursor: pointer;
-               img {
-                  padding: 0.5rem;
-                  width: 2rem;
-                  height: 2rem;
-                  transition: var(--transition-duration);
-               }
-               img {
-                  transform: rotate(90deg);
-               }
-               &:hover {
-                  img {
-                     transform: scale(0.9) rotate(90deg);
-                  }
-               }
-            }
-         }
 
          .LeftNav-navigations {
             flex-grow: 1;
@@ -358,17 +278,6 @@
 
    .LeftNav-isWide {
       .LeftNav-body {
-         .LeftNav-header {
-            .LeftNav-logo {
-               .LeftNav-icon {
-                  width: 2rem;
-                  height: 2rem;
-
-                  width: 1.8rem;
-                  height: 1.8rem;
-               }
-            }
-         }
          .LeftNav-navigations {
             padding: 0.8em;
             padding-top: 0.8em;
@@ -380,18 +289,6 @@
    .LeftNav-isThin {
       .LeftNav-body {
          width: fit-content;
-         .LeftNav-header {
-            gap: 0.5rem;
-            .LeftNav-logo {
-               .LeftNav-icon {
-                  width: 1.3rem;
-                  height: 1.3rem;
-               }
-               .LeftNav-title {
-                  display: none;
-               }
-            }
-         }
          .LeftNav-navigations {
             align-items: center;
             padding: 0.3em;
