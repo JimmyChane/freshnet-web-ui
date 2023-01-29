@@ -1,5 +1,31 @@
 <script>
-   export default { props: { isWide: { type: Boolean, default: false } } };
+   import Navigation from "@/tools/Navigation";
+
+   export default {
+      props: { isWide: { type: Boolean, default: false } },
+      computed: {
+         isDrawer: (c) => c.$root.navigation.isDrawer(),
+         isExpanded: (c) => c.$root.navigation.isExpanded(),
+      },
+      methods: {
+         toggleCollapse() {
+            if (this.isDrawer) {
+               this.isExpanded
+                  ? this.$root.navigation.closeNavigationDrawer()
+                  : this.$root.navigation.openNavigationDrawer();
+               return;
+            }
+
+            const nextLayout = this.isWide
+               ? Navigation.Layout.THIN
+               : Navigation.Layout.WIDE;
+
+            this.$root.navigation.getCurrentLayoutRequest() === null
+               ? this.$root.navigation.setDefaultLayout(nextLayout)
+               : this.$root.navigation.setLayout(nextLayout);
+         },
+      },
+   };
 </script>
 
 <template>
@@ -21,11 +47,7 @@
          <span class="LeftNavHeader-title">Freshnet Enterprise</span>
       </router-link>
 
-      <button
-         class="LeftNavHeader-collapse"
-         v-if="$root.navigation.isDrawer()"
-         @click="() => $root.navigation.closeNavigationDrawer()"
-      >
+      <button class="LeftNavHeader-collapse" @click="() => toggleCollapse()">
          <img :src="host.res('icon/arrowDown-000000.svg')" />
       </button>
    </div>
@@ -34,7 +56,6 @@
 <style lang="scss" scoped>
    .LeftNavHeader {
       display: flex;
-      flex-direction: row;
       align-items: center;
       justify-content: flex-start;
       padding: 0.4rem;
@@ -85,6 +106,21 @@
          img {
             transform: rotate(90deg);
          }
+      }
+   }
+
+   .LeftNavHeader-isWide {
+      flex-direction: row;
+      .LeftNavHeader-logo {
+         .LeftNavHeader-icon {
+            width: 1.8rem;
+            height: 1.8rem;
+         }
+      }
+      .LeftNavHeader-collapse {
+         img {
+            transform: rotate(90deg);
+         }
          &:hover {
             img {
                transform: scale(0.9) rotate(90deg);
@@ -92,18 +128,8 @@
          }
       }
    }
-   .LeftNavHeader-isWide {
-      .LeftNavHeader-logo {
-         .LeftNavHeader-icon {
-            width: 2rem;
-            height: 2rem;
-
-            width: 1.8rem;
-            height: 1.8rem;
-         }
-      }
-   }
    .LeftNavHeader-isThin {
+      flex-direction: column-reverse;
       gap: 0.5rem;
       .LeftNavHeader-logo {
          .LeftNavHeader-icon {
@@ -112,6 +138,16 @@
          }
          .LeftNavHeader-title {
             display: none;
+         }
+      }
+      .LeftNavHeader-collapse {
+         img {
+            transform: rotate(-90deg);
+         }
+         &:hover {
+            img {
+               transform: scale(0.9) rotate(-90deg);
+            }
          }
       }
    }

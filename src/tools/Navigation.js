@@ -9,6 +9,8 @@ class Navigation {
    static #layouts = Object.keys(this.Layout).map((key) => this.Layout[key]);
 
    context;
+   defaultVisibility = Navigation.Visibility.COLLAPSED;
+   defaultLayout = Navigation.Layout.WIDE;
    visibilityRequests = [];
    layoutRequests = [];
 
@@ -34,6 +36,15 @@ class Navigation {
       });
    }
 
+   setDefaultVisibility(visibility = 0) {
+      if (!Navigation.#visibilities.includes(visibility)) return;
+      this.defaultVisibility = visibility;
+   }
+   setDefaultLayout(layout = 0) {
+      if (!Navigation.#layouts.includes(layout)) return;
+      this.defaultLayout = layout;
+   }
+
    setVisibility(visibility = 0) {
       if (!Navigation.#visibilities.includes(visibility)) return;
 
@@ -53,14 +64,14 @@ class Navigation {
       else this.layoutRequests.push({ page, view, layout });
    }
 
-   #getCurrentVisibilityRequest() {
+   getCurrentVisibilityRequest() {
       const page = this.#getCurrentPageKey();
       const view = this.#getCurrentViewKey();
       const request = this.#getVisibilityRequest(page, view);
 
       return request ? request : null;
    }
-   #getCurrentLayoutRequest() {
+   getCurrentLayoutRequest() {
       const page = this.#getCurrentPageKey();
       const view = this.#getCurrentViewKey();
       const request = this.#getLayoutRequest(page, view);
@@ -69,14 +80,14 @@ class Navigation {
    }
 
    getCurrentVisibility() {
-      const request = this.#getCurrentVisibilityRequest();
+      const request = this.getCurrentVisibilityRequest();
       if (request) return request.visibility;
-      return Navigation.Visibility.COLLAPSED;
+      return this.defaultVisibility;
    }
    getCurrentLayout() {
-      const request = this.#getCurrentLayoutRequest();
+      const request = this.getCurrentLayoutRequest();
       if (request) return request.layout;
-      return Navigation.Layout.WIDE;
+      return this.defaultLayout;
    }
 
    isWide() {
