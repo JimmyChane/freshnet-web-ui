@@ -6,6 +6,9 @@
       computed: {
          isDrawer: (c) => c.$root.navigation.isDrawer(),
          isExpanded: (c) => c.$root.navigation.isExpanded(),
+         toggleButtonVisible: (c) =>
+            !c.$root.navigation.isThin() ||
+            c.$root.window.innerWidth > Navigation.MIN_WIDTH,
       },
       methods: {
          toggleCollapse() {
@@ -49,7 +52,7 @@
 
       <button
          class="LeftNavHeader-collapse"
-         v-if="false"
+         v-if="toggleButtonVisible"
          @click="() => toggleCollapse()"
       >
          <img :src="host.res('icon/arrowDown-000000.svg')" />

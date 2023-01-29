@@ -1,4 +1,5 @@
 class Navigation {
+   static MIN_WIDTH = 1000;
    static Visibility = { NONE: -1, EXPANDED: -2, COLLAPSED: -3 };
    static Layout = { WIDE: -1, THIN: -2 };
 
@@ -99,7 +100,7 @@ class Navigation {
       const { innerWidth } = this.context.window;
 
       if (this.getCurrentLayout() === Navigation.Layout.WIDE) {
-         return innerWidth <= 1000;
+         return innerWidth <= Navigation.MIN_WIDTH;
       }
       return this.getCurrentLayout() === Navigation.Layout.THIN;
    }
