@@ -71,7 +71,10 @@
             const { Container } = this.$refs;
 
             if (!Container) {
-               window.removeEventListener("resize", this.invalidateContainerSize);
+               window.removeEventListener(
+                  "resize",
+                  this.invalidateContainerSize,
+               );
                return;
             }
 
@@ -147,7 +150,7 @@
          </div>
 
          <div class="ImageView-footer" v-if="thumbnails.length > 1">
-            <div class="ImageView-images">
+            <div class="ImageView-images scrollbar">
                <button
                   :class="[
                      'ImageView-images-item-button',
@@ -199,7 +202,9 @@
             z-index: 2;
             width: 100vw;
             max-width: 100%;
-            max-height: calc(100% - var(--thumbnail-height) - var(--actionbar-height));
+            max-height: calc(
+               100% - var(--thumbnail-height) - var(--actionbar-height)
+            );
             padding: 1rem;
             flex-grow: 1;
 
@@ -235,36 +240,6 @@
                align-items: flex-start;
                justify-content: flex-start;
                gap: 0.5rem;
-
-               --scrollbar-size: 0;
-               --scrollbar-thumb-radius: 0;
-               --scrollbar-track-margin: 0;
-
-               --scrollbar-thumb-color: 0;
-               --scrollbar-thumb-color-hover: 0;
-               --scrollbar-track-color: 0;
-               --scrollbar-track-color-hover: 0;
-
-               scrollbar-width: var(--scrollbar-size);
-               scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
-               &::-webkit-scrollbar {
-                  height: var(--scrollbar-size);
-                  width: var(--scrollbar-size);
-                  &-thumb {
-                     border-radius: var(--scrollbar-thumb-radius);
-                     background-color: var(--scrollbar-thumb-color);
-                     &:hover {
-                        background-color: var(--scrollbar-thumb-color-hover);
-                     }
-                  }
-                  &-track {
-                     margin: var(--scrollbar-track-margin);
-                     background-color: var(--scrollbar-track-color);
-                     &:hover {
-                        background-color: var(--scrollbar-track-color-hover);
-                     }
-                  }
-               }
 
                .ImageView-images-item-button {
                   height: var(--thumbnail-height);

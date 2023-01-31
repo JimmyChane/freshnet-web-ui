@@ -74,7 +74,8 @@
          queryStock: (context) => context.$route.query.stock,
 
          isLoading: (context) => context.productStore.getters.isLoading,
-         isEmpty: (context) => !context.isLoading && !context.productGroups.length,
+         isEmpty: (context) =>
+            !context.isLoading && !context.productGroups.length,
          isEditable() {
             const { user } = this.loginStore.getters;
             return user.isTypeAdmin() || user.isTypeStaff();
@@ -123,7 +124,9 @@
                "getGroupsByCategory",
             );
             this.productGroups = categoryGroups
-               .sort((group1, group2) => group1.category.compare(group2.category))
+               .sort((group1, group2) =>
+                  group1.category.compare(group2.category),
+               )
                .map((group) => {
                   const items = group.items
                      .filter((item) => {
@@ -138,19 +141,24 @@
                   return {
                      key: group.category.id,
                      title: group.category.title,
-                     icon: group.category.icon ? group.category.icon.toUrl() : "",
+                     icon: group.category.icon
+                        ? group.category.icon.toUrl()
+                        : "",
                      items,
                   };
                })
                .filter((group) => group.items.length > 0);
 
-            const brandGroups = await this.productStore.dispatch("getGroupsByBrand");
+            const brandGroups = await this.productStore.dispatch(
+               "getGroupsByBrand",
+            );
             const brandMenus = brandGroups
                .filter((group) => group.brand && group.items.length > 0)
                .map((group) => {
                   const { title, icon } = group.brand;
                   const iconUrl = icon ? icon.toUrl() : "";
-                  if (iconUrl.length > 0) return { key: group.brand.id, icon: iconUrl };
+                  if (iconUrl.length > 0)
+                     return { key: group.brand.id, icon: iconUrl };
                   return { key: group.brand.id, title };
                });
 
@@ -267,7 +275,9 @@
                :key="group.key"
             >
                <div class="PanelProducts-category-header">
-                  <span class="PanelProducts-category-title">{{ group.title }}</span>
+                  <span class="PanelProducts-category-title">{{
+                     group.title
+                  }}</span>
                   <img
                      class="PanelProducts-category-icon"
                      v-if="group.icon"
@@ -275,7 +285,7 @@
                      :alt="`${group.title} Icon`"
                   />
                </div>
-               <div class="PanelProducts-category-items">
+               <div class="PanelProducts-category-items scrollbar">
                   <router-link
                      v-for="item of group.items"
                      :key="item.id"
@@ -408,31 +418,9 @@
 
                --scrollbar-size: 0.4em;
                --scrollbar-thumb-radius: 0.4em;
-               --scrollbar-track-margin: 1.3rem;
-
                --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.1);
                --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.6);
-
-               scrollbar-width: var(--scrollbar-size);
-               scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
-               &::-webkit-scrollbar {
-                  height: var(--scrollbar-size);
-                  width: var(--scrollbar-size);
-                  &-thumb {
-                     border-radius: var(--scrollbar-thumb-radius);
-                     background-color: var(--scrollbar-thumb-color);
-                     &:hover {
-                        background-color: var(--scrollbar-thumb-color-hover);
-                     }
-                  }
-                  &-track {
-                     margin: var(--scrollbar-track-margin);
-                     background-color: var(--scrollbar-track-color);
-                     &:hover {
-                        background-color: var(--scrollbar-track-color-hover);
-                     }
-                  }
-               }
+               --scrollbar-track-margin: 1.3rem;
 
                & > * {
                   width: 10rem;

@@ -1,7 +1,6 @@
 <script>
    import PageHome from "@/pages/home/PageHome.vue";
    import PageProduct from "@/pages/product/PageProduct.vue";
-   // import PagePs2 from "@/pages/ps2/PagePs2.vue";
    import PagePrint from "@/pages/print/PagePrint.vue";
    import PageManage from "@/pages/manage/PageManage.vue";
 
@@ -13,13 +12,7 @@
       name: "App",
 
       _children() {
-         return [
-            PageHome,
-            PageProduct,
-            //  PagePs2,
-            PagePrint,
-            PageManage,
-         ];
+         return [PageHome, PageProduct, PagePrint, PageManage];
       },
 
       components: { LeftNav, ViewerImage, Snackbar },
@@ -133,6 +126,39 @@
 </template>
 
 <style lang="scss">
+   .scrollbar {
+      --scrollbar-size: 0;
+
+      --scrollbar-thumb-radius: 0;
+      --scrollbar-thumb-color: none;
+      --scrollbar-thumb-color-hover: none;
+
+      --scrollbar-track-margin: 0;
+      --scrollbar-track-color: none;
+      --scrollbar-track-color-hover: none;
+
+      scrollbar-width: var(--scrollbar-size);
+      scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+      &::-webkit-scrollbar {
+         height: var(--scrollbar-size);
+         width: var(--scrollbar-size);
+         &-thumb {
+            border-radius: var(--scrollbar-thumb-radius);
+            background-color: var(--scrollbar-thumb-color);
+            &:hover {
+               background-color: var(--scrollbar-thumb-color-hover);
+            }
+         }
+         &-track {
+            margin: var(--scrollbar-track-margin);
+            background-color: var(--scrollbar-track-color);
+            &:hover {
+               background-color: var(--scrollbar-track-color-hover);
+            }
+         }
+      }
+   }
+
    :root {
       font-size: 16px;
       @media (max-width: 320px) {
@@ -366,9 +392,6 @@
                max-height: var(--status-height);
                opacity: 1;
             }
-            // .App-layout-body {
-            //    height: calc(100% - var(--status-height));
-            // }
          }
       }
    }

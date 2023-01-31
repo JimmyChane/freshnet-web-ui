@@ -188,7 +188,7 @@
       :edge="drawerEdge"
       @click-collapse="() => emitCollapse()"
    >
-      <div class="LeftNav-body" ref="Body">
+      <div class="LeftNav-body scrollbar" ref="Body">
          <LeftNavHeader :isWide="isWide" />
 
          <div class="LeftNav-navigations" v-if="navigations.length">
@@ -244,35 +244,10 @@
 
       .LeftNav-body {
          --scrollbar-size: 0.2rem;
-         --scrollbar-thumb-radius: 0;
-         --scrollbar-track-margin: 0;
-
          --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.1);
          --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.3);
          --scrollbar-track-color: hsla(0, 0%, 0%, 0.1);
          --scrollbar-track-color-hover: hsla(0, 0%, 0%, 0.2);
-
-         scrollbar-width: var(--scrollbar-size);
-         scrollbar-color: var(--scrollbar-thumb-color)
-            var(--scrollbar-track-color);
-         &::-webkit-scrollbar {
-            height: var(--scrollbar-size);
-            width: var(--scrollbar-size);
-            &-thumb {
-               border-radius: var(--scrollbar-thumb-radius);
-               background-color: var(--scrollbar-thumb-color);
-               &:hover {
-                  background-color: var(--scrollbar-thumb-color-hover);
-               }
-            }
-            &-track {
-               margin: var(--scrollbar-track-margin);
-               background-color: var(--scrollbar-track-color);
-               &:hover {
-                  background-color: var(--scrollbar-track-color-hover);
-               }
-            }
-         }
       }
    }
 

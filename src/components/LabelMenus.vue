@@ -30,7 +30,8 @@
 
          primaryColorBackground: (c) => c.primaryColor.mix("ffffff", 0.8),
          primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),
-         primaryColorBackgroundSelected: (c) => c.primaryColor.mix("ffffff", 0.4),
+         primaryColorBackgroundSelected: (c) =>
+            c.primaryColor.mix("ffffff", 0.4),
       },
       methods: {
          toggle() {
@@ -52,21 +53,35 @@
 
 <template>
    <div
-      :class="['LabelMenus', `LabelMenus-${isExpand ? 'isExpand' : 'isCollapse'}`]"
+      :class="[
+         'LabelMenus',
+         `LabelMenus-${isExpand ? 'isExpand' : 'isCollapse'}`,
+      ]"
       :style="{ '--primary-color': primaryColor.toString() }"
    >
-      <button class="LabelMenus-main" @click="() => toggle()" @blur="() => collapse(200)">
+      <button
+         class="LabelMenus-main"
+         @click="() => toggle()"
+         @blur="() => collapse(200)"
+      >
          <span class="LabelMenus-title">{{ title }}</span>
          <span class="LabelMenus-content">
-            <img class="LabelMenus-content-icon" v-if="menuIcon" :src="menuIcon" />
+            <img
+               class="LabelMenus-content-icon"
+               v-if="menuIcon"
+               :src="menuIcon"
+            />
             {{ menuTitle }}</span
          >
-         <img class="LabelMenus-arrow" :src="host.res('icon/arrowDown-505050.svg')" />
+         <img
+            class="LabelMenus-arrow"
+            :src="host.res('icon/arrowDown-505050.svg')"
+         />
       </button>
 
       <div class="LabelMenus-drop">
          <div
-            class="LabelMenus-menus"
+            class="LabelMenus-menus scrollbar"
             :style="{ 'background-color': primaryColorBackground }"
          >
             <button
@@ -174,7 +189,7 @@
          overflow: hidden;
          border-radius: var(--border-radius);
          box-shadow: 0 0 0.5rem 0 hsla(0, 0%, 30%, 0.7);
-			// border: 1px solid hsla(0, 0%, 30%, 0.7);
+         // border: 1px solid hsla(0, 0%, 30%, 0.7);
          background-color: white;
 
          .LabelMenus-menus {
@@ -188,33 +203,10 @@
             overflow-y: auto;
 
             --scrollbar-size: 0.3rem;
-            --scrollbar-thumb-radius: 0;
             --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.2);
             --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.2);
-            --scrollbar-track-margin: 0;
             --scrollbar-track-color: hsla(0, 0%, 0%, 0.08);
             --scrollbar-track-color-hover: hsla(0, 0%, 0%, 0.1);
-
-            scrollbar-width: var(--scrollbar-size);
-            scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
-            &::-webkit-scrollbar {
-               height: var(--scrollbar-size);
-               width: var(--scrollbar-size);
-            }
-            &::-webkit-scrollbar-thumb {
-               border-radius: var(--scrollbar-thumb-radius);
-               background-color: var(--scrollbar-thumb-color);
-               &:hover {
-                  background-color: var(--scrollbar-thumb-color-hover);
-               }
-            }
-            &::-webkit-scrollbar-track {
-               margin: var(--scrollbar-track-margin);
-               background-color: var(--scrollbar-track-color);
-               &:hover {
-                  background-color: var(--scrollbar-track-color-hover);
-               }
-            }
 
             .LabelMenus-menu {
                width: 100%;

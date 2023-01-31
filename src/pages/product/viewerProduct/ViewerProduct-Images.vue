@@ -13,7 +13,8 @@
          primaryColor: { type: Object },
       },
       computed: {
-         isPrimaryColorDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 60,
+         isPrimaryColorDark: (c) =>
+            chroma.deltaE(c.primaryColor, "000000") < 60,
       },
    };
 </script>
@@ -21,7 +22,7 @@
 <template>
    <div
       :class="[
-         'ProductViewerImages',
+         'ProductViewerImages scrollbar',
          isPrimaryColorDark
             ? 'ProductViewerImages-isDark'
             : 'ProductViewerImages-isLight',
@@ -60,29 +61,6 @@
       --scrollbar-size: 0.3rem;
       --scrollbar-thumb-radius: 0.2rem;
       --scrollbar-track-margin: 1.9rem;
-      --scrollbar-track-color: none;
-      --scrollbar-track-color-hover: none;
-
-      scrollbar-width: var(--scrollbar-size);
-      scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
-      &::-webkit-scrollbar {
-         height: var(--scrollbar-size);
-         width: var(--scrollbar-size);
-      }
-      &::-webkit-scrollbar-thumb {
-         border-radius: var(--scrollbar-thumb-radius);
-         background-color: var(--scrollbar-thumb-color);
-         &:hover {
-            background-color: var(--scrollbar-thumb-color-hover);
-         }
-      }
-      &::-webkit-scrollbar-track {
-         margin: var(--scrollbar-track-margin);
-         background-color: var(--scrollbar-track-color);
-         &:hover {
-            background-color: var(--scrollbar-track-color-hover);
-         }
-      }
 
       .ProductViewerImages-list {
          --height: 4rem;
