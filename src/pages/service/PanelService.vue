@@ -1,6 +1,5 @@
 <script>
    import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import ButtonIcon from "@/components/button/ButtonIcon.vue";
    import ButtonOption from "@/components/button/ButtonOption.vue";
    import Selector from "@/components/selector/Selector.vue";
 
@@ -17,7 +16,6 @@
    export default {
       components: {
          Actionbar,
-         ButtonIcon,
          Selector,
          ButtonOption,
          ButtonAddImage,
@@ -267,43 +265,60 @@
                      }"
                   >
                      <div class="PanelService-section-customer">
-                        <router-link
+                        <div
                            class="PanelService-section-customer-info"
                            v-if="customer"
-                           :to="{
-                              path: '/manage/customer',
-                              query: {
-                                 name: name,
-                                 phoneNumber: phoneNumberStr,
-                              },
-                           }"
                         >
                            <span
-                              class="PanelService-section-customer-item"
+                              class="PanelService-section-customer-name"
                               v-if="name"
                               >{{ name }}</span
                            >
                            <span
-                              class="PanelService-section-customer-item"
+                              class="PanelService-section-customer-phoneNumber"
                               v-if="phoneNumberStr"
                               >{{ phoneNumberStr }}</span
                            >
-                        </router-link>
+                        </div>
 
-                        <div
-                           class="PanelService-section-customer-contactLinks"
-                           v-if="isPhoneNumber"
-                        >
-                           <ButtonIcon
-                              :src="host.res('icon/whatsapp-color.svg')"
+                        <div class="PanelService-section-customer-contactLinks">
+                           <a
+                              class="transition"
                               :href="`https://api.whatsapp.com/send?phone=6${phoneNumberStr}`"
                               target="_blank"
-                           />
-                           <!-- <ButtonIcon :src="host.res('icon/telegram-color.svg')" /> -->
-                           <ButtonIcon
-                              :src="host.res('icon/call-505050.svg')"
+                              v-if="isPhoneNumber"
+                           >
+                              <img
+                                 :src="host.res('icon/whatsapp-color.svg')"
+                                 alt="Whatsapp Logo"
+                              />
+                              <span>Chat with Whatsapp</span>
+                           </a>
+
+                           <a
+                              class="transition"
                               :href="`tel:+6${phoneNumberStr}`"
-                           />
+                              v-if="isPhoneNumber"
+                           >
+                              <img
+                                 :src="host.res('icon/call-000000.svg')"
+                                 alt="Call Logo"
+                              />
+                              <span>Call</span>
+                           </a>
+
+                           <router-link
+                              class="transition"
+                              :to="{
+                                 path: '/manage/customer',
+                                 query: {
+                                    name: name,
+                                    phoneNumber: phoneNumberStr,
+                                 },
+                              }"
+                           >
+                              <span>Find</span>
+                           </router-link>
                         </div>
                      </div>
                   </Section>
@@ -532,42 +547,56 @@
                   width: 100%;
                   display: flex;
                   flex-direction: row;
+                  flex-direction: column;
                   align-items: flex-start;
                   flex-wrap: nowrap;
                   justify-content: space-between;
 
                   align-items: center;
-                  gap: 1rem;
+                  gap: 0.5rem;
 
                   .PanelService-section-customer-info {
-                     width: max-content;
+                     width: 100%;
                      display: flex;
                      flex-direction: column;
                      align-items: flex-start;
 
-                     border: 1px solid #dddddd;
-                     border-radius: 1rem;
-                     background-color: #f4f4f4;
-
-                     padding: 0.5rem 0.7rem;
-                     text-decoration: none;
-                     color: inherit;
-
-                     .PanelService-section-customer-item {
-                        font-weight: 400;
+                     .PanelService-section-customer-name {
+                        font-weight: 500;
+                     }
+                     .PanelService-section-customer-phoneNumber {
+                        font-size: 0.9rem;
                      }
                   }
 
                   .PanelService-section-customer-contactLinks {
+                     width: 100%;
+                     gap: 0.2rem;
                      display: flex;
                      flex-direction: row;
-                     flex-grow: 0;
-                     padding: 0.2em 0;
+                     flex-wrap: wrap;
+
                      & > * {
-                        & :hover {
-                           z-index: 1;
+                        padding: 0.7rem;
+                        gap: 0.5rem;
+                        text-decoration: none;
+                        color: inherit;
+                        background-color: #f4f4f4;
+                        border: 1px solid #dddddd;
+                        border-radius: 1rem;
+
+                        display: flex;
+                        flex-direction: row;
+                        align-items: center;
+
+                        &:hover {
+                           background-color: #e4e4e4;
                         }
-                        margin: -0.2em;
+
+                        img {
+                           width: 1rem;
+                           height: 1rem;
+                        }
                      }
                   }
                }
