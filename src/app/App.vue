@@ -163,7 +163,7 @@
    }
    .transition {
       --transition-target: all;
-      --transition-duration: 300ms;
+      --transition-duration: 200ms;
       --transition-delay: 0;
       --transition-timing: linear;
       transition: var(--transition-target) var(--transition-duration)
