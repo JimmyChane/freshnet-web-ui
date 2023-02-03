@@ -3,7 +3,7 @@
 </script>
 
 <template>
-   <embed class="LoadingDots" :src="host.res('anim/ellipsis.svg')" />
+   <embed class="LoadingDots transition" :src="host.res('anim/ellipsis.svg')" />
 </template>
 
 <style lang="scss" scoped>
@@ -17,6 +17,5 @@
       right: 0;
       margin: auto;
       pointer-events: none;
-      transition: var(--transition-duration);
    }
 </style>

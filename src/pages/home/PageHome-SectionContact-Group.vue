@@ -21,7 +21,11 @@
 
 <template>
    <a
-      :class="['ContactGroup', `ContactGroup-${isThin ? 'isThin' : 'isWide'}`]"
+      :class="[
+         'ContactGroup',
+         `ContactGroup-${isThin ? 'isThin' : 'isWide'}`,
+         'transition',
+      ]"
       :href="fisrtHref"
       :target="fisrtTarget"
    >
@@ -40,7 +44,6 @@
       color: black;
       text-decoration: none;
       position: relative;
-      transition: var(--transition-duration);
 
       width: 100%;
       height: 100%;

@@ -76,27 +76,5 @@
          color: hsl(0, 0%, 30%);
          line-height: 1.2;
       }
-      .ItemUser-buttonOption {
-         width: 2.4rem;
-         height: 2.4rem;
-         padding: 0.6rem;
-         display: flex;
-         flex-direction: row;
-         align-items: center;
-         justify-content: center;
-         border: none;
-         border-radius: 50%;
-         background: none;
-         cursor: pointer;
-         transition: var(--transition-duration);
-         &:hover,
-         &:focus {
-            background: hsla(0, 0%, 0%, 0.1);
-         }
-         &-icon {
-            width: 100%;
-            height: 100%;
-         }
-      }
    }
 </style>

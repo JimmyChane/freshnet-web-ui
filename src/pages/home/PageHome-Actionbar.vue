@@ -143,7 +143,7 @@
       <div class="HomeActionbar-body">
          <SearchInput
             :class="[
-               'Home-actionbar-search',
+               'Home-actionbar-search transition',
                isThin
                   ? 'Home-actionbar-search-isThin'
                   : 'Home-actionbar-search-isWide',
@@ -158,7 +158,7 @@
                :key="x.item.id"
             >
                <router-link
-                  class="Home-actionbar-search-item-button"
+                  class="Home-actionbar-search-item-button transition"
                   v-if="x.dataType === 'product'"
                   :to="{ path: '/product', query: { productId: x.item.id } }"
                >
@@ -166,7 +166,7 @@
                </router-link>
 
                <router-link
-                  class="Home-actionbar-search-item-button"
+                  class="Home-actionbar-search-item-button transition"
                   v-if="x.dataType === 'category'"
                   :to="{ path: '/product', query: { category: x.item.id } }"
                >
@@ -174,7 +174,7 @@
                </router-link>
 
                <router-link
-                  class="Home-actionbar-search-item-button"
+                  class="Home-actionbar-search-item-button transition"
                   v-if="x.dataType === 'brand'"
                   :to="{ path: '/product', query: { brand: x.item.id } }"
                >
@@ -182,7 +182,7 @@
                </router-link>
 
                <router-link
-                  class="Home-actionbar-search-item-button"
+                  class="Home-actionbar-search-item-button transition"
                   v-if="x.dataType === 'ps2Disc'"
                   :to="{ path: '/ps2', query: { discCode: x.item.code } }"
                >
@@ -190,7 +190,7 @@
                </router-link>
 
                <router-link
-                  class="Home-actionbar-search-item-button"
+                  class="Home-actionbar-search-item-button transition"
                   v-if="x.dataType === 'service'"
                   :to="{
                      path: '/manage/service',
@@ -232,7 +232,6 @@
          .Home-actionbar-search {
             max-width: 24rem;
             flex-grow: 1;
-            transition: var(--transition-duration);
             --border-radius: 4rem;
             --background-color: hsla(0, 0%, 100%, 0.9);
 
@@ -254,7 +253,6 @@
                   border: none;
                   background: none;
                   border-radius: 0.5em;
-                  transition: var(--transition-duration);
 
                   &:hover {
                      background: rgba(255, 255, 255, 0.5);

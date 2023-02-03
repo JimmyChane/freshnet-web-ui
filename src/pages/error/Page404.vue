@@ -17,7 +17,11 @@
       @scroll="(event) => (top.shadow = event.target.scrollTop > 0)"
    >
       <Actionbar
-         :class="['Home-top', top.shadow ? 'Home-top-shadow' : '']"
+         :class="[
+            'Home-top',
+            top.shadow ? 'Home-top-shadow' : '',
+            'transition',
+         ]"
          v-if="$root.navigation.isDrawer()"
          :leftMenus="[
             {
@@ -80,7 +84,6 @@
          width: 100%;
          position: sticky;
          flex-grow: 0;
-         transition: var(--transition-duration);
 
          .Home-top-body {
             width: 100%;
@@ -90,37 +93,6 @@
             justify-content: flex-start;
             align-items: center;
             column-gap: 1rem;
-
-            .Login-top-logo {
-               --size: 2.8rem;
-
-               width: var(--size);
-               height: var(--size);
-               min-width: var(--size);
-               min-height: var(--size);
-               max-width: var(--size);
-               max-height: var(--size);
-               background: none;
-               border: none;
-               cursor: pointer;
-               padding: 0.6rem;
-               border-radius: 50%;
-               transition: var(--transition-duration);
-               display: flex;
-               flex-grow: 0;
-               flex-direction: row;
-               align-items: center;
-               justify-content: center;
-
-               &:hover {
-                  background: hsla(0, 0%, 0%, 0.1);
-                  background: #49748940;
-               }
-               &-img {
-                  height: 100%;
-                  width: 100%;
-               }
-            }
          }
       }
       .Home-top-shadow {

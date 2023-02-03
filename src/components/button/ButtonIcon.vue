@@ -13,7 +13,7 @@
 
 <template>
    <a
-      class="ButtonIcon"
+      class="ButtonIcon transition"
       v-if="href.length"
       :href="href"
       :target="target"
@@ -49,7 +49,6 @@
       padding: 0.7em;
       background: none;
       border: none;
-      transition: var(--transition-duration);
       cursor: pointer;
 
       display: flex;

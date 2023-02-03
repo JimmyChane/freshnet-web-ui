@@ -1,137 +1,135 @@
 <script>
-	import Loadingv1 from "@/components/Loading";
-	import WindowBottom from "./WindowBottom.vue";
+   import Loadingv1 from "@/components/Loading";
+   import WindowBottom from "./WindowBottom.vue";
 
-	export default {
-		components: { Loadingv1, WindowBottom },
-		emits: ["click-cancel", "click-ok"],
-		props: {
-			title: { type: String, default: "" },
-			isShowing: { type: Boolean, default: false },
-			isLoading: { type: Boolean, default: false },
-			isClickable: { type: Boolean, default: true },
-		},
-		data() {
-			return { scrollTop: 0 };
-		},
-		watch: {
-			isShowing() {
-				const { Window } = this.$refs;
-				if (Window) Window.scrollTop = 0;
-			},
-		},
-	};
+   export default {
+      components: { Loadingv1, WindowBottom },
+      emits: ["click-cancel", "click-ok"],
+      props: {
+         title: { type: String, default: "" },
+         isShowing: { type: Boolean, default: false },
+         isLoading: { type: Boolean, default: false },
+         isClickable: { type: Boolean, default: true },
+      },
+      data() {
+         return { scrollTop: 0 };
+      },
+      watch: {
+         isShowing() {
+            const { Window } = this.$refs;
+            if (Window) Window.scrollTop = 0;
+         },
+      },
+   };
 </script>
 
 <template>
-	<div
-		:class="['Window', isClickable ? '' : 'Window-notClickable']"
-		ref="Window"
-		@scroll="(event) => (scrollTop = event.target.scrollTop)"
-	>
-		<div
-			class="Window-header"
-			:class="[scrollTop > 0 ? 'Window-header-isScrolledUp' : '']"
-		>
-			<span class="Window-header-title">{{ title }}</span>
-		</div>
+   <div
+      :class="['Window', isClickable ? '' : 'Window-notClickable']"
+      ref="Window"
+      @scroll="(event) => (scrollTop = event.target.scrollTop)"
+   >
+      <div
+         class="Window-header transition"
+         :class="[scrollTop > 0 ? 'Window-header-isScrolledUp' : '']"
+      >
+         <span class="Window-header-title">{{ title }}</span>
+      </div>
 
-		<div class="Window-main"><slot /></div>
+      <div class="Window-main"><slot /></div>
 
-		<WindowBottom
-			class="Window-bottom"
-			@click-cancel="$emit('click-cancel')"
-			@click-ok="$emit('click-ok')"
-		/>
+      <WindowBottom
+         class="Window-bottom"
+         @click-cancel="$emit('click-cancel')"
+         @click-ok="$emit('click-ok')"
+      />
 
-		<div class="Window-foreground"></div>
+      <div class="Window-foreground transition"></div>
 
-		<Loadingv1 class="Window-loading" :isRunning="isLoading" />
-	</div>
+      <Loadingv1 class="Window-loading" :isRunning="isLoading" />
+   </div>
 </template>
 
 <style lang="scss" scoped>
-	.Window {
-		width: 100%;
-		height: 100%;
+   .Window {
+      width: 100%;
+      height: 100%;
 
-		font-size: 1rem;
-		font-weight: 400;
-		color: black;
-		position: relative;
+      font-size: 1rem;
+      font-weight: 400;
+      color: black;
+      position: relative;
 
-		display: flex;
-		flex-direction: column;
-		overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
 
-		.Window-header {
-			z-index: 3;
-			padding: 1.2rem 1.8rem;
-			position: sticky;
-			top: 0;
-			left: 0;
-			right: 0;
+      .Window-header {
+         z-index: 3;
+         padding: 1.2rem 1.8rem;
+         position: sticky;
+         top: 0;
+         left: 0;
+         right: 0;
 
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			text-align: start;
-			transition: var(--transition-duration);
-			border-bottom: 1px solid transparent;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         text-align: start;
+         border-bottom: 1px solid transparent;
 
-			@media screen and (max-height: 30rem) {
-				padding: 1rem 1.8rem;
-			}
+         @media screen and (max-height: 30rem) {
+            padding: 1rem 1.8rem;
+         }
 
-			.Window-header-title {
-				font-weight: 600;
-				font-size: 1.5rem;
-				color: black;
-			}
-		}
-		.Window-header-isScrolledUp {
-			background-color: hsl(0, 0%, 96%);
-			border-bottom: 1px solid hsl(0, 0%, 90%);
-		}
+         .Window-header-title {
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: black;
+         }
+      }
+      .Window-header-isScrolledUp {
+         background-color: hsl(0, 0%, 96%);
+         border-bottom: 1px solid hsl(0, 0%, 90%);
+      }
 
-		.Window-main {
-			z-index: 1;
-			width: 100%;
-			height: fit-content;
-			padding: 1.8rem;
-			padding-top: 1rem;
-			display: flex;
-			flex-direction: column;
-		}
+      .Window-main {
+         z-index: 1;
+         width: 100%;
+         height: fit-content;
+         padding: 1.8rem;
+         padding-top: 1rem;
+         display: flex;
+         flex-direction: column;
+      }
 
-		.Window-bottom {
-			z-index: 2;
-		}
+      .Window-bottom {
+         z-index: 2;
+      }
 
-		.Window-foreground {
-			z-index: 4;
-			width: 100%;
-			height: 100%;
-			position: absolute;
-			background: white;
-			opacity: 0;
-			transition: var(--transition-duration);
-			pointer-events: none;
-		}
+      .Window-foreground {
+         z-index: 4;
+         width: 100%;
+         height: 100%;
+         position: absolute;
+         background: white;
+         opacity: 0;
+         pointer-events: none;
+      }
 
-		.Window-loading {
-			z-index: 5;
-			position: absolute;
-			width: 100%;
-			pointer-events: none;
-		}
-	}
+      .Window-loading {
+         z-index: 5;
+         position: absolute;
+         width: 100%;
+         pointer-events: none;
+      }
+   }
 
-	.Window-notClickable {
-		pointer-events: none;
-		.Window-foreground {
-			opacity: 0.5;
-		}
-	}
+   .Window-notClickable {
+      pointer-events: none;
+      .Window-foreground {
+         opacity: 0.5;
+      }
+   }
 </style>

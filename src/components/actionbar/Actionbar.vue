@@ -24,7 +24,7 @@
 </script>
 
 <template>
-   <div class="Actionbar">
+   <div class="Actionbar transition">
       <ActionbarMenus
          class="Actionbar-leftMenus"
          v-if="LeftMenus.length"
@@ -47,7 +47,6 @@
       );
       --actionbar-background-color-light: var(--actionbar-color);
       --actionbar-background-color-dark: var(--actionbar-color);
-      transition: var(--transition-duration);
       color: black;
       background-color: #f3f3f3;
 

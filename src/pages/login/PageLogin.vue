@@ -61,7 +61,7 @@
       <Loadingv1 class="PageLogin-Loading" :isRunning="isLoading" />
 
       <Actionbar
-         class="PageLogin-top"
+         class="PageLogin-top transition"
          v-if="$root.navigation.isDrawer()"
          :leftMenus="[
             {
@@ -145,7 +145,6 @@
          z-index: 2;
          width: 100%;
          position: sticky;
-         transition: var(--transition-duration);
       }
 
       .PageLogin-main {

@@ -10,7 +10,7 @@
 
 <template>
    <button
-      class="ItemMenu"
+      class="ItemMenu transition"
       :class="[`ItemMenu-${isSelected ? 'selected' : 'deselected'}`]"
       :style="{
          '--primary-color': item.color ? item.color : 'inherit',
@@ -30,7 +30,6 @@
       box-shadow: 0 0 4px hsl(0, 0%, 90%);
       font-size: 0.8em;
       padding: 0.6em 1.8em;
-      transition: var(--transition-duration);
       display: flex;
       flex-direction: row;
       align-items: center;

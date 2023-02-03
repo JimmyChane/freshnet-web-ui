@@ -169,6 +169,7 @@
          :class="[
             'PanelServices-actionbar',
             scrollTop > 0 ? 'PanelServices-actionbar-shadow' : '',
+            'transition',
          ]"
          :menus="menus"
          :services="services"
@@ -220,7 +221,6 @@
          width: 100%;
          flex-grow: 0;
          z-index: 2;
-         transition: var(--transition-duration);
          border-bottom: 1px solid #e4e4e4;
       }
       .PanelServices-actionbar-shadow {

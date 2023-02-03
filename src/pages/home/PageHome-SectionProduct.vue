@@ -138,6 +138,7 @@
       :class="[
          'HomeSectionProduct',
          `HomeSectionProduct-${isThin ? 'isThin' : 'isWide'}`,
+         'transition',
       ]"
       :style="{
          '--color0': color,
@@ -166,6 +167,7 @@
                      ? 'isSelected'
                      : 'isDeselected'
                }`,
+               'transition',
             ]"
             v-for="item of products"
             :key="item.id"
@@ -174,13 +176,13 @@
       </div>
 
       <button
-         class="HomeSectionProduct-arrow HomeSectionProduct-arrow-left"
+         class="HomeSectionProduct-arrow HomeSectionProduct-arrow-left transition"
          @click="() => productIndex--"
       >
          <img :src="arrowIcon" />
       </button>
       <button
-         class="HomeSectionProduct-arrow HomeSectionProduct-arrow-right"
+         class="HomeSectionProduct-arrow HomeSectionProduct-arrow-right transition"
          @click="() => productIndex++"
       >
          <img :src="arrowIcon" />
@@ -194,7 +196,6 @@
       border-radius: 1em;
       overflow: hidden;
       text-decoration: none;
-      transition: var(--transition-duration);
       background-color: var(--color0);
       color: var(--color3);
 
@@ -259,7 +260,6 @@
 
             border-radius: 50%;
             border: none;
-            transition: var(--transition-duration);
          }
          .HomeSectionProduct-footer-item-isSelected {
             transform: scale(1.5);
@@ -296,8 +296,6 @@
          min-height: var(--size);
          max-width: var(--size);
          max-height: var(--size);
-
-         transition: var(--transition-duration);
 
          & > * {
             width: calc(var(--size) - calc(var(--padding) * 2));

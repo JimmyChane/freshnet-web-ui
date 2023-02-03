@@ -47,7 +47,7 @@
       ]"
       @click="$emit('click', item)"
    >
-      <div class="LeftNavQuery-body">
+      <div class="LeftNavQuery-body transition">
          <div class="LeftNavQuery-item-parent">
             <LeftNavItem
                class="LeftNavQuery-item"
@@ -90,7 +90,6 @@
          flex-direction: row;
          align-items: center;
          justify-content: flex-start;
-         transition: var(--transition-duration);
          text-decoration: none;
          background: none;
          border: none;

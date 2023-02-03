@@ -70,7 +70,9 @@
             return this.$root.window.innerWidth < 550;
          },
          layoutMode() {
-            return this.isLayoutThin ? ItemProduct.Mode.List : ItemProduct.Mode.Grid;
+            return this.isLayoutThin
+               ? ItemProduct.Mode.List
+               : ItemProduct.Mode.Grid;
          },
 
          isLoading: (context) => context.productStore.getters.isLoading,
@@ -151,18 +153,24 @@
             const categoryGroups = await this.productStore.dispatch(
                "getGroupsByCategory",
             );
-            const brandGroups = await this.productStore.dispatch("getGroupsByBrand");
+            const brandGroups = await this.productStore.dispatch(
+               "getGroupsByBrand",
+            );
 
             const categoryMenus = categoryGroups
                .filter((group) => {
                   return group.items.length > 0;
                })
-               .sort((group1, group2) => group1.category.compare(group2.category))
+               .sort((group1, group2) =>
+                  group1.category.compare(group2.category),
+               )
                .map((group) => {
                   return {
                      key: group.category.id,
                      title: group.category.title,
-                     icon: group.category.icon ? group.category.icon.toUrl() : "",
+                     icon: group.category.icon
+                        ? group.category.icon.toUrl()
+                        : "",
                   };
                });
             const brandMenus = brandGroups
@@ -181,10 +189,12 @@
                   }
                });
 
-            const categoryMenuGroup = new MenuGroup(this, "category", "Category", [
-               { title: "All" },
-               ...categoryMenus,
-            ]);
+            const categoryMenuGroup = new MenuGroup(
+               this,
+               "category",
+               "Category",
+               [{ title: "All" }, ...categoryMenus],
+            );
             const brandMenuGroup = new MenuGroup(this, "brand", "Brand", [
                { title: "All" },
                ...brandMenus,
@@ -260,9 +270,12 @@
 </script>
 
 <template>
-   <div class="PanelProducts" @scroll="(event) => (scrollTop = event.target.scrollTop)">
+   <div
+      class="PanelProducts"
+      @scroll="(event) => (scrollTop = event.target.scrollTop)"
+   >
       <ActionbarProduct
-         class="PanelProducts-actionbar"
+         class="PanelProducts-actionbar transition"
          :products="products"
          :rightMenus="initRightMenus"
          @click-search="$emit('click-search')"
@@ -329,7 +342,6 @@
 
       .PanelProducts-actionbar {
          z-index: 2;
-         transition: var(--transition-duration);
          border-bottom: 1px solid hsl(0, 0%, 80%);
          background-color: #eeeeee;
       }

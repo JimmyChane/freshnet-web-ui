@@ -37,6 +37,7 @@
          :class="[
             'SearchInput-body',
             searchExpand ? 'SearchInput-body-isActive' : '',
+            'transition',
          ]"
          @click="$refs['SearchInput-keyword'].focus()"
       >
@@ -55,7 +56,7 @@
             "
          />
          <input
-            class="SearchInput-keyword"
+            class="SearchInput-keyword transition"
             ref="SearchInput-keyword"
             v-model="search"
             :placeholder="placeholder"
@@ -66,7 +67,7 @@
       <div class="SearchInput-main">
          <div
             ref="SearchInput-main-background"
-            class="SearchInput-main-background"
+            class="SearchInput-main-background transition"
             :style="{
                opacity: [searchExpand ? '1' : '0'],
                'pointer-events': [searchExpand ? 'all' : 'none'],
@@ -117,7 +118,6 @@
          flex-direction: row;
          align-items: stretch;
          align-items: center;
-         transition: var(--transition-duration);
          width: 100%;
          height: 100%;
          padding: 0.2rem;
@@ -138,7 +138,6 @@
             padding: 0.5rem;
             border: none;
             background: none;
-            transition: var(--transition-duration);
             display: flex;
             flex-direction: row;
             &::placeholder {
@@ -182,7 +181,6 @@
             right: 0;
             background-color: hsla(0, 0%, 0%, 0.6);
             display: grid;
-            transition: var(--transition-duration);
          }
 
          .SearchInput-main-container {

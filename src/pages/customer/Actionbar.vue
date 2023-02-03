@@ -62,7 +62,7 @@
          v-slot="{ collapse }"
       >
          <router-link
-            class="Actionbar-search-link"
+            class="Actionbar-search-link transition"
             v-for="item in results"
             :key="itemKey(item)"
             :to="{
@@ -116,7 +116,6 @@
             border: none;
             border-radius: 0.6rem;
             background: none;
-            transition: var(--transition-duration);
             &:hover {
                background: rgba(0, 0, 0, 0.05);
             }

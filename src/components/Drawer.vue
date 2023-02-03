@@ -146,7 +146,7 @@
          @click="$emit('click-collapse')"
       ></div>
 
-      <div class="Drawer-background" v-if="isDrawer"></div>
+      <div class="Drawer-background transition" v-if="isDrawer"></div>
    </div>
 </template>
 
@@ -179,7 +179,6 @@
 
          background-color: hsla(0, 0%, 0%, 0.7);
          pointer-events: none;
-         transition: var(--transition-duration);
 
          @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
             font-size: 1rem;

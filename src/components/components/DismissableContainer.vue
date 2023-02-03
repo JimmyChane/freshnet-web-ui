@@ -5,12 +5,24 @@
 </script>
 
 <template>
-   <div class="DismissableContainer">
+   <div class="DismissableContainer transition">
       <div class="DismissableContainer-body"><slot /></div>
-      <div class="DismissableContainer-hitbox-top" @click="$emit('click-dismiss')" />
-      <div class="DismissableContainer-hitbox-left" @click="$emit('click-dismiss')" />
-      <div class="DismissableContainer-hitbox-right" @click="$emit('click-dismiss')" />
-      <div class="DismissableContainer-hitbox-bottom" @click="$emit('click-dismiss')" />
+      <div
+         class="DismissableContainer-hitbox-top"
+         @click="$emit('click-dismiss')"
+      />
+      <div
+         class="DismissableContainer-hitbox-left"
+         @click="$emit('click-dismiss')"
+      />
+      <div
+         class="DismissableContainer-hitbox-right"
+         @click="$emit('click-dismiss')"
+      />
+      <div
+         class="DismissableContainer-hitbox-bottom"
+         @click="$emit('click-dismiss')"
+      />
    </div>
 </template>
 
@@ -20,7 +32,7 @@
       height: 100vh;
       z-index: 1;
       align-items: center;
-      transition: var(--transition-duration) cubic-bezier(1, 0, 0, 1);
+      --transition-timing: cubic-bezier(1, 0, 0, 1);
 
       // @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
       //    -webkit-backdrop-filter: blur(10px);

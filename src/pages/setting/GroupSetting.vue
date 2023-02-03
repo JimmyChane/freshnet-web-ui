@@ -27,8 +27,13 @@
       <div class="GroupSetting-header">
          <span class="GroupSetting-title" v-if="title">{{ title }}</span>
          <div class="GroupSetting-actions" v-if="actions.length">
-            <button v-for="action of actions" :key="action.title" @click="action.click">
-               <img :src="action.icon" />
+            <button
+               class="transition"
+               v-for="action of actions"
+               :key="action.title"
+               @click="action.click"
+            >
+               <img class="transition" :src="action.icon" />
             </button>
          </div>
       </div>
@@ -76,7 +81,6 @@
                background: none;
                border: none;
                cursor: pointer;
-               transition: var(--transition-duration);
                border-radius: 50%;
                padding: 0.5rem;
                aspect-ratio: 1/1;
@@ -92,7 +96,6 @@
                   width: 1rem;
                   height: 1rem;
                   aspect-ratio: 1/1;
-                  transition: var(--transition-duration);
                }
             }
          }

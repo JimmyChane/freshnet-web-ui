@@ -31,7 +31,10 @@
 </script>
 
 <template>
-   <div class="ItemSetting_Toggle" @click="$refs.toggleButton.$el.click()">
+   <div
+      class="ItemSetting_Toggle transition"
+      @click="$refs.toggleButton.$el.click()"
+   >
       <span class="ItemSetting_Toggle-title" v-if="title">{{ title }}</span>
       <ToggleButton
          class="ItemSetting_Toggle-value"
@@ -54,7 +57,6 @@
       padding: 1rem 0.8rem;
 
       background-color: hsla(0, 0%, 100%, 0.6);
-      transition: var(--transition-duration);
       cursor: pointer;
 
       &:hover {

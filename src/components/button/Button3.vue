@@ -12,12 +12,13 @@
       :class="[
          'Button3',
          `Button3-${isSelected ? 'isSelected' : 'isDeselected'}`,
+         'transition',
       ]"
       @click="$emit('click')"
       @focus="$emit('focus')"
    >
-      <div class="Button3-background"></div>
-      <div class="Button3-color"></div>
+      <div class="Button3-background transition"></div>
+      <div class="Button3-color transition"></div>
 
       <slot />
    </button>
@@ -30,7 +31,6 @@
       height: 100%;
       border: none;
       background: white;
-      transition: var(--transition-duration);
       border-radius: 1rem;
       overflow: hidden;
 
@@ -57,8 +57,6 @@
          background-color: var(--primary-color);
          border-top-left-radius: 0.3rem;
          border-bottom-left-radius: 0.3rem;
-
-         transition: var(--transition-duration);
       }
       .Button3-background {
          position: absolute;
@@ -69,7 +67,6 @@
          opacity: 0;
          pointer-events: none;
          background-color: var(--primary-color);
-         transition: var(--transition-duration);
       }
    }
 

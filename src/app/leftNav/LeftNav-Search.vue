@@ -122,10 +122,12 @@
          class="LeftNav-Search-button"
          v-if="!isWide"
          :src="host.res('icon/search-000000.svg')"
-         @click="()=>{
-            $root.navigation.openNavigationDrawer();
-            $root.navigation.disableNavigationDrawer();
-         }"
+         @click="
+            () => {
+               $root.navigation.openNavigationDrawer();
+               $root.navigation.disableNavigationDrawer();
+            }
+         "
       />
       <SearchInput
          class="LeftNav-Search-comp"
@@ -140,7 +142,7 @@
             :key="x.item.id"
          >
             <router-link
-               class="Home-actionbar-search-item-button"
+               class="Home-actionbar-search-item-button transition"
                v-if="x.dataType === 'product'"
                :to="{ path: '/product', query: { productId: x.item.id } }"
                @click.native="() => collapse()"
@@ -149,7 +151,7 @@
             </router-link>
 
             <router-link
-               class="Home-actionbar-search-item-button"
+               class="Home-actionbar-search-item-button transition"
                v-if="x.dataType === 'category'"
                :to="{ path: '/product', query: { category: x.item.id } }"
                @click.native="() => collapse()"
@@ -158,7 +160,7 @@
             </router-link>
 
             <router-link
-               class="Home-actionbar-search-item-button"
+               class="Home-actionbar-search-item-button transition"
                v-if="x.dataType === 'brand'"
                :to="{ path: '/product', query: { brand: x.item.id } }"
                @click.native="() => collapse()"
@@ -167,7 +169,7 @@
             </router-link>
 
             <router-link
-               class="Home-actionbar-search-item-button"
+               class="Home-actionbar-search-item-button transition"
                v-if="x.dataType === 'ps2Disc'"
                :to="{ path: '/ps2', query: { discCode: x.item.code } }"
                @click.native="() => collapse()"
@@ -176,7 +178,7 @@
             </router-link>
 
             <router-link
-               class="Home-actionbar-search-item-button"
+               class="Home-actionbar-search-item-button transition"
                v-if="x.dataType === 'service'"
                :to="{
                   path: '/manage/service',
@@ -222,7 +224,6 @@
                border: none;
                background: none;
                border-radius: 0.5em;
-               transition: var(--transition-duration);
 
                &:hover {
                   background: rgba(255, 255, 255, 0.5);

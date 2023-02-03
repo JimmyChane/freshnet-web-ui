@@ -74,11 +74,12 @@
          `App-${statusIsShown ? 'isShowingStatus' : 'isHidingStatus'}`,
          $root.appLayout.isNormal() ? 'App-isNormal' : '',
          $root.appLayout.isFull() ? 'App-isFull' : '',
+         'transition',
       ]"
    >
-      <div class="App-background"></div>
+      <div class="App-background transition"></div>
 
-      <div class="App-body">
+      <div class="App-body transition">
          <div class="App-layout">
             <div
                v-if="false"
@@ -87,6 +88,7 @@
                   `App-status-${
                      isConnected ? 'isConnected' : 'isDisconnected'
                   }`,
+                  'transition',
                ]"
             >
                <span>{{ isConnected ? "Connected" : "Disconnected" }}</span>
@@ -98,6 +100,7 @@
                   `App-layout-body-${
                      $root.navigation.isDrawer() ? 'isDrawer' : 'isFixed'
                   }`,
+                  'transition',
                ]"
             >
                <LeftNav
@@ -158,6 +161,15 @@
          }
       }
    }
+   .transition {
+      --transition-target: all;
+      --transition-duration: 300ms;
+      --transition-delay: 0;
+      --transition-timing: linear;
+      transition: var(--transition-target) var(--transition-duration)
+         var(--transition-timing);
+      transition-delay: var(--transition-delay);
+   }
 
    :root {
       font-size: 16px;
@@ -203,7 +215,6 @@
          --primary-color: #294656;
          --accent-color: #fc8237;
          --statusbar-color: #384a6a;
-         --transition-duration: 300ms;
       }
    }
 
@@ -218,7 +229,6 @@
       flex-direction: column;
       align-items: center;
       background: none;
-      transition: var(--transition-duration);
       overflow: hidden;
 
       height: -webkit-fill-available; // fix for ios - test
@@ -231,7 +241,6 @@
          width: 100%;
          height: 100%;
          pointer-events: none;
-         transition: var(--transition-duration);
       }
       .App-body {
          z-index: 2;
@@ -241,7 +250,6 @@
          flex-direction: column;
          align-items: center;
          justify-content: center;
-         transition: var(--transition-duration);
          overflow: hidden;
 
          .App-layout {
@@ -251,7 +259,6 @@
             flex-direction: column;
             align-items: center;
             justify-content: stretch;
-            transition: var(--transition-duration);
 
             --status-height: 1.2em;
 
@@ -267,7 +274,6 @@
                width: 100%;
                color: white;
                pointer-events: none;
-               transition: var(--transition-duration);
                background: var(--primary-color);
                --background-disconnected: #e73c2f;
                --background-connected: #0c8d0c;
@@ -291,12 +297,10 @@
                flex-grow: 1;
                align-items: center;
                justify-content: stretch;
-               // background-color: #c9d7df;
                background-color: #e4e4e4;
 
                --background-color-light: var(--background-color);
                --background-color-dark: var(--background-color);
-               transition: var(--transition-duration);
                .App-LeftNav {
                   flex-grow: 0;
                }

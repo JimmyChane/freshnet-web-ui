@@ -188,7 +188,7 @@
       :edge="drawerEdge"
       @click-collapse="() => emitCollapse()"
    >
-      <div class="LeftNav-body scrollbar" ref="Body">
+      <div class="LeftNav-body scrollbar transition" ref="Body">
          <LeftNavHeader :isWide="isWide" />
 
          <div class="LeftNav-navigations" v-if="navigations.length">
@@ -220,10 +220,8 @@
          align-items: stretch;
          overflow-y: auto;
          overflow-x: hidden;
-         background-color: #dfe8ee;
          background-color: hsl(0, 0%, 84%);
          position: relative;
-         transition: var(--transition-duration);
 
          .LeftNav-navigations {
             flex-grow: 1;

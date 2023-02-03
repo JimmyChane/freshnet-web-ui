@@ -153,10 +153,11 @@
             <div class="ImageView-images scrollbar">
                <button
                   :class="[
-                     'ImageView-images-item-button',
                      thumbnail === image
                         ? 'ImageView-images-item-button-isSelected'
                         : 'ImageView-images-item-button-isDeselected',
+                     'ImageView-images-item-button',
+                     'transition',
                   ]"
                   v-for="thumbnail of thumbnails"
                   :key="thumbnail.toUrl()"
@@ -250,7 +251,6 @@
                   justify-content: center;
                   border-radius: 0.2rem;
                   overflow: hidden;
-                  transition: var(--transition-duration);
                   padding: 0.2rem;
                   .ImageView-images-item {
                      height: 100%;

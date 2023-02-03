@@ -76,14 +76,17 @@
    <div class="ViewerProduct-BottomActionbar">
       <div class="ViewerProduct-BottomActionbar-main">
          <a
-            class="ViewerProduct-BottomActionbar-item"
+            class="ViewerProduct-BottomActionbar-item transition"
             :href="callHref"
             :style="{
                '--primary-color': '#2196f3',
                '--primary-background-color': '#dff1ff',
             }"
          >
-            <img class="ViewerProduct-BottomActionbar-item-icon" :src="callIcon" />
+            <img
+               class="ViewerProduct-BottomActionbar-item-icon"
+               :src="callIcon"
+            />
             <div class="ViewerProduct-BottomActionbar-item-body">
                <span class="ViewerProduct-BottomActionbar-item-title">{{
                   callTypeTitle
@@ -95,7 +98,7 @@
          </a>
 
          <a
-            class="ViewerProduct-BottomActionbar-item"
+            class="ViewerProduct-BottomActionbar-item transition"
             :target="whatsappTarget"
             :href="whatsappHref"
             :style="{
@@ -103,7 +106,10 @@
                '--primary-background-color': '#f3fff4',
             }"
          >
-            <img class="ViewerProduct-BottomActionbar-item-icon" :src="whatsappIcon" />
+            <img
+               class="ViewerProduct-BottomActionbar-item-icon"
+               :src="whatsappIcon"
+            />
             <div class="ViewerProduct-BottomActionbar-item-body">
                <span class="ViewerProduct-BottomActionbar-item-title">{{
                   whatsappTypeTitle
@@ -154,7 +160,6 @@
             cursor: pointer;
             border-radius: 0.5rem;
             overflow: hidden;
-            transition: var(--transition-duration);
 
             text-decoration: none;
             color: var(--primary-color);

@@ -34,9 +34,12 @@
 </script>
 
 <template>
-   <div class="ButtonOption" :class="[isShowing ? 'ButtonOption-shown' : '']">
+   <div
+      class="ButtonOption transition"
+      :class="[isShowing ? 'ButtonOption-shown' : '']"
+   >
       <button
-         class="ButtonOption-main"
+         class="ButtonOption-main transition"
          @mouseover="(x) => $emit('mouseover', x)"
          @mouseleave="(x) => $emit('mouseleave', x)"
          @click="() => toggle()"
@@ -48,7 +51,7 @@
       </button>
 
       <div
-         class="ButtonOption-dropdown"
+         class="ButtonOption-dropdown transition"
          :class="[
             direction === Directions.TopLeft
                ? 'ButtonOption-dropdown-topLeft'
@@ -63,7 +66,7 @@
          :style="{ display: dropdownDisplay }"
       >
          <button
-            class="ButtonOption-dropdown-item"
+            class="ButtonOption-dropdown-item transition"
             v-for="menu in menus"
             :key="menu.key"
             @click="
@@ -84,8 +87,11 @@
                class="ButtonOption-dropdown-item-title"
                v-if="menu.title"
                :style="{
-                  color: typeof menu.color === 'string' ? menu.color : '#000000',
-                  'font-weight': menu['font-weight'] ? menu['font-weight'] : '400',
+                  color:
+                     typeof menu.color === 'string' ? menu.color : '#000000',
+                  'font-weight': menu['font-weight']
+                     ? menu['font-weight']
+                     : '400',
                }"
                >{{ menu.title }}</span
             >
@@ -107,7 +113,6 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      transition: var(--transition-duration);
       font-weight: 600;
 
       .ButtonOption-main {
@@ -117,7 +122,6 @@
          width: inherit;
          height: inherit;
          cursor: pointer;
-         transition: var(--transition-duration);
          border: none;
          background: none;
 
@@ -167,7 +171,6 @@
          flex-wrap: nowrap;
          align-items: stretch;
          pointer-events: none;
-         transition: var(--transition-duration);
          transform: translateX(0%) translateY(0%) scale(0);
          .ButtonOption-dropdown-item {
             font-size: inherit;
@@ -186,7 +189,6 @@
             align-items: center;
             gap: 1em;
             cursor: pointer;
-            transition: var(--transition-duration);
             &:hover {
                background-color: hsla(0, 0%, 0%, 0.05);
             }

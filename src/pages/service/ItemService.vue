@@ -88,13 +88,16 @@
          v-if="isGrid"
          :class="[
             'ItemServiceGrid-body',
-            `ItemServiceGrid-body-${isSelected ? 'isSelected' : 'isDeselected'}`,
+            `ItemServiceGrid-body-${
+               isSelected ? 'isSelected' : 'isDeselected'
+            }`,
+            'transition',
          ]"
       >
          <div class="ItemService-top">
             <div class="ItemService-top-customer">
                <router-link
-                  class="ItemService-link-customer"
+                  class="ItemService-link-customer transition"
                   :to="{
                      path: '/manage/customer',
                      query: { name: name, phoneNumber: phoneNumberStr },
@@ -136,7 +139,10 @@
          v-if="isList"
          :class="[
             'ItemServiceList-body',
-            `ItemServiceList-body-${isSelected ? 'isSelected' : 'isDeselected'}`,
+            `ItemServiceList-body-${
+               isSelected ? 'isSelected' : 'isDeselected'
+            }`,
+            'transition',
          ]"
       >
          <div class="ItemService-top">
@@ -166,7 +172,9 @@
 
          <div class="ItemServiceList-middle">
             <div class="ItemServiceList-description">
-               <span class="ItemServiceList-description-body">{{ description }}</span>
+               <span class="ItemServiceList-description-body">{{
+                  description
+               }}</span>
             </div>
             <ImageViews :width="40" :height="40" :images="images" />
          </div>
@@ -215,7 +223,10 @@
          v-if="isDetail"
          :class="[
             'ItemServiceDetail-body',
-            `ItemServiceDetail-body-${isSelected ? 'isSelected' : 'isDeselected'}`,
+            `ItemServiceDetail-body-${
+               isSelected ? 'isSelected' : 'isDeselected'
+            }`,
+            'transition',
          ]"
       >
          <span
@@ -313,7 +324,6 @@
 
             text-decoration: none;
             cursor: pointer;
-            transition: var(--transition-duration);
 
             &:hover {
                background-color: #ebebeb;
@@ -372,7 +382,6 @@
          display: flex;
          flex-direction: column;
          align-items: stretch;
-         transition: var(--transition-duration);
          border-radius: 0 0.5em 0.5em 0;
          border: 0.1em solid transparent;
 
@@ -440,7 +449,6 @@
          display: flex;
          flex-direction: column;
          align-items: stretch;
-         transition: var(--transition-duration);
          border-radius: 0 0.5em 0.5em 0;
          border: 0.1em solid transparent;
 
@@ -517,7 +525,6 @@
          color: black;
          text-align: start;
          line-height: 1.1;
-         transition: var(--transition-duration);
          border-radius: 0 0.5em 0.5em 0;
          border: 0.1em solid transparent;
 

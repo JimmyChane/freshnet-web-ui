@@ -114,6 +114,7 @@
          isList ? 'ItemProduct-modeList' : '',
          isGrid ? 'ItemProduct-modeGrid' : '',
          isSelected ? 'ItemProduct-isSelected' : 'ItemProduct-isDeselected',
+         'transition',
       ]"
       :style="{
          '--available-opacity': isAvailable ? '1' : '0.1',
@@ -123,21 +124,27 @@
       :ref="item.id"
       @click="$emit('click', item)"
    >
-      <div class="ItemProduct-preview">
+      <div class="ItemProduct-preview transition">
          <ImageView
             :class="['ItemProduct-preview-image']"
             v-if="preview"
             :src="preview"
          />
-         <span :class="['ItemProduct-preview-empty']" v-else>No Preview</span>
+         <span :class="['ItemProduct-preview-empty', 'transition']" v-else
+            >No Preview</span
+         >
       </div>
 
       <div class="ItemProduct-title">
          <span class="ItemProduct-title-text">{{ fullTitle }}</span>
          <div class="ItemProduct-title-specs" v-if="specLabels.length">
-            <span v-for="label in specLabels" :key="label.text">{{ label.text }}</span>
+            <span v-for="label in specLabels" :key="label.text">{{
+               label.text
+            }}</span>
          </div>
-         <span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
+         <span class="ItemProduct-title-price" v-if="price">{{
+            price.to
+         }}</span>
       </div>
    </div>
 </template>
@@ -147,7 +154,6 @@
       --available-opacity: 1;
 
       width: 100%;
-      transition: var(--transition-duration);
       text-decoration: none;
       border: none;
 
@@ -156,15 +162,16 @@
       align-items: center;
       justify-content: flex-start;
       border-radius: var(--border-radius);
+      --transition-duration: 200ms;
 
       .ItemProduct-preview {
          flex-grow: 0;
          object-fit: cover;
          aspect-ratio: 16/12;
-         transition: var(--transition-duration);
 
          --preview-border-radius: var(--border-radius);
          --preview-border-radius-focus: var(--border-radius);
+         --transition-duration: 200ms;
 
          & > * {
             width: 100%;
@@ -172,7 +179,6 @@
             aspect-ratio: 16/12;
             border-radius: var(--preview-border-radius);
             background-color: hsl(0, 0%, 94%);
-            transition: var(--transition-duration);
          }
          .ItemProduct-preview-image {
             object-fit: contain;
@@ -256,7 +262,8 @@
       .ItemProduct-preview {
          height: 100%;
          transform: scale(0.92);
-         --preview-border-radius-focus: var(--border-radius) 0 0 var(--border-radius);
+         --preview-border-radius-focus: var(--border-radius) 0 0
+            var(--border-radius);
       }
       .ItemProduct-title {
          flex-grow: 1;
@@ -273,7 +280,8 @@
       .ItemProduct-preview {
          width: 100%;
          transform: scale(0.92) translateY(1rem);
-         --preview-border-radius-focus: var(--border-radius) var(--border-radius) 0 0;
+         --preview-border-radius-focus: var(--border-radius)
+            var(--border-radius) 0 0;
       }
       .ItemProduct-title {
          width: 100%;

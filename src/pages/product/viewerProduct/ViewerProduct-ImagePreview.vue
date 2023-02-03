@@ -30,7 +30,8 @@
          };
       },
       computed: {
-         primaryColorIsDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 60,
+         primaryColorIsDark: (c) =>
+            chroma.deltaE(c.primaryColor, "000000") < 60,
 
          arrowIcon: (c) =>
             c.primaryColorIsDark
@@ -95,7 +96,9 @@
    <div
       :class="[
          'LayoutProductViewerImagePreview',
-         `LayoutProductViewerImagePreview-${imageIsShowing ? 'isShown' : 'isHidden'}`,
+         `LayoutProductViewerImagePreview-${
+            imageIsShowing ? 'isShown' : 'isHidden'
+         }`,
       ]"
    >
       <ImageView
@@ -133,10 +136,11 @@
             `LayoutProductViewerImagePreview-tool-${
                allowEdit && image ? 'isShown' : 'isHidden'
             }`,
+            'transition',
          ]"
       >
          <div class="LayoutProductViewerImagePreview-tool-body">
-            <button @click="$emit('click-remove', image)">
+            <button class="transition" @click="$emit('click-remove', image)">
                <img :src="host.res('icon/trash-505050.svg')" />
             </button>
          </div>
@@ -168,7 +172,6 @@
          flex-direction: column;
          align-items: center;
          justify-content: center;
-         transition: var(--transition-duration);
 
          .LayoutProductViewerImagePreview-tool-body {
             display: flex;
@@ -189,7 +192,6 @@
                justify-content: center;
                border-radius: 50%;
                border-radius: 0.5rem;
-               transition: var(--transition-duration);
                cursor: pointer;
                &:hover {
                   background: hsla(0, 0%, 0%, 0.2);

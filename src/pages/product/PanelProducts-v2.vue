@@ -240,7 +240,7 @@
 <template>
    <div class="PanelProducts">
       <ActionbarProduct
-         class="PanelProducts-actionbar"
+         class="PanelProducts-actionbar transition"
          :products="products"
          :rightMenus="initRightMenus"
          @click-search="$emit('click-search')"
@@ -331,7 +331,6 @@
 
       .PanelProducts-actionbar {
          z-index: 2;
-         transition: var(--transition-duration);
          border-bottom: 1px solid hsl(0, 0%, 80%);
          background-color: #eeeeee;
       }

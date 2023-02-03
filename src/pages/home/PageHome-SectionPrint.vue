@@ -7,6 +7,7 @@
       :class="[
          'HomeSectionPrint',
          `HomeSectionPrint-${isThin ? 'isThin' : 'isWide'}`,
+         'transition',
       ]"
       :to="{ path: '/print' }"
    >
@@ -42,7 +43,6 @@
 
       text-decoration: none;
       position: relative;
-      transition: var(--transition-duration);
 
       &:hover,
       &:focus {

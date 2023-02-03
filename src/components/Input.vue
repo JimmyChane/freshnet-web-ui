@@ -67,7 +67,13 @@
 </script>
 
 <template>
-   <div :class="['Input', isFocused ? 'Input-isFocused' : 'Input-isBlurred']">
+   <div
+      :class="[
+         'Input',
+         isFocused ? 'Input-isFocused' : 'Input-isBlurred',
+         'transition',
+      ]"
+   >
       <span
          :class="[
             'Input-sign',
@@ -83,6 +89,7 @@
             'Input-sign',
             'Input-sign-error',
             `Input-sign-error-${error ? 'isShown' : 'isHidden'}`,
+            'transition',
          ]"
          >{{ error }}</span
       >
@@ -91,6 +98,7 @@
          :class="[
             'Input-label',
             `Input-label-${isValueEmpty ? 'isHidden' : 'isShown'}`,
+            'transition',
          ]"
          ref="label"
          v-if="label"
@@ -98,7 +106,7 @@
          >{{ label }}</label
       >
       <input
-         class="Input-input"
+         class="Input-input transition"
          ref="input"
          :name="name"
          :type="type"
@@ -138,15 +146,12 @@
       margin-top: 0.8rem;
       position: relative;
       padding: 0.6em;
-      // background: hsla(0, 0%, 100%, 0.2);
       background: hsla(0, 0%, 0%, 0.03);
       border-radius: 0.2em;
-      transition: var(--transition-duration);
 
       .Input-sign {
          font-size: 0.7em;
          font-weight: 600;
-         transition: var(--transition-duration);
       }
 
       .Input-sign-required {
@@ -183,10 +188,7 @@
          width: fit-content;
          position: absolute;
          left: 0;
-
          font-size: 1em;
-
-         transition: var(--transition-duration);
       }
       .Input-label-isHidden {
          top: calc(50% - 0.5em);
@@ -220,7 +222,6 @@
          font-weight: 400;
          font-size: 1em;
          color: black;
-         transition: var(--transition-duration);
       }
 
       .Input-dummy {

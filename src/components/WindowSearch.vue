@@ -41,7 +41,7 @@
       <div class="WindowSearch-body">
          <div class="WindowSearch-actionbar">
             <button
-               class="WindowSearch-actionbar-close"
+               class="WindowSearch-actionbar-close transition"
                @click="() => $emit('click-dismiss')"
             >
                <img :src="host.res('icon/arrow-left-000000.svg')" alt="" />
@@ -95,7 +95,6 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: var(--transition-duration);
             cursor: pointer;
             &:hover {
                background-color: hsl(0, 0%, 90%);

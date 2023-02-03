@@ -45,6 +45,7 @@
       :class="[
          'InputTextArea',
          isFocused ? 'InputTextArea-isFocused' : 'InputTextArea-isBlurred',
+         'transition',
       ]"
    >
       <span
@@ -54,6 +55,7 @@
             `InputTextArea-sign-required-${
                isRequired && isValueEmpty ? 'isShown' : 'isHidden'
             }`,
+            'transition',
          ]"
          >*Required</span
       >
@@ -62,6 +64,7 @@
             'InputTextArea-sign',
             'InputTextArea-sign-error',
             `InputTextArea-sign-error-${error ? 'isShown' : 'isHidden'}`,
+            'transition',
          ]"
          >{{ error }}</span
       >
@@ -70,6 +73,7 @@
          :class="[
             'InputTextArea-label',
             `InputTextArea-label-${isValueEmpty ? 'isHidden' : 'isShown'}`,
+            'transition',
          ]"
          ref="label"
          v-if="label"
@@ -77,7 +81,7 @@
          >{{ label }}</label
       >
       <textarea
-         class="InputTextArea-input"
+         class="InputTextArea-input transition"
          ref="input"
          :name="name"
          :type="type"
@@ -117,16 +121,13 @@
       margin-top: 0.8rem;
       position: relative;
       padding: 0.6em;
-      // background: hsla(0, 0%, 100%, 0.2);
       background: hsla(0, 0%, 0%, 0.03);
       border-radius: 0.2em;
-      transition: var(--transition-duration);
       resize: none;
 
       .InputTextArea-sign {
          font-size: 0.7em;
          font-weight: 600;
-         transition: var(--transition-duration);
       }
 
       .InputTextArea-sign-required {
@@ -163,10 +164,7 @@
          width: fit-content;
          position: absolute;
          left: 0;
-
          font-size: 1em;
-
-         transition: var(--transition-duration);
       }
       .InputTextArea-label-isHidden {
          top: 0.6em;
@@ -200,7 +198,6 @@
          font-weight: 400;
          font-size: 1em;
          color: black;
-         transition: var(--transition-duration);
          resize: inherit;
       }
 

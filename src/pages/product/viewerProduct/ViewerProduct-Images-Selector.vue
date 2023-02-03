@@ -6,7 +6,7 @@
 
 <template>
    <dir class="ProductViewerImageSelector">
-      <div class="ProductViewerImageSelector-body">
+      <div class="ProductViewerImageSelector-body transition">
          <div class="ProductViewerImageSelector-button">
             <img
                class="ProductViewerImageSelector-icon"
@@ -61,7 +61,6 @@
          position: relative;
          background: hsla(0, 0%, 100%, 0.6);
          border-radius: 0.4rem;
-         transition: var(--transition-duration);
 
          display: flex;
          align-items: center;

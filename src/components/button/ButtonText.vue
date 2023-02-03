@@ -7,7 +7,7 @@
 </script>
 
 <template>
-   <button class="ButtonText" @click="$emit('click')">
+   <button class="ButtonText transition" @click="$emit('click')">
       <span>{{ text }}</span>
    </button>
 </template>
@@ -26,7 +26,6 @@
       padding: 0.6em;
       background: none;
       border: none;
-      transition: var(--transition-duration);
       cursor: pointer;
       color: black;
 

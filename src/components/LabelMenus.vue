@@ -74,18 +74,18 @@
             {{ menuTitle }}</span
          >
          <img
-            class="LabelMenus-arrow"
+            class="LabelMenus-arrow transition"
             :src="host.res('icon/arrowDown-505050.svg')"
          />
       </button>
 
-      <div class="LabelMenus-drop">
+      <div class="LabelMenus-drop transition">
          <div
             class="LabelMenus-menus scrollbar"
             :style="{ 'background-color': primaryColorBackground }"
          >
             <button
-               class="LabelMenus-menu"
+               class="LabelMenus-menu transition"
                :style="{
                   '--background-color-hover': primaryColorBackgroundHover,
                   '--background-color-selected': primaryColorBackgroundSelected,
@@ -171,8 +171,6 @@
             top: calc(50% - var(--size) * 0.5);
             bottom: 0;
             right: calc(var(--size) * 1.5);
-
-            transition: var(--transition-duration);
          }
       }
 
@@ -184,7 +182,7 @@
 
          display: flex;
          transform: translateY(-1.25rem);
-         transition: var(--transition-duration) cubic-bezier(1, 0, 0, 1);
+         --transition-timing: cubic-bezier(1, 0, 0, 1);
          position: absolute;
          overflow: hidden;
          border-radius: var(--border-radius);
@@ -218,7 +216,6 @@
                row-gap: 0.1;
                column-gap: 0.5rem;
                padding: 0.8rem 1.2rem;
-               transition: var(--transition-duration);
                border: none;
                background: none;
                text-align: start;

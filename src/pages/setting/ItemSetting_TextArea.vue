@@ -33,29 +33,27 @@
 </script>
 
 <template>
-   <div class="ItemSetting_TextArea">
-      <span class="ItemSetting_TextArea-title" v-if="title">{{ title }}</span>
-      <textarea class="ItemSetting_TextArea-value" :value="value" />
+   <div class="ItemSetting-TextArea transition">
+      <span class="ItemSetting-TextArea-title" v-if="title">{{ title }}</span>
+      <textarea class="ItemSetting-TextArea-value" :value="value" />
    </div>
 </template>
 
 <style lang="scss" scoped>
-   .ItemSetting_TextArea {
+   .ItemSetting-TextArea {
       width: 100%;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       gap: 2rem;
-
       background-color: hsla(0, 0%, 100%, 0.6);
-      transition: var(--transition-duration);
 
       &:hover {
          background-color: white;
       }
 
-      .ItemSetting_TextArea-value {
+      .ItemSetting-TextArea-value {
          width: 100%;
          height: 6rem;
          min-height: 4rem;

@@ -37,6 +37,7 @@
                : 'hasNoSectionsAndIsSelected'
          }`,
          `LeftNavGroup1-${isExpanded ? 'isExpanded' : 'isNotExpanded'}`,
+         'transition',
       ]"
    >
       <LeftNavLink
@@ -70,7 +71,6 @@
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      transition: var(--transition-duration);
       .LeftNavGroup1-group2s {
          display: flex;
          flex-direction: column;

@@ -128,7 +128,7 @@
    <div class="PanelService" :style="{ '--primary-color': backgroundColor }">
       <Actionbar
          v-if="service"
-         class="PanelService-actionbar"
+         class="PanelService-actionbar transition"
          :style="{
             'background-color': actionbarColor,
             'border-bottom': `1px solid ${actionbarBorder}`,
@@ -182,11 +182,13 @@
                            }
                         "
                      >
-                        <span class="PanelService-section-labels-item-title">
+                        <span
+                           class="PanelService-section-labels-item-title transition"
+                        >
                            {{ label.title }}
                         </span>
                         <img
-                           class="PanelService-section-labels-item-close"
+                           class="PanelService-section-labels-item-close transition"
                            :src="host.res('icon/close-FFFFFF.svg')"
                         />
                      </button>
@@ -396,7 +398,6 @@
       .PanelService-actionbar {
          --actionbar-background-color-translucent: white;
          z-index: 3;
-         transition: var(--transition-duration);
          .PanelService-actionbar-title {
             width: 100%;
             display: flex;
@@ -472,14 +473,10 @@
                         cursor: pointer;
                         padding-left: 0.5em;
                         border: none;
-                        .PanelService-section-labels-item-title {
-                           transition: var(--transition-duration);
-                        }
                         .PanelService-section-labels-item-close {
                            width: 0.8em;
                            height: 0.8em;
                            opacity: 0;
-                           transition: var(--transition-duration);
                         }
                         &:hover {
                            .PanelService-section-labels-item-title {

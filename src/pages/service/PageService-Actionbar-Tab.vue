@@ -1,6 +1,9 @@
 <script>
    export default {
-      props: { item: { type: Object }, isWide: { type: Boolean, default: false } },
+      props: {
+         item: { type: Object },
+         isWide: { type: Boolean, default: false },
+      },
       computed: {
          primaryColor: (context) => context.item.primaryColor,
          title: (context) => context.item.title,
@@ -9,11 +12,16 @@
 
          selfClasses: (context) => {
             const classes = [
-               context.item.isSelected() ? "Tab-isSelected" : "Tab-isDeselected",
+               context.item.isSelected()
+                  ? "Tab-isSelected"
+                  : "Tab-isDeselected",
             ];
 
             if (context.isWide) classes.push("Tab-isWide");
-            else classes.push(context.item.isSelected() ? "Tab-isWide" : "Tab-isThin");
+            else
+               classes.push(
+                  context.item.isSelected() ? "Tab-isWide" : "Tab-isThin",
+               );
 
             return classes;
          },
@@ -23,12 +31,12 @@
 
 <template>
    <button
-      :class="['Tab', ...selfClasses]"
+      :class="['Tab', 'transition', ...selfClasses]"
       :style="{ '--primary-color': primaryColor }"
       @click="item.click()"
    >
       <img class="Tab-icon" :src="icon" />
-      <span class="Tab-title">{{ title }}</span>
+      <span class="Tab-title transition">{{ title }}</span>
       <span class="Tab-count">{{ count }}</span>
    </button>
 </template>
@@ -39,7 +47,6 @@
 
       height: 2.4rem;
       border-radius: 0.8rem 0.8rem 0 0;
-      transition: var(--transition-duration);
 
       border: none;
       background: none;
@@ -60,7 +67,6 @@
       }
       .Tab-title {
          z-index: 1;
-         transition: var(--transition-duration);
          text-align: start;
          text-overflow: ellipsis;
          white-space: nowrap;

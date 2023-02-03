@@ -38,9 +38,9 @@
          isWide ? 'LeftNavHeader-isWide' : 'LeftNavHeader-isThin',
       ]"
    >
-      <router-link class="LeftNavHeader-logo" :to="{ path: '/' }">
+      <router-link class="LeftNavHeader-logo transition" :to="{ path: '/' }">
          <img
-            class="LeftNavHeader-icon"
+            class="LeftNavHeader-icon transition"
             :src="
                host.cloudinary({
                   url: 'logo/svg/freshnet-enterprise-logo.svg',
@@ -55,7 +55,7 @@
          v-if="toggleButtonVisible"
          @click="() => toggleCollapse()"
       >
-         <img :src="host.res('icon/arrowDown-000000.svg')" />
+         <img class="transition" :src="host.res('icon/arrowDown-000000.svg')" />
       </button>
    </div>
 </template>
@@ -79,16 +79,12 @@
          cursor: pointer;
          text-decoration: none;
          color: var(--primary-color);
-         transition: var(--transition-duration);
          background: none;
 
          &:hover {
             text-decoration: underline;
          }
 
-         .LeftNavHeader-icon {
-            transition: var(--transition-duration);
-         }
          .LeftNavHeader-title {
             font-weight: 600;
             line-height: 1;
@@ -108,9 +104,6 @@
             padding: 0.5rem;
             width: 2rem;
             height: 2rem;
-            transition: var(--transition-duration);
-         }
-         img {
             transform: rotate(90deg);
          }
       }

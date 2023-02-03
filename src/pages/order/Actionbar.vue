@@ -46,7 +46,7 @@
          v-slot="{ collapse }"
       >
          <button
-            class="Actionbar-search-button"
+            class="Actionbar-search-button transition"
             v-for="item in results"
             :key="item.id"
             @click="
@@ -101,7 +101,6 @@
             border: none;
             border-radius: 0.6rem;
             background: none;
-            transition: var(--transition-duration);
             &:hover {
                background: rgba(0, 0, 0, 0.05);
             }

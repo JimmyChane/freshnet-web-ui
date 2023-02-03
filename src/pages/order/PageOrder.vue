@@ -112,7 +112,7 @@
 
 <template>
    <div
-      class="PageOrder"
+      class="PageOrder transition"
       ref="orderRoot"
       @scroll="(event) => (scrollTop = event.target.scrollTop)"
    >
@@ -121,9 +121,12 @@
          :hasShadow="scrollTop > 0"
          :title="$options.title"
          :items="items"
-         @click-item="(item) => $root.replaceRoute({ query: { order: item.id } })"
+         @click-item="
+            (item) => $root.replaceRoute({ query: { order: item.id } })
+         "
          @click-item-add="
-            () => (display.showDialogAppendOrder = !display.showDialogAppendOrder)
+            () =>
+               (display.showDialogAppendOrder = !display.showDialogAppendOrder)
          "
          @click-refresh="() => clickRefresh()"
          @click-drawer-expand="$emit('click-drawer-expand')"
@@ -135,8 +138,12 @@
             title="Pending"
             :items="pendingItems"
             :currentItemIdSelected="currentExpandedOrderid"
-            @click-collapse="(item) => $root.replaceRoute({ query: { order: null } })"
-            @click-expand="(item) => $root.replaceRoute({ query: { order: item.id } })"
+            @click-collapse="
+               (item) => $root.replaceRoute({ query: { order: null } })
+            "
+            @click-expand="
+               (item) => $root.replaceRoute({ query: { order: item.id } })
+            "
             @click-complete="
                (item) => orderStore.dispatch('updateToCompletedOfId', item.id)
             "
@@ -150,16 +157,25 @@
             title="Completed"
             :items="completedItems"
             :currentItemIdSelected="currentExpandedOrderid"
-            @click-collapse="(item) => $root.replaceRoute({ query: { order: null } })"
-            @click-expand="(item) => $root.replaceRoute({ query: { order: item.id } })"
-            @click-pending="(item) => orderStore.dispatch('updateToPendingOfId', item.id)"
+            @click-collapse="
+               (item) => $root.replaceRoute({ query: { order: null } })
+            "
+            @click-expand="
+               (item) => $root.replaceRoute({ query: { order: item.id } })
+            "
+            @click-pending="
+               (item) => orderStore.dispatch('updateToPendingOfId', item.id)
+            "
             @click-remove="
                (item) => orderStore.dispatch('removeOItemOfId', { id: item.id })
             "
          />
       </main>
 
-      <Loading class="viewOrder-loading" :isRunning="orderStore.getters.isLoading" />
+      <Loading
+         class="viewOrder-loading"
+         :isRunning="orderStore.getters.isLoading"
+      />
 
       <PopupWindow
          :style="{ 'z-index': '20' }"
@@ -202,7 +218,9 @@
                </div>
 
                <div class="body">
-                  <button class="button-focus" @click="createOrder">Submit</button>
+                  <button class="button-focus transition" @click="createOrder"
+                     >Submit</button
+                  >
                </div>
             </div>
          </div>
@@ -224,7 +242,6 @@
       height: 100%;
       width: 100%;
       padding-bottom: 80px;
-      transition: var(--transition-duration);
 
       main {
          width: 100%;
@@ -239,7 +256,6 @@
             background-color: white;
             box-shadow: 0 2px 4px #b5b5b5;
             padding: 10px;
-            transition: var(--transition-duration);
          }
          @media (min-width: 550px) {
             padding-left: 20px;
@@ -321,7 +337,6 @@
                color: white;
                font-weight: 600;
                background-color: var(--accent-color);
-               transition: all var(--transition-duration) linear;
 
                cursor: pointer;
 

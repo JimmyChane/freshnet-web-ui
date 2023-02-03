@@ -18,12 +18,15 @@
 
 <template>
    <div
-      class="Snackbar"
-      :class="[`Snackbar-${item.isShowing ? 'isShowing' : 'isHiding'}`]"
+      :class="[
+         `Snackbar-${item.isShowing ? 'isShowing' : 'isHiding'}`,
+         'Snackbar',
+         'transition',
+      ]"
       :style="{ '--index': item.index }"
    >
-      <div class="Snackbar-body">
-         <div class="Snackbar-background"></div>
+      <div class="Snackbar-body transition">
+         <div class="Snackbar-background transition"></div>
 
          <div class="Snackbar-header" v-if="item.icon || item.isLoading">
             <img
@@ -39,10 +42,12 @@
             />
          </div>
 
-         <span class="Snackbar-text" v-if="item.text">{{ item.text }}</span>
+         <span class="Snackbar-text transition" v-if="item.text">{{
+            item.text
+         }}</span>
 
          <button
-            class="Snackbar-action"
+            class="Snackbar-action transition"
             v-for="action of parsed_actions"
             :key="action.key"
             @click="action.click()"
@@ -70,7 +75,6 @@
       max-width: 100%;
       padding: 0.2em;
       border-radius: 0.4rem;
-      transition: var(--transition-duration);
 
       display: flex;
       flex-direction: column;
@@ -82,7 +86,6 @@
          display: flex;
          flex-direction: row;
          align-items: center;
-         transition: var(--transition-duration);
 
          .Snackbar-background {
             z-index: 1;
@@ -96,7 +99,6 @@
             background: hsla(0, 0%, 0%, 0.9);
             backdrop-filter: blur(0.4rem);
             border-radius: 0.4rem;
-            transition: var(--transition-duration);
 
             border: 0.1rem solid hsla(0, 0%, 40%, 0.4);
          }
@@ -116,7 +118,7 @@
                width: 1.2rem;
                height: 1.2rem;
             }
-            .Snackbar-icon-isLoading{
+            .Snackbar-icon-isLoading {
                transform: scale(0.7);
             }
             .Snackbar-loading {
@@ -144,14 +146,12 @@
             text-align: start;
             line-height: 1.2;
             color: white;
-            transition: var(--transition-duration);
 
             display: flex;
             flex-direction: column;
             align-items: center;
             align-items: flex-start;
          }
-
          .Snackbar-action {
             z-index: 2;
             height: 1.2rem;
@@ -165,7 +165,6 @@
             background: none;
             border: none;
             border-radius: 0.2rem;
-            transition: var(--transition-duration);
             cursor: pointer;
 
             display: flex;
