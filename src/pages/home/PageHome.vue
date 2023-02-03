@@ -40,12 +40,11 @@
          return { scrollTop: 0 };
       },
       computed: {
-         isThin: (c) => c.$root.navigation.isDrawer(),
+         // isWide: (c) => c.$root.window.innerWidth > 1170,
+         isWide: (c) => c.$root.window.innerWidth > 800,
+         isThin: (c) => c.isWide || c.$root.navigation.isDrawer(),
 
-         classes() {
-            if (this.$root.window.innerWidth > 1170) return "Home-isHorizontal";
-            return "Home-isVertical";
-         },
+         classes: (c) => (c.isWide ? "Home-isHorizontal" : "Home-isVertical"),
 
          businessHourDescription() {
             const now = new Date();

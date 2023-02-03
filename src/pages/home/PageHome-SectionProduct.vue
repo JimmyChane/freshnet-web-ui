@@ -23,8 +23,10 @@
             this.invalidate();
          },
          item() {
-            if (this.productIndex < 0) this.productIndex = this.products.length - 1;
-            if (this.productIndex >= this.products.length) this.productIndex = 0;
+            if (this.productIndex < 0)
+               this.productIndex = this.products.length - 1;
+            if (this.productIndex >= this.products.length)
+               this.productIndex = 0;
             return this.products[this.productIndex];
          },
          itemImage() {
@@ -38,7 +40,9 @@
          },
 
          color() {
-            return chroma.valid(this.primaryColor) ? this.primaryColor : chroma("cccccc");
+            return chroma.valid(this.primaryColor)
+               ? this.primaryColor
+               : chroma("cccccc");
          },
          color1() {
             return this.getColorMixed(this.color, 0.2);
@@ -68,7 +72,9 @@
       methods: {
          async invalidate() {
             this.products = [];
-            const groups = await this.productStore.dispatch("getGroupsByCategory");
+            const groups = await this.productStore.dispatch(
+               "getGroupsByCategory",
+            );
             if (!groups.length) return;
 
             this.itemTitle = "";
@@ -80,13 +86,17 @@
                      group.category.key === Category.Key.Printer
                   );
                })
-               .sort((group1, group2) => group1.category.compare(group2.category))
+               .sort((group1, group2) =>
+                  group1.category.compare(group2.category),
+               )
                .reduce((products, group) => {
                   products.push(...group.items);
                   return products;
                }, [])
                .filter((product) => {
-                  return product.toImageThumbnail() && product.isStockAvailable();
+                  return (
+                     product.toImageThumbnail() && product.isStockAvailable()
+                  );
                });
 
             while (products.length > this.maxLength) {
@@ -111,7 +121,10 @@
          },
 
          getColorMixed(color, value) {
-            return color.mix(this.isColorDark(this.color) ? "#ffffff" : "#000000", value);
+            return color.mix(
+               this.isColorDark(this.color) ? "#ffffff" : "#000000",
+               value,
+            );
          },
          isColorDark(color) {
             return chroma.deltaE(color, "000000") < 60;
@@ -133,38 +146,31 @@
          '--color3': getColorMixed(color, 0.9),
       }"
    >
-      <span class="HomeSectionProduct-title">{{ itemTitle }}</span>
+      <span class="HomeSectionProduct-header">{{ itemTitle }}</span>
       <ImageView
          class="HomeSectionProduct-img"
          v-if="itemImage"
          :src="itemImage"
-         @click="() => $router.push({ path: '/product', query: { productId: itemId } })"
+         @click="
+            () =>
+               $router.push({ path: '/product', query: { productId: itemId } })
+         "
       />
 
-      <div class="HomeSectionProduct-footer">
-         <!-- <div class="HomeSectionProduct-dummy"></div> -->
-         <div class="HomeSectionProduct-indexes" v-if="products.length > 1">
-            <button
-               :class="[
-                  'HomeSectionProduct-indexes-item',
-                  `HomeSectionProduct-indexes-item-${
-                     products.indexOf(item) === productIndex
-                        ? 'isSelected'
-                        : 'isDeselected'
-                  }`,
-               ]"
-               v-for="item of products"
-               :key="item.id"
-               @click="() => (productIndex = products.indexOf(item))"
-            />
-         </div>
-         <!-- <router-link
-            class="HomeSectionProduct-click"
-            v-if="itemId"
-            :to="{ path: '/product', query: { productId: itemId } }"
-            :style="{ color: isColorDark(color3) ? '#ffffff' : '#000000' }"
-            >View</router-link
-         > -->
+      <div class="HomeSectionProduct-footer" v-if="products.length > 1">
+         <button
+            :class="[
+               'HomeSectionProduct-footer-item',
+               `HomeSectionProduct-footer-item-${
+                  products.indexOf(item) === productIndex
+                     ? 'isSelected'
+                     : 'isDeselected'
+               }`,
+            ]"
+            v-for="item of products"
+            :key="item.id"
+            @click="() => (productIndex = products.indexOf(item))"
+         />
       </div>
 
       <button
@@ -201,90 +207,71 @@
       align-items: center;
       justify-content: center;
 
-      .HomeSectionProduct-title {
-         font-size: 1.4em;
+      --header-height: 3em;
+      --footer-height: 3em;
+
+      .HomeSectionProduct-header {
+         font-size: 1.5em;
          font-weight: 600;
-         height: 3em;
          display: flex;
          justify-content: center;
-         align-items: flex-end;
+         align-items: center;
+         text-align: center;
+         line-height: 1em;
+
+         padding: 1em;
+
+         height: var(--header-height);
+         min-height: var(--header-height);
+         max-height: var(--header-height);
       }
 
       .HomeSectionProduct-img {
-         --width: calc(100% - 6em);
-         --height: calc(100% - 9em);
-         width: var(--width);
+         --height: calc(100% - var(--header-height) - var(--footer-height));
          height: var(--height);
-         min-width: var(--width);
          min-height: var(--height);
-         max-width: var(--width);
          max-height: var(--height);
          flex-grow: 1;
-         object-fit: scale-down;
+         object-fit: contain;
          cursor: pointer;
 
-         margin: 1em;
          border-radius: 1rem;
          filter: drop-shadow(0 0 1rem hsla(0, 0%, 0%, 0.2));
       }
+
       .HomeSectionProduct-footer {
-         height: 4em;
          width: 100%;
+         height: var(--footer-height);
+         min-height: var(--footer-height);
+         max-height: var(--footer-height);
          display: flex;
          flex-direction: row;
          align-items: center;
-         justify-content: flex-end;
-         padding: 1em;
+         justify-content: center;
 
-         .HomeSectionProduct-indexes {
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
+         .HomeSectionProduct-footer-item {
+            width: var(--size);
+            height: var(--size);
+            min-width: var(--size);
+            min-height: var(--size);
+            max-width: var(--size);
+            max-height: var(--size);
 
-            .HomeSectionProduct-indexes-item {
-               width: var(--size);
-               height: var(--size);
-               min-width: var(--size);
-               min-height: var(--size);
-               max-width: var(--size);
-               max-height: var(--size);
-
-               border-radius: 50%;
-               border: none;
-               transition: var(--transition-duration);
-            }
-            .HomeSectionProduct-indexes-item-isSelected {
-               transform: scale(1.5);
-               margin-left: calc(var(--size) * 0.33);
-               margin-right: calc(var(--size) * 0.33);
-               background-color: var(--color3);
-            }
-            .HomeSectionProduct-indexes-item-isDeselected {
-               background-color: var(--color3);
-               cursor: pointer;
-               &:hover {
-                  box-shadow: 0px 0px 0.5rem var(--color3);
-               }
-            }
-         }
-         .HomeSectionProduct-click {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: none;
-            padding: 0.6em 1.2em;
-            border-radius: 3em;
-            background-color: var(--color3);
+            border-radius: 50%;
+            border: none;
             transition: var(--transition-duration);
-
+         }
+         .HomeSectionProduct-footer-item-isSelected {
+            transform: scale(1.5);
+            margin-left: calc(var(--size) * 0.33);
+            margin-right: calc(var(--size) * 0.33);
+            background-color: var(--color3);
+         }
+         .HomeSectionProduct-footer-item-isDeselected {
+            background-color: var(--color3);
+            cursor: pointer;
             &:hover {
-               box-shadow: 0px 0px 0.2rem var(--color3);
+               box-shadow: 0px 0px 0.5rem var(--color3);
             }
          }
       }
@@ -344,17 +331,9 @@
       height: 100%;
       font-size: 0.9rem;
       .HomeSectionProduct-footer {
-         .HomeSectionProduct-dummy {
-            width: 6rem;
-         }
-         .HomeSectionProduct-indexes {
-            gap: 0.3em;
-            .HomeSectionProduct-indexes-item {
-               --size: 14px;
-            }
-         }
-         .HomeSectionProduct-click {
-            width: 6rem;
+         gap: 0.3em;
+         .HomeSectionProduct-footer-item {
+            --size: 14px;
          }
       }
    }
@@ -363,17 +342,9 @@
       height: 100%;
       font-size: 1.2rem;
       .HomeSectionProduct-footer {
-         .HomeSectionProduct-dummy {
-            width: 8rem;
-         }
-         .HomeSectionProduct-indexes {
-            gap: 0.5em;
-            .HomeSectionProduct-indexes-item {
-               --size: 16px;
-            }
-         }
-         .HomeSectionProduct-click {
-            width: 8rem;
+         gap: 0.5em;
+         .HomeSectionProduct-footer-item {
+            --size: 16px;
          }
       }
    }
