@@ -315,6 +315,7 @@
                }
                .App-routerView {
                   flex-grow: 1;
+                  z-index: 1;
                }
             }
             .App-layout-body-isFixed {
@@ -323,6 +324,7 @@
                }
                .App-routerView {
                   flex-grow: 2;
+                  z-index: 2;
                }
             }
          }
