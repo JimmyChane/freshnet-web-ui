@@ -144,6 +144,7 @@
             font-size: 0.8rem;
             font-weight: 600;
             border-radius: var(--border-radius) 0 0 var(--border-radius);
+            margin: -1px;
          }
          .LabelMenus-content {
             min-width: max-content;

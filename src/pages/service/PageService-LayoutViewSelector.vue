@@ -41,20 +41,21 @@
       height: max-content;
       background-color: #e4e4e4;
       border: 1px solid hsla(0, 0%, 0%, 0.1);
-      border-radius: 0.3rem;
+      border-radius: 0.5rem;
 
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
 
-      --parent-padding: 0.2rem;
+      --parent-padding: 0.05rem;
       padding: var(--parent-padding);
 
       --item-index: 0;
       --item-size: 2.2rem;
 
       .LayoutViewSelector-selection {
+         --transition-timing: cubic-bezier(1, 0, 0, 1);
          --padding: calc(var(--parent-padding) * 2);
          --size: calc(var(--item-size) - var(--padding));
 
@@ -66,8 +67,8 @@
          width: var(--size);
          height: var(--size);
          background: white;
-         box-shadow: 0px 0px 0.3rem hsla(0, 0%, 0%, 0.25);
-         border-radius: 0.2rem;
+         border: 1px solid hsla(0, 0%, 0%, 0.25);
+         border-radius: 0.4rem;
       }
 
       .LayoutViewSelector-item {

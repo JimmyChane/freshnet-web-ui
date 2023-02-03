@@ -30,6 +30,9 @@
          layoutMenus: { type: Array, default: () => [] },
          layoutMenuIndex: { type: Number, default: -1 },
 
+         groupMenus: { type: Array, default: () => [] },
+         groupMenuIndex: { type: Number, default: -1 },
+
          sortMenus: { type: Array, default: () => [] },
          sortMenuIndex: { type: Number, default: -1 },
       },
@@ -38,6 +41,7 @@
       },
       computed: {
          isWide: (c) => c.$root.window.innerWidth > 600,
+         currentGroupMenu: (c) => c.groupMenus[c.sortMenuIndex],
          currentSortMenu: (c) => c.sortMenus[c.sortMenuIndex],
       },
       methods: {
@@ -107,12 +111,19 @@
          <div>
             <LayoutViewSelector :menus="layoutMenus" :index="layoutMenuIndex" />
             <LabelMenus
+               title="Group"
+               :style="{ '--primary-color': primaryColorLabel.toString() }"
+               :primaryColor="primaryColorLabel"
+               :menu="currentGroupMenu ? currentGroupMenu : null"
+               :menus="groupMenus"
+            />
+            <!-- <LabelMenus
                title="Sort"
                :style="{ '--primary-color': primaryColorLabel.toString() }"
                :primaryColor="primaryColorLabel"
                :menu="currentSortMenu ? currentSortMenu : null"
                :menus="sortMenus"
-            />
+            /> -->
          </div>
       </div>
 
@@ -132,7 +143,6 @@
 <style lang="scss" scoped>
    .Actionbar {
       height: max-content;
-      // background-color: #c9d7df;
       background-color: #f3f3f3;
       display: flex;
       flex-direction: column;
@@ -178,7 +188,6 @@
       .Actionbar-toolbar {
          width: 100%;
          padding: 0.3rem 1rem;
-         gap: 1rem;
 
          z-index: 2;
 
@@ -191,13 +200,14 @@
          & > * {
             width: 100%;
             max-width: var(--max-width);
-            gap: 0.2rem;
+            gap: 0.5rem;
 
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
             align-items: center;
-            justify-content: space-between;
+            // justify-content: space-between;
+            justify-content: flex-start;
          }
       }
 

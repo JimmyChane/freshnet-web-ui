@@ -78,9 +78,17 @@
                },
             ],
 
+            currentGroupIndex: 0,
+            groupMenus: [{ key: "Date", title: "Date" }].map((menu) => {
+               menu.click = () => {
+                  this.currentGroupIndex = this.groupMenus.indexOf(menu);
+               };
+               return menu;
+            }),
+
             currentSortIndex: 0,
             sortMenus: [
-               { key: ListServices.Sort.DateCreated, title: "Date Created" },
+               { key: ListServices.Sort.DateCreated, title: "Date" },
                { key: ListServices.Sort.Name, title: "Customer Name" },
                { key: ListServices.Sort.PhoneNumber, title: "Phone Number" },
             ].map((menu) => {
@@ -176,6 +184,8 @@
          :stateMenus="stateMenus"
          :layoutMenus="layoutMenus"
          :layoutMenuIndex="currentLayoutIndex"
+         :groupMenus="groupMenus"
+         :groupMenuIndex="currentGroupIndex"
          :sortMenus="sortMenus"
          :sortMenuIndex="currentSortIndex"
          @click-drawer-expand="() => $emit('click-drawer-expand')"
