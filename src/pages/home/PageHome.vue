@@ -42,7 +42,8 @@
       computed: {
          // isWide: (c) => c.$root.window.innerWidth > 1170,
          isWide: (c) => c.$root.window.innerWidth > 800,
-         isThin: (c) => c.isWide || c.$root.navigation.isDrawer(),
+         isDrawer: (c) => c.$root.navigation.isDrawer(),
+         isThin: (c) => c.isWide || c.isDrawer,
 
          classes: (c) => (c.isWide ? "Home-isHorizontal" : "Home-isVertical"),
 
@@ -88,7 +89,7 @@
       :class="['PageHome', classes, scrollTop > 0 ? 'Home-isScrollUp' : '']"
       @scroll="(e) => (scrollTop = e.target.scrollTop)"
    >
-      <Actionbar class="Home-actionbar" :isThin="isThin" />
+      <Actionbar class="Home-actionbar" :isThin="isDrawer" />
 
       <div class="Home-body">
          <div>
