@@ -7,6 +7,7 @@
    import LeftNav from "./leftNav/LeftNav.vue";
    import ViewerImage from "./ViewerImage.vue";
    import Snackbar from "./Snackbar.vue";
+   import Menu from "./Menu.vue";
 
    export default {
       name: "App",
@@ -15,7 +16,7 @@
          return [PageHome, PageProduct, PagePrint, PageManage];
       },
 
-      components: { LeftNav, ViewerImage, Snackbar },
+      components: { LeftNav, ViewerImage, Snackbar, Menu },
       data() {
          return { statusIsShown: false, layoutLoginIsShown: false };
       },
@@ -125,6 +126,8 @@
          :key="snackbar.key"
          :item="snackbar"
       />
+
+      <Menu></Menu>
    </div>
 </template>
 
