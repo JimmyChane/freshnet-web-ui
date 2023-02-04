@@ -20,10 +20,12 @@ Vue.mixin(Mixin);
 
 class U {
    static objectToArray(object = {}) {
-      return Object.keys(typeof object === "object" ? object : {}).map((key) => ({
-         key,
-         value: object[key],
-      }));
+      return Object.keys(typeof object === "object" ? object : {}).map(
+         (key) => ({
+            key,
+            value: object[key],
+         }),
+      );
    }
    static confineRouteQuery(previousQuery, nextQuery) {
       let nextQueries = U.objectToArray(previousQuery);
@@ -31,12 +33,18 @@ class U {
       let isChanged = false;
 
       for (let query of queries) {
-         const current = nextQueries.find((current) => current.key === query.key);
+         const current = nextQueries.find(
+            (current) => current.key === query.key,
+         );
 
          if (current && current.value !== query.value) {
             current.value = query.value;
             isChanged = true;
-         } else if (!current && query.value !== null && query.value !== undefined) {
+         } else if (
+            !current &&
+            query.value !== null &&
+            query.value !== undefined
+         ) {
             nextQueries.push({ key: query.key, value: query.value });
             isChanged = true;
          }
@@ -116,7 +124,9 @@ new Vue({
       return {
          console: {
             log(param1, param2) {
-               param2 === undefined ? console.log(param1) : console.log(param1, param2);
+               param2 === undefined
+                  ? console.log(param1)
+                  : console.log(param1, param2);
             },
             error(param1, param2) {
                param2 === undefined
@@ -131,6 +141,7 @@ new Vue({
          navigation: null,
          snackbars: [],
          imageViewer: { isShowing: false, image: null, thumbnails: [] },
+         popupMenu: { isShowing: false, anchor: null, menus: [] },
       };
    },
    computed: {
@@ -158,11 +169,13 @@ new Vue({
             const queries = typeof _queries === "function" ? _queries() : [];
 
             // parsing
-            const parsedChildren = U.parseGroup2s([{ values: children }]).map((obj) => {
-               obj.isLink = true;
-               obj.isQuery = false;
-               return obj;
-            });
+            const parsedChildren = U.parseGroup2s([{ values: children }]).map(
+               (obj) => {
+                  obj.isLink = true;
+                  obj.isQuery = false;
+                  return obj;
+               },
+            );
             const parsedGroups = U.parseGroup2s(groups).map((obj) => {
                obj.isLink = true;
                obj.isQuery = false;
@@ -180,7 +193,8 @@ new Vue({
                ...parsedQueries,
             ]
                .map((group) => {
-                  if (!U.isPassed(this.user, group.userPermissions)) return group;
+                  if (!U.isPassed(this.user, group.userPermissions))
+                     return group;
 
                   group.key = U.parseKey(group.key);
                   group.title = U.parseString(group.title);
@@ -192,7 +206,8 @@ new Vue({
                   return group;
                })
                .reduce((groups, group) => {
-                  if (!U.isPassed(this.user, group.userPermissions)) return groups;
+                  if (!U.isPassed(this.user, group.userPermissions))
+                     return groups;
 
                   // get property
                   let { key, title } = group;
@@ -200,7 +215,8 @@ new Vue({
 
                   const views = U.parseArray(group.values)
                      .map((value) => {
-                        if (!U.isPassed(this.user, value.userPermissions)) return null;
+                        if (!U.isPassed(this.user, value.userPermissions))
+                           return null;
                         const key = U.parseKey(value.key);
                         const title = U.parseString(value.title);
                         const icon = U.parseIcon(value.icon);
@@ -210,7 +226,9 @@ new Vue({
 
                   let found = groups.find((group) => group.key === key);
                   if (!found) {
-                     groups.push((found = { key, title, isLink, isQuery, groups: [] }));
+                     groups.push(
+                        (found = { key, title, isLink, isQuery, groups: [] }),
+                     );
                   }
                   found.groups.push(...views);
 
@@ -327,6 +345,20 @@ new Vue({
          return true;
       },
 
+      popupMenuShow(anchor, menus = []) {
+         this.popupMenu.anchor = anchor;
+         this.popupMenu.menus = menus;
+         this.popupMenu.isShowing = true;
+      },
+      popupMenuHide() {
+         setTimeout(() => {
+            this.popupMenu.anchor = null;
+            setTimeout(() => {
+               this.popupMenu.menus = [];
+            }, 300);
+         }, 300);
+      },
+
       imageViewerShow(image = null, thumbnails = []) {
          this.imageViewer.image = image;
          this.imageViewer.thumbnails = thumbnails;
@@ -395,7 +427,9 @@ new Vue({
       },
       pushDownload(filename, content) {
          const element = document.createElement("a");
-         element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`;
+         element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
+            content,
+         )}`;
          element.download = filename;
          document.body.appendChild(element);
          element.click();
