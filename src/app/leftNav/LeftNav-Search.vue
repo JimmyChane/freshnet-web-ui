@@ -6,6 +6,7 @@
    import ItemSearchBrand from "@/pages/home/ItemSearchBrand.vue";
    import ItemSearchPs2Disc from "@/pages/home/ItemSearchPs2Disc.vue";
    import ItemSearchService from "@/pages/home/ItemSearchService.vue";
+
    export default {
       props: { isWide: { type: Boolean, default: false } },
       components: {
@@ -124,8 +125,9 @@
          :src="host.res('icon/search-000000.svg')"
          @click="
             () => {
-               $root.navigation.openNavigationDrawer();
-               $root.navigation.disableNavigationDrawer();
+               if (!$root.navigation.isWide()) {
+                  $root.navigation.openNavigationDrawer();
+               }
             }
          "
       />

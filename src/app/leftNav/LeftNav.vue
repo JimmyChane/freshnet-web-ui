@@ -1,11 +1,18 @@
 <script>
    import Drawer from "@/components/Drawer.vue";
    import LeftNavHeader from "./LeftNav-Header.vue";
+   import Search from "./LeftNav-Search.vue";
    import LeftNavGroup1 from "./LeftNav-Group1.vue";
    import LeftNavLogin from "./LeftNav-Login.vue";
 
    export default {
-      components: { Drawer, LeftNavHeader, LeftNavGroup1, LeftNavLogin },
+      components: {
+         Drawer,
+         LeftNavHeader,
+         Search,
+         LeftNavGroup1,
+         LeftNavLogin,
+      },
       emits: ["click-logout"],
       data() {
          return {
@@ -190,6 +197,8 @@
    >
       <div class="LeftNav-body scrollbar transition" ref="Body">
          <LeftNavHeader :isWide="isWide" />
+
+         <Search v-if="isWide" :isWide="isWide" />
 
          <div class="LeftNav-navigations" v-if="navigations.length">
             <LeftNavGroup1
