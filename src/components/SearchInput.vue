@@ -1,8 +1,8 @@
 <script>
-   import ButtonIcon from "@/components/button/ButtonIcon.vue";
+   import Searchbar from "./Searchbar.vue";
 
    export default {
-      components: { ButtonIcon },
+      components: { Searchbar },
       props: {
          list: { type: Array, default: () => [] },
          placeholder: { type: String, default: "Search" },
@@ -33,36 +33,17 @@
 
 <template>
    <div class="SearchInput">
-      <div
+      <Searchbar
          :class="[
-            'SearchInput-body',
-            searchExpand ? 'SearchInput-body-isActive' : '',
-            'transition',
+            searchExpand
+               ? 'SearchInput-body-isActive'
+               : 'SearchInput-body-isPassive',
          ]"
-         @click="$refs['SearchInput-keyword'].focus()"
-      >
-         <ButtonIcon
-            class="SearchInput-icon"
-            :src="
-               host.res(
-                  search ? 'icon/close-000000.svg' : 'icon/search-000000.svg',
-               )
-            "
-            alt="Clear"
-            @click="
-               search = '';
-               searchExpand = false;
-               $refs['SearchInput-keyword'].focus();
-            "
-         />
-         <input
-            class="SearchInput-keyword transition"
-            ref="SearchInput-keyword"
-            v-model="search"
-            :placeholder="placeholder"
-            @focus="searchExpand = search"
-         />
-      </div>
+         :model="search"
+         :placeholder="placeholder"
+         @input="(e) => (search = e.value)"
+         @focus="searchExpand = search"
+      />
 
       <div class="SearchInput-main">
          <div
@@ -111,41 +92,8 @@
       height: 100%;
       position: relative;
 
-      .SearchInput-body {
-         z-index: 2;
-         color: #5c5c5c;
-         display: flex;
-         flex-direction: row;
-         align-items: stretch;
-         align-items: center;
-         width: 100%;
-         height: 100%;
-         padding: 0.2rem;
+      .SearchInput-body-isPassive {
          border: var(--border);
-
-         font-size: 0.8rem;
-
-         .SearchInput-icon {
-            font-size: 1em;
-         }
-         .SearchInput-keyword {
-            width: 100%;
-            font-size: 1em;
-            flex-grow: 1;
-            border: none;
-            outline: none;
-            padding: 0.5rem 0.7rem;
-            padding: 0.5rem;
-            border: none;
-            background: none;
-            display: flex;
-            flex-direction: row;
-            &::placeholder {
-               color: hsla(0, 0%, 0%, 0.4);
-            }
-         }
-      }
-      .SearchInput-body {
          background-color: var(--background-color);
          border-radius: var(--border-radius);
          &:focus-within {
