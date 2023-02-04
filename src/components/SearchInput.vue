@@ -41,6 +41,7 @@
          ]"
          :model="search"
          :placeholder="placeholder"
+         @clear="(e) => (search = '')"
          @input="(e) => (search = e.value)"
          @focus="searchExpand = search"
       />

@@ -34,8 +34,20 @@
          },
       },
       methods: {
+         blur() {
+            this.$refs["input"].blur();
+         },
          focus() {
             this.$refs["input"].focus();
+         },
+         enter() {
+            this.focus();
+            this.$emit("enter");
+         },
+         clear() {
+            this.search = "";
+            this.focus();
+            this.$emit("clear", this._self);
          },
       },
    };
@@ -47,13 +59,7 @@
          class="Searchbar-icon"
          :src="icon"
          :alt="search ? 'Clear' : 'Search'"
-         @click="
-            () => {
-               search = '';
-               focus();
-               $emit('input', this._self);
-            }
-         "
+         @click="() => (search.length > 0 ? clear() : enter())"
       />
       <input
          class="Searchbar-input transition"
@@ -79,8 +85,8 @@
       width: 100%;
       height: 100%;
       padding: 0.2em;
-      font-size: 0.8em;
       border-radius: 2em;
+      gap: 0.1em;
 
       color: #5c5c5c;
 
@@ -89,7 +95,7 @@
       align-items: center;
 
       .Searchbar-icon {
-         font-size: 1em;
+         font-size: 0.9em;
       }
       .Searchbar-input {
          width: 100%;
@@ -97,17 +103,17 @@
          flex-grow: 1;
          border: none;
          outline: none;
-         padding: 0.5em;
          border: none;
          background: none;
          display: flex;
          flex-direction: row;
          &::placeholder {
             color: hsla(0, 0%, 0%, 0.4);
+            font-size: 0.8em;
          }
       }
 
-      background-color: hsla(0, 0%, 100%, 0.3);
+      background-color: hsla(0, 0%, 90%, 0.96);
       border: 1px solid hsla(0, 0%, 0%, 0.15);
       &:focus-within {
          background-color: white;
