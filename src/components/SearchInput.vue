@@ -44,6 +44,7 @@
          @clear="(e) => (search = '')"
          @input="(e) => (search = e.value)"
          @focus="searchExpand = search"
+         @blur="searchExpand = false"
       />
 
       <div class="SearchInput-main">
