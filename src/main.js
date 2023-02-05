@@ -5,6 +5,7 @@ import Notification from "./tools/Notification.js";
 import TimeNowGetter from "./tools/TimeNowGetter.js";
 import ApiHost from "./host/ApiHost.js";
 import PopupMenu from "@/app/PopupMenu.vue";
+import U from "@/U";
 
 // vue
 import Vue from "vue";
@@ -19,102 +20,75 @@ Vue.config.productionTip = false;
 Vue.prototype.host = ApiHost;
 Vue.mixin(Mixin);
 
-class U {
-   static objectToArray(object = {}) {
-      return Object.keys(typeof object === "object" ? object : {}).map(
-         (key) => ({
-            key,
-            value: object[key],
-         }),
-      );
-   }
-   static confineRouteQuery(previousQuery, nextQuery) {
-      let nextQueries = U.objectToArray(previousQuery);
-      let queries = U.objectToArray(nextQuery);
-      let isChanged = false;
+const objectToArray = (object = {}) => {
+   return Object.keys(typeof object === "object" ? object : {}).map((key) => ({
+      key,
+      value: object[key],
+   }));
+};
+const confineRouteQuery = (previousQuery, nextQuery) => {
+   let nextQueries = objectToArray(previousQuery);
+   let queries = objectToArray(nextQuery);
+   let isChanged = false;
 
-      for (let query of queries) {
-         const current = nextQueries.find(
-            (current) => current.key === query.key,
-         );
+   for (let query of queries) {
+      const current = nextQueries.find((current) => current.key === query.key);
 
-         if (current && current.value !== query.value) {
-            current.value = query.value;
-            isChanged = true;
-         } else if (
-            !current &&
-            query.value !== null &&
-            query.value !== undefined
-         ) {
-            nextQueries.push({ key: query.key, value: query.value });
-            isChanged = true;
-         }
-
-         if (current && current.value === null) {
-            nextQueries.splice(nextQueries.indexOf(current), 1);
-            isChanged = true;
-         }
+      if (current && current.value !== query.value) {
+         current.value = query.value;
+         isChanged = true;
+      } else if (
+         !current &&
+         query.value !== null &&
+         query.value !== undefined
+      ) {
+         nextQueries.push({ key: query.key, value: query.value });
+         isChanged = true;
       }
 
-      if (!isChanged) return;
-
-      return nextQueries.reduce((query, newQuery) => {
-         query[newQuery.key] = newQuery.value;
-         return query;
-      }, {});
-   }
-
-   static isObject(obj) {
-      return typeof obj === "object";
-   }
-   static isString(str) {
-      return typeof str === "string";
-   }
-   static isPassed(user, permissions) {
-      permissions = Array.isArray(permissions) ? permissions : [];
-
-      if (permissions.length > 0) {
-         if (user.isTypeAdmin() && !permissions.includes("admin")) return false;
-         if (user.isTypeStaff() && !permissions.includes("staff")) return false;
+      if (current && current.value === null) {
+         nextQueries.splice(nextQueries.indexOf(current), 1);
+         isChanged = true;
       }
-
-      return true;
    }
 
-   static parseIcon(icon) {
-      icon = U.isObject(icon) ? icon : null;
-      if (icon === null) return null;
-      const light = icon === null ? "" : ApiHost.res(`icon/${icon.light}.svg`);
-      const dark = icon === null ? "" : ApiHost.res(`icon/${icon.dark}.svg`);
-      return { light, dark };
+   if (!isChanged) return;
+
+   return nextQueries.reduce((query, newQuery) => {
+      query[newQuery.key] = newQuery.value;
+      return query;
+   }, {});
+};
+const isPassed = (user, permissions) => {
+   permissions = Array.isArray(permissions) ? permissions : [];
+
+   if (permissions.length > 0) {
+      if (user.isTypeAdmin() && !permissions.includes("admin")) return false;
+      if (user.isTypeStaff() && !permissions.includes("staff")) return false;
    }
 
-   static parseKey(str) {
-      return this.isString(str) ? str.trim().replace(" ", "") : "";
-   }
-   static parseArray(array) {
-      return Array.isArray(array) ? array : [];
-   }
-   static parseObject(obj) {
-      return this.isObject(obj) ? obj : {};
-   }
-   static parseString(str) {
-      return this.isString(str) ? str : "";
-   }
-
-   static parseGroup2s(array) {
-      return U.parseArray(array).map((obj) => {
-         return {
-            key: obj.key,
-            title: obj.title,
-            icon: obj.icon,
-            values: obj.values,
-            children: obj.children,
-            userPermissions: obj.userPermissions,
-         };
-      });
-   }
-}
+   return true;
+};
+const parseIcon = (icon) => {
+   icon = U.isObject(icon) ? icon : null;
+   if (icon === null) return null;
+   const light = icon === null ? "" : ApiHost.res(`icon/${icon.light}.svg`);
+   const dark = icon === null ? "" : ApiHost.res(`icon/${icon.dark}.svg`);
+   return { light, dark };
+};
+const parseKey = (str) => U.optString(str).trim().replace(" ", "");
+const parseGroup2s = (array) => {
+   return U.optArray(array).map((obj) => {
+      return {
+         key: obj.key,
+         title: obj.title,
+         icon: obj.icon,
+         values: obj.values,
+         children: obj.children,
+         userPermissions: obj.userPermissions,
+      };
+   });
+};
 
 new Vue({
    host: ApiHost,
@@ -153,7 +127,7 @@ new Vue({
 
       // pages
       pages() {
-         const pages = U.parseArray(App._children());
+         const pages = U.optArray(App._children());
          if (pages.length < 1) return [];
 
          const listGroup1 = pages.map((page) => {
@@ -162,27 +136,27 @@ new Vue({
             const { _children, _groups, _queries } = page;
 
             // get ready
-            key = U.parseKey(page.key);
-            title = U.parseString(page.title).trim();
-            icon = U.parseIcon(page.icon);
+            key = parseKey(page.key);
+            title = U.optString(page.title).trim();
+            icon = parseIcon(page.icon);
             const children = typeof _children === "function" ? _children() : [];
             const groups = typeof _groups === "function" ? _groups() : [];
             const queries = typeof _queries === "function" ? _queries() : [];
 
             // parsing
-            const parsedChildren = U.parseGroup2s([{ values: children }]).map(
+            const parsedChildren = parseGroup2s([{ values: children }]).map(
                (obj) => {
                   obj.isLink = true;
                   obj.isQuery = false;
                   return obj;
                },
             );
-            const parsedGroups = U.parseGroup2s(groups).map((obj) => {
+            const parsedGroups = parseGroup2s(groups).map((obj) => {
                obj.isLink = true;
                obj.isQuery = false;
                return obj;
             });
-            const parsedQueries = U.parseGroup2s(queries).map((obj) => {
+            const parsedQueries = parseGroup2s(queries).map((obj) => {
                obj.isLink = true;
                obj.isQuery = true;
                return obj;
@@ -194,11 +168,10 @@ new Vue({
                ...parsedQueries,
             ]
                .map((group) => {
-                  if (!U.isPassed(this.user, group.userPermissions))
-                     return group;
+                  if (!isPassed(this.user, group.userPermissions)) return group;
 
-                  group.key = U.parseKey(group.key);
-                  group.title = U.parseString(group.title);
+                  group.key = parseKey(group.key);
+                  group.title = U.optString(group.title);
 
                   if (!Array.isArray(group.values)) group.values = [];
                   if (Array.isArray(group.children))
@@ -207,20 +180,20 @@ new Vue({
                   return group;
                })
                .reduce((groups, group) => {
-                  if (!U.isPassed(this.user, group.userPermissions))
+                  if (!isPassed(this.user, group.userPermissions))
                      return groups;
 
                   // get property
                   let { key, title } = group;
                   const { isLink, isQuery } = group;
 
-                  const views = U.parseArray(group.values)
+                  const views = U.optArray(group.values)
                      .map((value) => {
-                        if (!U.isPassed(this.user, value.userPermissions))
+                        if (!isPassed(this.user, value.userPermissions))
                            return null;
-                        const key = U.parseKey(value.key);
-                        const title = U.parseString(value.title);
-                        const icon = U.parseIcon(value.icon);
+                        const key = parseKey(value.key);
+                        const title = U.optString(value.title);
+                        const icon = parseIcon(value.icon);
                         return { key, icon, title };
                      })
                      .filter((view) => view !== null);
@@ -521,7 +494,7 @@ new Vue({
          this.setRoute(param, false);
       },
       setRoute(param = {}, isNext = true) {
-         let query = U.confineRouteQuery(this.$route.query, param.query);
+         let query = confineRouteQuery(this.$route.query, param.query);
          if (isNext) this.$router.push({ query });
          else this.$router.replace({ query });
       },
