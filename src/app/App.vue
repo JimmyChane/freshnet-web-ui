@@ -127,7 +127,12 @@
          :item="snackbar"
       />
 
-      <PopupMenu class="App-PopupMenu" />
+      <PopupMenu
+         v-for="popupMenu of $root.popupMenus"
+         :key="popupMenu.key"
+         :popupMenu="popupMenu"
+         class="App-PopupMenu"
+      />
    </div>
 </template>
 

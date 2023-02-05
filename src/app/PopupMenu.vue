@@ -1,34 +1,45 @@
 <script>
+   const Corner = {
+      AUTO: 0,
+      TOP_LEFT: 1,
+      TOP_RIGHT: 2,
+      BOTTOM_LEFT: 3,
+      BOTTOM_RIGHT: 4,
+   };
+
    export default {
+      Corner,
+
+      props: {
+         popupMenu: { default: undefined },
+      },
       data() {
          return {
             top: 0,
             left: 0,
 
             classTransition: "",
-            classState: "",
+            classState: "PopupMenu-isHiding",
+            stylePointerEvent: "none",
 
+            halfWidth: 0,
+            halfHeight: 0,
             startX: 0,
             startY: 0,
             endX: 0,
             endY: 0,
-            halfWidth: 0,
-            halfHeight: 0,
+
+            moveY: 0,
          };
       },
       computed: {
-         isShowing() {
-            return this.$root.popupMenu.isShowing;
-         },
-         anchor() {
-            return this.$root.popupMenu.anchor;
-         },
-         menus() {
-            return this.$root.popupMenu.menus;
-         },
+         isShowing: (c) => c.popupMenu.isShowing,
+         anchor: (c) => c.popupMenu.anchor,
+         menus: (c) => c.popupMenu.menus,
+         corner: (c) => c.popupMenu.corner,
       },
       watch: {
-         anchor() {
+         isShowing() {
             this.invalidate();
          },
       },
@@ -37,10 +48,9 @@
       },
       methods: {
          invalidate() {
-            const { anchor } = this;
-
-            if (anchor === null) {
+            if (!this.isShowing) {
                this.classState = "PopupMenu-isHiding";
+               this.stylePointerEvent = "none";
                setTimeout(() => {
                   this.halfWidth = 0;
                   this.halfHeight = 0;
@@ -53,22 +63,71 @@
                return;
             }
 
-            const { width, height } = screen;
+            // const { width, height } = screen;
 
-            console.log({ width, height });
+            this.classTransition = "transition";
 
-            const rect = anchor.getBoundingClientRect();
+            const rect = this.anchor.getBoundingClientRect();
+
             this.halfWidth = rect.width / 2;
             this.halfHeight = rect.height / 2;
-            this.startX = rect.left;
-            this.startY = rect.top;
-            this.endX = this.startX + this.halfWidth;
-            this.endY = this.startY + this.halfHeight;
-            this.classTransition = "transition";
+
+            switch (this.corner) {
+               case Corner.TOP_LEFT:
+                  this.invalidateTopLeft(rect);
+                  break;
+               case Corner.TOP_RIGHT:
+                  this.invalidateTopRight(rect);
+                  break;
+               case Corner.BOTTOM_LEFT:
+                  this.invalidateBottomLeft(rect);
+                  break;
+               default:
+               case Corner.BOTTOM_RIGHT:
+                  this.invalidateBottomRight(rect);
+                  break;
+            }
 
             setTimeout(() => {
                this.classState = "PopupMenu-isShowing";
-            }, 100);
+               this.stylePointerEvent = "initial";
+            }, 200);
+         },
+         invalidateTopLeft(rect) {
+            this.startX = rect.left + this.halfWidth - 159;
+            this.startY = rect.top + this.halfHeight - 105;
+
+            this.endX = this.startX;
+            this.endY = this.startY;
+
+            this.moveY = 1;
+         },
+         invalidateTopRight(rect) {
+            this.startX = rect.left + this.halfWidth;
+            this.startY = rect.top + this.halfHeight - 105;
+
+            this.endX = this.startX;
+            this.endY = this.startY;
+
+            this.moveY = 1;
+         },
+         invalidateBottomLeft(rect) {
+            this.startX = rect.left + this.halfWidth - 159;
+            this.startY = rect.top + this.halfHeight;
+
+            this.endX = this.startX - this.halfWidth;
+            this.endY = this.startY;
+
+            this.moveY = -1;
+         },
+         invalidateBottomRight(rect) {
+            this.startX = rect.left + this.halfWidth;
+            this.startY = rect.top + this.halfHeight;
+
+            this.endX = this.startX;
+            this.endY = this.startY;
+
+            this.moveY = -1;
          },
       },
    };
@@ -78,12 +137,14 @@
    <div
       :class="['PopupMenu', classTransition, classState]"
       :style="{
+         '--halfWidth': `${halfWidth}px`,
+         '--halfHeight': `${halfHeight}px`,
          '--startX': `${startX}px`,
          '--startY': `${startY}px`,
          '--endX': `${endX}px`,
          '--endY': `${endY}px`,
-         '--halfWidth': `${halfWidth}px`,
-         '--halfHeight': `${halfHeight}px`,
+         '--moveY': `${moveY}em`,
+         'pointer-events': stylePointerEvent,
       }"
    >
       <div class="PopupMenu-scroll scrollbar">
@@ -93,11 +154,16 @@
             :key="menu.key"
             @click="
                () => {
-                  $root.popupMenuHide();
+                  popupMenu.hide();
                   if (typeof menu.click === 'function') menu.click(menu);
                }
             "
          >
+            <img
+               v-if="menu.icon"
+               :src="menu.icon"
+               :alt="`Icon ${menu.title}`"
+            />
             <span>{{ menu.title }}</span>
          </button>
       </div>
@@ -110,8 +176,8 @@
       z-index: 5;
       display: flex;
       overflow: hidden;
-      top: var(--startY);
-      left: var(--startX);
+      top: 0;
+      left: 0;
 
       min-width: 10em;
       width: max-content;
@@ -150,26 +216,49 @@
          & > * {
             display: flex;
             flex-direction: row;
-            padding: 0.8em;
+            flex-wrap: nowrap;
+            align-items: center;
 
             background: none;
             border: none;
             font-size: 1em;
             cursor: pointer;
 
+            width: 100%;
+            min-width: inherit;
+            overflow: hidden;
+            padding: 1em 1.2em;
+            gap: 1em;
+
             &:hover {
                background: hsla(0, 0%, 0%, 0.1);
+            }
+
+            img {
+               --icon-size: 1em;
+               width: var(--icon-size);
+               height: var(--icon-size);
+               max-width: initial;
+               max-height: initial;
+            }
+            span {
+               flex-grow: 1;
+               min-width: max-content;
+               text-align: start;
+               font-size: 0.9em;
+               font-weight: 400;
+               color: black;
             }
          }
       }
    }
    .PopupMenu-isShowing {
       opacity: 1;
-      transform: translateY(var(--halfHeight)) translateX(var(--halfWidth));
+      transform: translateX(var(--endX)) translateY(var(--endY));
    }
    .PopupMenu-isHiding {
       opacity: 0;
-      transform: translateY(0);
-      pointer-events: none;
+      transform: translateX(var(--startX))
+         translateY(calc(var(--startY) + var(--moveY)));
    }
 </style>

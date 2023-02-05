@@ -4,6 +4,7 @@ import Navigation from "./tools/Navigation.js";
 import Notification from "./tools/Notification.js";
 import TimeNowGetter from "./tools/TimeNowGetter.js";
 import ApiHost from "./host/ApiHost.js";
+import PopupMenu from "@/app/PopupMenu.vue";
 
 // vue
 import Vue from "vue";
@@ -141,7 +142,7 @@ new Vue({
          navigation: null,
          snackbars: [],
          imageViewer: { isShowing: false, image: null, thumbnails: [] },
-         popupMenu: { isShowing: false, anchor: null, menus: [] },
+         popupMenus: [],
       };
    },
    computed: {
@@ -345,18 +346,41 @@ new Vue({
          return true;
       },
 
-      popupMenuShow(anchor, menus = []) {
-         this.popupMenu.anchor = anchor;
-         this.popupMenu.menus = menus;
-         this.popupMenu.isShowing = true;
-      },
-      popupMenuHide() {
-         setTimeout(() => {
-            this.popupMenu.anchor = null;
-            setTimeout(() => {
-               this.popupMenu.menus = [];
-            }, 300);
-         }, 300);
+      popupMenuShow(anchor, menus = [], corner = PopupMenu.Corner.AUTO) {
+         const popupMenu = {
+            key: this.keyGetter.get(),
+            corner,
+            anchor,
+            menus: menus,
+            isShowing: true,
+            isClosing: false,
+
+            windowScrollEvent: () => popupMenu.hide(),
+            hide: () => {
+               if (popupMenu.isClosing) return;
+               popupMenu.isClosing = true;
+               window.removeEventListener(
+                  "scroll",
+                  popupMenu.windowScrollEvent,
+                  true,
+               );
+
+               setTimeout(() => {
+                  popupMenu.isShowing = false;
+                  setTimeout(() => {
+                     this.popupMenus.splice(
+                        this.popupMenus.indexOf(popupMenu),
+                        1,
+                     );
+                  }, 300);
+               }, 300);
+            },
+         };
+
+         window.addEventListener("scroll", popupMenu.windowScrollEvent, true);
+         this.popupMenus.push(popupMenu);
+
+         return popupMenu;
       },
 
       imageViewerShow(image = null, thumbnails = []) {
