@@ -4,7 +4,7 @@
 	import ButtonImage from "./components/ButtonImage.vue";
 	import ButtonImageAdd from "./components/ButtonImageAdd.vue";
 	import ToggleButton from "@/components/button/ToggleButton.vue";
-	import MenuButton from "@/components/button/MenuButton.vue";
+	import OptionButton from "@/components/button/OptionButton.vue";
 	import ButtonIcon from "@/components/button/ButtonIcon.vue";
 
 	export default {
@@ -29,7 +29,7 @@
 			ButtonImage,
 			ButtonImageAdd,
 			ToggleButton,
-			MenuButton,
+			OptionButton,
 			ButtonIcon,
 		},
 		props: {
@@ -304,7 +304,7 @@
 						<span class="WindowProduct-bundle-item-title">
 							{{ bundle.title }}
 						</span>
-						<MenuButton
+						<OptionButton
 							:menus="[
 								{
 									key: 'delete',
@@ -349,7 +349,7 @@
 						<span class="WindowProduct-gift-item-title">
 							{{ gift }}
 						</span>
-						<MenuButton
+						<OptionButton
 							:menus="[
 								{
 									key: 'delete',

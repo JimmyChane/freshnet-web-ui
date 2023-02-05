@@ -1,10 +1,10 @@
 <script>
    import ImageView from "@/components/ImageView.vue";
-   import MenuButton from "@/components/button/MenuButton.vue";
+   import OptionButton from "@/components/button/OptionButton.vue";
 
    export default {
       emits: ["click", "click-remove"],
-      components: { ImageView, MenuButton },
+      components: { ImageView, OptionButton },
       props: { src: { default: "" } },
    };
 </script>
@@ -16,7 +16,7 @@
       </button>
       <div class="ButtonImage-foreground transition"></div>
       <div class="ButtonImage-option">
-         <MenuButton
+         <OptionButton
             :menus="[
                {
                   key: 'delete',

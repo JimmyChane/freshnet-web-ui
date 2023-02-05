@@ -1,9 +1,10 @@
 <script>
-   import ButtonOption2 from "@/components/button/ButtonOption2.vue";
    import { format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
+   import OptionButton from "@/components/button/OptionButton.vue";
+   import Menu from "@/components/Menu.vue";
 
    export default {
-      components: { ButtonOption2 },
+      components: { OptionButton },
       props: { item: { type: Object, default: null } },
       emits: ["callback-delete"],
       data() {
@@ -33,10 +34,9 @@
             return result ? result : "";
          },
 
-         menuDirection: () => ButtonOption2.Directions.Left,
          isShowingMenu() {
             return (
-               this.isHovered || this.menuMode === ButtonOption2.Visibility.Show
+               this.isHovered || this.menuMode === Menu.Mode.Show
             );
          },
       },
@@ -102,11 +102,11 @@
             >{{ methodResult }}</span
          >
 
-         <ButtonOption2
+         <OptionButton
             class="ItemEvent-menu"
             :style="{
                'z-index': isShowingMenu ? '100' : '1',
-               'opacity': isShowingMenu ? '1' : '0',
+               opacity: isShowingMenu ? '1' : '0',
             }"
             :menus="[
                {
@@ -116,14 +116,8 @@
                   click: () => $emit('callback-delete', item),
                },
             ]"
-            :direction="menuDirection"
-            @visibility-change="(mode) => (menuMode = mode)"
-         >
-            <img
-               class="ItemEvent-menu-icon"
-               :src="host.res('icon/option-black.svg')"
-            />
-         </ButtonOption2>
+            @mode-change="(mode) => (menuMode = mode)"
+         />
       </div>
    </div>
 </template>

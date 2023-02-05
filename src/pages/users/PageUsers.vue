@@ -1,6 +1,6 @@
 <script>
    import Loadingv1 from "@/components/Loading";
-   import MenuButton from "@/components/button/MenuButton.vue";
+   import OptionButton from "@/components/button/OptionButton.vue";
    import Selector from "@/components/selector/Selector.vue";
    import Empty from "@/components/Empty.vue";
    import PopupWindowAction from "@/components/window/PopupWindowAction";
@@ -20,7 +20,7 @@
       components: {
          ActionBarManage,
          Loadingv1,
-         MenuButton,
+         OptionButton,
          Selector,
          Empty,
          PopupWindowAction,

@@ -1,6 +1,6 @@
 <script>
    import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import ButtonOption from "@/components/button/ButtonOption.vue";
+   import Menu from "@/components/Menu.vue";
    import Selector from "@/components/selector/Selector.vue";
 
    import ButtonAddImage from "./ButtonAddImage.vue";
@@ -17,7 +17,7 @@
       components: {
          Actionbar,
          Selector,
-         ButtonOption,
+         Menu,
          ButtonAddImage,
          ButtonImage,
          PanelEvents,
@@ -192,7 +192,7 @@
                      </button>
                   </div>
 
-                  <ButtonOption
+                  <Menu
                      class="PanelService-section-label-option"
                      direction="bottomLeft"
                      @mouseover="bookmarkHeaderIconIsHover = true"
@@ -235,7 +235,7 @@
                               : host.res('icon/bookmark-505050.svg')
                         "
                      />
-                  </ButtonOption>
+                  </Menu>
                </div>
             </div>
 

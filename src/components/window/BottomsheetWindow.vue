@@ -1,5 +1,5 @@
 <script>
-   import DismissableContainer from "@/components/components/DismissableContainer.vue";
+   import DismissableContainer from "@/components/DismissableContainer.vue";
 
    export default {
       emits: ["click-dismiss", "listen-open"],

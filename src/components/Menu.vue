@@ -5,17 +5,12 @@
    export default {
       Mode,
 
-      props: {
-         menus: { type: Array, default: () => [] },
-      },
+      props: { menus: { type: Array, default: () => [] } },
       data() {
          return { popupMenu: null };
       },
       computed: {
-         isShowing() {
-            if (!this.popupMenu) return false;
-            return this.popupMenu.isShowing;
-         },
+         isShowing: (c) => c.popupMenu && c.popupMenu.isShowing,
       },
       watch: {
          isShowing() {
@@ -33,7 +28,11 @@
             this.popupMenu = this.$root.popupMenuShow(
                this._self.$el,
                this.menus.map((menu) => {
-                  menu.click = () => menu.interact();
+                  if (
+                     typeof menu.click !== "function" &&
+                     typeof menu.interact === "function"
+                  )
+                     menu.click = () => menu.interact();
                   return menu;
                }),
                PopupMenu.Corner.BOTTOM_LEFT,
@@ -49,7 +48,7 @@
 
 <template>
    <button
-      class="OptionContainer transition"
+      class="Menu transition"
       @mouseover="(x) => $emit('mouseover', x)"
       @mouseleave="(x) => $emit('mouseleave', x)"
       @click="() => toggle()"
@@ -60,7 +59,7 @@
 </template>
 
 <style lang="scss" scoped>
-   .OptionContainer {
+   .Menu {
       font-size: 1rem;
       font-weight: 600;
 

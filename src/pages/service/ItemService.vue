@@ -1,7 +1,7 @@
 <script>
    const Mode = { Grid: 1, List: 2, Detail: 3 };
 
-   import MenuButton from "@/components/button/MenuButton.vue";
+   import OptionButton from "@/components/button/OptionButton.vue";
    import Button3 from "@/components/button/Button3.vue";
    import LabelCount from "@/components/LabelCount.vue";
    import ImageViews from "@/components/ImageViews.vue";
@@ -16,7 +16,7 @@
    export default {
       Mode,
 
-      components: { MenuButton, Button3, LabelCount, ImageViews, ImageView },
+      components: { OptionButton, Button3, LabelCount, ImageViews, ImageView },
       emits: ["click"],
       props: {
          mode: { type: Number, default: Mode.List },
