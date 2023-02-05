@@ -8,11 +8,11 @@
          placeholder: { type: String, default: "Search" },
       },
       data() {
-         return { search: "", searchExpand: false, searchLastCharTime: 0 };
+         return { search: "", isExpand: false, searchLastCharTime: 0 };
       },
       watch: {
-         search(newSearch) {
-            this.searchExpand = newSearch;
+         search(text = "") {
+            this.isExpand = text.length > 0;
 
             const elapseTimeDesigned = 250;
             const date = new Date();
@@ -22,12 +22,25 @@
 
             this.searchLastCharTime = time;
             setTimeout(
-               () => this.$emit("callback-search", newSearch),
+               () => this.$emit("callback-search", text),
                elapseTimeDesigned,
             );
          },
       },
       emits: ["callback-search"],
+      methods: {
+         clear() {
+            this.search = "";
+         },
+         expand() {
+            this.isExpand = true;
+         },
+         collapse() {
+            setTimeout(() => {
+               this.isExpand = false;
+            }, 300);
+         },
+      },
    };
 </script>
 
@@ -35,39 +48,37 @@
    <div class="SearchInput">
       <Searchbar
          :class="[
-            searchExpand
+            isExpand
                ? 'SearchInput-body-isActive'
                : 'SearchInput-body-isPassive',
          ]"
          :model="search"
          :placeholder="placeholder"
-         @clear="(e) => (search = '')"
+         @clear="(e) => clear()"
          @input="(e) => (search = e.value)"
-         @focus="searchExpand = search"
-         @blur="searchExpand = false"
+         @focus="isExpand = search"
+         @blur="() => collapse()"
       />
 
-      <div class="SearchInput-main">
-         <div
-            ref="SearchInput-main-background"
-            class="SearchInput-main-background transition"
-            :style="{
-               opacity: [searchExpand ? '1' : '0'],
-               'pointer-events': [searchExpand ? 'all' : 'none'],
-            }"
-            @click="searchExpand = false"
-         />
-         <div v-if="searchExpand" class="SearchInput-main-container">
-            <div class="SearchInput-main-body">
-               <p v-if="!list || list.length <= 0">No Result</p>
+      <div
+         class="SearchInput-background transition"
+         :style="{
+            opacity: [isExpand ? '1' : '0'],
+            'pointer-events': [isExpand ? 'all' : 'none'],
+         }"
+         @click="() => collapse()"
+      />
 
-               <slot
-                  :clear="() => (search = '')"
-                  :expand="() => (searchExpand = true)"
-                  :collapse="() => (searchExpand = false)"
-                  :list="list"
-               />
-            </div>
+      <div class="SearchInput-dropdown" v-if="isExpand">
+         <div class="SearchInput-dropdown-body">
+            <p v-if="!list || list.length <= 0">No Result</p>
+
+            <slot
+               :clear="() => clear()"
+               :expand="() => expand()"
+               :collapse="() => collapse()"
+               :list="list"
+            />
          </div>
       </div>
    </div>
@@ -87,12 +98,18 @@
 
       --dropdown-height: 80vh;
 
+      background-color: #e4e4e4;
+
+      border-radius: var(--border-radius);
+
       display: flex;
       flex-direction: column;
       align-items: stretch;
       width: 100%;
       height: 100%;
       position: relative;
+
+      background-color: #e4e4e4;
 
       .SearchInput-body-isPassive {
          border: var(--border);
@@ -113,61 +130,57 @@
          }
       }
 
-      .SearchInput-main {
+      .SearchInput-background {
+         min-width: 100vw;
+         min-height: 100vh;
+         position: fixed;
+         top: 0;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         background-color: hsla(0, 0%, 0%, 0.6);
+         display: grid;
+      }
+
+      .SearchInput-dropdown {
          width: 100%;
-         height: 0;
-         background-color: white;
-         border-radius: 0 0 var(--border-radius-active)
-            var(--border-radius-active);
+         height: 100vh;
+         max-height: var(--dropdown-height);
+
          z-index: 1;
 
-         .SearchInput-main-background {
-            min-width: 100vw;
-            min-height: 100vh;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-color: hsla(0, 0%, 0%, 0.6);
-            display: grid;
-         }
+         position: absolute;
+         top: 100%;
 
-         .SearchInput-main-container {
-            position: absolute;
-            top: 100%;
+         box-shadow: 0 0 60px hsla(0, 0%, 0%, 0.1);
+         border-radius: 0 0 var(--border-radius-active)
+            var(--border-radius-active);
+
+         background-color: #e4e4e4;
+         overflow: hidden;
+
+         .SearchInput-dropdown-body {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             max-height: var(--dropdown-height);
-            box-shadow: 0 0 60px hsla(0, 0%, 0%, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+
             border-radius: 0 0 var(--border-radius-active)
                var(--border-radius-active);
-            background-color: #e4e4e4;
-            overflow: hidden;
 
-            .SearchInput-main-body {
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            padding: 0.7rem 0.9rem 4rem 0.9rem;
+            color: black;
+
+            & > * {
                width: 100%;
-               height: 100%;
-               max-height: var(--dropdown-height);
-               display: flex;
-               flex-direction: column;
-               align-items: center;
-               gap: 0.4rem;
-
-               border-radius: 0 0 var(--border-radius-active)
-                  var(--border-radius-active);
-
-               overflow-y: auto;
-               overflow-x: hidden;
-
-               padding: 0.7rem 0.9rem 4rem 0.9rem;
-               color: black;
-
-               & > * {
-                  width: 100%;
-                  height: max-content;
-                  overflow: initial;
-               }
+               height: max-content;
+               overflow: initial;
             }
          }
       }

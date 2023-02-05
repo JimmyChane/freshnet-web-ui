@@ -162,7 +162,7 @@
       align-items: center;
       justify-content: flex-start;
       border-radius: var(--border-radius);
-      --transition-duration: 200ms;
+      --transition-timing: cubic-bezier(1, 0, 0, 1);
 
       .ItemProduct-preview {
          flex-grow: 0;
@@ -171,7 +171,7 @@
 
          --preview-border-radius: var(--border-radius);
          --preview-border-radius-focus: var(--border-radius);
-         --transition-duration: 200ms;
+         --transition-timing: cubic-bezier(1, 0, 0, 1);
 
          & > * {
             width: 100%;

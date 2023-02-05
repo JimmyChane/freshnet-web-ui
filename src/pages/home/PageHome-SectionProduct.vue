@@ -208,46 +208,53 @@
       align-items: center;
       justify-content: center;
 
-      --header-height: 3em;
+      --header-height: 2.2em;
       --footer-height: 3em;
-
-      .HomeSectionProduct-header {
-         font-size: 1.5em;
-         font-weight: 600;
-         display: flex;
-         justify-content: center;
-         align-items: center;
-         text-align: center;
-         line-height: 1em;
-
-         padding: 1em;
-
-         height: var(--header-height);
-         min-height: var(--header-height);
-         max-height: var(--header-height);
-      }
 
       .HomeSectionProduct-img {
          --height: calc(100% - var(--header-height) - var(--footer-height));
          height: var(--height);
          min-height: var(--height);
          max-height: var(--height);
-         flex-grow: 1;
+         overflow: hidden;
+
+         width: 100%;
          object-fit: contain;
+         flex-grow: 1;
+         padding: 1em;
          cursor: pointer;
 
          border-radius: 1rem;
          filter: drop-shadow(0 0 1rem hsla(0, 0%, 0%, 0.2));
       }
 
+      .HomeSectionProduct-header {
+         width: 100%;
+         height: var(--header-height);
+         min-height: var(--header-height);
+         max-height: var(--header-height);
+
+         font-size: 1.5em;
+         font-weight: 600;
+         text-align: center;
+         line-height: 1em;
+
+         display: flex;
+         flex-grow: 0;
+         flex-direction: column;
+         justify-content: flex-end;
+         align-items: center;
+      }
       .HomeSectionProduct-footer {
          width: 100%;
          height: var(--footer-height);
          min-height: var(--footer-height);
          max-height: var(--footer-height);
+
          display: flex;
+         flex-grow: 0;
          flex-direction: row;
-         align-items: center;
+         align-items: flex-start;
          justify-content: center;
 
          .HomeSectionProduct-footer-item {

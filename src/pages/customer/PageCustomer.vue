@@ -19,7 +19,7 @@
    export default {
       key: "customer",
       title: "Customers",
-      icon: { light: "customer-FFFFFF", dark: "customer-000000" },
+      icon: { light: "customers-FFFFFF", dark: "customers-000000" },
 
       userPermissions: ["admin", "staff"],
 
