@@ -111,160 +111,196 @@
 </script>
 
 <template>
-   <Bottomsheet
-      class="ViewerImage"
-      :isShowing="isShowing"
-      @click-dismiss="() => clickDismiss()"
-      :style="{ '--thumbnails-height': thumbnails.length > 1 ? '5rem' : '0' }"
-   >
-      <div class="ViewerImage-body">
-         <Actionbar
-            class="ViewerImage-actionbar"
-            :leftMenus="{
-               icon: host.icon('close-000000'),
-               click: () => clickDismiss(),
-            }"
-         />
-
-         <div
-            class="ViewerImage-main"
+   <div class="App-overflow">
+      <div class="App-overflow-body">
+         <Bottomsheet
+            class="ViewerImage"
+            :isShowing="isShowing"
+            @click-dismiss="() => clickDismiss()"
             :style="{
-               height:
-                  thumbnails.length > 1
-                     ? 'calc(100% - var(--thumbnails-height))'
-                     : '100%',
+               '--thumbnails-height': thumbnails.length > 1 ? '5rem' : '0',
             }"
-            ref="Container"
-            @mousemove="(e) => onMouseMove(e)"
-            @mouseleave="(e) => onMouseLeave(e)"
-            @click="() => onClickContainer()"
          >
-            <ImageView
-               class="ViewerImage-image"
-               ref="image"
-               v-if="image"
-               :src="image.toUrl()"
-               :style="style"
-               @click="() => onClickImage()"
-            />
-         </div>
+            <div class="ViewerImage-body">
+               <Actionbar
+                  class="ViewerImage-actionbar"
+                  :leftMenus="{
+                     icon: host.icon('close-000000'),
+                     click: () => clickDismiss(),
+                  }"
+               />
 
-         <div class="ImageView-footer" v-if="thumbnails.length > 1">
-            <div class="ImageView-images scrollbar">
-               <button
-                  :class="[
-                     thumbnail === image
-                        ? 'ImageView-images-item-button-isSelected'
-                        : 'ImageView-images-item-button-isDeselected',
-                     'ImageView-images-item-button',
-                     'transition',
-                  ]"
-                  v-for="thumbnail of thumbnails"
-                  :key="thumbnail.toUrl()"
-                  @click="
-                     () => {
-                        $root.imageViewer.image = thumbnail;
-                     }
-                  "
+               <div
+                  class="ViewerImage-main"
+                  :style="{
+                     height:
+                        thumbnails.length > 1
+                           ? 'calc(100% - var(--thumbnails-height))'
+                           : '100%',
+                  }"
+                  ref="Container"
+                  @mousemove="(e) => onMouseMove(e)"
+                  @mouseleave="(e) => onMouseLeave(e)"
+                  @click="() => onClickContainer()"
                >
-                  <ImageView class="ImageView-images-item" :src="thumbnail" />
-               </button>
+                  <ImageView
+                     class="ViewerImage-image"
+                     ref="image"
+                     v-if="image"
+                     :src="image.toUrl()"
+                     :style="style"
+                     @click="() => onClickImage()"
+                  />
+               </div>
+
+               <div class="ImageView-footer" v-if="thumbnails.length > 1">
+                  <div class="ImageView-images scrollbar">
+                     <button
+                        :class="[
+                           thumbnail === image
+                              ? 'ImageView-images-item-button-isSelected'
+                              : 'ImageView-images-item-button-isDeselected',
+                           'ImageView-images-item-button',
+                           'transition',
+                        ]"
+                        v-for="thumbnail of thumbnails"
+                        :key="thumbnail.toUrl()"
+                        @click="
+                           () => {
+                              $root.imageViewer.image = thumbnail;
+                           }
+                        "
+                     >
+                        <ImageView
+                           class="ImageView-images-item"
+                           :src="thumbnail"
+                        />
+                     </button>
+                  </div>
+               </div>
             </div>
-         </div>
+         </Bottomsheet>
       </div>
-   </Bottomsheet>
+   </div>
 </template>
 
 <style lang="scss" scoped>
-   .ViewerImage {
-      --default-size-top: 0;
-      --default-size-right: 0;
-      --default-size-bottom: 0;
-      --default-size-left: 0;
+   .App-overflow {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      overflow: hidden;
 
-      --actionbar-height: 5rem;
-      --thumbnails-height: 5rem;
-      --thumbnail-height: 4.2rem;
+      height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+      height: calc(var(--vh, 1vh) * 100);
 
-      .ViewerImage-body {
-         width: 100%;
-         height: 100%;
+      .App-overflow-body {
+         position: relative;
+         width: 100vw;
+         height: 100vh;
          display: flex;
-         flex-direction: column;
          overflow: hidden;
-         background-color: hsla(0, 0%, 100%, 0.5);
-         .ViewerImage-actionbar {
-            z-index: 1;
-            background: none;
-            color: black;
-            height: var(--actionbar-height);
-         }
-         .ViewerImage-main {
-            z-index: 2;
-            width: 100vw;
-            max-width: 100%;
-            max-height: calc(
-               100% - var(--thumbnail-height) - var(--actionbar-height)
-            );
-            padding: 1rem;
-            flex-grow: 1;
 
+         .ViewerImage {
+            z-index: 3;
+         }
+      }
+
+      .ViewerImage {
+         --default-size-top: 0;
+         --default-size-right: 0;
+         --default-size-bottom: 0;
+         --default-size-left: 0;
+
+         --actionbar-height: 5rem;
+         --thumbnails-height: 5rem;
+         --thumbnail-height: 4.2rem;
+
+         .ViewerImage-body {
+            width: 100%;
+            height: 100%;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-
-            .ViewerImage-image {
-               max-width: 100%;
-               max-height: 100%;
-               border-radius: 0.5rem;
-               object-fit: contain;
-               background-color: rgba(255, 255, 255, 0.9);
+            overflow: hidden;
+            background-color: hsla(0, 0%, 100%, 0.5);
+            .ViewerImage-actionbar {
+               z-index: 1;
+               background: none;
+               color: black;
+               height: var(--actionbar-height);
             }
-         }
-         .ImageView-footer {
-            z-index: 1;
-            height: var(--thumbnails-height);
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-
-            .ImageView-images {
-               width: max-content;
+            .ViewerImage-main {
+               z-index: 2;
+               width: 100vw;
                max-width: 100%;
+               max-height: calc(
+                  100% - var(--thumbnail-height) - var(--actionbar-height)
+               );
+               padding: 1rem;
+               flex-grow: 1;
+
+               display: flex;
+               flex-direction: column;
+               align-items: center;
+               justify-content: center;
+
+               .ViewerImage-image {
+                  max-width: 100%;
+                  max-height: 100%;
+                  border-radius: 0.5rem;
+                  object-fit: contain;
+                  background-color: rgba(255, 255, 255, 0.9);
+               }
+            }
+            .ImageView-footer {
+               z-index: 1;
                height: var(--thumbnails-height);
-               overflow-y: auto;
                display: flex;
                flex-direction: row;
                align-items: center;
-               align-items: flex-start;
-               justify-content: flex-start;
-               gap: 0.5rem;
+               justify-content: center;
 
-               .ImageView-images-item-button {
-                  height: var(--thumbnail-height);
-                  background: none;
-                  border: none;
+               .ImageView-images {
+                  width: max-content;
+                  max-width: 100%;
+                  height: var(--thumbnails-height);
+                  overflow-y: auto;
                   display: flex;
+                  flex-direction: row;
                   align-items: center;
-                  justify-content: center;
-                  border-radius: 0.2rem;
-                  overflow: hidden;
-                  padding: 0.2rem;
-                  .ImageView-images-item {
-                     height: 100%;
-                     width: 100%;
-                     object-fit: contain;
+                  align-items: flex-start;
+                  justify-content: flex-start;
+                  gap: 0.5rem;
+
+                  .ImageView-images-item-button {
+                     height: var(--thumbnail-height);
+                     background: none;
+                     border: none;
+                     display: flex;
+                     align-items: center;
+                     justify-content: center;
+                     border-radius: 0.2rem;
+                     overflow: hidden;
+                     padding: 0.2rem;
+                     .ImageView-images-item {
+                        height: 100%;
+                        width: 100%;
+                        object-fit: contain;
+                     }
                   }
-               }
-               .ImageView-images-item-button-isSelected {
-                  background-color: var(--accent-color);
-               }
-               .ImageView-images-item-button-isDeselected {
-                  cursor: pointer;
-                  &:hover {
-                     background-color: hsla(0, 0%, 0%, 0.1);
+                  .ImageView-images-item-button-isSelected {
+                     background-color: var(--accent-color);
+                  }
+                  .ImageView-images-item-button-isDeselected {
+                     cursor: pointer;
+                     &:hover {
+                        background-color: hsla(0, 0%, 0%, 0.1);
+                     }
                   }
                }
             }

@@ -173,7 +173,6 @@
 <style lang="scss" scoped>
    .PopupMenu {
       position: absolute;
-      z-index: 5;
       display: flex;
       overflow: hidden;
       top: 0;

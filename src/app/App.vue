@@ -8,6 +8,7 @@
    import ViewerImage from "./ViewerImage.vue";
    import Snackbar from "./Snackbar.vue";
    import PopupMenu from "./PopupMenu.vue";
+   import Status from "./Status.vue";
 
    export default {
       name: "App",
@@ -16,43 +17,27 @@
          return [PageHome, PageProduct, PagePrint, PageManage];
       },
 
-      components: { LeftNav, ViewerImage, Snackbar, PopupMenu },
+      components: { LeftNav, ViewerImage, Snackbar, PopupMenu, Status },
       data() {
-         return { statusIsShown: false, layoutLoginIsShown: false };
+         return { layoutLoginIsShown: false };
       },
       computed: {
          isLogging: (c) => c.loginStore.getters.isLogging,
-         isConnected: (c) => c.store.getters.isConnected,
       },
       watch: {
          isLogging() {
             if (!this.loginStore.getters.user && this.isLogging)
                this.$root.feedback("User Logging");
          },
-         isConnected() {
-            this.onConnectionChange();
-         },
       },
       mounted() {
          window.addEventListener("resize", () => this.invalidateHeight());
          this.invalidateHeight();
-
-         setTimeout(() => this.onConnectionChange(), 3000);
       },
       unmounted() {
          window.removeEventListener("resize", this.invalidateHeight);
       },
       methods: {
-         onConnectionChange() {
-            if (!this.isConnected) {
-               this.statusIsShown = true;
-               return;
-            }
-
-            this.statusIsShown = true;
-            setTimeout(() => (this.statusIsShown = false), 3000);
-         },
-
          logout() {
             this.loginStore.dispatch("logout").then((user) => {
                this.$root.feedback(`${user.name} is now logged out`);
@@ -72,37 +57,26 @@
    <div
       :class="[
          'App',
-         `App-${statusIsShown ? 'isShowingStatus' : 'isHidingStatus'}`,
+         'transition',
          $root.appLayout.isNormal() ? 'App-isNormal' : '',
          $root.appLayout.isFull() ? 'App-isFull' : '',
-         'transition',
       ]"
    >
-      <div class="App-background transition"></div>
+      <div class="App-background transition" :style="{ 'z-index': '1' }"></div>
 
-      <div class="App-body transition">
+      <div class="App-body transition" :style="{ 'z-index': '2' }">
          <div class="App-layout">
-            <div
-               v-if="false"
-               :class="[
-                  'App-status',
-                  `App-status-${
-                     isConnected ? 'isConnected' : 'isDisconnected'
-                  }`,
-                  'transition',
-               ]"
-            >
-               <span>{{ isConnected ? "Connected" : "Disconnected" }}</span>
-            </div>
+            <Status :style="{ 'z-index': '2' }" />
 
             <div
                :class="[
-                  'App-layout-body',
-                  `App-layout-body-${
-                     $root.navigation.isDrawer() ? 'isDrawer' : 'isFixed'
-                  }`,
                   'transition',
+                  'App-layout-body',
+                  $root.navigation.isDrawer()
+                     ? 'App-layout-body-isDrawer'
+                     : 'App-layout-body-isFixed',
                ]"
+               :style="{ 'z-index': '1' }"
             >
                <LeftNav
                   class="App-LeftNav"
@@ -114,20 +88,17 @@
          </div>
       </div>
 
-      <div class="App-overflow">
-         <div class="App-overflow-body">
-            <ViewerImage class="App-imageViewer" />
-         </div>
-      </div>
+      <ViewerImage :style="{ 'z-index': 'auto' }" />
 
       <Snackbar
-         class="App-Snackbar"
+         :style="{ 'z-index': '4' }"
          v-for="snackbar of $root.snackbars"
          :key="snackbar.key"
          :item="snackbar"
       />
 
       <PopupMenu
+         :style="{ 'z-index': '5' }"
          v-for="popupMenu of $root.popupMenus"
          :key="popupMenu.key"
          :popupMenu="popupMenu"
@@ -244,14 +215,12 @@
       height: calc(var(--vh, 1vh) * 100);
 
       .App-background {
-         z-index: 1;
          position: absolute;
          width: 100%;
          height: 100%;
          pointer-events: none;
       }
       .App-body {
-         z-index: 2;
          width: 100%;
          height: 100%;
          display: flex;
@@ -268,41 +237,11 @@
             align-items: center;
             justify-content: stretch;
 
-            --status-height: 1.2em;
-
-            .App-status {
-               z-index: 2;
-               font-size: 0.7em;
-               display: flex;
-               flex-direction: row;
-               flex-grow: 0;
-               align-items: center;
-               justify-content: center;
-               padding: 0 0.1em;
-               width: 100%;
-               color: white;
-               pointer-events: none;
-               background: var(--primary-color);
-               --background-disconnected: #e73c2f;
-               --background-connected: #0c8d0c;
-
-               position: absolute;
-               top: 0;
-            }
-            .App-status-isDisconnected {
-               background: var(--background-disconnected);
-            }
-            .App-status-isConnected {
-               background: var(--background-connected);
-            }
-
             .App-layout-body {
-               z-index: 1;
                width: 100%;
                height: 100%;
                display: flex;
                flex-direction: row;
-               flex-grow: 1;
                align-items: center;
                justify-content: stretch;
                background-color: #e4e4e4;
@@ -337,39 +276,6 @@
             }
          }
       }
-      .App-overflow {
-         z-index: auto;
-         position: absolute;
-         top: 0;
-         bottom: 0;
-         left: 0;
-         right: 0;
-         width: 100vw;
-         height: 100vh;
-         display: flex;
-         overflow: hidden;
-
-         height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-         height: calc(var(--vh, 1vh) * 100);
-
-         .App-overflow-body {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-
-            .App-imageViewer {
-               z-index: 3;
-            }
-         }
-      }
-      .App-Snackbar {
-         z-index: 4;
-      }
-      .App-PopupMenu {
-         z-index: 5;
-      }
    }
 
    .App-isNormal {
@@ -397,31 +303,6 @@
       background: none;
       .App-background {
          opacity: 0;
-      }
-   }
-
-   .App-isShowingStatus {
-      .App-body {
-         .App-layout {
-            .App-status {
-               height: var(--status-height);
-               min-height: var(--status-height);
-               max-height: var(--status-height);
-               opacity: 1;
-            }
-         }
-      }
-   }
-   .App-isHidingStatus {
-      .App-body {
-         .App-layout {
-            .App-status {
-               height: 0;
-               min-height: 0;
-               max-height: 0;
-               opacity: 0;
-            }
-         }
       }
    }
 </style>
