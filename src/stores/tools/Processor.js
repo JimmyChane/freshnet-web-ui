@@ -1,20 +1,20 @@
 class Processor {
-   #keys = [];
+   keys = [];
 
    async #add(key) {
       return new Promise((resolve, reject) => {
          const run = () => {
             if (this.isLoading(key)) return setTimeout(run, 10);
 
-            this.#keys.push(key);
+            this.keys.push(key);
             resolve(key);
          };
          run();
       });
    }
    #remove(key) {
-      const index = this.#keys.indexOf(key);
-      if (index > -1) this.#keys.splice(index, 1);
+      const index = this.keys.indexOf(key);
+      if (index > -1) this.keys.splice(index, 1);
    }
 
    async acquire(key, callback) {
@@ -30,8 +30,8 @@ class Processor {
    }
 
    isLoading(key) {
-      if (typeof key !== "string") return this.#keys.length > 0;
-      return !!this.#keys.find((loading) => loading === key);
+      if (typeof key !== "string") return this.keys.length > 0;
+      return !!this.keys.find((loading) => loading === key);
    }
 }
 
