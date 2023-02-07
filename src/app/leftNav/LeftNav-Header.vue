@@ -64,7 +64,7 @@
    .LeftNavHeader {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: space-between;
       padding: 0.4rem;
 
       .LeftNavHeader-logo {

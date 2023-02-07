@@ -42,6 +42,6 @@
       }
    }
    .LeftNav-Search-isWide {
-      margin: 0 1.2rem;
+      margin: 0 0.7rem;
    }
 </style>

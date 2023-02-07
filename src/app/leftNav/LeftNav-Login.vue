@@ -71,7 +71,6 @@
       display: flex;
       flex-direction: column;
       gap: 2px;
-      padding: 1rem;
       border-top: 1px solid hsla(0, 0%, 0%, 0.1);
       background-color: hsl(0, 0%, 84%);
 
@@ -118,7 +117,7 @@
             border-radius: 6px;
             border: none;
             cursor: pointer;
-            padding: 0.3em;
+            padding: 0.5em;
 
             display: flex;
             text-decoration: none;
@@ -143,10 +142,9 @@
    }
 
    .LeftNavigationLogin-isWide {
-      padding: 1rem;
+      padding: 0.5rem;
    }
    .LeftNavigationLogin-isThin {
-      // padding: 0;
       padding: 0.2rem;
       .LeftNavigationLogin-loggedIn {
          gap: 0;

@@ -221,7 +221,7 @@
 <style lang="scss" scoped>
    .LeftNav {
       .LeftNav-body {
-         width: 16rem;
+         width: 18rem;
          height: 100%;
          max-width: 100%;
          display: flex;
@@ -238,7 +238,7 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            padding: 0.4em 0;
+            padding: 0.2em;
             padding-bottom: 4em;
          }
          .LeftNav-login {
@@ -261,9 +261,7 @@
    .LeftNav-isWide {
       .LeftNav-body {
          .LeftNav-navigations {
-            padding: 0.8em;
             padding-top: 0.8em;
-            padding-bottom: 4em;
             align-items: flex-start;
          }
       }
@@ -273,7 +271,6 @@
          width: fit-content;
          .LeftNav-navigations {
             align-items: center;
-            padding: 0.3em;
          }
       }
    }
