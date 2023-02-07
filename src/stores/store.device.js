@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import ItemCustomerDevice from "../items/CustomerDevice.js";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
@@ -34,27 +34,27 @@ const getItemsOfIds = async (context, ids = []) => {
 };
 
 const requestList = async () => {
-   return ApiHost.request().url("customer/device/list").send();
+   return HostApi.request().url("customer/device/list").send();
 };
 const requestAdd = async (body) => {
-   return ApiHost.request().POST().url("customer/device/add").body(body).send();
+   return HostApi.request().POST().url("customer/device/add").body(body).send();
 };
 const requestRemove = async (body) => {
-   return ApiHost.request()
+   return HostApi.request()
       .DELETE()
       .url("customer/device/remove")
       .body(body)
       .send();
 };
 const requestUpdateSpecification = async (body) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("customer/device/update/specifications")
       .body(body)
       .send();
 };
 const requestUpdateDescription = async (body) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("customer/device/update/description")
       .body(body)

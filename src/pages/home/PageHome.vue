@@ -16,15 +16,15 @@
    import Company from "@/host/Company";
    import { format, differenceInMinutes } from "date-fns";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "home",
       name: "Home",
       title: "Home",
       icon: {
-         light: new IconHost("home-FFFFFF.svg"),
-         dark: new IconHost("home-000000.svg"),
+         light: new HostIcon("home-FFFFFF.svg"),
+         dark: new HostIcon("home-000000.svg"),
       },
 
       components: {

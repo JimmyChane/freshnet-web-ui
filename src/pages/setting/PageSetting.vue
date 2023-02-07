@@ -4,14 +4,14 @@
    import GroupSetting from "./GroupSetting.vue";
    import SettingModule from "@/items/data/Setting.js";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "setting",
       title: "Settings",
       icon: {
-         light: new IconHost("setting-FFFFFF.svg"),
-         dark: new IconHost("setting-000000.svg"),
+         light: new HostIcon("setting-FFFFFF.svg"),
+         dark: new HostIcon("setting-000000.svg"),
       },
       userPermissions: ["admin"],
 
@@ -25,7 +25,7 @@
                   actions: [
                      {
                         title: "Add",
-                        icon: this.host.res("icon/add-000000.svg"),
+                        icon: this.host.icon("add-000000"),
                         click: () => console.log("click add"),
                      },
                   ],
@@ -35,7 +35,7 @@
                   actions: [
                      {
                         title: "Edit",
-                        icon: this.host.res("icon/edit-000000.svg"),
+                        icon: this.host.icon("edit-000000"),
                         click: () => console.log("click edit"),
                      },
                   ],
@@ -81,7 +81,7 @@
             {
                key: 'refresh',
                title: 'Refresh',
-               icon: host.res('icon/refresh-2A4858.svg'),
+               icon: host.icon('refresh-2A4858'),
                click: () => refresh(),
             },
          ]"
@@ -98,7 +98,7 @@
 
       <Empty
          v-if="!settings.length && !isLoading"
-         :icon="$options.icon.dark.toString()"
+         :icon="$options.icon.dark.toUrl()"
       />
    </div>
 </template>

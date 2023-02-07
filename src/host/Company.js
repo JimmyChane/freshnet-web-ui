@@ -1,4 +1,4 @@
-import Host from "@/host/ApiHost";
+import Host from "@/host/HostApi";
 import DateFNS, {
    differenceInHours,
    isAfter,
@@ -47,18 +47,18 @@ class ContactCategory {
    }
 }
 class ContactCategories {
-   static Call = new ContactCategory("Call", Host.res("icon/call-color.svg"));
+   static Call = new ContactCategory("Call", Host.icon("call-color"));
    static Whatsapp = new ContactCategory(
       "Whatsapp",
-      Host.res("icon/whatsapp-color.svg"),
+      Host.icon("whatsapp-color"),
    );
    static Telegram = new ContactCategory(
       "Telegram",
-      Host.res("icon/telegram-color.svg"),
+      Host.icon("telegram-color"),
    );
    static Telephone = new ContactCategory(
       "Telephone",
-      Host.res("icon/telephone-color.svg"),
+      Host.icon("telephone-color"),
    );
 }
 class ContactLink {

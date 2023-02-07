@@ -13,7 +13,7 @@
       <ButtonIcon
          class="LeftNav-Search-button"
          v-if="!isWide"
-         :src="host.res('icon/search-000000.svg')"
+         :src="host.icon('search-000000')"
          @click="
             () => {
                if (!$root.navigation.isWide()) {

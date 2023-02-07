@@ -9,13 +9,14 @@
          product: { type: Object, default: () => null },
       },
       computed: {
-         description: (context) => (context.product ? context.product.description : ""),
+         description: (context) =>
+            context.product ? context.product.description : "",
 
          menu() {
             if (!this.allowEdit) return null;
             return {
                title: "Edit",
-               icon: this.host.res("icon/edit-000000.svg"),
+               icon: this.host.icon("edit-000000"),
                click: () =>
                   this.$emit("click-edit", {
                      product: this.product,
@@ -36,7 +37,9 @@
       :menu="menu"
    >
       <div class="SectionDescription">
-         <p class="SectionDescription-content" v-if="description">{{ description }}</p>
+         <p class="SectionDescription-content" v-if="description">{{
+            description
+         }}</p>
 
          <span class="SectionDescription-noContent" v-else>No Description</span>
       </div>

@@ -35,8 +35,8 @@
 
          arrowIcon: (c) =>
             c.primaryColorIsDark
-               ? c.host.res("icon/arrowDown-white.svg")
-               : c.host.res("icon/arrowDown-black.svg"),
+               ? c.host.icon("arrowDown-white")
+               : c.host.icon("arrowDown-black"),
 
          isThin: (c) => c.$root.window.innerWidth < 550,
          imageIsShowing() {
@@ -141,7 +141,7 @@
       >
          <div class="LayoutProductViewerImagePreview-tool-body">
             <button class="transition" @click="$emit('click-remove', image)">
-               <img :src="host.res('icon/trash-505050.svg')" />
+               <img :src="host.icon('trash-505050')" />
             </button>
          </div>
       </div>

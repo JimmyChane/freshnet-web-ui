@@ -17,7 +17,7 @@
    import WindowUpdateCategory from "./WindowUpdateCategory.vue";
    import WindowUpdateSpecifications from "./WindowUpdateSpecifications.vue";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    class PopupContext {
       context = null;
@@ -119,8 +119,8 @@
       key: "product",
       title: "Products",
       icon: {
-         light: new IconHost("products-FFFFFF.svg"),
-         dark: new IconHost("products-000000.svg"),
+         light: new HostIcon("products-FFFFFF.svg"),
+         dark: new HostIcon("products-000000.svg"),
       },
 
       _queries_old() {

@@ -22,7 +22,7 @@
             ? {
                  key: 'hamburgerMenu',
                  title: 'Hamburger Menu',
-                 icon: host.res('icon/hamburgerMenu-000000.svg'),
+                 icon: host.icon('hamburgerMenu-000000'),
                  click: () => $emit('click-drawer-expand'),
               }
             : null,

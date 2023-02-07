@@ -23,7 +23,7 @@
          return { scrollTop: 0, itemSelect: null };
       },
       computed: {
-         iconEmpty: () => PageCustomer.icon.dark.toString(),
+         iconEmpty: () => PageCustomer.icon.dark.toUrl(),
       },
       methods: {
          itemKey(item) {
@@ -38,7 +38,7 @@
             return "";
          },
          itemPhoneNumberStr(item) {
-            if (item && item.phoneNumber) return item.phoneNumber.toString();
+            if (item && item.phoneNumber) return item.phoneNumber.toUrl();
             return "";
          },
       },

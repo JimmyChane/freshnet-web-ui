@@ -38,7 +38,7 @@
             <img
                class="Snackbar-loading"
                v-if="item.isLoading"
-               :src="host.res('icon/loading-circular-FFFFFF.svg')"
+               :src="host.icon('loading-circular-FFFFFF')"
             />
          </div>
 

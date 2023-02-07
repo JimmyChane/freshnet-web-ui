@@ -1,28 +1,28 @@
 import U from "@/U.js";
 import Vuex from "vuex";
-import ApiHost from "../host/ApiHost.js";
+import HostApi from "../host/HostApi.js";
 import ItemUser from "../items/User.js";
 import StoreBuilder from "./tools/StoreBuilder.js";
 
 const requestList = async () => {
-   return ApiHost.request().url("users").send();
+   return HostApi.request().url("users").send();
 };
 const requestAdd = async (username, name, passwordNew, passwordRepeat) => {
-   return ApiHost.request()
+   return HostApi.request()
       .url("users/user")
       .POST()
       .body({ username, name, passwordNew, passwordRepeat })
       .send();
 };
 const requestRemove = async (username) => {
-   return ApiHost.request()
+   return HostApi.request()
       .DELETE()
       .url("users/user")
       .body({ username })
       .send();
 };
 const requestUpdate = async (username, userType) => {
-   return ApiHost.request()
+   return HostApi.request()
       .url("users/user")
       .PUT()
       .body({ username, userType })

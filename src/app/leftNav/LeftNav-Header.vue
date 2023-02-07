@@ -55,7 +55,7 @@
          v-if="toggleButtonVisible"
          @click="() => toggleCollapse()"
       >
-         <img class="transition" :src="host.res('icon/arrowDown-000000.svg')" />
+         <img class="transition" :src="host.icon('arrowDown-000000')" />
       </button>
    </div>
 </template>

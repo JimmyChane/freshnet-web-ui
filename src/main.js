@@ -3,10 +3,10 @@ import AppLayout from "./tools/AppLayout.js";
 import Navigation from "./tools/Navigation.js";
 import Notification from "./tools/Notification.js";
 import TimeNowGetter from "./tools/TimeNowGetter.js";
-import ApiHost from "./host/ApiHost.js";
+import HostApi from "./host/HostApi.js";
 import PopupMenu from "@/app/PopupMenu.vue";
 import U from "@/U";
-import IconHost from "@/host/IconHost";
+import HostIcon from "@/host/HostIcon";
 
 // vue
 import Vue from "vue";
@@ -18,7 +18,7 @@ import Mixin from "./main.mixin.js";
 import App from "./app/App.vue";
 
 Vue.config.productionTip = false;
-Vue.prototype.host = ApiHost;
+Vue.prototype.host = HostApi;
 Vue.mixin(Mixin);
 
 const objectToArray = (object = {}) => {
@@ -74,13 +74,13 @@ const parseIcon = (icon) => {
    if (!U.isObject(icon) || icon === null) return null;
 
    const light =
-      icon.light instanceof IconHost
+      icon.light instanceof HostIcon
          ? icon.light.toUrl()
-         : ApiHost.res(`icon/${icon.light}.svg`);
+         : HostApi.icon(icon.light);
    const dark =
-      icon.dark instanceof IconHost
+      icon.dark instanceof HostIcon
          ? icon.dark.toUrl()
-         : ApiHost.res(`icon/${icon.dark}.svg`);
+         : HostApi.icon(icon.dark);
 
    return { light, dark };
 };
@@ -99,7 +99,7 @@ const parseGroup2s = (array) => {
 };
 
 new Vue({
-   host: ApiHost,
+   host: HostApi,
    router: Router,
    store: Stores.store,
 
@@ -380,13 +380,6 @@ new Vue({
       // app layout
       setAppLayout(layout) {
          this.appLayout.setLayout(layout);
-      },
-
-      // get full icon url on server localhost/res/icon/${name}.svg
-      icon(name) {
-         console.trace();
-         console.warn("please consider using host.icon() instead");
-         return this.host.res(`icon/${name}.svg`);
       },
 
       // send a snackbar notification

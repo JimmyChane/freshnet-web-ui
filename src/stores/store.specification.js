@@ -1,10 +1,10 @@
 import Vuex from "vuex";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import ProductSpecType from "@/items/ProductSpecType";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
-const requestList = async () => ApiHost.request().url("spec/").send();
+const requestList = async () => HostApi.request().url("spec/").send();
 
 export default {
    init(Stores) {

@@ -60,11 +60,11 @@
                         key: 'delete',
                         title: 'Delete',
                         color: '#DB4A2A',
-                        icon: host.res('icon/trash-DB4A2A.svg'),
+                        icon: host.icon('trash-DB4A2A'),
                         interact: () => $emit('click-remove', { item }),
                      },
                   ]"
-                  :icon="host.res('icon/option-000000.svg')"
+                  :icon="host.icon('option-000000')"
                />
             </div>
          </div>

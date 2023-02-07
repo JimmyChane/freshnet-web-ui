@@ -68,7 +68,7 @@
          };
       },
       computed: {
-         iconEmpty: () => PageProduct.icon.dark.toString(),
+         iconEmpty: () => PageProduct.icon.dark.toUrl(),
 
          isLayoutThin: (context) => context.$root.window.innerWidth < 550,
          layoutMode: () => ItemProduct.Mode.Grid,
@@ -88,7 +88,7 @@
          initRightMenus() {
             if (!this.isEditable) return null;
             const title = "Add";
-            const icon = this.host.res("icon/add-000000.svg");
+            const icon = this.host.icon("add-000000");
             const click = () => this.$emit("click-productAdd");
             return { title, icon, click };
          },

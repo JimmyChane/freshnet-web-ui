@@ -16,14 +16,14 @@
    import PanelCustomers from "./PanelCustomers.vue";
    import PanelCustomer from "./PanelCustomer.vue";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "customer",
       title: "Customers",
       icon: {
-         light: new IconHost("customers-FFFFFF.svg"),
-         dark: new IconHost("customers-000000.svg"),
+         light: new HostIcon("customers-FFFFFF.svg"),
+         dark: new HostIcon("customers-000000.svg"),
       },
 
       userPermissions: ["admin", "staff"],

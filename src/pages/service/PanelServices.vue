@@ -62,19 +62,19 @@
             layoutMenus: [
                {
                   title: "Grid View",
-                  icon: this.host.res("icon/grid-000000.svg"),
+                  icon: this.host.icon("grid-000000"),
                   click: (menu) =>
                      (this.currentLayoutIndex = this.layoutMenus.indexOf(menu)),
                },
                {
                   title: "List View",
-                  icon: this.host.res("icon/list-000000.svg"),
+                  icon: this.host.icon("list-000000"),
                   click: (menu) =>
                      (this.currentLayoutIndex = this.layoutMenus.indexOf(menu)),
                },
                {
                   title: "Detail View",
-                  icon: this.host.res("icon/detail-000000.svg"),
+                  icon: this.host.icon("detail-000000"),
                   click: (menu) =>
                      (this.currentLayoutIndex = this.layoutMenus.indexOf(menu)),
                },
@@ -102,7 +102,7 @@
          };
       },
       computed: {
-         iconEmpty: () => PageService.icon.dark.toString(),
+         iconEmpty: () => PageService.icon.dark.toUrl(),
 
          items: (context) => context.stateMenus[context.stateMenuIndex].list,
          state: (c) => U.optString(c.$route.query.state),

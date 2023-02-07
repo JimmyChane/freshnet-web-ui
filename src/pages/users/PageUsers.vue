@@ -11,14 +11,14 @@
 
    import User from "@/items/User.js";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "users",
       title: "Other Users",
       icon: {
-         light: new IconHost("users-FFFFFF.svg"),
-         dark: new IconHost("users-000000.svg"),
+         light: new HostIcon("users-FFFFFF.svg"),
+         dark: new HostIcon("users-000000.svg"),
       },
       userPermissions: ["admin"],
 
@@ -204,14 +204,14 @@
                ? {
                     key: 'addUser',
                     title: 'Add User',
-                    icon: host.res('icon/add-000000.svg'),
+                    icon: host.icon('add-000000'),
                     click: onIntentAddUser,
                  }
                : null,
             {
                key: 'refresh',
                title: 'Refresh',
-               icon: host.res('icon/refresh-000000.svg'),
+               icon: host.icon('refresh-000000'),
                click: () => onIntentRefresh(),
             },
          ]"
@@ -232,7 +232,7 @@
 
       <Empty
          v-if="!users.length && !isLoading"
-         :icon="$options.icon.dark.toString()"
+         :icon="$options.icon.dark.toUrl()"
       />
 
       <Loadingv1 class="PageUsers-loading" :isRunning="isLoading" />

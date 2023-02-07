@@ -132,11 +132,11 @@
             'border-bottom': `1px solid ${actionbarBorder}`,
          }"
          :leftMenus="{
-            icon: host.res('icon/close-000000.svg'),
+            icon: host.icon('close-000000'),
             click: () => actions.onClickClose(),
          }"
          :rightMenus="{
-            icon: host.res('icon/trash-000000.svg'),
+            icon: host.icon('trash-000000'),
             click: () => actions.onClickRemove(service),
          }"
       >
@@ -187,7 +187,7 @@
                         </span>
                         <img
                            class="PanelService-section-labels-item-close transition"
-                           :src="host.res('icon/close-FFFFFF.svg')"
+                           :src="host.icon('close-FFFFFF')"
                         />
                      </button>
                   </div>
@@ -231,8 +231,8 @@
                         class="PanelService-section-label-option-icon"
                         :src="
                            bookmarkHeaderIconIsHover
-                              ? host.res('icon/bookmark-add-505050.svg')
-                              : host.res('icon/bookmark-505050.svg')
+                              ? host.icon('bookmark-add-505050')
+                              : host.icon('bookmark-505050')
                         "
                      />
                   </Menu>
@@ -260,7 +260,7 @@
                      title="Customer"
                      :menus="{
                         title: 'Update Customer',
-                        icon: host.res('icon/edit-505050.svg'),
+                        icon: host.icon('edit-505050'),
                         click: () => actions.onClickUpdateCustomer(customer),
                      }"
                   >
@@ -289,7 +289,7 @@
                               v-if="isPhoneNumber"
                            >
                               <img
-                                 :src="host.res('icon/whatsapp-color.svg')"
+                                 :src="host.icon('whatsapp-color')"
                                  alt="Whatsapp Logo"
                               />
                               <span>Chat with Whatsapp</span>
@@ -301,7 +301,7 @@
                               v-if="isPhoneNumber"
                            >
                               <img
-                                 :src="host.res('icon/call-000000.svg')"
+                                 :src="host.icon('call-000000')"
                                  alt="Call Logo"
                               />
                               <span>Call</span>
@@ -327,7 +327,7 @@
                      title="Problem"
                      :menus="{
                         title: 'Update Problem',
-                        icon: host.res('icon/edit-505050.svg'),
+                        icon: host.icon('edit-505050'),
                         click: () =>
                            actions.onClickUpdateDescription(description),
                      }"
@@ -346,7 +346,7 @@
                      title="Belongings"
                      :menus="{
                         title: 'Update Belongings',
-                        icon: host.res('icon/edit-505050.svg'),
+                        icon: host.icon('edit-505050'),
                         click: () =>
                            actions.onClickUpdateBelongings(belongings),
                      }"

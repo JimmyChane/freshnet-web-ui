@@ -98,7 +98,7 @@
                      : 'ItemOrder-button-collapsed',
                ]"
                :alt="isExpanded ? 'Expand' : 'Collapse'"
-               :src="host.res('icon/down-arrow-grey.svg')"
+               :src="host.icon('down-arrow-grey')"
             />
          </div>
       </div>
@@ -115,15 +115,15 @@
          />
          <Button1
             v-if="order.status === Order.STATUS_PENDING"
-            :icon="host.res('icon/success-green.svg')"
-            :iconActive="host.res('icon/success-white.svg')"
+            :icon="host.icon('success-green')"
+            :iconActive="host.icon('success-white')"
             color="#25AE88"
             text="Move to Completed"
             @button-click="$emit('onComplete')"
          />
          <Button1
-            :icon="host.res('icon/trash-red.svg')"
-            :iconActive="host.res('icon/trash-white.svg')"
+            :icon="host.icon('trash-red')"
+            :iconActive="host.icon('trash-white')"
             color="#DB4A2A"
             text=""
             @button-click="$emit('onRemove')"

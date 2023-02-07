@@ -121,7 +121,7 @@
          <Actionbar
             class="ViewerImage-actionbar"
             :leftMenus="{
-               icon: host.res('icon/close-000000.svg'),
+               icon: host.icon('close-000000'),
                click: () => clickDismiss(),
             }"
          />

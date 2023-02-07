@@ -1,13 +1,13 @@
 import Vuex from "vuex";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import SettingModule from "@/items/data/Setting.js";
 import StoreBuilder from "./tools/StoreBuilder";
 
 const requestList = async () => {
-   return ApiHost.request().url("settingv3").send();
+   return HostApi.request().url("settingv3").send();
 };
 const requestUpdate = async (setting) => {
-   return ApiHost.request().PUT().url("settingv3/system").body(setting).send();
+   return HostApi.request().PUT().url("settingv3/system").body(setting).send();
 };
 
 export default {

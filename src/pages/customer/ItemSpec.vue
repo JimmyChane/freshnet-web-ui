@@ -46,7 +46,7 @@
 
          <ButtonIcon
             class="ItemSpec-delete"
-            :src="host.res('icon/trash-DB4A2A.svg')"
+            :src="host.icon('trash-DB4A2A')"
             @click="$emit('click-remove', item)"
          />
       </div>

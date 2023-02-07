@@ -2,7 +2,7 @@ import Service from "@/items/Service.js";
 import ServiceImage from "@/items/ServiceImage";
 import Vuex from "vuex";
 import ServiceModule from "@/items/data/Service.js";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import ServiceCustomer from "@/items/ServiceCustomer";
 import ServiceEvent from "@/items/ServiceEvent";
 import U from "@/U";
@@ -24,104 +24,104 @@ const Notify = {
 };
 
 const requestList = async () => {
-   return ApiHost.request().url("service_v2/get/items").send();
+   return HostApi.request().url("service_v2/get/items").send();
 };
 const requestImport = async (service) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url("service_v2/import/item/")
       .body({ content: service })
       .send();
 };
 const requestAdd = async (service) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url("service_v2/add/item/")
       .body({ content: service })
       .send();
 };
 const requestRemove = async (id) => {
-   return ApiHost.request().DELETE().url(`service_v2/delete/item/${id}`).send();
+   return HostApi.request().DELETE().url(`service_v2/delete/item/${id}`).send();
 };
 const requestUpdateState = async (id, state) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url(`service_v2/item/${id}/update/state/`)
       .body({ content: state })
       .send();
 };
 const requestUpdateDescription = async (id, description) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url(`service_v2/item/${id}/update/description/`)
       .body({ content: description })
       .send();
 };
 const requestUpdateBelongings = async (id, belongings) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url(`service_v2/item/${id}/update/belonging/`)
       .body({ content: belongings })
       .send();
 };
 const requestUpdateCustomer = async (id, customer) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url(`service_v2/item/${id}/update/customer/`)
       .body({ content: customer })
       .send();
 };
 const requestAddEvent = async (id, event) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url(`service_v2/item/${id}/add/event/`)
       .body({ content: event })
       .send();
 };
 const requestRemoveEvent = async (id, eventTime) => {
-   return ApiHost.request()
+   return HostApi.request()
       .DELETE()
       .url(`service_v2/item/${id}/delete/event/`)
       .body({ serviceID: id, time: eventTime })
       .send();
 };
 const requestUpdateUrgent = async (id, isUrgent) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("service/urgent")
       .body({ serviceID: id, isUrgent })
       .send();
 };
 const requestUpdateWarranty = async (id, isWarranty) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("service/urgent")
       .body({ serviceID: id, isWarranty })
       .send();
 };
 const requestAddLabel = async (id, label) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url(`service_v2/item/${id}/add/label/`)
       .body({ label })
       .send();
 };
 const requestRemoveLabel = async (id, label) => {
-   return ApiHost.request()
+   return HostApi.request()
       .DELETE()
       .url(`service_v2/item/${id}/delete/label/`)
       .body({ label: label.toData() })
       .send();
 };
 const requestAddImage = async (id, imageForm) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url(`service_v2/item/${id}/add/image_files/`)
       .bodyObject(imageForm)
       .sendNotJson();
 };
 const requestRemoveImage = async (id, image) => {
-   return ApiHost.request()
+   return HostApi.request()
       .DELETE()
       .url(`service_v2/item/${id}/delete/image/`)
       .body({ content: image.toData() })

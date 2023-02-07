@@ -9,15 +9,15 @@
    import WindowItemPs2Disc from "./WindowItemPs2Disc.vue";
    import ItemPs2Disc from "./ItemPs2Disc.vue";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "ps2",
       name: "PagePs2",
       title: "PS2 Disc",
       icon: {
-         light: new IconHost("playstation-FFFFFF.svg"),
-         dark: new IconHost("playstation-000000.svg"),
+         light: new HostIcon("playstation-FFFFFF.svg"),
+         dark: new HostIcon("playstation-000000.svg"),
       },
 
       components: {
@@ -84,12 +84,12 @@
                   ? [
                        {
                           title: 'Hamburger Menu',
-                          icon: host.res('icon/hamburgerMenu-000000.svg'),
+                          icon: host.icon('hamburgerMenu-000000'),
                           click: () => $root.navigation.openNavigationDrawer(),
                        },
                        {
                           title: 'Home',
-                          icon: host.res('img/freshnet-enterprise-logo.svg'),
+                          icon: host.res('img/freshnet-enterprise-logo'),
                           click: () => $router.push({ name: 'home' }),
                        },
                     ]
@@ -107,12 +107,12 @@
 
                   <ButtonIcon
                      v-if="searchKeyword"
-                     :src="host.res('icon/close-2A4858.svg')"
+                     :src="host.icon('close-2A4858')"
                      alt="Clear"
                      @click="searchKeyword = ''"
                   />
                   <ButtonIcon
-                     :src="host.res('icon/search-2A4858.svg')"
+                     :src="host.icon('search-2A4858')"
                      alt="Search"
                   />
                </div>
@@ -172,7 +172,7 @@
 
          <Empty
             v-if="!ps2Discs.length && !isLoading"
-            :icon="$options.icon.dark.toString()"
+            :icon="$options.icon.dark.toUrl()"
          />
 
          <Footer />

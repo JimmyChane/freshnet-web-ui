@@ -56,8 +56,8 @@
 
          arrowIcon() {
             return this.isColorDark(this.color)
-               ? this.host.res("icon/arrowDown-ffffff.svg")
-               : this.host.res("icon/arrowDown-000000.svg");
+               ? this.host.icon("arrowDown-ffffff")
+               : this.host.icon("arrowDown-000000");
          },
       },
       watch: {

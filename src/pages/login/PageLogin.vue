@@ -66,7 +66,7 @@
          :leftMenus="[
             {
                title: 'Hamburger Menu',
-               icon: host.res('icon/hamburgerMenu-000000.svg'),
+               icon: host.icon('hamburgerMenu-000000'),
                click: () => $root.navigation.openNavigationDrawer(),
             },
             {

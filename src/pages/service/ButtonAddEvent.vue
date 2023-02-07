@@ -6,7 +6,7 @@
    <button class="ButtonAddEvent transition" @click="$emit('click')">
       <img
          class="ButtonAddEvent-icon transition"
-         :src="host.res('icon/add-gray.svg')"
+         :src="host.icon('add-gray')"
       />
    </button>
 </template>

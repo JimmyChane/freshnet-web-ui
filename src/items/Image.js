@@ -1,4 +1,4 @@
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import U from "@/U.js";
 import ModuleImage from "./data/Image.js";
 import Filename from "./Filename.js";
@@ -49,10 +49,10 @@ class Image {
             resPath = resPath.substring(1, resPath.length);
          if (resPath.startsWith("resource/")) {
             resPath = resPath.substring("resource/".length, resPath.length);
-            return ApiHost.res(resPath);
+            return HostApi.res(resPath);
          }
 
-         return `${ApiHost.origin}/${path}`;
+         return `${HostApi.origin}/${path}`;
       }
       if (method === Image.Method.Link) return path;
       if (method === Image.Method.StorageImage) {
@@ -62,7 +62,7 @@ class Image {
          const dimensionQuery = Image.dimensionToQuery(width, height);
          const query = dimensionQuery.length ? `?${dimensionQuery}` : "";
          return `${
-            ApiHost.originApi
+            HostApi.originApi
          }/image/name/${filename.toString()}${query}`;
       }
 

@@ -1,31 +1,31 @@
 import Vuex from "vuex";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import DataLoader from "./tools/DataLoader";
 import Processor from "./tools/Processor.js";
 
 const requestInfo = async () => {
-   return ApiHost.request().POST().url("database/info").send();
+   return HostApi.request().POST().url("database/info").send();
 };
 const requestDatabases = async () => {
-   return ApiHost.request().POST().url("database/databases").send();
+   return HostApi.request().POST().url("database/databases").send();
 };
 const requestCollections = async (database) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url(`database/database/${database}/collections`)
       .send();
 };
 const requestDocuments = async (database, collection) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url(`database/database/${database}/collection/${collection}/documents`)
       .send();
 };
 const requestImport = async (body) => {
-   return ApiHost.request().POST().url("database/imports").body(body).send();
+   return HostApi.request().POST().url("database/imports").body(body).send();
 };
 const requestExport = async (database) => {
-   return ApiHost.request().url(`database/database/${database}/exportv2`).send();
+   return HostApi.request().url(`database/database/${database}/exportv2`).send();
 };
 
 export default {

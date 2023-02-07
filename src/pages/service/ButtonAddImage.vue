@@ -6,7 +6,7 @@
    <button class="ButtonImageAdd-root transition">
       <img
          class="ButtonImageAdd-icon transition"
-         :src="host.res('icon/add-gray.svg')"
+         :src="host.icon('add-gray')"
       />
       <input
          class="ButtonImageAdd-pick"

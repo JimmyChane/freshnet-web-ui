@@ -27,8 +27,8 @@
          },
          arrowIcon: (c) =>
             c.primaryColorIsDark
-               ? c.host.res("icon/arrowDown-white.svg")
-               : c.host.res("icon/arrowDown-black.svg"),
+               ? c.host.icon("arrowDown-white")
+               : c.host.icon("arrowDown-black"),
       },
    };
 </script>

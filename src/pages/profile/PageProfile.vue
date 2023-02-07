@@ -5,14 +5,14 @@
    import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
    import Input from "@/components/Input.vue";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "profile",
       title: "Your Profile",
       icon: {
-         light: new IconHost("profile-FFFFFF.svg"),
-         dark: new IconHost("profile-000000.svg"),
+         light: new HostIcon("profile-FFFFFF.svg"),
+         dark: new HostIcon("profile-000000.svg"),
       },
 
       components: {
@@ -137,7 +137,7 @@
                   </div>
                   <ButtonIcon
                      class="PageProfile-section-changePassword-arrow"
-                     :src="host.res('icon/arrowDown-000000.svg')"
+                     :src="host.icon('arrowDown-000000')"
                      @click="window.changePassword.isShowing = true"
                   />
                </div>

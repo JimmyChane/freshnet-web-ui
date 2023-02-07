@@ -1,4 +1,4 @@
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import ModuleService from "@/items/data/Service.js";
 
 export default {
@@ -7,8 +7,8 @@ export default {
          key: ModuleService.State.Pending,
          title: "Pending",
          icon: {
-            white: ApiHost.res("icon/page/service/pending-white.svg"),
-            color: ApiHost.res("icon/page/service/pending-color.svg"),
+            white: HostApi.icon("page/service/pending-white"),
+            color: HostApi.icon("page/service/pending-color"),
          },
          color: "#f4a60d",
       },
@@ -16,8 +16,8 @@ export default {
          key: ModuleService.State.Completed,
          title: "Completed",
          icon: {
-            white: ApiHost.res("icon/page/service/completed-white.svg"),
-            color: ApiHost.res("icon/page/service/completed-color.svg"),
+            white: HostApi.icon("page/service/completed-white"),
+            color: HostApi.icon("page/service/completed-color"),
          },
          color: "#25ad86",
       },
@@ -25,8 +25,8 @@ export default {
          key: ModuleService.State.Rejected,
          title: "Rejected",
          icon: {
-            white: ApiHost.res("icon/page/service/rejected-white.svg"),
-            color: ApiHost.res("icon/page/service/rejected-color.svg"),
+            white: HostApi.icon("page/service/rejected-white"),
+            color: HostApi.icon("page/service/rejected-color"),
          },
          color: "#d94136",
       },
@@ -34,8 +34,8 @@ export default {
          key: ModuleService.State.Waiting,
          title: "Waiting",
          icon: {
-            white: ApiHost.res("icon/page/service/waiting-white.svg"),
-            color: ApiHost.res("icon/page/service/waiting-color.svg"),
+            white: HostApi.icon("page/service/waiting-white"),
+            color: HostApi.icon("page/service/waiting-color"),
          },
          color: "#c336d9",
       },

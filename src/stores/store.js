@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import socketIo from "socket.io-client";
-import ApiHost from "../host/ApiHost.js";
+import HostApi from "../host/HostApi.js";
 
 Vue.use(Vuex);
 
@@ -27,7 +27,7 @@ export default {
       context.actions.openSocket = (context) => {
          if (context.getters.isConnected) return;
 
-         const socket = socketIo(ApiHost.origin, {
+         const socket = socketIo(HostApi.origin, {
             extraHeaders: {
                authorization: window.localStorage.getItem("userToken"),
             },

@@ -33,7 +33,9 @@
                   index1 = index1 >= 0 ? index1 : this.keys.length;
                   index2 = index2 >= 0 ? index2 : this.keys.length;
 
-                  return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
+                  return index1 !== index2
+                     ? index1 - index2
+                     : key1.localeCompare(key2);
                });
          },
 
@@ -41,7 +43,7 @@
             if (!this.allowEdit) return null;
             return {
                title: "Edit",
-               icon: this.host.res("icon/edit-000000.svg"),
+               icon: this.host.icon("edit-000000"),
                click: () =>
                   this.$emit("click-edit", {
                      product: this.product,
@@ -77,7 +79,9 @@
             />
          </div>
 
-         <span class="SectionSpecification-noContent" v-else>No Specifications</span>
+         <span class="SectionSpecification-noContent" v-else
+            >No Specifications</span
+         >
       </div>
    </Section>
 </template>

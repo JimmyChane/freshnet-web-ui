@@ -35,7 +35,7 @@
 			<span class="PanelEvents-title" v-else>Events</span>
 
 			<ButtonIcon
-				:src="host.res('icon/add-505050.svg')"
+				:src="host.icon('add-505050')"
 				@click="$emit('click-add-event')"
 			/>
 		</div>

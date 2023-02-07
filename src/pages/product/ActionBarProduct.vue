@@ -66,7 +66,7 @@
                menus.push({
                   key: "hamburgerMenu",
                   title: "Hamburger Menu",
-                  icon: this.host.res("icon/hamburgerMenu-000000.svg"),
+                  icon: this.host.icon("hamburgerMenu-000000"),
                   click: () => this.$root.navigation.openNavigationDrawer(),
                });
                menus.push({
@@ -85,7 +85,7 @@
             if (!this.isOver550px) {
                menus.push({
                   title: "Search",
-                  icon: this.host.res("icon/search-000000.svg"),
+                  icon: this.host.icon("search-000000"),
                   click: () => this.$emit("click-search"),
                });
             }
@@ -101,7 +101,7 @@
             menus.push({
                key: "refresh",
                title: "Refresh",
-               icon: this.host.res("icon/refresh-000000.svg"),
+               icon: this.host.icon("refresh-000000"),
                click: () => {
                   this.categoryStore.dispatch("refresh");
                   this.productStore.dispatch("refresh");

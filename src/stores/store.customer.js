@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import ItemCustomer from "../items/Customer.js";
 import DeviceStore from "./store.device.js";
 import U from "@/U";
@@ -33,7 +33,7 @@ const getItemsOfIds = async (context, ids = []) => {
       return results;
    });
 };
-const requestApi = () => ApiHost.request().url("customer/list");
+const requestApi = () => HostApi.request().url("customer/list");
 
 export default {
    init(Stores) {
@@ -124,7 +124,7 @@ export default {
          return context.state.processor.acquire("addItem", async () => {
             const data = new ItemCustomer(Stores).fromData(arg).toData();
             delete data.id;
-            const api = await ApiHost.request()
+            const api = await HostApi.request()
                .POST()
                .url("customer/add")
                .body({ content: data })
@@ -138,7 +138,7 @@ export default {
       context.actions.removeItemOfId = async (context, arg = { _id }) => {
          return context.state.processor.acquire("removeItemOfId", async () => {
             const { _id } = arg;
-            const api = await ApiHost.request()
+            const api = await HostApi.request()
                .DELETE()
                .url("customer/remove")
                .body({ content: { _id } })
@@ -158,7 +158,7 @@ export default {
             "updateNamePhoneNumberOfItemId",
             async () => {
                const { _id, name, phoneNumber } = arg;
-               const api = await ApiHost.request()
+               const api = await HostApi.request()
                   .PUT()
                   .url("customer/update/namePhoneNumber")
                   .body({ content: { _id, name, phoneNumber } })
@@ -184,7 +184,7 @@ export default {
             "updateDescriptionOfId",
             async () => {
                const { _id, description } = arg;
-               const api = await ApiHost.request()
+               const api = await HostApi.request()
                   .PUT()
                   .url("customer/update/description")
                   .body({ content: { _id, description } })

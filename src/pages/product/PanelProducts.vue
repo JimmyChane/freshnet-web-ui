@@ -68,7 +68,7 @@
          };
       },
       computed: {
-         iconEmpty: () => PageProduct.icon.dark.toString(),
+         iconEmpty: () => PageProduct.icon.dark.toUrl(),
 
          isLayoutThin() {
             return this.$root.window.innerWidth < 550;
@@ -91,7 +91,7 @@
             if (!this.isEditable) return null;
             return {
                title: "Add",
-               icon: this.host.res("icon/add-000000.svg"),
+               icon: this.host.icon("add-000000"),
                click: () => this.$emit("click-productAdd"),
             };
          },

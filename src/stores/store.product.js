@@ -5,99 +5,99 @@ import ModuleBundle from "@/items/data/ProductBundle.js";
 import ModulePrice from "@/items/data/ProductPrice.js";
 import Category from "@/items/Category.js";
 import Vuex from "vuex";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import U from "@/U.js";
 import StoreBuilder from "./tools/StoreBuilder.js";
 
 const requestList = async () => {
-   return ApiHost.request().url("productv2/list/").send();
+   return HostApi.request().url("productv2/list/").send();
 };
 const requestAddItem = async (data) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url("productv2/")
       .body({ content: data })
       .send();
 };
 const requestDeleteItem = async (id) => {
-   return ApiHost.request()
+   return HostApi.request()
       .DELETE()
       .url(`productv2/id/${id}`)
       .body({ id })
       .send();
 };
 const requestUpdateTitle = async (id, title) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("productv2/title/")
       .body({ content: { productId: id, title } })
       .send();
 };
 const requestUpdateDescription = async (id, description) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("productv2/description/")
       .body({ content: { productId: id, description } })
       .send();
 };
 const requestUpdateBrand = async (id, brandId) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("productv2/brandId/")
       .body({ content: { productId: id, brandId } })
       .send();
 };
 const requestUpdateCategory = async (id, categoryId) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("productv2/categoryId/")
       .body({ content: { productId: id, categoryId } })
       .send();
 };
 const requestUpdateAvailability = async (id, isAvailable) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("productv2/isAvailable/")
       .body({ content: { productId: id, isAvailable } })
       .send();
 };
 const requestUpdateSecondHand = async (id, isSecondHand) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("productv2/isSecondHand/")
       .body({ content: { productId: id, isSecondHand } })
       .send();
 };
 const requestUpdatePrice = async (id, price) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("productv2/price/")
       .body({ content: { productId: id, price } })
       .send();
 };
 const requestAddBundle = async (id, bundle) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url("productv2/bundle/")
       .body({ content: { productId: id, bundle } })
       .send();
 };
 const requestRemoveBundle = async (id, bundle) => {
-   return ApiHost.request()
+   return HostApi.request()
       .DELETE()
       .url("productv2/bundle/")
       .body({ content: { productId: id, bundle: ModuleBundle.trim(bundle) } })
       .send();
 };
 const requestAddGift = async (id, gift) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url("productv2/gift/")
       .body({ content: { productId: id, gift } })
       .send();
 };
 const requestRemoveGift = async (id, gift) => {
-   return ApiHost.request()
+   return HostApi.request()
       .DELETE()
       .url("productv2/gift/")
       .body({ content: { productId: id, gift } })
@@ -105,35 +105,35 @@ const requestRemoveGift = async (id, gift) => {
 };
 
 const requestAddSpecification = async (id, specification) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url("productv2/specification/")
       .body({ content: { productId: id, specification } })
       .send();
 };
 const requestRemoveSpecification = async (id, specification) => {
-   return ApiHost.request()
+   return HostApi.request()
       .DELETE()
       .url("productv2/specification/")
       .body({ content: { productId: id, specification } })
       .send();
 };
 const requestUpdateSpecifications = async (id, specifications) => {
-   return ApiHost.request()
+   return HostApi.request()
       .PUT()
       .url("productv2/specification/list")
       .body({ content: { productId: id, specifications } })
       .send();
 };
 const requestAddImage = async (id, imageForm) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url(`productv2/id/${id}/image/`)
       .bodyObject(imageForm)
       .sendNotJson();
 };
 const requestRemoveImage = async (id, image) => {
-   return ApiHost.request()
+   return HostApi.request()
       .DELETE()
       .url(`productv2/id/${id}/image/`)
       .body({ content: { image } })

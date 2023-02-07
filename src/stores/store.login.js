@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import ItemUser from "../items/User.js";
 import Processor from "./tools/Processor.js";
 
@@ -22,13 +22,13 @@ const noneUser = new ItemUser().fromData({
 });
 
 const requestLogin = async (body) => {
-   return ApiHost.request().POST().url("session/login/").body(body).send();
+   return HostApi.request().POST().url("session/login/").body(body).send();
 };
 const requestUser = async (token) => {
-   return ApiHost.request().POST().url("session/verifyToken/").body({ token }).send();
+   return HostApi.request().POST().url("session/verifyToken/").body({ token }).send();
 };
 const requestUpdatePassword = async (username, passwordVerify, passwordNew) => {
-   return ApiHost.request()
+   return HostApi.request()
       .POST()
       .url(`session/user/${username}/changePassword`)
       .body({ passwordVerify, passwordNew })

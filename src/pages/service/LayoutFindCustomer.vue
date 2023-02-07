@@ -105,7 +105,7 @@
             >
                <img
                   class="LayoutFindCustomer-close-img"
-                  :src="host.res('icon/close-000000.svg')"
+                  :src="host.icon('close-000000')"
                />
             </button>
          </div>

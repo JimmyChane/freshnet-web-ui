@@ -210,7 +210,7 @@
                <LabelCount
                   :style="{ '--primary-color': '#8C623A' }"
                   v-if="images.length"
-                  :icon="host.res('icon/image-FFFFFF.svg')"
+                  :icon="host.icon('image-FFFFFF')"
                   :count="images.length"
                />
             </div>

@@ -10,7 +10,7 @@
          <div class="ProductViewerImageSelector-button">
             <img
                class="ProductViewerImageSelector-icon"
-               :src="host.res('icon/add-000000.svg')"
+               :src="host.icon('add-000000')"
             />
          </div>
 

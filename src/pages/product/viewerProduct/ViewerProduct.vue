@@ -536,7 +536,7 @@
          }"
          @click="() => scrollToTop()"
       >
-         <img :src="host.res('icon/arrow-left-000000.svg')" />
+         <img :src="host.icon('arrow-left-000000')" />
       </button>
 
       <BottomActionbar

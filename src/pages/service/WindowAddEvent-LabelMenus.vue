@@ -73,7 +73,7 @@
          >
          <img
             class="LabelMenus-arrow transition"
-            :src="host.res('icon/arrowDown-FFFFFF.svg')"
+            :src="host.icon('arrowDown-FFFFFF')"
          />
       </button>
 

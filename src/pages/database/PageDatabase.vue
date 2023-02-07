@@ -5,14 +5,14 @@
    import ActionBarManage from "@/pages/manage/ActionBarManage.vue";
    import ItemDatabase from "./ItemDatabase.vue";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "database",
       title: "Database",
       icon: {
-         light: new IconHost("database-FFFFFF.svg"),
-         dark: new IconHost("database-000000.svg"),
+         light: new HostIcon("database-FFFFFF.svg"),
+         dark: new HostIcon("database-000000.svg"),
       },
       userPermissions: ["admin"],
 
@@ -107,7 +107,7 @@
             {
                key: 'refresh',
                title: 'Refresh',
-               icon: host.res('icon/refresh-000000.svg'),
+               icon: host.icon('refresh-000000'),
                click: () => actionRefresh(),
             },
          ]"
@@ -151,7 +151,7 @@
 
       <Empty
          v-if="!baseInfo && !databases.length && !isLoading"
-         :icon="$options.icon.dark.toString()"
+         :icon="$options.icon.dark.toUrl()"
       />
 
       <PopupWindow

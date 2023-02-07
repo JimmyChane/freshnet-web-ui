@@ -1,4 +1,4 @@
-import ApiHost from "@/host/ApiHost";
+import HostApi from "@/host/HostApi";
 import Filename from "./Filename";
 import Image from "./Image";
 
@@ -45,13 +45,13 @@ class ServiceImage {
          const name = path.substring(prefix.length, path.length);
          const filename = new Filename(name);
          return `${
-            ApiHost.originApi
+            HostApi.originApi
          }/image/name/${filename.toString()}${query}`;
       }
 
       const filename = new Filename(this.name);
       return `${
-         ApiHost.originApi
+         HostApi.originApi
       }/service_v2/get/image/${filename.toString()}${query}`;
    }
 }

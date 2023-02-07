@@ -48,7 +48,7 @@
 		:primaryColor="primaryColor"
 		:menu="{
 			title: 'Edit',
-			icon: host.res('icon/edit-000000.svg'),
+			icon: host.icon('edit-000000'),
 			click: () =>
 				$emit('click-edit', { product, title: title, brandId: brandId }),
 		}"

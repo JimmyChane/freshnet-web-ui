@@ -1,5 +1,5 @@
 <script>
-   import Host from "@/host/ApiHost";
+   import Host from "@/host/HostApi";
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
 
    export default {
@@ -7,10 +7,10 @@
       props: {
          placeholder: { type: String, default: "Search" },
          model: { default: undefined },
-         backIcon: { type: String, default: Host.res("icon/close-000000.svg") },
+         backIcon: { type: String, default: Host.icon("close-000000") },
          enterIcon: {
             type: String,
-            default: Host.res("icon/search-000000.svg"),
+            default: Host.icon("search-000000"),
          },
       },
       data() {

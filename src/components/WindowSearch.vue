@@ -45,7 +45,7 @@
             ref="inputSearch"
             :model="search"
             :placeholder="placeholder"
-            :enterIcon="host.res('icon/arrow-left-000000.svg')"
+            :enterIcon="host.icon('arrow-left-000000')"
             @input="(e) => (search = e.value)"
             @clear="(e) => (search = '')"
             @enter="() => $emit('click-dismiss')"

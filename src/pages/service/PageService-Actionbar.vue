@@ -63,7 +63,7 @@
                   {
                      key: 'hamburgerMenu',
                      title: 'Hamburger Menu',
-                     icon: host.res('icon/hamburgerMenu-000000.svg'),
+                     icon: host.icon('hamburgerMenu-000000'),
                      click: () => $emit('click-drawer-expand'),
                   },
                ]"
@@ -98,7 +98,7 @@
                      ? null
                      : {
                           title: 'Search',
-                          icon: host.res('icon/search-000000.svg'),
+                          icon: host.icon('search-000000'),
                           click: () => $emit('click-search'),
                        },
                   ...menus,

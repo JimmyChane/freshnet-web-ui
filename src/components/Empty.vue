@@ -1,11 +1,11 @@
 <script>
-   import Host from "@/host/ApiHost";
+   import Host from "@/host/HostApi";
 
    export default {
       props: {
          icon: {
             type: String,
-            default: Host.res("icon/empty-folder-505050.svg"),
+            default: Host.icon("empty-folder-505050"),
          },
          title: { type: String, default: "Sorry, nothing here" },
       },

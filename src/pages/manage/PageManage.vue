@@ -7,15 +7,15 @@
    import PageDatabase from "@/pages/database/PageDatabase.vue";
    import PageSetting from "@/pages/setting/PageSetting.vue";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "manage",
       name: "Manage",
       title: "Manage",
       icon: {
-         light: new IconHost("manage-FFFFFF.svg"),
-         dark: new IconHost("manage-000000.svg"),
+         light: new HostIcon("manage-FFFFFF.svg"),
+         dark: new HostIcon("manage-000000.svg"),
       },
 
       _children() {

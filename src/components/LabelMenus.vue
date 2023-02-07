@@ -75,7 +75,7 @@
          >
          <img
             class="LabelMenus-arrow transition"
-            :src="host.res('icon/arrowDown-505050.svg')"
+            :src="host.icon('arrowDown-505050')"
          />
       </button>
 

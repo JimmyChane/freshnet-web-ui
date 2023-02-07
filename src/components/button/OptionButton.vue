@@ -20,7 +20,7 @@
    >
       <img
          class="OptionButton-icon"
-         :src="icon ? icon : host.res('icon/option-black.svg')"
+         :src="icon ? icon : host.icon('option-black')"
       />
    </Menu>
 </template>

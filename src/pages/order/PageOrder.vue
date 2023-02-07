@@ -10,15 +10,15 @@
 
    import Order from "@/items/Order.js";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "order",
       name: "ViewOrder",
       title: "Orders",
       icon: {
-         light: new IconHost("order-FFFFFF.svg"),
-         dark: new IconHost("order-000000.svg"),
+         light: new HostIcon("order-FFFFFF.svg"),
+         dark: new HostIcon("order-000000.svg"),
       },
       userPermissions: ["admin", "staff"],
 

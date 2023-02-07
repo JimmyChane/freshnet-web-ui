@@ -1,10 +1,10 @@
 import Vuex from "vuex";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import Brand from "@/items/Brand.js";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
-const requestApi = () => ApiHost.request().url("brand/");
+const requestApi = () => HostApi.request().url("brand/");
 
 export default {
    init(Stores) {

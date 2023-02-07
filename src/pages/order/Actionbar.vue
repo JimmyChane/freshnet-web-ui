@@ -31,7 +31,7 @@
             {
                key: 'hamburgerMenu',
                title: 'Hamburger Menu',
-               icon: host.res('icon/hamburgerMenu-000000.svg'),
+               icon: host.icon('hamburgerMenu-000000'),
                click: () => $emit('click-drawer-expand'),
             },
          ]"
@@ -67,13 +67,13 @@
             {
                key: 'appendOrder',
                title: 'Append Order',
-               icon: host.res('icon/add-000000.svg'),
+               icon: host.icon('add-000000'),
                click: () => $emit('click-item-add'),
             },
             {
                key: 'refresh',
                title: 'Refresh',
-               icon: host.res('icon/refresh-000000.svg'),
+               icon: host.icon('refresh-000000'),
                click: () => $emit('click-refresh'),
             },
          ]"

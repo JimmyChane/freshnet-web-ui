@@ -1,11 +1,11 @@
 import Vuex from "vuex";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import ItemPs2Disc from "../items/Ps2Disc.js";
 import U from "@/U.js";
 import StoreBuilder from "./tools/StoreBuilder.js";
 
 const requestList = async () => {
-   return ApiHost.request().url("ps2/disc/").send();
+   return HostApi.request().url("ps2/disc/").send();
 };
 
 export default {

@@ -14,8 +14,8 @@
       computed: {
          iconArrow() {
             if (this.isSelected && this.isSelectedDark)
-               return this.host.res("icon/arrowDown-FFFFFF.svg");
-            return this.host.res("icon/arrowDown-2A4858.svg");
+               return this.host.icon("arrowDown-FFFFFF");
+            return this.host.icon("arrowDown-2A4858");
          },
          styleClass() {
             if (this.isSelected) {

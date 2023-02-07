@@ -13,14 +13,14 @@
    import WindowUpdateCustomer from "./WindowUpdateCustomer.vue";
    import Drawer from "@/components/Drawer.vue";
 
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "service",
       title: "Services",
       icon: {
-         light: new IconHost("service-FFFFFF.svg"),
-         dark: new IconHost("service-000000.svg"),
+         light: new HostIcon("service-FFFFFF.svg"),
+         dark: new HostIcon("service-000000.svg"),
       },
       userPermissions: ["admin", "staff"],
 
@@ -302,7 +302,7 @@
                actionMenus.push({
                   key: "add",
                   title: "Add",
-                  icon: this.host.res("icon/add-000000.svg"),
+                  icon: this.host.icon("add-000000"),
                   click: this.clickAddService,
                });
             }
@@ -323,7 +323,7 @@
                actionMenus.push({
                   key: "refresh",
                   title: "Refresh",
-                  icon: this.host.res("icon/refresh-000000.svg"),
+                  icon: this.host.icon("refresh-000000"),
                   click: this.clickRefresh,
                });
             }

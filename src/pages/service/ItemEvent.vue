@@ -112,7 +112,7 @@
                {
                   key: 'delete',
                   title: 'Delete',
-                  icon: host.res('icon/page/service/rejected-color.svg'),
+                  icon: host.icon('page/service/rejected-color'),
                   click: () => $emit('callback-delete', item),
                },
             ]"

@@ -1,20 +1,20 @@
 import Vuex from "vuex";
-import ApiHost from "@/host/ApiHost.js";
+import HostApi from "@/host/HostApi.js";
 import Order from "@/items/Order.js";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
 const requestList = async () => {
-   return ApiHost.request().url("order/").send();
+   return HostApi.request().url("order/").send();
 };
 const requestAdd = async (body) => {
-   return ApiHost.request().POST().url("order/").body(body).send();
+   return HostApi.request().POST().url("order/").body(body).send();
 };
 const requestDelete = async (id) => {
-   return ApiHost.request().DELETE().url("order/").body({ id }).send();
+   return HostApi.request().DELETE().url("order/").body({ id }).send();
 };
 const requestUpdateStatus = async (id, status) => {
-   return ApiHost.request().PUT().url("order/").body({ id, status }).send();
+   return HostApi.request().PUT().url("order/").body({ id, status }).send();
 };
 
 export default {

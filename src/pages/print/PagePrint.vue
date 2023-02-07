@@ -9,7 +9,7 @@
    import Output from "./Output";
    import PaperSize from "./PaperSize";
    import Price from "@/objects/Price";
-   import IconHost from "@/host/IconHost";
+   import HostIcon from "@/host/HostIcon";
 
    class Media {
       constructor(title = "", items = []) {
@@ -43,8 +43,8 @@
       key: "print",
       title: "Printing",
       icon: {
-         light: new IconHost("paper-FFFFFF.svg"),
-         dark: new IconHost("paper-000000.svg"),
+         light: new HostIcon("paper-FFFFFF.svg"),
+         dark: new HostIcon("paper-000000.svg"),
       },
 
       components: { Actionbar, Tabs, Card, Footer },
@@ -155,7 +155,7 @@
             return [
                {
                   title: "Hamburger Menu",
-                  icon: this.host.res(`icon/hamburgerMenu-000000.svg`),
+                  icon: this.host.icon(`hamburgerMenu-000000`),
                   click: () => this.$root.navigation.openNavigationDrawer(),
                },
                {
