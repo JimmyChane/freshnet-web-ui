@@ -1,6 +1,6 @@
 <script>
    import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import GlobalSearch from "@/app/GlobalSearch.vue";
+   import GlobalSearch from "@/app/search/GlobalSearch.vue";
 
    export default {
       components: { Actionbar, GlobalSearch },

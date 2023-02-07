@@ -1,6 +1,6 @@
 <script>
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
-   import GlobalSearch from "@/app/GlobalSearch.vue";
+   import GlobalSearch from "@/app/search/GlobalSearch.vue";
 
    export default {
       props: { isWide: { type: Boolean, default: false } },

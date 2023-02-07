@@ -1,11 +1,11 @@
 <script>
    import SearchInput from "@/components/SearchInput.vue";
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
-   import ItemSearchProduct from "@/pages/home/ItemSearchProduct.vue";
-   import ItemSearchCategory from "@/pages/home/ItemSearchCategory.vue";
-   import ItemSearchBrand from "@/pages/home/ItemSearchBrand.vue";
-   import ItemSearchPs2Disc from "@/pages/home/ItemSearchPs2Disc.vue";
-   import ItemSearchService from "@/pages/home/ItemSearchService.vue";
+   import ItemSearchProduct from "./GlobalSearch-Item-Product.vue";
+   import ItemSearchCategory from "./GlobalSearch-Item-Category.vue";
+   import ItemSearchBrand from "./GlobalSearch-Item-Brand.vue";
+   import ItemSearchPs2Disc from "./GlobalSearch-Item-Ps2Disc.vue";
+   import ItemSearchService from "./GlobalSearch-Item-Service.vue";
 
    export default {
       components: {
@@ -124,53 +124,31 @@
       v-slot="{ collapse }"
    >
       <div class="GlobalSearch-item" v-for="x in searches" :key="x.item.id">
-         <router-link
-            class="GlobalSearch-button transition"
+         <ItemSearchProduct
             v-if="x.dataType === 'product'"
-            :to="{ path: '/product', query: { productId: x.item.id } }"
-            @click.native="() => collapse()"
-         >
-            <ItemSearchProduct :item="x.item" />
-         </router-link>
-
-         <router-link
-            class="GlobalSearch-button transition"
+            :item="x.item"
+            @click="() => collapse()"
+         />
+         <ItemSearchCategory
             v-if="x.dataType === 'category'"
-            :to="{ path: '/product', query: { category: x.item.id } }"
-            @click.native="() => collapse()"
-         >
-            <ItemSearchCategory :item="x.item" />
-         </router-link>
-
-         <router-link
-            class="GlobalSearch-button transition"
+            :item="x.item"
+            @click="() => collapse()"
+         />
+         <ItemSearchBrand
             v-if="x.dataType === 'brand'"
-            :to="{ path: '/product', query: { brand: x.item.id } }"
-            @click.native="() => collapse()"
-         >
-            <ItemSearchBrand :item="x.item" />
-         </router-link>
-
-         <router-link
-            class="GlobalSearch-button transition"
+            :item="x.item"
+            @click="() => collapse()"
+         />
+         <ItemSearchPs2Disc
             v-if="x.dataType === 'ps2Disc'"
-            :to="{ path: '/ps2', query: { discCode: x.item.code } }"
-            @click.native="() => collapse()"
-         >
-            <ItemSearchPs2Disc :item="x.item" />
-         </router-link>
-
-         <router-link
-            class="GlobalSearch-button transition"
+            :item="x.item"
+            @click="() => collapse()"
+         />
+         <ItemSearchService
             v-if="x.dataType === 'service'"
-            :to="{
-               path: '/manage/service',
-               query: { service: x.item.id },
-            }"
-            @click.native="() => collapse()"
-         >
-            <ItemSearchService :item="x.item" />
-         </router-link>
+            :item="x.item"
+            @click="() => collapse()"
+         />
       </div>
    </SearchInput>
 </template>
@@ -186,26 +164,6 @@
       .GlobalSearch-item {
          width: 100%;
          display: flex;
-         flex-direction: column;
-
-         .GlobalSearch-button {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            text-decoration: none;
-            justify-content: center;
-            align-items: flex-start;
-            color: black;
-            cursor: pointer;
-            text-align: start;
-            border: none;
-            background: none;
-            border-radius: 0.5em;
-
-            &:hover {
-               background: rgba(255, 255, 255, 0.5);
-            }
-         }
       }
    }
 </style>

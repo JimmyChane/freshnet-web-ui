@@ -1,25 +1,32 @@
 <script>
+   import ItemSearch from "./GlobalSearch-Item.vue";
+
    export default {
-      props: {
-         item: { type: Object, default: null },
-      },
+      components: { ItemSearch },
+      props: { item: { type: Object, default: null } },
       computed: {
-         thumbnail: (c) => {
-            const icon = c.item.icon;
-            return icon ? icon.toUrl() : "";
-         },
+         icon: (c) => c.item.icon,
+         thumbnail: (c) => (c.icon ? c.icon.toUrl() : ""),
          title: (c) => (c.item ? c.item.title : ""),
       },
    };
 </script>
 
 <template>
-   <div class="ItemSearchCategory">
+   <ItemSearch
+      class="ItemSearchCategory"
+      :to="{ path: '/product', query: { category: item.id } }"
+      @click="() => $emit('click')"
+   >
       <div
          class="ItemSearchCategory-image"
          :class="[thumbnail ? '' : 'ItemSearchCategory-image-noImage']"
       >
-         <img class="ItemSearchCategory-icon" v-if="thumbnail" :src="thumbnail" />
+         <img
+            class="ItemSearchCategory-icon"
+            v-if="thumbnail"
+            :src="thumbnail"
+         />
       </div>
       <div class="ItemSearchCategory-body">
          <div class="ItemSearchCategory-labels">
@@ -28,7 +35,7 @@
          </div>
          <span class="ItemSearchCategory-title">{{ title }}</span>
       </div>
-   </div>
+   </ItemSearch>
 </template>
 
 <style lang="scss" scoped>
