@@ -13,10 +13,15 @@
    import WindowUpdateCustomer from "./WindowUpdateCustomer.vue";
    import Drawer from "@/components/Drawer.vue";
 
+   import IconHost from "@/host/IconHost";
+
    export default {
       key: "service",
       title: "Services",
-      icon: { light: "service-FFFFFF", dark: "service-000000" },
+      icon: {
+         light: new IconHost("service-FFFFFF.svg"),
+         dark: new IconHost("service-000000.svg"),
+      },
       userPermissions: ["admin", "staff"],
 
       components: {
@@ -38,7 +43,8 @@
       data() {
          return {
             actions: {
-               onClickClose: () => this.$root.nextRoute({ query: { service: null } }),
+               onClickClose: () =>
+                  this.$root.nextRoute({ query: { service: null } }),
                onClickRemove: (x) => this.clickDeleteService(x),
                onClickAddEvent: (x) => this.clickAddEvent(x),
                onClickRemoveEvent: (x) => this.clickRemoveEvent(x),
@@ -431,7 +437,12 @@
 
 <template>
    <div class="PageService">
-      <div :class="['PageService-panels', `PageService-${isWide ? 'isWide' : 'isThin'}`]">
+      <div
+         :class="[
+            'PageService-panels',
+            `PageService-${isWide ? 'isWide' : 'isThin'}`,
+         ]"
+      >
          <PanelServices
             class="PageService-PanelServices"
             :menus="actionMenus"
@@ -472,16 +483,6 @@
          @click-item="(item) => clickService(item)"
       />
 
-      <!-- View Image Window -->
-      <!-- <WindowViewImage
-			class="PageService-window"
-			v-if="drawerService && popup.viewImage.value !== null"
-			:isShowing="popup.viewImage.isShowing"
-			:imageFiles="popup.viewImage.value.imageFiles"
-			:index="popup.viewImage.value.index"
-			@click-close="() => windowAction('viewImage', 'dismiss')"
-		/> -->
-
       <!-- Import Service Window -->
       <PopupWindow
          class="PageService-window"
@@ -491,7 +492,9 @@
          <WindowImportService
             class="PageService-window-child"
             @click-cancel="() => windowAction('importService', 'dismiss')"
-            @click-ok="(service) => windowAction('importService', 'ok', service)"
+            @click-ok="
+               (service) => windowAction('importService', 'ok', service)
+            "
          />
       </PopupWindow>
 
@@ -535,7 +538,9 @@
             class="PageService-window-child"
             ref="WindowUpdateCustomer"
             :value="popup.customer.value"
-            @callback-change="(customer) => windowAction('customer', 'ok', customer)"
+            @callback-change="
+               (customer) => windowAction('customer', 'ok', customer)
+            "
             @callback-cancel="() => windowAction('customer', 'dismiss')"
          />
       </PopupWindow>
@@ -552,7 +557,8 @@
             ref="WindowUpdateDescription"
             :description="popup.editDescription.value"
             @callback-change="
-               (description) => windowAction('editDescription', 'ok', description)
+               (description) =>
+                  windowAction('editDescription', 'ok', description)
             "
             @callback-cancel="() => windowAction('editDescription', 'dismiss')"
          />
@@ -588,7 +594,9 @@
             message="After deleting this service, it cannot be reverted."
             :value="popup.removeService.value"
             @click-cancel="() => windowAction('removeService', 'dismiss')"
-            @click-ok="(service) => windowAction('removeService', 'ok', service)"
+            @click-ok="
+               (service) => windowAction('removeService', 'ok', service)
+            "
          />
       </PopupWindow>
 

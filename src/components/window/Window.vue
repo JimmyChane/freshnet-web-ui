@@ -78,6 +78,7 @@
          justify-content: center;
          text-align: start;
          border-bottom: 1px solid transparent;
+         background-color: hsl(0, 0%, 96%);
 
          @media screen and (max-height: 30rem) {
             padding: 1rem 1.8rem;
@@ -90,7 +91,6 @@
          }
       }
       .Window-header-isScrolledUp {
-         background-color: hsl(0, 0%, 96%);
          border-bottom: 1px solid hsl(0, 0%, 90%);
       }
 

@@ -11,10 +11,15 @@
 
    import User from "@/items/User.js";
 
+   import IconHost from "@/host/IconHost";
+
    export default {
       key: "users",
       title: "Other Users",
-      icon: { light: "users-FFFFFF", dark: "users-000000" },
+      icon: {
+         light: new IconHost("users-FFFFFF.svg"),
+         dark: new IconHost("users-000000.svg"),
+      },
       userPermissions: ["admin"],
 
       components: {
@@ -225,7 +230,10 @@
          />
       </div>
 
-      <Empty v-if="!users.length && !isLoading" />
+      <Empty
+         v-if="!users.length && !isLoading"
+         :icon="$options.icon.dark.toString()"
+      />
 
       <Loadingv1 class="PageUsers-loading" :isRunning="isLoading" />
 

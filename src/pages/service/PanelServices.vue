@@ -8,6 +8,8 @@
 
    import U from "@/U.js";
 
+   import PageService from "@/pages/service/PageService.vue";
+
    const { State } = ModuleService;
 
    export default {
@@ -100,6 +102,8 @@
          };
       },
       computed: {
+         iconEmpty: () => PageService.icon.dark.toString(),
+
          items: (context) => context.stateMenus[context.stateMenuIndex].list,
          state: (c) => U.optString(c.$route.query.state),
 
@@ -204,7 +208,10 @@
          @click-item="(item) => $emit('click-service', item)"
       />
 
-      <Empty v-if="!services.length && !serviceStore.getters.isLoading" />
+      <Empty
+         v-if="!items.length && !serviceStore.getters.isLoading"
+         :icon="iconEmpty"
+      />
    </div>
 </template>
 

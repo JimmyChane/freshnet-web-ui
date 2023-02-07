@@ -6,6 +6,7 @@ import TimeNowGetter from "./tools/TimeNowGetter.js";
 import ApiHost from "./host/ApiHost.js";
 import PopupMenu from "@/app/PopupMenu.vue";
 import U from "@/U";
+import IconHost from "@/host/IconHost";
 
 // vue
 import Vue from "vue";
@@ -70,10 +71,17 @@ const isPassed = (user, permissions) => {
    return true;
 };
 const parseIcon = (icon) => {
-   icon = U.isObject(icon) ? icon : null;
-   if (icon === null) return null;
-   const light = icon === null ? "" : ApiHost.res(`icon/${icon.light}.svg`);
-   const dark = icon === null ? "" : ApiHost.res(`icon/${icon.dark}.svg`);
+   if (!U.isObject(icon) || icon === null) return null;
+
+   const light =
+      icon.light instanceof IconHost
+         ? icon.light.toUrl()
+         : ApiHost.res(`icon/${icon.light}.svg`);
+   const dark =
+      icon.dark instanceof IconHost
+         ? icon.dark.toUrl()
+         : ApiHost.res(`icon/${icon.dark}.svg`);
+
    return { light, dark };
 };
 const parseKey = (str) => U.optString(str).trim().replace(" ", "");

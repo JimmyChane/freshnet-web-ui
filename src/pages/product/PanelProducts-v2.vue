@@ -8,6 +8,8 @@
    import ItemProduct from "./ItemProduct.vue";
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
+   import PageProduct from "@/pages/product/PageProduct.vue";
+
    class MenuGroup {
       context = null;
       key = "";
@@ -66,6 +68,8 @@
          };
       },
       computed: {
+         iconEmpty: () => PageProduct.icon.dark.toString(),
+
          isLayoutThin: (context) => context.$root.window.innerWidth < 550,
          layoutMode: () => ItemProduct.Mode.Grid,
 
@@ -308,7 +312,7 @@
          </div>
 
          <LoadingDots class="PanelProducts-loading" v-if="isLoading" />
-         <Empty v-if="isEmpty" />
+         <Empty v-if="isEmpty" :icon="iconEmpty" />
       </div>
 
       <Footer />

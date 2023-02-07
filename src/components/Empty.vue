@@ -1,7 +1,21 @@
+<script>
+   import Host from "@/host/ApiHost";
+
+   export default {
+      props: {
+         icon: {
+            type: String,
+            default: Host.res("icon/empty-folder-505050.svg"),
+         },
+         title: { type: String, default: "Sorry, nothing here" },
+      },
+   };
+</script>
+
 <template>
    <div class="Empty">
-      <img class="Empty-background" :src="host.res('icon/empty-folder-505050.svg')" />
-      <span class="Empty-text">Sorry, nothing here</span>
+      <img class="Empty-background" :src="icon" />
+      <span class="Empty-text">{{ title }}</span>
    </div>
 </template>
 
@@ -22,14 +36,15 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      opacity: 0.2;
+      color: #00000033;
 
       .Empty-background {
-         width: 60vw;
-         height: 60vh;
+         width: 60%;
+         height: 60%;
          max-width: 16em;
          max-height: 16em;
          padding: 1.5em;
+         opacity: 0.1;
       }
       .Empty-text {
          font-weight: 600;

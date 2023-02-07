@@ -4,10 +4,15 @@
    import GroupSetting from "./GroupSetting.vue";
    import SettingModule from "@/items/data/Setting.js";
 
+   import IconHost from "@/host/IconHost";
+
    export default {
       key: "setting",
       title: "Settings",
-      icon: { light: "setting-FFFFFF", dark: "setting-000000" },
+      icon: {
+         light: new IconHost("setting-FFFFFF.svg"),
+         dark: new IconHost("setting-000000.svg"),
+      },
       userPermissions: ["admin"],
 
       components: { ActionBarManage, Empty, GroupSetting },
@@ -64,7 +69,10 @@
 </script>
 
 <template>
-   <div class="PageSetting" @scroll="(event) => (scrollTop = event.target.scrollTop)">
+   <div
+      class="PageSetting"
+      @scroll="(event) => (scrollTop = event.target.scrollTop)"
+   >
       <ActionBarManage
          :class="['PageSetting-actionbar']"
          :hasShadow="scrollTop > 0"
@@ -81,10 +89,17 @@
       />
 
       <div class="PageSetting-body" v-if="settings.length">
-         <GroupSetting v-for="group of groups" :key="group.title" :group="group" />
+         <GroupSetting
+            v-for="group of groups"
+            :key="group.title"
+            :group="group"
+         />
       </div>
 
-      <Empty v-if="!settings.length && !isLoading" />
+      <Empty
+         v-if="!settings.length && !isLoading"
+         :icon="$options.icon.dark.toString()"
+      />
    </div>
 </template>
 

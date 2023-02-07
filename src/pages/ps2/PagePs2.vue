@@ -9,11 +9,16 @@
    import WindowItemPs2Disc from "./WindowItemPs2Disc.vue";
    import ItemPs2Disc from "./ItemPs2Disc.vue";
 
+   import IconHost from "@/host/IconHost";
+
    export default {
       key: "ps2",
       name: "PagePs2",
       title: "PS2 Disc",
-      icon: { light: "playstation-FFFFFF", dark: "playstation-000000" },
+      icon: {
+         light: new IconHost("playstation-FFFFFF.svg"),
+         dark: new IconHost("playstation-000000.svg"),
+      },
 
       components: {
          Actionbar,
@@ -165,7 +170,10 @@
             </div>
          </div>
 
-         <Empty v-if="!ps2Discs.length && !isLoading" />
+         <Empty
+            v-if="!ps2Discs.length && !isLoading"
+            :icon="$options.icon.dark.toString()"
+         />
 
          <Footer />
       </div>
