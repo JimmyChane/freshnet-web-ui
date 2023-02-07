@@ -1,5 +1,5 @@
 <script>
-   import Loadingv1 from "@/components/Loading.vue";
+   import Loading from "@/components/Loading.vue";
    import PopupWindow from "@/components/window/PopupWindow.vue";
    import WindowRemove from "@/components/window/WindowRemove.vue";
    import PanelServices from "./PanelServices.vue";
@@ -26,7 +26,7 @@
 
       components: {
          PanelServices,
-         Loadingv1,
+         Loading,
          PopupWindow,
          PanelService,
          WindowSearch,
@@ -634,9 +634,9 @@
          />
       </PopupWindow>
 
-      <Loadingv1
+      <Loading
          class="PageService-loading"
-         :isRunning="serviceStore.getters.isLoading"
+         :isShowing="serviceStore.getters.isLoading"
       />
    </div>
 </template>

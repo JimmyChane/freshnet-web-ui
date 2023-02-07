@@ -1,9 +1,50 @@
 <script>
-   export default {};
+   export default {
+      props: { isShowing: { type: Boolean, default: false } },
+      data() {
+         return { show: false, animate: false };
+      },
+      watch: {
+         isShowing() {
+            this.invalidate();
+         },
+      },
+      mounted() {
+         this.invalidate();
+      },
+      methods: {
+         invalidate() {
+            this.show = true;
+            this.animate = false;
+
+            if (this.isShowing) {
+               const isShowing = this.isShowing;
+
+               setTimeout(() => {
+                  if (this.isShowing === isShowing) this.animate = true;
+               }, 300);
+            } else {
+               const isShowing = this.isShowing;
+
+               setTimeout(() => {
+                  if (this.isShowing === isShowing) this.show = false;
+               }, 300);
+            }
+         },
+      },
+   };
 </script>
 
 <template>
-   <embed class="LoadingDots transition" :src="host.res('anim/ellipsis.svg')" />
+   <embed
+      v-if="show"
+      :class="[
+         'LoadingDots',
+         'transition',
+         animate ? 'LoadingDots-isShowing' : 'LoadingDots-isHiding',
+      ]"
+      :src="host.res('anim/ellipsis.svg')"
+   />
 </template>
 
 <style lang="scss" scoped>
@@ -12,10 +53,16 @@
       height: 6rem;
       position: absolute;
       top: 0;
-      bottom: 22%;
+      bottom: 0;
       left: 0;
       right: 0;
       margin: auto;
       pointer-events: none;
+   }
+   .LoadingDots-isShowing {
+      opacity: 1;
+   }
+   .LoadingDots-isHiding {
+      opacity: 0;
    }
 </style>

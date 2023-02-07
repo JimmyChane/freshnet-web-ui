@@ -1,9 +1,9 @@
 <script>
-   import Loadingv1 from "@/components/Loading";
+   import Loading from "@/components/Loading";
    import WindowBottom from "./WindowBottom.vue";
 
    export default {
-      components: { Loadingv1, WindowBottom },
+      components: { Loading, WindowBottom },
       emits: ["click-cancel", "click-ok"],
       props: {
          title: { type: String, default: "" },
@@ -46,7 +46,7 @@
 
       <div class="Window-foreground transition"></div>
 
-      <Loadingv1 class="Window-loading" :isRunning="isLoading" />
+      <Loading class="Window-loading" :isShowing="isLoading" />
    </div>
 </template>
 

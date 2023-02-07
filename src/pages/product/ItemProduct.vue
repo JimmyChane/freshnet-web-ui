@@ -197,6 +197,7 @@
          display: flex;
          flex-direction: column;
          justify-content: flex-start;
+         text-align: start;
 
          gap: 0.3rem;
          color: black;
@@ -208,7 +209,6 @@
 
             font-size: 1rem;
             font-weight: 600;
-            text-align: start;
             overflow: hidden;
 
             display: flex;
@@ -260,7 +260,9 @@
       justify-content: flex-start;
 
       .ItemProduct-preview {
-         height: 100%;
+         height: var(--height);
+         min-height: var(--height);
+         max-height: var(--height);
          transform: scale(0.92);
          --preview-border-radius-focus: var(--border-radius) 0 0
             var(--border-radius);

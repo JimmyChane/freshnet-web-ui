@@ -1,6 +1,6 @@
 <script>
    import ActionBarManage from "@/pages/manage/ActionBarManage.vue";
-   import Loadingv1 from "@/components/Loading";
+   import Loading from "@/components/Loading";
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
    import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
    import Input from "@/components/Input.vue";
@@ -17,7 +17,7 @@
 
       components: {
          ActionBarManage,
-         Loadingv1,
+         Loading,
          ButtonIcon,
          PopupWindowAction,
          Input,
@@ -186,7 +186,7 @@
          </div>
       </PopupWindowAction>
 
-      <Loadingv1 class="PageProfile-loading" :isRunning="isLoading" />
+      <Loading class="PageProfile-loading" :isShowing="isLoading" />
    </div>
 </template>
 

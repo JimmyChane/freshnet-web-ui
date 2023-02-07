@@ -1,5 +1,5 @@
 <script>
-   import Loadingv1 from "@/components/Loading";
+   import Loading from "@/components/Loading";
    import Input from "@/components/Input.vue";
    import Button2 from "@/components/button/Button2.vue";
    import Actionbar from "@/components/actionbar/Actionbar.vue";
@@ -8,7 +8,7 @@
    export default {
       title: "Staff Login",
 
-      components: { Loadingv1, Input, Button2, Actionbar, Footer },
+      components: { Loading, Input, Button2, Actionbar, Footer },
       data() {
          return {
             top: { shadow: false },
@@ -58,7 +58,7 @@
       class="PageLogin"
       @scroll="(event) => (top.shadow = event.target.scrollTop > 0)"
    >
-      <Loadingv1 class="PageLogin-Loading" :isRunning="isLoading" />
+      <Loading class="PageLogin-Loading" :isShowing="isLoading" />
 
       <Actionbar
          class="PageLogin-top transition"

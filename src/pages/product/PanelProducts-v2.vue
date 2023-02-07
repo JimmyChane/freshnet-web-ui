@@ -311,7 +311,7 @@
             </div>
          </div>
 
-         <LoadingDots class="PanelProducts-loading" v-if="isLoading" />
+         <LoadingDots style="z-index: 3" :isShowing="isLoading" />
          <Empty v-if="isEmpty" :icon="iconEmpty" />
       </div>
 
@@ -442,11 +442,6 @@
                display: grid;
                grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
             }
-         }
-
-         .PanelProducts-loading {
-            z-index: 1;
-            position: static;
          }
       }
    }

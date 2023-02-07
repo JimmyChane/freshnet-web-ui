@@ -1,6 +1,6 @@
 <script>
    import Drawer from "@/components/Drawer.vue";
-   import Loadingv1 from "@/components/Loading.vue";
+   import Loading from "@/components/Loading.vue";
    import PopupWindow from "@/components/window/PopupWindow.vue";
    import Input from "@/components/Input.vue";
 
@@ -30,7 +30,7 @@
 
       components: {
          Drawer,
-         Loadingv1,
+         Loading,
          PopupWindow,
          Input,
          PanelCustomers,
@@ -317,7 +317,7 @@
          </Drawer>
       </div>
 
-      <Loadingv1 class="PageCustomer-loading" :isRunning="isLoading" />
+      <Loading class="PageCustomer-loading" :isShowing="isLoading" />
 
       <!-- Add Customer -->
       <WindowAddCustomer

@@ -19,8 +19,8 @@
       <Actionbar
          :class="[
             'Home-top',
-            top.shadow ? 'Home-top-shadow' : '',
             'transition',
+            top.shadow ? 'Home-top-shadow' : '',
          ]"
          v-if="$root.navigation.isDrawer()"
          :leftMenus="[
@@ -40,12 +40,10 @@
 
       <div class="Page404-main">
          <span class="Page404-title">404</span>
-         <p class="Page404-description"
-            >The page you're looking for cannot be found</p
-         >
+         <p class="Page404-description">Oops, no page found</p>
 
          <router-link class="Page404-goBack" :to="{ path: '/' }"
-            >Go Back</router-link
+            >Go Home</router-link
          >
       </div>
 
@@ -108,7 +106,7 @@
          display: flex;
          flex-direction: column;
          flex-grow: 1;
-         align-items: flex-start;
+         align-items: center;
          justify-content: center;
 
          .Page404-title {

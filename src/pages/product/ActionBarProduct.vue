@@ -25,29 +25,6 @@
          },
          productSearches() {
             return Searcher.withItems(this.products).search(this.searchText);
-
-            const str = this.searchText;
-
-            if (!str) return [];
-
-            const strs = str
-               .toLowerCase()
-               .split(/[\s,]+/)
-               .filter((text) => text);
-
-            return this.products
-               .reduce((results, product) => {
-                  try {
-                     const count = product.toCount(strs);
-                     if (count > 0) results.push({ count, product });
-                  } catch (error) {
-                     console.error("one of search result failed");
-                     console.error(error);
-                  }
-                  return results;
-               }, [])
-               .sort((result1, result2) => result2.count - result1.count)
-               .map((result) => result.product);
          },
 
          initLeftMenus() {
@@ -128,17 +105,12 @@
          @callback-search="(text) => (searchText = text)"
          v-slot="{ list }"
       >
-         <router-link
-            class="ActionbarProduct-search-item-link"
+         <ItemSearchProduct
+            class="ActionbarProduct-search-item"
             v-for="product in list"
             :key="product.id"
-            :to="{ query: { productId: product.id } }"
-         >
-            <ItemSearchProduct
-               class="ActionbarProduct-search-item"
-               :item="product"
-            />
-         </router-link>
+            :item="product"
+         />
       </SearchInput>
    </Actionbar>
 </template>

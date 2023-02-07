@@ -1,5 +1,5 @@
 <script>
-   import Loadingv1 from "@/components/Loading";
+   import Loading from "@/components/Loading";
    import OptionButton from "@/components/button/OptionButton.vue";
    import Selector from "@/components/selector/Selector.vue";
    import Empty from "@/components/Empty.vue";
@@ -24,7 +24,7 @@
 
       components: {
          ActionBarManage,
-         Loadingv1,
+         Loading,
          OptionButton,
          Selector,
          Empty,
@@ -235,7 +235,7 @@
          :icon="$options.icon.dark.toUrl()"
       />
 
-      <Loadingv1 class="PageUsers-loading" :isRunning="isLoading" />
+      <Loading class="PageUsers-loading" :isShowing="isLoading" />
 
       <!-- add user -->
       <PopupWindowAction

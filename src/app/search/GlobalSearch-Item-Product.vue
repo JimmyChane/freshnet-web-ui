@@ -70,7 +70,7 @@
       flex-direction: row;
       align-items: flex-start;
       justify-content: flex-start;
-      gap: 10px;
+      gap: 0.5em;
       border-radius: 8px;
       border-radius: 0.3em;
       font-size: 1.1em;

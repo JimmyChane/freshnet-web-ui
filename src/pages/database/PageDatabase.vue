@@ -1,5 +1,5 @@
 <script>
-   import Loadingv1 from "@/components/Loading";
+   import Loading from "@/components/Loading";
    import PopupWindow from "@/components/window/PopupWindow.vue";
    import Empty from "@/components/Empty.vue";
    import ActionBarManage from "@/pages/manage/ActionBarManage.vue";
@@ -17,7 +17,7 @@
       userPermissions: ["admin"],
 
       components: {
-         Loadingv1,
+         Loading,
          PopupWindow,
          Empty,
          ActionBarManage,
@@ -167,7 +167,7 @@
          </div>
       </PopupWindow>
 
-      <Loadingv1 class="PageDatabase-loading" :isRunning="isLoading" />
+      <Loading class="PageDatabase-loading" :isShowing="isLoading" />
    </div>
 </template>
 

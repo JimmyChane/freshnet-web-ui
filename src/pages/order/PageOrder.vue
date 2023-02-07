@@ -179,7 +179,7 @@
 
       <Loading
          class="viewOrder-loading"
-         :isRunning="orderStore.getters.isLoading"
+         :isShowing="orderStore.getters.isLoading"
       />
 
       <PopupWindow

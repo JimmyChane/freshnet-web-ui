@@ -45,7 +45,7 @@
       flex-direction: row;
       align-items: flex-start;
       justify-content: flex-start;
-      gap: 1em;
+      gap: 0.5em;
       padding: 0.5em;
       color: black;
       border-radius: 0.3em;

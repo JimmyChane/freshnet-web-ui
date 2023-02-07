@@ -1,6 +1,6 @@
 <script>
    import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import Loadingv1 from "@/components/Loading.vue";
+   import Loading from "@/components/Loading.vue";
 
    import Section from "./PanelCustomer_Section.vue";
    import ItemDevice from "./ItemDevice.vue";
@@ -8,7 +8,7 @@
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
    export default {
-      components: { Actionbar, Loadingv1, Section, ItemDevice },
+      components: { Actionbar, Loading, Section, ItemDevice },
       emits: [
          "click-item-close",
          "click-item-remove",
@@ -221,10 +221,9 @@
                      "
                   />
                </div>
-               <Loadingv1
+               <Loading
                   class="PanelCustomer-devices-loading"
-                  v-if="isLoadingDevices"
-                  :isRunning="isLoadingDevices"
+                  :isShowing="isLoadingDevices"
                />
             </Section>
 

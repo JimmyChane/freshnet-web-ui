@@ -115,6 +115,8 @@
    .LeftNavGroup1-isWide {
       &-hasGroup2s {
          border-radius: 0.5rem;
+         width: calc(100% - 1em);
+         margin: 0 0.5em;
          .LeftNavGroup1-header {
             --primary-color: #abbec9;
          }
@@ -132,8 +134,7 @@
       &-isSelected {
          width: 100%;
          border-radius: 0.5rem;
-         // margin-bottom: 1rem;
-         // margin-top: 1rem;
+         margin: 0;
          .LeftNavGroup1-header {
             border-radius: 0;
          }
@@ -143,6 +144,7 @@
       }
       &-notSelected {
          width: 100%;
+         margin: 0;
          border-radius: 0.5rem;
          .LeftNavGroup1-group2s {
             background: none;
@@ -151,9 +153,6 @@
          }
       }
 
-      // &-hasSectionsAndIsSelected {
-      //    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.15);
-      // }
       &-hasNoSectionsAndIsSelected {
          .LeftNavGroup1-group2s {
             display: none;

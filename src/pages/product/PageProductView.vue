@@ -40,9 +40,13 @@
 
 <template>
    <div class="PageProductView">
-      <ViewerProduct :product="product" :isWide="isOver1200px" :isEditable="false" />
+      <ViewerProduct
+         :product="product"
+         :isWide="isOver1200px"
+         :isEditable="false"
+      />
 
-      <LoadingDots class="PageProductView-loading" v-if="isLoading" />
+      <LoadingDots style="z-index: 2" :isShowing="isLoading" />
    </div>
 </template>
 
@@ -54,9 +58,5 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-
-      .PageProductView-loading {
-         z-index: 2;
-      }
    }
 </style>

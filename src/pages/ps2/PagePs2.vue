@@ -111,10 +111,7 @@
                      alt="Clear"
                      @click="searchKeyword = ''"
                   />
-                  <ButtonIcon
-                     :src="host.icon('search-2A4858')"
-                     alt="Search"
-                  />
+                  <ButtonIcon :src="host.icon('search-2A4858')" alt="Search" />
                </div>
             </div>
          </Actionbar>
@@ -192,7 +189,7 @@
          <WindowItemPs2Disc :item="currentDisc" />
       </PopupWindow>
 
-      <LoadingDots class="PagePs2-loading" v-if="isLoading" />
+      <LoadingDots style="z-index: 3" :isShowing="isLoading" />
    </div>
 </template>
 
@@ -345,10 +342,6 @@
          z-index: 2;
          width: 100%;
          height: 100%;
-      }
-
-      .PagePs2-loading {
-         z-index: 3;
       }
    }
 </style>
