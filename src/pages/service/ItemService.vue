@@ -138,11 +138,11 @@
       <div
          v-if="isList"
          :class="[
-            'ItemServiceList-body',
-            `ItemServiceList-body-${
-               isSelected ? 'isSelected' : 'isDeselected'
-            }`,
             'transition',
+            'ItemServiceList-body',
+            isSelected
+               ? 'ItemServiceList-body-isSelected'
+               : 'ItemServiceList-body-isDeselected',
          ]"
       >
          <div class="ItemService-top">
@@ -365,7 +365,7 @@
    }
 
    .ItemService {
-      width: 100%;
+      width: initial;
       background: white;
 
       .ItemServiceGrid-body {
