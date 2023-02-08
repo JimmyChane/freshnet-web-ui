@@ -1,7 +1,8 @@
 <script>
-   import ActionbarMenus from "./ActionbarMenus.vue";
+   import Menus from "./Actionbar-Menus.vue";
+
    export default {
-      components: { ActionbarMenus },
+      components: { Menus },
       props: {
          title: { type: String, default: "" },
          leftMenus: { default: () => [] },
@@ -25,18 +26,10 @@
 
 <template>
    <div class="Actionbar transition">
-      <ActionbarMenus
-         class="Actionbar-leftMenus"
-         v-if="LeftMenus.length"
-         :menus="LeftMenus"
-      />
+      <Menus :style="{ 'justify-content': 'flex-start' }" :menus="LeftMenus" />
       <span class="Actionbar-title" v-if="title">{{ title }}</span>
       <slot v-if="hasSlot" />
-      <ActionbarMenus
-         class="Actionbar-rightMenus"
-         v-if="RightMenus.length"
-         :menus="RightMenus"
-      />
+      <Menus :style="{ 'justify-content': 'flex-end' }" :menus="RightMenus" />
    </div>
 </template>
 
@@ -66,24 +59,6 @@
       align-items: center;
       justify-content: space-between;
 
-      .Actionbar-leftMenus {
-         width: 100%;
-         min-width: max-content;
-         max-width: max-content;
-
-         display: flex;
-         flex-direction: row;
-         justify-content: flex-start;
-      }
-      .Actionbar-rightMenus {
-         width: 100%;
-         min-width: max-content;
-         max-width: max-content;
-
-         display: flex;
-         flex-direction: row;
-         justify-content: flex-end;
-      }
       .Actionbar-title {
          font-size: 1.3rem;
          font-weight: 600;

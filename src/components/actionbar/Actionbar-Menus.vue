@@ -18,7 +18,7 @@
 </script>
 
 <template>
-   <div class="ActionBar2Menus">
+   <div class="ActionBar2Menus" v-if="menus.length">
       <div class="ActionBar2Menus-menu" v-for="menu in Menus" :key="menu.key">
          <ButtonIcon
             class="ActionBar2Menus-menu-icon"
@@ -39,8 +39,9 @@
 
 <style lang="scss" scoped>
    .ActionBar2Menus {
-      width: max-content;
-      // padding: 0.4rem;
+      width: 100%;
+      min-width: max-content;
+      max-width: max-content;
 
       display: flex;
       flex-direction: row;
