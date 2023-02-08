@@ -5,7 +5,7 @@
 
    import Footer from "@/app/footer/Footer.vue";
 
-   import PanelProducts from "./PanelProducts-v2.vue";
+   import PanelProducts from "./PanelProducts.vue";
    import PanelProduct from "./PanelProduct.vue";
    import WindowSearch from "./WindowSearch.vue";
    import WindowAddProduct from "./WindowAddProduct.vue";
