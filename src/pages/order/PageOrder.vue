@@ -1,11 +1,10 @@
 <script>
    import PopupWindow from "@/components/window/PopupWindow.vue";
-   import Loading from "@/components/Loading";
+   import Loading from "@/components/Loading.vue";
    import Input from "@/components/Input.vue";
 
    import Actionbar from "./Actionbar.vue";
    import SectionOrder from "./SectionOrder.vue";
-   import ActionBarManage from "@/pages/manage/ActionBarManage.vue";
    import U from "@/U";
 
    import Order from "@/items/Order.js";
@@ -22,14 +21,7 @@
       },
       userPermissions: ["admin", "staff"],
 
-      components: {
-         PopupWindow,
-         Loading,
-         ActionBarManage,
-         Actionbar,
-         SectionOrder,
-         Input,
-      },
+      components: { PopupWindow, Loading, Actionbar, SectionOrder, Input },
       emits: ["callback-side-expand"],
       data() {
          return {
@@ -123,7 +115,6 @@
    >
       <Actionbar
          class="PageOrder-actionbar"
-         :hasShadow="scrollTop > 0"
          :title="$options.title"
          :items="items"
          @click-item="
@@ -134,7 +125,6 @@
                (display.showDialogAppendOrder = !display.showDialogAppendOrder)
          "
          @click-refresh="() => clickRefresh()"
-         @click-drawer-expand="$emit('click-drawer-expand')"
       />
 
       <main>

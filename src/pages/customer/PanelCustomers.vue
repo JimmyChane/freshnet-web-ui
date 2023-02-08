@@ -8,12 +8,7 @@
 
    export default {
       components: { Actionbar, ItemCustomer, Empty },
-      emits: [
-         "click-drawer-expand",
-         "click-refresh",
-         "click-item-add",
-         "click-item-remove",
-      ],
+      emits: ["click-refresh", "click-item-add", "click-item-remove"],
       props: {
          title: { type: String, default: "" },
          items: { type: Array, default: () => [] },
@@ -52,12 +47,10 @@
    >
       <Actionbar
          class="PanelCustomers-top"
-         :hasShadow="scrollTop > 0"
          :title="title"
          :items="items"
          @click-item-add="() => $emit('click-item-add')"
          @click-refresh="() => $emit('click-refresh')"
-         @click-drawer-expand="() => $emit('click-drawer-expand')"
       />
 
       <div class="PanelCustomers-body" v-if="items.length">

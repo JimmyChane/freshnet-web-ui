@@ -1,5 +1,5 @@
 <script>
-   import ActionBarManage from "@/pages/manage/ActionBarManage.vue";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import Empty from "@/components/Empty.vue";
    import GroupSetting from "./GroupSetting.vue";
    import SettingModule from "@/items/data/Setting.js";
@@ -15,7 +15,7 @@
       },
       userPermissions: ["admin"],
 
-      components: { ActionBarManage, Empty, GroupSetting },
+      components: { NavigationBar, Empty, GroupSetting },
       data() {
          return {
             scrollTop: 0,
@@ -73,9 +73,7 @@
       class="PageSetting"
       @scroll="(event) => (scrollTop = event.target.scrollTop)"
    >
-      <ActionBarManage
-         :class="['PageSetting-actionbar']"
-         :hasShadow="scrollTop > 0"
+      <NavigationBar
          :title="$options.title"
          :rightMenus="[
             {
@@ -85,7 +83,6 @@
                click: () => refresh(),
             },
          ]"
-         @click-drawer-expand="$emit('click-drawer-expand')"
       />
 
       <div class="PageSetting-body" v-if="settings.length">
@@ -112,10 +109,6 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-
-      .PageSetting-actionbar {
-         width: 100%;
-      }
 
       .PageSetting-body {
          width: 100%;

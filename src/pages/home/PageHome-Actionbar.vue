@@ -1,35 +1,15 @@
 <script>
-   import Actionbar from "@/components/actionbar/Actionbar.vue";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import GlobalSearch from "@/app/search/GlobalSearch.vue";
 
    export default {
-      components: { Actionbar, GlobalSearch },
-      props: {
-         isTop: { type: Boolean, default: false },
-         isThin: { type: Boolean, default: false },
-      },
+      components: { NavigationBar, GlobalSearch },
+      props: { isThin: { type: Boolean, default: false } },
    };
 </script>
 
 <template>
-   <Actionbar
-      class="HomeActionbar"
-      :leftMenus="[
-         $root.navigation.isDrawer()
-            ? {
-                 title: 'Hamburger Menu',
-                 icon: host.icon('hamburgerMenu-000000'),
-                 click: () => $root.navigation.openNavigationDrawer(),
-              }
-            : null,
-         isThin
-            ? {
-                 icon: host.res('img/freshnet-enterprise-logo.svg'),
-                 click: () => {},
-              }
-            : null,
-      ]"
-   >
+   <NavigationBar class="HomeActionbar">
       <div class="HomeActionbar-body">
          <GlobalSearch
             :class="[
@@ -40,7 +20,7 @@
             ]"
          />
       </div>
-   </Actionbar>
+   </NavigationBar>
 </template>
 
 <style lang="scss" scoped>

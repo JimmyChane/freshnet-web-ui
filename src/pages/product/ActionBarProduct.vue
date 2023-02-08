@@ -1,15 +1,16 @@
 <script>
    import Actionbar from "@/components/actionbar/Actionbar.vue";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import SearchInput from "@/components/SearchInput.vue";
    import ItemSearchProduct from "./ItemSearchProduct.vue";
    import Searcher from "@/tools/Searcher";
 
    export default {
-      components: { Actionbar, SearchInput, ItemSearchProduct },
+      components: { Actionbar, NavigationBar, SearchInput, ItemSearchProduct },
       props: {
          products: { type: Array, default: () => [] },
-         leftMenus: { default: () => null },
-         rightMenus: { default: () => null },
+         leftMenus: { default: () => [] },
+         rightMenus: { default: () => [] },
       },
       data() {
          return { searchText: "" };
@@ -27,35 +28,6 @@
             return Searcher.withItems(this.products).search(this.searchText);
          },
 
-         initLeftMenus() {
-            const menus = [];
-
-            if (Array.isArray(this.leftMenus)) menus.push(...this.leftMenus);
-            if (
-               !Array.isArray(this.leftMenus) &&
-               this.leftMenus !== null &&
-               this.leftMenus !== undefined
-            ) {
-               menus.push(this.leftMenus);
-            }
-
-            if (this.$root.navigation.isDrawer()) {
-               menus.push({
-                  key: "hamburgerMenu",
-                  title: "Hamburger Menu",
-                  icon: this.host.icon("hamburgerMenu-000000"),
-                  click: () => this.$root.navigation.openNavigationDrawer(),
-               });
-               menus.push({
-                  key: "home",
-                  title: "Home",
-                  icon: this.host.res("img/freshnet-enterprise-logo.svg"),
-                  click: () => this.$router.push("/home"),
-               });
-            }
-
-            return menus;
-         },
          initRightMenus() {
             const menus = [];
 
@@ -92,9 +64,9 @@
 </script>
 
 <template>
-   <Actionbar
+   <NavigationBar
       class="ActionbarProduct"
-      :leftMenus="initLeftMenus"
+      :leftMenus="leftMenus"
       :rightMenus="initRightMenus"
    >
       <SearchInput
@@ -112,7 +84,7 @@
             :item="product"
          />
       </SearchInput>
-   </Actionbar>
+   </NavigationBar>
 </template>
 
 <style lang="scss" scoped>

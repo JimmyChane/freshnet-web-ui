@@ -1,8 +1,8 @@
 <script>
-   import Loading from "@/components/Loading";
+   import Loading from "@/components/Loading.vue";
    import PopupWindow from "@/components/window/PopupWindow.vue";
    import Empty from "@/components/Empty.vue";
-   import ActionBarManage from "@/pages/manage/ActionBarManage.vue";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import ItemDatabase from "./ItemDatabase.vue";
 
    import HostIcon from "@/host/HostIcon";
@@ -16,13 +16,7 @@
       },
       userPermissions: ["admin"],
 
-      components: {
-         Loading,
-         PopupWindow,
-         Empty,
-         ActionBarManage,
-         ItemDatabase,
-      },
+      components: { Loading, PopupWindow, Empty, NavigationBar, ItemDatabase },
       emits: ["callback-side-expand"],
       data() {
          return {
@@ -99,9 +93,8 @@
       class="PageDatabase"
       @scroll="(event) => (scrollTop = event.target.scrollTop)"
    >
-      <ActionBarManage
-         class="PageDatabase-actionbar"
-         :hasShadow="scrollTop > 0"
+      <NavigationBar
+         style="z-index: 2"
          :title="$options.title"
          :rightMenus="[
             {
@@ -111,7 +104,6 @@
                click: () => actionRefresh(),
             },
          ]"
-         @click-drawer-expand="$emit('click-drawer-expand')"
       />
 
       <div
@@ -188,9 +180,6 @@
       flex-direction: column;
       overflow: auto;
 
-      .PageDatabase-actionbar {
-         z-index: 2;
-      }
       .PageDatabase-body {
          z-index: 1;
          width: 100%;

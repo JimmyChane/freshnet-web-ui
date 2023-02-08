@@ -1,13 +1,12 @@
 <script>
-   import Loading from "@/components/Loading";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
+   import Loading from "@/components/Loading.vue";
    import OptionButton from "@/components/button/OptionButton.vue";
    import Selector from "@/components/selector/Selector.vue";
    import Empty from "@/components/Empty.vue";
-   import PopupWindowAction from "@/components/window/PopupWindowAction";
+   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
    import Input from "@/components/Input.vue";
    import ItemUser from "./ItemUser.vue";
-
-   import ActionBarManage from "@/pages/manage/ActionBarManage.vue";
 
    import User from "@/items/User.js";
 
@@ -23,7 +22,7 @@
       userPermissions: ["admin"],
 
       components: {
-         ActionBarManage,
+         NavigationBar,
          Loading,
          OptionButton,
          Selector,
@@ -196,8 +195,7 @@
       class="PageUsers"
       @scroll="(event) => (scrollTop = event.target.scrollTop)"
    >
-      <ActionBarManage
-         :hasShadow="scrollTop > 0"
+      <NavigationBar
          :title="$options.title"
          :rightMenus="[
             isCurrentUserAdmin
@@ -215,7 +213,6 @@
                click: () => onIntentRefresh(),
             },
          ]"
-         @click-drawer-expand="$emit('click-drawer-expand')"
       />
 
       <div class="PageUsers-body" v-if="users.length">

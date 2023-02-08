@@ -260,7 +260,6 @@
             :items="items"
             :itemSelected="currentCustomer"
             :title="$options.title"
-            @click-drawer-expand="() => $emit('click-drawer-expand')"
             @click-refresh="() => invalidate()"
             @click-item-add="() => clickItemAdd()"
             @click-item-remove="(param) => clickItemRemove(param.item)"

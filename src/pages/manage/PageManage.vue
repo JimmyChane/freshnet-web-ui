@@ -76,11 +76,7 @@
 
 <template>
    <div class="PageManage">
-      <router-view
-         class="PageManage-view"
-         v-if="!user.isTypeNone()"
-         @click-drawer-expand="$root.navigation.openNavigationDrawer()"
-      />
+      <router-view class="PageManage-view" v-if="!user.isTypeNone()" />
    </div>
 </template>
 

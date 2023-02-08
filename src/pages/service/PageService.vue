@@ -449,7 +449,6 @@
             :services="items"
             :currentItem="currentService"
             @click-service="(item) => clickService(item)"
-            @click-drawer-expand="$emit('click-drawer-expand')"
             @click-search="() => windowAction('search', 'start')"
          />
 

@@ -1,5 +1,5 @@
 <script>
-   import Actionbar from "@/components/actionbar/Actionbar.vue";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import Tabs from "./PagePrint-Tabs.vue";
    import Card from "./PagePrint-Card.vue";
    import Footer from "@/app/footer/Footer.vue";
@@ -47,7 +47,7 @@
          dark: new HostIcon("paper-000000.svg"),
       },
 
-      components: { Actionbar, Tabs, Card, Footer },
+      components: { NavigationBar, Tabs, Card, Footer },
       data() {
          return {
             items: [
@@ -149,23 +149,6 @@
          };
       },
       computed: {
-         leftMenus() {
-            if (!this.$root.navigation.isDrawer()) return [];
-
-            return [
-               {
-                  title: "Hamburger Menu",
-                  icon: this.host.icon(`hamburgerMenu-000000`),
-                  click: () => this.$root.navigation.openNavigationDrawer(),
-               },
-               {
-                  title: "Home",
-                  icon: this.host.res("img/freshnet-enterprise-logo.svg"),
-                  click: () => this.$router.push("/home"),
-               },
-            ];
-         },
-
          tabs0() {
             return this.items.map((layer) => {
                const tab = { title: layer.title };
@@ -246,11 +229,7 @@
 
 <template>
    <div class="PagePrint">
-      <Actionbar
-         class="PagePrint-actionbar"
-         :title="$options.title"
-         :leftMenus="leftMenus"
-      />
+      <NavigationBar class="PagePrint-actionbar" :title="$options.title" />
 
       <div class="PagePrint-tabs">
          <Tabs v-if="tabs0.length" :items="tabs0" />

@@ -1,6 +1,6 @@
 <script>
-   import ActionBarManage from "@/pages/manage/ActionBarManage.vue";
-   import Loading from "@/components/Loading";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
+   import Loading from "@/components/Loading.vue";
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
    import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
    import Input from "@/components/Input.vue";
@@ -16,7 +16,7 @@
       },
 
       components: {
-         ActionBarManage,
+         NavigationBar,
          Loading,
          ButtonIcon,
          PopupWindowAction,
@@ -98,12 +98,7 @@
          class="PageProfile-scroll"
          @scroll="(event) => (scrollTop = event.target.scrollTop)"
       >
-         <ActionBarManage
-            class="PageProfile-actionbar"
-            :hasShadow="scrollTop > 0"
-            :title="$options.title"
-            @click-drawer-expand="$emit('click-drawer-expand')"
-         />
+         <NavigationBar style="z-index: 2" :title="$options.title" />
 
          <div class="PageProfile-body" v-if="user">
             <div class="PageProfile-section PageProfile-introduction">
@@ -208,14 +203,7 @@
          flex-direction: column;
          align-items: center;
          justify-content: flex-start;
-         .PageProfile-actionbar {
-            z-index: 2;
-            position: sticky;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 2;
-         }
+
          .PageProfile-body {
             z-index: 1;
             width: 100%;

@@ -192,7 +192,6 @@
          :groupMenuIndex="currentGroupIndex"
          :sortMenus="sortMenus"
          :sortMenuIndex="currentSortIndex"
-         @click-drawer-expand="() => $emit('click-drawer-expand')"
          @click-service="(service) => $emit('click-service', service)"
          @click-search="() => $emit('click-search')"
       />

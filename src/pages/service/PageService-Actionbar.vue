@@ -1,5 +1,5 @@
 <script>
-   import ActionbarMenus from "@/components/actionbar/ActionbarMenus.vue";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import SearchInput from "@/components/SearchInput.vue";
    import LayoutViewSelector from "@/pages/service/PageService-LayoutViewSelector.vue";
    import LabelMenus from "@/components/LabelMenus.vue";
@@ -11,14 +11,14 @@
 
    export default {
       components: {
-         ActionbarMenus,
+         NavigationBar,
          SearchInput,
          LayoutViewSelector,
          LabelMenus,
          ItemService,
          Tab,
       },
-      emits: ["click-drawer-expand", "click-service"],
+      emits: ["click-service"],
       props: {
          title: { type: String, default: "" },
          menus: { type: Array, default: () => [] },
@@ -53,61 +53,43 @@
 </script>
 
 <template>
-   <div class="Actionbar">
-      <div class="Actionbar-top">
-         <div>
-            <ActionbarMenus
-               class="Actionbar-leftMenus"
-               v-if="$root.navigation.isDrawer()"
-               :menus="[
-                  {
-                     key: 'hamburgerMenu',
-                     title: 'Hamburger Menu',
-                     icon: host.icon('hamburgerMenu-000000'),
-                     click: () => $emit('click-drawer-expand'),
-                  },
-               ]"
+   <div class="PageServiceActionbar">
+      <NavigationBar
+         class="PageServiceActionbar-top"
+         :rightMenus="[
+            isWide
+               ? null
+               : {
+                    title: 'Search',
+                    icon: host.icon('search-000000'),
+                    click: () => $emit('click-search'),
+                 },
+            ...menus,
+         ]"
+      >
+         <SearchInput
+            class="PageServiceActionbar-SearchInput"
+            v-if="isWide && services.length"
+            placeholder="Search services"
+            :list="results"
+            @callback-search="(strs) => (results = searchResults(strs))"
+            v-slot="{ collapse }"
+         >
+            <ItemService
+               v-for="item in results"
+               :key="item.id"
+               :item="item"
+               @click="
+                  () => {
+                     collapse();
+                     $emit('click-service', item);
+                  }
+               "
             />
+         </SearchInput>
+      </NavigationBar>
 
-            <SearchInput
-               class="Actionbar-SearchInput"
-               v-if="isWide && services.length"
-               placeholder="Search services"
-               :list="results"
-               @callback-search="(strs) => (results = searchResults(strs))"
-               v-slot="{ collapse }"
-            >
-               <ItemService
-                  v-for="item in results"
-                  :key="item.id"
-                  :item="item"
-                  @click="
-                     () => {
-                        collapse();
-                        $emit('click-service', item);
-                     }
-                  "
-               />
-            </SearchInput>
-
-            <ActionbarMenus
-               class="Actionbar-rightMenus"
-               v-if="menus.length"
-               :menus="[
-                  isWide
-                     ? null
-                     : {
-                          title: 'Search',
-                          icon: host.icon('search-000000'),
-                          click: () => $emit('click-search'),
-                       },
-                  ...menus,
-               ]"
-            />
-         </div>
-      </div>
-
-      <div class="Actionbar-toolbar">
+      <div class="PageServiceActionbar-toolbar">
          <div>
             <LayoutViewSelector :menus="layoutMenus" :index="layoutMenuIndex" />
             <LabelMenus
@@ -127,7 +109,7 @@
          </div>
       </div>
 
-      <div class="Actionbar-tabs">
+      <div class="PageServiceActionbar-tabs">
          <div>
             <Tab
                v-for="stateMenu of stateMenus"
@@ -141,7 +123,7 @@
 </template>
 
 <style lang="scss" scoped>
-   .Actionbar {
+   .PageServiceActionbar {
       height: max-content;
       background-color: #f3f3f3;
       display: flex;
@@ -149,43 +131,19 @@
       justify-content: center;
       align-items: center;
 
-      .Actionbar-top {
+      .PageServiceActionbar-top {
          z-index: 3;
-         width: 100%;
+         max-width: var(--max-width);
 
-         padding: 0 1rem;
-
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-
-         & > * {
+         .PageServiceActionbar-SearchInput {
+            z-index: 3;
             width: 100%;
-            max-width: var(--max-width);
-            padding: 0.3rem 0;
-            gap: 0.5rem;
-
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-end;
-
-            .Actionbar-SearchInput {
-               z-index: 3;
-               width: 100%;
-               padding: 0;
-               flex-grow: 2;
-            }
-            .Actionbar-leftMenus {
-               flex-grow: 0;
-            }
-            .Actionbar-rightMenus {
-               flex-grow: 1;
-            }
+            padding: 0;
+            flex-grow: 2;
          }
       }
 
-      .Actionbar-toolbar {
+      .PageServiceActionbar-toolbar {
          width: 100%;
          padding: 0.3rem 1rem;
 
@@ -211,7 +169,7 @@
          }
       }
 
-      .Actionbar-tabs {
+      .PageServiceActionbar-tabs {
          z-index: 1;
          width: 100%;
          padding: 0 1rem;
