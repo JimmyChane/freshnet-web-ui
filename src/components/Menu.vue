@@ -62,8 +62,7 @@
    .Menu {
       font-size: 1rem;
       font-weight: 600;
-
-      position: relative;
+ 
       width: fit-content;
       height: fit-content;
       display: flex;

@@ -241,7 +241,9 @@
                </div>
             </div>
 
-            <AddEvent />
+            <AddEvent
+               @callback-create="(event) => actions.onClickToAddEvent(event)"
+            />
 
             <PanelEvents
                v-if="service"

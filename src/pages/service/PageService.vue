@@ -47,8 +47,9 @@
                   this.$root.nextRoute({ query: { service: null } }),
                onClickRemove: (x) => this.clickDeleteService(x),
                onClickAddEvent: (x) => this.clickAddEvent(x),
+               onClickToAddEvent: (event) =>
+                  this.popup.newEvent.ok(this, this.popup.newEvent, event),
                onClickRemoveEvent: (x) => this.clickRemoveEvent(x),
-               // onClickOpenImage: (x) => this.clickImage(x),
                onClickRemoveImage: (x) => this.clickRemoveImage(x),
                onClickUpdateCustomer: (x) => this.clickUpdateCustomer(x),
                onClickUpdateDescription: (x) => this.clickUpdateDescription(x),
