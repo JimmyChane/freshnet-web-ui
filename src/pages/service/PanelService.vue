@@ -248,7 +248,6 @@
             <PanelEvents
                v-if="service"
                :service="service"
-               @click-add-event="actions.onClickAddEvent()"
                @click-remove-event="
                   (event) => actions.onClickRemoveEvent({ service, event })
                "

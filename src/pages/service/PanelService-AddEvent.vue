@@ -18,28 +18,14 @@
          };
       },
       computed: {
-         primaryColor: (c) => chroma("961d96"),
          primaryColor: (c) => c.methodMenu.color,
          primaryColor1: (c) => c.primaryColor.mix("ffffff", 0.45),
          primaryColor2: (c) => c.primaryColor.mix("ffffff", 0.6),
-
-         user: (c) => c.loginStore.getters.user,
-         isUserDefault: (c) => {
-            if (c.user.isTypeNone()) return false;
-            const isUserAdmin = c.user.isTypeAdmin() && c.user.isDefault();
-            const isUserStaff = c.user.isTypeStaff() && c.user.isDefault();
-            return isUserAdmin || isUserStaff;
-         },
 
          isMethodInfo: (c) => c.eventMethod === ModuleEvent.Method.Info,
          isMethodQuotation: (c) =>
             c.eventMethod === ModuleEvent.Method.Quotation,
          isMethodPurchase: (c) => c.eventMethod === ModuleEvent.Method.Purchase,
-         nameUserType: (c) => {
-            if (c.user.isTypeAdmin()) return "Admin";
-            if (c.user.isTypeStaff()) return "Staff";
-            return "unknown";
-         },
 
          methodMenu: (c) =>
             c.methodMenus.find((menu) => menu.key === c.eventMethod),
@@ -57,6 +43,19 @@
                click: (menu) => (c.eventMethod = menu.key),
             },
          ],
+
+         user: (c) => c.loginStore.getters.user,
+         isUserDefault: (c) => {
+            if (c.user.isTypeNone()) return false;
+            const isUserAdmin = c.user.isTypeAdmin() && c.user.isDefault();
+            const isUserStaff = c.user.isTypeStaff() && c.user.isDefault();
+            return isUserAdmin || isUserStaff;
+         },
+         nameUserType: (c) => {
+            if (c.user.isTypeAdmin()) return "Admin";
+            if (c.user.isTypeStaff()) return "Staff";
+            return "unknown";
+         },
       },
       watch: {
          user() {
@@ -75,18 +74,6 @@
          this.clear();
       },
       methods: {
-         clear() {
-            this.nameOfUser = "";
-            this.eventMethod = ModuleEvent.Method.Quotation;
-
-            this.eventDescription = "";
-            this.eventStatus = "";
-            this.eventAmount = 0;
-
-            this.focus();
-            this.invalidateMethod();
-            this.invalidateUser();
-         },
          invalidateMethod() {
             const { InputStatus, InputAmount } = this.$refs;
             if (this.isMethodInfo) InputStatus.focus();
@@ -118,6 +105,18 @@
             }
 
             return null;
+         },
+
+         clear() {
+            this.nameOfUser = "";
+
+            this.eventDescription = "";
+            this.eventStatus = "";
+            this.eventAmount = 0;
+
+            this.focus();
+            this.invalidateMethod();
+            this.invalidateUser();
          },
          submit() {
             if (this.isUserDefault && !this.nameOfUser.trim()) {
@@ -243,8 +242,7 @@
    .AddEvent {
       width: 100%;
       max-width: 40rem;
-      display: flex;
-      flex-direction: row;
+      margin-top: 1rem;
 
       display: grid;
       grid-template-areas: "header status" "description status" "footer status";

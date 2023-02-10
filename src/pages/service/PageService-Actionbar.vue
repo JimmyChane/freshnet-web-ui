@@ -40,7 +40,7 @@
          return { results: [], primaryColorLabel: chroma("black") };
       },
       computed: {
-         isWide: (c) => c.$root.window.innerWidth > 600,
+         isWide: (c) => c.$root.window.innerWidth > 400,
          currentGroupMenu: (c) => c.groupMenus[c.sortMenuIndex],
          currentSortMenu: (c) => c.sortMenus[c.sortMenuIndex],
       },

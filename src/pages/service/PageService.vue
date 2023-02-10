@@ -7,7 +7,6 @@
    import WindowSearch from "./WindowSearch.vue";
    import WindowImportService from "./WindowImportService.vue";
    import WindowAddService from "./WindowAddService.vue";
-   import WindowAddEvent from "./WindowAddEvent.vue";
    import WindowUpdateDescription from "./WindowUpdateDescription.vue";
    import WindowUpdateBelonging from "./WindowUpdateBelonging.vue";
    import WindowUpdateCustomer from "./WindowUpdateCustomer.vue";
@@ -32,7 +31,6 @@
          WindowSearch,
          WindowImportService,
          WindowAddService,
-         WindowAddEvent,
          WindowUpdateCustomer,
          WindowUpdateDescription,
          WindowUpdateBelonging,
@@ -46,9 +44,17 @@
                onClickClose: () =>
                   this.$root.nextRoute({ query: { service: null } }),
                onClickRemove: (x) => this.clickDeleteService(x),
-               onClickAddEvent: (x) => this.clickAddEvent(x),
-               onClickToAddEvent: (event) =>
-                  this.popup.newEvent.ok(this, this.popup.newEvent, event),
+               onClickToAddEvent: (event) => {
+                  this.serviceStore
+                     .dispatch("addEventToId", {
+                        serviceID: this.currentService.id,
+                        data: event,
+                     })
+                     .catch((error) => {
+                        this.$root.feedback("Failed to create an event");
+                        throw error;
+                     });
+               },
                onClickRemoveEvent: (x) => this.clickRemoveEvent(x),
                onClickRemoveImage: (x) => this.clickRemoveImage(x),
                onClickUpdateCustomer: (x) => this.clickUpdateCustomer(x),
@@ -115,28 +121,6 @@
                         })
                         .catch((error) => {
                            context.$root.feedback("Delete Failed");
-                           throw error;
-                        });
-                  },
-               },
-               newEvent: {
-                  isShowing: false,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     context.$refs.WindowAddEvent.focus();
-                  },
-                  dismiss: (context, self, data) => (self.isShowing = false),
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("addEventToId", {
-                           serviceID: context.currentService.id,
-                           data,
-                        })
-                        .then((event) => {
-                           self.dismiss(context, self);
-                        })
-                        .catch((error) => {
-                           context.$root.feedback("Failed to create an event");
                            throw error;
                         });
                   },
@@ -409,9 +393,6 @@
                });
             }
          },
-         clickAddEvent() {
-            this.windowAction("newEvent", "start");
-         },
          clickRemoveEvent(event) {
             this.windowAction("removeEvent", "start", event);
          },
@@ -509,21 +490,6 @@
             ref="WindowAddService"
             @callback-create="(data) => windowAction('newService', 'ok', data)"
             @callback-cancel="() => windowAction('newService', 'dismiss')"
-         />
-      </PopupWindow>
-
-      <!-- Add Event Window -->
-      <PopupWindow
-         class="PageService-window"
-         v-if="drawerService"
-         :isShowing="popup.newEvent.isShowing"
-         @click-dismiss="() => windowAction('newEvent', 'dismiss')"
-      >
-         <WindowAddEvent
-            class="PageService-window-child"
-            ref="WindowAddEvent"
-            @callback-create="(event) => windowAction('newEvent', 'ok', event)"
-            @callback-cancel="() => windowAction('newEvent', 'dismiss')"
          />
       </PopupWindow>
 
