@@ -1,5 +1,4 @@
 <script>
-   import Actionbar from "@/components/actionbar/Actionbar.vue";
    import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import GlobalSearch from "@/app/search/GlobalSearch.vue";
 
@@ -7,7 +6,7 @@
    import { format, differenceInMinutes } from "date-fns";
 
    export default {
-      components: { Actionbar, NavigationBar, GlobalSearch },
+      components: { NavigationBar, GlobalSearch },
       props: { isThin: { type: Boolean, default: false } },
       computed: {
          businessHourDescription() {

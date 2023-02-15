@@ -1,16 +1,22 @@
 <script>
+   import Category from "@/items/Category";
    export default {
       props: {
-         title: { type: String, default: "" },
-         count: { type: Number, default: 0 },
-         icon: { type: String, default: "" },
-         to: { default: "" },
+         category: { type: Category },
+         productCount: { type: Number, default: 0 },
       },
       computed: {
-         subtitle() {
-            if (this.count < 1) return "";
-            if (this.count === 0) return "1 Product";
-            return `${this.count} Products`;
+         title: (c) => c.category.title,
+         subtitle: (c) => {
+            if (c.productCount < 1) return "";
+            if (c.productCount === 1) return "1 Product";
+            return `${c.productCount} Products`;
+         },
+         icon: (c) => (c.category.icon ? c.category.icon.toUrl() : ""),
+         background: (c) => (c.category.background ? c.category.background.toUrl() : ""),
+
+         to: (c) => {
+            return { path: "/product", query: { category: c.category.id } };
          },
       },
    };
@@ -18,9 +24,15 @@
 
 <template>
    <router-link class="SectionCategory-item transition" :to="to">
+      <img
+         class="SectionCategory-item-background"
+         v-if="background.length"
+         :src="background"
+         :alt="`${title} background`"
+      />
+      <div class="SectionCategory-item-gradient transition" />
       <span class="SectionCategory-item-title">{{ title }}</span>
       <span class="SectionCategory-item-count">{{ subtitle }}</span>
-      <img class="SectionCategory-item-icon" :src="icon" />
    </router-link>
 </template>
 
@@ -28,38 +40,63 @@
    .SectionCategory-item {
       --icon-size: 40px;
 
-      display: grid;
-      grid-template-areas: "title icon" "count icon";
-      grid-template-columns: 1fr var(--icon-size);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
 
       background-color: white;
       padding: 1.5rem;
       border-radius: 0.5rem;
       text-decoration: none;
       font-size: 1rem;
-      color: black;
+      color: white;
+      overflow: hidden;
+
+      position: relative;
 
       &:hover {
-         background-color: aqua;
-         background-color: var(--accent-color);
-         color: white;
+         .SectionCategory-item-gradient {
+            transform: translateX(0);
+         }
       }
-   }
-   .SectionCategory-item-title {
-      grid-area: title;
-      display: flex;
-      align-items: center;
-      font-weight: 600;
-   }
-   .SectionCategory-item-count {
-      grid-area: count;
-      display: flex;
-      align-items: center;
-      font-size: 0.8rem;
-   }
-   .SectionCategory-item-icon {
-      grid-area: icon;
-      width: var(--icon-size);
-      height: var(--icon-size);
+
+      & > * {
+         z-index: 1;
+      }
+      .SectionCategory-item-title {
+         display: flex;
+         align-items: center;
+         font-weight: 600;
+      }
+      .SectionCategory-item-count {
+         display: flex;
+         align-items: center;
+         font-size: 0.8rem;
+      }
+      .SectionCategory-item-icon {
+         width: var(--icon-size);
+         height: var(--icon-size);
+      }
+      .SectionCategory-item-background {
+         z-index: 0;
+         height: 100%;
+         width: 100%;
+         position: absolute;
+         top: 0;
+         left: 0;
+         pointer-events: none;
+         object-fit: cover;
+      }
+      .SectionCategory-item-gradient {
+         z-index: 0;
+         height: 100%;
+         width: 150%;
+         position: absolute;
+         top: 0;
+         left: 0;
+         pointer-events: none;
+         background-image: linear-gradient(120deg, #000000, hsla(0, 0%, 0%, 0.7));
+         transform: translateX(-25%);
+      }
    }
 </style>
