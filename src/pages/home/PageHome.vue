@@ -13,8 +13,6 @@
    import SectionWhatElse from "./PageHome-SectionWhatElse.vue";
    import SectionAboutUs from "./PageHome-SectionAboutUs.vue";
    import SectionFeedback from "./PageHome-SectionFeedback.vue";
-   import Company from "@/host/Company";
-   import { format, differenceInMinutes } from "date-fns";
 
    import HostIcon from "@/host/HostIcon";
 
@@ -41,9 +39,6 @@
          SectionAboutUs,
          SectionFeedback,
       },
-      data() {
-         return { scrollTop: 0 };
-      },
       computed: {
          // isWide: (c) => c.$root.window.innerWidth > 1170,
          isWide: (c) => c.$root.window.innerWidth > 800,
@@ -51,37 +46,6 @@
          isThin: (c) => c.isWide || c.isDrawer,
 
          classes: (c) => (c.isWide ? "Home-isHorizontal" : "Home-isVertical"),
-
-         businessHourDescription() {
-            const now = new Date();
-            const days = Company.BusinessDays.toArray();
-
-            const today = days.find((day) => day.isToday());
-            const todayHourEnd = today.hours.getDateEnd();
-
-            const remainingHourCount = differenceInMinutes(todayHourEnd, now);
-
-            if (0 < remainingHourCount && remainingHourCount <= 30)
-               return `Closing Soon until ${format(todayHourEnd, "h:mmaaa")}`;
-
-            if (today.hours.isBetween(now))
-               return `We're open until ${format(todayHourEnd, "h:mmaaa")}`;
-
-            if (today.isSameDay(now) && today.hours.isBefore(now)) {
-               const todayHourStart = today.hours.getDateStart();
-               return `Sorry, we're not open now\nCome back at ${format(
-                  todayHourStart,
-                  "h:mmaaa",
-               )}`;
-            }
-
-            const nextDay = Company.BusinessDays.getNextWorkingDay(today);
-            const nextDayStartDate = nextDay.hours.getDateStart();
-            return `Sorry, we're closed\nCome back at ${format(
-               nextDayStartDate,
-               "h:mmaaa",
-            )} tomorrow`;
-         },
       },
       mounted() {
          document.title = "Freshnet Enterprise";
@@ -90,11 +54,8 @@
 </script>
 
 <template>
-   <div
-      :class="['PageHome', classes, scrollTop > 0 ? 'Home-isScrollUp' : '']"
-      @scroll="(e) => (scrollTop = e.target.scrollTop)"
-   >
-      <Actionbar class="Home-actionbar" :isThin="isDrawer" />
+   <div :class="['PageHome', classes]">
+      <Actionbar class="Home-actionbar" :style="{ 'z-index': '2' }" :isThin="isDrawer" />
 
       <div class="Home-body">
          <div>
@@ -132,13 +93,6 @@
 
          <div>
             <span class="Home-section-title">Business Hours</span>
-
-            <div class="Home-HourDescription">
-               <p v-if="businessHourDescription">{{
-                  businessHourDescription
-               }}</p>
-            </div>
-
             <SectionHour :isThin="isThin" />
          </div>
 
@@ -168,18 +122,9 @@
       overflow-x: hidden;
       overflow-y: auto;
 
-      .Home-actionbar {
-         position: sticky;
-         top: 0;
-         z-index: 2;
-         border-bottom: 1px solid transparent;
-      }
       .Home-body {
          z-index: 1;
          width: 100%;
-         gap: 1rem;
-         gap: 0.5rem;
-         gap: 0;
 
          display: flex;
          flex-direction: column;
@@ -222,11 +167,6 @@
                }
             }
          }
-      }
-   }
-   .Home-isScrollUp {
-      .Home-actionbar {
-         border-bottom: 1px solid #0000001a;
       }
    }
 
