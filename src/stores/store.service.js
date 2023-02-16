@@ -95,7 +95,7 @@ const requestUpdateUrgent = async (id, isUrgent) => {
 const requestUpdateWarranty = async (id, isWarranty) => {
    return HostApi.request()
       .PUT()
-      .url("service/urgent")
+      .url("service/warranty")
       .body({ serviceID: id, isWarranty })
       .send();
 };
