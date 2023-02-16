@@ -249,12 +249,14 @@
    <div class="PanelProducts">
       <div class="PanelProducts-actionbar">
          <ActionbarProduct
+            :style="{ 'z-index': '2' }"
             :products="products"
             :rightMenus="initRightMenus"
             @click-search="$emit('click-search')"
          />
 
          <div
+            :style="{ 'z-index': '1' }"
             :class="[
                'PanelProducts-filters',
                `PanelProducts-filters-${isLayoutThin ? 'isThin' : 'isWide'}`,
