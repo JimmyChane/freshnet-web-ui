@@ -4,6 +4,7 @@
    import LabelMenus from "@/components/LabelMenus.vue";
    import Footer from "@/app/footer/Footer.vue";
 
+   import Actionbar from "@/components/actionbar/Actionbar.vue";
    import ActionbarProduct from "./ActionBarProduct.vue";
    import ItemProduct from "./ItemProduct.vue";
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
@@ -49,6 +50,7 @@
    export default {
       emits: ["click-productAdd"],
       components: {
+         Actionbar,
          ActionbarProduct,
          ItemProduct,
          LabelMenus,
@@ -74,12 +76,12 @@
          layoutMode: () => ItemProduct.Mode.Grid,
 
          queryProductId: (context) => context.$route.query.productId,
+         queryCategoryId: (context) => context.$route.query.category,
          queryBrandId: (context) => context.$route.query.brand,
          queryStock: (context) => context.$route.query.stock,
 
          isLoading: (context) => context.productStore.getters.isLoading,
-         isEmpty: (context) =>
-            !context.isLoading && !context.productGroups.length,
+         isEmpty: (context) => !context.isLoading && !context.productGroups.length,
          isEditable() {
             const { user } = this.loginStore.getters;
             return user.isTypeAdmin() || user.isTypeStaff();
@@ -102,6 +104,9 @@
             } else {
                this.currentProductId = this.queryProductId;
             }
+         },
+         queryCategoryId() {
+            this.invalidate();
          },
          queryBrandId() {
             this.invalidate();
@@ -127,10 +132,10 @@
             const categoryGroups = await this.productStore.dispatch(
                "getGroupsByCategory",
             );
+            const brandGroups = await this.productStore.dispatch("getGroupsByBrand");
+
             this.productGroups = categoryGroups
-               .sort((group1, group2) =>
-                  group1.category.compare(group2.category),
-               )
+               .sort((group1, group2) => group1.category.compare(group2.category))
                .map((group) => {
                   const items = group.items
                      .filter((item) => {
@@ -139,35 +144,38 @@
                         return item.isStockAvailable();
                      })
                      .filter((product) => {
+                        if (!this.queryCategoryId) return true;
+                        return product.categoryId === this.queryCategoryId;
+                     })
+                     .filter((product) => {
                         if (!this.queryBrandId) return true;
                         return product.brandId === this.queryBrandId;
                      });
                   return {
                      key: group.category.id,
                      title: group.category.title,
-                     icon: group.category.icon
-                        ? group.category.icon.toUrl()
-                        : "",
+                     icon: group.category.icon ? group.category.icon.toUrl() : "",
                      items,
                   };
                })
                .filter((group) => group.items.length > 0);
 
-            const brandGroups = await this.productStore.dispatch(
-               "getGroupsByBrand",
-            );
-            const brandMenus = brandGroups
-               .filter((group) => group.brand && group.items.length > 0)
-               .map((group) => {
-                  return { key: group.brand.id, title: group.brand.title };
-               });
-
+            const categoryMenuGroup = new MenuGroup(this, "category", "Category", [
+               { title: "All" },
+               ...categoryGroups.map((group) => {
+                  return { key: group.category.id, title: group.category.title };
+               }),
+            ]);
             const brandMenuGroup = new MenuGroup(this, "brand", "Brand", [
                { title: "All" },
-               ...brandMenus,
+               ...brandGroups
+                  .filter((group) => group.brand && group.items.length > 0)
+                  .map((group) => {
+                     return { key: group.brand.id, title: group.brand.title };
+                  }),
             ]);
 
-            this.filterMenus = [brandMenuGroup];
+            this.filterMenus = [categoryMenuGroup, brandMenuGroup];
             if (this.isEditable) {
                this.filterMenus.push(
                   new MenuGroup(this, "stock", "Stock", [
@@ -239,14 +247,13 @@
 
 <template>
    <div class="PanelProducts">
-      <ActionbarProduct
-         class="PanelProducts-actionbar transition"
-         :products="products"
-         :rightMenus="initRightMenus"
-         @click-search="$emit('click-search')"
-      />
+      <div class="PanelProducts-actionbar">
+         <ActionbarProduct
+            :products="products"
+            :rightMenus="initRightMenus"
+            @click-search="$emit('click-search')"
+         />
 
-      <div class="PanelProducts-body">
          <div
             :class="[
                'PanelProducts-filters',
@@ -262,7 +269,9 @@
                :menus="filterMenu.menus"
             />
          </div>
+      </div>
 
+      <div class="PanelProducts-body">
          <div
             :class="[
                'PanelProducts-categories',
@@ -275,9 +284,7 @@
                :key="group.key"
             >
                <div class="PanelProducts-category-header">
-                  <span class="PanelProducts-category-title">{{
-                     group.title
-                  }}</span>
+                  <span class="PanelProducts-category-title">{{ group.title }}</span>
                   <img
                      class="PanelProducts-category-icon"
                      v-if="group.icon"
@@ -330,9 +337,30 @@
       background-color: #dddddd;
 
       .PanelProducts-actionbar {
+         width: 100%;
          z-index: 2;
-         border-bottom: 1px solid hsl(0, 0%, 80%);
-         background-color: #eeeeee;
+         position: sticky;
+         top: 0;
+
+         .PanelProducts-filters {
+            border-bottom: 1px solid hsl(0, 0%, 80%);
+            background-color: #dddddd;
+            z-index: 3;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-start;
+         }
+         .PanelProducts-filters-isThin {
+            padding: 1.3rem 1rem;
+            gap: 0.2rem;
+         }
+         .PanelProducts-filters-isWide {
+            padding: 0.4rem 1rem;
+            gap: 0.5rem;
+         }
       }
       .PanelProducts-body {
          z-index: 1;
@@ -343,25 +371,6 @@
          flex-direction: column;
          align-items: center;
          justify-content: flex-start;
-
-         .PanelProducts-filters {
-            z-index: 3;
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: flex-start;
-         }
-         .PanelProducts-filters-isThin {
-            padding: 1rem;
-            padding-top: 1.3rem;
-            gap: 0.2rem;
-         }
-         .PanelProducts-filters-isWide {
-            padding: 0.8rem 1rem 0 1rem;
-            gap: 0.5rem;
-         }
 
          .PanelProducts-categories {
             z-index: 2;

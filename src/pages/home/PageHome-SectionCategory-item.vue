@@ -46,7 +46,7 @@
 
       background-color: white;
       padding: 1.5rem;
-      border-radius: 0.5rem;
+      border-radius: 0.6rem;
       text-decoration: none;
       font-size: 1rem;
       color: white;

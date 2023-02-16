@@ -89,12 +89,13 @@
 
 <style lang="scss" scoped>
    .ActionbarProduct {
+      border-bottom: 1px solid hsl(0, 0%, 80%);
       .ActionbarProduct-search {
          flex-grow: 1;
          z-index: 1;
          max-width: 30rem;
          border: none;
-         margin: auto;
+         margin: 0 0.5rem;
          --border-radius: 2rem;
 
          .ActionbarProduct-search-item-link {

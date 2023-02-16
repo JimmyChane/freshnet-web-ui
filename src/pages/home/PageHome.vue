@@ -9,6 +9,7 @@
    import SectionContact from "./PageHome-SectionContact.vue";
    import SectionPrint from "./PageHome-SectionPrint.vue";
    import SectionLocation from "./PageHome-SectionLocation.vue";
+   import SectionCategory from "./PageHome-SectionCategory.vue";
    import SectionHour from "./PageHome-SectionHour.vue";
    import SectionWhatElse from "./PageHome-SectionWhatElse.vue";
    import SectionAboutUs from "./PageHome-SectionAboutUs.vue";
@@ -34,6 +35,7 @@
          SectionContact,
          SectionPrint,
          SectionLocation,
+         SectionCategory,
          SectionHour,
          SectionWhatElse,
          SectionAboutUs,
@@ -84,6 +86,10 @@
                }"
                :isThin="isThin"
             />
+         </div>
+
+         <div>
+            <SectionCategory />
          </div>
 
          <div>

@@ -32,37 +32,21 @@
 
 <template>
    <div class="HomeSectionCategory">
-      <div class="HomeSectionCategory-body">
-         <Item
-            v-for="group of groups"
-            :key="group.category.id"
-            :productCount="group.items.length"
-            :category="group.category"
-         />
-      </div>
+      <Item
+         v-for="group of groups"
+         :key="group.category.id"
+         :productCount="group.items.length"
+         :category="group.category"
+      />
    </div>
 </template>
 
 <style lang="scss" scoped>
    .HomeSectionCategory {
       width: 100%;
-      gap: 0.5rem;
-
+      gap: 0.3rem;
       display: grid;
-      grid-auto-flow: row;
-      grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
-
-      justify-content: center;
-      align-items: center;
-      justify-items: center;
-      align-content: center;
-
-      .HomeSectionCategory-body {
-         width: 100%;
-         gap: 0.5rem;
-         display: grid;
-         grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
-      }
+      grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
    }
    .HomeSectionCategory-isThin {
       font-size: 1rem;
