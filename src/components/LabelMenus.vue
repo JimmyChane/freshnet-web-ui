@@ -30,8 +30,7 @@
 
          primaryColorBackground: (c) => c.primaryColor.mix("ffffff", 0.8),
          primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),
-         primaryColorBackgroundSelected: (c) =>
-            c.primaryColor.mix("ffffff", 0.4),
+         primaryColorBackgroundSelected: (c) => c.primaryColor.mix("ffffff", 0.4),
       },
       methods: {
          toggle() {
@@ -53,30 +52,20 @@
 
 <template>
    <div
-      :class="[
-         'LabelMenus',
-         `LabelMenus-${isExpand ? 'isExpand' : 'isCollapse'}`,
-      ]"
+      :class="['LabelMenus', `LabelMenus-${isExpand ? 'isExpand' : 'isCollapse'}`]"
       :style="{ '--primary-color': primaryColor.toString() }"
    >
       <button
-         class="LabelMenus-main"
+         class="LabelMenus-main transition"
          @click="() => toggle()"
          @blur="() => collapse(200)"
       >
          <span class="LabelMenus-title">{{ title }}</span>
          <span class="LabelMenus-content">
-            <img
-               class="LabelMenus-content-icon"
-               v-if="menuIcon"
-               :src="menuIcon"
-            />
+            <img class="LabelMenus-content-icon" v-if="menuIcon" :src="menuIcon" />
             {{ menuTitle }}</span
          >
-         <img
-            class="LabelMenus-arrow transition"
-            :src="host.icon('arrowDown-505050')"
-         />
+         <img class="LabelMenus-arrow transition" :src="host.icon('arrowDown-505050')" />
       </button>
 
       <div class="LabelMenus-drop transition">
@@ -119,8 +108,6 @@
       width: max-content;
       position: relative;
       overflow: visible;
-      border: 1px solid var(--primary-color);
-      border-radius: var(--border-radius);
 
       .LabelMenus-main {
          width: max-content;
@@ -135,10 +122,18 @@
          border: none;
          background: none;
          cursor: pointer;
+         border: 1px solid var(--primary-color);
+         border-radius: var(--border-radius);
+         --transition-duration: 100ms;
+         background-color: var(--primary-color);
+
+         &:hover,
+         &:focus {
+            transform: scale(1.02);
+         }
 
          .LabelMenus-title {
             min-width: max-content;
-            background-color: var(--primary-color);
             padding: 0.4rem 0.6rem;
             color: white;
             font-size: 0.8rem;
@@ -188,7 +183,6 @@
          overflow: hidden;
          border-radius: var(--border-radius);
          box-shadow: 0 0 0.5rem 0 hsla(0, 0%, 30%, 0.7);
-         // border: 1px solid hsla(0, 0%, 30%, 0.7);
          background-color: white;
 
          .LabelMenus-menus {

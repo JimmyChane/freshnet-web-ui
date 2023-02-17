@@ -277,7 +277,9 @@
          <div
             :class="[
                'PanelProducts-categories',
-               `PanelProducts-categories-${isLayoutThin ? 'isThin' : 'isWide'}`,
+               `PanelProducts-categories-${
+                  productGroups.length > 1 && isLayoutThin ? 'isThin' : 'isWide'
+               }`,
             ]"
          >
             <div

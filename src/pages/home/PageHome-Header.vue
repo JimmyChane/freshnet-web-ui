@@ -1,9 +1,11 @@
 <script>
+   import Section from "./PageHome-Section.vue";
    import Company from "@/host/Company";
 
    import { getHours } from "date-fns";
 
    export default {
+      components: { Section },
       data() {
          return {
             companyTitle: Company.name,
@@ -35,21 +37,23 @@
 </script>
 
 <template>
-   <div class="HomeHeader">
-      <span class="HomeHeader-title">
-         <span class="HomeHeader-name">{{ companyTitle }}</span>
-         <a class="HomeHeader-classification" :href="addressHref" target="_blank"
-            >{{ companyCategory }}<br />Kuala Selangor District</a
-         >
-      </span>
-      <!-- <span class="HomeHeader-description"
+   <Section>
+      <div class="HomeHeader">
+         <span class="HomeHeader-title">
+            <span class="HomeHeader-name">{{ companyTitle }}</span>
+            <a class="HomeHeader-classification" :href="addressHref" target="_blank"
+               >{{ companyCategory }}<br />Kuala Selangor District</a
+            >
+         </span>
+         <!-- <span class="HomeHeader-description"
 			>We sell notebooks, printers, repairs, and more</span
 		> -->
-      <div class="HomeHeader-greet">
-         <span class="HomeHeader-greetTitle">{{ greetTitle }}</span>
-         <span class="HomeHeader-greetHelp">How can we help you?</span>
+         <div class="HomeHeader-greet">
+            <span class="HomeHeader-greetTitle">{{ greetTitle }}</span>
+            <span class="HomeHeader-greetHelp">How can we help you?</span>
+         </div>
       </div>
-   </div>
+   </Section>
 </template>
 
 <style lang="scss" scoped>

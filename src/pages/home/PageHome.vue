@@ -12,8 +12,6 @@
    import SectionCategory from "./PageHome-SectionCategory.vue";
    import SectionHour from "./PageHome-SectionHour.vue";
    import SectionWhatElse from "./PageHome-SectionWhatElse.vue";
-   import SectionAboutUs from "./PageHome-SectionAboutUs.vue";
-   import SectionFeedback from "./PageHome-SectionFeedback.vue";
 
    import HostIcon from "@/host/HostIcon";
 
@@ -38,11 +36,8 @@
          SectionCategory,
          SectionHour,
          SectionWhatElse,
-         SectionAboutUs,
-         SectionFeedback,
       },
       computed: {
-         // isWide: (c) => c.$root.window.innerWidth > 1170,
          isWide: (c) => c.$root.window.innerWidth > 800,
          isDrawer: (c) => c.$root.navigation.isDrawer(),
          isThin: (c) => c.isWide || c.isDrawer,
@@ -60,9 +55,7 @@
       <Actionbar class="Home-actionbar" :style="{ 'z-index': '2' }" :isThin="isDrawer" />
 
       <div class="Home-body">
-         <div>
-            <Header class="Home-header" />
-         </div>
+         <Header class="Home-header" />
 
          <div class="Home-section-1">
             <SectionProduct
@@ -88,24 +81,10 @@
             />
          </div>
 
-         <div>
-            <SectionCategory />
-         </div>
-
-         <div>
-            <span class="Home-section-title">Contact Us</span>
-            <SectionContact :isThin="isThin" />
-         </div>
-
-         <div>
-            <span class="Home-section-title">Business Hours</span>
-            <SectionHour :isThin="isThin" />
-         </div>
-
-         <div>
-            <span class="Home-section-title">What else can we do?</span>
-            <SectionWhatElse :isThin="isThin" />
-         </div>
+         <SectionCategory />
+         <SectionContact :isThin="isThin" />
+         <SectionHour :isThin="isThin" />
+         <SectionWhatElse :isThin="isThin" />
       </div>
 
       <Footer />
@@ -136,42 +115,17 @@
          flex-direction: column;
          align-items: stretch;
 
-         & > * {
+         .Home-section-1 {
             width: 100%;
             gap: 0.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             margin-top: 2rem;
 
-            .Home-section-title {
-               font-size: 1.4rem;
-               font-weight: 500;
-
-               font-size: 2rem;
-               color: hsl(0, 0%, 13%);
-
-               margin-bottom: 1rem;
-
-               display: flex;
-               align-items: center;
-               justify-content: center;
-               text-align: center;
-            }
-
-            .Home-HourDescription {
-               margin-bottom: 1rem;
-
-               display: flex;
-               flex-direction: column;
-               align-items: center;
-               text-align: center;
-
-               .Home-HourDescription-notice {
-                  color: red;
-                  font-size: 0.8em;
-               }
-            }
+            display: grid;
+            grid-auto-flow: row;
+            justify-content: center;
+            align-items: center;
+            justify-items: center;
+            align-content: center;
          }
       }
    }
@@ -182,14 +136,7 @@
          padding: 1.2rem;
 
          .Home-section-1 {
-            display: grid;
             grid-template-columns: 1fr 1fr;
-            grid-auto-flow: row;
-
-            justify-content: center;
-            align-items: center;
-            justify-items: center;
-            align-content: center;
          }
       }
    }
@@ -197,19 +144,11 @@
       --actionbar-height: 3.5rem;
       .Home-body {
          height: max-content;
-         max-width: 80rem;
          max-width: 70rem;
          padding: 2rem;
 
          .Home-section-1 {
-            display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
-            grid-auto-flow: row;
-
-            justify-content: center;
-            align-items: center;
-            justify-items: center;
-            align-content: center;
          }
       }
    }

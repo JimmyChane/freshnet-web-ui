@@ -1,9 +1,10 @@
 <script>
+   import Section from "./PageHome-Section.vue";
    import Item from "./PageHome-SectionHour-Item.vue";
    import Company from "@/host/Company";
 
    export default {
-      components: { Item },
+      components: { Section, Item },
       props: { isThin: { type: Boolean, default: false } },
       data() {
          return { items: Company.BusinessDays.toArray() };
@@ -18,16 +19,15 @@
 </script>
 
 <template>
-   <div
-      :class="[
-         'HomeSectionHour',
-         `HomeSectionHour-${isThin ? 'isThin' : 'isWide'}`,
-      ]"
-   >
-      <div class="HomeSectionHour-body">
-         <Item v-for="item of items" :key="item.title" :item="item" />
+   <Section title="Business Hours">
+      <div
+         :class="['HomeSectionHour', `HomeSectionHour-${isThin ? 'isThin' : 'isWide'}`]"
+      >
+         <div class="HomeSectionHour-body">
+            <Item v-for="item of items" :key="item.title" :item="item" />
+         </div>
       </div>
-   </div>
+   </Section>
 </template>
 
 <style lang="scss" scoped>
