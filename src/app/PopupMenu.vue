@@ -1,13 +1,34 @@
 <script>
+   const Size = {
+      AUTO: 0,
+
+      MIN: 1,
+      MAX: 2,
+      FILL: 3,
+   };
    const Corner = {
       AUTO: 0,
-      TOP_LEFT: 1,
-      TOP_RIGHT: 2,
-      BOTTOM_LEFT: 3,
-      BOTTOM_RIGHT: 4,
+
+      TOP: 1,
+      RIGHT: 2,
+      BOTTOM: 3,
+      LEFT: 4,
+
+      TOP_LEFT: 5,
+      TOP_RIGHT: 6,
+      BOTTOM_LEFT: 7,
+      BOTTOM_RIGHT: 8,
+   };
+   const Alignment = {
+      AUTO: 0,
+
+      CENTER: 1,
+      START: 2,
+      END: 3,
    };
 
    export default {
+      Size,
       Corner,
 
       props: {
@@ -22,21 +43,34 @@
             classState: "PopupMenu-isHiding",
             stylePointerEvent: "none",
 
+            width: 0,
+            height: 0,
             halfWidth: 0,
             halfHeight: 0,
-            startX: 0,
-            startY: 0,
-            endX: 0,
-            endY: 0,
-
-            moveY: 0,
+            x: 0,
+            y: 0,
          };
       },
       computed: {
          isShowing: (c) => c.popupMenu.isShowing,
          anchor: (c) => c.popupMenu.anchor,
          menus: (c) => c.popupMenu.menus,
+         size: (c) => c.popupMenu.size,
          corner: (c) => c.popupMenu.corner,
+
+         // corner: (c) => Corner.BOTTOM, // test
+
+         classCorner: (c) => {
+            if (c.corner === Corner.TOP) return "PopupMenu-Top";
+            if (c.corner === Corner.RIGHT) return "PopupMenu-Right";
+            if (c.corner === Corner.BOTTOM) return "PopupMenu-Bottom";
+            if (c.corner === Corner.LEFT) return "PopupMenu-Left";
+            if (c.corner === Corner.TOP_LEFT) return "PopupMenu-TopLeft";
+            if (c.corner === Corner.TOP_RIGHT) return "PopupMenu-TopRight";
+            if (c.corner === Corner.BOTTOM_LEFT) return "PopupMenu-BottomLeft";
+            if (c.corner === Corner.BOTTOM_RIGHT) return "PopupMenu-BottomRight";
+            return "";
+         },
       },
       watch: {
          isShowing() {
@@ -52,39 +86,58 @@
                this.classState = "PopupMenu-isHiding";
                this.stylePointerEvent = "none";
                setTimeout(() => {
+                  this.width = 0;
+                  this.height = 0;
                   this.halfWidth = 0;
                   this.halfHeight = 0;
-                  this.startX = 0;
-                  this.startY = 0;
-                  this.endX = 0;
-                  this.endY = 0;
+                  this.x = 0;
+                  this.y = 0;
                   this.classTransition = "";
                }, 200);
                return;
             }
 
-            // const { width, height } = screen;
-
             this.classTransition = "transition";
 
             const rect = this.anchor.getBoundingClientRect();
 
-            this.halfWidth = rect.width / 2;
-            this.halfHeight = rect.height / 2;
-
+            this.width = rect.width;
+            this.height = rect.height;
+            this.halfWidth = this.width / 2;
+            this.halfHeight = this.height / 2;
             switch (this.corner) {
+               case Corner.TOP:
+                  this.x = rect.left + this.halfWidth;
+                  this.y = rect.top;
+                  break;
+               case Corner.RIGHT:
+                  this.x = rect.left + this.width;
+                  this.y = rect.top + this.halfHeight;
+                  break;
+               case Corner.BOTTOM:
+                  this.x = rect.left + this.halfWidth;
+                  this.y = rect.top + this.height;
+                  break;
+               case Corner.LEFT:
+                  this.x = rect.left;
+                  this.y = rect.top + this.halfHeight;
+                  break;
                case Corner.TOP_LEFT:
-                  this.invalidateTopLeft(rect);
+                  this.x = rect.left;
+                  this.y = rect.top;
                   break;
                case Corner.TOP_RIGHT:
-                  this.invalidateTopRight(rect);
+                  this.x = rect.left + this.width;
+                  this.y = rect.top;
                   break;
                case Corner.BOTTOM_LEFT:
-                  this.invalidateBottomLeft(rect);
+                  this.x = rect.left;
+                  this.y = rect.top + this.height;
                   break;
                default:
                case Corner.BOTTOM_RIGHT:
-                  this.invalidateBottomRight(rect);
+                  this.x = rect.left + this.width;
+                  this.y = rect.top + this.height;
                   break;
             }
 
@@ -93,57 +146,20 @@
                this.stylePointerEvent = "initial";
             }, 200);
          },
-         invalidateTopLeft(rect) {
-            this.startX = rect.left + this.halfWidth - 159;
-            this.startY = rect.top + this.halfHeight - 105;
-
-            this.endX = this.startX;
-            this.endY = this.startY;
-
-            this.moveY = 1;
-         },
-         invalidateTopRight(rect) {
-            this.startX = rect.left + this.halfWidth;
-            this.startY = rect.top + this.halfHeight - 105;
-
-            this.endX = this.startX;
-            this.endY = this.startY;
-
-            this.moveY = 1;
-         },
-         invalidateBottomLeft(rect) {
-            this.startX = rect.left + this.halfWidth - 159;
-            this.startY = rect.top + this.halfHeight;
-
-            this.endX = this.startX - this.halfWidth;
-            this.endY = this.startY;
-
-            this.moveY = -1;
-         },
-         invalidateBottomRight(rect) {
-            this.startX = rect.left + this.halfWidth;
-            this.startY = rect.top + this.halfHeight;
-
-            this.endX = this.startX;
-            this.endY = this.startY;
-
-            this.moveY = -1;
-         },
       },
    };
 </script>
 
 <template>
    <div
-      :class="['PopupMenu', classTransition, classState]"
+      :class="['PopupMenu', classTransition, classState, classCorner]"
       :style="{
+         '--width': `${width}px`,
+         '--height': `${height}px`,
          '--halfWidth': `${halfWidth}px`,
          '--halfHeight': `${halfHeight}px`,
-         '--startX': `${startX}px`,
-         '--startY': `${startY}px`,
-         '--endX': `${endX}px`,
-         '--endY': `${endY}px`,
-         '--moveY': `${moveY}em`,
+         '--x': `${x}px`,
+         '--y': `${y}px`,
          'pointer-events': stylePointerEvent,
       }"
    >
@@ -159,11 +175,7 @@
                }
             "
          >
-            <img
-               v-if="menu.icon"
-               :src="menu.icon"
-               :alt="`Icon ${menu.title}`"
-            />
+            <img v-if="menu.icon" :src="menu.icon" :alt="`Icon ${menu.title}`" />
             <span>{{ menu.title }}</span>
          </button>
       </div>
@@ -172,11 +184,8 @@
 
 <style lang="scss" scoped>
    .PopupMenu {
-      position: absolute;
       display: flex;
       overflow: hidden;
-      top: 0;
-      left: 0;
 
       min-width: 10em;
       width: max-content;
@@ -250,14 +259,70 @@
             }
          }
       }
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      top: var(--y);
+      left: var(--x);
    }
    .PopupMenu-isShowing {
       opacity: 1;
-      transform: translateX(var(--endX)) translateY(var(--endY));
+      transform: var(--transform-end);
    }
    .PopupMenu-isHiding {
       opacity: 0;
-      transform: translateX(var(--startX))
-         translateY(calc(var(--startY) + var(--moveY)));
+      transform: var(--transform-start);
+   }
+
+   .PopupMenu-Top {
+      --transform-start: translateX(calc(0px - 50%))
+         translateY(calc(0px - 100% + var(--halfHeight)));
+      --transform-end: translateX(calc(0px - 50%))
+         translateY(calc(0px - 100% + calc(var(--halfHeight) * 0.5)));
+   }
+   .PopupMenu-Right {
+      --transform-start: translateX(calc(0px - var(--halfWidth)))
+         translateY(calc(0px - 50%));
+      --transform-end: translateX(calc(0px - calc(var(--halfWidth) * 0.5)))
+         translateY(calc(0px - 50%));
+   }
+   .PopupMenu-Bottom {
+      --transform-start: translateX(calc(0px - 50%))
+         translateY(calc(0px - var(--halfHeight)));
+      --transform-end: translateX(calc(0px - 50%))
+         translateY(calc(0px - calc(var(--halfHeight) * 0.5)));
+   }
+   .PopupMenu-Left {
+      --transform-start: translateX(calc(0px - 100% + var(--halfWidth)))
+         translateY(calc(0px - 50%));
+      --transform-end: translateX(calc(0px - 100% + calc(var(--halfWidth) * 0.5)))
+         translateY(calc(0px - 50%));
+   }
+
+   .PopupMenu-TopLeft {
+      --transform-start: translateX(calc(0px - 100% + var(--halfWidth)))
+         translateY(calc(0px - 100% + var(--halfHeight)));
+      --transform-end: translateX(calc(0px - 100% + calc(var(--halfWidth) * 0.5)))
+         translateY(calc(0px - 100% + calc(var(--halfHeight) * 0.5)));
+   }
+   .PopupMenu-TopRight {
+      --transform-start: translateX(calc(0px - var(--halfWidth)))
+         translateY(calc(0px - 100% + var(--halfHeight)));
+      --transform-end: translateX(calc(0px - calc(var(--halfWidth) * 0.5)))
+         translateY(calc(0px - 100% + calc(var(--halfHeight) * 0.5)));
+   }
+   .PopupMenu-BottomLeft {
+      --transform-start: translateX(calc(0px - 100% + var(--halfWidth)))
+         translateY(calc(0px - var(--halfHeight)));
+      --transform-end: translateX(calc(0px - 100% + calc(var(--halfWidth) * 0.5)))
+         translateY(calc(0px - calc(var(--halfHeight) * 0.5)));
+   }
+   .PopupMenu-BottomRight {
+      --transform-start: translateX(calc(0px - var(--halfWidth)))
+         translateY(calc(0px - var(--halfHeight)));
+      --transform-end: translateX(calc(0px - calc(var(--halfWidth) * 0.5)))
+         translateY(calc(0px - calc(var(--halfHeight) * 0.5)));
    }
 </style>

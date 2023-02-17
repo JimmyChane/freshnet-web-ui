@@ -4,8 +4,14 @@
 
    export default {
       Mode,
+      Size: PopupMenu.Size,
+      Corner: PopupMenu.Corner,
 
-      props: { menus: { type: Array, default: () => [] } },
+      props: {
+         size: { type: Number, default: PopupMenu.Size.AUTO },
+         corner: { type: Number, default: PopupMenu.Corner.BOTTOM_LEFT },
+         menus: { type: Array, default: () => [] },
+      },
       data() {
          return { popupMenu: null };
       },
@@ -35,7 +41,7 @@
                      menu.click = () => menu.interact();
                   return menu;
                }),
-               PopupMenu.Corner.BOTTOM_LEFT,
+               this.corner,
             );
          },
          hide() {
@@ -52,7 +58,7 @@
       @mouseover="(x) => $emit('mouseover', x)"
       @mouseleave="(x) => $emit('mouseleave', x)"
       @click="() => toggle()"
-      @blur="hide()"
+      @blur="() => hide()"
    >
       <slot />
    </button>
@@ -62,7 +68,7 @@
    .Menu {
       font-size: 1rem;
       font-weight: 600;
- 
+
       width: fit-content;
       height: fit-content;
       display: flex;

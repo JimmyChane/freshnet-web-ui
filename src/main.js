@@ -38,11 +38,7 @@ const confineRouteQuery = (previousQuery, nextQuery) => {
       if (current && current.value !== query.value) {
          current.value = query.value;
          isChanged = true;
-      } else if (
-         !current &&
-         query.value !== null &&
-         query.value !== undefined
-      ) {
+      } else if (!current && query.value !== null && query.value !== undefined) {
          nextQueries.push({ key: query.key, value: query.value });
          isChanged = true;
       }
@@ -74,13 +70,9 @@ const parseIcon = (icon) => {
    if (!U.isObject(icon) || icon === null) return null;
 
    const light =
-      icon.light instanceof HostIcon
-         ? icon.light.toUrl()
-         : HostApi.icon(icon.light);
+      icon.light instanceof HostIcon ? icon.light.toUrl() : HostApi.icon(icon.light);
    const dark =
-      icon.dark instanceof HostIcon
-         ? icon.dark.toUrl()
-         : HostApi.icon(icon.dark);
+      icon.dark instanceof HostIcon ? icon.dark.toUrl() : HostApi.icon(icon.dark);
 
    return { light, dark };
 };
@@ -107,9 +99,7 @@ new Vue({
       return {
          console: {
             log(param1, param2) {
-               param2 === undefined
-                  ? console.log(param1)
-                  : console.log(param1, param2);
+               param2 === undefined ? console.log(param1) : console.log(param1, param2);
             },
             error(param1, param2) {
                param2 === undefined
@@ -152,13 +142,11 @@ new Vue({
             const queries = typeof _queries === "function" ? _queries() : [];
 
             // parsing
-            const parsedChildren = parseGroup2s([{ values: children }]).map(
-               (obj) => {
-                  obj.isLink = true;
-                  obj.isQuery = false;
-                  return obj;
-               },
-            );
+            const parsedChildren = parseGroup2s([{ values: children }]).map((obj) => {
+               obj.isLink = true;
+               obj.isQuery = false;
+               return obj;
+            });
             const parsedGroups = parseGroup2s(groups).map((obj) => {
                obj.isLink = true;
                obj.isQuery = false;
@@ -188,8 +176,7 @@ new Vue({
                   return group;
                })
                .reduce((groups, group) => {
-                  if (!isPassed(this.user, group.userPermissions))
-                     return groups;
+                  if (!isPassed(this.user, group.userPermissions)) return groups;
 
                   // get property
                   let { key, title } = group;
@@ -197,8 +184,7 @@ new Vue({
 
                   const views = U.optArray(group.values)
                      .map((value) => {
-                        if (!isPassed(this.user, value.userPermissions))
-                           return null;
+                        if (!isPassed(this.user, value.userPermissions)) return null;
                         const key = parseKey(value.key);
                         const title = U.optString(value.title);
                         const icon = parseIcon(value.icon);
@@ -208,9 +194,7 @@ new Vue({
 
                   let found = groups.find((group) => group.key === key);
                   if (!found) {
-                     groups.push(
-                        (found = { key, title, isLink, isQuery, groups: [] }),
-                     );
+                     groups.push((found = { key, title, isLink, isQuery, groups: [] }));
                   }
                   found.groups.push(...views);
 
@@ -327,9 +311,15 @@ new Vue({
          return true;
       },
 
-      popupMenuShow(anchor, menus = [], corner = PopupMenu.Corner.AUTO) {
+      popupMenuShow(
+         anchor,
+         menus = [],
+         corner = PopupMenu.Corner.AUTO,
+         size = PopupMenu.Size.AUTO,
+      ) {
          const popupMenu = {
             key: this.keyGetter.get(),
+            size,
             corner,
             anchor,
             menus: menus,
@@ -340,19 +330,12 @@ new Vue({
             hide: () => {
                if (popupMenu.isClosing) return;
                popupMenu.isClosing = true;
-               window.removeEventListener(
-                  "scroll",
-                  popupMenu.windowScrollEvent,
-                  true,
-               );
+               window.removeEventListener("scroll", popupMenu.windowScrollEvent, true);
 
                setTimeout(() => {
                   popupMenu.isShowing = false;
                   setTimeout(() => {
-                     this.popupMenus.splice(
-                        this.popupMenus.indexOf(popupMenu),
-                        1,
-                     );
+                     this.popupMenus.splice(this.popupMenus.indexOf(popupMenu), 1);
                   }, 300);
                }, 300);
             },
@@ -425,9 +408,7 @@ new Vue({
       },
       pushDownload(filename, content) {
          const element = document.createElement("a");
-         element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
-            content,
-         )}`;
+         element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(content)}`;
          element.download = filename;
          document.body.appendChild(element);
          element.click();
