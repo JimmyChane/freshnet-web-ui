@@ -1,10 +1,10 @@
 <script>
-   const Size = {
+   const Width = {
       AUTO: 0,
 
       MIN: 1,
       MAX: 2,
-      FILL: 3,
+      SAME: 3,
    };
    const Corner = {
       AUTO: 0,
@@ -19,21 +19,12 @@
       BOTTOM_LEFT: 7,
       BOTTOM_RIGHT: 8,
    };
-   const Alignment = {
-      AUTO: 0,
-
-      CENTER: 1,
-      START: 2,
-      END: 3,
-   };
 
    export default {
-      Size,
+      Width,
       Corner,
 
-      props: {
-         popupMenu: { default: undefined },
-      },
+      props: { popupMenu: { default: undefined } },
       data() {
          return {
             top: 0,
@@ -55,10 +46,34 @@
          isShowing: (c) => c.popupMenu.isShowing,
          anchor: (c) => c.popupMenu.anchor,
          menus: (c) => c.popupMenu.menus,
-         size: (c) => c.popupMenu.size,
+         preferWidth: (c) => c.popupMenu.width,
          corner: (c) => c.popupMenu.corner,
 
-         // corner: (c) => Corner.BOTTOM, // test
+         style: (c) => {
+            const style = {
+               "--width": `${c.width}px`,
+               "--height": `${c.height}px`,
+               "--halfWidth": `${c.halfWidth}px`,
+               "--halfHeight": `${c.halfHeight}px`,
+               "--x": `${c.x}px`,
+               "--y": `${c.y}px`,
+               "pointer-events": c.stylePointerEvent,
+            };
+
+            if (c.preferWidth === Width.MIN) {
+               style["min-width"] = "min-content";
+               style["width"] = "min-content";
+            }
+            if (c.preferWidth === Width.MAX) {
+               style["min-width"] = `${c.width}px`;
+               style["width"] = "max-content";
+            }
+            if (c.preferWidth === Width.SAME) {
+               style["min-width"] = `${c.width}px`;
+               style["width"] = `${c.width}px`;
+            }
+            return style;
+         },
 
          classCorner: (c) => {
             if (c.corner === Corner.TOP) return "PopupMenu-Top";
@@ -151,18 +166,7 @@
 </script>
 
 <template>
-   <div
-      :class="['PopupMenu', classTransition, classState, classCorner]"
-      :style="{
-         '--width': `${width}px`,
-         '--height': `${height}px`,
-         '--halfWidth': `${halfWidth}px`,
-         '--halfHeight': `${halfHeight}px`,
-         '--x': `${x}px`,
-         '--y': `${y}px`,
-         'pointer-events': stylePointerEvent,
-      }"
-   >
+   <div :class="['PopupMenu', classTransition, classState, classCorner]" :style="style">
       <div class="PopupMenu-scroll scrollbar">
          <button
             class="transition"

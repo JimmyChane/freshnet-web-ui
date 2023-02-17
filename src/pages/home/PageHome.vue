@@ -60,19 +60,6 @@
       <div class="Home-body">
          <Header class="Home-header" />
 
-         <!-- <Menu
-            :style="{ 'margin': 'auto' }"
-            :menus="[
-               { title: 'Hi' },
-               { title: 'Hi' },
-               { title: 'Hi' },
-               { title: 'Hi' },
-               { title: 'Hi' },
-               { title: 'Hi' },
-            ]"
-            >click me</Menu
-         > -->
-
          <div class="Home-section-1">
             <SectionProduct
                :style="{

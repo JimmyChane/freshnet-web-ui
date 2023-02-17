@@ -4,11 +4,11 @@
 
    export default {
       Mode,
-      Size: PopupMenu.Size,
+      Width: PopupMenu.Width,
       Corner: PopupMenu.Corner,
 
       props: {
-         size: { type: Number, default: PopupMenu.Size.AUTO },
+         width: { type: Number, default: PopupMenu.Width.AUTO },
          corner: { type: Number, default: PopupMenu.Corner.BOTTOM_LEFT },
          menus: { type: Array, default: () => [] },
       },
@@ -31,16 +31,16 @@
          show() {
             if (this.popupMenu) this.popupMenu.hide();
 
+            for (const menu of this.menus) {
+               const isLegacy =
+                  typeof menu.click !== "function" && typeof menu.interact === "function";
+               if (isLegacy) menu.click = () => menu.interact();
+            }
+
             this.popupMenu = this.$root.popupMenuShow(
                this._self.$el,
-               this.menus.map((menu) => {
-                  if (
-                     typeof menu.click !== "function" &&
-                     typeof menu.interact === "function"
-                  )
-                     menu.click = () => menu.interact();
-                  return menu;
-               }),
+               this.menus,
+               this.width,
                this.corner,
             );
          },

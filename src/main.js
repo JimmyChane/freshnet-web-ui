@@ -314,15 +314,15 @@ new Vue({
       popupMenuShow(
          anchor,
          menus = [],
+         width = PopupMenu.Width.AUTO,
          corner = PopupMenu.Corner.AUTO,
-         size = PopupMenu.Size.AUTO,
       ) {
          const popupMenu = {
             key: this.keyGetter.get(),
-            size,
-            corner,
             anchor,
             menus: menus,
+            width,
+            corner,
             isShowing: true,
             isClosing: false,
 
