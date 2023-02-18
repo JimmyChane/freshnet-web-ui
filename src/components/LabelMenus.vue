@@ -17,6 +17,7 @@
       data: () => ({ isExpand: false }),
       computed: {
          menuCorner: () => Menu.Corner.BOTTOM,
+         menuWidth: () => Menu.Width.SAME,
 
          parsedMenus() {
             const menus = Array.isArray(this.menus) ? this.menus : [this.menus];
@@ -52,6 +53,7 @@
          :style="{ '--primary-color': primaryColor.toString() }"
          :menus="parsedMenus"
          :corner="menuCorner"
+         :width="menuWidth"
          :primaryColor="primaryColor"
          @show="() => (isExpand = true)"
          @hide="() => (isExpand = false)"

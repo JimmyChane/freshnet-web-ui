@@ -110,6 +110,7 @@
       },
       mounted() {
          this.invalidate();
+         window.addEventListener("scroll", this.hide, true);
       },
       methods: {
          invalidate() {
@@ -177,13 +178,24 @@
                this.stylePointerEvent = "initial";
             }, 200);
          },
+         hide(e) {
+            if (e && e.target === this.$refs.scroll) return;
+
+            this.stylePointerEvent = "none";
+            window.removeEventListener("scroll", this.hide, true);
+            this.popupMenu.hide();
+         },
+         clickMenu(menu) {
+            this.hide();
+            if (typeof menu.click === "function") menu.click(menu);
+         },
       },
    };
 </script>
 
 <template>
    <div :class="['PopupMenu', classTransition, classState, classCorner]" :style="style">
-      <div class="PopupMenu-scroll scrollbar">
+      <div class="PopupMenu-scroll scrollbar" ref="scroll">
          <Item
             class="transition"
             v-for="menu of menus"
@@ -191,12 +203,7 @@
             :menu="menu"
             :primaryColorBackgroundHover="primaryColorBackgroundHover"
             :primaryColorBackgroundSelected="primaryColorBackgroundSelected"
-            @click="
-               (menu) => {
-                  popupMenu.hide();
-                  if (typeof menu.click === 'function') menu.click(menu);
-               }
-            "
+            @click="(menu) => clickMenu(menu)"
          />
       </div>
    </div>
@@ -216,7 +223,7 @@
       max-height: 20em;
 
       border-radius: 1em;
-      box-shadow: 0 0 1em hsla(0, 0%, 0%, 0.1);
+      box-shadow: 0.1em 0.2em 1em hsla(0, 0%, 0%, 0.4);
       border: 1px solid hsla(0, 0%, 0%, 0.1);
       --transition-timing: cubic-bezier(1, 0, 0, 1);
 
@@ -267,26 +274,22 @@
    .PopupMenu-Top {
       --transform-start: translateX(calc(0px - 50%))
          translateY(calc(0px - 100% + var(--halfHeight)));
-      --transform-end: translateX(calc(0px - 50%))
-         translateY(calc(0px - 100% + calc(var(--halfHeight) * 0.5)));
+      --transform-end: translateX(calc(0px - 50%)) translateY(calc(0px - 100%));
    }
    .PopupMenu-Right {
       --transform-start: translateX(calc(0px - var(--halfWidth)))
          translateY(calc(0px - 50%));
-      --transform-end: translateX(calc(0px - calc(var(--halfWidth) * 0.5)))
-         translateY(calc(0px - 50%));
+      --transform-end: translateX(calc(0px)) translateY(calc(0px - 50%));
    }
    .PopupMenu-Bottom {
       --transform-start: translateX(calc(0px - 50%))
          translateY(calc(0px - var(--halfHeight)));
-      --transform-end: translateX(calc(0px - 50%))
-         translateY(calc(0px - calc(var(--halfHeight) * 0.5)));
+      --transform-end: translateX(calc(0px - 50%)) translateY(0px);
    }
    .PopupMenu-Left {
       --transform-start: translateX(calc(0px - 100% + var(--halfWidth)))
          translateY(calc(0px - 50%));
-      --transform-end: translateX(calc(0px - 100% + calc(var(--halfWidth) * 0.5)))
-         translateY(calc(0px - 50%));
+      --transform-end: translateX(calc(0px - 100%)) translateY(calc(0px - 50%));
    }
 
    .PopupMenu-TopLeft {

@@ -50,7 +50,8 @@
 
       background: none;
       border: none;
-      font-size: 1em;
+      font-size: 0.9em;
+      font-weight: 600;
 
       width: 100%;
       height: max-content;
@@ -72,8 +73,6 @@
          height: max-content;
          min-height: max-content;
          text-align: start;
-         font-size: 0.9em;
-         font-weight: 400;
          color: black;
       }
    }

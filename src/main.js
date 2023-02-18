@@ -328,11 +328,9 @@ new Vue({
             isShowing: true,
             isClosing: false,
 
-            windowScrollEvent: () => popupMenu.hide(),
             hide: () => {
                if (popupMenu.isClosing) return;
                popupMenu.isClosing = true;
-               window.removeEventListener("scroll", popupMenu.windowScrollEvent, true);
 
                setTimeout(() => {
                   popupMenu.isShowing = false;
@@ -343,7 +341,6 @@ new Vue({
             },
          };
 
-         window.addEventListener("scroll", popupMenu.windowScrollEvent, true);
          this.popupMenus.push(popupMenu);
 
          return popupMenu;
