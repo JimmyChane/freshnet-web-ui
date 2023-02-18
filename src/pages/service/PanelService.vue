@@ -1,6 +1,6 @@
 <script>
    import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import Menu from "@/components/Menu.vue";
+   import MenuIcon from "@/components/MenuIcon.vue";
    import Selector from "@/components/selector/Selector.vue";
 
    import ButtonAddImage from "./ButtonAddImage.vue";
@@ -18,7 +18,7 @@
       components: {
          Actionbar,
          Selector,
-         Menu,
+         MenuIcon,
          ButtonAddImage,
          ButtonImage,
          AddEvent,
@@ -38,6 +38,8 @@
          };
       },
       computed: {
+         bookmarkMenuCorner: () => MenuIcon.Corner.BOTTOM_LEFT,
+
          isUrgent: (c) => c.service.isUrgent(),
          isWarranty: (c) => c.service.isWarranty(),
 
@@ -182,9 +184,7 @@
                            }
                         "
                      >
-                        <span
-                           class="PanelService-section-labels-item-title transition"
-                        >
+                        <span class="PanelService-section-labels-item-title transition">
                            {{ label.title }}
                         </span>
                         <img
@@ -194,11 +194,9 @@
                      </button>
                   </div>
 
-                  <Menu
+                  <MenuIcon
                      class="PanelService-section-label-option"
-                     direction="bottomLeft"
-                     @mouseover="bookmarkHeaderIconIsHover = true"
-                     @mouseleave="bookmarkHeaderIconIsHover = false"
+                     :corner="bookmarkMenuCorner"
                      :menus="
                         [
                            {
@@ -228,22 +226,18 @@
                            return !label;
                         })
                      "
-                  >
-                     <img
-                        class="PanelService-section-label-option-icon"
-                        :src="
-                           bookmarkHeaderIconIsHover
-                              ? host.icon('bookmark-add-505050')
-                              : host.icon('bookmark-505050')
-                        "
-                     />
-                  </Menu>
+                     @mouseover="bookmarkHeaderIconIsHover = true"
+                     @mouseleave="bookmarkHeaderIconIsHover = false"
+                     :src="
+                        bookmarkHeaderIconIsHover
+                           ? host.icon('bookmark-add-505050')
+                           : host.icon('bookmark-505050')
+                     "
+                  />
                </div>
             </div>
 
-            <AddEvent
-               @callback-create="(event) => actions.onClickToAddEvent(event)"
-            />
+            <AddEvent @callback-create="(event) => actions.onClickToAddEvent(event)" />
 
             <PanelEvents
                v-if="service"
@@ -270,15 +264,10 @@
                      }"
                   >
                      <div class="PanelService-section-customer">
-                        <div
-                           class="PanelService-section-customer-info"
-                           v-if="customer"
-                        >
-                           <span
-                              class="PanelService-section-customer-name"
-                              v-if="name"
-                              >{{ name }}</span
-                           >
+                        <div class="PanelService-section-customer-info" v-if="customer">
+                           <span class="PanelService-section-customer-name" v-if="name">{{
+                              name
+                           }}</span>
                            <span
                               class="PanelService-section-customer-phoneNumber"
                               v-if="phoneNumberStr"
@@ -305,10 +294,7 @@
                               :href="`tel:+6${phoneNumberStr}`"
                               v-if="isPhoneNumber"
                            >
-                              <img
-                                 :src="host.icon('call-000000')"
-                                 alt="Call Logo"
-                              />
+                              <img :src="host.icon('call-000000')" alt="Call Logo" />
                               <span>Call</span>
                            </a>
 
@@ -333,14 +319,10 @@
                      :menus="{
                         title: 'Update Problem',
                         icon: host.icon('edit-505050'),
-                        click: () =>
-                           actions.onClickUpdateDescription(description),
+                        click: () => actions.onClickUpdateDescription(description),
                      }"
                   >
-                     <div
-                        class="PanelService-section-description"
-                        v-if="description"
-                     >
+                     <div class="PanelService-section-description" v-if="description">
                         <p class="PanelService-section-description-text">{{
                            description
                         }}</p>
@@ -352,14 +334,10 @@
                      :menus="{
                         title: 'Update Belongings',
                         icon: host.icon('edit-505050'),
-                        click: () =>
-                           actions.onClickUpdateBelongings(belongings),
+                        click: () => actions.onClickUpdateBelongings(belongings),
                      }"
                   >
-                     <div
-                        class="PanelService-section-belonging"
-                        v-if="belongings.length"
-                     >
+                     <div class="PanelService-section-belonging" v-if="belongings.length">
                         <ItemBelonging
                            v-for="belonging in belongings"
                            :key="belonging.title"
@@ -382,9 +360,7 @@
                            v-for="imageFile in imageFiles"
                            :key="imageFile.name"
                            :src="imageFile"
-                           @click="
-                              () => $root.imageViewerShow(imageFile, imageFiles)
-                           "
+                           @click="() => $root.imageViewerShow(imageFile, imageFiles)"
                            @click-remove="actions.onClickRemoveImage(imageFile)"
                         />
                         <div
@@ -506,17 +482,6 @@
                               opacity: 1;
                            }
                         }
-                     }
-                  }
-                  .PanelService-section-label-option {
-                     border-radius: 50%;
-                     .PanelService-section-label-option-icon {
-                        --size: 1.5em;
-                        min-width: var(--size);
-                        min-height: var(--size);
-                        width: var(--size);
-                        height: var(--size);
-                        padding: 0.1em;
                      }
                   }
                }

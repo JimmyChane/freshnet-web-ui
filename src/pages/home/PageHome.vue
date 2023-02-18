@@ -15,8 +15,6 @@
 
    import HostIcon from "@/host/HostIcon";
 
-   import Menu from "@/components/Menu.vue";
-
    export default {
       key: "home",
       name: "Home",
@@ -27,7 +25,6 @@
       },
 
       components: {
-         Menu,
          SearchInput,
          Footer,
          Actionbar,

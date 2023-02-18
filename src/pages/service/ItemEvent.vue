@@ -1,15 +1,12 @@
 <script>
    import { format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
-   import OptionButton from "@/components/button/OptionButton.vue";
-   import Menu from "@/components/Menu.vue";
+   import MenuOption from "@/components/button/MenuOption.vue";
 
    export default {
-      components: { OptionButton },
+      components: { MenuOption },
       props: { item: { type: Object, default: null } },
       emits: ["callback-delete"],
-      data() {
-         return { nameOfUser: "loading...", isHovered: false, menuMode: "" };
-      },
+      data: () => ({ nameOfUser: "loading...", isShowingMenu: false, isHovered: false }),
       computed: {
          timestampText() {
             if (!this.item.timestamp) return "";
@@ -34,11 +31,7 @@
             return result ? result : "";
          },
 
-         isShowingMenu() {
-            return (
-               this.isHovered || this.menuMode === Menu.Mode.Show
-            );
-         },
+         shouldShowMenu: (c) => c.isShowingMenu || c.isHovered,
       },
       watch: {
          item() {
@@ -70,8 +63,8 @@
    <div
       class="ItemEvent"
       :style="{ '--primary-color': methodPrimaryColor, '--opacity': '1' }"
-      @mouseenter="isHovered = true"
-      @mouseleave="isHovered = false"
+      @mouseenter="() => (isHovered = true)"
+      @mouseleave="() => (isHovered = false)"
    >
       <div class="ItemEvent-left">
          <div class="ItemEvent-colorbar"></div>
@@ -84,39 +77,31 @@
                   class="ItemService-header-dot"
                   v-if="timestampText && nameOfUser"
                ></div>
-               <span class="ItemEvent-user" v-if="nameOfUser">{{
-                  nameOfUser
-               }}</span>
+               <span class="ItemEvent-user" v-if="nameOfUser">{{ nameOfUser }}</span>
             </div>
          </div>
       </div>
 
-      <div class="ItemEvent-right">
-         <span
-            class="ItemEvent-result transition"
-            :style="{
-               'z-index': isShowingMenu ? '1' : '2',
-               'margin-right': isShowingMenu ? '0' : '-3.3rem',
-            }"
-            v-if="methodResult"
-            >{{ methodResult }}</span
-         >
+      <div
+         :class="[
+            'ItemEvent-right',
+            shouldShowMenu ? 'ItemEvent-right-isShow' : 'ItemEvent-right-isHide',
+         ]"
+      >
+         <span :class="['ItemEvent-result', 'transition']" v-if="methodResult">{{
+            methodResult
+         }}</span>
 
-         <OptionButton
+         <MenuOption
             class="ItemEvent-menu"
-            :style="{
-               'z-index': isShowingMenu ? '100' : '1',
-               opacity: isShowingMenu ? '1' : '0',
+            :menus="{
+               key: 'delete',
+               title: 'Delete',
+               icon: host.icon('page/service/rejected-color'),
+               click: () => $emit('callback-delete', item),
             }"
-            :menus="[
-               {
-                  key: 'delete',
-                  title: 'Delete',
-                  icon: host.icon('page/service/rejected-color'),
-                  click: () => $emit('callback-delete', item),
-               },
-            ]"
-            @mode-change="(mode) => (menuMode = mode)"
+            @show="() => (isShowingMenu = true)"
+            @hide="() => (isShowingMenu = false)"
          />
       </div>
    </div>
@@ -130,6 +115,7 @@
       background-color: hsla(0, 0%, 100%, 0.6);
       border-radius: var(--border-radius);
       border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
+      overflow: hidden;
 
       .ItemEvent-left {
          display: flex;
@@ -138,6 +124,7 @@
          flex-grow: 1;
          border-radius: var(--border-radius) 0 0 var(--border-radius);
          overflow: hidden;
+
          .ItemEvent-colorbar {
             background-color: var(--primary-color);
             height: 100%;
@@ -200,7 +187,6 @@
             padding: 0.4rem;
             border-radius: 0.3rem;
          }
-
          .ItemEvent-menu {
             border-radius: 50%;
             .ItemEvent-menu-icon {
@@ -212,6 +198,26 @@
                align-items: center;
                justify-content: center;
             }
+         }
+      }
+      .ItemEvent-right-isShow {
+         .ItemEvent-result {
+            z-index: 1;
+            margin-right: 0;
+         }
+         .ItemEvent-menu {
+            z-index: 100;
+            opacity: 1;
+         }
+      }
+      .ItemEvent-right-isHide {
+         .ItemEvent-result {
+            z-index: 2;
+            margin-right: -3.3rem;
+         }
+         .ItemEvent-menu {
+            z-index: 1;
+            opacity: 0;
          }
       }
    }

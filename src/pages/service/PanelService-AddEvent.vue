@@ -23,12 +23,10 @@
          primaryColor2: (c) => c.primaryColor.mix("ffffff", 0.6),
 
          isMethodInfo: (c) => c.eventMethod === ModuleEvent.Method.Info,
-         isMethodQuotation: (c) =>
-            c.eventMethod === ModuleEvent.Method.Quotation,
+         isMethodQuotation: (c) => c.eventMethod === ModuleEvent.Method.Quotation,
          isMethodPurchase: (c) => c.eventMethod === ModuleEvent.Method.Purchase,
 
-         methodMenu: (c) =>
-            c.methodMenus.find((menu) => menu.key === c.eventMethod),
+         methodMenu: (c) => c.methodMenus.find((menu) => menu.key === c.eventMethod),
          methodMenus: (c) => [
             {
                key: ModuleEvent.Method.Quotation,
@@ -43,6 +41,8 @@
                click: (menu) => (c.eventMethod = menu.key),
             },
          ],
+         methodMenuCorner: () => Menu.Corner.BOTTOM,
+         methodMenuWidth: () => Menu.Width.SAME,
 
          user: (c) => c.loginStore.getters.user,
          isUserDefault: (c) => {
@@ -77,8 +77,7 @@
          invalidateMethod() {
             const { InputStatus, InputAmount } = this.$refs;
             if (this.isMethodInfo) InputStatus.focus();
-            if (this.isMethodQuotation || this.isMethodPurchase)
-               InputAmount.focus();
+            if (this.isMethodQuotation || this.isMethodPurchase) InputAmount.focus();
          },
          invalidateUser() {
             const user = this.user;
@@ -157,9 +156,7 @@
          '--primary-color-2': primaryColor2,
       }"
    >
-      <span class="AddEvent-header" :style="{ 'grid-area': 'header' }"
-         >Add Event</span
-      >
+      <span class="AddEvent-header" :style="{ 'grid-area': 'header' }">Add Event</span>
 
       <textarea
          class="AddEvent-description scrollbar"
@@ -196,10 +193,13 @@
             />
          </div>
 
-         <Menu class="AddEvent-status-header" :menus="methodMenus">
-            <span class="AddEvent-status-header-title">{{
-               methodMenu.title
-            }}</span>
+         <Menu
+            class="AddEvent-status-header"
+            :menus="methodMenus"
+            :corner="methodMenuCorner"
+            :width="methodMenuWidth"
+         >
+            <span class="AddEvent-status-header-title">{{ methodMenu.title }}</span>
             <img
                class="AddEvent-status-header-arrow"
                :src="host.icon('arrowDown-FFFFFF')"

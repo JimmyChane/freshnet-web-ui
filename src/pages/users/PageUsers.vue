@@ -1,7 +1,7 @@
 <script>
    import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import Loading from "@/components/Loading.vue";
-   import OptionButton from "@/components/button/OptionButton.vue";
+   import MenuOption from "@/components/button/MenuOption.vue";
    import Selector from "@/components/selector/Selector.vue";
    import Empty from "@/components/Empty.vue";
    import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
@@ -24,7 +24,7 @@
       components: {
          NavigationBar,
          Loading,
-         OptionButton,
+         MenuOption,
          Selector,
          Empty,
          PopupWindowAction,

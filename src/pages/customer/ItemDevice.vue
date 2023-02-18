@@ -1,10 +1,10 @@
 <script>
-   import OptionButton from "@/components/button/OptionButton.vue";
+   import MenuOption from "@/components/button/MenuOption.vue";
    import Button3 from "@/components/button/Button3.vue";
    import ItemSpecification from "./ItemSpecification.vue";
 
    export default {
-      components: { OptionButton, Button3, ItemSpecification },
+      components: { MenuOption, Button3, ItemSpecification },
       emtis: ["click", "click-remove"],
       props: {
          item: { type: Object, default: null },
@@ -42,7 +42,7 @@
                >Category Not Found</span
             >
             <div class="ItemDevice-header-end">
-               <OptionButton
+               <MenuOption
                   :menus="[
                      {
                         key: 'updateDescription',

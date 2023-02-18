@@ -12,9 +12,7 @@
          menu: { type: Object, default: () => null },
          menus: { default: () => [] },
       },
-      data() {
-         return { state: State.Collapse };
-      },
+      data: () => ({ state: State.Collapse }),
       computed: {
          parsedMenus() {
             const menus = Array.isArray(this.menus) ? this.menus : [this.menus];

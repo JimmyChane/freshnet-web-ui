@@ -2,6 +2,7 @@
    import Category from "@/items/Category";
    import ImageView from "@/components/ImageView.vue";
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import U from "@/U";
 
    export default {
       components: { ImageView },
@@ -23,10 +24,8 @@
             this.invalidate();
          },
          item() {
-            if (this.productIndex < 0)
-               this.productIndex = this.products.length - 1;
-            if (this.productIndex >= this.products.length)
-               this.productIndex = 0;
+            if (this.productIndex < 0) this.productIndex = this.products.length - 1;
+            if (this.productIndex >= this.products.length) this.productIndex = 0;
             return this.products[this.productIndex];
          },
          itemImage() {
@@ -40,9 +39,7 @@
          },
 
          color() {
-            return chroma.valid(this.primaryColor)
-               ? this.primaryColor
-               : chroma("cccccc");
+            return chroma.valid(this.primaryColor) ? this.primaryColor : chroma("cccccc");
          },
          color1() {
             return this.getColorMixed(this.color, 0.2);
@@ -55,7 +52,7 @@
          },
 
          arrowIcon() {
-            return this.isColorDark(this.color)
+            return U.isColorDark(this.color)
                ? this.host.icon("arrowDown-ffffff")
                : this.host.icon("arrowDown-000000");
          },
@@ -72,9 +69,7 @@
       methods: {
          async invalidate() {
             this.products = [];
-            const groups = await this.productStore.dispatch(
-               "getGroupsByCategory",
-            );
+            const groups = await this.productStore.dispatch("getGroupsByCategory");
             if (!groups.length) return;
 
             this.itemTitle = "";
@@ -86,17 +81,13 @@
                      group.category.key === Category.Key.Printer
                   );
                })
-               .sort((group1, group2) =>
-                  group1.category.compare(group2.category),
-               )
+               .sort((group1, group2) => group1.category.compare(group2.category))
                .reduce((products, group) => {
                   products.push(...group.items);
                   return products;
                }, [])
                .filter((product) => {
-                  return (
-                     product.toImageThumbnail() && product.isStockAvailable()
-                  );
+                  return product.toImageThumbnail() && product.isStockAvailable();
                });
 
             while (products.length > this.maxLength) {
@@ -121,13 +112,7 @@
          },
 
          getColorMixed(color, value) {
-            return color.mix(
-               this.isColorDark(this.color) ? "#ffffff" : "#000000",
-               value,
-            );
-         },
-         isColorDark(color) {
-            return chroma.deltaE(color, "000000") < 60;
+            return color.mix(U.isColorDark(this.color) ? "#ffffff" : "#000000", value);
          },
       },
    };
@@ -152,10 +137,7 @@
          class="HomeSectionProduct-img"
          v-if="itemImage"
          :src="itemImage"
-         @click="
-            () =>
-               $router.push({ path: '/product', query: { productId: itemId } })
-         "
+         @click="() => $router.push({ path: '/product', query: { productId: itemId } })"
       />
 
       <div class="HomeSectionProduct-footer" v-if="products.length > 1">
@@ -163,9 +145,7 @@
             :class="[
                'HomeSectionProduct-footer-item',
                `HomeSectionProduct-footer-item-${
-                  products.indexOf(item) === productIndex
-                     ? 'isSelected'
-                     : 'isDeselected'
+                  products.indexOf(item) === productIndex ? 'isSelected' : 'isDeselected'
                }`,
                'transition',
             ]"

@@ -20,10 +20,13 @@
       BOTTOM_RIGHT: 8,
    };
 
+   import Item from "./PopupMenu-Item.vue";
+
    export default {
       Width,
       Corner,
 
+      components: { Item },
       props: { popupMenu: { default: undefined } },
       data() {
          return {
@@ -168,20 +171,18 @@
 <template>
    <div :class="['PopupMenu', classTransition, classState, classCorner]" :style="style">
       <div class="PopupMenu-scroll scrollbar">
-         <button
+         <Item
             class="transition"
             v-for="menu of menus"
             :key="menu.key"
+            :menu="menu"
             @click="
-               () => {
+               (menu) => {
                   popupMenu.hide();
                   if (typeof menu.click === 'function') menu.click(menu);
                }
             "
-         >
-            <img v-if="menu.icon" :src="menu.icon" :alt="`Icon ${menu.title}`" />
-            <span>{{ menu.title }}</span>
-         </button>
+         />
       </div>
    </div>
 </template>
@@ -224,44 +225,6 @@
          align-items: stretch;
 
          background-color: white;
-
-         & > * {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-items: center;
-
-            background: none;
-            border: none;
-            font-size: 1em;
-            cursor: pointer;
-
-            width: 100%;
-            min-width: inherit;
-            overflow: hidden;
-            padding: 1em 1.2em;
-            gap: 1em;
-
-            &:hover {
-               background: hsla(0, 0%, 0%, 0.1);
-            }
-
-            img {
-               --icon-size: 1em;
-               width: var(--icon-size);
-               height: var(--icon-size);
-               max-width: initial;
-               max-height: initial;
-            }
-            span {
-               flex-grow: 1;
-               min-width: max-content;
-               text-align: start;
-               font-size: 0.9em;
-               font-weight: 400;
-               color: black;
-            }
-         }
       }
 
       position: absolute;

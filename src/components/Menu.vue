@@ -1,26 +1,23 @@
 <script>
    import PopupMenu from "@/app/PopupMenu.vue";
-   const Mode = { Show: "show", Hide: "hide" };
+   import U from "@/U";
 
    export default {
-      Mode,
       Width: PopupMenu.Width,
       Corner: PopupMenu.Corner,
 
       props: {
          width: { type: Number, default: PopupMenu.Width.AUTO },
          corner: { type: Number, default: PopupMenu.Corner.BOTTOM_LEFT },
-         menus: { type: Array, default: () => [] },
+         menus: { default: undefined },
       },
-      data() {
-         return { popupMenu: null };
-      },
+      data: () => ({ popupMenu: null }),
       computed: {
          isShowing: (c) => c.popupMenu && c.popupMenu.isShowing,
       },
       watch: {
          isShowing() {
-            this.$emit("mode-change", this.isShowing ? Mode.Show : Mode.Hide);
+            this.isShowing ? this.$emit("show") : this.$emit("hide");
          },
       },
       methods: {
@@ -31,7 +28,12 @@
          show() {
             if (this.popupMenu) this.popupMenu.hide();
 
-            for (const menu of this.menus) {
+            const menus =
+               U.isObject(this.menus) && !U.isArray(this.menus)
+                  ? [this.menus]
+                  : U.optArray(this.menus);
+
+            for (const menu of menus) {
                const isLegacy =
                   typeof menu.click !== "function" && typeof menu.interact === "function";
                if (isLegacy) menu.click = () => menu.interact();
@@ -39,7 +41,7 @@
 
             this.popupMenu = this.$root.popupMenuShow(
                this._self.$el,
-               this.menus,
+               menus,
                this.width,
                this.corner,
             );
@@ -66,28 +68,8 @@
 
 <style lang="scss" scoped>
    .Menu {
-      font-size: 1rem;
-      font-weight: 600;
-
-      width: fit-content;
-      height: fit-content;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      z-index: 1;
-      cursor: pointer;
       background: none;
       border: none;
-      border-radius: inherit;
-
-      padding: 0.6em;
-      overflow: hidden;
-
-      &:hover,
-      &:focus-within {
-         background-color: hsla(0, 0%, 0%, 0.1);
-      }
+      cursor: pointer;
    }
 </style>
