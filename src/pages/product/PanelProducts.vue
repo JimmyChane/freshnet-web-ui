@@ -59,16 +59,14 @@
          Footer,
       },
       props: { products: { type: Array, default: () => [] } },
-      data() {
-         return {
-            labelMenuPrimaryColor: chroma("000000"),
+      data: () => ({
+         labelMenuPrimaryColor: chroma("000000"),
 
-            currentProductId: "",
+         currentProductId: "",
 
-            filterMenus: [],
-            productGroups: [],
-         };
-      },
+         filterMenus: [],
+         productGroups: [],
+      }),
       computed: {
          iconEmpty: () => PageProduct.icon.dark.toUrl(),
 
@@ -255,13 +253,7 @@
             @click-search="$emit('click-search')"
          />
 
-         <div
-            :style="{ 'z-index': '1' }"
-            :class="[
-               'PanelProducts-filters',
-               `PanelProducts-filters-${isLayoutThin ? 'isThin' : 'isWide'}`,
-            ]"
-         >
+         <div :style="{ 'z-index': '1' }" :class="['scrollbar', 'PanelProducts-filters']">
             <LabelMenus
                :primaryColor="labelMenuPrimaryColor"
                v-for="filterMenu of filterMenus"
@@ -347,23 +339,25 @@
          top: 0;
 
          .PanelProducts-filters {
-            border-bottom: 1px solid hsl(0, 0%, 80%);
-            background-color: #dddddd;
-            z-index: 3;
             width: 100%;
+            padding: 1rem;
+            gap: 0.5rem;
+
             display: flex;
             flex-direction: row;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             align-items: center;
             justify-content: flex-start;
-         }
-         .PanelProducts-filters-isThin {
-            padding: 1.3rem 1rem;
-            gap: 0.2rem;
-         }
-         .PanelProducts-filters-isWide {
-            padding: 0.4rem 1rem;
-            gap: 0.5rem;
+
+            overflow-x: auto;
+            z-index: 3;
+            border-bottom: 1px solid hsl(0, 0%, 80%);
+            background-color: #dddddd;
+
+            --scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+            --scrollbar-thumb-color-hover: rgba(0, 0, 0, 0.2);
+            --scrollbar-track-margin: 1rem;
+            --scrollbar-size: 0.2rem;
          }
       }
       .PanelProducts-body {

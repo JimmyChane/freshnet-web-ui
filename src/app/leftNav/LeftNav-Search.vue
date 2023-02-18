@@ -5,6 +5,11 @@
    export default {
       props: { isWide: { type: Boolean, default: false } },
       components: { ButtonIcon, GlobalSearch },
+      methods: {
+         focus() {
+            this.$refs.globalsearch.focus();
+         },
+      },
    };
 </script>
 
@@ -23,7 +28,7 @@
          "
       />
 
-      <GlobalSearch class="LeftNav-Search-comp" />
+      <GlobalSearch class="LeftNav-Search-comp" ref="globalsearch" />
    </div>
 </template>
 

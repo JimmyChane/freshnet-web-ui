@@ -24,7 +24,7 @@
       <Icon :src="src" :alt="alt" />
    </a>
    <button
-      class="ButtonIcon"
+      class="ButtonIcon transition"
       v-else
       @click="$emit('click')"
       @mouseover="(x) => $emit('mouseover', x)"

@@ -40,9 +40,6 @@
    .PopupWindowAction {
       z-index: 3;
       .PopupWindowAction-Window {
-         width: fit-content;
-         width: inherit;
-         max-width: inherit;
          width: inherit;
          max-width: 100%;
 

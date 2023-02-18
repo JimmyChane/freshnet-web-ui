@@ -21,10 +21,7 @@
             if (time < this.searchLastCharTime) return;
 
             this.searchLastCharTime = time;
-            setTimeout(
-               () => this.$emit("callback-search", text),
-               elapseTimeDesigned,
-            );
+            setTimeout(() => this.$emit("callback-search", text), elapseTimeDesigned);
          },
       },
       emits: ["callback-search"],
@@ -40,6 +37,10 @@
                this.isExpand = false;
             }, 300);
          },
+
+         focus() {
+            this.$refs.searchbar.focus();
+         },
       },
    };
 </script>
@@ -47,16 +48,12 @@
 <template>
    <div class="SearchInput">
       <Searchbar
-         :class="[
-            isExpand
-               ? 'SearchInput-body-isActive'
-               : 'SearchInput-body-isPassive',
-         ]"
+         ref="searchbar"
+         :class="[isExpand ? 'SearchInput-body-isActive' : 'SearchInput-body-isPassive']"
          :model="search"
          :placeholder="placeholder"
          @clear="(e) => clear()"
          @input="(e) => (search = e.value)"
-         @focus="isExpand = search"
          @blur="() => collapse()"
       />
 
@@ -122,8 +119,7 @@
       }
       .SearchInput-body-isActive {
          background-color: var(--background-color-active);
-         border-radius: var(--border-radius-active) var(--border-radius-active)
-            0 0;
+         border-radius: var(--border-radius-active) var(--border-radius-active) 0 0;
          &:focus-within {
             background-color: var(--background-color-active);
             border: var(--border-active);
@@ -153,8 +149,7 @@
          top: 100%;
 
          box-shadow: 0 0 60px hsla(0, 0%, 0%, 0.1);
-         border-radius: 0 0 var(--border-radius-active)
-            var(--border-radius-active);
+         border-radius: 0 0 var(--border-radius-active) var(--border-radius-active);
 
          background-color: #e4e4e4;
          overflow: hidden;
@@ -168,8 +163,7 @@
             align-items: center;
             gap: 0.4rem;
 
-            border-radius: 0 0 var(--border-radius-active)
-               var(--border-radius-active);
+            border-radius: 0 0 var(--border-radius-active) var(--border-radius-active);
 
             overflow-y: auto;
             overflow-x: hidden;

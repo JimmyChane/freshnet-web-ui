@@ -6,24 +6,16 @@
    import LeftNavLogin from "./LeftNav-Login.vue";
 
    export default {
-      components: {
-         Drawer,
-         LeftNavHeader,
-         Search,
-         LeftNavGroup1,
-         LeftNavLogin,
-      },
+      components: { Drawer, LeftNavHeader, Search, LeftNavGroup1, LeftNavLogin },
       emits: ["click-logout"],
-      data() {
-         return {
-            expandedPagKey: "",
+      data: () => ({
+         expandedPagKey: "",
 
-            isDragging: false,
-            dragTrigger: 20,
-            dragOpen: 80,
-            dragWidth: 0,
-         };
-      },
+         isDragging: false,
+         dragTrigger: 20,
+         dragOpen: 80,
+         dragWidth: 0,
+      }),
       computed: {
          isWide: (context) => context.$root.navigation.isWide(),
          isDrawer: (context) => context.$root.navigation.isDrawer(),
@@ -47,8 +39,7 @@
                nav.isSelected = () => this.selectedPageKey === nav.key;
                nav.isWide = () => this.isWide;
                nav.clickExpand = () => {
-                  this.expandedPageKey =
-                     this.expandedPageKey === nav.key ? "" : nav.key;
+                  this.expandedPageKey = this.expandedPageKey === nav.key ? "" : nav.key;
                };
                nav.click = () => this.emitCollapse();
 
@@ -90,6 +81,11 @@
             return this.$refs.Body;
          },
       },
+      watch: {
+         isExpand() {
+            if (this.isExpand) this.focus();
+         },
+      },
       mounted() {
          this.addTouchListeners();
       },
@@ -125,6 +121,7 @@
             const y = touch.pageY;
 
             if (x > this.dragTrigger) return;
+            this.focus();
             if (x < this.dragTrigger) x = this.dragTrigger;
             this.refDrawer.onDragStart(x, y);
             this.isDragging = true;
@@ -132,16 +129,14 @@
          onTouchMove(e) {
             if (!this.isDragging) return;
             const touch = [...e.changedTouches][0];
-            const x =
-               touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
+            const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
             const y = touch.pageY;
             this.refDrawer.onDragMove(x, y);
          },
          onTouchEnd(e) {
             if (!this.isDragging) return;
             const touch = [...e.changedTouches][0];
-            const x =
-               touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
+            const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
             const y = touch.pageY;
             this.refDrawer.onDragEnd(x, y);
             if (x > this.dragOpen) this.$root.navigation.openNavigationDrawer();
@@ -183,6 +178,10 @@
 
             this.$root.replaceRoute({ query });
          },
+
+         focus() {
+            this.$refs.search.focus();
+         },
       },
    };
 </script>
@@ -198,7 +197,7 @@
       <div class="LeftNav-body scrollbar transition" ref="Body">
          <LeftNavHeader :isWide="isWide" />
 
-         <Search v-if="isWide" :isWide="isWide" />
+         <Search ref="search" v-if="isWide" :isWide="isWide" />
 
          <div class="LeftNav-navigations" v-if="navigations.length">
             <LeftNavGroup1
