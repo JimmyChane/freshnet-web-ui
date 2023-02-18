@@ -86,6 +86,7 @@
       :corner="menuCorner"
       :width="menuWidth"
       :menus="menus"
+      :primaryColor="currentColor"
       ref="Selector-button"
       @show="() => (isShow = true)"
       @hide="() => (isShow = false)"

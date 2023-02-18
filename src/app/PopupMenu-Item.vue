@@ -1,16 +1,20 @@
 <script>
    import U from "@/U";
+   import chroma from "chroma-js";
+
    export default {
-      props: { menu: { type: Object } },
+      props: {
+         menu: { type: Object },
+         primaryColorBackgroundHover: { type: chroma.Color },
+         primaryColorBackgroundSelected: { type: chroma.Color },
+      },
       computed: {
          icon: (c) => c.menu.icon,
          title: (c) => c.menu.title,
-         primaryColor: (c) => c.menu.primaryColor,
          isSelected: (c) => {
             if (typeof c.menu.isSelected !== "function") return false;
             return c.menu.isSelected();
          },
-
          hasIcon: (c) => {
             if (U.isString(c.icon)) return c.icon.length > 0;
             return !c;
@@ -26,6 +30,10 @@
          'PopupMenu-Item',
          isSelected ? 'PopupMenu-Item-isSelected' : 'PopupMenu-Item-isDeselected',
       ]"
+      :style="{
+         '--primary-color-hover': primaryColorBackgroundHover,
+         '--primary-color-isSelected': primaryColorBackgroundSelected,
+      }"
       @click="() => $emit('click', menu)"
    >
       <img v-if="hasIcon" :src="icon" :alt="`Icon ${title}`" />
@@ -71,9 +79,11 @@
       cursor: pointer;
       &:hover {
          background: hsla(0, 0%, 0%, 0.1);
+         background: var(--primary-color-hover);
       }
    }
    .PopupMenu-Item-isSelected {
       background: hsla(0, 0%, 0%, 0.2);
+      background: var(--primary-color-isSelected);
    }
 </style>

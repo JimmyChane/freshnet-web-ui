@@ -10,11 +10,10 @@
          width: { type: Number, default: PopupMenu.Width.AUTO },
          corner: { type: Number, default: PopupMenu.Corner.BOTTOM_LEFT },
          menus: { default: undefined },
+         primaryColor: { default: undefined },
       },
       data: () => ({ popupMenu: null }),
-      computed: {
-         isShowing: (c) => c.popupMenu && c.popupMenu.isShowing,
-      },
+      computed: { isShowing: (c) => c.popupMenu && c.popupMenu.isShowing },
       watch: {
          isShowing() {
             this.isShowing ? this.$emit("show") : this.$emit("hide");
@@ -39,12 +38,11 @@
                if (isLegacy) menu.click = () => menu.interact();
             }
 
-            this.popupMenu = this.$root.popupMenuShow(
-               this._self.$el,
-               menus,
-               this.width,
-               this.corner,
-            );
+            this.popupMenu = this.$root.popupMenuShow(this._self.$el, menus, {
+               width: this.width,
+               corner: this.corner,
+               primaryColor: this.primaryColor,
+            });
          },
          hide() {
             if (!this.popupMenu) return;

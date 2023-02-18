@@ -21,6 +21,7 @@
    };
 
    import Item from "./PopupMenu-Item.vue";
+   import chroma from "chroma-js";
 
    export default {
       Width,
@@ -49,9 +50,18 @@
          isShowing: (c) => c.popupMenu.isShowing,
          anchor: (c) => c.popupMenu.anchor,
          menus: (c) => c.popupMenu.menus,
-         preferWidth: (c) => c.popupMenu.width,
-         corner: (c) => c.popupMenu.corner,
 
+         classCorner: (c) => {
+            if (c.corner === Corner.TOP) return "PopupMenu-Top";
+            if (c.corner === Corner.RIGHT) return "PopupMenu-Right";
+            if (c.corner === Corner.BOTTOM) return "PopupMenu-Bottom";
+            if (c.corner === Corner.LEFT) return "PopupMenu-Left";
+            if (c.corner === Corner.TOP_LEFT) return "PopupMenu-TopLeft";
+            if (c.corner === Corner.TOP_RIGHT) return "PopupMenu-TopRight";
+            if (c.corner === Corner.BOTTOM_LEFT) return "PopupMenu-BottomLeft";
+            if (c.corner === Corner.BOTTOM_RIGHT) return "PopupMenu-BottomRight";
+            return "";
+         },
          style: (c) => {
             const style = {
                "--width": `${c.width}px`,
@@ -78,17 +88,19 @@
             return style;
          },
 
-         classCorner: (c) => {
-            if (c.corner === Corner.TOP) return "PopupMenu-Top";
-            if (c.corner === Corner.RIGHT) return "PopupMenu-Right";
-            if (c.corner === Corner.BOTTOM) return "PopupMenu-Bottom";
-            if (c.corner === Corner.LEFT) return "PopupMenu-Left";
-            if (c.corner === Corner.TOP_LEFT) return "PopupMenu-TopLeft";
-            if (c.corner === Corner.TOP_RIGHT) return "PopupMenu-TopRight";
-            if (c.corner === Corner.BOTTOM_LEFT) return "PopupMenu-BottomLeft";
-            if (c.corner === Corner.BOTTOM_RIGHT) return "PopupMenu-BottomRight";
-            return "";
+         option: (c) => c.popupMenu.option,
+         preferWidth: (c) => c.option.width,
+         corner: (c) => c.option.corner,
+         primaryColor: (c) => {
+            const primaryColor = c.option.primaryColor;
+            if (primaryColor instanceof chroma.Color) return primaryColor;
+            if (chroma.valid(primaryColor)) return chroma(primaryColor);
+            return chroma("cccccc");
          },
+
+         primaryColorBackground: (c) => c.primaryColor.mix("ffffff", 0.8),
+         primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),
+         primaryColorBackgroundSelected: (c) => c.primaryColor.mix("ffffff", 0.4),
       },
       watch: {
          isShowing() {
@@ -176,6 +188,8 @@
             v-for="menu of menus"
             :key="menu.key"
             :menu="menu"
+            :primaryColorBackgroundHover="primaryColorBackgroundHover"
+            :primaryColorBackgroundSelected="primaryColorBackgroundSelected"
             @click="
                (menu) => {
                   popupMenu.hide();
