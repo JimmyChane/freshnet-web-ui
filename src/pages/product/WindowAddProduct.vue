@@ -49,25 +49,27 @@
 
             this.brandMenus = [
                { key: "none", title: "None" },
-               ...brands.map((brand) => {
-                  return {
-                     key: brand.id,
-                     title: brand.title,
-                     icon: brand.icon ? brand.icon.toUrl({ height: 10 }) : "",
-                     click: (menu) => (this.brandMenu = menu),
-                  };
-               }),
+               ...brands
+                  .sort((brand1, brand2) => brand1.compare(brand2))
+                  .map((brand) => {
+                     return {
+                        key: brand.id,
+                        title: brand.title,
+                        click: (menu) => (this.brandMenu = menu),
+                     };
+                  }),
             ];
-            this.categoryMenus = categories.map((category) => {
-               return {
-                  key: category.id,
-                  title: category.title,
-                  icon: category.icon ? category.icon.toUrl({ height: 10 }) : "",
-                  click: (menu) => (this.categoryMenu = menu),
-               };
-            });
+            this.categoryMenus = categories
+               .sort((category1, category2) => category1.compare(category2))
+               .map((category) => {
+                  return {
+                     key: category.id,
+                     title: category.title,
+                     click: (menu) => (this.categoryMenu = menu),
+                  };
+               });
 
-            if (!this.brandMenus) {
+            if (!this.brandMenu) {
                this.brandMenu = this.brandMenus.find((menu) => menu.key === "none");
             }
 
