@@ -71,6 +71,7 @@
                "--x": `${c.x}px`,
                "--y": `${c.y}px`,
                "pointer-events": c.stylePointerEvent,
+               "--primary-color-background": c.primaryColorBackground,
             };
 
             if (c.preferWidth === Width.MIN) {
@@ -204,6 +205,9 @@
 <style lang="scss" scoped>
    .PopupMenu {
       display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
       overflow: hidden;
 
       min-width: 10em;
@@ -225,6 +229,8 @@
          width: inherit;
          height: inherit;
          max-height: inherit;
+         height: 100%;
+         max-height: 100%;
 
          overflow-x: hidden;
          overflow-y: auto;
@@ -236,9 +242,10 @@
 
          display: flex;
          flex-direction: column;
+         justify-content: flex-start;
          align-items: stretch;
 
-         background-color: white;
+         background-color: var(--primary-color-background);
       }
 
       position: absolute;

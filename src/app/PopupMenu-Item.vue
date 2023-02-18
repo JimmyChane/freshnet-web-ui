@@ -53,8 +53,9 @@
       font-size: 1em;
 
       width: 100%;
-      min-width: inherit;
-      overflow: hidden;
+      height: max-content;
+      min-width: 100%;
+      min-height: max-content;
       padding: 1em 1.2em;
       gap: 1em;
 
@@ -68,6 +69,8 @@
       span {
          flex-grow: 1;
          min-width: max-content;
+         height: max-content;
+         min-height: max-content;
          text-align: start;
          font-size: 0.9em;
          font-weight: 400;
