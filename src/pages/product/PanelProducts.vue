@@ -168,6 +168,7 @@
                { title: "All" },
                ...brandGroups
                   .filter((group) => group.brand && group.items.length > 0)
+                  .sort((group1, group2) => group1.brand.compare(group2.brand))
                   .map((group) => {
                      return { key: group.brand.id, title: group.brand.title };
                   }),
