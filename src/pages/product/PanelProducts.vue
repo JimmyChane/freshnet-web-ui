@@ -7,6 +7,7 @@
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import ActionbarProduct from "./ActionBarProduct.vue";
    import ItemProduct from "./ItemProduct.vue";
+   import Group from "./PanelProducts-Group.vue";
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
    import PageProduct from "@/pages/product/PageProduct.vue";
@@ -53,6 +54,7 @@
          Actionbar,
          ActionbarProduct,
          ItemProduct,
+         Group,
          LabelMenus,
          Empty,
          LoadingDots,
@@ -267,48 +269,17 @@
       </div>
 
       <div class="PanelProducts-body">
-         <div
-            :class="[
-               'PanelProducts-categories',
-               `PanelProducts-categories-${
-                  productGroups.length > 1 && isLayoutThin ? 'isThin' : 'isWide'
-               }`,
-            ]"
-         >
-            <div
-               class="PanelProducts-category"
+         <div class="PanelProducts-categories">
+            <Group
                v-for="group of productGroups"
                :key="group.key"
-            >
-               <div class="PanelProducts-category-header">
-                  <span class="PanelProducts-category-title">{{ group.title }}</span>
-                  <img
-                     class="PanelProducts-category-icon"
-                     v-if="group.icon"
-                     :src="group.icon"
-                     :alt="`${group.title} Icon`"
-                  />
-               </div>
-               <div class="PanelProducts-category-items scrollbar">
-                  <router-link
-                     v-for="item of group.items"
-                     :key="item.id"
-                     :to="{
-                        query: {
-                           productId: item.id,
-                           brand: queryBrandId,
-                           stock: queryStock,
-                        },
-                     }"
-                  >
-                     <ItemProduct
-                        :mode="layoutMode"
-                        :item="item"
-                        :isSelected="item.id === currentProductId"
-                     />
-                  </router-link>
-               </div>
-            </div>
+               :group="group"
+               :isWide="!(productGroups.length > 1 && isLayoutThin)"
+               :layoutMode="layoutMode"
+               :currentProductId="currentProductId"
+               :queryBrandId="queryBrandId"
+               :queryStock="queryStock"
+            />
          </div>
 
          <LoadingDots style="z-index: 3" :isShowing="isLoading" />
@@ -378,74 +349,6 @@
             padding: 2rem 0;
             display: flex;
             flex-direction: column;
-
-            .PanelProducts-category {
-               display: flex;
-               flex-direction: column;
-               align-items: stretch;
-               padding: 1rem 0;
-
-               .PanelProducts-category-header {
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-
-                  font-size: 2.5rem;
-                  font-weight: 500;
-                  gap: 0.5em;
-
-                  .PanelProducts-category-icon {
-                     width: 1em;
-                     height: 1em;
-                  }
-               }
-
-               .PanelProducts-category-items {
-                  & > * {
-                     text-decoration: none;
-                     & > * {
-                        width: 100%;
-                        height: 100%;
-                     }
-                  }
-               }
-            }
-         }
-         .PanelProducts-categories-isThin {
-            .PanelProducts-category-header {
-               padding: 0 0.9rem;
-            }
-            .PanelProducts-category-items {
-               padding: 0 0.7rem;
-
-               display: flex;
-               flex-direction: row;
-               overflow-x: auto;
-               overflow-y: hidden;
-
-               --scrollbar-size: 0.4em;
-               --scrollbar-thumb-radius: 0.4em;
-               --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.1);
-               --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.6);
-               --scrollbar-track-margin: 1.3rem;
-
-               & > * {
-                  width: 10rem;
-                  min-width: 10rem;
-                  max-width: 10rem;
-               }
-            }
-         }
-         .PanelProducts-categories-isWide {
-            .PanelProducts-category-header {
-               padding: 0 0.8rem;
-            }
-            .PanelProducts-category-items {
-               padding: 0 0.5rem;
-
-               display: grid;
-               grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-            }
          }
       }
    }
