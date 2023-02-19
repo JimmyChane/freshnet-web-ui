@@ -65,8 +65,7 @@
 
                if (ts.isToday()) putItem("Today");
                else if (ts.isYesterday()) putItem("Yesterday");
-               else if (isWithinWeek())
-                  putItem(format(time, "EEEE, dd/LL/yyyy"));
+               else if (isWithinWeek()) putItem(format(time, "EEEE, dd/LL/yyyy"));
                else if (ts.isThisYear()) putItem(format(time, "dd/LL/yyyy"));
                else putItem(ts.getYear().toString());
 
@@ -120,7 +119,12 @@
 <template>
    <div class="ListServices">
       <div
-         class="ListServices-group"
+         :class="[
+            'ListServices-group',
+            isGridView ? 'ListServices-group-gridView' : '',
+            isListView ? 'ListServices-group-listView' : '',
+            isDetailView ? 'ListServices-group-detailView' : '',
+         ]"
          v-for="group of groups"
          :key="group.title"
       >
@@ -134,17 +138,10 @@
             group.title
          }}</span>
 
-         <div
-            :class="[
-               'PanelServices-items',
-               isGridView ? 'PanelServices-items-gridView' : '',
-               isListView ? 'PanelServices-items-listView' : '',
-               isDetailView ? 'PanelServices-items-detailView' : '',
-            ]"
-         >
-            <div class="PanelServices-items-header" v-if="isGridView"></div>
+         <div class="ListServices-items">
+            <div class="ListServices-items-header" v-if="isGridView"></div>
             <div
-               class="PanelServices-items-header"
+               class="ListServices-items-header"
                v-if="isDetailView && groups.indexOf(group) === 0"
             >
                <span
@@ -157,9 +154,7 @@
                <span
                   class="Property-customerPhoneNumber"
                   :style="{
-                     '--width': `${
-                        getPropertyByKey('customerPhoneNumber').width
-                     }px`,
+                     '--width': `${getPropertyByKey('customerPhoneNumber').width}px`,
                   }"
                   >Customer Phone Number</span
                >
@@ -194,7 +189,7 @@
             </div>
 
             <ItemService
-               class="PanelServices-item"
+               class="ListServices-item"
                v-for="item in group.items"
                :mode="viewMode"
                :key="`service${item.id}`"
@@ -220,7 +215,6 @@
       flex-grow: 1;
       align-items: center;
       padding: 1rem;
-      padding-top: 0;
       padding-top: 0.8rem;
 
       .ListServices-group {
@@ -250,7 +244,7 @@
             top: 9.6rem;
          }
 
-         .PanelServices-items {
+         .ListServices-items {
             width: 100%;
             .PanelService-items-title {
                background: hsla(0, 0%, 0%, 0.04);
@@ -258,7 +252,10 @@
                padding: 0.3rem 0.5rem;
             }
          }
-         .PanelServices-items-gridView {
+      }
+
+      .ListServices-group-gridView {
+         .ListServices-items {
             max-width: var(--max-width);
             margin-top: -0.5rem;
             gap: 0.2rem;
@@ -266,35 +263,47 @@
             grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
             grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 
-            .PanelServices-items-header {
+            .ListServices-items-header {
                grid-column: 1 / -1;
             }
-            .PanelServices-item {
+            .ListServices-item {
                width: 100%;
                aspect-ratio: 1/1;
             }
          }
-         .PanelServices-items-listView {
+      }
+      .ListServices-group-listView {
+         .ListServices-items {
             max-width: 32rem;
             gap: 0.2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
 
-            .PanelServices-item {
+            .ListServices-item {
                width: 100%;
             }
          }
-         .PanelServices-items-detailView {
+      }
+      .ListServices-group-detailView {
+         align-items: flex-start;
+         .ListServices-group-title {
+            left: 1rem;
+         }
+         .ListServices-items {
+            width: max-content;
+
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             justify-content: flex-start;
-            gap: 0.2rem;
 
-            .PanelServices-items-header {
+            border-radius: 0.5rem;
+            overflow: hidden;
+
+            .ListServices-items-header {
                gap: 0.5rem;
-               padding: 1rem;
+               padding: 1rem 0.6rem;
 
                display: flex;
                flex-direction: row;

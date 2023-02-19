@@ -79,21 +79,17 @@
 
 <template>
    <Button3
-      class="ItemService"
+      :class="[
+         'ItemService',
+         isGrid ? 'ItemService-isGrid' : '',
+         isList ? 'ItemService-isList' : '',
+         isDetail ? 'ItemService-isDetail' : '',
+      ]"
       :style="{ '--primary-color': primaryColor }"
       :isSelected="isSelected"
       @click="$emit('click', item)"
    >
-      <div
-         v-if="isGrid"
-         :class="[
-            'ItemServiceGrid-body',
-            `ItemServiceGrid-body-${
-               isSelected ? 'isSelected' : 'isDeselected'
-            }`,
-            'transition',
-         ]"
-      >
+      <div v-if="isGrid" :class="['transition', 'ItemService-body']">
          <div class="ItemService-top">
             <div class="ItemService-top-customer">
                <router-link
@@ -135,16 +131,7 @@
          </div>
       </div>
 
-      <div
-         v-if="isList"
-         :class="[
-            'transition',
-            'ItemServiceList-body',
-            isSelected
-               ? 'ItemServiceList-body-isSelected'
-               : 'ItemServiceList-body-isDeselected',
-         ]"
-      >
+      <div v-if="isList" :class="['transition', 'ItemService-body']">
          <div class="ItemService-top">
             <div class="ItemService-top-customer">
                <router-link
@@ -172,9 +159,7 @@
 
          <div class="ItemServiceList-middle">
             <div class="ItemServiceList-description">
-               <span class="ItemServiceList-description-body">{{
-                  description
-               }}</span>
+               <span class="ItemServiceList-description-body">{{ description }}</span>
             </div>
             <ImageViews :width="40" :height="40" :images="images" />
          </div>
@@ -219,16 +204,7 @@
          </div>
       </div>
 
-      <div
-         v-if="isDetail"
-         :class="[
-            'ItemServiceDetail-body',
-            `ItemServiceDetail-body-${
-               isSelected ? 'isSelected' : 'isDeselected'
-            }`,
-            'transition',
-         ]"
-      >
+      <div v-if="isDetail" :class="['transition', 'ItemService-body']">
          <span
             class="ItemServiceDetail-customerName"
             :style="{
@@ -367,8 +343,10 @@
    .ItemService {
       width: initial;
       background: white;
+   }
 
-      .ItemServiceGrid-body {
+   .ItemService-isGrid {
+      .ItemService-body {
          width: 100%;
          height: 100%;
          font-weight: 400;
@@ -437,7 +415,9 @@
             }
          }
       }
-      .ItemServiceList-body {
+   }
+   .ItemService-isList {
+      .ItemService-body {
          width: 100%;
          height: 100%;
          font-weight: 400;
@@ -515,7 +495,10 @@
             }
          }
       }
-      .ItemServiceDetail-body {
+   }
+   .ItemService-isDetail {
+      border-radius: 0;
+      .ItemService-body {
          height: 100%;
          gap: 0.5rem;
          padding: 0.3rem;
@@ -526,6 +509,7 @@
          text-align: start;
          line-height: 1.1;
          border-radius: 0 0.5em 0.5em 0;
+         border-radius: 0.5em;
          border: 0.1em solid transparent;
 
          display: flex;
