@@ -1,35 +1,31 @@
 <script>
-   import Section from "./PageHome-Section.vue";
    export default {
-      components: { Section },
       props: { isThin: { type: Boolean, default: false } },
    };
 </script>
 
 <template>
-   <Section title="What else can we do?">
-      <div
-         :class="[
-            'HomeSectionWhatElse',
-            `HomeSectionWhatElse-${isThin ? 'isThin' : 'isWide'}`,
-         ]"
-      >
-         <div class="HomeSectionyHour-body">
-            <span>Repair Laptop</span>
-            <span>Repair Computer</span>
-            <span>Repair Printer</span>
-            <span>Modified Printer</span>
-            <span>Refill Cartridge</span>
-            <!-- <span>Internet Service</span> -->
-            <span>Name Card Design</span>
-            <span>Projector</span>
-            <span>Typing</span>
-            <!-- <span>Top-Up Handphone</span> -->
-            <!-- <span>My Card</span> -->
-            <span>CyberCafe (Internet & Browsing Only)</span>
-         </div>
+   <div
+      :class="[
+         'HomeSectionWhatElse',
+         `HomeSectionWhatElse-${isThin ? 'isThin' : 'isWide'}`,
+      ]"
+   >
+      <div class="HomeSectionyHour-body">
+         <span>Repair Laptop</span>
+         <span>Repair Computer</span>
+         <span>Repair Printer</span>
+         <span>Modified Printer</span>
+         <span>Refill Cartridge</span>
+         <!-- <span>Internet Service</span> -->
+         <span>Name Card Design</span>
+         <span>Projector</span>
+         <span>Typing</span>
+         <!-- <span>Top-Up Handphone</span> -->
+         <!-- <span>My Card</span> -->
+         <span>CyberCafe (Internet & Browsing Only)</span>
       </div>
-   </Section>
+   </div>
 </template>
 
 <style lang="scss" scoped>

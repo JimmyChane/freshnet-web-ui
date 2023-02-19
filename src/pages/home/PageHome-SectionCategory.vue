@@ -1,9 +1,8 @@
 <script>
-   import Section from "./PageHome-Section.vue";
    import Item from "./PageHome-SectionCategory-Item.vue";
 
    export default {
-      components: { Section, Item },
+      components: { Item },
       props: { isThin: { type: Boolean, default: false } },
       data: () => ({ groups: [] }),
       watch: {
@@ -32,16 +31,14 @@
 </script>
 
 <template>
-   <Section>
-      <div class="HomeSectionCategory">
-         <Item
-            v-for="group of groups"
-            :key="group.category.id"
-            :productCount="group.items.length"
-            :category="group.category"
-         />
-      </div>
-   </Section>
+   <div class="HomeSectionCategory">
+      <Item
+         v-for="group of groups"
+         :key="group.category.id"
+         :productCount="group.items.length"
+         :category="group.category"
+      />
+   </div>
 </template>
 
 <style lang="scss" scoped>

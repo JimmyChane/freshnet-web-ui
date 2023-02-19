@@ -1,5 +1,6 @@
 <script>
    import ItemProduct from "./ItemProduct.vue";
+
    export default {
       components: { ItemProduct },
       props: {
@@ -31,6 +32,7 @@
             :alt="`${group.title} Icon`"
          />
       </div>
+
       <div class="PanelProducts-category-items scrollbar">
          <router-link
             v-for="item of group.items"
@@ -56,6 +58,10 @@
       align-items: stretch;
       padding: 1rem 0;
 
+      position: relative;
+
+      --floating-button-size: 2rem;
+
       .PanelProducts-category-header {
          display: flex;
          flex-direction: row;
@@ -78,6 +84,13 @@
                height: 100%;
             }
          }
+      }
+      .PanelProducts-previous {
+         --size: var(--floating-button-size);
+         width: var(--size);
+         height: var(--size);
+      }
+      .PanelProducts-next {
       }
    }
    .PanelProducts-category-isThin {
