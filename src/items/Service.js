@@ -1,7 +1,7 @@
 import ServiceTimestamp from "./ServiceTimestamp";
 import ServiceEvent from "./ServiceEvent.js";
 import ServicePrice from "./ServicePrice.js";
-import ServiceState from "./tools/ServiceState.js";
+import ServiceStates from "./tools/ServiceStates.js";
 import ServiceCustomer from "./ServiceCustomer.js";
 import ServiceImage from "./ServiceImage";
 import ServiceLabel from "./ServiceLabel";
@@ -85,7 +85,7 @@ class Service {
 	toCount(strs) {
 		const { customer, timestamp, state, description } = this;
 
-		const stateRes = ServiceState.getResourceByKey(state);
+		const stateRes = ServiceStates.findByKey(state);
 		const stateTitle = stateRes ? stateRes.title : "";
 
 		let count = strs.reduce((count, str) => {

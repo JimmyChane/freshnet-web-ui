@@ -3,7 +3,7 @@
    import ListServices from "./ListServices.vue";
 
    import ModuleService from "@/items/data/Service.js";
-   import ServiceState from "@/items/tools/ServiceState.js";
+   import ServiceStates from "@/items/tools/ServiceStates.js";
    import Empty from "@/components/Empty.vue";
 
    import U from "@/U.js";
@@ -31,7 +31,7 @@
                State.Completed,
                State.Rejected,
             ].map((stateKey) => {
-               const resource = ServiceState.getResourceByKey(stateKey);
+               const resource = ServiceStates.findByKey(stateKey);
                const title = resource.title;
                const icon = resource.icon.color;
                const iconSelected = resource.icon.white;

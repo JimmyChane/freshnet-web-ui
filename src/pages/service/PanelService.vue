@@ -1,5 +1,5 @@
 <script>
-   import Actionbar from "@/components/actionbar/Actionbar.vue";
+   import Actionbar from "./PanelService-Actionbar.vue";
    import MenuIcon from "@/components/MenuIcon.vue";
    import Selector from "@/components/selector/Selector.vue";
 
@@ -10,7 +10,7 @@
    import AddEvent from "./PanelService-AddEvent.vue";
    import PanelEvents from "./PanelEvents.vue";
 
-   import ServiceState from "@/items/tools/ServiceState.js";
+   import ServiceStates from "@/items/tools/ServiceStates.js";
 
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
@@ -32,7 +32,7 @@
       },
       data() {
          return {
-            ServiceState,
+            ServiceStates,
             nameOfUser: "",
             bookmarkHeaderIconIsHover: false,
          };
@@ -55,12 +55,10 @@
 
          labels: (c) => c.service.labels,
 
-         primaryColor() {
-            return this.stateColor;
-         },
+         primaryColor: (c) => c.stateColor,
          stateColor() {
             if (this.service) {
-               const res = ServiceState.list.find((s) => {
+               const res = ServiceStates.list.find((s) => {
                   return s.key === this.service.state;
                });
                if (res) return chroma(res.color);
@@ -129,34 +127,19 @@
 <template>
    <div class="PanelService" :style="{ '--primary-color': backgroundColor }">
       <Actionbar
-         v-if="service"
-         class="PanelService-actionbar transition"
-         :style="{
-            'background-color': actionbarColor,
-            'border-bottom': `1px solid ${actionbarBorder}`,
-         }"
-         :leftMenus="{
-            icon: host.icon('close-000000'),
-            click: () => actions.onClickClose(),
-         }"
-         :rightMenus="{
-            icon: host.icon('trash-000000'),
-            click: () => actions.onClickRemove(service),
-         }"
-      >
-         <div class="PanelService-actionbar-title" v-if="service">
-            <div class="PanelService-timestamp" v-if="service">
-               {{ service.timestamp }}
-            </div>
-         </div>
-      </Actionbar>
+         :style="{ 'z-index': '3' }"
+         :service="service"
+         :actionbarColor="actionbarColor"
+         :actionbarBorder="actionbarBorder"
+         :actions="actions"
+      />
 
       <div v-if="service" class="PanelService-body">
          <div class="PanelService-body-body">
             <div class="PanelService-body-header">
                <Selector
                   class="PanelService-actionbar-state-selector"
-                  :list="ServiceState.list"
+                  :list="ServiceStates.list"
                   :keySelected="service.state"
                   @callback-select="
                      (state) => {
@@ -256,7 +239,6 @@
                   </Section>
 
                   <Section
-                     title="Customer"
                      :menus="{
                         title: 'Update Customer',
                         icon: host.icon('edit-505050'),
@@ -390,23 +372,6 @@
       overflow-y: auto;
       background-color: var(--primary-color);
       padding-bottom: 10rem;
-
-      .PanelService-actionbar {
-         --actionbar-background-color-translucent: white;
-         z-index: 3;
-         .PanelService-actionbar-title {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            .PanelService-timestamp {
-               text-align: center;
-               color: black;
-               font-size: 0.8rem;
-            }
-         }
-      }
 
       .PanelService-body {
          z-index: 2;
@@ -590,7 +555,7 @@
                   display: flex;
                   flex-direction: column;
                   gap: 0.2rem;
-                  // border-radius: 0.6rem;
+                  border-radius: 0.6rem;
                   overflow: hidden;
                }
                .PanelService-section-belonging-empty {

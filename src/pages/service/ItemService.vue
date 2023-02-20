@@ -8,7 +8,7 @@
    import ImageView from "@/components/ImageView.vue";
 
    import ServicePrice from "@/items/ServicePrice";
-   import ServiceState from "@/items/tools/ServiceState.js";
+   import ServiceStates from "@/items/tools/ServiceStates.js";
 
    import { format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
    import U from "@/U";
@@ -67,7 +67,7 @@
          },
 
          state: (c) => c.item.state,
-         primaryColor: (c) => ServiceState.getResourceByKey(c.state).color,
+         primaryColor: (c) => ServiceStates.findByKey(c.state).color,
       },
       methods: {
          getPropertyByKey(key) {

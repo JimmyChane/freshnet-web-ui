@@ -21,7 +21,7 @@
       @mouseover="(x) => $emit('mouseover', x)"
       @mouseleave="(x) => $emit('mouseleave', x)"
    >
-      <Icon :src="src" :alt="alt" />
+      <Icon class="ButtonIcon-icon" :src="src" :alt="alt" />
    </a>
    <button
       class="ButtonIcon transition"
@@ -30,7 +30,7 @@
       @mouseover="(x) => $emit('mouseover', x)"
       @mouseleave="(x) => $emit('mouseleave', x)"
    >
-      <Icon :src="src" :alt="alt" />
+      <Icon class="ButtonIcon-icon" :src="src" :alt="alt" />
    </button>
 </template>
 
@@ -58,6 +58,10 @@
       &:hover,
       &:focus {
          background: rgba(0, 0, 0, 0.1);
+      }
+
+      .ButtonIcon-icon {
+         font-size: inherit;
       }
    }
 </style>
