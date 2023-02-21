@@ -15,6 +15,39 @@
          phoneNumber: (c) => c.customer.phoneNumber,
          phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
          isPhoneNumber: (c) => !!c.phoneNumberStr,
+
+         menus: (c) => {
+            const menus = [];
+
+            if (c.isPhoneNumber) {
+               menus.push({
+                  title: "Chat with Whatsapp",
+                  icon: c.host.icon("whatsapp-color"),
+                  alth: "Chat on Whatsapp",
+                  href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
+                  target: "_blank",
+               });
+               menus.push({
+                  title: "Call",
+                  icon: c.host.icon("call-000000"),
+                  href: `tel:+6${c.phoneNumberStr}`,
+               });
+            }
+            menus.push({
+               title: "Find",
+               to: {
+                  path: "/manage/customer",
+                  query: { name: c.name, phoneNumber: c.phoneNumberStr },
+               },
+            });
+
+            menus.push({
+               icon: c.host.icon("trash-000000"),
+               click: () => c.actions.onClickRemove(c.service),
+            });
+
+            return menus;
+         },
       },
    };
 </script>
@@ -34,10 +67,7 @@
             icon: host.icon('close-000000'),
             click: () => actions.onClickClose(),
          }"
-         :rightMenus="{
-            icon: host.icon('trash-000000'),
-            click: () => actions.onClickRemove(service),
-         }"
+         :rightMenus="menus"
       >
          <div class="PanelService-actionbar-customer" v-if="customer">
             <div class="PanelService-actionbar-customer-data">

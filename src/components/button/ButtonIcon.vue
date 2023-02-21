@@ -6,7 +6,8 @@
          src: { type: String, default: "" },
          alt: { type: String, default: "" },
          href: { type: String, default: "" },
-         target: { type: String, default: "_blank" },
+         target: { type: String, default: "" },
+         to: { default: undefined },
       },
    };
 </script>
@@ -23,6 +24,18 @@
    >
       <Icon class="ButtonIcon-icon" :src="src" :alt="alt" />
    </a>
+
+   <router-link
+      class="ButtonIcon transition"
+      v-else-if="to !== undefined"
+      :to="to"
+      @click="$emit('click')"
+      @mouseover="(x) => $emit('mouseover', x)"
+      @mouseleave="(x) => $emit('mouseleave', x)"
+   >
+      <Icon class="ButtonIcon-icon" :src="src" :alt="alt"
+   /></router-link>
+
    <button
       class="ButtonIcon transition"
       v-else

@@ -25,13 +25,27 @@
             v-if="menu.icon !== undefined"
             :src="menu.icon"
             :alt="menu.title"
-            @click="() => menu.click()"
+            :href="menu.href"
+            :target="menu.target"
+            :to="menu.to"
+            @click="
+               () => {
+                  if (typeof menu.click === 'function') menu.click();
+               }
+            "
          />
          <ButtonText
             v-else-if="menu.title !== undefined"
             class="ActionBar2Menus-menu-textButton"
             :text="menu.title"
-            @click="() => menu.click()"
+            :href="menu.href"
+            :target="menu.target"
+            :to="menu.to"
+            @click="
+               () => {
+                  if (typeof menu.click === 'function') menu.click();
+               }
+            "
          />
       </div>
    </div>

@@ -239,64 +239,6 @@
                   </Section>
 
                   <Section
-                     :menus="{
-                        title: 'Update Customer',
-                        icon: host.icon('edit-505050'),
-                        click: () => actions.onClickUpdateCustomer(customer),
-                     }"
-                  >
-                     <div class="PanelService-section-customer">
-                        <div class="PanelService-section-customer-info" v-if="customer">
-                           <span class="PanelService-section-customer-name" v-if="name">{{
-                              name
-                           }}</span>
-                           <span
-                              class="PanelService-section-customer-phoneNumber"
-                              v-if="phoneNumberStr"
-                              >{{ phoneNumberStr }}</span
-                           >
-                        </div>
-
-                        <div class="PanelService-section-customer-contactLinks">
-                           <a
-                              class="transition"
-                              :href="`https://api.whatsapp.com/send?phone=6${phoneNumberStr}`"
-                              target="_blank"
-                              v-if="isPhoneNumber"
-                           >
-                              <img
-                                 :src="host.icon('whatsapp-color')"
-                                 alt="Whatsapp Logo"
-                              />
-                              <span>Chat with Whatsapp</span>
-                           </a>
-
-                           <a
-                              class="transition"
-                              :href="`tel:+6${phoneNumberStr}`"
-                              v-if="isPhoneNumber"
-                           >
-                              <img :src="host.icon('call-000000')" alt="Call Logo" />
-                              <span>Call</span>
-                           </a>
-
-                           <router-link
-                              class="transition"
-                              :to="{
-                                 path: '/manage/customer',
-                                 query: {
-                                    name: name,
-                                    phoneNumber: phoneNumberStr,
-                                 },
-                              }"
-                           >
-                              <span>Find</span>
-                           </router-link>
-                        </div>
-                     </div>
-                  </Section>
-
-                  <Section
                      title="Problem"
                      :menus="{
                         title: 'Update Problem',
@@ -478,63 +420,7 @@
                      text-align: start;
                   }
                }
-               .PanelService-section-customer {
-                  width: 100%;
-                  display: flex;
-                  flex-direction: row;
-                  flex-direction: column;
-                  align-items: flex-start;
-                  flex-wrap: nowrap;
-                  justify-content: space-between;
 
-                  align-items: center;
-                  gap: 0.5rem;
-
-                  .PanelService-section-customer-info {
-                     width: 100%;
-                     display: flex;
-                     flex-direction: column;
-                     align-items: flex-start;
-
-                     .PanelService-section-customer-name {
-                        font-weight: 500;
-                     }
-                     .PanelService-section-customer-phoneNumber {
-                        font-size: 0.9rem;
-                     }
-                  }
-
-                  .PanelService-section-customer-contactLinks {
-                     width: 100%;
-                     gap: 0.2rem;
-                     display: flex;
-                     flex-direction: row;
-                     flex-wrap: wrap;
-
-                     & > * {
-                        padding: 0.7rem;
-                        gap: 0.5rem;
-                        text-decoration: none;
-                        color: inherit;
-                        background-color: #f4f4f4;
-                        border: 1px solid #dddddd;
-                        border-radius: 1rem;
-
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-
-                        &:hover {
-                           background-color: #e4e4e4;
-                        }
-
-                        img {
-                           width: 1rem;
-                           height: 1rem;
-                        }
-                     }
-                  }
-               }
                .PanelService-section-description {
                   width: 100%;
                   display: flex;
