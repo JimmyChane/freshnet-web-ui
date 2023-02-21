@@ -7,7 +7,7 @@ import ModuleBundle from "./data/ProductBundle.js";
 import Image from "./Image.js";
 import ProductSpecContent from "./ProductSpecContent.js";
 import ProductPrice from "./ProductPrice.js";
-import ItemSearcher from "./tools/ItemSearcher.js";
+import ItemSearcher from "../objects/ItemSearcher.js";
 
 import U from "@/U.js";
 
@@ -88,15 +88,15 @@ class Product {
       let { brand, category, specifications } = this;
 
       return strs.reduce((count, str) => {
-         count += textContains("product", str) ? 1 : 0;
-         count += textContains(this.title, str) ? 1 : 0;
-         count += textContains(this.description, str) ? 1 : 0;
-         count += brand && textContains(brand.title, str) ? 1 : 0;
-         count += category && textContains(category.title, str) ? 1 : 0;
+         if (textContains("product", str)) count++;
+         if (textContains(this.title, str)) count++;
+         if (textContains(this.description, str)) count++;
+         if (brand && textContains(brand.title, str)) count++;
+         if (category && textContains(category.title, str)) count++;
+
          count += specifications.reduce((count, specContent) => {
-            let { type, content } = specContent;
-            count += type && textContains(type.title, str) ? 1 : 0;
-            count += textContains(content, str) ? 1 : 0;
+            if (specContent.type && textContains(specContent.type.title, str)) count++;
+            if (textContains(specContent.content, str)) count++;
             return count;
          }, 0);
          return count;
@@ -215,9 +215,7 @@ class Product {
       let normalValue = price.normal ? price.normal.value : 0;
       let promotionValue = price.normal ? price.promotion.value : 0;
 
-      return (
-         normalValue > 0 && promotionValue > 0 && normalValue > promotionValue
-      );
+      return normalValue > 0 && promotionValue > 0 && normalValue > promotionValue;
    }
    isStockAvailable() {
       let stock = this.stock;
@@ -240,9 +238,7 @@ class Product {
       let { normal, promotion } = price ? price : {};
       this.price = {
          normal: ProductPrice.parseString(U.isString(normal) ? normal : ""),
-         promotion: ProductPrice.parseString(
-            U.isString(promotion) ? promotion : "",
-         ),
+         promotion: ProductPrice.parseString(U.isString(promotion) ? promotion : ""),
       };
    }
 

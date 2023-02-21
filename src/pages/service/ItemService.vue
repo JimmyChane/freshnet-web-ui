@@ -8,7 +8,7 @@
    import ImageView from "@/components/ImageView.vue";
 
    import ServicePrice from "@/items/ServicePrice";
-   import ServiceStates from "@/items/tools/ServiceStates.js";
+   import ServiceStates from "@/objects/ServiceStates.js";
 
    import { format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
    import U from "@/U";

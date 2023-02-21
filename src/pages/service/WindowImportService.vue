@@ -1,7 +1,7 @@
 <script>
 	import Window from "@/components/window/Window.vue";
 	import TypeSelector from "@/components/selector/TypeSelector.vue";
-	import ServiceStates from "@/items/tools/ServiceStates.js";
+	import ServiceStates from "@/objects/ServiceStates.js";
 	import ModuleService from "@/items/data/Service.js";
 	import LayoutFindCustomer from "./LayoutFindCustomer.vue";
 	import BodyUser from "./WindowUpdateService-user.vue";

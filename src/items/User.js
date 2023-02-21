@@ -1,4 +1,6 @@
 import ModuleUser, { Type } from "./data/User.js";
+import ItemSearcher from "../objects/ItemSearcher.js";
+const textContains = ItemSearcher.textContains;
 
 export default class User {
    static Type = ModuleUser.Type;
@@ -29,7 +31,11 @@ export default class User {
       });
    }
    toCount(strs) {
-      return 0;
+      return strs.reduce((count, str) => {
+         if (textContains(this.username, str)) count++;
+         if (textContains(this.name, str)) count++;
+         return count;
+      }, 0);
    }
    toTextUserType() {
       if (this.isTypeAdmin()) return "Admin";

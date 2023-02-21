@@ -1,5 +1,5 @@
 import ModulePhoneNumber from "./data/PhoneNumber.js";
-import ItemSearcher from "./tools/ItemSearcher.js";
+import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
 class PhoneNumber {
@@ -23,7 +23,7 @@ class PhoneNumber {
    }
    toCount(strs) {
       return strs.reduce((count, str) => {
-         count += textContains(this.value, str) ? 1 : 0;
+         if (textContains(this.value, str)) count++;
          return count;
       }, 0);
    }

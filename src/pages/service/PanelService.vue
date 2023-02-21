@@ -10,7 +10,7 @@
    import AddEvent from "./PanelService-AddEvent.vue";
    import PanelEvents from "./PanelEvents.vue";
 
-   import ServiceStates from "@/items/tools/ServiceStates.js";
+   import ServiceStates from "@/objects/ServiceStates.js";
 
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 

@@ -1,6 +1,6 @@
 import Image from "./Image.js";
 import ModuleBrand from "./data/ProductBrand.js";
-import ItemSearcher from "./tools/ItemSearcher.js";
+import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
 class Brand {
@@ -30,8 +30,8 @@ class Brand {
    }
    toCount(strs) {
       return strs.reduce((count, str) => {
-         count += textContains(this.title, str) ? 1 : 0;
-         count += textContains("brand", str) ? 1 : 0;
+         if (textContains(this.title, str)) count++;
+         if (textContains(this.title, str)) count++;
          return count;
       }, 0);
    }

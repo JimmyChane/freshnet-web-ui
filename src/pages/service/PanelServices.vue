@@ -3,7 +3,7 @@
    import ListServices from "./ListServices.vue";
 
    import ModuleService from "@/items/data/Service.js";
-   import ServiceStates from "@/items/tools/ServiceStates.js";
+   import ServiceStates from "@/objects/ServiceStates.js";
    import Empty from "@/components/Empty.vue";
 
    import U from "@/U.js";

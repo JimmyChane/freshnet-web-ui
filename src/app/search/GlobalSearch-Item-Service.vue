@@ -1,5 +1,5 @@
 <script>
-   import ServiceStates from "@/items/tools/ServiceStates.js";
+   import ServiceStates from "@/objects/ServiceStates.js";
    import ImageViews from "@/components/ImageViews.vue";
    import ItemSearch from "./GlobalSearch-Item.vue";
 

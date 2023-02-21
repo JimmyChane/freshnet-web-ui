@@ -1,11 +1,11 @@
 import ServiceTimestamp from "./ServiceTimestamp";
 import ServiceEvent from "./ServiceEvent.js";
 import ServicePrice from "./ServicePrice.js";
-import ServiceStates from "./tools/ServiceStates.js";
+import ServiceStates from "@/objects/ServiceStates.js";
 import ServiceCustomer from "./ServiceCustomer.js";
 import ServiceImage from "./ServiceImage";
 import ServiceLabel from "./ServiceLabel";
-import ItemSearcher from "./tools/ItemSearcher.js";
+import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
 import ModuleService from "./data/Service.js";
@@ -89,19 +89,16 @@ class Service {
       const stateTitle = stateRes ? stateRes.title : "";
 
       let count = strs.reduce((count, str) => {
-         count += textContains("service", str) ? 1 : 0;
-         count += textContains(description, str) ? 1 : 0;
-         count += this.isUrgent() ? textContains("urgent", str) : 0;
-         count += this.isWarranty() ? textContains("warranty", str) : 0;
-         count += textContains(stateTitle, str) ? 1 : 0;
+         if (textContains("service", str)) count++;
+         if (textContains(description, str)) count++;
+         if (this.isUrgent() && textContains("warranty", str)) count++;
+         if (this.isWarranty() && textContains("warranty", str)) count++;
+         if (textContains(stateTitle, str)) count++;
          return count;
       }, 0);
-      count += this.events.reduce((count, event) => {
-         count += event.toCount(strs);
-         return count;
-      }, 0);
-      count += timestamp ? timestamp.toCount(strs) : 0;
-      count += customer ? customer.toCount(strs) : 0;
+      count += this.events.reduce((count, event) => count + event.toCount(strs), 0);
+      if (timestamp && timestamp.toCount(strs)) count++;
+      if (customer && customer.toCount(strs)) count++;
 
       return count;
    }

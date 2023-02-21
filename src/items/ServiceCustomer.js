@@ -1,6 +1,6 @@
 import PhoneNumber from "./PhoneNumber.js";
 import U from "@/U.js";
-import ItemSearcher from "./tools/ItemSearcher.js";
+import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
 class ServiceCustomer {
@@ -27,11 +27,11 @@ class ServiceCustomer {
    }
    toCount(strs) {
       let count = strs.reduce((count, str) => {
-         count += textContains("customer", str) ? 1 : 0;
-         count += textContains(this.name, str) ? 1 : 0;
+         if (textContains("customer", str)) count++;
+         if (textContains(this.name, str)) count++;
          return count;
       }, 0);
-      count += this.phoneNumber ? this.phoneNumber.toCount(strs) : 0;
+      if (this.phoneNumber) count += this.phoneNumber.toCount(strs);
 
       return count;
    }
