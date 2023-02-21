@@ -21,29 +21,32 @@
 
             if (c.isPhoneNumber) {
                menus.push({
-                  title: "Chat with Whatsapp",
+                  title: "Chat with Customer on Whatsapp",
                   icon: c.host.icon("whatsapp-color"),
                   alth: "Chat on Whatsapp",
                   href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
                   target: "_blank",
                });
                menus.push({
-                  title: "Call",
+                  title: "Call Customer",
                   icon: c.host.icon("call-000000"),
                   href: `tel:+6${c.phoneNumberStr}`,
                });
             }
             menus.push({
-               title: "Find",
+               title: "Find Customer",
                to: {
                   path: "/manage/customer",
                   query: { name: c.name, phoneNumber: c.phoneNumberStr },
                },
+               isHidden: true,
             });
 
             menus.push({
+               title: "Delete Service",
                icon: c.host.icon("trash-000000"),
                click: () => c.actions.onClickRemove(c.service),
+               isHidden: true,
             });
 
             return menus;

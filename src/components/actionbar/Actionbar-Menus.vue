@@ -1,16 +1,27 @@
 <script>
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
    import ButtonText from "@/components/button/ButtonText.vue";
+   import MenuOption from "@/components/button/MenuOption.vue";
 
    export default {
-      components: { ButtonIcon, ButtonText },
-      props: {
-         menus: { type: Array, default: () => [] },
-      },
+      components: { ButtonIcon, ButtonText, MenuOption },
+      props: { menus: { type: Array, default: () => [] } },
       computed: {
          Menus: (c) => {
             return (Array.isArray(c.menus) ? c.menus : []).filter((menu) => {
                return typeof menu === "object" && menu !== null;
+            });
+         },
+         visibleMenus: (c) => {
+            return c.Menus.filter((menu) => {
+               if (typeof menu.isHidden !== "boolean") return true;
+               return !menu.isHidden;
+            });
+         },
+         hiddenMenus: (c) => {
+            return c.Menus.filter((menu) => {
+               if (typeof menu.isHidden !== "boolean") return false;
+               return menu.isHidden;
             });
          },
       },
@@ -19,7 +30,7 @@
 
 <template>
    <div class="ActionBar2Menus" v-if="menus.length">
-      <div class="ActionBar2Menus-menu" v-for="menu in Menus" :key="menu.key">
+      <div class="ActionBar2Menus-menu" v-for="menu in visibleMenus" :key="menu.key">
          <ButtonIcon
             class="ActionBar2Menus-menu-icon"
             v-if="menu.icon !== undefined"
@@ -48,6 +59,7 @@
             "
          />
       </div>
+      <MenuOption v-if="hiddenMenus.length" :menus="hiddenMenus" />
    </div>
 </template>
 
