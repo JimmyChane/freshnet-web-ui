@@ -4,12 +4,10 @@ import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
 class Order {
-   static STATUS = {
-      PENDING: ModuleOrder.Status.Pending,
-      COMPLETED: ModuleOrder.Status.Completed,
+   static Status = {
+      Pending: ModuleOrder.Status.Pending,
+      Completed: ModuleOrder.Status.Completed,
    };
-   static STATUS_PENDING = ModuleOrder.Status.Pending; // legacy
-   static STATUS_COMPLETED = ModuleOrder.Status.Completed; //legacy
 
    stores = null;
 
@@ -21,7 +19,7 @@ class Order {
    customer = null;
    content = "";
    createdAt = "";
-   status = Order.STATUS_PENDING;
+   status = Order.Status.Pending;
 
    fromData(data) {
       data = ModuleOrder.trim(data);

@@ -115,11 +115,11 @@ export default {
          );
       };
       context.actions.updateToPendingOfId = async (context, id = "") => {
-         const status = Order.STATUS.PENDING;
+         const status = Order.Status.Pending;
          return context.dispatch("updateStatusOfId", { id, status });
       };
       context.actions.updateToCompletedOfId = async (context, id = "") => {
-         const status = Order.STATUS.COMPLETED;
+         const status = Order.Status.Completed;
          return context.dispatch("updateStatusOfId", { id, status });
       };
 
