@@ -1,6 +1,6 @@
 <script>
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
-   import LeftNavItem from "./LeftNav-Item.vue";
+   import LeftNavItem from "./NavigationLeft-Item.vue";
 
    export default {
       emits: ["click", "click-expand"],
@@ -19,14 +19,14 @@
          },
          styleClass() {
             if (this.isSelected) {
-               if (this.isSelectedDark) return "LeftNavQuery-isSelectedDark";
-               return "LeftNavQuery-isSelected";
+               if (this.isSelectedDark) return "LeftNavLink-isSelectedDark";
+               return "LeftNavLink-isSelected";
             }
-            return "LeftNavQuery-notSelected";
+            return "LeftNavLink-notSelected";
          },
-
          hasGroups() {
-            return Array.isArray(this.item.groups) && this.item.groups.length;
+            const groups = this.item;
+            return Array.isArray(groups) && groups.length;
          },
 
          isWide: (context) => context.item.isWide(),
@@ -37,31 +37,32 @@
 </script>
 
 <template>
-   <button
+   <router-link
       :class="[
-         'LeftNavQuery',
+         'LeftNavLink',
          styleClass,
-         `LeftNavQuery-${isWide ? 'isWide' : 'isThin'}`,
-         isSelected && isExpanded ? 'LeftNavQuery-isExpanded' : '',
-         hasGroup2s && isSelected ? 'LeftNavQuery-hasGroup2s-isSelected' : '',
+         `LeftNavLink-${isWide ? 'isWide' : 'isThin'}`,
+         isSelected && isExpanded ? 'LeftNavLink-isExpanded' : '',
+         hasGroup2s && isSelected ? 'LeftNavLink-hasGroup2s-isSelected' : '',
       ]"
+      :to="{ path: href }"
       @click="$emit('click', item)"
    >
-      <div class="LeftNavQuery-body transition">
-         <div class="LeftNavQuery-item-parent">
+      <div class="LeftNavLink-body transition">
+         <div class="LeftNavLink-item-parent">
             <LeftNavItem
-               class="LeftNavQuery-item"
+               class="LeftNavLink-item"
                :item="item"
                :isSelectedDark="isSelectedDark"
                :isWide="isWide"
             />
          </div>
 
-         <div class="LeftNavQuery-arrow" v-if="isWide && hasGroups">
+         <div class="LeftNavLink-arrow" v-if="isWide && hasGroups">
             <ButtonIcon
                :class="[
-                  'LeftNavQuery-arrow-button',
-                  `LeftNavQuery-arrow-button-${
+                  'LeftNavLink-arrow-button',
+                  `LeftNavLink-arrow-button-${
                      !isSelected && isExpanded ? 'isExpanded' : 'isCollapsed'
                   }`,
                ]"
@@ -70,11 +71,11 @@
             />
          </div>
       </div>
-   </button>
+   </router-link>
 </template>
 
 <style lang="scss" scoped>
-   .LeftNavQuery {
+   .LeftNavLink {
       width: 100%;
       display: flex;
       flex-direction: row;
@@ -85,7 +86,7 @@
       border: none;
       text-align: start;
       padding: 0.1em 0.4em;
-      .LeftNavQuery-body {
+      .LeftNavLink-body {
          display: flex;
          flex-direction: row;
          align-items: center;
@@ -94,7 +95,7 @@
          background: none;
          border: none;
          position: relative;
-         .LeftNavQuery-item-parent {
+         .LeftNavLink-item-parent {
             height: fit-content;
             width: 100%;
             display: flex;
@@ -104,7 +105,7 @@
             justify-content: flex-start;
             padding: 0.7rem 1rem;
          }
-         .LeftNavQuery-arrow {
+         .LeftNavLink-arrow {
             flex-grow: 0;
             position: absolute;
             right: 0.5rem;
@@ -113,64 +114,70 @@
       }
    }
 
-   .LeftNavQuery-isSelected {
+   .LeftNavLink-isSelected {
       cursor: default;
-      .LeftNavQuery-body {
+      .LeftNavLink-body {
          background: var(--primary-color);
-         .LeftNavQuery-item-parent {
+         background: hsla(0, 0%, 0%, 0.1);
+         .LeftNavLink-item-parent {
             color: #2a4858;
+            color: black;
          }
-         .LeftNavQuery-arrow {
+         .LeftNavLink-arrow {
             pointer-events: none;
          }
       }
    }
-   .LeftNavQuery-notSelected {
+   .LeftNavLink-notSelected {
       cursor: pointer;
       &:hover,
       &:focus {
-         .LeftNavQuery-body {
+         .LeftNavLink-body {
             box-shadow: var(--default-box-shadow);
-            background: #cdd9e6;
+            background: hsl(211, 33%, 85%);
+            background: hsla(0, 0%, 0%, 0.1);
          }
       }
-      .LeftNavQuery-body {
-         .LeftNavQuery-item-parent {
+      .LeftNavLink-body {
+         .LeftNavLink-item-parent {
             color: #2a4858;
+            color: black;
          }
-         .LeftNavQuery-arrow {
-            .LeftNavQuery-arrow-button {
+         .LeftNavLink-arrow {
+            .LeftNavLink-arrow-button {
                transform: rotate(-90deg);
             }
          }
       }
    }
 
-   .LeftNavQuery-isSelectedDark {
+   .LeftNavLink-isSelectedDark {
       cursor: default;
-      .LeftNavQuery-body {
+      .LeftNavLink-body {
          background: var(--primary-color);
-         .LeftNavQuery-item-parent {
+         background-color: hsla(0, 0%, 0%, 0.8);
+         .LeftNavLink-item-parent {
             color: white;
          }
       }
    }
 
-   .LeftNavQuery-isWide {
-      .LeftNavQuery-body {
+   .LeftNavLink-isWide {
+      .LeftNavLink-body {
          width: 100%;
          border-radius: 0.5em;
-         .LeftNavQuery-item-parent {
+         .LeftNavLink-item-parent {
             padding-right: 3rem;
          }
       }
    }
-   .LeftNavQuery-isThin {
-      .LeftNavQuery-body {
-         border-radius: 50%;
+   .LeftNavLink-isThin {
+      .LeftNavLink-body {
+         // border-radius: 50%;
+         border-radius: 0.5rem;
          align-items: center;
          justify-content: center;
-         .LeftNavQuery-item-parent {
+         .LeftNavLink-item-parent {
             width: min-content;
             align-items: center;
             justify-content: center;
@@ -179,22 +186,22 @@
       }
    }
 
-   .LeftNavQuery-isExpanded {
-      .LeftNavQuery-body {
+   .LeftNavLink-isExpanded {
+      .LeftNavLink-body {
          background: #d9dbdd;
-         .LeftNavQuery-arrow {
-            .LeftNavQuery-arrow-button {
+         .LeftNavLink-arrow {
+            .LeftNavLink-arrow-button {
                transform: rotate(0deg);
             }
          }
       }
    }
 
-   .LeftNavQuery-hasGroup2s-isSelected {
+   .LeftNavLink-hasGroup2s-isSelected {
       width: 100%;
       border-radius: 0;
       padding: 0;
-      .LeftNavQuery-body {
+      .LeftNavLink-body {
          width: 100%;
          border-radius: 0;
       }
