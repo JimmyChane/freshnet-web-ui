@@ -1,5 +1,6 @@
 <script>
-   const Sort = { DateCreated: 1, Name: 2, PhoneNumber: 3, Price: 4 };
+   const SortMode = { DateCreated: 1, Name: 2, PhoneNumber: 3, Price: 4 };
+   const GroupMode = { None: 0, DateCreated: 1 };
 
    import ItemService from "./ItemService.vue";
 
@@ -7,12 +8,14 @@
 
    export default {
       Mode: ItemService.Mode,
-      Sort,
+      SortMode,
+      GroupMode,
 
       components: { ItemService },
       props: {
          mode: { type: Number, default: ItemService.Mode.List },
-         sort: { type: Number, default: Sort.DateCreated },
+         sortMode: { type: Number, default: SortMode.DateCreated },
+         groupMode: { type: Number, default: GroupMode.DateCreated },
 
          items: { type: Array, default: () => [] },
          item: { type: Object, default: () => null },
@@ -38,10 +41,10 @@
          isListView: (c) => c.mode === ItemService.Mode.List,
          isDetailView: (c) => c.mode === ItemService.Mode.Detail,
 
-         isSortDateCreated: (c) => c.sort === Sort.DateCreated,
-         isSortName: (c) => c.sort === Sort.Name,
-         isSortPhoneNumber: (c) => c.sort === Sort.PhoneNumber,
-         isSortPrice: (c) => c.sort === Sort.Price,
+         isSortDateCreated: (c) => c.sortMode === SortMode.DateCreated,
+         isSortName: (c) => c.sortMode === SortMode.Name,
+         isSortPhoneNumber: (c) => c.sortMode === SortMode.PhoneNumber,
+         isSortPrice: (c) => c.sortMode === SortMode.Price,
 
          sortedItems: (c) => {
             if (c.isSortDateCreated)
@@ -65,8 +68,13 @@
          },
 
          groups() {
-            const items = this.sortedItems;
-            const groups = this.groupsOfDate(items);
+            const groups =
+               this.groupMode === GroupMode.DateCreated
+                  ? this.groupsOfDate(this.items)
+                  : [{ items: this.items }];
+
+            for (const group of groups) this.sortItems(group.items);
+
             return groups;
          },
       },
@@ -110,6 +118,26 @@
 
                return groups;
             }, []);
+         },
+         sortItems(items) {
+            if (this.isSortDateCreated)
+               return items.sort((item1, item2) => {
+                  return item1.compareTimestamp(item2);
+               });
+            if (this.isSortName)
+               return items.sort((item1, item2) => {
+                  return item1.customer.compareName(item2.customer);
+               });
+            if (this.isSortPhoneNumber)
+               return items.sort((item1, item2) => {
+                  return item1.customer.comparePhoneNumber(item2.customer);
+               });
+            if (this.isSortPrice)
+               return items.sort((item1, item2) => {
+                  return item1.comparePrice(item2);
+               });
+
+            return items;
          },
 
          isItemSelected(item) {
