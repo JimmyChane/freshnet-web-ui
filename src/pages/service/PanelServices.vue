@@ -85,6 +85,9 @@
                menu.click = () => {
                   this.currentGroupIndex = this.groupMenus.indexOf(menu);
                };
+               menu.isSelected = () => {
+                  return this.groupMenus.indexOf(menu) === this.currentGroupIndex;
+               };
                return menu;
             }),
 
@@ -96,6 +99,9 @@
             ].map((menu) => {
                menu.click = () => {
                   this.currentSortIndex = this.sortMenus.indexOf(menu);
+               };
+               menu.isSelected = () => {
+                  return this.sortMenus.indexOf(menu) === this.currentSortIndex;
                };
                return menu;
             }),
@@ -118,7 +124,7 @@
             return 0;
          },
          SortMode() {
-            const menu = this.sortMenus[this.currentSortIndex];
+            const menu = this.sortMenus.find((menu) => menu.isSelected());
             return menu ? menu.key : ListServices.Sort.DateCreated;
          },
       },
@@ -145,8 +151,7 @@
 
          filterList(services, key) {
             const tab = this.stateMenus.find((tab) => tab.key === key);
-            if (tab)
-               tab.list = services.filter((service) => service.state === key);
+            if (tab) tab.list = services.filter((service) => service.state === key);
          },
 
          invalidateList() {
@@ -197,9 +202,7 @@
       />
 
       <ListServices
-         v-if="
-            stateMenus[stateMenuIndex] && stateMenus[stateMenuIndex].list.length
-         "
+         v-if="stateMenus[stateMenuIndex] && stateMenus[stateMenuIndex].list.length"
          :mode="ViewMode"
          :sort="SortMode"
          :items="items"
@@ -207,10 +210,7 @@
          @click-item="(item) => $emit('click-service', item)"
       />
 
-      <Empty
-         v-if="!items.length && !serviceStore.getters.isLoading"
-         :icon="iconEmpty"
-      />
+      <Empty v-if="!items.length && !serviceStore.getters.isLoading" :icon="iconEmpty" />
    </div>
 </template>
 

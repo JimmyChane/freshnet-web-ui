@@ -99,13 +99,13 @@
                :menu="currentGroupMenu ? currentGroupMenu : null"
                :menus="groupMenus"
             />
-            <!-- <LabelMenus
+            <LabelMenus
                title="Sort"
                :style="{ '--primary-color': primaryColorLabel.toString() }"
                :primaryColor="primaryColorLabel"
                :menu="currentSortMenu ? currentSortMenu : null"
                :menus="sortMenus"
-            /> -->
+            />
          </div>
       </div>
 

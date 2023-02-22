@@ -1,5 +1,6 @@
 import ModulePhoneNumber from "./data/PhoneNumber.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
+import U from "@/U.js";
 const textContains = ItemSearcher.textContains;
 
 class PhoneNumber {

@@ -43,8 +43,47 @@
          isSortPhoneNumber: (c) => c.sort === Sort.PhoneNumber,
          isSortPrice: (c) => c.sort === Sort.Price,
 
+         sortedItems: (c) => {
+            if (c.isSortDateCreated)
+               return c.items.sort((item1, item2) => {
+                  return item1.compareTimestamp(item2);
+               });
+            if (c.isSortName)
+               return c.items.sort((item1, item2) => {
+                  return item1.customer.compareName(item2.customer);
+               });
+            if (c.isSortPhoneNumber)
+               return c.items.sort((item1, item2) => {
+                  return item1.customer.comparePhoneNumber(item2.customer);
+               });
+            if (c.isSortPrice)
+               return c.items.sort((item1, item2) => {
+                  return item1.comparePrice(item2);
+               });
+
+            return items;
+         },
+
          groups() {
-            const groups = this.items.reduce((groups, item) => {
+            const items = this.sortedItems;
+            const groups = this.groupsOfDate(items);
+            return groups;
+         },
+      },
+      watch: {
+         item() {
+            if (!this.item) {
+               setTimeout(() => {
+                  this.itemSelected = this.item;
+               }, 500);
+            } else {
+               this.itemSelected = this.item;
+            }
+         },
+      },
+      methods: {
+         groupsOfDate(items) {
+            return items.reduce((groups, item) => {
                const ts = item.timestamp;
                const time = ts.time;
 
@@ -71,37 +110,8 @@
 
                return groups;
             }, []);
-
-            if (this.isSortDateCreated) return groups;
-
-            for (const group of groups) {
-               group.items.sort((item1, item2) => {
-                  if (this.isSortName) {
-                     return item1.customer.compareName(item2.customer);
-                  }
-                  if (this.isSortPhoneNumber) {
-                     return item1.customer.comparePhoneNumber(item2.customer);
-                  }
-                  if (this.isSortPrice) return item1.comparePrice(item2);
-                  return 0;
-               });
-            }
-
-            return groups;
          },
-      },
-      watch: {
-         item() {
-            if (!this.item) {
-               setTimeout(() => {
-                  this.itemSelected = this.item;
-               }, 500);
-            } else {
-               this.itemSelected = this.item;
-            }
-         },
-      },
-      methods: {
+
          isItemSelected(item) {
             return item === this.itemSelected;
          },
