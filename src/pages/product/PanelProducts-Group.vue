@@ -1,5 +1,5 @@
 <script>
-   import Arrow from "./viewerProduct/ViewerProduct-ImagePreview-Arrow.vue";
+   import Arrow from "./PanelProducts-Group-Arrow.vue";
    import ItemProduct from "./ItemProduct.vue";
 
    export default {
