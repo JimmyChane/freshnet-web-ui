@@ -1,3 +1,6 @@
+import ItemSearcher from "@/objects/ItemSearcher.js";
+const textContains = ItemSearcher.textContains;
+
 export default class Price {
    static #parseCurrency(content) {
       const indexStart = content.indexOf(this.DefaultCurrency);
@@ -116,5 +119,9 @@ export default class Price {
       }
 
       return currency ? `${currency} ${text}` : `${text}`;
+   }
+
+   toCount(strs) {
+      return strs.reduce((count, str) => count + textContains(this.toString(), str), 0);
    }
 }

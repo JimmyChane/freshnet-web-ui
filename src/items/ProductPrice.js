@@ -1,6 +1,4 @@
 import Price from "@/objects/Price";
-import ItemSearcher from "../objects/ItemSearcher.js";
-const textContains = ItemSearcher.textContains;
 
 class ProductPrice {
    static Currency = Price.DefaultCurrency;
@@ -29,15 +27,32 @@ class ProductPrice {
          value: this.#price.amount,
       };
    }
+   toCount(strs) {
+      return this.#price.toCount(strs);
+   }
    toString() {
       return this.#price.toString();
    }
-   toCount(strs) {
-      return strs.reduce((count, str) => count + textContains(this.toString(), str), 0);
-   }
 
    compare(item) {
-      return 0;
+      return this.#price.compare(item.#price);
+   }
+
+   plus(value) {
+      const price =
+         value instanceof ProductPrice
+            ? this.#price.plus(value.#price)
+            : this.#price.plus(value);
+      const data = { amount: price.amount, currency: price.currency };
+      return new ServicePrice().fromData(data);
+   }
+   minus(value) {
+      const price =
+         value instanceof ProductPrice
+            ? this.#price.minus(value.#price)
+            : this.#price.minus(value);
+      const data = { amount: price.amount, currency: price.currency };
+      return new ServicePrice().fromData(data);
    }
 
    get value() {

@@ -1,6 +1,4 @@
 import Price from "@/objects/Price";
-import ItemSearcher from "../objects/ItemSearcher.js";
-const textContains = ItemSearcher.textContains;
 
 export default class ServicePrice {
    #price = null;
@@ -23,10 +21,14 @@ export default class ServicePrice {
       };
    }
    toCount(strs) {
-      return strs.reduce((count, str) => count + textContains(this.toString(), str), 0);
+      return this.#price.toCount(strs);
    }
    toString() {
       return this.#price.toString();
+   }
+
+   compare(item) {
+      return this.#price.compare(item.#price);
    }
 
    plus(value) {
@@ -34,14 +36,15 @@ export default class ServicePrice {
          value instanceof ServicePrice
             ? this.#price.plus(value.#price)
             : this.#price.plus(value);
-
-      return new ServicePrice().fromData({
-         amount: price.amount,
-         currency: price.currency,
-      });
+      const data = { amount: price.amount, currency: price.currency };
+      return new ServicePrice().fromData(data);
    }
-
-   compare(item) {
-      return this.#price.compare(item.#price);
+   minus(value) {
+      const price =
+         value instanceof ServicePrice
+            ? this.#price.minus(value.#price)
+            : this.#price.minus(value);
+      const data = { amount: price.amount, currency: price.currency };
+      return new ServicePrice().fromData(data);
    }
 }
