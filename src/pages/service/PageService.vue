@@ -358,11 +358,17 @@
          },
          async invalidateServiceId() {
             this.currentService = null;
-            if (this.currentServiceId) {
-               this.currentService = this.items.find((service) => {
-                  return service.id === this.currentServiceId;
-               });
-            }
+
+            if (!this.currentServiceId) return;
+
+            const currentService = await this.serviceStore.dispatch(
+               "getItemOfId",
+               this.currentServiceId,
+            );
+
+            if (!currentService) return;
+            if (this.currentServiceId === currentService.id)
+               this.currentService = currentService;
          },
 
          clickRefresh() {

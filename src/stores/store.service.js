@@ -248,7 +248,7 @@ export default {
       };
       context.actions.getItemOfId = async (context, id = "") => {
          return context.state.processor.acquire("getItemOfId", async () => {
-            let items = await context.dispatch("getServices");
+            let items = await context.dispatch("getItems");
             return items.find((service) => service.id === id);
          });
       };
