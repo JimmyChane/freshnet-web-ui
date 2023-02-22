@@ -121,7 +121,6 @@
             const y = touch.pageY;
 
             if (x > this.dragTrigger) return;
-            this.focus();
             if (x < this.dragTrigger) x = this.dragTrigger;
             this.refDrawer.onDragStart(x, y);
             this.isDragging = true;
@@ -139,7 +138,10 @@
             const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
             const y = touch.pageY;
             this.refDrawer.onDragEnd(x, y);
-            if (x > this.dragOpen) this.$root.navigation.openNavigationDrawer();
+            if (x > this.dragOpen) {
+               this.$root.navigation.openNavigationDrawer();
+               this.focus();
+            }
             this.isDragging = false;
          },
 
@@ -189,7 +191,10 @@
 <template>
    <Drawer
       ref="Drawer"
-      :class="['NavigationLeft', !isWide ? 'NavigationLeft-isThin' : 'NavigationLeft-isWide']"
+      :class="[
+         'NavigationLeft',
+         !isWide ? 'NavigationLeft-isThin' : 'NavigationLeft-isWide',
+      ]"
       :mode="drawerMode"
       :edge="drawerEdge"
       @click-collapse="() => emitCollapse()"
