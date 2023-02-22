@@ -19,6 +19,23 @@
          icon: (c) => c.group.icon,
          title: (c) => c.group.title,
          items: (c) => c.group.items,
+         refScroll: (c) => c.$refs.scroll,
+      },
+      methods: {
+         clickPrevious() {
+            const { refScroll } = this;
+            refScroll.scrollTo({
+               left: refScroll.scrollLeft - refScroll.offsetWidth,
+               behavior: "smooth",
+            });
+         },
+         clickNext() {
+            const { refScroll } = this;
+            refScroll.scrollTo({
+               left: refScroll.scrollLeft + refScroll.offsetWidth,
+               behavior: "smooth",
+            });
+         },
       },
    };
 </script>
@@ -40,38 +57,43 @@
          />
       </div>
 
-      <div
-         class="PanelProducts-category-items scrollbar"
-         :style="{ 'z-index': '1' }"
-         @scroll="(e) => (scrollLeft = e.target.scrollLeft)"
-      >
-         <router-link
-            v-for="item of items"
-            :key="item.id"
-            :to="{
-               query: { productId: item.id, brand: queryBrandId, stock: queryStock },
-            }"
+      <div class="PanelProducts-category-body">
+         <div
+            :class="['PanelProducts-category-items', 'scrollbar']"
+            ref="scroll"
+            :style="{ 'z-index': '1' }"
+            @scroll="(e) => (scrollLeft = e.target.scrollLeft)"
          >
-            <ItemProduct
-               :mode="layoutMode"
-               :item="item"
-               :isSelected="item.id === currentProductId"
-            />
-         </router-link>
-      </div>
+            <router-link
+               v-for="item of items"
+               :key="item.id"
+               :to="{
+                  query: { productId: item.id, brand: queryBrandId, stock: queryStock },
+               }"
+            >
+               <ItemProduct
+                  :mode="layoutMode"
+                  :item="item"
+                  :isSelected="item.id === currentProductId"
+               />
+            </router-link>
+         </div>
 
-      <!-- <Arrow
-         :style="{ 'z-index': '2' }"
-         :direction="ArrowDirection.Left"
-         :isShowing="scrollLeft > 0"
-         @click="() => {}"
-      />
-      <Arrow
-         :style="{ 'z-index': '2' }"
-         :direction="ArrowDirection.Right"
-         :isShowing="true"
-         @click="() => {}"
-      /> -->
+         <Arrow
+            v-if="!isWide"
+            :style="{ 'z-index': '2' }"
+            :direction="ArrowDirection.Left"
+            :isShowing="scrollLeft > 0"
+            @click="() => clickPrevious()"
+         />
+         <Arrow
+            v-if="!isWide"
+            :style="{ 'z-index': '2' }"
+            :direction="ArrowDirection.Right"
+            :isShowing="true"
+            @click="() => clickNext()"
+         />
+      </div>
    </div>
 </template>
 
@@ -81,8 +103,6 @@
       flex-direction: column;
       align-items: stretch;
       padding: 1rem 0;
-
-      position: relative;
 
       --floating-button-size: 2rem;
 
@@ -100,12 +120,21 @@
             height: 1em;
          }
       }
-      .PanelProducts-category-items {
-         & > * {
-            text-decoration: none;
+      .PanelProducts-category-body {
+         width: 100%;
+         position: relative;
+         display: flex;
+         flex-direction: row;
+
+         .PanelProducts-category-items {
+            width: 100%;
+
             & > * {
-               width: 100%;
-               height: 100%;
+               text-decoration: none;
+               & > * {
+                  width: 100%;
+                  height: 100%;
+               }
             }
          }
       }
@@ -116,6 +145,7 @@
       }
       .PanelProducts-category-items {
          padding: 0 0.7rem;
+         padding-right: 50%;
 
          display: flex;
          flex-direction: row;
@@ -128,7 +158,11 @@
          --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.6);
          --scrollbar-track-margin: 1.3rem;
 
+         scroll-snap-type: x proximity;
+         scroll-padding: 4rem;
+
          & > * {
+            scroll-snap-align: start;
             width: 10rem;
             min-width: 10rem;
             max-width: 10rem;

@@ -38,7 +38,7 @@
 </script>
 
 <template>
-   <button
+   <div
       :class="[
          'ImagePreviewArrow',
          isShowing ? '' : 'ImagePreviewArrow-isHidden',
@@ -52,7 +52,7 @@
       @click="() => $emit('click')"
    >
       <img class="ImagePreviewArrow-arrow transition" :src="arrowIcon" />
-   </button>
+   </div>
 </template>
 
 <style lang="scss" scoped>
