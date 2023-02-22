@@ -226,14 +226,14 @@
 
 <template>
    <div class="PagePrint">
-      <NavigationBar class="PagePrint-actionbar" :title="$options.title" />
+      <NavigationBar :style="{ 'z-index': '3' }" :title="$options.title" />
 
-      <div class="PagePrint-tabs">
+      <div class="PagePrint-tabs" :style="{ 'z-index': '2' }">
          <Tabs v-if="tabs0.length" :items="tabs0" />
          <Tabs v-if="tabs1.length" :items="tabs1" />
       </div>
 
-      <div class="PagePrint-body" v-if="currentLayer">
+      <div class="PagePrint-body" :style="{ 'z-index': '1' }" v-if="currentLayer">
          <Card
             v-for="preview of currentLayer.items"
             :key="preview.title"
@@ -255,10 +255,6 @@
       align-items: center;
       justify-content: flex-start;
 
-      .PagePrint-actionbar {
-         z-index: 2;
-      }
-
       .PagePrint-tabs {
          width: 100%;
          max-width: max-content;
@@ -271,7 +267,6 @@
       }
 
       .PagePrint-body {
-         z-index: 1;
          gap: 2rem;
          padding: 1rem;
 

@@ -56,6 +56,7 @@
    <div class="PagePrintTabs">
       <div
          class="PagePrintTabs-items scrollbar"
+         :style="{ 'z-index': '1' }"
          ref="scroll"
          @scroll="(e) => (scrollLeft = e.target.scrollLeft)"
       >
