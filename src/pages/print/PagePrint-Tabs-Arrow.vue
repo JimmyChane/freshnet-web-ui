@@ -40,33 +40,38 @@
 <template>
    <button
       :class="[
-         'ImagePreviewArrow',
-         isShowing ? '' : 'ImagePreviewArrow-isHidden',
+         'PagePrintTabsArrow',
+         isShowing ? '' : 'PagePrintTabsArrow-isHidden',
          'transition',
       ]"
       :style="{
          '--rotation': rotation,
-         left: isLeft ? '0' : 'unset',
-         right: isRight ? '0' : 'unset',
+         left: isLeft ? '1rem' : 'unset',
+         right: isRight ? '1rem' : 'unset',
       }"
       @click="() => $emit('click')"
    >
-      <img class="ImagePreviewArrow-arrow transition" :src="arrowIcon" />
+      <img class="PagePrintTabsArrow-arrow transition" :src="arrowIcon" />
    </button>
 </template>
 
 <style lang="scss" scoped>
-   .ImagePreviewArrow {
+   .PagePrintTabsArrow {
       --rotation: 90deg;
 
       position: absolute;
       top: 0;
       bottom: 0;
 
-      width: 4rem;
-      height: 100%;
+      --size: 2.2rem;
+      width: var(--size);
+      height: var(--size);
+      aspect-ratio: 1;
 
-      background: none;
+      border-radius: 0.5rem;
+      overflow: hidden;
+
+      background-color: hsla(0, 0%, 100%, 0.9);
       border: none;
       cursor: pointer;
 
@@ -74,22 +79,20 @@
       align-items: center;
       justify-content: center;
 
-      .ImagePreviewArrow-arrow {
-         width: 1.8rem;
-         height: 1.8rem;
+      .PagePrintTabsArrow-arrow {
+         --size: 0.8rem;
+         width: var(--size);
+         height: var(--size);
          opacity: 0.66;
          pointer-events: none;
-
          transform: rotate(var(--rotation));
       }
 
       &:hover {
-         .ImagePreviewArrow-arrow {
-            transform: rotate(var(--rotation)) scale(1.3);
-         }
+         transform: scale(1.05);
       }
    }
-   .ImagePreviewArrow-isHidden {
+   .PagePrintTabsArrow-isHidden {
       opacity: 0;
       pointer-events: none;
    }

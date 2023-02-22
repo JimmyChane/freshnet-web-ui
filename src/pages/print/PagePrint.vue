@@ -125,17 +125,14 @@
                ]),
                new Media("Binding", [
                   new Category(null, [
-                     new Subcategory(
-                        { toString: () => "Comb", color: { icon: "" } },
-                        [
-                           new Item({ title: "8mm" }, new Price(1.0)),
-                           new Item({ title: "10mm" }, new Price(1.0)),
-                           new Item({ title: "12mm" }, new Price(1.5)),
-                           new Item({ title: "14mm" }, new Price(2.0)),
-                           new Item({ title: "16mm" }, new Price(2.0)),
-                           new Item({ title: "25mm" }, new Price(3.0)),
-                        ],
-                     ),
+                     new Subcategory({ toString: () => "Comb", color: { icon: "" } }, [
+                        new Item({ title: "8mm" }, new Price(1.0)),
+                        new Item({ title: "10mm" }, new Price(1.0)),
+                        new Item({ title: "12mm" }, new Price(1.5)),
+                        new Item({ title: "14mm" }, new Price(2.0)),
+                        new Item({ title: "16mm" }, new Price(2.0)),
+                        new Item({ title: "25mm" }, new Price(3.0)),
+                     ]),
                      new Subcategory(null, [
                         new Item({ title: "Tape & Staple" }, new Price(1.0)),
                      ]),
