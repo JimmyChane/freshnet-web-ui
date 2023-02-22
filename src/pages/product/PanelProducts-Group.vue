@@ -1,8 +1,9 @@
 <script>
+   import Arrow from "./viewerProduct/ViewerProduct-ImagePreview-Arrow.vue";
    import ItemProduct from "./ItemProduct.vue";
 
    export default {
-      components: { ItemProduct },
+      components: { Arrow, ItemProduct },
       props: {
          group: { type: Object },
          layoutMode: { type: Number, default: 0 },
@@ -12,6 +13,12 @@
          currentProductId: { type: String, default: "" },
          queryBrandId: { type: String, default: "" },
          queryStock: { type: String, default: "" },
+      },
+      data: () => ({ ArrowDirection: Arrow.Direction, scrollLeft: 0 }),
+      computed: {
+         icon: (c) => c.group.icon,
+         title: (c) => c.group.title,
+         items: (c) => c.group.items,
       },
    };
 </script>
@@ -24,18 +31,22 @@
       ]"
    >
       <div class="PanelProducts-category-header">
-         <span class="PanelProducts-category-title">{{ group.title }}</span>
+         <span class="PanelProducts-category-title">{{ title }}</span>
          <img
             class="PanelProducts-category-icon"
-            v-if="group.icon"
-            :src="group.icon"
-            :alt="`${group.title} Icon`"
+            v-if="icon"
+            :src="icon"
+            :alt="`${title} Icon`"
          />
       </div>
 
-      <div class="PanelProducts-category-items scrollbar">
+      <div
+         class="PanelProducts-category-items scrollbar"
+         :style="{ 'z-index': '1' }"
+         @scroll="(e) => (scrollLeft = e.target.scrollLeft)"
+      >
          <router-link
-            v-for="item of group.items"
+            v-for="item of items"
             :key="item.id"
             :to="{
                query: { productId: item.id, brand: queryBrandId, stock: queryStock },
@@ -48,6 +59,19 @@
             />
          </router-link>
       </div>
+
+      <!-- <Arrow
+         :style="{ 'z-index': '2' }"
+         :direction="ArrowDirection.Left"
+         :isShowing="scrollLeft > 0"
+         @click="() => {}"
+      />
+      <Arrow
+         :style="{ 'z-index': '2' }"
+         :direction="ArrowDirection.Right"
+         :isShowing="true"
+         @click="() => {}"
+      /> -->
    </div>
 </template>
 
@@ -84,13 +108,6 @@
                height: 100%;
             }
          }
-      }
-      .PanelProducts-previous {
-         --size: var(--floating-button-size);
-         width: var(--size);
-         height: var(--size);
-      }
-      .PanelProducts-next {
       }
    }
    .PanelProducts-category-isThin {

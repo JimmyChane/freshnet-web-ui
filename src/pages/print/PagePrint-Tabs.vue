@@ -18,23 +18,17 @@
          onItemChange() {
             const { selectedItem } = this;
             setTimeout(() => {
-               if (selectedItem === this.selectedItem)
-                  this.scrollToItem(selectedItem);
+               if (selectedItem === this.selectedItem) this.scrollToItem(selectedItem);
             }, 300);
          },
          scrollToItem(item) {
             const element = this._self.$el;
-            const childElement =
-               this._self.$children[this.items.indexOf(item)].$el;
+            const childElement = this._self.$children[this.items.indexOf(item)].$el;
 
             const parentHalfWidth = element.offsetWidth / 2;
-            const childCenter =
-               childElement.offsetLeft + childElement.offsetWidth / 2;
+            const childCenter = childElement.offsetLeft + childElement.offsetWidth / 2;
 
-            element.scrollTo({
-               left: childCenter - parentHalfWidth,
-               behavior: "smooth",
-            });
+            element.scrollTo({ left: childCenter - parentHalfWidth, behavior: "smooth" });
          },
       },
    };

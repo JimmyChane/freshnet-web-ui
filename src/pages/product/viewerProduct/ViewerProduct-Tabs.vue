@@ -25,12 +25,10 @@
             const { item } = this;
 
             const element = this._self.$el;
-            const childElement =
-               this._self.$children[this.items.indexOf(item)].$el;
+            const childElement = this._self.$children[this.items.indexOf(item)].$el;
 
             const parentHalfWidth = element.offsetWidth / 2;
-            const childCenter =
-               childElement.offsetLeft + childElement.offsetWidth / 2;
+            const childCenter = childElement.offsetLeft + childElement.offsetWidth / 2;
 
             element.scrollTo({
                left: childCenter - parentHalfWidth,

@@ -17,8 +17,12 @@
          isLeft: (c) => c.direction === Direction.Left,
          isRight: (c) => c.direction === Direction.Right,
 
-         primaryColorIsDark: (c) =>
-            chroma.deltaE(c.primaryColor, "000000") < 60,
+         primaryColorIsDark: (c) => {
+            const primaryColor = chroma.valid(c.primaryColor)
+               ? c.primaryColor
+               : chroma("ffffff");
+            return chroma.deltaE(primaryColor, "000000") < 60;
+         },
 
          rotation() {
             if (this.isLeft) return "90deg";
@@ -42,8 +46,8 @@
       ]"
       :style="{
          '--rotation': rotation,
-         'left': isLeft ? '0' : 'unset',
-         'right': isRight ? '0' : 'unset',
+         left: isLeft ? '0' : 'unset',
+         right: isRight ? '0' : 'unset',
       }"
       @click="() => $emit('click')"
    >
