@@ -2,16 +2,20 @@ import Vue from "vue";
 import Vuex from "vuex";
 import socketIo from "socket.io-client";
 import HostApi from "../host/HostApi.js";
+import TimeNowGetter from "@/tools/TimeNowGetter.js";
+import PopupMenu from "@/app/PopupMenu.vue";
+
+const keyGetter = new TimeNowGetter();
 
 Vue.use(Vuex);
 
 const init = (Stores) => {
    const context = { state: {}, mutations: {}, getters: {}, actions: {} };
 
+   // socket
    context.state.socket = null;
    context.mutations.socket = (state, socket) => (state.socket = socket);
    context.getters.isConnected = (state) => state.socket && state.socket.connected;
-
    context.actions.socketNotify = (context, body) => {
       const { manager, key, content } = body ? body : {};
       switch (manager) {
@@ -43,6 +47,7 @@ const init = (Stores) => {
       context.dispatch("openSocket");
    };
 
+   // imageViewer
    context.state.imageViewer = { isShowing: false, image: null, thumbnails: [] };
    context.mutations.imageViewer = (state, imageViewer) =>
       (state.imageViewer = imageViewer);
@@ -68,6 +73,53 @@ const init = (Stores) => {
    context.actions.imageViewerSelect = (context, image = null) => {
       context.state.imageViewer.image = image;
       context.commit("imageViewer", context.state.imageViewer);
+   };
+
+   // popupMenus
+   context.state.popupMenus = [];
+   context.mutations.popupMenus = (state, popupMenus) => (state.popupMenus = popupMenus);
+   context.getters.popupMenus = (state) => state.popupMenus;
+   context.actions.popupMenuShow = (
+      context,
+      arg = {
+         anchor,
+         menus: [],
+         option: {
+            width: PopupMenu.Width.AUTO,
+            corner: PopupMenu.Corner.AUTO,
+            primaryColor: undefined,
+         },
+      },
+   ) => {
+      const { anchor, menus = [], option = {} } = arg;
+
+      const popupMenu = {
+         key: keyGetter.get(),
+         anchor,
+         menus,
+         option,
+         isShowing: true,
+         isClosing: false,
+
+         hide: () => {
+            if (popupMenu.isClosing) return;
+            popupMenu.isClosing = true;
+
+            setTimeout(() => {
+               popupMenu.isShowing = false;
+               setTimeout(() => {
+                  const index = context.state.popupMenus.indexOf(popupMenu);
+                  context.state.popupMenus.splice(index, 1);
+                  context.commit("popupMenus", context.state.popupMenus);
+               }, 300);
+            }, 300);
+         },
+      };
+
+      context.state.popupMenus.push(popupMenu);
+      context.commit("popupMenus", context.state.popupMenus);
+
+      return popupMenu;
    };
 
    const store = new Vuex.Store(context);

@@ -16,6 +16,7 @@ import Mixin from "./main.mixin.js";
 
 // app
 import App from "./app/App.vue";
+import store from "./stores/store.js";
 
 Vue.config.productionTip = false;
 Vue.prototype.host = HostApi;
@@ -110,7 +111,6 @@ new Vue({
       appLayout: null,
       navigation: null,
       snackbars: [],
-      popupMenus: [],
    }),
    computed: {
       user: (c) => c.loginStore.getters.user,
@@ -298,41 +298,6 @@ new Vue({
    methods: {
       onBackPressed() {
          return true;
-      },
-
-      popupMenuShow(
-         anchor,
-         menus = [],
-         option = {
-            width: PopupMenu.Width.AUTO,
-            corner: PopupMenu.Corner.AUTO,
-            primaryColor: undefined,
-         },
-      ) {
-         const popupMenu = {
-            key: this.keyGetter.get(),
-            anchor,
-            menus: menus,
-            option,
-            isShowing: true,
-            isClosing: false,
-
-            hide: () => {
-               if (popupMenu.isClosing) return;
-               popupMenu.isClosing = true;
-
-               setTimeout(() => {
-                  popupMenu.isShowing = false;
-                  setTimeout(() => {
-                     this.popupMenus.splice(this.popupMenus.indexOf(popupMenu), 1);
-                  }, 300);
-               }, 300);
-            },
-         };
-
-         this.popupMenus.push(popupMenu);
-
-         return popupMenu;
       },
 
       // send a snackbar notification

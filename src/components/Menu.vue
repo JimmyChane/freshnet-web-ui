@@ -24,7 +24,7 @@
             if (this.isShowing) this.hide();
             else this.show();
          },
-         show() {
+         async show() {
             if (this.popupMenu) this.popupMenu.hide();
 
             const menus =
@@ -38,10 +38,14 @@
                if (isLegacy) menu.click = () => menu.interact();
             }
 
-            this.popupMenu = this.$root.popupMenuShow(this._self.$el, menus, {
-               width: this.width,
-               corner: this.corner,
-               primaryColor: this.primaryColor,
+            this.popupMenu = await this.store.dispatch("popupMenuShow", {
+               anchor: this._self.$el,
+               menus,
+               option: {
+                  width: this.width,
+                  corner: this.corner,
+                  primaryColor: this.primaryColor,
+               },
             });
          },
          hide() {

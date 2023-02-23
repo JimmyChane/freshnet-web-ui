@@ -97,7 +97,7 @@
 
       <PopupMenu
          :style="{ 'z-index': '5' }"
-         v-for="popupMenu of $root.popupMenus"
+         v-for="popupMenu of store.getters.popupMenus"
          :key="popupMenu.key"
          :popupMenu="popupMenu"
          class="App-PopupMenu"
