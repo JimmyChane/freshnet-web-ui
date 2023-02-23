@@ -89,7 +89,7 @@
          </SearchInput>
       </NavigationBar>
 
-      <div class="PageServiceActionbar-toolbar">
+      <div class="PageServiceActionbar-toolbar scrollbar">
          <div>
             <LayoutViewSelector :menus="layoutMenus" :index="layoutMenuIndex" />
             <LabelMenus
@@ -154,6 +154,7 @@
          flex-wrap: nowrap;
          align-items: center;
          justify-content: center;
+         overflow-x: auto;
 
          & > * {
             width: 100%;

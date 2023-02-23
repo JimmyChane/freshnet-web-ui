@@ -37,7 +37,7 @@
          isOver460px: (c) => c.$root.window.innerWidth > 460,
 
          isGridView: (c) => c.layoutMode === ItemService.Mode.Grid,
-         isListView: (c) => c.layoutMode === ItemService.Mode.List,
+         isListView: (c) => c.layoutMode === ItemService.Mode.List, 
          isDetailView: (c) => c.layoutMode === ItemService.Mode.Detail,
 
          isSortDateCreated: (c) => c.sortMode === SortMode.DateCreated,
@@ -159,7 +159,7 @@
          :class="[
             'ListServices-group',
             isGridView ? 'ListServices-group-gridView' : '',
-            isListView ? 'ListServices-group-listView' : '',
+            isListView ? 'ListServices-group-listView' : '', 
             isDetailView ? 'ListServices-group-detailView' : '',
          ]"
          v-for="group of groups"
@@ -168,7 +168,7 @@
          <div
             class="ListServices-group-line"
             v-if="groups.indexOf(group) !== 0"
-            :style="{ 'max-width': isListView ? '32rem' : '100%' }"
+            :style="{ 'max-width': isListView   ? '32rem' : '100%' }"
          ></div>
 
          <span class="ListServices-group-title" v-if="group.title">{{
