@@ -40,56 +40,60 @@
 <template>
    <button
       :class="[
-         'ImagePreviewArrow',
-         isShowing ? '' : 'ImagePreviewArrow-isHidden',
+         'PanelProductsGroupArrow',
+         isShowing ? '' : 'PanelProductsGroupArrow-isHidden',
          'transition',
       ]"
       :style="{
          '--rotation': rotation,
-         left: isLeft ? '0' : 'unset',
-         right: isRight ? '0' : 'unset',
+         left: isLeft ? '1rem' : 'unset',
+         right: isRight ? '1rem' : 'unset',
       }"
       @click="() => $emit('click')"
    >
-      <img class="ImagePreviewArrow-arrow transition" :src="arrowIcon" />
+      <img class="PanelProductsGroupArrow-arrow transition" :src="arrowIcon" />
    </button>
 </template>
 
 <style lang="scss" scoped>
-   .ImagePreviewArrow {
+   .PanelProductsGroupArrow {
       --rotation: 90deg;
 
+      --size: 2.5rem;
+      width: var(--size);
+      height: var(--size);
+      aspect-ratio: 1;
+
       position: absolute;
-      top: 0;
+      top: calc(50% - var(--size));
       bottom: 0;
 
-      width: 4rem;
-      height: 100%;
+      border-radius: 0.5rem;
+      overflow: hidden;
 
-      background: none;
-      border: none;
+      background-color: hsla(0, 0%, 100%, 0.9);
+      box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.2);
+      border: 1px solid hsla(0, 0%, 0%, 0.2);
       cursor: pointer;
 
       display: flex;
       align-items: center;
       justify-content: center;
 
-      .ImagePreviewArrow-arrow {
-         width: 1.8rem;
-         height: 1.8rem;
+      .PanelProductsGroupArrow-arrow {
+         --size: 0.8rem;
+         width: var(--size);
+         height: var(--size);
          opacity: 0.66;
          pointer-events: none;
-
          transform: rotate(var(--rotation));
       }
 
       &:hover {
-         .ImagePreviewArrow-arrow {
-            transform: rotate(var(--rotation)) scale(1.3);
-         }
+         transform: scale(1.05);
       }
    }
-   .ImagePreviewArrow-isHidden {
+   .PanelProductsGroupArrow-isHidden {
       opacity: 0;
       pointer-events: none;
    }

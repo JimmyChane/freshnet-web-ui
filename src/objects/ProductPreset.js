@@ -1,5 +1,5 @@
 import ProductSpecType from "@/items/ProductSpecType.js";
-import Brand from "../Brand";
+import Brand from "@/items/Brand";
 
 class Brands {
    static Intel = new Brand().fromData({ title: "Intel" });
@@ -140,9 +140,7 @@ export default class ProductPreset {
 
       return specifications
          .filter((itemSpec) => {
-            return Object.keys(this.Specifications).includes(
-               itemSpec?.type?.key,
-            );
+            return Object.keys(this.Specifications).includes(itemSpec?.type?.key);
          })
          .map((itemSpec) => {
             const compares = this.Specifications[itemSpec.type.key];
@@ -195,9 +193,7 @@ export default class ProductPreset {
             }
 
             if (itemSpec.type.key === ProductSpecType.Key.Graphic) {
-               for (const compare of compares
-                  .map((compare) => compare)
-                  .reverse()) {
+               for (const compare of compares.map((compare) => compare).reverse()) {
                   if (content.includes(compare)) {
                      return {
                         name: compare,

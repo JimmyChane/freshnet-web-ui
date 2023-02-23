@@ -59,7 +59,7 @@
 
             const groups = await this.orderStore.dispatch("getGroupsByStatus");
             const groupPending = groups.find((group) => {
-               return group.status === Order.STATUS_PENDING;
+               return group.status === Order.Status.Pending;
             });
             const groupCompleted = groups.find((group) => {
                return group.status === Order.STATUS_COMPLETED;
@@ -117,12 +117,9 @@
          class="PageOrder-actionbar"
          :title="$options.title"
          :items="items"
-         @click-item="
-            (item) => $root.replaceRoute({ query: { order: item.id } })
-         "
+         @click-item="(item) => $root.replaceRoute({ query: { order: item.id } })"
          @click-item-add="
-            () =>
-               (display.showDialogAppendOrder = !display.showDialogAppendOrder)
+            () => (display.showDialogAppendOrder = !display.showDialogAppendOrder)
          "
          @click-refresh="() => clickRefresh()"
       />
@@ -133,12 +130,8 @@
             title="Pending"
             :items="pendingItems"
             :currentItemIdSelected="currentExpandedOrderid"
-            @click-collapse="
-               (item) => $root.replaceRoute({ query: { order: null } })
-            "
-            @click-expand="
-               (item) => $root.replaceRoute({ query: { order: item.id } })
-            "
+            @click-collapse="(item) => $root.replaceRoute({ query: { order: null } })"
+            @click-expand="(item) => $root.replaceRoute({ query: { order: item.id } })"
             @click-complete="
                (item) => orderStore.dispatch('updateToCompletedOfId', item.id)
             "
@@ -152,25 +145,16 @@
             title="Completed"
             :items="completedItems"
             :currentItemIdSelected="currentExpandedOrderid"
-            @click-collapse="
-               (item) => $root.replaceRoute({ query: { order: null } })
-            "
-            @click-expand="
-               (item) => $root.replaceRoute({ query: { order: item.id } })
-            "
-            @click-pending="
-               (item) => orderStore.dispatch('updateToPendingOfId', item.id)
-            "
+            @click-collapse="(item) => $root.replaceRoute({ query: { order: null } })"
+            @click-expand="(item) => $root.replaceRoute({ query: { order: item.id } })"
+            @click-pending="(item) => orderStore.dispatch('updateToPendingOfId', item.id)"
             @click-remove="
                (item) => orderStore.dispatch('removeOItemOfId', { id: item.id })
             "
          />
       </main>
 
-      <Loading
-         class="viewOrder-loading"
-         :isShowing="orderStore.getters.isLoading"
-      />
+      <Loading class="viewOrder-loading" :isShowing="orderStore.getters.isLoading" />
 
       <PopupWindow
          :style="{ 'z-index': '20' }"

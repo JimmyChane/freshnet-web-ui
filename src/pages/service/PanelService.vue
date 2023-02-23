@@ -1,6 +1,6 @@
 <script>
-   import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import Menu from "@/components/Menu.vue";
+   import Actionbar from "./PanelService-Actionbar.vue";
+   import MenuIcon from "@/components/MenuIcon.vue";
    import Selector from "@/components/selector/Selector.vue";
 
    import ButtonAddImage from "./ButtonAddImage.vue";
@@ -10,7 +10,7 @@
    import AddEvent from "./PanelService-AddEvent.vue";
    import PanelEvents from "./PanelEvents.vue";
 
-   import ServiceState from "@/items/tools/ServiceState.js";
+   import ServiceStates from "@/objects/ServiceStates.js";
 
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
@@ -18,7 +18,7 @@
       components: {
          Actionbar,
          Selector,
-         Menu,
+         MenuIcon,
          ButtonAddImage,
          ButtonImage,
          AddEvent,
@@ -32,12 +32,14 @@
       },
       data() {
          return {
-            ServiceState,
+            ServiceStates,
             nameOfUser: "",
             bookmarkHeaderIconIsHover: false,
          };
       },
       computed: {
+         bookmarkMenuCorner: () => MenuIcon.Corner.BOTTOM_LEFT,
+
          isUrgent: (c) => c.service.isUrgent(),
          isWarranty: (c) => c.service.isWarranty(),
 
@@ -53,12 +55,10 @@
 
          labels: (c) => c.service.labels,
 
-         primaryColor() {
-            return this.stateColor;
-         },
+         primaryColor: (c) => c.stateColor,
          stateColor() {
             if (this.service) {
-               const res = ServiceState.list.find((s) => {
+               const res = ServiceStates.list.find((s) => {
                   return s.key === this.service.state;
                });
                if (res) return chroma(res.color);
@@ -127,34 +127,19 @@
 <template>
    <div class="PanelService" :style="{ '--primary-color': backgroundColor }">
       <Actionbar
-         v-if="service"
-         class="PanelService-actionbar transition"
-         :style="{
-            'background-color': actionbarColor,
-            'border-bottom': `1px solid ${actionbarBorder}`,
-         }"
-         :leftMenus="{
-            icon: host.icon('close-000000'),
-            click: () => actions.onClickClose(),
-         }"
-         :rightMenus="{
-            icon: host.icon('trash-000000'),
-            click: () => actions.onClickRemove(service),
-         }"
-      >
-         <div class="PanelService-actionbar-title" v-if="service">
-            <div class="PanelService-timestamp" v-if="service">
-               {{ service.timestamp }}
-            </div>
-         </div>
-      </Actionbar>
+         :style="{ 'z-index': '3' }"
+         :service="service"
+         :actionbarColor="actionbarColor"
+         :actionbarBorder="actionbarBorder"
+         :actions="actions"
+      />
 
       <div v-if="service" class="PanelService-body">
          <div class="PanelService-body-body">
             <div class="PanelService-body-header">
                <Selector
                   class="PanelService-actionbar-state-selector"
-                  :list="ServiceState.list"
+                  :list="ServiceStates.list"
                   :keySelected="service.state"
                   @callback-select="
                      (state) => {
@@ -182,9 +167,7 @@
                            }
                         "
                      >
-                        <span
-                           class="PanelService-section-labels-item-title transition"
-                        >
+                        <span class="PanelService-section-labels-item-title transition">
                            {{ label.title }}
                         </span>
                         <img
@@ -194,11 +177,9 @@
                      </button>
                   </div>
 
-                  <Menu
+                  <MenuIcon
                      class="PanelService-section-label-option"
-                     direction="bottomLeft"
-                     @mouseover="bookmarkHeaderIconIsHover = true"
-                     @mouseleave="bookmarkHeaderIconIsHover = false"
+                     :corner="bookmarkMenuCorner"
                      :menus="
                         [
                            {
@@ -228,22 +209,18 @@
                            return !label;
                         })
                      "
-                  >
-                     <img
-                        class="PanelService-section-label-option-icon"
-                        :src="
-                           bookmarkHeaderIconIsHover
-                              ? host.icon('bookmark-add-505050')
-                              : host.icon('bookmark-505050')
-                        "
-                     />
-                  </Menu>
+                     @mouseover="bookmarkHeaderIconIsHover = true"
+                     @mouseleave="bookmarkHeaderIconIsHover = false"
+                     :src="
+                        bookmarkHeaderIconIsHover
+                           ? host.icon('bookmark-add-505050')
+                           : host.icon('bookmark-505050')
+                     "
+                  />
                </div>
             </div>
 
-            <AddEvent
-               @callback-create="(event) => actions.onClickToAddEvent(event)"
-            />
+            <AddEvent @callback-create="(event) => actions.onClickToAddEvent(event)" />
 
             <PanelEvents
                v-if="service"
@@ -262,85 +239,14 @@
                   </Section>
 
                   <Section
-                     title="Customer"
-                     :menus="{
-                        title: 'Update Customer',
-                        icon: host.icon('edit-505050'),
-                        click: () => actions.onClickUpdateCustomer(customer),
-                     }"
-                  >
-                     <div class="PanelService-section-customer">
-                        <div
-                           class="PanelService-section-customer-info"
-                           v-if="customer"
-                        >
-                           <span
-                              class="PanelService-section-customer-name"
-                              v-if="name"
-                              >{{ name }}</span
-                           >
-                           <span
-                              class="PanelService-section-customer-phoneNumber"
-                              v-if="phoneNumberStr"
-                              >{{ phoneNumberStr }}</span
-                           >
-                        </div>
-
-                        <div class="PanelService-section-customer-contactLinks">
-                           <a
-                              class="transition"
-                              :href="`https://api.whatsapp.com/send?phone=6${phoneNumberStr}`"
-                              target="_blank"
-                              v-if="isPhoneNumber"
-                           >
-                              <img
-                                 :src="host.icon('whatsapp-color')"
-                                 alt="Whatsapp Logo"
-                              />
-                              <span>Chat with Whatsapp</span>
-                           </a>
-
-                           <a
-                              class="transition"
-                              :href="`tel:+6${phoneNumberStr}`"
-                              v-if="isPhoneNumber"
-                           >
-                              <img
-                                 :src="host.icon('call-000000')"
-                                 alt="Call Logo"
-                              />
-                              <span>Call</span>
-                           </a>
-
-                           <router-link
-                              class="transition"
-                              :to="{
-                                 path: '/manage/customer',
-                                 query: {
-                                    name: name,
-                                    phoneNumber: phoneNumberStr,
-                                 },
-                              }"
-                           >
-                              <span>Find</span>
-                           </router-link>
-                        </div>
-                     </div>
-                  </Section>
-
-                  <Section
                      title="Problem"
                      :menus="{
                         title: 'Update Problem',
                         icon: host.icon('edit-505050'),
-                        click: () =>
-                           actions.onClickUpdateDescription(description),
+                        click: () => actions.onClickUpdateDescription(description),
                      }"
                   >
-                     <div
-                        class="PanelService-section-description"
-                        v-if="description"
-                     >
+                     <div class="PanelService-section-description" v-if="description">
                         <p class="PanelService-section-description-text">{{
                            description
                         }}</p>
@@ -352,14 +258,10 @@
                      :menus="{
                         title: 'Update Belongings',
                         icon: host.icon('edit-505050'),
-                        click: () =>
-                           actions.onClickUpdateBelongings(belongings),
+                        click: () => actions.onClickUpdateBelongings(belongings),
                      }"
                   >
-                     <div
-                        class="PanelService-section-belonging"
-                        v-if="belongings.length"
-                     >
+                     <div class="PanelService-section-belonging" v-if="belongings.length">
                         <ItemBelonging
                            v-for="belonging in belongings"
                            :key="belonging.title"
@@ -382,9 +284,7 @@
                            v-for="imageFile in imageFiles"
                            :key="imageFile.name"
                            :src="imageFile"
-                           @click="
-                              () => $root.imageViewerShow(imageFile, imageFiles)
-                           "
+                           @click="() => $root.imageViewerShow(imageFile, imageFiles)"
                            @click-remove="actions.onClickRemoveImage(imageFile)"
                         />
                         <div
@@ -414,23 +314,6 @@
       overflow-y: auto;
       background-color: var(--primary-color);
       padding-bottom: 10rem;
-
-      .PanelService-actionbar {
-         --actionbar-background-color-translucent: white;
-         z-index: 3;
-         .PanelService-actionbar-title {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            .PanelService-timestamp {
-               text-align: center;
-               color: black;
-               font-size: 0.8rem;
-            }
-         }
-      }
 
       .PanelService-body {
          z-index: 2;
@@ -508,17 +391,6 @@
                         }
                      }
                   }
-                  .PanelService-section-label-option {
-                     border-radius: 50%;
-                     .PanelService-section-label-option-icon {
-                        --size: 1.5em;
-                        min-width: var(--size);
-                        min-height: var(--size);
-                        width: var(--size);
-                        height: var(--size);
-                        padding: 0.1em;
-                     }
-                  }
                }
             }
 
@@ -548,63 +420,7 @@
                      text-align: start;
                   }
                }
-               .PanelService-section-customer {
-                  width: 100%;
-                  display: flex;
-                  flex-direction: row;
-                  flex-direction: column;
-                  align-items: flex-start;
-                  flex-wrap: nowrap;
-                  justify-content: space-between;
 
-                  align-items: center;
-                  gap: 0.5rem;
-
-                  .PanelService-section-customer-info {
-                     width: 100%;
-                     display: flex;
-                     flex-direction: column;
-                     align-items: flex-start;
-
-                     .PanelService-section-customer-name {
-                        font-weight: 500;
-                     }
-                     .PanelService-section-customer-phoneNumber {
-                        font-size: 0.9rem;
-                     }
-                  }
-
-                  .PanelService-section-customer-contactLinks {
-                     width: 100%;
-                     gap: 0.2rem;
-                     display: flex;
-                     flex-direction: row;
-                     flex-wrap: wrap;
-
-                     & > * {
-                        padding: 0.7rem;
-                        gap: 0.5rem;
-                        text-decoration: none;
-                        color: inherit;
-                        background-color: #f4f4f4;
-                        border: 1px solid #dddddd;
-                        border-radius: 1rem;
-
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-
-                        &:hover {
-                           background-color: #e4e4e4;
-                        }
-
-                        img {
-                           width: 1rem;
-                           height: 1rem;
-                        }
-                     }
-                  }
-               }
                .PanelService-section-description {
                   width: 100%;
                   display: flex;
@@ -625,7 +441,7 @@
                   display: flex;
                   flex-direction: column;
                   gap: 0.2rem;
-                  // border-radius: 0.6rem;
+                  border-radius: 0.6rem;
                   overflow: hidden;
                }
                .PanelService-section-belonging-empty {

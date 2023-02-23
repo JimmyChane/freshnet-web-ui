@@ -3,7 +3,7 @@
 
    import Setting from "@/items/data/Setting.js";
    import ProductPrice from "@/items/ProductPrice.js";
-   import ProductPreset from "@/items/tools/ProductPreset";
+   import ProductPreset from "@/objects/ProductPreset";
 
    import ImageView from "@/components/ImageView.vue";
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
@@ -138,13 +138,9 @@
       <div class="ItemProduct-title">
          <span class="ItemProduct-title-text">{{ fullTitle }}</span>
          <div class="ItemProduct-title-specs" v-if="specLabels.length">
-            <span v-for="label in specLabels" :key="label.text">{{
-               label.text
-            }}</span>
+            <span v-for="label in specLabels" :key="label.text">{{ label.text }}</span>
          </div>
-         <span class="ItemProduct-title-price" v-if="price">{{
-            price.to
-         }}</span>
+         <span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
       </div>
    </div>
 </template>
@@ -264,8 +260,7 @@
          min-height: var(--height);
          max-height: var(--height);
          transform: scale(0.92);
-         --preview-border-radius-focus: var(--border-radius) 0 0
-            var(--border-radius);
+         --preview-border-radius-focus: var(--border-radius) 0 0 var(--border-radius);
       }
       .ItemProduct-title {
          flex-grow: 1;
@@ -282,8 +277,7 @@
       .ItemProduct-preview {
          width: 100%;
          transform: scale(0.92) translateY(1rem);
-         --preview-border-radius-focus: var(--border-radius)
-            var(--border-radius) 0 0;
+         --preview-border-radius-focus: var(--border-radius) var(--border-radius) 0 0;
       }
       .ItemProduct-title {
          width: 100%;

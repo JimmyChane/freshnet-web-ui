@@ -4,7 +4,7 @@
    import PagePrint from "@/pages/print/PagePrint.vue";
    import PageManage from "@/pages/manage/PageManage.vue";
 
-   import LeftNav from "./leftNav/LeftNav.vue";
+   import NavigationLeft from "./leftNav/NavigationLeft.vue";
    import ViewerImage from "./ViewerImage.vue";
    import Snackbar from "./Snackbar.vue";
    import PopupMenu from "./PopupMenu.vue";
@@ -17,7 +17,7 @@
          return [PageHome, PageProduct, PagePrint, PageManage];
       },
 
-      components: { LeftNav, ViewerImage, Snackbar, PopupMenu, Status },
+      components: { NavigationLeft, ViewerImage, Snackbar, PopupMenu, Status },
       data() {
          return { layoutLoginIsShown: false };
       },
@@ -78,8 +78,8 @@
                ]"
                :style="{ 'z-index': '1' }"
             >
-               <LeftNav
-                  class="App-LeftNav"
+               <NavigationLeft
+                  class="App-NavigationLeft"
                   v-if="!$root.navigation.isNone()"
                   @click-logout="() => logout()"
                />
@@ -248,7 +248,7 @@
 
                --background-color-light: var(--background-color);
                --background-color-dark: var(--background-color);
-               .App-LeftNav {
+               .App-NavigationLeft {
                   flex-grow: 0;
                }
                .App-routerView {
@@ -257,7 +257,7 @@
                }
             }
             .App-layout-body-isDrawer {
-               .App-LeftNav {
+               .App-NavigationLeft {
                   z-index: 2;
                }
                .App-routerView {
@@ -266,12 +266,15 @@
                }
             }
             .App-layout-body-isFixed {
-               .App-LeftNav {
+               .App-NavigationLeft {
                   z-index: 1;
                }
                .App-routerView {
                   flex-grow: 2;
                   z-index: 2;
+
+                  // border-radius: 1rem 0 0 1rem;
+                  // box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.2);
                }
             }
          }

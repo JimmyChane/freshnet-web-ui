@@ -41,8 +41,7 @@
       data() {
          return {
             actions: {
-               onClickClose: () =>
-                  this.$root.nextRoute({ query: { service: null } }),
+               onClickClose: () => this.$root.nextRoute({ query: { service: null } }),
                onClickRemove: (x) => this.clickDeleteService(x),
                onClickToAddEvent: (event) => {
                   this.serviceStore
@@ -292,11 +291,7 @@
                });
             }
 
-            if (
-               this.isCurrentStatePending &&
-               this.isCurrentUserAdmin &&
-               this.isCurrentUserDefault
-            ) {
+            if (this.isCurrentStatePending && this.isCurrentUserAdmin) {
                actionMenus.push({
                   key: "import",
                   title: "Import",
@@ -363,11 +358,17 @@
          },
          async invalidateServiceId() {
             this.currentService = null;
-            if (this.currentServiceId) {
-               this.currentService = this.items.find((service) => {
-                  return service.id === this.currentServiceId;
-               });
-            }
+
+            if (!this.currentServiceId) return;
+
+            const currentService = await this.serviceStore.dispatch(
+               "getItemOfId",
+               this.currentServiceId,
+            );
+
+            if (!currentService) return;
+            if (this.currentServiceId === currentService.id)
+               this.currentService = currentService;
          },
 
          clickRefresh() {
@@ -419,12 +420,7 @@
 
 <template>
    <div class="PageService">
-      <div
-         :class="[
-            'PageService-panels',
-            `PageService-${isWide ? 'isWide' : 'isThin'}`,
-         ]"
-      >
+      <div :class="['PageService-panels', `PageService-${isWide ? 'isWide' : 'isThin'}`]">
          <PanelServices
             class="PageService-PanelServices"
             :menus="actionMenus"
@@ -473,9 +469,7 @@
          <WindowImportService
             class="PageService-window-child"
             @click-cancel="() => windowAction('importService', 'dismiss')"
-            @click-ok="
-               (service) => windowAction('importService', 'ok', service)
-            "
+            @click-ok="(service) => windowAction('importService', 'ok', service)"
          />
       </PopupWindow>
 
@@ -504,9 +498,7 @@
             class="PageService-window-child"
             ref="WindowUpdateCustomer"
             :value="popup.customer.value"
-            @callback-change="
-               (customer) => windowAction('customer', 'ok', customer)
-            "
+            @callback-change="(customer) => windowAction('customer', 'ok', customer)"
             @callback-cancel="() => windowAction('customer', 'dismiss')"
          />
       </PopupWindow>
@@ -523,8 +515,7 @@
             ref="WindowUpdateDescription"
             :description="popup.editDescription.value"
             @callback-change="
-               (description) =>
-                  windowAction('editDescription', 'ok', description)
+               (description) => windowAction('editDescription', 'ok', description)
             "
             @callback-cancel="() => windowAction('editDescription', 'dismiss')"
          />
@@ -560,9 +551,7 @@
             message="After deleting this service, it cannot be reverted."
             :value="popup.removeService.value"
             @click-cancel="() => windowAction('removeService', 'dismiss')"
-            @click-ok="
-               (service) => windowAction('removeService', 'ok', service)
-            "
+            @click-ok="(service) => windowAction('removeService', 'ok', service)"
          />
       </PopupWindow>
 
@@ -600,10 +589,7 @@
          />
       </PopupWindow>
 
-      <Loading
-         class="PageService-loading"
-         :isShowing="serviceStore.getters.isLoading"
-      />
+      <Loading class="PageService-loading" :isShowing="serviceStore.getters.isLoading" />
    </div>
 </template>
 

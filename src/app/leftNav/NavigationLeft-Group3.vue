@@ -1,6 +1,6 @@
 <script>
-   import LeftNavLink from "./LeftNav-Link.vue";
-   import LeftNavQuery from "./LeftNav-Query.vue";
+   import LeftNavLink from "./NavigationLeft-Link.vue";
+   import LeftNavQuery from "./NavigationLeft-Query.vue";
 
    export default {
       components: { LeftNavLink, LeftNavQuery },

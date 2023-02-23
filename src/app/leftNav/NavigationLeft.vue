@@ -1,29 +1,21 @@
 <script>
    import Drawer from "@/components/Drawer.vue";
-   import LeftNavHeader from "./LeftNav-Header.vue";
-   import Search from "./LeftNav-Search.vue";
-   import LeftNavGroup1 from "./LeftNav-Group1.vue";
-   import LeftNavLogin from "./LeftNav-Login.vue";
+   import LeftNavHeader from "./NavigationLeft-Header.vue";
+   import Search from "./NavigationLeft-Search.vue";
+   import LeftNavGroup1 from "./NavigationLeft-Group1.vue";
+   import LeftNavLogin from "./NavigationLeft-Login.vue";
 
    export default {
-      components: {
-         Drawer,
-         LeftNavHeader,
-         Search,
-         LeftNavGroup1,
-         LeftNavLogin,
-      },
+      components: { Drawer, LeftNavHeader, Search, LeftNavGroup1, LeftNavLogin },
       emits: ["click-logout"],
-      data() {
-         return {
-            expandedPagKey: "",
+      data: () => ({
+         expandedPagKey: "",
 
-            isDragging: false,
-            dragTrigger: 20,
-            dragOpen: 80,
-            dragWidth: 0,
-         };
-      },
+         isDragging: false,
+         dragTrigger: 20,
+         dragOpen: 80,
+         dragWidth: 0,
+      }),
       computed: {
          isWide: (context) => context.$root.navigation.isWide(),
          isDrawer: (context) => context.$root.navigation.isDrawer(),
@@ -47,8 +39,7 @@
                nav.isSelected = () => this.selectedPageKey === nav.key;
                nav.isWide = () => this.isWide;
                nav.clickExpand = () => {
-                  this.expandedPageKey =
-                     this.expandedPageKey === nav.key ? "" : nav.key;
+                  this.expandedPageKey = this.expandedPageKey === nav.key ? "" : nav.key;
                };
                nav.click = () => this.emitCollapse();
 
@@ -88,6 +79,11 @@
          },
          refBody() {
             return this.$refs.Body;
+         },
+      },
+      watch: {
+         isExpand() {
+            if (this.isExpand) this.focus();
          },
       },
       mounted() {
@@ -132,19 +128,20 @@
          onTouchMove(e) {
             if (!this.isDragging) return;
             const touch = [...e.changedTouches][0];
-            const x =
-               touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
+            const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
             const y = touch.pageY;
             this.refDrawer.onDragMove(x, y);
          },
          onTouchEnd(e) {
             if (!this.isDragging) return;
             const touch = [...e.changedTouches][0];
-            const x =
-               touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
+            const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
             const y = touch.pageY;
             this.refDrawer.onDragEnd(x, y);
-            if (x > this.dragOpen) this.$root.navigation.openNavigationDrawer();
+            if (x > this.dragOpen) {
+               this.$root.navigation.openNavigationDrawer();
+               this.focus();
+            }
             this.isDragging = false;
          },
 
@@ -183,6 +180,10 @@
 
             this.$root.replaceRoute({ query });
          },
+
+         focus() {
+            this.$refs.search.focus();
+         },
       },
    };
 </script>
@@ -190,17 +191,20 @@
 <template>
    <Drawer
       ref="Drawer"
-      :class="['LeftNav', !isWide ? 'LeftNav-isThin' : 'LeftNav-isWide']"
+      :class="[
+         'NavigationLeft',
+         !isWide ? 'NavigationLeft-isThin' : 'NavigationLeft-isWide',
+      ]"
       :mode="drawerMode"
       :edge="drawerEdge"
       @click-collapse="() => emitCollapse()"
    >
-      <div class="LeftNav-body scrollbar transition" ref="Body">
+      <div class="NavigationLeft-body scrollbar transition" ref="Body">
          <LeftNavHeader :isWide="isWide" />
 
-         <Search v-if="isWide" :isWide="isWide" />
+         <Search ref="search" v-if="isWide" :isWide="isWide" />
 
-         <div class="LeftNav-navigations" v-if="navigations.length">
+         <div class="NavigationLeft-navigations" v-if="navigations.length">
             <LeftNavGroup1
                v-for="group1 of navigations"
                :key="group1.key"
@@ -219,8 +223,8 @@
 </template>
 
 <style lang="scss" scoped>
-   .LeftNav {
-      .LeftNav-body {
+   .NavigationLeft {
+      .NavigationLeft-body {
          width: 18rem;
          height: 100%;
          max-width: 100%;
@@ -232,7 +236,7 @@
          background-color: hsl(0, 0%, 84%);
          position: relative;
 
-         .LeftNav-navigations {
+         .NavigationLeft-navigations {
             flex-grow: 1;
             width: 100%;
             display: flex;
@@ -241,7 +245,7 @@
             padding: 0.2em;
             padding-bottom: 4em;
          }
-         .LeftNav-login {
+         .NavigationLeft-login {
             position: sticky;
             bottom: 0;
             width: 100%;
@@ -249,7 +253,7 @@
          }
       }
 
-      .LeftNav-body {
+      .NavigationLeft-body {
          --scrollbar-size: 0.2rem;
          --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.1);
          --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.3);
@@ -258,18 +262,18 @@
       }
    }
 
-   .LeftNav-isWide {
-      .LeftNav-body {
-         .LeftNav-navigations {
+   .NavigationLeft-isWide {
+      .NavigationLeft-body {
+         .NavigationLeft-navigations {
             padding-top: 0.8em;
             align-items: flex-start;
          }
       }
    }
-   .LeftNav-isThin {
-      .LeftNav-body {
+   .NavigationLeft-isThin {
+      .NavigationLeft-body {
          width: fit-content;
-         .LeftNav-navigations {
+         .NavigationLeft-navigations {
             align-items: center;
          }
       }

@@ -1,3 +1,5 @@
+import chroma from "chroma-js";
+
 export default {
    isString(str) {
       return typeof str === "string";
@@ -23,5 +25,9 @@ export default {
    },
    optObject(obj) {
       return this.isObject(obj) ? obj : {};
+   },
+
+   isColorDark(color, thre = 60) {
+      return chroma.deltaE(color, "000000") < thre;
    },
 };

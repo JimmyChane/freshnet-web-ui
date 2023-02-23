@@ -2,62 +2,47 @@
    import Category from "@/items/Category";
    import ImageView from "@/components/ImageView.vue";
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import U from "@/U";
 
    export default {
       components: { ImageView },
       props: { isThin: { type: Boolean, default: false } },
-      data() {
-         return {
-            groupMenus: [],
+      data: () => ({
+         groupMenus: [],
 
-            maxLength: 8,
-            products: [],
-            productIndex: 0,
+         maxLength: 8,
+         products: [],
+         productIndex: 0,
 
-            itemTitle: "",
-            primaryColor: chroma("cccccc"),
-         };
-      },
+         itemTitle: "",
+         primaryColor: chroma("cccccc"),
+
+         timeClicked: 0,
+         timeout: 8000,
+         isDestroyed: false,
+      }),
       computed: {
          "categoryStore.getters.lastModified"() {
             this.invalidate();
          },
          item() {
-            if (this.productIndex < 0)
-               this.productIndex = this.products.length - 1;
-            if (this.productIndex >= this.products.length)
-               this.productIndex = 0;
+            if (this.productIndex < 0) this.productIndex = this.products.length - 1;
+            if (this.productIndex >= this.products.length) this.productIndex = 0;
             return this.products[this.productIndex];
          },
-         itemImage() {
-            return this.item ? this.item.toImageThumbnail() : null;
-         },
-         itemImageUrl() {
-            return this.itemImage ? this.itemImage.toUrl({ width: 350 }) : "";
-         },
-         itemId() {
-            return this.item ? this.item.id : "";
-         },
+         itemImage: (c) => (c.item ? c.item.toImageThumbnail() : null),
+         itemImageUrl: (c) => (c.itemImage ? c.itemImage.toUrl({ width: 350 }) : ""),
+         itemId: (c) => c.item?.id ?? "",
 
-         color() {
-            return chroma.valid(this.primaryColor)
-               ? this.primaryColor
-               : chroma("cccccc");
-         },
-         color1() {
-            return this.getColorMixed(this.color, 0.2);
-         },
-         color2() {
-            return this.getColorMixed(this.color, 0.3);
-         },
-         color3() {
-            return this.getColorMixed(this.color, 0.9);
-         },
+         color: (c) => (chroma.valid(c.primaryColor) ? c.primaryColor : chroma("cccccc")),
+         color1: (c) => c.getColorMixed(c.color, 0.2),
+         color2: (c) => c.getColorMixed(c.color, 0.3),
+         color3: (c) => c.getColorMixed(c.color, 0.9),
 
-         arrowIcon() {
-            return this.isColorDark(this.color)
-               ? this.host.icon("arrowDown-ffffff")
-               : this.host.icon("arrowDown-000000");
+         arrowIcon: (c) => {
+            return U.isColorDark(c.color)
+               ? c.host.icon("arrowDown-ffffff")
+               : c.host.icon("arrowDown-000000");
          },
       },
       watch: {
@@ -68,13 +53,28 @@
       mounted() {
          this.invalidate();
          this.invalidateProduct();
+         this.shuffle();
+      },
+      destroyed() {
+         this.isDestroyed = true;
       },
       methods: {
+         shuffle() {
+            if (this.isDestroyed) return;
+            if (this.timeClicked > 0) {
+               const now = Date.now();
+               const distance = now - this.timeClicked;
+               if (distance < this.timeout)
+                  return setTimeout(this.shuffle, this.timeout - distance);
+            }
+
+            this.clickNext();
+            setTimeout(this.shuffle, this.timeout);
+         },
+
          async invalidate() {
             this.products = [];
-            const groups = await this.productStore.dispatch(
-               "getGroupsByCategory",
-            );
+            const groups = await this.productStore.dispatch("getGroupsByCategory");
             if (!groups.length) return;
 
             this.itemTitle = "";
@@ -86,17 +86,13 @@
                      group.category.key === Category.Key.Printer
                   );
                })
-               .sort((group1, group2) =>
-                  group1.category.compare(group2.category),
-               )
+               .sort((group1, group2) => group1.category.compare(group2.category))
                .reduce((products, group) => {
                   products.push(...group.items);
                   return products;
                }, [])
                .filter((product) => {
-                  return (
-                     product.toImageThumbnail() && product.isStockAvailable()
-                  );
+                  return product.toImageThumbnail() && product.isStockAvailable();
                });
 
             while (products.length > this.maxLength) {
@@ -121,13 +117,16 @@
          },
 
          getColorMixed(color, value) {
-            return color.mix(
-               this.isColorDark(this.color) ? "#ffffff" : "#000000",
-               value,
-            );
+            return color.mix(U.isColorDark(this.color) ? "#ffffff" : "#000000", value);
          },
-         isColorDark(color) {
-            return chroma.deltaE(color, "000000") < 60;
+
+         clickNext() {
+            this.productIndex++;
+            this.timeClicked = Date.now();
+         },
+         clickPrevious() {
+            this.productIndex--;
+            this.timeClicked = Date.now();
          },
       },
    };
@@ -147,27 +146,23 @@
          '--color3': getColorMixed(color, 0.9),
       }"
    >
-      <span class="HomeSectionProduct-header">{{ itemTitle }}</span>
       <ImageView
          class="HomeSectionProduct-img"
          v-if="itemImage"
          :src="itemImage"
-         @click="
-            () =>
-               $router.push({ path: '/product', query: { productId: itemId } })
-         "
+         @click="() => $router.push({ path: '/product', query: { productId: itemId } })"
       />
+
+      <span class="HomeSectionProduct-header">{{ itemTitle }}</span>
 
       <div class="HomeSectionProduct-footer" v-if="products.length > 1">
          <button
             :class="[
+               'transition',
                'HomeSectionProduct-footer-item',
                `HomeSectionProduct-footer-item-${
-                  products.indexOf(item) === productIndex
-                     ? 'isSelected'
-                     : 'isDeselected'
+                  products.indexOf(item) === productIndex ? 'isSelected' : 'isDeselected'
                }`,
-               'transition',
             ]"
             v-for="item of products"
             :key="item.id"
@@ -177,13 +172,13 @@
 
       <button
          class="HomeSectionProduct-arrow HomeSectionProduct-arrow-left transition"
-         @click="() => productIndex--"
+         @click="() => clickPrevious()"
       >
          <img :src="arrowIcon" />
       </button>
       <button
          class="HomeSectionProduct-arrow HomeSectionProduct-arrow-right transition"
-         @click="() => productIndex++"
+         @click="() => clickNext()"
       >
          <img :src="arrowIcon" />
       </button>
@@ -192,7 +187,6 @@
 
 <style lang="scss" scoped>
    .HomeSectionProduct {
-      aspect-ratio: 16/12;
       border-radius: 1em;
       overflow: hidden;
       text-decoration: none;
@@ -200,7 +194,9 @@
       color: var(--color3);
 
       width: 100%;
-      height: 100%;
+      height: 30rem;
+      min-height: 30rem;
+      max-height: 30rem;
       position: relative;
 
       display: flex;
@@ -242,7 +238,7 @@
          display: flex;
          flex-grow: 0;
          flex-direction: column;
-         justify-content: flex-end;
+         justify-content: flex-start;
          align-items: center;
       }
       .HomeSectionProduct-footer {

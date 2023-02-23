@@ -1,5 +1,5 @@
 import HostApi from "@/host/HostApi";
-import Filename from "./Filename";
+import Filename from "../objects/Filename";
 import Image from "./Image";
 
 class ServiceImage {

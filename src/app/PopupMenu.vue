@@ -1,18 +1,34 @@
 <script>
+   const Width = {
+      AUTO: 0,
+
+      MIN: 1,
+      MAX: 2,
+      SAME: 3,
+   };
    const Corner = {
       AUTO: 0,
-      TOP_LEFT: 1,
-      TOP_RIGHT: 2,
-      BOTTOM_LEFT: 3,
-      BOTTOM_RIGHT: 4,
+
+      TOP: 1,
+      RIGHT: 2,
+      BOTTOM: 3,
+      LEFT: 4,
+
+      TOP_LEFT: 5,
+      TOP_RIGHT: 6,
+      BOTTOM_LEFT: 7,
+      BOTTOM_RIGHT: 8,
    };
 
+   import Item from "./PopupMenu-Item.vue";
+   import chroma from "chroma-js";
+
    export default {
+      Width,
       Corner,
 
-      props: {
-         popupMenu: { default: undefined },
-      },
+      components: { Item },
+      props: { popupMenu: { default: undefined } },
       data() {
          return {
             top: 0,
@@ -22,21 +38,70 @@
             classState: "PopupMenu-isHiding",
             stylePointerEvent: "none",
 
+            width: 0,
+            height: 0,
             halfWidth: 0,
             halfHeight: 0,
-            startX: 0,
-            startY: 0,
-            endX: 0,
-            endY: 0,
-
-            moveY: 0,
+            x: 0,
+            y: 0,
          };
       },
       computed: {
          isShowing: (c) => c.popupMenu.isShowing,
          anchor: (c) => c.popupMenu.anchor,
          menus: (c) => c.popupMenu.menus,
-         corner: (c) => c.popupMenu.corner,
+
+         classCorner: (c) => {
+            if (c.corner === Corner.TOP) return "PopupMenu-Top";
+            if (c.corner === Corner.RIGHT) return "PopupMenu-Right";
+            if (c.corner === Corner.BOTTOM) return "PopupMenu-Bottom";
+            if (c.corner === Corner.LEFT) return "PopupMenu-Left";
+            if (c.corner === Corner.TOP_LEFT) return "PopupMenu-TopLeft";
+            if (c.corner === Corner.TOP_RIGHT) return "PopupMenu-TopRight";
+            if (c.corner === Corner.BOTTOM_LEFT) return "PopupMenu-BottomLeft";
+            if (c.corner === Corner.BOTTOM_RIGHT) return "PopupMenu-BottomRight";
+            return "";
+         },
+         style: (c) => {
+            const style = {
+               "--width": `${c.width}px`,
+               "--height": `${c.height}px`,
+               "--halfWidth": `${c.halfWidth}px`,
+               "--halfHeight": `${c.halfHeight}px`,
+               "--x": `${c.x}px`,
+               "--y": `${c.y}px`,
+               "pointer-events": c.stylePointerEvent,
+               "--primary-color-background": c.primaryColorBackground,
+            };
+
+            if (c.preferWidth === Width.MIN) {
+               style["min-width"] = "min-content";
+               style["width"] = "min-content";
+            }
+            if (c.preferWidth === Width.MAX) {
+               style["min-width"] = `${c.width}px`;
+               style["width"] = "max-content";
+            }
+            if (c.preferWidth === Width.SAME) {
+               style["min-width"] = `${c.width}px`;
+               style["width"] = `${c.width}px`;
+            }
+            return style;
+         },
+
+         option: (c) => c.popupMenu.option,
+         preferWidth: (c) => c.option.width,
+         corner: (c) => c.option.corner,
+         primaryColor: (c) => {
+            const primaryColor = c.option.primaryColor;
+            if (primaryColor instanceof chroma.Color) return primaryColor;
+            if (chroma.valid(primaryColor)) return chroma(primaryColor);
+            return chroma("cccccc");
+         },
+
+         primaryColorBackground: (c) => c.primaryColor.mix("ffffff", 0.8),
+         primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),
+         primaryColorBackgroundSelected: (c) => c.primaryColor.mix("ffffff", 0.4),
       },
       watch: {
          isShowing() {
@@ -45,6 +110,7 @@
       },
       mounted() {
          this.invalidate();
+         window.addEventListener("scroll", this.hide, true);
       },
       methods: {
          invalidate() {
@@ -52,39 +118,58 @@
                this.classState = "PopupMenu-isHiding";
                this.stylePointerEvent = "none";
                setTimeout(() => {
+                  this.width = 0;
+                  this.height = 0;
                   this.halfWidth = 0;
                   this.halfHeight = 0;
-                  this.startX = 0;
-                  this.startY = 0;
-                  this.endX = 0;
-                  this.endY = 0;
+                  this.x = 0;
+                  this.y = 0;
                   this.classTransition = "";
                }, 200);
                return;
             }
 
-            // const { width, height } = screen;
-
             this.classTransition = "transition";
 
             const rect = this.anchor.getBoundingClientRect();
 
-            this.halfWidth = rect.width / 2;
-            this.halfHeight = rect.height / 2;
-
+            this.width = rect.width;
+            this.height = rect.height;
+            this.halfWidth = this.width / 2;
+            this.halfHeight = this.height / 2;
             switch (this.corner) {
+               case Corner.TOP:
+                  this.x = rect.left + this.halfWidth;
+                  this.y = rect.top;
+                  break;
+               case Corner.RIGHT:
+                  this.x = rect.left + this.width;
+                  this.y = rect.top + this.halfHeight;
+                  break;
+               case Corner.BOTTOM:
+                  this.x = rect.left + this.halfWidth;
+                  this.y = rect.top + this.height;
+                  break;
+               case Corner.LEFT:
+                  this.x = rect.left;
+                  this.y = rect.top + this.halfHeight;
+                  break;
                case Corner.TOP_LEFT:
-                  this.invalidateTopLeft(rect);
+                  this.x = rect.left;
+                  this.y = rect.top;
                   break;
                case Corner.TOP_RIGHT:
-                  this.invalidateTopRight(rect);
+                  this.x = rect.left + this.width;
+                  this.y = rect.top;
                   break;
                case Corner.BOTTOM_LEFT:
-                  this.invalidateBottomLeft(rect);
+                  this.x = rect.left;
+                  this.y = rect.top + this.height;
                   break;
                default:
                case Corner.BOTTOM_RIGHT:
-                  this.invalidateBottomRight(rect);
+                  this.x = rect.left + this.width;
+                  this.y = rect.top + this.height;
                   break;
             }
 
@@ -93,90 +178,44 @@
                this.stylePointerEvent = "initial";
             }, 200);
          },
-         invalidateTopLeft(rect) {
-            this.startX = rect.left + this.halfWidth - 159;
-            this.startY = rect.top + this.halfHeight - 105;
+         hide(e) {
+            if (e && e.target === this.$refs.scroll) return;
 
-            this.endX = this.startX;
-            this.endY = this.startY;
-
-            this.moveY = 1;
+            this.stylePointerEvent = "none";
+            window.removeEventListener("scroll", this.hide, true);
+            this.popupMenu.hide();
          },
-         invalidateTopRight(rect) {
-            this.startX = rect.left + this.halfWidth;
-            this.startY = rect.top + this.halfHeight - 105;
-
-            this.endX = this.startX;
-            this.endY = this.startY;
-
-            this.moveY = 1;
-         },
-         invalidateBottomLeft(rect) {
-            this.startX = rect.left + this.halfWidth - 159;
-            this.startY = rect.top + this.halfHeight;
-
-            this.endX = this.startX - this.halfWidth;
-            this.endY = this.startY;
-
-            this.moveY = -1;
-         },
-         invalidateBottomRight(rect) {
-            this.startX = rect.left + this.halfWidth;
-            this.startY = rect.top + this.halfHeight;
-
-            this.endX = this.startX;
-            this.endY = this.startY;
-
-            this.moveY = -1;
+         clickMenu(menu) {
+            this.hide();
+            if (typeof menu.click === "function") menu.click(menu);
          },
       },
    };
 </script>
 
 <template>
-   <div
-      :class="['PopupMenu', classTransition, classState]"
-      :style="{
-         '--halfWidth': `${halfWidth}px`,
-         '--halfHeight': `${halfHeight}px`,
-         '--startX': `${startX}px`,
-         '--startY': `${startY}px`,
-         '--endX': `${endX}px`,
-         '--endY': `${endY}px`,
-         '--moveY': `${moveY}em`,
-         'pointer-events': stylePointerEvent,
-      }"
-   >
-      <div class="PopupMenu-scroll scrollbar">
-         <button
+   <div :class="['PopupMenu', classTransition, classState, classCorner]" :style="style">
+      <div class="PopupMenu-scroll scrollbar" ref="scroll">
+         <Item
             class="transition"
             v-for="menu of menus"
             :key="menu.key"
-            @click="
-               () => {
-                  popupMenu.hide();
-                  if (typeof menu.click === 'function') menu.click(menu);
-               }
-            "
-         >
-            <img
-               v-if="menu.icon"
-               :src="menu.icon"
-               :alt="`Icon ${menu.title}`"
-            />
-            <span>{{ menu.title }}</span>
-         </button>
+            :menu="menu"
+            :primaryColorBackgroundHover="primaryColorBackgroundHover"
+            :primaryColorBackgroundSelected="primaryColorBackgroundSelected"
+            @click="(menu) => clickMenu(menu)"
+         />
       </div>
    </div>
 </template>
 
 <style lang="scss" scoped>
    .PopupMenu {
-      position: absolute;
       display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
       overflow: hidden;
-      top: 0;
-      left: 0;
 
       min-width: 10em;
       width: max-content;
@@ -184,7 +223,7 @@
       max-height: 20em;
 
       border-radius: 1em;
-      box-shadow: 0 0 1em hsla(0, 0%, 0%, 0.1);
+      box-shadow: 0.1em 0.2em 1em hsla(0, 0%, 0%, 0.4);
       border: 1px solid hsla(0, 0%, 0%, 0.1);
       --transition-timing: cubic-bezier(1, 0, 0, 1);
 
@@ -197,6 +236,8 @@
          width: inherit;
          height: inherit;
          max-height: inherit;
+         height: 100%;
+         max-height: 100%;
 
          overflow-x: hidden;
          overflow-y: auto;
@@ -208,56 +249,71 @@
 
          display: flex;
          flex-direction: column;
+         justify-content: flex-start;
          align-items: stretch;
 
-         background-color: white;
-
-         & > * {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-items: center;
-
-            background: none;
-            border: none;
-            font-size: 1em;
-            cursor: pointer;
-
-            width: 100%;
-            min-width: inherit;
-            overflow: hidden;
-            padding: 1em 1.2em;
-            gap: 1em;
-
-            &:hover {
-               background: hsla(0, 0%, 0%, 0.1);
-            }
-
-            img {
-               --icon-size: 1em;
-               width: var(--icon-size);
-               height: var(--icon-size);
-               max-width: initial;
-               max-height: initial;
-            }
-            span {
-               flex-grow: 1;
-               min-width: max-content;
-               text-align: start;
-               font-size: 0.9em;
-               font-weight: 400;
-               color: black;
-            }
-         }
+         background-color: var(--primary-color-background);
       }
+
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      top: var(--y);
+      left: var(--x);
    }
    .PopupMenu-isShowing {
       opacity: 1;
-      transform: translateX(var(--endX)) translateY(var(--endY));
+      transform: var(--transform-end);
    }
    .PopupMenu-isHiding {
       opacity: 0;
-      transform: translateX(var(--startX))
-         translateY(calc(var(--startY) + var(--moveY)));
+      transform: var(--transform-start);
+   }
+
+   .PopupMenu-Top {
+      --transform-start: translateX(calc(0px - 50%))
+         translateY(calc(0px - 100% + var(--halfHeight)));
+      --transform-end: translateX(calc(0px - 50%)) translateY(calc(0px - 100%));
+   }
+   .PopupMenu-Right {
+      --transform-start: translateX(calc(0px - var(--halfWidth)))
+         translateY(calc(0px - 50%));
+      --transform-end: translateX(calc(0px)) translateY(calc(0px - 50%));
+   }
+   .PopupMenu-Bottom {
+      --transform-start: translateX(calc(0px - 50%))
+         translateY(calc(0px - var(--halfHeight)));
+      --transform-end: translateX(calc(0px - 50%)) translateY(0px);
+   }
+   .PopupMenu-Left {
+      --transform-start: translateX(calc(0px - 100% + var(--halfWidth)))
+         translateY(calc(0px - 50%));
+      --transform-end: translateX(calc(0px - 100%)) translateY(calc(0px - 50%));
+   }
+
+   .PopupMenu-TopLeft {
+      --transform-start: translateX(calc(0px - 100% + var(--halfWidth)))
+         translateY(calc(0px - 100% + var(--halfHeight)));
+      --transform-end: translateX(calc(0px - 100% + calc(var(--halfWidth) * 0.5)))
+         translateY(calc(0px - 100% + calc(var(--halfHeight) * 0.5)));
+   }
+   .PopupMenu-TopRight {
+      --transform-start: translateX(calc(0px - var(--halfWidth)))
+         translateY(calc(0px - 100% + var(--halfHeight)));
+      --transform-end: translateX(calc(0px - calc(var(--halfWidth) * 0.5)))
+         translateY(calc(0px - 100% + calc(var(--halfHeight) * 0.5)));
+   }
+   .PopupMenu-BottomLeft {
+      --transform-start: translateX(calc(0px - 100% + var(--halfWidth)))
+         translateY(calc(0px - var(--halfHeight)));
+      --transform-end: translateX(calc(0px - 100% + calc(var(--halfWidth) * 0.5)))
+         translateY(calc(0px - calc(var(--halfHeight) * 0.5)));
+   }
+   .PopupMenu-BottomRight {
+      --transform-start: translateX(calc(0px - var(--halfWidth)))
+         translateY(calc(0px - var(--halfHeight)));
+      --transform-end: translateX(calc(0px - calc(var(--halfWidth) * 0.5)))
+         translateY(calc(0px - calc(var(--halfHeight) * 0.5)));
    }
 </style>

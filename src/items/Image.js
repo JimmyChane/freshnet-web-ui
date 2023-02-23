@@ -1,7 +1,7 @@
 import HostApi from "@/host/HostApi.js";
 import U from "@/U.js";
 import ModuleImage from "./data/Image.js";
-import Filename from "./Filename.js";
+import Filename from "../objects/Filename";
 
 const getColors = require("get-image-colors"); // https://www.npmjs.com/package/get-image-colors
 
@@ -34,8 +34,7 @@ class Image {
       return 0;
    }
    toUrl(option = { width: 0, height: 0 }) {
-      let { width = 0, height = 0 } =
-         U.isObject(option) && option !== null ? option : {};
+      let { width = 0, height = 0 } = U.isObject(option) && option !== null ? option : {};
 
       const method = this.method;
       const path = this.path;
@@ -43,10 +42,8 @@ class Image {
       if (!method || !path) return "";
       if (method === Image.Method.Local) {
          let resPath = path;
-         if (resPath.startsWith("."))
-            resPath = resPath.substring(1, resPath.length);
-         if (resPath.startsWith("/"))
-            resPath = resPath.substring(1, resPath.length);
+         if (resPath.startsWith(".")) resPath = resPath.substring(1, resPath.length);
+         if (resPath.startsWith("/")) resPath = resPath.substring(1, resPath.length);
          if (resPath.startsWith("resource/")) {
             resPath = resPath.substring("resource/".length, resPath.length);
             return HostApi.res(resPath);
@@ -61,9 +58,7 @@ class Image {
          const filename = new Filename(name);
          const dimensionQuery = Image.dimensionToQuery(width, height);
          const query = dimensionQuery.length ? `?${dimensionQuery}` : "";
-         return `${
-            HostApi.originApi
-         }/image/name/${filename.toString()}${query}`;
+         return `${HostApi.originApi}/image/name/${filename.toString()}${query}`;
       }
 
       return "";

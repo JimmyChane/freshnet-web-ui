@@ -45,10 +45,7 @@
       },
       watch: {
          isExpanded() {
-            this.$emit(
-               this.isExpanded ? "onExpanded" : "onCollapsed",
-               this.order,
-            );
+            this.$emit(this.isExpanded ? "onExpanded" : "onCollapsed", this.order);
          },
          expand() {
             this.isExpanded = this.expand;
@@ -68,9 +65,7 @@
    >
       <div class="ItemOrder-main">
          <div class="ItemOrder-main-left">
-            <span class="ItemOrder-date" v-if="dateCreated">{{
-               dateCreated
-            }}</span>
+            <span class="ItemOrder-date" v-if="dateCreated">{{ dateCreated }}</span>
 
             <router-link
                class="ItemOrder-customer"
@@ -93,9 +88,7 @@
             <img
                class="ItemOrder-button transition"
                :class="[
-                  isExpanded
-                     ? 'ItemOrder-button-expanded'
-                     : 'ItemOrder-button-collapsed',
+                  isExpanded ? 'ItemOrder-button-expanded' : 'ItemOrder-button-collapsed',
                ]"
                :alt="isExpanded ? 'Expand' : 'Collapse'"
                :src="host.icon('down-arrow-grey')"
@@ -108,13 +101,13 @@
          :class="[isExpanded ? 'ItemOrder-option-expand' : '']"
       >
          <Button1
-            v-if="order.status === Order.STATUS_COMPLETED"
+            v-if="order.status === Order.Status.Completed"
             color="#25AE88"
             text="Move to Pending"
             @button-click="$emit('onPending')"
          />
          <Button1
-            v-if="order.status === Order.STATUS_PENDING"
+            v-if="order.status === Order.Status.Pending"
             :icon="host.icon('success-green')"
             :iconActive="host.icon('success-white')"
             color="#25AE88"

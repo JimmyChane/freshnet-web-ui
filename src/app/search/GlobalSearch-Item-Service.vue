@@ -1,5 +1,5 @@
 <script>
-   import ServiceState from "@/items/tools/ServiceState.js";
+   import ServiceStates from "@/objects/ServiceStates.js";
    import ImageViews from "@/components/ImageViews.vue";
    import ItemSearch from "./GlobalSearch-Item.vue";
 
@@ -10,7 +10,7 @@
          images: (c) => (c.item ? c.item.imageFiles : []),
          stateTitle: (c) => {
             const key = c.item ? c.item.state : "";
-            const state = ServiceState.getResourceByKey(key);
+            const state = ServiceStates.findByKey(key);
             return state ? state.title : "";
          },
          title: (c) => {

@@ -6,7 +6,8 @@
          src: { type: String, default: "" },
          alt: { type: String, default: "" },
          href: { type: String, default: "" },
-         target: { type: String, default: "_blank" },
+         target: { type: String, default: "" },
+         to: { default: undefined },
       },
    };
 </script>
@@ -21,16 +22,28 @@
       @mouseover="(x) => $emit('mouseover', x)"
       @mouseleave="(x) => $emit('mouseleave', x)"
    >
-      <Icon :src="src" :alt="alt" />
+      <Icon class="ButtonIcon-icon" :src="src" :alt="alt" />
    </a>
+
+   <router-link
+      class="ButtonIcon transition"
+      v-else-if="to !== undefined"
+      :to="to"
+      @click="$emit('click')"
+      @mouseover="(x) => $emit('mouseover', x)"
+      @mouseleave="(x) => $emit('mouseleave', x)"
+   >
+      <Icon class="ButtonIcon-icon" :src="src" :alt="alt"
+   /></router-link>
+
    <button
-      class="ButtonIcon"
+      class="ButtonIcon transition"
       v-else
       @click="$emit('click')"
       @mouseover="(x) => $emit('mouseover', x)"
       @mouseleave="(x) => $emit('mouseleave', x)"
    >
-      <Icon :src="src" :alt="alt" />
+      <Icon class="ButtonIcon-icon" :src="src" :alt="alt" />
    </button>
 </template>
 
@@ -58,6 +71,10 @@
       &:hover,
       &:focus {
          background: rgba(0, 0, 0, 0.1);
+      }
+
+      .ButtonIcon-icon {
+         font-size: inherit;
       }
    }
 </style>

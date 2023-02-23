@@ -3,7 +3,7 @@
    import ListServices from "./ListServices.vue";
 
    import ModuleService from "@/items/data/Service.js";
-   import ServiceState from "@/items/tools/ServiceState.js";
+   import ServiceStates from "@/objects/ServiceStates.js";
    import Empty from "@/components/Empty.vue";
 
    import U from "@/U.js";
@@ -25,101 +25,38 @@
             scrollTop: 0,
 
             stateMenuIndex: 0,
-            stateMenus: [
-               State.Pending,
-               State.Waiting,
-               State.Completed,
-               State.Rejected,
-            ].map((stateKey) => {
-               const resource = ServiceState.getResourceByKey(stateKey);
-               const title = resource.title;
-               const icon = resource.icon.color;
-               const iconSelected = resource.icon.white;
-               const primaryColor = resource.color;
-               const isSelected = () => {
-                  const state = this.stateMenus[this.stateMenuIndex];
-                  if (!state) return false;
-                  return state.key === stateKey;
-               };
-               const click = () => {
-                  if (this.state === stateKey) return;
-                  this.$root.replaceRoute({ query: { state: stateKey } });
-               };
-               return {
-                  key: stateKey,
-                  title,
-                  icon,
-                  iconSelected,
-                  primaryColor,
-                  isPrimaryColorBright: true,
-                  list: [],
-                  isSelected,
-                  click,
-               };
-            }),
-
             currentLayoutIndex: 1,
-            layoutMenus: [
-               {
-                  title: "Grid View",
-                  icon: this.host.icon("grid-000000"),
-                  click: (menu) =>
-                     (this.currentLayoutIndex = this.layoutMenus.indexOf(menu)),
-               },
-               {
-                  title: "List View",
-                  icon: this.host.icon("list-000000"),
-                  click: (menu) =>
-                     (this.currentLayoutIndex = this.layoutMenus.indexOf(menu)),
-               },
-               {
-                  title: "Detail View",
-                  icon: this.host.icon("detail-000000"),
-                  click: (menu) =>
-                     (this.currentLayoutIndex = this.layoutMenus.indexOf(menu)),
-               },
-            ],
-
-            currentGroupIndex: 0,
-            groupMenus: [{ key: "Date", title: "Date" }].map((menu) => {
-               menu.click = () => {
-                  this.currentGroupIndex = this.groupMenus.indexOf(menu);
-               };
-               return menu;
-            }),
-
+            currentGroupIndex: 1,
             currentSortIndex: 0,
-            sortMenus: [
-               { key: ListServices.Sort.DateCreated, title: "Date" },
-               { key: ListServices.Sort.Name, title: "Customer Name" },
-               { key: ListServices.Sort.PhoneNumber, title: "Phone Number" },
-            ].map((menu) => {
-               menu.click = () => {
-                  this.currentSortIndex = this.sortMenus.indexOf(menu);
-               };
-               return menu;
-            }),
+
+            stateMenus: [],
+            layoutMenus: [],
+            groupMenus: [],
+            sortMenus: [],
          };
       },
       computed: {
          iconEmpty: () => PageService.icon.dark.toUrl(),
 
-         items: (context) => context.stateMenus[context.stateMenuIndex].list,
+         items: (context) =>
+            context.stateMenus[context.stateMenuIndex]
+               ? context.stateMenus[context.stateMenuIndex].list
+               : [],
          state: (c) => U.optString(c.$route.query.state),
 
-         isGridView: (c) => c.currentLayoutIndex === 0,
-         isListView: (c) => c.currentLayoutIndex === 1,
-         isDetailView: (c) => c.currentLayoutIndex === 2,
-
-         ViewMode() {
-            if (this.isGridView) return ListServices.Mode.Grid;
-            if (this.isListView) return ListServices.Mode.List;
-            if (this.isDetailView) return ListServices.Mode.Detail;
+         viewMode: (c) => {
+            if (c.currentLayoutIndex === 0) return ListServices.Mode.Grid;
+            if (c.currentLayoutIndex === 1) return ListServices.Mode.List;
+            if (c.currentLayoutIndex === 2) return ListServices.Mode.Detail;
             return 0;
          },
-         SortMode() {
-            const menu = this.sortMenus[this.currentSortIndex];
-            return menu ? menu.key : ListServices.Sort.DateCreated;
+         sortMode: (c) => {
+            const menu = c.sortMenus.find((menu) => menu.isSelected());
+            return menu ? menu.key : ListServices.SortMode.DateCreated;
+         },
+         groupMode: (c) => {
+            const menu = c.groupMenus.find((menu) => menu.isSelected());
+            return menu ? menu.key : ListServices.GroupMode.DateCreated;
          },
       },
       watch: {
@@ -145,8 +82,7 @@
 
          filterList(services, key) {
             const tab = this.stateMenus.find((tab) => tab.key === key);
-            if (tab)
-               tab.list = services.filter((service) => service.state === key);
+            if (tab) tab.list = services.filter((service) => service.state === key);
          },
 
          invalidateList() {
@@ -169,6 +105,75 @@
          },
       },
       mounted() {
+         this.stateMenus = [
+            State.Pending,
+            State.Waiting,
+            State.Completed,
+            State.Rejected,
+         ].map((stateKey) => {
+            const resource = ServiceStates.findByKey(stateKey);
+            const title = resource.title;
+            const icon = resource.icon.color;
+            const iconSelected = resource.icon.white;
+            const primaryColor = resource.color;
+            return {
+               key: stateKey,
+               title,
+               icon,
+               iconSelected,
+               primaryColor,
+               isPrimaryColorBright: true,
+               list: [],
+            };
+         });
+         this.layoutMenus = [
+            { title: "Grid View", icon: this.host.icon("grid-000000") },
+            { title: "List View", icon: this.host.icon("list-000000") },
+            { title: "Detail View", icon: this.host.icon("detail-000000") },
+         ];
+         this.groupMenus = [
+            { key: ListServices.GroupMode.None, title: "None" },
+            { key: ListServices.GroupMode.DateCreated, title: "Date" },
+         ];
+         this.sortMenus = [
+            { key: ListServices.SortMode.DateCreated, title: "Date" },
+            { key: ListServices.SortMode.Name, title: "Customer Name" },
+            { key: ListServices.SortMode.PhoneNumber, title: "Phone Number" },
+         ];
+
+         for (const menu of this.stateMenus) {
+            menu.isSelected = () => {
+               const state = this.stateMenus[this.stateMenuIndex];
+               if (!state) return false;
+               return state.key === menu.key;
+            };
+            menu.click = () => {
+               if (this.state === menu.key) return;
+               this.$root.replaceRoute({ query: { state: menu.key } });
+            };
+         }
+         for (const menu of this.layoutMenus) {
+            menu.click = (menu) => {
+               this.currentLayoutIndex = this.layoutMenus.indexOf(menu);
+            };
+         }
+         for (const menu of this.groupMenus) {
+            menu.click = () => {
+               this.currentGroupIndex = this.groupMenus.indexOf(menu);
+            };
+            menu.isSelected = () => {
+               return this.groupMenus.indexOf(menu) === this.currentGroupIndex;
+            };
+         }
+         for (const menu of this.sortMenus) {
+            menu.click = () => {
+               this.currentSortIndex = this.sortMenus.indexOf(menu);
+            };
+            menu.isSelected = () => {
+               return this.sortMenus.indexOf(menu) === this.currentSortIndex;
+            };
+         }
+
          this.invalidateList();
          this.invalidateState();
       },
@@ -197,20 +202,16 @@
       />
 
       <ListServices
-         v-if="
-            stateMenus[stateMenuIndex] && stateMenus[stateMenuIndex].list.length
-         "
-         :mode="ViewMode"
-         :sort="SortMode"
+         v-if="stateMenus[stateMenuIndex] && stateMenus[stateMenuIndex].list.length"
+         :mode="viewMode"
+         :sortMode="sortMode"
+         :groupMode="groupMode"
          :items="items"
          :item="currentItem"
          @click-item="(item) => $emit('click-service', item)"
       />
 
-      <Empty
-         v-if="!items.length && !serviceStore.getters.isLoading"
-         :icon="iconEmpty"
-      />
+      <Empty v-if="!items.length && !serviceStore.getters.isLoading" :icon="iconEmpty" />
    </div>
 </template>
 

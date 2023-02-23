@@ -5,13 +5,18 @@
    export default {
       props: { isWide: { type: Boolean, default: false } },
       components: { ButtonIcon, GlobalSearch },
+      methods: {
+         focus() {
+            this.$refs.globalsearch.focus();
+         },
+      },
    };
 </script>
 
 <template>
-   <div :class="['LeftNav-Search', isWide ? 'LeftNav-Search-isWide' : '']">
+   <div :class="['NavigationLeft-Search', isWide ? 'NavigationLeft-Search-isWide' : '']">
       <ButtonIcon
-         class="LeftNav-Search-button"
+         class="NavigationLeft-Search-button"
          v-if="!isWide"
          :src="host.icon('search-000000')"
          @click="
@@ -23,17 +28,17 @@
          "
       />
 
-      <GlobalSearch class="LeftNav-Search-comp" />
+      <GlobalSearch class="NavigationLeft-Search-comp" ref="globalsearch" />
    </div>
 </template>
 
 <style lang="scss" scoped>
-   .LeftNav-Search {
+   .NavigationLeft-Search {
       display: flex;
       flex-direction: row;
       align-items: center;
       margin: auto;
-      .LeftNav-Search-comp {
+      .NavigationLeft-Search-comp {
          --background-color: hsl(0, 0%, 94%);
          --border-radius: 0.8rem;
          --border: 1px solid transparent;
@@ -41,7 +46,7 @@
          --dropdown-height: calc(100vh - 10rem);
       }
    }
-   .LeftNav-Search-isWide {
+   .NavigationLeft-Search-isWide {
       margin: 0 0.7rem;
    }
 </style>

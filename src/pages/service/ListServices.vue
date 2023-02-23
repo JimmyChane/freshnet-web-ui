@@ -1,5 +1,6 @@
 <script>
-   const Sort = { DateCreated: 1, Name: 2, PhoneNumber: 3, Price: 4 };
+   const SortMode = { DateCreated: 1, Name: 2, PhoneNumber: 3, Price: 4 };
+   const GroupMode = { None: 0, DateCreated: 1 };
 
    import ItemService from "./ItemService.vue";
 
@@ -7,12 +8,14 @@
 
    export default {
       Mode: ItemService.Mode,
-      Sort,
+      SortMode,
+      GroupMode,
 
       components: { ItemService },
       props: {
          mode: { type: Number, default: ItemService.Mode.List },
-         sort: { type: Number, default: Sort.DateCreated },
+         sortMode: { type: Number, default: SortMode.DateCreated },
+         groupMode: { type: Number, default: GroupMode.DateCreated },
 
          items: { type: Array, default: () => [] },
          item: { type: Object, default: () => null },
@@ -38,13 +41,57 @@
          isListView: (c) => c.mode === ItemService.Mode.List,
          isDetailView: (c) => c.mode === ItemService.Mode.Detail,
 
-         isSortDateCreated: (c) => c.sort === Sort.DateCreated,
-         isSortName: (c) => c.sort === Sort.Name,
-         isSortPhoneNumber: (c) => c.sort === Sort.PhoneNumber,
-         isSortPrice: (c) => c.sort === Sort.Price,
+         isSortDateCreated: (c) => c.sortMode === SortMode.DateCreated,
+         isSortName: (c) => c.sortMode === SortMode.Name,
+         isSortPhoneNumber: (c) => c.sortMode === SortMode.PhoneNumber,
+         isSortPrice: (c) => c.sortMode === SortMode.Price,
+
+         sortedItems: (c) => {
+            if (c.isSortDateCreated)
+               return c.items.sort((item1, item2) => {
+                  return item1.compareTimestamp(item2);
+               });
+            if (c.isSortName)
+               return c.items.sort((item1, item2) => {
+                  return item1.customer.compareName(item2.customer);
+               });
+            if (c.isSortPhoneNumber)
+               return c.items.sort((item1, item2) => {
+                  return item1.customer.comparePhoneNumber(item2.customer);
+               });
+            if (c.isSortPrice)
+               return c.items.sort((item1, item2) => {
+                  return item1.comparePrice(item2);
+               });
+
+            return items;
+         },
 
          groups() {
-            const groups = this.items.reduce((groups, item) => {
+            const groups =
+               this.groupMode === GroupMode.DateCreated
+                  ? this.groupsOfDate(this.items)
+                  : [{ items: this.items }];
+
+            for (const group of groups) this.sortItems(group.items);
+
+            return groups;
+         },
+      },
+      watch: {
+         item() {
+            if (!this.item) {
+               setTimeout(() => {
+                  this.itemSelected = this.item;
+               }, 500);
+            } else {
+               this.itemSelected = this.item;
+            }
+         },
+      },
+      methods: {
+         groupsOfDate(items) {
+            return items.reduce((groups, item) => {
                const ts = item.timestamp;
                const time = ts.time;
 
@@ -65,44 +112,34 @@
 
                if (ts.isToday()) putItem("Today");
                else if (ts.isYesterday()) putItem("Yesterday");
-               else if (isWithinWeek())
-                  putItem(format(time, "EEEE, dd/LL/yyyy"));
+               else if (isWithinWeek()) putItem(format(time, "EEEE, dd/LL/yyyy"));
                else if (ts.isThisYear()) putItem(format(time, "dd/LL/yyyy"));
                else putItem(ts.getYear().toString());
 
                return groups;
             }, []);
-
-            if (this.isSortDateCreated) return groups;
-
-            for (const group of groups) {
-               group.items.sort((item1, item2) => {
-                  if (this.isSortName) {
-                     return item1.customer.compareName(item2.customer);
-                  }
-                  if (this.isSortPhoneNumber) {
-                     return item1.customer.comparePhoneNumber(item2.customer);
-                  }
-                  if (this.isSortPrice) return item1.comparePrice(item2);
-                  return 0;
+         },
+         sortItems(items) {
+            if (this.isSortDateCreated)
+               return items.sort((item1, item2) => {
+                  return item1.compareTimestamp(item2);
                });
-            }
+            if (this.isSortName)
+               return items.sort((item1, item2) => {
+                  return item1.customer.compareName(item2.customer);
+               });
+            if (this.isSortPhoneNumber)
+               return items.sort((item1, item2) => {
+                  return item1.customer.comparePhoneNumber(item2.customer);
+               });
+            if (this.isSortPrice)
+               return items.sort((item1, item2) => {
+                  return item1.comparePrice(item2);
+               });
 
-            return groups;
+            return items;
          },
-      },
-      watch: {
-         item() {
-            if (!this.item) {
-               setTimeout(() => {
-                  this.itemSelected = this.item;
-               }, 500);
-            } else {
-               this.itemSelected = this.item;
-            }
-         },
-      },
-      methods: {
+
          isItemSelected(item) {
             return item === this.itemSelected;
          },
@@ -120,7 +157,12 @@
 <template>
    <div class="ListServices">
       <div
-         class="ListServices-group"
+         :class="[
+            'ListServices-group',
+            isGridView ? 'ListServices-group-gridView' : '',
+            isListView ? 'ListServices-group-listView' : '',
+            isDetailView ? 'ListServices-group-detailView' : '',
+         ]"
          v-for="group of groups"
          :key="group.title"
       >
@@ -134,17 +176,10 @@
             group.title
          }}</span>
 
-         <div
-            :class="[
-               'PanelServices-items',
-               isGridView ? 'PanelServices-items-gridView' : '',
-               isListView ? 'PanelServices-items-listView' : '',
-               isDetailView ? 'PanelServices-items-detailView' : '',
-            ]"
-         >
-            <div class="PanelServices-items-header" v-if="isGridView"></div>
+         <div class="ListServices-items">
+            <div class="ListServices-items-header" v-if="isGridView"></div>
             <div
-               class="PanelServices-items-header"
+               class="ListServices-items-header"
                v-if="isDetailView && groups.indexOf(group) === 0"
             >
                <span
@@ -157,9 +192,7 @@
                <span
                   class="Property-customerPhoneNumber"
                   :style="{
-                     '--width': `${
-                        getPropertyByKey('customerPhoneNumber').width
-                     }px`,
+                     '--width': `${getPropertyByKey('customerPhoneNumber').width}px`,
                   }"
                   >Customer Phone Number</span
                >
@@ -194,7 +227,7 @@
             </div>
 
             <ItemService
-               class="PanelServices-item"
+               class="ListServices-item"
                v-for="item in group.items"
                :mode="viewMode"
                :key="`service${item.id}`"
@@ -220,7 +253,6 @@
       flex-grow: 1;
       align-items: center;
       padding: 1rem;
-      padding-top: 0;
       padding-top: 0.8rem;
 
       .ListServices-group {
@@ -250,7 +282,7 @@
             top: 9.6rem;
          }
 
-         .PanelServices-items {
+         .ListServices-items {
             width: 100%;
             .PanelService-items-title {
                background: hsla(0, 0%, 0%, 0.04);
@@ -258,7 +290,10 @@
                padding: 0.3rem 0.5rem;
             }
          }
-         .PanelServices-items-gridView {
+      }
+
+      .ListServices-group-gridView {
+         .ListServices-items {
             max-width: var(--max-width);
             margin-top: -0.5rem;
             gap: 0.2rem;
@@ -266,35 +301,47 @@
             grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
             grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
 
-            .PanelServices-items-header {
+            .ListServices-items-header {
                grid-column: 1 / -1;
             }
-            .PanelServices-item {
+            .ListServices-item {
                width: 100%;
                aspect-ratio: 1/1;
             }
          }
-         .PanelServices-items-listView {
+      }
+      .ListServices-group-listView {
+         .ListServices-items {
             max-width: 32rem;
             gap: 0.2rem;
             display: flex;
             flex-direction: column;
             align-items: center;
 
-            .PanelServices-item {
+            .ListServices-item {
                width: 100%;
             }
          }
-         .PanelServices-items-detailView {
+      }
+      .ListServices-group-detailView {
+         align-items: flex-start;
+         .ListServices-group-title {
+            left: 1rem;
+         }
+         .ListServices-items {
+            width: max-content;
+
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             justify-content: flex-start;
-            gap: 0.2rem;
 
-            .PanelServices-items-header {
+            border-radius: 0.5rem;
+            overflow: hidden;
+
+            .ListServices-items-header {
                gap: 0.5rem;
-               padding: 1rem;
+               padding: 1rem 0.6rem;
 
                display: flex;
                flex-direction: row;

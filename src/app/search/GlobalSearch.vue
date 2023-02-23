@@ -54,9 +54,7 @@
       methods: {
          search(text) {
             text = this.searchText = text.toLowerCase();
-            let texts = text
-               .split(/[\s,]+/)
-               .filter((text) => text.trim().length);
+            let texts = text.split(/[\s,]+/).filter((text) => text.trim().length);
 
             let productSearches = this.products.map((product) => {
                return {
@@ -112,12 +110,17 @@
                   .sort((x1, x2) => x2.count - x1.count);
             else this.searches = [];
          },
+
+         focus() {
+            this.$refs.searchinput.focus();
+         },
       },
    };
 </script>
 
 <template>
    <SearchInput
+      ref="searchinput"
       class="GlobalSearch"
       :list="searches"
       @callback-search="(text) => search(text)"

@@ -1,92 +1,67 @@
 import PhoneNumber from "./PhoneNumber.js";
 import U from "@/U.js";
-import ItemSearcher from "./tools/ItemSearcher.js";
+import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
 class ServiceCustomer {
-	stores = null;
-	constructor(stores) {
-		this.stores = stores;
-	}
+   stores = null;
+   constructor(stores) {
+      this.stores = stores;
+   }
 
-	names = [];
-	phoneNumbers = [];
+   name = "";
+   phoneNumber = null;
 
-	// legacy
-	get name() {
-		return this.names[0];
-	}
-	// legacy
-	get phoneNumber() {
-		return this.phoneNumbers[0];
-	}
+   fromData(data) {
+      this.name = U.optString(data.name);
+      this.phoneNumber = data.phoneNumber
+         ? new PhoneNumber(this.stores).fromData(data.phoneNumber)
+         : null;
+      return this;
+   }
+   toData() {
+      return {
+         name: this.name,
+         phoneNumber: this.phoneNumber ? this.phoneNumber.toData() : "",
+      };
+   }
+   toCount(strs) {
+      let count = strs.reduce((count, str) => {
+         if (textContains("customer", str)) count++;
+         if (textContains(this.name, str)) count++;
+         return count;
+      }, 0);
+      if (this.phoneNumber) count += this.phoneNumber.toCount(strs);
 
-	fromData(data) {
-		this.names = (Array.isArray(data.names) ? data.names : [data.name])
-			.map((name) => U.optString(name))
-			.filter((name) => name.length);
+      return count;
+   }
 
-		this.phoneNumbers = (
-			Array.isArray(data.phoneNumbers) ? data.phoneNumbers : [data.phoneNumber]
-		)
-			.map((dataPhoneNumber) => {
-				if (!dataPhoneNumber) return null;
-				return new PhoneNumber(this.stores).fromData(dataPhoneNumber);
-			})
-			.filter((phoneNumber) => phoneNumber !== null);
+   compare(item) {
+      return this.compareName(item) + this.comparePhoneNumber(item);
+   }
+   compareName(item) {
+      const name1 = U.optString(this.name);
+      const name2 = U.optString(item.name);
+      return name1.localeCompare(name2);
+   }
+   comparePhoneNumber(item) {
+      if (!this.phoneNumber && !item.phoneNumber) return 0;
+      if (this.phoneNumber && !item.phoneNumber) return 1;
+      if (!this.phoneNumber && item.phoneNumber) return -1;
+      return this.phoneNumber.compare(item.phoneNumber);
+   }
 
-		return this;
-	}
-	toData() {
-		return {
-			name: this.name, // legacy
-			phoneNumber: this.phoneNumber ? this.phoneNumber.toData() : "", // legacy
-			names: this.names.map((name) => name),
-			phoneNumbers: this.phoneNumbers.map((phoneNumber) =>
-				phoneNumber.toData(),
-			),
-		};
-	}
-	toCount(strs) {
-		return strs.reduce((count, str) => {
-			if (textContains("customer", str)) count++;
-			count += this.names.reduce((count, name) => {
-				if (textContains(name, str)) count++;
-				return count;
-			}, 0);
-			count += this.phoneNumbers.reduce((count, phoneNumber) => {
-				if (textContains(phoneNumber.toString(), str)) count++;
-				return count;
-			}, 0);
-			return count;
-		}, 0);
-	}
+   isEqual(item) {
+      const eName = U.optString(item.name);
+      const ePhoneNumber = item.phoneNumber;
+      const ePhoneNumberValue = ePhoneNumber ? ePhoneNumber.value : "";
 
-	compare(item) {
-		return this.compareName(item) + this.comparePhoneNumber(item);
-	}
-	compareName(item) {
-		const name1 = U.optString(this.name);
-		const name2 = U.optString(item.name);
-		return name1.localeCompare(name2);
-	}
-	comparePhoneNumber(item) {
-		const phoneNumber1 = U.optString(this.phoneNumber);
-		const phoneNumber2 = U.optString(item.phoneNumber);
-		return phoneNumber1.localeCompare(phoneNumber2);
-	}
+      const name = U.optString(this.name);
+      const phoneNumber = this.phoneNumber;
+      const phoneNumberValue = phoneNumber ? phoneNumber.value : "";
 
-	isEqual(item) {
-		const eName = U.optString(item.name);
-		const ePhoneNumber = item.phoneNumber;
-		const ePhoneNumberValue = ePhoneNumber ? ePhoneNumber.value : "";
-
-		const name = U.optString(this.name);
-		const phoneNumber = this.phoneNumber;
-		const phoneNumberValue = phoneNumber ? phoneNumber.value : "";
-
-		return eName === name && ePhoneNumberValue === phoneNumberValue;
-	}
+      return eName === name && ePhoneNumberValue === phoneNumberValue;
+   }
 }
 
 export default ServiceCustomer;

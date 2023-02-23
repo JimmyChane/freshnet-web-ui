@@ -1,267 +1,169 @@
 <script>
    const selectionNone = { key: "", title: "None" };
 
+   import Menu from "@/components/Menu.vue";
+   import U from "@/U";
+
    export default {
+      components: { Menu },
       emits: ["callback-select"],
       props: {
          list: { type: Array, default: () => [] },
          keySelected: { type: String, default: "" },
       },
-      data() {
-         return {
-            expand: false,
-            shouldShowIcon: false,
+      data: () => ({ isShow: false, menus: [], shouldShowIcon: false }),
+      computed: {
+         menuCorner: (c) => Menu.Corner.BOTTOM,
+         menuWidth: (c) => Menu.Width.SAME,
 
-            itemList: [],
-
-            currentSelected: selectionNone,
-
-            selectionNone,
-         };
+         currentMenu: (c) => {
+            const menu = c.menus.find((menu) => menu.isSelected());
+            if (menu) return menu;
+            return selectionNone;
+         },
+         currentIcon: (c) => {
+            const item = c.list.find((item) => item.key === c.currentMenu.key);
+            const icon = item.icon;
+            if (icon) return icon.white;
+            return "";
+         },
+         currentColor: (c) => {
+            if (!c.currentMenu || !U.isString(c.currentMenu.primaryColor))
+               return "hsl(0, 0%, 96%)";
+            return c.currentMenu.primaryColor;
+         },
+         currentFontColor: (c) => {
+            if (!c.currentMenu || !U.isString(c.currentMenu.primaryColor)) return "black";
+            return U.isColorDark(c.currentColor, 80) ? "white" : "black";
+         },
       },
       watch: {
-         list: function () {
-            this.onList();
-         },
-         keySelected: function (newKey) {
-            this.onSelect(newKey);
+         list() {
+            this.invalidate();
          },
       },
       mounted() {
-         const spinnerButton = this.$refs["Selector-button"];
+         const spinnerButton = this.$refs["Selector-button"].$el;
          spinnerButton.addEventListener("focusout", () => {
-            setTimeout(() => (this.expand = false), 100);
+            setTimeout(() => (this.isShow = false), 100);
          });
 
-         this.onList();
-         this.onSelect(this.keySelected);
+         this.invalidate();
       },
       methods: {
-         onList() {
+         invalidate() {
             this.shouldShowIcon = false;
-
-            const itemListParsed = this.list.filter((item) => {
+            this.menus = this.list.map((item) => {
                this.shouldShowIcon = !this.shouldShowIcon ? item.icon : true;
-               return (
-                  typeof item == "object" &&
-                  item.key &&
-                  this.currentSelected?.key !== item.key
-               );
+               return {
+                  key: item.key,
+                  title: item.title,
+                  icon: U.isObject(item.icon) ? item.icon.color : "",
+                  primaryColor: item.color,
+                  isSelected: () => item.key === this.keySelected,
+                  click: () => this.$emit("callback-select", item.key),
+               };
             });
 
-            this.itemList = itemListParsed ? itemListParsed : [];
-         },
-         onSelect(key) {
-            const currentSelectedParsed = this.list.find((item) => {
-               return item.key === key;
-            });
+            if (!this.shouldShowIcon) {
+               for (const menu of this.menus) menu.icon = undefined;
+            }
 
-            this.currentSelected = currentSelectedParsed
-               ? currentSelectedParsed
-               : this.selectionNone;
-
-            this.onList();
+            this.$emit("callback-select", this.currentMenu.key);
          },
       },
    };
 </script>
 
 <template>
-   <div
-      class="Selector-root transition"
-      :style="{
-         '--item-color': currentSelected.color
-            ? currentSelected.color
-            : 'hsl(0, 0%, 96%)',
-         '--item-font-color':
-            currentSelected.color && currentSelected.color ? 'white' : 'black',
-      }"
+   <Menu
+      :class="[
+         'transition',
+         'Selector',
+         isShow ? 'Selector-isSelected' : 'Selector-isDeselected',
+      ]"
+      :style="{ '--primary-color': currentColor, '--color': currentFontColor }"
+      :corner="menuCorner"
+      :width="menuWidth"
+      :menus="menus"
+      :primaryColor="currentColor"
+      ref="Selector-button"
+      @show="() => (isShow = true)"
+      @hide="() => (isShow = false)"
    >
-      <button
-         :class="[
-            'Selector-body',
-            expand ? 'Selector-body-selected' : '',
-            'transition',
-         ]"
-         ref="Selector-button"
-         @click="expand = !expand"
-      >
-         <div class="Selector-body-hover Selector-item transition">
-            <img
-               class="Selector-icon transition"
-               v-if="shouldShowIcon && currentSelected.icon"
-               :style="{ opacity: [currentSelected.icon ? '1' : '0'] }"
-               :src="currentSelected.icon ? currentSelected.icon.white : ''"
-            />
-            <span class="Selector-title transition">
-               {{ currentSelected.title }}
-            </span>
-            <div class="Selector-separator transition" />
-            <img
-               class="Selector-arrow"
-               :src="
-                  host.res(
-                     `icon/arrow_down-${
-                        currentSelected.color ? 'white' : 'black'
-                     }.svg`,
-                  )
-               "
-               :style="{
-                  transform: [expand ? 'rotate(-180deg)' : 'rotate(0deg)'],
-               }"
-            />
-         </div>
-      </button>
-
-      <div
-         class="Selector-dropdown transition"
-         :style="{
-            transform: [expand ? 'translateY(4px)' : 'translateY(-20px)'],
-            'pointer-events': [expand ? 'all' : 'none'],
-            opacity: [expand ? '1' : '0'],
-         }"
-      >
-         <button
-            class="Selector-item transition"
-            :key="item.key"
-            v-for="item in itemList"
-            :class="[
-               currentSelected.key === item.key
-                  ? 'Selector-item-selected transition'
-                  : '',
-            ]"
-            @click="
-               onSelect(item.key);
-               $emit('callback-select', item.key);
-            "
-         >
-            <img
-               class="Selector-icon"
-               v-if="shouldShowIcon"
-               :style="{ opacity: [item.icon ? '1' : '0'] }"
-               :src="item.icon ? item.icon.color : ''"
-            />
-            <span class="Selector-title"> {{ item.title }} </span>
-         </button>
-      </div>
-   </div>
+      <img
+         class="Selector-icon transition"
+         v-if="shouldShowIcon && currentIcon"
+         :style="{ opacity: currentIcon ? '1' : '0' }"
+         :src="currentIcon"
+      />
+      <span class="Selector-title transition">
+         {{ currentMenu.title }}
+      </span>
+      <div class="Selector-separator transition" />
+      <img
+         class="Selector-arrow"
+         :src="host.res(`icon/arrow_down-${currentColor ? 'white' : 'black'}.svg`)"
+         :style="{ transform: [isShow ? 'rotate(-180deg)' : 'rotate(0deg)'] }"
+      />
+   </Menu>
 </template>
 
 <style lang="scss" scoped>
-   .Selector-root {
-      width: 100%;
+   .Selector {
       --border-radius: 6px;
-      --icon-size: 20px;
 
-      --item-color: hsl(0, 0%, 40%);
-      --item-font-color: black;
-
-      --root-shadow: 0px 0px 10px 0px hsla(0, 0%, 30%, 0.7);
-
-      font-size: 1rem;
-      position: relative;
-   }
-
-   .Selector-icon {
-      width: var(--icon-size);
-      height: var(--icon-size);
-      padding: 0.1rem;
-   }
-
-   .Selector-body {
       width: 100%;
+      padding: 0.6em 1em;
+      gap: 0.6em;
+
+      color: var(--color);
+      border: 1px solid hsl(0, 0%, 80%);
+      border-radius: var(--border-radius);
+      background-color: var(--primary-color);
+
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
-      align-items: center;
-      gap: 1em;
-      cursor: pointer;
-      text-align: start;
-      border: none;
-      border-radius: var(--border-radius);
-      background-color: var(--item-color);
-      // box-shadow: 0 0 4px hsl(0, 0%, 70%);
-      border: 1px solid hsl(0, 0%, 80%);
-      overflow: hidden;
-      &-selected {
-         // box-shadow: var(--root-shadow);
-         z-index: 1;
-      }
+      align-items: stretch;
 
-      .Selector-body-hover {
-         width: 100%;
+      border-radius: 6px;
+      font-weight: 400;
+      font-size: 1rem;
+      text-align: start;
+      overflow: hidden;
+
+      --icon-size: 1.25rem;
+
+      .Selector-icon {
+         width: var(--icon-size);
+         height: var(--icon-size);
+         padding: 0.1rem;
+      }
+      .Selector-title {
+         flex-grow: 100;
+      }
+      .Selector-separator {
+         min-width: 2px;
+         min-height: 100%;
+         background-color: hsla(0, 0%, 0%, 0.1);
          display: flex;
          flex-direction: row;
-         flex-wrap: nowrap;
-         align-items: stretch;
-         gap: 0.6em;
-         padding: 0.6em 1em;
-         border-radius: 6px;
-         color: var(--item-font-color);
-         font-weight: 400;
-         font-size: 1rem;
-         cursor: pointer;
-         &:hover {
-            background-color: hsla(0, 0%, 0%, 0.1);
-         }
-
-         .Selector-title {
-            flex-grow: 100;
-         }
-         .Selector-separator {
-            min-width: 2px;
-            min-height: 100%;
-            background-color: hsla(0, 0%, 0%, 0.1);
-            display: flex;
-            flex-direction: row;
-         }
-         .Selector-arrow {
-            width: var(--icon-size);
-            height: var(--icon-size);
-            padding: 0.3rem;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-         }
       }
-   }
-
-   .Selector-dropdown {
-      width: 100%;
-      z-index: 1;
-      max-height: 400px;
-      overflow-y: auto;
-      position: absolute;
-      flex-direction: column;
-      background-color: white;
-      display: flex;
-      transform: translateY(-20px);
-      pointer-events: none;
-      opacity: 0;
-      border-radius: var(--border-radius);
-      box-shadow: var(--root-shadow);
-      --transition-timing: cubic-bezier(1, 0, 0, 1);
-      padding: 10px 0;
-      .Selector-item {
-         width: 100%;
+      .Selector-arrow {
+         width: var(--icon-size);
+         height: var(--icon-size);
+         padding: 0.3rem;
          display: flex;
          flex-direction: row;
          align-items: center;
-         gap: 1em;
-         padding: 0.6em 1em;
-         cursor: pointer;
-         border: none;
-         background-color: transparent;
-         text-align: start;
-         font-size: 1em;
-         &:hover,
-         &:focus {
-            background-color: hsl(0, 0%, 90%);
-         }
+         justify-content: center;
       }
-      .Selector-item-selected {
-         background-color: hsl(0, 0%, 90%);
+   }
+
+   .Selector-isDeselected {
+      &:hover {
+         background-color: var(--primary-color);
       }
    }
 </style>

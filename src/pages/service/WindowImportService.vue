@@ -1,7 +1,7 @@
 <script>
 	import Window from "@/components/window/Window.vue";
 	import TypeSelector from "@/components/selector/TypeSelector.vue";
-	import ServiceState from "@/items/tools/ServiceState.js";
+	import ServiceStates from "@/objects/ServiceStates.js";
 	import ModuleService from "@/items/data/Service.js";
 	import LayoutFindCustomer from "./LayoutFindCustomer.vue";
 	import BodyUser from "./WindowUpdateService-user.vue";
@@ -26,7 +26,7 @@
 		data() {
 			return {
 				ModuleService,
-				ServiceState,
+				ServiceStates,
 
 				data: {
 					nameOfUser: "",
@@ -151,7 +151,7 @@
 				<span class="WindowService-title">States</span>
 				<TypeSelector
 					class="WindowEvent-type"
-					:items="ServiceState.list.map((state) => state)"
+					:items="ServiceStates.list.map((state) => state)"
 					:defaultKey="data.state"
 					@click-item-key="(key) => (data.state = key)"
 				/>

@@ -1,6 +1,6 @@
 <script>
-   import LeftNavGroup2 from "./LeftNav-Group2.vue";
-   import LeftNavLink from "./LeftNav-Link.vue";
+   import LeftNavGroup2 from "./NavigationLeft-Group2.vue";
+   import LeftNavLink from "./NavigationLeft-Link.vue";
 
    export default {
       components: { LeftNavGroup2, LeftNavLink },

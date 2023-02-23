@@ -2,14 +2,34 @@
    export default {
       props: {
          text: { type: String, default: "" },
+         href: { type: String, default: "" },
+         target: { type: String, default: "" },
+         to: { default: undefined },
       },
    };
 </script>
 
 <template>
-   <button class="ButtonText transition" @click="$emit('click')">
-      <span>{{ text }}</span>
-   </button>
+   <a
+      class="ButtonText transition"
+      v-if="href.length"
+      :href="href"
+      :target="target"
+      @click="$emit('click')"
+      ><span>{{ text }}</span></a
+   >
+
+   <router-link
+      class="ButtonText transition"
+      v-else-if="to !== undefined"
+      :to="to"
+      @click="$emit('click')"
+      ><span>{{ text }}</span></router-link
+   >
+
+   <button class="ButtonText transition" v-else @click="$emit('click')"
+      ><span>{{ text }}</span></button
+   >
 </template>
 
 <style lang="scss" scoped>
@@ -28,6 +48,7 @@
       border: none;
       cursor: pointer;
       color: black;
+      text-decoration: none;
 
       display: flex;
       align-items: center;

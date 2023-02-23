@@ -1,9 +1,9 @@
 <script>
-   import OptionButton from "@/components/button/OptionButton.vue";
+   import MenuOption from "@/components/button/MenuOption.vue";
    import User from "@/items/User";
 
    export default {
-      components: { OptionButton },
+      components: { MenuOption },
       props: {
          item: { type: User },
          isEditable: { type: Boolean, default: false },
@@ -24,7 +24,7 @@
          <span class="ItemUser-username">{{ item.username }}</span>
          <span class="ItemUser-type">{{ item.toTextUserType() }}</span>
       </div>
-      <OptionButton
+      <MenuOption
          v-if="isEditable"
          :menus="[
             {

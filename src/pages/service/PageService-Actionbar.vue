@@ -41,7 +41,7 @@
       },
       computed: {
          isWide: (c) => c.$root.window.innerWidth > 400,
-         currentGroupMenu: (c) => c.groupMenus[c.sortMenuIndex],
+         currentGroupMenu: (c) => c.groupMenus[c.groupMenuIndex],
          currentSortMenu: (c) => c.sortMenus[c.sortMenuIndex],
       },
       methods: {
@@ -99,13 +99,13 @@
                :menu="currentGroupMenu ? currentGroupMenu : null"
                :menus="groupMenus"
             />
-            <!-- <LabelMenus
+            <LabelMenus
                title="Sort"
                :style="{ '--primary-color': primaryColorLabel.toString() }"
                :primaryColor="primaryColorLabel"
                :menu="currentSortMenu ? currentSortMenu : null"
                :menus="sortMenus"
-            /> -->
+            />
          </div>
       </div>
 

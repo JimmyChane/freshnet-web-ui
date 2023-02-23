@@ -17,6 +17,7 @@ class Category {
       Storage: "storage",
       Ram: "ram",
       Network: "network",
+      Charger: "charger",
       Other: "other",
    };
 
@@ -28,12 +29,9 @@ class Category {
       this._id = Text.trim(data._id, data._id);
       this.key = Text.trim(data.key, "").replace(" ", "");
       this.title = Text.trim(data.title, "");
-      this.icon =
-         typeof data.icon === "object" ? Image.trim(data.icon) : undefined;
+      this.icon = typeof data.icon === "object" ? Image.trim(data.icon) : undefined;
       this.background =
-         typeof data.background === "object"
-            ? Image.trim(data.background)
-            : undefined;
+         typeof data.background === "object" ? Image.trim(data.background) : undefined;
    }
 }
 

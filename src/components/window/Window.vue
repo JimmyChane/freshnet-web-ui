@@ -64,6 +64,8 @@
       flex-direction: column;
       overflow-y: auto;
 
+      scroll-padding-bottom: 4rem;
+
       .Window-header {
          z-index: 3;
          padding: 1.2rem 1.8rem;

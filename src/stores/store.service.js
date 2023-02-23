@@ -95,7 +95,7 @@ const requestUpdateUrgent = async (id, isUrgent) => {
 const requestUpdateWarranty = async (id, isWarranty) => {
    return HostApi.request()
       .PUT()
-      .url("service/urgent")
+      .url("service/warranty")
       .body({ serviceID: id, isWarranty })
       .send();
 };
@@ -248,7 +248,7 @@ export default {
       };
       context.actions.getItemOfId = async (context, id = "") => {
          return context.state.processor.acquire("getItemOfId", async () => {
-            let items = await context.dispatch("getServices");
+            let items = await context.dispatch("getItems");
             return items.find((service) => service.id === id);
          });
       };
