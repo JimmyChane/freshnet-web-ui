@@ -44,10 +44,10 @@
                : [],
          state: (c) => U.optString(c.$route.query.state),
 
-         viewMode: (c) => {
-            if (c.currentLayoutIndex === 0) return ListServices.Mode.Grid;
-            if (c.currentLayoutIndex === 1) return ListServices.Mode.List;
-            if (c.currentLayoutIndex === 2) return ListServices.Mode.Detail;
+         layoutMode: (c) => {
+            if (c.currentLayoutIndex === 0) return ListServices.LayoutMode.Grid;
+            if (c.currentLayoutIndex === 1) return ListServices.LayoutMode.List;
+            if (c.currentLayoutIndex === 2) return ListServices.LayoutMode.Detail;
             return 0;
          },
          sortMode: (c) => {
@@ -127,9 +127,21 @@
             };
          });
          this.layoutMenus = [
-            { title: "Grid View", icon: this.host.icon("grid-000000") },
-            { title: "List View", icon: this.host.icon("list-000000") },
-            { title: "Detail View", icon: this.host.icon("detail-000000") },
+            {
+               key: ListServices.LayoutMode.Grid,
+               title: "Grid View",
+               icon: this.host.icon("grid-000000"),
+            },
+            {
+               key: ListServices.LayoutMode.List,
+               title: "List View",
+               icon: this.host.icon("list-000000"),
+            },
+            {
+               key: ListServices.LayoutMode.Detail,
+               title: "Detail View",
+               icon: this.host.icon("detail-000000"),
+            },
          ];
          this.groupMenus = [
             { key: ListServices.GroupMode.None, title: "None" },
@@ -203,7 +215,7 @@
 
       <ListServices
          v-if="stateMenus[stateMenuIndex] && stateMenus[stateMenuIndex].list.length"
-         :mode="viewMode"
+         :layoutMode="layoutMode"
          :sortMode="sortMode"
          :groupMode="groupMode"
          :items="items"

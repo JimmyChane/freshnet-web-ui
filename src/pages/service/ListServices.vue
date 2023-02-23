@@ -7,13 +7,13 @@
    import { getDay, previousDay, endOfDay, format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
 
    export default {
-      Mode: ItemService.Mode,
+      LayoutMode: ItemService.Mode,
       SortMode,
       GroupMode,
 
       components: { ItemService },
       props: {
-         mode: { type: Number, default: ItemService.Mode.List },
+         layoutMode: { type: Number, default: ItemService.Mode.List },
          sortMode: { type: Number, default: SortMode.DateCreated },
          groupMode: { type: Number, default: GroupMode.DateCreated },
 
@@ -36,10 +36,9 @@
       computed: {
          isOver460px: (c) => c.$root.window.innerWidth > 460,
 
-         viewMode: (c) => c.mode,
-         isGridView: (c) => c.mode === ItemService.Mode.Grid,
-         isListView: (c) => c.mode === ItemService.Mode.List,
-         isDetailView: (c) => c.mode === ItemService.Mode.Detail,
+         isGridView: (c) => c.layoutMode === ItemService.Mode.Grid,
+         isListView: (c) => c.layoutMode === ItemService.Mode.List,
+         isDetailView: (c) => c.layoutMode === ItemService.Mode.Detail,
 
          isSortDateCreated: (c) => c.sortMode === SortMode.DateCreated,
          isSortName: (c) => c.sortMode === SortMode.Name,
@@ -229,7 +228,7 @@
             <ItemService
                class="ListServices-item"
                v-for="item in group.items"
-               :mode="viewMode"
+               :mode="layoutMode"
                :key="`service${item.id}`"
                :item="item"
                :isSelected="isItemSelected(item)"
