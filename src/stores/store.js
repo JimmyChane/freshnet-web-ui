@@ -43,6 +43,33 @@ const init = (Stores) => {
       context.dispatch("openSocket");
    };
 
+   context.state.imageViewer = { isShowing: false, image: null, thumbnails: [] };
+   context.mutations.imageViewer = (state, imageViewer) =>
+      (state.imageViewer = imageViewer);
+   context.getters.imageViewer = (state) => state.imageViewer;
+   context.actions.imageViewerShow = (
+      context,
+      option = { image: null, thumbnails: [] },
+   ) => {
+      context.state.imageViewer.image = option.image;
+      context.state.imageViewer.thumbnails = option.thumbnails;
+      context.state.imageViewer.isShowing = true;
+      context.commit("imageViewer", context.state.imageViewer);
+   };
+   context.actions.imageViewerHide = (context) => {
+      context.state.imageViewer.isShowing = false;
+      context.commit("imageViewer", context.state.imageViewer);
+      setTimeout(() => {
+         context.state.imageViewer.thumbnails = [];
+         context.state.imageViewer.image = null;
+         context.commit("imageViewer", context.state.imageViewer);
+      }, 300);
+   };
+   context.actions.imageViewerSelect = (context, image = null) => {
+      context.state.imageViewer.image = image;
+      context.commit("imageViewer", context.state.imageViewer);
+   };
+
    const store = new Vuex.Store(context);
    store.dispatch("openSocket");
 

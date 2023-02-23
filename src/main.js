@@ -95,28 +95,23 @@ new Vue({
    router: Router,
    store: Stores.store,
 
-   data() {
-      return {
-         console: {
-            log(param1, param2) {
-               param2 === undefined ? console.log(param1) : console.log(param1, param2);
-            },
-            error(param1, param2) {
-               param2 === undefined
-                  ? console.error(param1)
-                  : console.error(param1, param2);
-            },
+   data: () => ({
+      console: {
+         log(param1, param2) {
+            param2 === undefined ? console.log(param1) : console.log(param1, param2);
          },
-         keyGetter: new TimeNowGetter(),
-         window: { innerWidth: 0, innerHeight: 0 },
+         error(param1, param2) {
+            param2 === undefined ? console.error(param1) : console.error(param1, param2);
+         },
+      },
+      keyGetter: new TimeNowGetter(),
+      window: { innerWidth: 0, innerHeight: 0 },
 
-         appLayout: null,
-         navigation: null,
-         snackbars: [],
-         imageViewer: { isShowing: false, image: null, thumbnails: [] },
-         popupMenus: [],
-      };
-   },
+      appLayout: null,
+      navigation: null,
+      snackbars: [],
+      popupMenus: [],
+   }),
    computed: {
       user: (c) => c.loginStore.getters.user,
 
@@ -241,12 +236,6 @@ new Vue({
          let paths = this.currentPaths;
          return paths.length > 1 ? paths[1] : "";
       },
-
-      // app layout mode
-      APP_LAYOUT_MODE: (c) => ({
-         NORMAL: AppLayout.Layout.NORMAL,
-         FULL: AppLayout.Layout.FULL,
-      }),
    },
    watch: {
       currentPaths() {
@@ -344,24 +333,6 @@ new Vue({
          this.popupMenus.push(popupMenu);
 
          return popupMenu;
-      },
-
-      imageViewerShow(image = null, thumbnails = []) {
-         this.imageViewer.image = image;
-         this.imageViewer.thumbnails = thumbnails;
-         this.imageViewer.isShowing = true;
-      },
-      imageViewerHide() {
-         this.imageViewer.isShowing = false;
-         setTimeout(() => {
-            this.imageViewer.thumbnails = [];
-            this.imageViewer.image = null;
-         }, 300);
-      },
-
-      // app layout
-      setAppLayout(layout) {
-         this.appLayout.setLayout(layout);
       },
 
       // send a snackbar notification

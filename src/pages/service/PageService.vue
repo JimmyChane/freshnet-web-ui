@@ -191,7 +191,7 @@
                            image: data,
                         })
                         .then((service) => {
-                           context.$root.imageViewerHide();
+                           context.store.dispatch("imageViewerHide");
                            self.dismiss(context, self);
                         })
                         .catch((error) => {

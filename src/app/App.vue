@@ -18,9 +18,7 @@
       },
 
       components: { NavigationLeft, ViewerImage, Snackbar, PopupMenu, Status },
-      data() {
-         return { layoutLoginIsShown: false };
-      },
+      data: () => ({ layoutLoginIsShown: false }),
       computed: {
          isLogging: (c) => c.loginStore.getters.isLogging,
       },

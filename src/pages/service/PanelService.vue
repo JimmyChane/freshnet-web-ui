@@ -284,7 +284,13 @@
                            v-for="imageFile in imageFiles"
                            :key="imageFile.name"
                            :src="imageFile"
-                           @click="() => $root.imageViewerShow(imageFile, imageFiles)"
+                           @click="
+                              () =>
+                                 store.dispatch('imageViewerShow', {
+                                    image: imageFile,
+                                    thumbnails: imageFiles,
+                                 })
+                           "
                            @click-remove="actions.onClickRemoveImage(imageFile)"
                         />
                         <div

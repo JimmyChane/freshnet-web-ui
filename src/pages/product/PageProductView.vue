@@ -1,6 +1,7 @@
 <script>
    import ViewerProduct from "@/pages/product/viewerProduct/ViewerProduct.vue";
    import LoadingDots from "@/components/LoadingDots.vue";
+   import AppLayout from "@/tools/AppLayout.js";
 
    export default {
       components: { ViewerProduct, LoadingDots },
@@ -18,7 +19,7 @@
          },
       },
       mounted() {
-         this.$root.setAppLayout(this.$root.APP_LAYOUT_MODE.FULL);
+         this.$root.appLayout.setLayout(AppLayout.Layout.FULL);
          this.$root.navigation.disableNavigationDrawer();
 
          this.invalidate();
@@ -40,11 +41,7 @@
 
 <template>
    <div class="PageProductView">
-      <ViewerProduct
-         :product="product"
-         :isWide="isOver1200px"
-         :isEditable="false"
-      />
+      <ViewerProduct :product="product" :isWide="isOver1200px" :isEditable="false" />
 
       <LoadingDots style="z-index: 2" :isShowing="isLoading" />
    </div>
