@@ -59,7 +59,7 @@
 				this.data.description = this.data.description.trim();
 
 				if (this.Requirement.description.isRequired && !this.data.description) {
-					this.$root.feedback('You must specify the "Description"');
+					this.store.dispatch("snackbarShow",'You must specify the "Description"');
 				} else {
 					this.customerStore
 						.dispatch("updateDescriptionOfId", {

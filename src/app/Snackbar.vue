@@ -42,9 +42,7 @@
             />
          </div>
 
-         <span class="Snackbar-text transition" v-if="item.text">{{
-            item.text
-         }}</span>
+         <span class="Snackbar-text transition" v-if="item.text">{{ item.text }}</span>
 
          <button
             class="Snackbar-action transition"

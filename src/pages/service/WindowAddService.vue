@@ -75,11 +75,11 @@
 				};
 
 				if (this.userIsDefault && !this.nameOfUser.trim()) {
-					this.$root.feedback("You must specify your name");
+					this.store.dispatch("snackbarShow","You must specify your name");
 				} else if (!data.customer.name) {
-					this.$root.feedback("You must specify customer name");
+					this.store.dispatch("snackbarShow","You must specify customer name");
 				} else if (!data.description) {
-					this.$root.feedback("You must specify description");
+					this.store.dispatch("snackbarShow","You must specify description");
 				} else {
 					if (this.userIsDefault && this.nameOfUser.trim()) {
 						data.nameOfUser = this.nameOfUser;

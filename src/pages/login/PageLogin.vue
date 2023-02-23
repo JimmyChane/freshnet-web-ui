@@ -38,7 +38,7 @@
                   setTimeout(() => this.$router.push(redirect), 200),
                )
                .catch(() => {
-                  this.$root.feedback("Login failed");
+                  this.store.dispatch("snackbarShow","Login failed");
                   this.usernameErrorText = "Check your username";
                   this.passwordErrorText = "Check your password";
                });

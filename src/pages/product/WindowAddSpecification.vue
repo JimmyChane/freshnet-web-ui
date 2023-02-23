@@ -56,7 +56,7 @@
 							(typeSelection) => typeSelection.key === this.data.key,
 						);
 						if (!selection) {
-							this.$root.feedback("Cannot find the matching type");
+							this.store.dispatch("snackbarShow","Cannot find the matching type");
 							throw new Error();
 						}
 
@@ -69,7 +69,7 @@
 						this.action.onConfirm(specification);
 					})
 					.catch((error) => {
-						this.$root.feedback("Error While Loading Specification");
+						this.store.dispatch("snackbarShow","Error While Loading Specification");
 					});
 				return;
 			},

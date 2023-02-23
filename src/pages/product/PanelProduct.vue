@@ -75,16 +75,16 @@
       methods: {
          clickCopyLink() {
             if (!this.product) {
-               this.$root.feedback("Cannot Copy");
+               this.store.dispatch("snackbarShow", "Cannot Copy");
                return;
             }
             const link = this.product.getLink();
             if (!link) {
-               this.$root.feedback("Cannot Copy");
+               this.store.dispatch("snackbarShow", "Cannot Copy");
                return;
             }
             this.$root.copyText(link);
-            this.$root.feedback({
+            this.store.dispatch("snackbarShow", {
                icon: this.host.icon("copy-FFFFFF"),
                text: "Copied to Clipboard",
                actions: [{ title: "Open", click: () => this.clickView() }],
@@ -114,21 +114,15 @@
          :product="product"
          :productPrevious="productPrevious"
          :productNext="productNext"
-         @click-product-imageRemove="
-            (x) => $emit('click-product-imageRemove', x)
-         "
+         @click-product-imageRemove="(x) => $emit('click-product-imageRemove', x)"
          @click-product-titleBrandUpdate="
             (x) => $emit('click-product-titleBrandUpdate', x)
          "
-         @click-product-priceUpdate="
-            (x) => $emit('click-product-priceUpdate', x)
-         "
+         @click-product-priceUpdate="(x) => $emit('click-product-priceUpdate', x)"
          @click-product-descriptionUpdate="
             (x) => $emit('click-product-descriptionUpdate', x)
          "
-         @click-product-categoryUpdate="
-            (x) => $emit('click-product-categoryUpdate', x)
-         "
+         @click-product-categoryUpdate="(x) => $emit('click-product-categoryUpdate', x)"
          @click-product-specificationsUpdate="
             (x) => $emit('click-product-specificationsUpdate', x)
          "

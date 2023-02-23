@@ -3,6 +3,7 @@ import Vuex from "vuex";
 import socketIo from "socket.io-client";
 import HostApi from "../host/HostApi.js";
 import TimeNowGetter from "@/tools/TimeNowGetter.js";
+import Notification from "@/tools/Notification.js";
 import PopupMenu from "@/app/PopupMenu.vue";
 
 const keyGetter = new TimeNowGetter();
@@ -120,6 +121,16 @@ const init = (Stores) => {
       context.commit("popupMenus", context.state.popupMenus);
 
       return popupMenu;
+   };
+
+   // snackbars
+   context.state.snackbars = [];
+   context.mutations.snackbars = (state, snackbars) => (state.snackbars = snackbars);
+   context.getters.snackbars = (state) => state.snackbars;
+   context.actions.snackbarShow = (context, arg) => {
+      if (typeof arg === "string") arg = { text: arg };
+      context.state.snackbars.push(new Notification(context, arg).show());
+      context.commit("snackbars", context.state.snackbars);
    };
 
    const store = new Vuex.Store(context);

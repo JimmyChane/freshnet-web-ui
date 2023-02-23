@@ -48,7 +48,7 @@
             if (!item) return (this.nameOfUser = "");
 
             const name = await this.item.fetchName().catch((error) => {
-               this.$root.feedback("Error getting user for event");
+               this.store.dispatch("snackbarShow","Error getting user for event");
                return "";
             });
 

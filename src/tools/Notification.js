@@ -1,5 +1,8 @@
+import TimeNowGetter from "@/tools/TimeNowGetter.js";
+const keyGetter = new TimeNowGetter();
+
 class Notification {
-   snackbars;
+   context;
 
    key;
    isShowing = false;
@@ -10,9 +13,9 @@ class Notification {
    actions;
 
    constructor(context, param = { text, isLoading, icon, actions }) {
-      this.snackbars = context.snackbars;
+      this.context = context;
 
-      this.key = context.keyGetter.get();
+      this.key = keyGetter.get();
 
       this.icon = param.icon;
       this.isLoading = param.isLoading;
@@ -21,7 +24,7 @@ class Notification {
    }
 
    get index() {
-      return this.snackbars.indexOf(this);
+      return this.context.getters.snackbars.indexOf(this);
    }
 
    show(timeout = 3000) {
@@ -33,7 +36,9 @@ class Notification {
       this.isShowing = false;
 
       setTimeout(() => {
-         this.snackbars.splice(this.snackbars.indexOf(this), 1);
+         const index = this.context.state.snackbars.indexOf(this);
+         this.context.state.snackbars.splice(index, 1);
+         this.context.commit("snackbars", this.context.state.snackbars);
       }, 80);
 
       return this;

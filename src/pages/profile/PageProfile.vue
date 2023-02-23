@@ -61,7 +61,8 @@
                this.window.changePassword;
 
             if (passwordNew !== passwordRepeat) {
-               this.$root.feedback(
+               this.store.dispatch(
+                  "snackbarShow",
                   "Repeat Password Not Match With New Password",
                );
                return;
@@ -71,7 +72,7 @@
                .dispatch("changePassword", { passwordVerify, passwordNew })
                .then((user) => this.onDiscardChangePassword())
                .catch((error) =>
-                  this.$root.feedback("Changing Password Error"),
+                  this.store.dispatch("snackbarShow", "Changing Password Error"),
                );
          },
       },
@@ -84,7 +85,7 @@
                this.user = user;
             })
             .catch((error) => {
-               this.$root.feedback("Failed to validate");
+               this.store.dispatch("snackbarShow", "Failed to validate");
                this.isLoading = false;
                this.user = null;
             });
@@ -105,12 +106,8 @@
                <div class="PageProfile-introduction-body">
                   <span class="PageProfile-user-name">Hello, {{ name }}</span>
                   <div class="PageProfile-user-main">
-                     <span class="PageProfile-section-title">{{
-                        `@${username}`
-                     }}</span>
-                     <span class="PageProfile-section-title">{{
-                        typeDisplay
-                     }}</span>
+                     <span class="PageProfile-section-title">{{ `@${username}` }}</span>
+                     <span class="PageProfile-section-title">{{ typeDisplay }}</span>
                   </div>
                </div>
             </div>
@@ -123,9 +120,7 @@
             <div class="PageProfile-section">
                <div class="PageProfile-section-changePassword">
                   <div class="PageProfile-section-changePassword-body">
-                     <span class="PageProfile-section-title"
-                        >Change Your Password</span
-                     >
+                     <span class="PageProfile-section-title">Change Your Password</span>
                      <span class="PageProfile-section-main"
                         >Also signing out other session</span
                      >
@@ -154,9 +149,7 @@
                label="Current Password"
                :bindValue="window.changePassword.passwordVerify"
                :isRequired="true"
-               @input="
-                  (comp) => (window.changePassword.passwordVerify = comp.value)
-               "
+               @input="(comp) => (window.changePassword.passwordVerify = comp.value)"
             />
 
             <Input
@@ -164,9 +157,7 @@
                label="New Password"
                :bindValue="window.changePassword.passwordNew"
                :isRequired="true"
-               @input="
-                  (comp) => (window.changePassword.passwordNew = comp.value)
-               "
+               @input="(comp) => (window.changePassword.passwordNew = comp.value)"
             />
 
             <Input
@@ -174,9 +165,7 @@
                label="Repeat Password"
                :bindValue="window.changePassword.passwordRepeat"
                :isRequired="true"
-               @input="
-                  (comp) => (window.changePassword.passwordRepeat = comp.value)
-               "
+               @input="(comp) => (window.changePassword.passwordRepeat = comp.value)"
             />
          </div>
       </PopupWindowAction>

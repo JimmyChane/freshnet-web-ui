@@ -1,10 +1,7 @@
 // tools
 import AppLayout from "./tools/AppLayout.js";
 import Navigation from "./tools/Navigation.js";
-import Notification from "./tools/Notification.js";
-import TimeNowGetter from "./tools/TimeNowGetter.js";
 import HostApi from "./host/HostApi.js";
-import PopupMenu from "@/app/PopupMenu.vue";
 import U from "@/U";
 import HostIcon from "@/host/HostIcon";
 
@@ -16,7 +13,6 @@ import Mixin from "./main.mixin.js";
 
 // app
 import App from "./app/App.vue";
-import store from "./stores/store.js";
 
 Vue.config.productionTip = false;
 Vue.prototype.host = HostApi;
@@ -105,12 +101,10 @@ new Vue({
             param2 === undefined ? console.error(param1) : console.error(param1, param2);
          },
       },
-      keyGetter: new TimeNowGetter(),
       window: { innerWidth: 0, innerHeight: 0 },
 
       appLayout: null,
       navigation: null,
-      snackbars: [],
    }),
    computed: {
       user: (c) => c.loginStore.getters.user,
@@ -298,18 +292,6 @@ new Vue({
    methods: {
       onBackPressed() {
          return true;
-      },
-
-      // send a snackbar notification
-      feedback(param) {
-         if (typeof param === "string") {
-            param = { text: param };
-         }
-
-         this.snackbars.push(new Notification(this, param).show());
-
-         return;
-         if (this.app) this.app.showSnackbar(param);
       },
 
       // external interaction

@@ -97,7 +97,7 @@
             if (!service) return "";
 
             const name = await service.fetchName().catch((error) => {
-               this.$root.feedback("Error getting user for service");
+               this.store.dispatch("snackbarShow","Error getting user for service");
                return "";
             });
 
@@ -114,7 +114,7 @@
                })
                .then((serivce) => {})
                .catch((error) => {
-                  this.$root.feedback("Failed to Add Image");
+                  this.store.dispatch("snackbarShow","Failed to Add Image");
                });
          },
       },

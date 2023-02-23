@@ -66,12 +66,12 @@
 				this.data.phoneNumber = this.data.phoneNumber.trim();
 
 				if (this.Requirement.name.isRequired && !this.data.name) {
-					this.$root.feedback('You must specify the "Name"');
+					this.store.dispatch("snackbarShow",'You must specify the "Name"');
 				} else if (
 					this.Requirement.phoneNumber.isRequired &&
 					!this.data.phoneNumber
 				) {
-					this.$root.feedback('You must specify the "Phone Number"');
+					this.store.dispatch("snackbarShow",'You must specify the "Phone Number"');
 				} else {
 					this.customerStore
 						.dispatch("updateNamePhoneNumberOfId", {

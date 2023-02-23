@@ -63,7 +63,7 @@
 				};
 
 				if (!output.title) {
-					this.$root.feedback("You must specify title");
+					this.store.dispatch("snackbarShow","You must specify title");
 					return;
 				}
 

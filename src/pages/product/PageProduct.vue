@@ -43,7 +43,7 @@
          }
          const reject = (error, reason) => {
             if (typeof reason === "string" && reason.length)
-               this.context.$root.feedback(reason);
+               this.context.store.dispatch("snackbarShow",reason);
             if (error !== undefined) console.error(error);
          };
          this.onShowCallback(accept, reject, input);
@@ -59,7 +59,7 @@
          }
          const reject = (error, reason) => {
             if (typeof reason === "string" && reason.length)
-               this.context.$root.feedback(reason);
+               this.context.store.dispatch("snackbarShow",reason);
             if (error !== undefined) console.error(error);
          };
          this.onDismissCallback(accept, reject);
@@ -75,7 +75,7 @@
          }
          const reject = (error, reason) => {
             if (typeof reason === "string" && reason.length)
-               this.context.$root.feedback(reason);
+               this.context.store.dispatch("snackbarShow",reason);
             if (error !== undefined) console.error(error);
          };
          this.onCancelCallback(accept, reject);
@@ -91,7 +91,7 @@
          }
          const reject = (error, reason) => {
             if (typeof reason === "string" && reason.length)
-               this.context.$root.feedback(reason);
+               this.context.store.dispatch("snackbarShow",reason);
             if (error !== undefined) console.error(error);
          };
          this.onConfirmCallback(accept, reject, output);

@@ -67,7 +67,7 @@
       },
       mounted() {
          this.ps2Store.dispatch("getItems").catch((error) => {
-            this.$root.feedback("Failed to load");
+            this.store.dispatch("snackbarShow","Failed to load");
             console.error(error);
          });
       },

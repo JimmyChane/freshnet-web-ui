@@ -17,7 +17,7 @@
 		methods: {
 			onChange() {
 				if (this.description === this.value) {
-					this.$root.feedback("No Changes");
+					this.store.dispatch("snackbarShow","No Changes");
 					return;
 				}
 

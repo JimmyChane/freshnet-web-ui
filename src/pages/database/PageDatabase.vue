@@ -43,7 +43,7 @@
                this.actionRefresh();
             })
             .catch((error) => {
-               this.$root.feedback("Your login credential could be invalid");
+               this.store.dispatch("snackbarShow","Your login credential could be invalid");
                throw error;
             });
       },
@@ -80,7 +80,7 @@
                   return this.databaseStore.dispatch("loadBaseInfo");
                })
                .catch((error) => {
-                  this.$root.feedback("Error Loading Databases");
+                  this.store.dispatch("snackbarShow","Error Loading Databases");
                   throw error;
                });
          },

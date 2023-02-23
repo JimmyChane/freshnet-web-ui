@@ -76,7 +76,7 @@
 
          onIntentRefresh() {
             this.userStore.dispatch("refresh").catch((error) => {
-               this.$root.feedback("Failed to validate user");
+               this.store.dispatch("snackbarShow","Failed to validate user");
             });
          },
 
@@ -101,12 +101,12 @@
                      this.window.addUser.isShowing = false;
                      this.onResetAddUser();
                   } else {
-                     this.$root.feedback("Failed to add user");
+                     this.store.dispatch("snackbarShow","Failed to add user");
                      throw new Error();
                   }
                })
                .catch((error) => {
-                  this.$root.feedback("Error to add user");
+                  this.store.dispatch("snackbarShow","Error to add user");
                });
          },
          onResetAddUser() {
@@ -136,12 +136,12 @@
                      interfaceWindow.isShowing = false;
                      this.onResetRemoveUser();
                   } else {
-                     this.$root.feedback("Failed to remove user");
+                     this.store.dispatch("snackbarShow","Failed to remove user");
                      throw new Error();
                   }
                })
                .catch((error) => {
-                  this.$root.feedback("Error to remove user");
+                  this.store.dispatch("snackbarShow","Error to remove user");
                });
          },
          onResetRemoveUser() {
@@ -174,12 +174,12 @@
                      this.window.changeUserType.isShowing = false;
                      this.onResetChangeUserType();
                   } else {
-                     this.$root.feedback("Failed to change user priviledge");
+                     this.store.dispatch("snackbarShow","Failed to change user priviledge");
                      throw new Error();
                   }
                })
                .catch((error) => {
-                  this.$root.feedback("Error to change user priviledge");
+                  this.store.dispatch("snackbarShow","Error to change user priviledge");
                });
          },
          onResetChangeUserType() {

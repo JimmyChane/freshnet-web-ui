@@ -25,7 +25,7 @@
       watch: {
          isLogging() {
             if (!this.loginStore.getters.user && this.isLogging)
-               this.$root.feedback("User Logging");
+               this.store.dispatch("snackbarShow","User Logging");
          },
       },
       mounted() {
@@ -38,7 +38,7 @@
       methods: {
          logout() {
             this.loginStore.dispatch("logout").then((user) => {
-               this.$root.feedback(`${user.name} is now logged out`);
+               this.store.dispatch("snackbarShow",`${user.name} is now logged out`);
             });
          },
 
@@ -90,7 +90,7 @@
 
       <Snackbar
          :style="{ 'z-index': '4' }"
-         v-for="snackbar of $root.snackbars"
+         v-for="snackbar of store.getters.snackbars"
          :key="snackbar.key"
          :item="snackbar"
       />
