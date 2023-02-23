@@ -3,8 +3,11 @@
 </script>
 
 <template>
-   <button class="ButtonAddEvent" @click="$emit('click')">
-      <img class="ButtonAddEvent-icon" :src="host.res('icon/add-gray.svg')" />
+   <button class="ButtonAddEvent transition" @click="$emit('click')">
+      <img
+         class="ButtonAddEvent-icon transition"
+         :src="host.icon('add-gray')"
+      />
    </button>
 </template>
 
@@ -18,8 +21,6 @@
 
       border: none;
       background: white;
-      transition: var(--transition-duration);
-      // border: 0.1em solid hsl(0, 0%, 70%);
       border-radius: 0.5rem;
       cursor: pointer;
       padding: 1em;
@@ -30,7 +31,6 @@
       .ButtonAddEvent-icon {
          width: 1em;
          height: 1em;
-         transition: var(--transition-duration);
       }
    }
 </style>

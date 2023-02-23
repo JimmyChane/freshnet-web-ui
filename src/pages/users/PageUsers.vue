@@ -1,26 +1,30 @@
 <script>
-   import Loadingv1 from "@/components/Loading";
-   import MenuButton from "@/components/button/MenuButton.vue";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
+   import Loading from "@/components/Loading.vue";
+   import OptionButton from "@/components/button/OptionButton.vue";
    import Selector from "@/components/selector/Selector.vue";
    import Empty from "@/components/Empty.vue";
-   import PopupWindowAction from "@/components/window/PopupWindowAction";
+   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
    import Input from "@/components/Input.vue";
    import ItemUser from "./ItemUser.vue";
 
-   import ActionBarManage from "@/pages/manage/ActionBarManage.vue";
-
    import User from "@/items/User.js";
+
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "users",
       title: "Other Users",
-      icon: { light: "users-FFFFFF", dark: "users-000000" },
+      icon: {
+         light: new HostIcon("users-FFFFFF.svg"),
+         dark: new HostIcon("users-000000.svg"),
+      },
       userPermissions: ["admin"],
 
       components: {
-         ActionBarManage,
-         Loadingv1,
-         MenuButton,
+         NavigationBar,
+         Loading,
+         OptionButton,
          Selector,
          Empty,
          PopupWindowAction,
@@ -191,26 +195,24 @@
       class="PageUsers"
       @scroll="(event) => (scrollTop = event.target.scrollTop)"
    >
-      <ActionBarManage
-         :hasShadow="scrollTop > 0"
+      <NavigationBar
          :title="$options.title"
          :rightMenus="[
             isCurrentUserAdmin
                ? {
                     key: 'addUser',
                     title: 'Add User',
-                    icon: host.res('icon/add-000000.svg'),
+                    icon: host.icon('add-000000'),
                     click: onIntentAddUser,
                  }
                : null,
             {
                key: 'refresh',
                title: 'Refresh',
-               icon: host.res('icon/refresh-000000.svg'),
+               icon: host.icon('refresh-000000'),
                click: () => onIntentRefresh(),
             },
          ]"
-         @click-drawer-expand="$emit('click-drawer-expand')"
       />
 
       <div class="PageUsers-body" v-if="users.length">
@@ -225,9 +227,12 @@
          />
       </div>
 
-      <Empty v-if="!users.length && !isLoading" />
+      <Empty
+         v-if="!users.length && !isLoading"
+         :icon="$options.icon.dark.toUrl()"
+      />
 
-      <Loadingv1 class="PageUsers-loading" :isRunning="isLoading" />
+      <Loading class="PageUsers-loading" :isShowing="isLoading" />
 
       <!-- add user -->
       <PopupWindowAction

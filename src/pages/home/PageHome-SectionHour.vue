@@ -1,78 +1,66 @@
 <script>
-	import { getDay } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
-	import Item from "./PageHome-SectionHour-Item.vue";
-	import Company from "@/host/Company";
+   import Item from "./PageHome-SectionHour-Item.vue";
+   import Company from "@/host/Company";
 
-	export default {
-		components: { Item },
-		props: { isThin: { type: Boolean, default: false } },
-		data() {
-			return {
-				items: Company.BusinessHours.toArray().map((item) => {
-					return {
-						index: item.day,
-						title: item.title,
-						content: item.hours.toString(),
-					};
-				}),
-				todayIndex: -1,
-			};
-		},
-		mounted() {
-			this.todayIndex = getDay(Date.now());
-		},
-	};
+   export default {
+      components: { Item },
+      props: { isThin: { type: Boolean, default: false } },
+      data() {
+         return { items: Company.BusinessDays.toArray() };
+      },
+      mounted() {
+         this.items.forEach((item) => {
+            if (!item.isToday()) return;
+            Company.BusinessDays.getNextWorkingDay(item);
+         });
+      },
+   };
 </script>
 
 <template>
-	<div
-		:class="[
-			'HomeSectionHour',
-			`HomeSectionHour-${isThin ? 'isThin' : 'isWide'}`,
-		]"
-	>
-		<div class="HomeSectionyHour-body">
-			<Item
-				v-for="item of items"
-				:key="item.title"
-				:item="item"
-				:isToday="item.index === todayIndex"
-			/>
-		</div>
-	</div>
+   <div
+      :class="[
+         'HomeSectionHour',
+         `HomeSectionHour-${isThin ? 'isThin' : 'isWide'}`,
+      ]"
+   >
+      <div class="HomeSectionHour-body">
+         <Item v-for="item of items" :key="item.title" :item="item" />
+      </div>
+   </div>
 </template>
 
 <style lang="scss" scoped>
-	.HomeSectionHour {
-		background-color: #f3f3f3;
-		overflow: hidden;
-		color: black;
+   .HomeSectionHour {
+      background-color: #f3f3f3;
+      overflow: hidden;
+      color: black;
 
-		border-radius: 1em;
+      border-radius: 1em;
 
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
 
-		.HomeSectionyHour-body {
-			padding: 1.8em 1.3em;
-			gap: 0.5em;
+      .HomeSectionHour-body {
+         padding: 1.8em 1.3em;
+         gap: 0.5em;
 
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-		}
-	}
-	.HomeSectionHour-isThin {
-		width: 100%;
-		height: 100%;
-		font-size: 1rem;
-	}
-	.HomeSectionHour-isWide {
-		width: 100%;
-		height: 100%;
-		font-size: 1.2rem;
-	}
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+      }
+   }
+   .HomeSectionHour-isThin {
+      width: 100%;
+      height: 100%;
+      font-size: 1rem;
+   }
+   .HomeSectionHour-isWide {
+      width: 100%;
+      height: 100%;
+      font-size: 1.2rem;
+   }
 </style>

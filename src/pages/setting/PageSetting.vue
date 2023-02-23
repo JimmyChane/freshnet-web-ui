@@ -1,16 +1,21 @@
 <script>
-   import ActionBarManage from "@/pages/manage/ActionBarManage.vue";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import Empty from "@/components/Empty.vue";
    import GroupSetting from "./GroupSetting.vue";
    import SettingModule from "@/items/data/Setting.js";
 
+   import HostIcon from "@/host/HostIcon";
+
    export default {
       key: "setting",
       title: "Settings",
-      icon: { light: "setting-FFFFFF", dark: "setting-000000" },
+      icon: {
+         light: new HostIcon("setting-FFFFFF.svg"),
+         dark: new HostIcon("setting-000000.svg"),
+      },
       userPermissions: ["admin"],
 
-      components: { ActionBarManage, Empty, GroupSetting },
+      components: { NavigationBar, Empty, GroupSetting },
       data() {
          return {
             scrollTop: 0,
@@ -20,7 +25,7 @@
                   actions: [
                      {
                         title: "Add",
-                        icon: this.host.res("icon/add-000000.svg"),
+                        icon: this.host.icon("add-000000"),
                         click: () => console.log("click add"),
                      },
                   ],
@@ -30,7 +35,7 @@
                   actions: [
                      {
                         title: "Edit",
-                        icon: this.host.res("icon/edit-000000.svg"),
+                        icon: this.host.icon("edit-000000"),
                         click: () => console.log("click edit"),
                      },
                   ],
@@ -64,27 +69,34 @@
 </script>
 
 <template>
-   <div class="PageSetting" @scroll="(event) => (scrollTop = event.target.scrollTop)">
-      <ActionBarManage
-         :class="['PageSetting-actionbar']"
-         :hasShadow="scrollTop > 0"
+   <div
+      class="PageSetting"
+      @scroll="(event) => (scrollTop = event.target.scrollTop)"
+   >
+      <NavigationBar
          :title="$options.title"
          :rightMenus="[
             {
                key: 'refresh',
                title: 'Refresh',
-               icon: host.res('icon/refresh-2A4858.svg'),
+               icon: host.icon('refresh-2A4858'),
                click: () => refresh(),
             },
          ]"
-         @click-drawer-expand="$emit('click-drawer-expand')"
       />
 
       <div class="PageSetting-body" v-if="settings.length">
-         <GroupSetting v-for="group of groups" :key="group.title" :group="group" />
+         <GroupSetting
+            v-for="group of groups"
+            :key="group.title"
+            :group="group"
+         />
       </div>
 
-      <Empty v-if="!settings.length && !isLoading" />
+      <Empty
+         v-if="!settings.length && !isLoading"
+         :icon="$options.icon.dark.toUrl()"
+      />
    </div>
 </template>
 
@@ -97,10 +109,6 @@
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-
-      .PageSetting-actionbar {
-         width: 100%;
-      }
 
       .PageSetting-body {
          width: 100%;

@@ -41,93 +41,94 @@
 </script>
 
 <template>
-	<div
-		:class="[
-			'InputTextArea',
-			isFocused ? 'InputTextArea-isFocused' : 'InputTextArea-isBlurred',
-		]"
-	>
-		<span
-			:class="[
-				'InputTextArea-sign',
-				'InputTextArea-sign-required',
-				`InputTextArea-sign-required-${
-					isRequired && isValueEmpty ? 'isShown' : 'isHidden'
-				}`,
-			]"
-			>*Required</span
-		>
-		<span
-			:class="[
-				'InputTextArea-sign',
-				'InputTextArea-sign-error',
-				`InputTextArea-sign-error-${error ? 'isShown' : 'isHidden'}`,
-			]"
-			>{{ error }}</span
-		>
+   <div
+      :class="[
+         'InputTextArea',
+         isFocused ? 'InputTextArea-isFocused' : 'InputTextArea-isBlurred',
+         'transition',
+      ]"
+   >
+      <span
+         :class="[
+            'InputTextArea-sign',
+            'InputTextArea-sign-required',
+            `InputTextArea-sign-required-${
+               isRequired && isValueEmpty ? 'isShown' : 'isHidden'
+            }`,
+            'transition',
+         ]"
+         >*Required</span
+      >
+      <span
+         :class="[
+            'InputTextArea-sign',
+            'InputTextArea-sign-error',
+            `InputTextArea-sign-error-${error ? 'isShown' : 'isHidden'}`,
+            'transition',
+         ]"
+         >{{ error }}</span
+      >
 
-		<label
-			:class="[
-				'InputTextArea-label',
-				`InputTextArea-label-${isValueEmpty ? 'isHidden' : 'isShown'}`,
-			]"
-			ref="label"
-			v-if="label"
-			:for="name"
-			>{{ label }}</label
-		>
-		<textarea
-			class="InputTextArea-input"
-			ref="input"
-			:name="name"
-			:type="type"
-			@focus="
-				(event) => {
-					isFocused = true;
-					$emit('focus', this._self);
-				}
-			"
-			@blur="
-				(event) => {
-					isFocused = false;
-					$emit('blur', this._self);
-				}
-			"
-			@input="
-				(event) => {
-					value = event.target.value;
-					$emit('input', this._self);
-				}
-			"
-			@change="
-				(event) => {
-					$emit('change', this._self);
-				}
-			"
-			v-bind:value="value"
-		/>
+      <label
+         :class="[
+            'InputTextArea-label',
+            `InputTextArea-label-${isValueEmpty ? 'isHidden' : 'isShown'}`,
+            'transition',
+         ]"
+         ref="label"
+         v-if="label"
+         :for="name"
+         >{{ label }}</label
+      >
+      <textarea
+         class="InputTextArea-input transition"
+         ref="input"
+         :name="name"
+         :type="type"
+         @focus="
+            (event) => {
+               isFocused = true;
+               $emit('focus', this._self);
+            }
+         "
+         @blur="
+            (event) => {
+               isFocused = false;
+               $emit('blur', this._self);
+            }
+         "
+         @input="
+            (event) => {
+               value = event.target.value;
+               $emit('input', this._self);
+            }
+         "
+         @change="
+            (event) => {
+               $emit('change', this._self);
+            }
+         "
+         v-bind:value="value"
+      />
 
 		<div class="InputTextArea-dummy"></div>
 	</div>
 </template>
 
 <style lang="scss" scoped>
-	.InputTextArea {
-		width: 100%;
-		margin-top: 0.8rem;
-		position: relative;
-		padding: 0.6em;
-		// background: hsla(0, 0%, 100%, 0.2);
-		background: hsla(0, 0%, 0%, 0.03);
-		border-radius: 0.2em;
-		transition: var(--transition-duration);
-		resize: none;
+   .InputTextArea {
+      width: 100%;
+      margin-top: 0.8rem;
+      position: relative;
+      padding: 0.6em;
+      background: hsla(0, 0%, 0%, 0.03);
+      border-radius: 0.2em;
+      resize: none;
 
-		.InputTextArea-sign {
-			font-size: 0.7em;
-			font-weight: 600;
-			transition: var(--transition-duration);
-		}
+      .InputTextArea-sign {
+         font-size: 0.7em;
+         font-weight: 600;
+      }
 
 		.InputTextArea-sign-required {
 			position: absolute;
@@ -158,19 +159,16 @@
 			opacity: 1;
 		}
 
-		label {
-			z-index: 1;
-			width: fit-content;
-			position: absolute;
-			left: 0;
-
-			font-size: 1em;
-
-			transition: var(--transition-duration);
-		}
-		.InputTextArea-label-isHidden {
-			top: 0.6em;
-			padding-left: inherit;
+      label {
+         z-index: 1;
+         width: fit-content;
+         position: absolute;
+         left: 0;
+         font-size: 1em;
+      }
+      .InputTextArea-label-isHidden {
+         top: 0.6em;
+         padding-left: inherit;
 
 			color: hsla(0, 0%, 20%, 0.5);
 			font-weight: 400;
@@ -197,12 +195,11 @@
 			border: none;
 			background: none;
 
-			font-weight: 400;
-			font-size: 1em;
-			color: black;
-			transition: var(--transition-duration);
-			resize: inherit;
-		}
+         font-weight: 400;
+         font-size: 1em;
+         color: black;
+         resize: inherit;
+      }
 
 		.InputTextArea-dummy {
 			height: 1.1em;

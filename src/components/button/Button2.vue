@@ -15,7 +15,7 @@
 
 <template>
    <button
-      class="Button2-root"
+      class="Button2-root transition"
       @blur="focused = false"
       @click="$emit('callback-click')"
       @focus="focused = true"
@@ -24,10 +24,10 @@
    >
       <img
          v-if="icon"
-         class="Button2-icon"
+         class="Button2-icon transition"
          :src="iconActive ? (focused || hovered ? iconActive : icon) : icon"
       />
-      <span v-if="text" class="Button2-text">{{ text }}</span>
+      <span v-if="text" class="Button2-text transition">{{ text }}</span>
    </button>
 </template>
 
@@ -46,20 +46,16 @@
       gap: 12px;
       padding: 0.25em 1em;
       background-color: white;
-      transition: var(--transition-duration);
       cursor: pointer;
 
       .Button2-icon {
          width: 18px;
          height: 18px;
-         transition: var(--transition-duration);
       }
-
       .Button2-text {
          color: var(--Button2-color-text);
          font-weight: 800;
          font-size: 1em;
-         transition: var(--transition-duration);
       }
 
       &:hover,

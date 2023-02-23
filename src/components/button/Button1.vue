@@ -12,13 +12,20 @@
          return {
             focused: false,
             hovered: false,
-            style: { color: "", text: "", textColor: "", icon: "", iconActive: "" },
+            style: {
+               color: "",
+               text: "",
+               textColor: "",
+               icon: "",
+               iconActive: "",
+            },
          };
       },
       mounted() {
          this.style.color = this.color;
          this.style.text = this.text;
-         this.style.textColor = this.textColor !== "" ? this.textColor : this.color;
+         this.style.textColor =
+            this.textColor !== "" ? this.textColor : this.color;
          this.style.icon = this.icon;
          this.style.iconActive = this.iconActive;
       },
@@ -27,7 +34,7 @@
 
 <template>
    <button
-      class="Button1-root"
+      class="Button1-root transition"
       :style="{
          '--propColor': style.color,
          '--propTextColor': style.textColor,
@@ -66,7 +73,6 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      transition: var(--transition-duration);
       cursor: pointer;
       gap: 12px;
 

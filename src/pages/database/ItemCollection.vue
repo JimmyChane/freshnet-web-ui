@@ -13,7 +13,7 @@
 
 <template>
    <div class="ItemCollection">
-      <div class="ItemCollection-header">
+      <div class="ItemCollection-header transition">
          <span class="ItemCollection-title">{{ collection.name }}</span>
 
          <ButtonIconText
@@ -50,7 +50,6 @@
          align-items: center;
          gap: 0.2rem;
          padding-bottom: 0.3rem;
-         transition: var(--transition-duration);
          border-width: 0 0 2px 0;
          border-style: solid;
          border-color: transparent;

@@ -48,7 +48,7 @@
 		:primaryColor="primaryColor"
 		:menu="{
 			title: 'Edit',
-			icon: host.res('icon/edit-000000.svg'),
+			icon: host.icon('edit-000000'),
 			click: () =>
 				$emit('click-edit', { product, title: title, brandId: brandId }),
 		}"
@@ -82,7 +82,6 @@
 			padding: 0.8rem;
 			gap: 1.4rem;
 			background: hsla(0, 0%, 100%, 0.6);
-			border-radius: 0.6rem;
 
 			display: flex;
 			flex-direction: row;
@@ -104,7 +103,6 @@
 		.SectionBrand-noContent {
 			width: 100%;
 			padding: 1.2rem;
-			border-radius: 0.6rem;
 			font-style: italic;
 			font-size: 0.8rem;
 			color: hsla(0, 0%, 0%, 0.6);

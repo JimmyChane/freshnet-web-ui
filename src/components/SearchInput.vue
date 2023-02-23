@@ -1,216 +1,188 @@
 <script>
-	import ButtonIcon from "@/components/button/ButtonIcon.vue";
+   import Searchbar from "./Searchbar.vue";
 
-	export default {
-		components: { ButtonIcon },
-		props: {
-			list: { type: Array, default: () => [] },
-			placeholder: { type: String, default: "Search" },
-		},
-		data() {
-			return { search: "", searchExpand: false, searchLastCharTime: 0 };
-		},
-		watch: {
-			search(newSearch) {
-				this.searchExpand = newSearch;
+   export default {
+      components: { Searchbar },
+      props: {
+         list: { type: Array, default: () => [] },
+         placeholder: { type: String, default: "Search" },
+      },
+      data() {
+         return { search: "", isExpand: false, searchLastCharTime: 0 };
+      },
+      watch: {
+         search(text = "") {
+            this.isExpand = text.length > 0;
 
-				const elapseTimeDesigned = 250;
-				const date = new Date();
-				const time = date.getTime();
+            const elapseTimeDesigned = 250;
+            const date = new Date();
+            const time = date.getTime();
 
-				if (time < this.searchLastCharTime) return;
+            if (time < this.searchLastCharTime) return;
 
-				this.searchLastCharTime = time;
-				setTimeout(
-					() => this.$emit("callback-search", newSearch),
-					elapseTimeDesigned,
-				);
-			},
-		},
-		emits: ["callback-search"],
-	};
+            this.searchLastCharTime = time;
+            setTimeout(
+               () => this.$emit("callback-search", text),
+               elapseTimeDesigned,
+            );
+         },
+      },
+      emits: ["callback-search"],
+      methods: {
+         clear() {
+            this.search = "";
+         },
+         expand() {
+            this.isExpand = true;
+         },
+         collapse() {
+            setTimeout(() => {
+               this.isExpand = false;
+            }, 300);
+         },
+      },
+   };
 </script>
 
 <template>
-	<div class="SearchInput">
-		<div
-			:class="[
-				'SearchInput-body',
-				searchExpand ? 'SearchInput-body-isActive' : '',
-			]"
-			@click="$refs['SearchInput-keyword'].focus()"
-		>
-			<ButtonIcon
-				:src="
-					host.res(search ? 'icon/close-000000.svg' : 'icon/search-000000.svg')
-				"
-				alt="Clear"
-				@click="
-					search = '';
-					searchExpand = false;
-					$refs['SearchInput-keyword'].focus();
-				"
-			/>
-			<input
-				class="SearchInput-keyword"
-				ref="SearchInput-keyword"
-				v-model="search"
-				:placeholder="placeholder"
-				@focus="searchExpand = search"
-			/>
-		</div>
+   <div class="SearchInput">
+      <Searchbar
+         :class="[
+            isExpand
+               ? 'SearchInput-body-isActive'
+               : 'SearchInput-body-isPassive',
+         ]"
+         :model="search"
+         :placeholder="placeholder"
+         @clear="(e) => clear()"
+         @input="(e) => (search = e.value)"
+         @focus="isExpand = search"
+         @blur="() => collapse()"
+      />
 
-		<div class="SearchInput-main">
-			<div
-				ref="SearchInput-main-background"
-				class="SearchInput-main-background"
-				:style="{
-					opacity: [searchExpand ? '1' : '0'],
-					'pointer-events': [searchExpand ? 'all' : 'none'],
-				}"
-				@click="searchExpand = false"
-			/>
-			<div v-if="searchExpand" class="SearchInput-main-container">
-				<div class="SearchInput-main-body">
-					<p v-if="!list || list.length <= 0">No Result</p>
+      <div
+         class="SearchInput-background transition"
+         :style="{
+            opacity: [isExpand ? '1' : '0'],
+            'pointer-events': [isExpand ? 'all' : 'none'],
+         }"
+         @click="() => collapse()"
+      />
 
-					<slot
-						:clear="() => (search = '')"
-						:expand="() => (searchExpand = true)"
-						:collapse="() => (searchExpand = false)"
-						:list="list"
-					/>
-				</div>
-			</div>
-		</div>
-	</div>
+      <div class="SearchInput-dropdown" v-if="isExpand">
+         <div class="SearchInput-dropdown-body">
+            <p v-if="!list || list.length <= 0">No Result</p>
+
+            <slot
+               :clear="() => clear()"
+               :expand="() => expand()"
+               :collapse="() => collapse()"
+               :list="list"
+            />
+         </div>
+      </div>
+   </div>
 </template>
 
 <style lang="scss" scoped>
-	.SearchInput {
-		--background-color: hsla(0, 0%, 100%, 0.3);
-		--background-color-active: white;
-		--background-color-focus: white;
+   .SearchInput {
+      --background-color: hsla(0, 0%, 100%, 0.3);
+      --background-color-active: white;
+      --background-color-focus: white;
 
-		--border-radius: 0.4rem;
-		--border-radius-active: 0.4rem;
+      --border-radius: 0.4rem;
+      --border-radius-active: 0.4rem;
 
-		--border: 1px solid hsla(0, 0%, 0%, 0.15);
-		--border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
+      --border: 1px solid hsla(0, 0%, 0%, 0.15);
+      --border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
 
-		display: flex;
-		flex-direction: column;
-		align-items: stretch;
-		width: 100%;
-		height: 100%;
-		position: relative;
+      --dropdown-height: 80vh;
 
-		.SearchInput-body {
-			z-index: 2;
-			color: #5c5c5c;
-			display: flex;
-			flex-direction: row;
-			align-items: stretch;
-			align-items: center;
-			transition: var(--transition-duration);
-			width: 100%;
-			height: 100%;
-			padding: 0.2rem 0.4rem;
-			padding: 0.4rem;
-			border: var(--border);
+      background-color: #e4e4e4;
 
-			.SearchInput-keyword {
-				width: 100%;
-				font-size: 1rem;
-				flex-grow: 1;
-				border: none;
-				outline: none;
-				padding: 0.5rem 0.7rem;
-				padding: 0.5rem;
-				border: none;
-				background: none;
-				transition: var(--transition-duration);
-				display: flex;
-				flex-direction: row;
-				&::placeholder {
-					color: hsla(0, 0%, 0%, 0.4);
-				}
-			}
-		}
-		.SearchInput-body {
-			background-color: var(--background-color);
-			border-radius: var(--border-radius);
-			&:focus-within {
-				background-color: var(--background-color-focus);
-				border: var(--border-focus);
-			}
-		}
-		.SearchInput-body-isActive {
-			background-color: var(--background-color-active);
-			border-radius: var(--border-radius-active) var(--border-radius-active) 0 0;
-			&:focus-within {
-				background-color: var(--background-color-active);
-				border: var(--border-active);
-			}
-		}
+      border-radius: var(--border-radius);
 
-		.SearchInput-main {
-			width: 100%;
-			height: 0;
-			background-color: white;
-			border-radius: 0 0 var(--border-radius-active) var(--border-radius-active);
-			z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      height: 100%;
+      position: relative;
 
-			.SearchInput-main-background {
-				min-width: 100vw;
-				min-height: 100vh;
-				position: fixed;
-				top: 0;
-				bottom: 0;
-				left: 0;
-				right: 0;
-				background-color: hsla(0, 0%, 0%, 0.6);
-				display: grid;
-				transition: var(--transition-duration);
-			}
+      background-color: #e4e4e4;
 
-			.SearchInput-main-container {
-				position: absolute;
-				top: 100%;
-				width: 100%;
-				height: 100vh;
-				max-height: 80vh;
-				box-shadow: 0 0 60px hsla(0, 0%, 0%, 0.1);
-				border-radius: 0 0 var(--border-radius-active)
-					var(--border-radius-active);
-				background-color: #e4e4e4;
-				overflow: hidden;
+      .SearchInput-body-isPassive {
+         border: var(--border);
+         background-color: var(--background-color);
+         border-radius: var(--border-radius);
+         &:focus-within {
+            background-color: var(--background-color-focus);
+            border: var(--border-focus);
+         }
+      }
+      .SearchInput-body-isActive {
+         background-color: var(--background-color-active);
+         border-radius: var(--border-radius-active) var(--border-radius-active)
+            0 0;
+         &:focus-within {
+            background-color: var(--background-color-active);
+            border: var(--border-active);
+         }
+      }
 
-				.SearchInput-main-body {
-					width: 100%;
-					height: 100%;
-					max-height: 80vh;
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					gap: 0.4rem;
+      .SearchInput-background {
+         min-width: 100vw;
+         min-height: 100vh;
+         position: fixed;
+         top: 0;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         background-color: hsla(0, 0%, 0%, 0.6);
+         display: grid;
+      }
 
-					border-radius: 0 0 var(--border-radius-active)
-						var(--border-radius-active);
+      .SearchInput-dropdown {
+         width: 100%;
+         height: 100vh;
+         max-height: var(--dropdown-height);
 
-					overflow-y: auto;
-					overflow-x: hidden;
+         z-index: 1;
 
-					padding: 0.7rem 0.9rem 4rem 0.9rem;
-					color: black;
+         position: absolute;
+         top: 100%;
 
-					& > * {
-						width: 100%;
-						height: max-content;
-						overflow: initial;
-					}
-				}
-			}
-		}
-	}
+         box-shadow: 0 0 60px hsla(0, 0%, 0%, 0.1);
+         border-radius: 0 0 var(--border-radius-active)
+            var(--border-radius-active);
+
+         background-color: #e4e4e4;
+         overflow: hidden;
+
+         .SearchInput-dropdown-body {
+            width: 100%;
+            height: 100%;
+            max-height: var(--dropdown-height);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+
+            border-radius: 0 0 var(--border-radius-active)
+               var(--border-radius-active);
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            padding: 0.7rem 0.9rem 4rem 0.9rem;
+            color: black;
+
+            & > * {
+               width: 100%;
+               height: max-content;
+               overflow: initial;
+            }
+         }
+      }
+   }
 </style>

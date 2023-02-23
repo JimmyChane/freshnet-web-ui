@@ -1,139 +1,138 @@
 <script>
-	import Company from "@/host/Company";
+   import Company from "@/host/Company";
 
-	import { getHours } from "date-fns";
+   import { getHours } from "date-fns";
 
-	export default {
-		data() {
-			return {
-				companyTitle: Company.name,
-				companyCategory: Company.category,
-				addressHref: Company.Location.toHref(),
-			};
-		},
-		computed: {
-			greetTitle() {
-				const periods = [
-					{ title: "Good Midnight", start: 0, end: 4 },
-					{ title: "Good Dawn", start: 5, end: 6 },
-					{ title: "Good Morning", start: 7, end: 11 },
-					{ title: "Good Afternoon", start: 12, end: 15 },
-					{ title: "Good Evening", start: 16, end: 18 },
-					{ title: "Good Night", start: 19, end: 23 },
-				];
+   export default {
+      data() {
+         return {
+            companyTitle: Company.name,
+            companyCategory: Company.category,
+            addressHref: Company.Location.toHref(),
+         };
+      },
+      computed: {
+         greetTitle() {
+            const periods = [
+               { title: "Good Midnight", start: 0, end: 4 },
+               { title: "Good Dawn", start: 5, end: 6 },
+               { title: "Good Morning", start: 7, end: 11 },
+               { title: "Good Afternoon", start: 12, end: 15 },
+               { title: "Good Evening", start: 16, end: 18 },
+               { title: "Good Night", start: 19, end: 23 },
+            ];
 
-				const hour = getHours(Date.now());
+            const hour = getHours(Date.now());
 
-				const period = periods.find((period) => {
-					return period.start <= hour && hour <= period.end;
-				});
+            const period = periods.find((period) => {
+               return period.start <= hour && hour <= period.end;
+            });
 
-				return period ? period.title : "Hi";
-			},
-		},
-	};
+            return period ? period.title : "Hi";
+         },
+      },
+   };
 </script>
 
 <template>
-	<div class="HomeHeader">
-		<span class="HomeHeader-title">
-			<span class="HomeHeader-name">{{ companyTitle }}</span>
-			<a class="HomeHeader-classification" :href="addressHref" target="_blank"
-				>{{ companyCategory }}<br />Kuala Selangor District</a
-			>
-		</span>
-		<!-- <span class="HomeHeader-description"
+   <div class="HomeHeader">
+      <span class="HomeHeader-title">
+         <span class="HomeHeader-name">{{ companyTitle }}</span>
+         <a class="HomeHeader-classification" :href="addressHref" target="_blank"
+            >{{ companyCategory }}<br />Kuala Selangor District</a
+         >
+      </span>
+      <!-- <span class="HomeHeader-description"
 			>We sell notebooks, printers, repairs, and more</span
 		> -->
-		<div class="HomeHeader-greet">
-			<span class="HomeHeader-greetTitle">{{ greetTitle }}</span>
-			<span class="HomeHeader-greetHelp">How can we help you?</span>
-		</div>
-	</div>
+      <div class="HomeHeader-greet">
+         <span class="HomeHeader-greetTitle">{{ greetTitle }}</span>
+         <span class="HomeHeader-greetHelp">How can we help you?</span>
+      </div>
+   </div>
 </template>
 
 <style lang="scss" scoped>
-	.HomeHeader {
-		column-gap: 1em;
-		row-gap: 0.4em;
-		color: black;
-		text-align: center;
+   .HomeHeader {
+      column-gap: 1em;
+      row-gap: 0.4em;
+      color: black;
+      text-align: center;
 
-		z-index: 2;
-		width: 100%;
+      z-index: 2;
+      width: 100%;
 
-		display: flex;
-		flex-direction: column;
-		text-align: center;
-		align-items: center;
-		justify-content: center;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
 
-		margin-top: 2rem;
-		font-size: 1rem;
+      font-size: 1rem;
 
-		.HomeHeader-title {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
+      .HomeHeader-title {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
 
-			.HomeHeader-name {
-				font-weight: 600;
-				font-size: 1.6em;
-				line-height: 1;
-			}
-			.HomeHeader-classification {
-				font-size: 0.4em;
-				line-height: 1em;
-				cursor: pointer;
-				color: inherit;
-				text-decoration: inherit;
+         .HomeHeader-name {
+            font-weight: 600;
+            font-size: 1.6em;
+            line-height: 1;
+         }
+         .HomeHeader-classification {
+            font-size: 0.4em;
+            line-height: 1em;
+            cursor: pointer;
+            color: inherit;
+            text-decoration: inherit;
 
-				&:hover {
-					text-decoration: underline;
-				}
-			}
-		}
-		.HomeHeader-description {
-			font-size: 1em;
-			line-height: 1em;
-		}
-		.HomeHeader-greet {
-			--height: 6rem;
-			min-height: var(--height);
-			max-height: var(--height);
+            &:hover {
+               text-decoration: underline;
+            }
+         }
+      }
+      .HomeHeader-description {
+         font-size: 1em;
+         line-height: 1em;
+      }
+      .HomeHeader-greet {
+         --height: 6rem;
+         min-height: var(--height);
+         max-height: var(--height);
 
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			align-items: inherit;
-			justify-content: inherit;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         align-items: inherit;
+         justify-content: inherit;
 
-			.HomeHeader-greetTitle {
-				font-size: 0.7em;
-			}
-			.HomeHeader-greetHelp {
-				font-size: 0.7em;
-			}
-		}
+         .HomeHeader-greetTitle {
+            font-size: 0.7em;
+         }
+         .HomeHeader-greetHelp {
+            font-size: 0.7em;
+         }
+      }
 
-		@media (min-width: 320px) {
-			font-size: 1.1rem;
-		}
-		@media (min-width: 340px) {
-			font-size: 1.2rem;
-		}
-		@media (min-width: 350px) {
-			font-size: 1.3rem;
-		}
-		@media (min-width: 380px) {
-			font-size: 1.4rem;
-		}
-		@media (min-width: 480px) {
-			font-size: 1.8rem;
-		}
-		@media (min-width: 500px) {
-			font-size: 1.9rem;
-		}
-	}
+      @media (min-width: 320px) {
+         font-size: 1.1rem;
+      }
+      @media (min-width: 340px) {
+         font-size: 1.2rem;
+      }
+      @media (min-width: 350px) {
+         font-size: 1.3rem;
+      }
+      @media (min-width: 380px) {
+         font-size: 1.4rem;
+      }
+      @media (min-width: 480px) {
+         font-size: 1.8rem;
+      }
+      @media (min-width: 500px) {
+         font-size: 1.9rem;
+      }
+   }
 </style>

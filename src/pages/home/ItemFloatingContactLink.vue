@@ -14,13 +14,16 @@
 
 <template>
    <a
-      class="ItemFloatingContactLink"
-      :class="[isScreenWide ? 'ItemFloatingContactLink-isScreenWide' : '']"
+      :class="[
+         isScreenWide ? 'ItemFloatingContactLink-isScreenWide' : '',
+         'ItemFloatingContactLink',
+         'transition',
+      ]"
       :href="href"
       :target="target"
    >
       <img class="ItemFloatingContactLink-icon" :src="src" />
-      <div class="ItemFloatingContactLink-content">
+      <div class="ItemFloatingContactLink-content transition">
          <span class="ItemFloatingContactLink-title1">{{ title1 }}</span>
          <span class="ItemFloatingContactLink-title2">{{ title2 }}</span>
       </div>
@@ -53,7 +56,6 @@
          align-items: flex-start;
          justify-content: center;
          opacity: 0;
-         transition: var(--transition-duration);
          .ItemFloatingContactLink-title1 {
             font-size: 0.7em;
             font-weight: 600;
@@ -77,7 +79,6 @@
       // border: 0.1em solid var(--primary-color);
       color: var(--primary-color);
       background: white;
-      transition: var(--transition-duration);
       &:hover {
          background: var(--background-color-hover);
       }
@@ -88,7 +89,6 @@
       .ItemFloatingContactLink-content {
          display: flex;
          opacity: 1;
-         transition: var(--transition-duration);
       }
    }
 </style>

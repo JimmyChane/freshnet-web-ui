@@ -1,404 +1,308 @@
 <script>
-	import PageHome from "@/pages/home/PageHome.vue";
-	import PageProduct from "@/pages/product/PageProduct.vue";
-	// import PagePs2 from "@/pages/ps2/PagePs2.vue";
-	import PagePrint from "@/pages/print/PagePrint.vue";
-	import PageManage from "@/pages/manage/PageManage.vue";
+   import PageHome from "@/pages/home/PageHome.vue";
+   import PageProduct from "@/pages/product/PageProduct.vue";
+   import PagePrint from "@/pages/print/PagePrint.vue";
+   import PageManage from "@/pages/manage/PageManage.vue";
 
-	import LeftNav from "./leftNav/LeftNav.vue";
-	import ViewerImage from "./ViewerImage.vue";
-	import Snackbar from "./Snackbar.vue";
+   import LeftNav from "./leftNav/LeftNav.vue";
+   import ViewerImage from "./ViewerImage.vue";
+   import Snackbar from "./Snackbar.vue";
+   import PopupMenu from "./PopupMenu.vue";
+   import Status from "./Status.vue";
 
-	export default {
-		name: "App",
+   export default {
+      name: "App",
 
-		_children() {
-			return [
-				PageHome,
-				PageProduct,
-				//  PagePs2,
-				PagePrint,
-				PageManage,
-			];
-		},
+      _children() {
+         return [PageHome, PageProduct, PagePrint, PageManage];
+      },
 
-		components: { LeftNav, ViewerImage, Snackbar },
-		data() {
-			return { statusIsShown: false, layoutLoginIsShown: false };
-		},
-		computed: {
-			isLogging: (c) => c.loginStore.getters.isLogging,
-			isConnected: (c) => c.store.getters.isConnected,
-		},
-		watch: {
-			isLogging() {
-				if (!this.loginStore.getters.user && this.isLogging)
-					this.$root.feedback("User Logging");
-			},
-			isConnected() {
-				this.onConnectionChange();
-			},
-		},
-		mounted() {
-			window.addEventListener("resize", () => this.invalidateHeight()) &&
-				this.invalidateHeight();
+      components: { LeftNav, ViewerImage, Snackbar, PopupMenu, Status },
+      data() {
+         return { layoutLoginIsShown: false };
+      },
+      computed: {
+         isLogging: (c) => c.loginStore.getters.isLogging,
+      },
+      watch: {
+         isLogging() {
+            if (!this.loginStore.getters.user && this.isLogging)
+               this.$root.feedback("User Logging");
+         },
+      },
+      mounted() {
+         window.addEventListener("resize", () => this.invalidateHeight());
+         this.invalidateHeight();
+      },
+      unmounted() {
+         window.removeEventListener("resize", this.invalidateHeight);
+      },
+      methods: {
+         logout() {
+            this.loginStore.dispatch("logout").then((user) => {
+               this.$root.feedback(`${user.name} is now logged out`);
+            });
+         },
 
-			setTimeout(() => this.onConnectionChange(), 3000);
-		},
-		unmounted() {
-			window.removeEventListener("resize", this.invalidateHeight);
-		},
-		methods: {
-			onConnectionChange() {
-				if (!this.isConnected) {
-					this.statusIsShown = true;
-					return;
-				}
-
-				this.statusIsShown = true;
-				setTimeout(() => (this.statusIsShown = false), 3000);
-			},
-
-			logout() {
-				this.loginStore.dispatch("logout").then((user) => {
-					this.$root.feedback(`${user.name} is now logged out`);
-				});
-			},
-
-			invalidateHeight() {
-				let vh = window.innerHeight * 0.01;
-				document.body.style.setProperty("--vh", `${vh}px`);
-			},
-		},
-	};
+         invalidateHeight() {
+            const { innerHeight } = window;
+            const vh = innerHeight * 0.01;
+            document.body.style.setProperty("--vh", `${vh}px`);
+         },
+      },
+   };
 </script>
 
 <template>
-	<div
-		:class="[
-			'App',
-			`App-${$root.appLayout.isNormal() ? 'isNormal' : ''}`,
-			`App-${$root.appLayout.isFull() ? 'isFull' : ''}`,
-			`App-${statusIsShown ? 'isShowingStatus' : 'isHidingStatus'}`,
-		]"
-	>
-		<div class="App-background"></div>
+   <div
+      :class="[
+         'App',
+         'transition',
+         $root.appLayout.isNormal() ? 'App-isNormal' : '',
+         $root.appLayout.isFull() ? 'App-isFull' : '',
+      ]"
+   >
+      <div class="App-background transition" :style="{ 'z-index': '1' }"></div>
 
-		<div class="App-body">
-			<div class="App-layout">
-				<div
-					v-if="false"
-					:class="[
-						'App-status',
-						`App-status-${isConnected ? 'isConnected' : 'isDisconnected'}`,
-					]"
-				>
-					<span>{{ isConnected ? "Connected" : "Disconnected" }}</span>
-				</div>
+      <div class="App-body transition" :style="{ 'z-index': '2' }">
+         <div class="App-layout">
+            <Status :style="{ 'z-index': '2' }" />
 
-				<div class="App-layout-body">
-					<LeftNav
-						class="App-LeftNav"
-						v-if="!$root.navigation.isNone()"
-						:isDrawer="$root.navigation.isDrawer()"
-						:isExpand="$root.navigation.isExpanded()"
-						:selectedPageKey="$root.currentPageKey"
-						:selectedViewKey="$root.currentViewKey"
-						:isWide="$root.navigation.isWide()"
-						@click-collapse="() => $root.closeNavigationDrawer()"
-						@click-logout="logout"
-					/>
-					<router-view class="App-routerView" ref="AppRouterView" />
-				</div>
-			</div>
-		</div>
+            <div
+               :class="[
+                  'transition',
+                  'App-layout-body',
+                  $root.navigation.isDrawer()
+                     ? 'App-layout-body-isDrawer'
+                     : 'App-layout-body-isFixed',
+               ]"
+               :style="{ 'z-index': '1' }"
+            >
+               <LeftNav
+                  class="App-LeftNav"
+                  v-if="!$root.navigation.isNone()"
+                  @click-logout="() => logout()"
+               />
+               <router-view class="App-routerView" ref="AppRouterView" />
+            </div>
+         </div>
+      </div>
 
-		<div class="App-overflow">
-			<div class="App-overflow-body">
-				<ViewerImage class="App-imageViewer" />
-			</div>
-		</div>
+      <ViewerImage :style="{ 'z-index': 'auto' }" />
 
-		<Snackbar
-			class="App-Snackbar"
-			v-for="snackbar of $root.snackbars"
-			:key="snackbar.key"
-			:item="snackbar"
-		/>
-	</div>
+      <Snackbar
+         :style="{ 'z-index': '4' }"
+         v-for="snackbar of $root.snackbars"
+         :key="snackbar.key"
+         :item="snackbar"
+      />
+
+      <PopupMenu
+         :style="{ 'z-index': '5' }"
+         v-for="popupMenu of $root.popupMenus"
+         :key="popupMenu.key"
+         :popupMenu="popupMenu"
+         class="App-PopupMenu"
+      />
+   </div>
 </template>
 
 <style lang="scss">
-	:root {
-		@media (max-width: 320px) {
-			font-size: 14px;
-		}
-	}
+   .scrollbar {
+      --scrollbar-size: 0;
 
-	html {
-		// @import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
-		// @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-		@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+      --scrollbar-thumb-radius: 0;
+      --scrollbar-thumb-color: none;
+      --scrollbar-thumb-color-hover: none;
 
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
-		overscroll-behavior-x: none;
+      --scrollbar-track-margin: 0;
+      --scrollbar-track-color: none;
+      --scrollbar-track-color-hover: none;
 
-		body {
-			width: 100%;
-			height: 100%;
-			// overflow: hidden;
-			overscroll-behavior-x: none;
+      scrollbar-width: var(--scrollbar-size);
+      scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+      &::-webkit-scrollbar {
+         height: var(--scrollbar-size);
+         width: var(--scrollbar-size);
+         &-thumb {
+            border-radius: var(--scrollbar-thumb-radius);
+            background-color: var(--scrollbar-thumb-color);
+            &:hover {
+               background-color: var(--scrollbar-thumb-color-hover);
+            }
+         }
+         &-track {
+            margin: var(--scrollbar-track-margin);
+            background-color: var(--scrollbar-track-color);
+            &:hover {
+               background-color: var(--scrollbar-track-color-hover);
+            }
+         }
+      }
+   }
+   .transition {
+      --transition-target: all;
+      --transition-duration: 200ms;
+      --transition-delay: 0;
+      --transition-timing: linear;
+      transition: var(--transition-target) var(--transition-duration)
+         var(--transition-timing);
+      transition-delay: var(--transition-delay);
+   }
 
-			p {
-				white-space: pre-line;
-			}
-		}
+   :root {
+      font-size: 16px;
+      @media (max-width: 320px) {
+         font-size: 14px;
+      }
+   }
 
-		* {
-			box-sizing: border-box;
-			margin: 0;
-			padding: 0;
+   html {
+      // @import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
+      // @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+      // @import url("https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
 
-			outline: none;
-			-webkit-tap-highlight-color: transparent;
-			// font-family: 'Poppins';
-			// font-family: "Comic Neue";
-			font-family: "Roboto";
-			// font-family: arial;
-			word-break: break-word;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      overscroll-behavior-x: none;
 
-			// --scrollbar-size: 0.6em;
-			// --scrollbar-thumb-radius: 0.2em;
-			// --scrollbar-thumb-radius: 0;
-			// --scrollbar-track-margin: 0;
+      body {
+         width: 100%;
+         height: 100%;
+         overscroll-behavior-x: none;
 
-			// --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.4);
-			// --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.6);
-			// --scrollbar-track-color: hsla(0, 0%, 0%, 0.1);
-			// --scrollbar-track-color-hover: hsla(0, 0%, 0%, 0.2);
+         p {
+            white-space: pre-line;
+         }
+      }
 
-			// scrollbar-width: var(--scrollbar-size);
-			// scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
-			// &::-webkit-scrollbar {
-			//    height: var(--scrollbar-size);
-			//    width: var(--scrollbar-size);
-			//    &-thumb {
-			//       border-radius: var(--scrollbar-thumb-radius);
-			//       background-color: var(--scrollbar-thumb-color);
-			//       &:hover {
-			//          background-color: var(--scrollbar-thumb-color-hover);
-			//       }
-			//    }
-			//    &-track {
-			//       margin: var(--scrollbar-track-margin);
-			//       background-color: var(--scrollbar-track-color);
-			//       &:hover {
-			//          background-color: var(--scrollbar-track-color-hover);
-			//       }
-			//    }
-			// }
-		}
+      * {
+         box-sizing: border-box;
+         margin: 0;
+         padding: 0;
 
-		// color schemas
-		.App {
-			--primary-color: #294656;
-			--accent-color: #fc8237;
-			--statusbar-color: #384a6a;
-			--transition-duration: 300ms;
-		}
-	}
+         outline: none;
+         -webkit-tap-highlight-color: transparent;
+         font-family: "Roboto", sans-serif;
+         word-break: break-word;
+      }
 
-	.App {
-		position: relative;
-		color: black;
-		width: 100%;
-		height: 100%;
-		height: 100vh;
-		max-height: 100vh;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		background: none;
-		transition: var(--transition-duration);
-		overflow: hidden;
+      // color schemas
+      .App {
+         --primary-color: #294656;
+         --accent-color: #fc8237;
+         --statusbar-color: #384a6a;
+      }
+   }
 
-		height: -webkit-fill-available; // fix for ios - test
-		height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-		height: calc(var(--vh, 1vh) * 100);
+   .App {
+      position: relative;
+      color: black;
+      width: 100%;
+      height: 100%;
+      height: 100vh;
+      max-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: none;
+      overflow: hidden;
 
-		.App-background {
-			z-index: 1;
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			pointer-events: none;
-			transition: var(--transition-duration);
-		}
-		.App-body {
-			z-index: 2;
-			width: 100%;
-			height: 100%;
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
-			transition: var(--transition-duration);
-			overflow: hidden;
+      height: -webkit-fill-available; // fix for ios - test
+      height: 100vh; /* Fallback for browsers that do not support Custom Properties */
+      height: calc(var(--vh, 1vh) * 100);
 
-			.App-layout {
-				width: 100%;
-				height: 100%;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: stretch;
-				transition: var(--transition-duration);
+      .App-background {
+         position: absolute;
+         width: 100%;
+         height: 100%;
+         pointer-events: none;
+      }
+      .App-body {
+         width: 100%;
+         height: 100%;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         overflow: hidden;
 
-				--status-height: 1.2em;
+         .App-layout {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: stretch;
 
-				.App-status {
-					z-index: 2;
-					font-size: 0.7em;
-					display: flex;
-					flex-direction: row;
-					flex-grow: 0;
-					align-items: center;
-					justify-content: center;
-					padding: 0 0.1em;
-					width: 100%;
-					color: white;
-					pointer-events: none;
-					transition: var(--transition-duration);
-					background: var(--primary-color);
-					--background-disconnected: #e73c2f;
-					--background-connected: #0c8d0c;
+            .App-layout-body {
+               width: 100%;
+               height: 100%;
+               display: flex;
+               flex-direction: row;
+               align-items: center;
+               justify-content: stretch;
+               background-color: #e4e4e4;
 
-					position: absolute;
-					top: 0;
-				}
-				.App-status-isDisconnected {
-					background: var(--background-disconnected);
-				}
-				.App-status-isConnected {
-					background: var(--background-connected);
-				}
+               --background-color-light: var(--background-color);
+               --background-color-dark: var(--background-color);
+               .App-LeftNav {
+                  flex-grow: 0;
+               }
+               .App-routerView {
+                  width: 100%;
+                  height: 100%;
+               }
+            }
+            .App-layout-body-isDrawer {
+               .App-LeftNav {
+                  z-index: 2;
+               }
+               .App-routerView {
+                  flex-grow: 1;
+                  z-index: 1;
+               }
+            }
+            .App-layout-body-isFixed {
+               .App-LeftNav {
+                  z-index: 1;
+               }
+               .App-routerView {
+                  flex-grow: 2;
+                  z-index: 2;
+               }
+            }
+         }
+      }
+   }
 
-				.App-layout-body {
-					z-index: 1;
-					width: 100%;
-					height: 100%;
-					display: flex;
-					flex-direction: row;
-					flex-grow: 1;
-					align-items: center;
-					justify-content: stretch;
-					// background-color: #c9d7df;
-					background-color: #e4e4e4;
-
-					--background-color-light: var(--background-color);
-					--background-color-dark: var(--background-color);
-					transition: var(--transition-duration);
-					.App-LeftNav {
-						z-index: 2;
-						flex-grow: 0;
-					}
-					.App-routerView {
-						z-index: 1;
-						flex-grow: 1;
-						width: 100%;
-						height: 100%;
-					}
-				}
-			}
-		}
-		.App-overflow {
-			z-index: auto;
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			width: 100vw;
-			height: 100vh;
-			display: flex;
-			overflow: hidden;
-
-			.App-overflow-body {
-				position: relative;
-				width: 100vw;
-				height: 100vh;
-				display: flex;
-				overflow: hidden;
-
-				// height: -webkit-fill-available; // fix for ios - test
-				height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-				height: calc(var(--vh, 1vh) * 100);
-
-				.App-imageViewer {
-					z-index: 3;
-				}
-			}
-		}
-		.App-Snackbar {
-			z-index: 4;
-		}
-	}
-
-	.App-isNormal {
-		@media (min-width: 1600px) {
-			.App-body {
-				padding: 1vh 4vw;
-				.App-layout {
-					max-width: 1800px;
-					max-height: 2000px;
-					box-shadow: 1px 1px 50px 0px hsla(0, 0%, 0%, 0.3);
-					border-radius: 8px;
-				}
-			}
-			.App-background {
-				opacity: 0.5;
-				background-image: linear-gradient(
-					120deg,
-					hsl(202, 61%, 33%) 4%,
-					hsl(236, 66%, 24%) 95%
-				);
-			}
-		}
-	}
-	.App-isFull {
-		background: none;
-		.App-background {
-			opacity: 0;
-		}
-	}
-
-	.App-isShowingStatus {
-		.App-body {
-			.App-layout {
-				.App-status {
-					height: var(--status-height);
-					min-height: var(--status-height);
-					max-height: var(--status-height);
-					opacity: 1;
-				}
-				// .App-layout-body {
-				//    height: calc(100% - var(--status-height));
-				// }
-			}
-		}
-	}
-	.App-isHidingStatus {
-		.App-body {
-			.App-layout {
-				.App-status {
-					height: 0;
-					min-height: 0;
-					max-height: 0;
-					opacity: 0;
-				}
-			}
-		}
-	}
+   .App-isNormal {
+      @media (min-width: 1600px) {
+         .App-body {
+            padding: 1vh 4vw;
+            .App-layout {
+               max-width: 1800px;
+               max-height: 2000px;
+               box-shadow: 1px 1px 50px 0px hsla(0, 0%, 0%, 0.3);
+               border-radius: 8px;
+            }
+         }
+         .App-background {
+            opacity: 0.5;
+            background-image: linear-gradient(
+               120deg,
+               hsl(202, 61%, 33%) 4%,
+               hsl(236, 66%, 24%) 95%
+            );
+         }
+      }
+   }
+   .App-isFull {
+      background: none;
+      .App-background {
+         opacity: 0;
+      }
+   }
 </style>

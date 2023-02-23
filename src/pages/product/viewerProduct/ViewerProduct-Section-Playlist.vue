@@ -78,7 +78,6 @@
 
 		.SectionPlaylist-playlist {
 			width: 100%;
-			border-radius: 0.6rem;
 			overflow: hidden;
 
 			display: flex;

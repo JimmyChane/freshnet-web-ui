@@ -1,5 +1,5 @@
 <script>
-   import DismissableContainer from "@/components/components/DismissableContainer.vue";
+   import DismissableContainer from "@/components/DismissableContainer.vue";
 
    export default {
       emits: ["click-show", "click-dismiss"],
@@ -34,11 +34,11 @@
 
 <template>
    <DismissableContainer
-      class="PopupWindow"
+      class="PopupWindow transition"
       :class="[isShown ? 'PopupWindow-shown' : '']"
       @click-dismiss="dismiss()"
    >
-      <div class="PopupWindow-body">
+      <div class="PopupWindow-body transition">
          <slot />
       </div>
    </DismissableContainer>
@@ -49,7 +49,7 @@
       width: 100%;
       height: 100%;
       background-color: hsla(0, 0%, 0%, 0.7);
-      transition: var(--transition-duration) cubic-bezier(1, 0, 0, 1);
+      --transition-timing: cubic-bezier(1, 0, 0, 1);
 
       --hitbox-size: 30px;
 
@@ -77,7 +77,7 @@
          box-shadow: 1px 2px 20px 0px hsla(0, 0%, 0%, 0.2);
          box-shadow: 1px 2px 10px 0px hsla(0, 0%, 0%, 0.8);
          overflow: hidden;
-         transition: var(--transition-duration) cubic-bezier(1, 0, 0, 1);
+         --transition-timing: cubic-bezier(1, 0, 0, 1);
       }
 
       pointer-events: none;

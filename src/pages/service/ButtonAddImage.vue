@@ -3,12 +3,15 @@
 </script>
 
 <template>
-   <button class="ButtonImageAdd-root">
-      <img class="ButtonImageAdd-icon" :src="host.res('icon/add-gray.svg')" />
+   <button class="ButtonImageAdd-root transition">
+      <img
+         class="ButtonImageAdd-icon transition"
+         :src="host.icon('add-gray')"
+      />
       <input
          class="ButtonImageAdd-pick"
          type="file"
-         accept=".jpeg, .jpg, .png"
+         accept=".jpeg, .jpg, .png, .webp"
          @change="
             (event) => {
                const [file] = event.target.files;
@@ -26,7 +29,6 @@
       position: relative;
       border: none;
       background: white;
-      transition: var(--transition-duration);
       cursor: pointer;
       display: flex;
       flex-direction: row;
@@ -39,7 +41,6 @@
       .ButtonImageAdd-icon {
          width: 20%;
          height: 20%;
-         transition: var(--transition-duration);
          cursor: pointer;
       }
       .ButtonImageAdd-pick {

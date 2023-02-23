@@ -1,11 +1,48 @@
 <script>
    export default {
-      props: { isRunning: { type: Boolean, default: false } },
+      props: { isShowing: { type: Boolean, default: false } },
+      data() {
+         return {
+            show: false,
+            animate: false,
+         };
+      },
+      watch: {
+         isShowing() {
+            this.invalidate();
+         },
+      },
+      mounted() {
+         this.invalidate();
+      },
+      methods: {
+         invalidate() {
+            this.show = true;
+            this.animate = false;
+
+            if (this.isShowing) {
+               const isShowing = this.isShowing;
+
+               setTimeout(() => {
+                  if (this.isShowing === isShowing) this.animate = true;
+               }, 300);
+            } else {
+               const isShowing = this.isShowing;
+
+               setTimeout(() => {
+                  if (this.isShowing === isShowing) this.show = false;
+               }, 300);
+            }
+         },
+      },
    };
 </script>
 
 <template>
-   <div :class="['Loading', isRunning ? 'Loading-running' : '']">
+   <div
+      v-if="show"
+      :class="['Loading', animate ? 'Loading-isShowing' : 'Loading-isHiding']"
+   >
       <div class="Loading-body"><div class="Loading-bar"></div></div>
    </div>
 </template>
@@ -33,12 +70,6 @@
          align-items: center;
          justify-content: flex-start;
          overflow: hidden;
-      }
-   }
-
-   .Loading-running {
-      opacity: 1;
-      .Loading-body {
          .Loading-bar {
             position: absolute;
             min-width: 0%;
@@ -46,16 +77,23 @@
             background-color: var(--primary-color);
             animation: Loadingv1Animation 1.4s linear infinite;
          }
+      }
 
-         @keyframes Loadingv1Animation {
-            from {
-               transform: translateX(-50%);
-            }
-            to {
-               min-width: 100%;
-               transform: translateX(100%);
-            }
+      @keyframes Loadingv1Animation {
+         from {
+            transform: translateX(-50%);
+         }
+         to {
+            min-width: 100%;
+            transform: translateX(100%);
          }
       }
+   }
+
+   .Loading-isShowing {
+      opacity: 1;
+   }
+   .Loading-isHiding {
+      opacity: 0;
    }
 </style>

@@ -1,44 +1,48 @@
 class AppLayout {
    static Layout = { NORMAL: -1, FULL: -2 };
 
-   context;
+   // for quick checking arguments
+   static #layouts = Object.keys(this.Layout).map((key) => this.Layout[key]);
 
+   context;
    requests = [];
 
    constructor(context) {
       this.context = context;
    }
 
-   setLayout(mode) {
-      switch (mode) {
-         default:
-            return;
-         case AppLayout.Layout.NORMAL:
-         case AppLayout.Layout.FULL:
-      }
-
-      const page = this.context.currentPageKey;
-      const view = this.context.currentViewKey;
-
-      const request = this.requests.find((request) => {
+   #getCurrentPageKey() {
+      return this.context.currentPageKey;
+   }
+   #getCurrentViewKey() {
+      return this.context.currentViewKey;
+   }
+   #getVisibilityRequest(page = "", view = "") {
+      return this.requests.find((request) => {
          return request.page === page && request.view === view;
       });
+   }
+
+   setLayout(mode = 0) {
+      if (!AppLayout.#layouts.includes(mode)) return false;
+
+      const page = this.#getCurrentPageKey();
+      const view = this.#getCurrentViewKey();
+      const request = this.#getVisibilityRequest(page, view);
+
       if (request) request.mode = mode;
       else this.requests.push({ page, view, mode });
    }
 
-   getCurrentRequest() {
-      const page = this.context.currentPageKey;
-      const view = this.context.currentViewKey;
-
-      const request = this.requests.find((request) => {
-         return request.page === page && request.view === view;
-      });
+   #getCurrentVisibilityRequest() {
+      const page = this.#getCurrentPageKey();
+      const view = this.#getCurrentViewKey();
+      const request = this.#getVisibilityRequest(page, view);
 
       return request ? request : null;
    }
    getCurrentLayout() {
-      const request = this.getCurrentRequest();
+      const request = this.#getCurrentVisibilityRequest();
       return request ? request.mode : AppLayout.Layout.FULL;
    }
 

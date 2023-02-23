@@ -8,7 +8,7 @@
 </script>
 
 <template>
-   <button class="ButtonIconText" @click="$emit('click')">
+   <button class="ButtonIconText transition" @click="$emit('click')">
       <img class="ButtonIconText-icon" :src="src" :alt="text" />
       <span>{{ text }}</span>
    </button>
@@ -26,7 +26,6 @@
       padding: 0.6em;
       background: none;
       border: none;
-      transition: var(--transition-duration);
       cursor: pointer;
       color: black;
 
