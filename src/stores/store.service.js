@@ -7,6 +7,7 @@ import ServiceCustomer from "@/items/ServiceCustomer";
 import ServiceEvent from "@/items/ServiceEvent";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
+import ServiceLabel from "@/items/data/ServiceLabel";
 
 const Notify = {
    ItemAdd: "item-add",
@@ -83,20 +84,6 @@ const requestRemoveEvent = async (id, eventTime) => {
       .DELETE()
       .url(`service_v2/item/${id}/delete/event/`)
       .body({ serviceID: id, time: eventTime })
-      .send();
-};
-const requestUpdateUrgent = async (id, isUrgent) => {
-   return HostApi.request()
-      .PUT()
-      .url("service/urgent")
-      .body({ serviceID: id, isUrgent })
-      .send();
-};
-const requestUpdateWarranty = async (id, isWarranty) => {
-   return HostApi.request()
-      .PUT()
-      .url("service/warranty")
-      .body({ serviceID: id, isWarranty })
       .send();
 };
 const requestAddLabel = async (id, label) => {
@@ -316,7 +303,6 @@ const init = (Stores) => {
          });
       });
    };
-
    context.actions.updateDescriptionOfId = async (
       context,
       arg = { serviceID, description },
@@ -387,45 +373,39 @@ const init = (Stores) => {
       });
    };
    context.actions.updateUrgentOfId = async (context, arg = { serviceID, isUrgent }) => {
-      console.warn("updateUrgentOfId is deprecated, please use addLabelToId");
-      return context.state.processor.acquire("updateUrgentOfId", async () => {
-         const { serviceID, isUrgent } = arg;
-
-         const content = await updateContent(requestUpdateUrgent(serviceID, isUrgent));
-         const inputItem = new Service(Stores).fromData(content);
-         return context.state.list.updateItemById(inputItem.id, (item) => {
-            if (!item) return inputItem;
-            item.setUrgent(inputItem.isUrgent());
+      const label = ServiceLabel.Defaults.Urgent;
+      if (arg.isUrgent) {
+         return context.dispatch("addLabelToId", { serviceID: arg.serviceID, label });
+      } else {
+         return context.dispatch("removeLabelFromId", {
+            serviceID: arg.serviceID,
+            label,
          });
-      });
+      }
    };
    context.actions.updateWarrantyOfId = async (
       context,
       arg = { serviceID, isWarranty },
    ) => {
-      console.warn("updateWarrantyOfId is deprecated, please use addLabelToId");
-      return context.state.processor.acquire("updateWarrantyOfId", async () => {
-         const { serviceID, isWarranty } = arg;
-
-         const content = await updateContent(
-            requestUpdateWarranty(serviceID, isWarranty),
-         );
-         const inputItem = new Service(Stores).fromData(content);
-         return context.state.list.updateItemById(inputItem.id, (item) => {
-            if (!item) return inputItem;
-            item.setWarranty(inputItem.isWarranty());
+      const label = ServiceLabel.Defaults.Warranty;
+      if (arg.isUrgent) {
+         return context.dispatch("addLabelToId", { serviceID: arg.serviceID, label });
+      } else {
+         return context.dispatch("removeLabelFromId", {
+            serviceID: arg.serviceID,
+            label,
          });
-      });
+      }
    };
    context.actions.addLabelToId = async (context, arg = { serviceID, label }) => {
       return context.state.processor.acquire("addLabelToId", async () => {
          const { serviceID, label } = arg;
-         const api = await requestAddLabel(serviceID, label);
-
-         const error = api.getError();
-         if (error) throw new Error(error);
-         const content = api.getContent();
-         console.warn(content);
+         const content = await updateContent(requestAddLabel(serviceID, label));
+         const inputItem = new Service(Stores).fromData(content);
+         return context.state.list.updateItemById(inputItem.id, (item) => {
+            if (label.title === "Urgent") item.setUrgent(inputItem.isUrgent());
+            if (label.title === "Warranty") item.setWarranty(inputItem.isUrgent());
+         });
       });
    };
    context.actions.removeLabelFromId = async (context, arg = { serviceID, label }) => {
