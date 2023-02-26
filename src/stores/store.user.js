@@ -18,28 +18,20 @@ const init = (Stores) => {
    context.onIdProperty("username");
    context.build();
    context.getters.token = () => loginStore.getters.token;
-   context.actions.refresh = async (context) => {
-      return context.state.processor.acquire("refresh", async () => {
-         context.state.dataLoader.doTimeout();
-         await context.dispatch("getUsers");
-      });
-   };
-   context.actions.getUsers = async (context) => {
-      return context.state.processor.acquire("getUsers", async () => {
-         return await context.state.dataLoader.data();
-      });
-   };
-   context.actions.getUserByUsername = async (context, username = "") => {
-      return context.state.processor.acquire("getUserByUsername", async () => {
-         const users = await context.dispatch("getUsers");
-         return users.find((user) => user.username === username);
-      });
-   };
-   context.actions.updateTypeOfUserByUsername = async (
-      context,
-      arg = { username, userType },
-   ) => {
-      return context.state.processor.acquire("updateTypeOfUserByUsername", async () => {
+   context.action("refresh", async (context) => {
+      context.state.dataLoader.doTimeout();
+      await context.dispatch("getUsers");
+   });
+   context.action("getUsers", async (context) => {
+      return await context.state.dataLoader.data();
+   });
+   context.action("getUserByUsername", async (context, username = "") => {
+      const users = await context.dispatch("getUsers");
+      return users.find((user) => user.username === username);
+   });
+   context.action(
+      "updateTypeOfUserByUsername",
+      async (context, arg = { username, userType }) => {
          try {
             const user = await loginStore.dispatch("getUser");
 
@@ -57,13 +49,11 @@ const init = (Stores) => {
             context.state.list.clear();
             throw error;
          }
-      });
-   };
-   context.actions.addUser = async (
-      context,
-      arg = { username, name, passwordNew, passwordRepeat },
-   ) => {
-      return context.state.processor.acquire("addUser", async () => {
+      },
+   );
+   context.action(
+      "addUser",
+      async (context, arg = { username, name, passwordNew, passwordRepeat }) => {
          const user = await loginStore.dispatch("getUser");
 
          if (!user.isTypeAdmin()) throw new Error();
@@ -78,21 +68,19 @@ const init = (Stores) => {
          const newUser = new ItemUser(Stores).fromData(content);
          context.state.list.addItem(newUser);
          return newUser;
-      });
-   };
-   context.actions.removeUserByUsername = async (context, arg = { username }) => {
-      return context.state.processor.acquire("removeUserByUsername", async () => {
-         const user = await loginStore.dispatch("getUser");
+      },
+   );
+   context.action("removeUserByUsername", async (context, arg = { username }) => {
+      const user = await loginStore.dispatch("getUser");
 
-         if (!user.isTypeAdmin()) throw new Error();
+      if (!user.isTypeAdmin()) throw new Error();
 
-         const api = await UserRequest.remove(arg.username);
-         const content = api.getStringContent();
-         if (content !== "ok") throw new Error();
-         context.state.list.removeItemById(arg.username);
-         return true;
-      });
-   };
+      const api = await UserRequest.remove(arg.username);
+      const content = api.getStringContent();
+      if (content !== "ok") throw new Error();
+      context.state.list.removeItemById(arg.username);
+      return true;
+   });
 
    return new Vuex.Store(context);
 };

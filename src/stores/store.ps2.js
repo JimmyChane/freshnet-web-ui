@@ -11,20 +11,15 @@ const init = (Stores) => {
          .sort((a, b) => a.compare(b));
    });
    context.onGetStore(() => Stores.ps2);
-   context.build();
-   context.actions.refresh = async (context) => {
-      return context.state.processor.acquire("refresh", async () => {
-         context.state.dataLoader.doTimeout();
-         await context.dispatch("getItems");
-      });
-   };
-   context.actions.getItems = async (context) => {
-      return context.state.processor.acquire("getItems", async () => {
-         return context.state.dataLoader.data();
-      });
-   };
+   context.action("refresh", async (context) => {
+      context.state.dataLoader.doTimeout();
+      await context.dispatch("getItems");
+   });
+   context.action("getItems", async (context) => {
+      return context.state.dataLoader.data();
+   });
 
-   return new Vuex.Store(context);
+   return new Vuex.Store(context.build());
 };
 
 export default { init };
