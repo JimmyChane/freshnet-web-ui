@@ -1,14 +1,12 @@
 import Vuex from "vuex";
-import HostApi from "@/host/HostApi.js";
 import ProductSpecType from "@/items/ProductSpecType";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
-
-const requestList = async () => HostApi.request().url("spec/").send();
+import SpecificationRequest from "@/request/Specification";
 
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await requestList();
+      const api = await SpecificationRequest.list();
       const error = api.getError();
       if (error) throw new Error(error);
       return U.optArray(api.getContent()).map((content) => {

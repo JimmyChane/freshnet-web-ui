@@ -1,18 +1,11 @@
 import Vuex from "vuex";
-import HostApi from "@/host/HostApi.js";
 import SettingModule from "@/items/data/Setting.js";
 import StoreBuilder from "./tools/StoreBuilder";
-
-const requestList = async () => {
-   return HostApi.request().url("settingv3").send();
-};
-const requestUpdate = async (setting) => {
-   return HostApi.request().PUT().url("settingv3/system").body(setting).send();
-};
+import SettingRequest from "@/request/Setting";
 
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await requestList();
+      const api = await SettingRequest.list();
       const error = api.getError();
       const content = api.getContent();
       if (error) throw new Error(error);
@@ -39,7 +32,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateItem", async () => {
          const { key, value } = arg;
          const setting = new SettingModule({ key, value });
-         const api = requestUpdate(setting);
+         const api = SettingRequest.update(setting);
          const error = api.getError();
          const content = api.getContent();
          if (error) throw new Error();

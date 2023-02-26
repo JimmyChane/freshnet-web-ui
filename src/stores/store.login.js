@@ -1,7 +1,7 @@
 import Vuex from "vuex";
-import HostApi from "@/host/HostApi.js";
 import ItemUser from "../items/User.js";
 import Processor from "./tools/Processor.js";
+import LoginRequest from "@/request/Login";
 
 const storageTokenKey = "userToken";
 const getToken = () => window.localStorage.getItem(storageTokenKey);
@@ -21,29 +21,11 @@ const noneUser = new ItemUser().fromData({
    userType: ItemUser.Type.None,
 });
 
-const requestLogin = async (body) => {
-   return HostApi.request().POST().url("session/login/").body(body).send();
-};
-const requestUser = async (token) => {
-   return HostApi.request().POST().url("session/verifyToken/").body({ token }).send();
-};
-const requestUpdatePassword = async (username, passwordVerify, passwordNew) => {
-   return HostApi.request()
-      .POST()
-      .url(`session/user/${username}/changePassword`)
-      .body({ passwordVerify, passwordNew })
-      .send();
-};
-
 const init = (Stores) => {
    const { store } = Stores;
 
    const loginStore = new Vuex.Store({
-      state: {
-         lastModified: Date.now(),
-         user: noneUser,
-         loader: new Processor(),
-      },
+      state: { lastModified: Date.now(), user: noneUser, loader: new Processor() },
       mutations: {
          lastModified: (state, time) => (state.lastModified = time),
          user: (state, user) => (state.user = user),
@@ -64,7 +46,7 @@ const init = (Stores) => {
             return context.state.loader.acquire("login", async () => {
                try {
                   deleteToken();
-                  const api = await requestLogin({
+                  const api = await LoginRequest.login({
                      username: arg.username,
                      password: arg.password,
                   });
@@ -114,7 +96,7 @@ const init = (Stores) => {
                      return context.state.user;
                   }
 
-                  const api = await requestUser(token);
+                  const api = await LoginRequest.user(token);
                   const content = api.getContent();
                   const user = new ItemUser().fromData(content.user);
 
@@ -154,7 +136,7 @@ const init = (Stores) => {
                }
                const username = user.username;
                const { passwordVerify, passwordNew } = arg;
-               const api = await requestUpdatePassword(
+               const api = await LoginRequest.updatePassword(
                   username,
                   passwordVerify,
                   passwordNew,

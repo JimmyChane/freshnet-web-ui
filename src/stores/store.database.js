@@ -1,32 +1,7 @@
 import Vuex from "vuex";
-import HostApi from "@/host/HostApi.js";
 import DataLoader from "./tools/DataLoader";
 import Processor from "./tools/Processor.js";
-
-const requestInfo = async () => {
-   return HostApi.request().POST().url("database/info").send();
-};
-const requestDatabases = async () => {
-   return HostApi.request().POST().url("database/databases").send();
-};
-const requestCollections = async (database) => {
-   return HostApi.request()
-      .POST()
-      .url(`database/database/${database}/collections`)
-      .send();
-};
-const requestDocuments = async (database, collection) => {
-   return HostApi.request()
-      .POST()
-      .url(`database/database/${database}/collection/${collection}/documents`)
-      .send();
-};
-const requestImport = async (body) => {
-   return HostApi.request().POST().url("database/imports").body(body).send();
-};
-const requestExport = async (database) => {
-   return HostApi.request().url(`database/database/${database}/exportv2`).send();
-};
+import DatabaseRequest from "@/request/Database";
 
 const init = (Stores) => {
    const store = new Vuex.Store({
@@ -35,7 +10,7 @@ const init = (Stores) => {
          dataLoader: new DataLoader({ timeout: 1000 * 5 }) // 5sec
             .processor(() => store.state.processor)
             .loadData(async () => {
-               const api = await requestInfo();
+               const api = await DatabaseRequest.info();
                const baseInfo = api.getContent();
                store.dispatch("loadDatabases");
                return baseInfo;
@@ -78,7 +53,7 @@ const init = (Stores) => {
                try {
                   context.commit("items", []);
                   context.commit("lastModified", Date.now());
-                  const api = await requestDatabases();
+                  const api = await DatabaseRequest.databases();
                   const content = api.getContent();
                   const items = content.map((database) => {
                      return { name: database, collections: [] };
@@ -98,7 +73,7 @@ const init = (Stores) => {
          loadCollections: async (context, arg = {}) => {
             return context.state.processor.acquire("loadCollections", async () => {
                const { database } = arg;
-               const api = await requestCollections(database);
+               const api = await DatabaseRequest.collections(database);
                const content = api.getContent();
                const collections = content.map((collection) => {
                   return { name: collection, documents: [] };
@@ -120,7 +95,7 @@ const init = (Stores) => {
          loadDocuments: async (context, arg = {}) => {
             return context.state.processor.acquire("loadDocuments", async () => {
                const { database, collection } = arg;
-               const api = await requestDocuments(database, collection);
+               const api = await DatabaseRequest.documents(database, collection);
                const documents = api.getContent();
                const outputArg = { database, collection };
                const collectionFound = await context.dispatch(
@@ -138,14 +113,14 @@ const init = (Stores) => {
          imports: async (context, arg = {}) => {
             return context.state.processor.acquire("imports", async () => {
                const { json } = arg;
-               const api = await requestImport({ content: json });
+               const api = await DatabaseRequest.import({ content: json });
                throw new Error();
             });
          },
          exportDatabase: async (context, arg = {}) => {
             return context.state.processor.acquire("exportDatabase", async () => {
                const { database } = arg;
-               const api = await requestExport(database);
+               const api = await DatabaseRequest.export(database);
                return api.getContent();
             });
          },

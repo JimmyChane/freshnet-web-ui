@@ -1,14 +1,12 @@
 import Vuex from "vuex";
-import HostApi from "@/host/HostApi.js";
 import Brand from "@/items/Brand.js";
+import BrandRequest from "@/request/Brand";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
-const requestApi = () => HostApi.request().url("brand/");
-
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await requestApi().send();
+      const api = await BrandRequest.list();
       const error = api.getError();
       if (error) throw new Error(error);
       return U.optArray(api.getContent()).map((content) => {

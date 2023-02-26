@@ -1,25 +1,8 @@
 import U from "@/U.js";
 import Vuex from "vuex";
-import HostApi from "../host/HostApi.js";
 import ItemUser from "../items/User.js";
 import StoreBuilder from "./tools/StoreBuilder.js";
-
-const requestList = async () => {
-   return HostApi.request().url("users").send();
-};
-const requestAdd = async (username, name, passwordNew, passwordRepeat) => {
-   return HostApi.request()
-      .url("users/user")
-      .POST()
-      .body({ username, name, passwordNew, passwordRepeat })
-      .send();
-};
-const requestRemove = async (username) => {
-   return HostApi.request().DELETE().url("users/user").body({ username }).send();
-};
-const requestUpdate = async (username, userType) => {
-   return HostApi.request().url("users/user").PUT().body({ username, userType }).send();
-};
+import UserRequest from "@/request/User";
 
 const init = (Stores) => {
    const loginStore = Stores.login;
@@ -27,7 +10,7 @@ const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
       const user = await loginStore.dispatch("getUser");
       if (!user.isTypeAdmin() && !user.isTypeStaff()) throw new Error();
-      const api = await requestList();
+      const api = await UserRequest.list();
       return U.optArray(api.getContent()).map((data) => {
          return new ItemUser(Stores).fromData(data);
       });
@@ -64,7 +47,7 @@ const init = (Stores) => {
             if (!user.isTypeAdmin()) throw new Error();
 
             const { username, userType } = arg;
-            const api = await requestUpdate(username, userType);
+            const api = await UserRequest.update(username, userType);
             const content = api.getContent();
             const userChange = new ItemUser(Stores).fromData(content);
             if (!userChange) throw new Error();
@@ -86,7 +69,7 @@ const init = (Stores) => {
 
          if (!user.isTypeAdmin()) throw new Error();
 
-         const api = await requestAdd(
+         const api = await UserRequest.add(
             arg.username,
             arg.name,
             arg.passwordNew,
@@ -106,7 +89,7 @@ const init = (Stores) => {
 
          if (!user.isTypeAdmin()) throw new Error();
 
-         const api = await requestRemove(arg.username);
+         const api = await UserRequest.remove(arg.username);
          const content = api.getContent();
          if (content !== "ok") throw new Error();
          context.state.list.removeItemById(arg.username);

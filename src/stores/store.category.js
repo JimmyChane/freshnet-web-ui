@@ -1,14 +1,12 @@
 import Vuex from "vuex";
-import HostApi from "@/host/HostApi.js";
 import Category from "@/items/Category.js";
+import CategoryRequest from "@/request/Category";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
-const requestApi = () => HostApi.request().url("productv2/category/list/");
-
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await requestApi().send();
+      const api = await CategoryRequest.list();
       const error = api.getError();
       if (error) throw new Error(error);
       return U.optArray(api.getContent()).map((content) => {

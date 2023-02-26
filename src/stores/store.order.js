@@ -1,25 +1,12 @@
 import Vuex from "vuex";
-import HostApi from "@/host/HostApi.js";
 import Order from "@/items/Order.js";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
-
-const requestList = async () => {
-   return HostApi.request().url("order/").send();
-};
-const requestAdd = async (body) => {
-   return HostApi.request().POST().url("order/").body(body).send();
-};
-const requestDelete = async (id) => {
-   return HostApi.request().DELETE().url("order/").body({ id }).send();
-};
-const requestUpdateStatus = async (id, status) => {
-   return HostApi.request().PUT().url("order/").body({ id, status }).send();
-};
+import OrderRequest from "@/request/Order";
 
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await requestList();
+      const api = await OrderRequest.list();
       const error = api.getError();
       if (error) throw new Error(error);
       return U.optArray(api.getContent()).map((data) => {
@@ -80,7 +67,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("addItem", async () => {
          const { data } = arg;
          if (!data) return null;
-         const api = await requestAdd(data);
+         const api = await OrderRequest.add(data);
          const error = api.getError();
          const content = api.getContent();
          if (error) throw new Error();
@@ -90,7 +77,7 @@ const init = (Stores) => {
    context.actions.removeOItemOfId = async (context, arg = { id }) => {
       return context.state.processor.acquire("removeOItemOfId", async () => {
          const { id } = arg;
-         const api = await requestDelete(id);
+         const api = await OrderRequest.delete(id);
          const error = api.getError();
          if (error) throw new Error();
          context.state.list.removeItemById(id);
@@ -99,7 +86,7 @@ const init = (Stores) => {
    context.actions.updateStatusOfId = async (context, arg = { id, status }) => {
       return context.state.processor.acquire("updateStatusOfId", async () => {
          const { id, status } = arg;
-         const api = await requestUpdateStatus(id, status);
+         const api = await OrderRequest.updateStatus(id, status);
          const error = api.getError();
          if (error) throw new Error();
          return context.state.list.updateItemById(id, (item) => {

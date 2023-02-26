@@ -1,6 +1,6 @@
 import Vuex from "vuex";
-import HostApi from "@/host/HostApi.js";
 import ItemCustomer from "../items/Customer.js";
+import CustomerRequest from "@/request/Customer";
 import DeviceStore from "./store.device.js";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
@@ -33,13 +33,12 @@ const getItemsOfIds = async (context, ids = []) => {
       return results;
    });
 };
-const requestApi = () => HostApi.request().url("customer/list");
 
 const init = (Stores) => {
    const deviceStore = DeviceStore.init(Stores);
 
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await requestApi().send();
+      const api = await CustomerRequest.list();
       const error = api.getError();
       if (error) throw new Error(error);
       return U.optArray(apiThenContent(api)).map((content) => {
@@ -117,11 +116,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("addItem", async () => {
          const data = new ItemCustomer(Stores).fromData(arg).toData();
          delete data.id;
-         const api = await HostApi.request()
-            .POST()
-            .url("customer/add")
-            .body({ content: data })
-            .send();
+         const api = await CustomerRequest.add(data);
          const content = apiThenContent(api);
          return context.state.list.addItem(new ItemCustomer(Stores).fromData(content));
       });
@@ -129,11 +124,7 @@ const init = (Stores) => {
    context.actions.removeItemOfId = async (context, arg = { _id }) => {
       return context.state.processor.acquire("removeItemOfId", async () => {
          const { _id } = arg;
-         const api = await HostApi.request()
-            .DELETE()
-            .url("customer/remove")
-            .body({ content: { _id } })
-            .send();
+         const api = await CustomerRequest.remove(_id);
          const content = apiThenContent(api);
          return context.state.list.removeItemByItem(
             new ItemCustomer(Stores).fromData(content),
@@ -149,11 +140,11 @@ const init = (Stores) => {
          "updateNamePhoneNumberOfItemId",
          async () => {
             const { _id, name, phoneNumber } = arg;
-            const api = await HostApi.request()
-               .PUT()
-               .url("customer/update/namePhoneNumber")
-               .body({ content: { _id, name, phoneNumber } })
-               .send();
+            const api = await CustomerRequest.updateNamePhoneNumber(
+               _id,
+               name,
+               phoneNumber,
+            );
             const content = apiThenContent(api);
 
             const inputItem = new ItemCustomer(Stores).fromData(content);
@@ -170,11 +161,7 @@ const init = (Stores) => {
    ) => {
       return context.state.processor.acquire("updateDescriptionOfId", async () => {
          const { _id, description } = arg;
-         const api = await HostApi.request()
-            .PUT()
-            .url("customer/update/description")
-            .body({ content: { _id, description } })
-            .send();
+         const api = await CustomerRequest.updateDescription(_id, description);
          const content = apiThenContent(api);
          const inputItem = new ItemCustomer(Stores).fromData(content);
          return context.state.list.updateItemById(inputItem.id, (item) => {

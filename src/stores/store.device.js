@@ -1,8 +1,8 @@
 import Vuex from "vuex";
-import HostApi from "@/host/HostApi.js";
 import ItemCustomerDevice from "../items/CustomerDevice.js";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
+import DeviceRequest from "@/request/Device";
 
 const apiThenContent = (api) => {
    let error = api.getError();
@@ -33,33 +33,9 @@ const getItemsOfIds = async (context, ids = []) => {
    });
 };
 
-const requestList = async () => {
-   return HostApi.request().url("customer/device/list").send();
-};
-const requestAdd = async (body) => {
-   return HostApi.request().POST().url("customer/device/add").body(body).send();
-};
-const requestRemove = async (body) => {
-   return HostApi.request().DELETE().url("customer/device/remove").body(body).send();
-};
-const requestUpdateSpecification = async (body) => {
-   return HostApi.request()
-      .PUT()
-      .url("customer/device/update/specifications")
-      .body(body)
-      .send();
-};
-const requestUpdateDescription = async (body) => {
-   return HostApi.request()
-      .PUT()
-      .url("customer/device/update/description")
-      .body(body)
-      .send();
-};
-
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await requestList();
+      const api = await DeviceRequest.list();
       const content = apiThenContent(api);
       return U.optArray(content).map((content) => {
          return new ItemCustomerDevice(Stores).fromData(content);
@@ -87,7 +63,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("addItem", async () => {
          const data = new ItemCustomerDevice(Stores).fromData(arg).toData();
          delete data.id;
-         const api = await requestAdd({ content: data });
+         const api = await DeviceRequest.add({ content: data });
          const content = apiThenContent(api);
 
          const item = context.state.list.addItem(
@@ -102,7 +78,7 @@ const init = (Stores) => {
    };
    context.actions.removeItemOfId = async (context, arg = {}) => {
       return context.state.processor.acquire("removeItemById", async () => {
-         const api = await requestRemove({
+         const api = await DeviceRequest.remove({
             content: {
                ownerCustomerId: arg.ownerCustomerId,
                deviceId: arg.id,
@@ -126,7 +102,7 @@ const init = (Stores) => {
    ) => {
       return context.state.processor.acquire("updateSpecificationsOfId", async () => {
          const { _id, specifications } = arg;
-         const api = await requestUpdateSpecification({
+         const api = await DeviceRequest.updateSpecification({
             content: { _id, specifications },
          });
          const content = apiThenContent(api);
@@ -143,7 +119,7 @@ const init = (Stores) => {
    ) => {
       return context.state.processor.acquire("updateDescriptionOfId", async () => {
          const { _id, description } = arg;
-         const api = await requestUpdateDescription({
+         const api = await DeviceRequest.updateDescription({
             content: { _id, description },
          });
          const content = apiThenContent(api);

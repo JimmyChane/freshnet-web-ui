@@ -1,16 +1,12 @@
 import Vuex from "vuex";
-import HostApi from "@/host/HostApi.js";
 import ItemPs2Disc from "../items/Ps2Disc.js";
 import U from "@/U.js";
 import StoreBuilder from "./tools/StoreBuilder.js";
-
-const requestList = async () => {
-   return HostApi.request().url("ps2/disc/").send();
-};
+import Ps2Request from "@/request/Ps2";
 
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await requestList();
+      const api = await Ps2Request.listDisc();
       const error = api.getError();
       if (error) throw new Error(error);
       return U.optArray(api.getContent())
