@@ -1,17 +1,14 @@
 import Vuex from "vuex";
 import Category from "@/items/Category.js";
 import CategoryRequest from "@/request/Category";
-import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
       const api = await CategoryRequest.list();
-      const error = api.getError();
-      if (error) throw new Error(error);
-      return U.optArray(api.getContent()).map((content) => {
-         return new Category(Stores).fromData(content);
-      });
+      return api
+         .optArrayContent()
+         .map((content) => new Category(Stores).fromData(content));
    });
    context.onGetStore(() => Stores.category);
    context.build();

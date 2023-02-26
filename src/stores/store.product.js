@@ -14,10 +14,8 @@ const init = (Stores) => {
 
    const context = new StoreBuilder().onFetchItems(async () => {
       const api = await ProductRequest.list();
-      const error = api.getError();
-      if (error) throw new Error(error);
       return Promise.all(
-         U.optArray(api.getContent()).map((content) => {
+         api.optArrayContent().map((content) => {
             return new Product(Stores).fromData(content);
          }),
       );
@@ -99,10 +97,7 @@ const init = (Stores) => {
          const { data } = arg;
          if (!data) throw new Error("data not valid");
          const api = await ProductRequest.addItem(data);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
-         const inputItem = new Product(Stores).fromData(content);
+         const inputItem = new Product(Stores).fromData(api.optObjectContent());
          return context.state.list.addItem(inputItem);
       });
    };
@@ -110,8 +105,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("removeItemOfId", async () => {
          const { id } = arg;
          const api = await ProductRequest.removeItem(id);
-         const error = api.getError();
-         if (error) throw new Error(error);
+         api.getContent();
          context.state.list.removeItemById(id);
          return true;
       });
@@ -120,9 +114,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateTitleOfId", async () => {
          const { id, title } = arg;
          const api = await ProductRequest.updateTitle(id, title);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.title = U.optString(content.title);
          });
@@ -132,9 +124,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateDescriptionOfId", async () => {
          const { id, description } = arg;
          const api = await ProductRequest.updateDescription(id, description);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             const { description } = content;
             item.description = U.isString(description) ? description.trim() : "";
@@ -145,9 +135,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateBrandIdOfId", async () => {
          const { id, brandId } = arg;
          const api = await ProductRequest.updateBrand(id, brandId);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.setBrandId(content.brandId);
          });
@@ -157,9 +145,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateCategoryIdOfId", async () => {
          const { id, categoryId } = arg;
          const api = await ProductRequest.updateCategory(id, categoryId);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.setCategoryId(content.categoryId);
          });
@@ -172,9 +158,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateAvailabilityOfId", async () => {
          const { id, isAvailable } = arg;
          const api = await ProductRequest.updateAvailability(id, isAvailable);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.stock.isAvailable = content.isAvailable;
          });
@@ -184,9 +168,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateSecondHandOfId", async () => {
          const { id, isSecondHand } = arg;
          const api = await ProductRequest.updateSecondHand(id, isSecondHand);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.stock.isSecondHand = content.isSecondHand;
          });
@@ -196,9 +178,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updatePriceOfId", async () => {
          const { id, price } = arg;
          const api = await ProductRequest.updatePrice(id, ModulePrice.trim(price));
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.setPrice({
                normal: content.price.normal,
@@ -211,9 +191,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("addBundleOfId", async () => {
          const { id, bundle } = arg;
          const api = await ProductRequest.addBundle(id, bundle);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.addBundle(ModuleBundle.trim(content.bundle));
          });
@@ -223,9 +201,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("removeBundleOfId", async () => {
          const { id, bundle } = arg;
          const api = await ProductRequest.removeBundle(id, bundle);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.removeBundle(content.bundle);
          });
@@ -235,9 +211,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("addGiftOfId", async () => {
          const { id, gift } = arg;
          const api = ProductRequest.addGift(id, gift);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.addGift(content.gift);
          });
@@ -247,9 +221,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("removeGiftOfId", async () => {
          const { id, gift } = arg;
          const api = await ProductRequest.removeGift(id, gift);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.removeGift(content.gift);
          });
@@ -262,9 +234,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("addSpecificationOfId", async () => {
          const { id, specification } = arg;
          const api = await ProductRequest.addSpecification(id, specification);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.addSpecification(content.specification);
          });
@@ -283,9 +253,7 @@ const init = (Stores) => {
                : specification;
          specification.type = specification.key;
          const api = await ProductRequest.removeSpecification(id, specification);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.removeSpecification(content.specification);
          });
@@ -298,9 +266,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateSpecificationsOfId", async () => {
          const { id, specifications } = arg;
          const api = await ProductRequest.updateSpecifications(id, specifications);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.setSpecifications(content.specifications);
          });
@@ -312,8 +278,7 @@ const init = (Stores) => {
          const imageFileForm = new FormData();
          imageFileForm.append(imageFile.name, imageFile);
          const api = await ProductRequest.addImage(id, imageFileForm);
-         if (api.error) throw new Error(api.error);
-         const { content } = api;
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.addImages(content.images);
          });
@@ -325,9 +290,7 @@ const init = (Stores) => {
          let { image } = arg;
          image = image instanceof Image ? image.toData() : image;
          const api = await ProductRequest.removeImage(id, image);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error(error);
+         const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
             item.removeImage(content.image);
          });

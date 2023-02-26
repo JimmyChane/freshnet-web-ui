@@ -1,15 +1,12 @@
 import Vuex from "vuex";
 import ItemPs2Disc from "../items/Ps2Disc.js";
-import U from "@/U.js";
 import StoreBuilder from "./tools/StoreBuilder.js";
 import Ps2Request from "@/request/Ps2";
 
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await Ps2Request.listDisc();
-      const error = api.getError();
-      if (error) throw new Error(error);
-      return U.optArray(api.getContent())
+      return (await Ps2Request.listDisc())
+         .optArrayContent()
          .map((content) => new ItemPs2Disc(Stores).fromData(content))
          .sort((a, b) => a.compare(b));
    });

@@ -50,9 +50,7 @@ const init = (Stores) => {
                      username: arg.username,
                      password: arg.password,
                   });
-                  const error = api.getError();
-                  const content = api.getContent();
-                  if (error || !content) throw new Error();
+                  const content = api.getObjectContent();
                   const { token, user } = content;
                   const newUser = onNewCredentail(context, { token, user }, Stores);
                   store.dispatch("restartSocket");
@@ -97,7 +95,7 @@ const init = (Stores) => {
                   }
 
                   const api = await LoginRequest.user(token);
-                  const content = api.getContent();
+                  const content = api.optObjectContent();
                   const user = new ItemUser().fromData(content.user);
 
                   const userNow = context.state.user;
@@ -141,8 +139,7 @@ const init = (Stores) => {
                   passwordVerify,
                   passwordNew,
                );
-               const content = api.getContent();
-               const { token } = content;
+               const { token } = api.optObjectContent();
                const outputUser = onNewCredentail(
                   context,
                   { token, user: content },

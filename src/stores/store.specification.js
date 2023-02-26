@@ -6,12 +6,9 @@ import SpecificationRequest from "@/request/Specification";
 
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await SpecificationRequest.list();
-      const error = api.getError();
-      if (error) throw new Error(error);
-      return U.optArray(api.getContent()).map((content) => {
-         return new ProductSpecType(Stores).fromData(content);
-      });
+      return (await SpecificationRequest.list())
+         .optArrayContent()
+         .map((content) => new ProductSpecType(Stores).fromData(content));
    });
    context.onGetStore(() => Stores.specification);
    context.onIdProperty("key");

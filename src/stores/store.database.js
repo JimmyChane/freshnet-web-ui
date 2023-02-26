@@ -54,8 +54,7 @@ const init = (Stores) => {
                   context.commit("items", []);
                   context.commit("lastModified", Date.now());
                   const api = await DatabaseRequest.databases();
-                  const content = api.getContent();
-                  const items = content.map((database) => {
+                  const items = api.optArrayContent().map((database) => {
                      return { name: database, collections: [] };
                   });
                   context.commit("items", items);
@@ -74,8 +73,7 @@ const init = (Stores) => {
             return context.state.processor.acquire("loadCollections", async () => {
                const { database } = arg;
                const api = await DatabaseRequest.collections(database);
-               const content = api.getContent();
-               const collections = content.map((collection) => {
+               const collections = api.optArrayContent().map((collection) => {
                   return { name: collection, documents: [] };
                });
                const dbFound = await context.dispatch("findDatabase", {
@@ -96,7 +94,7 @@ const init = (Stores) => {
             return context.state.processor.acquire("loadDocuments", async () => {
                const { database, collection } = arg;
                const api = await DatabaseRequest.documents(database, collection);
-               const documents = api.getContent();
+               const documents = api.optArrayContent();
                const outputArg = { database, collection };
                const collectionFound = await context.dispatch(
                   "findCollection",
@@ -120,8 +118,7 @@ const init = (Stores) => {
          exportDatabase: async (context, arg = {}) => {
             return context.state.processor.acquire("exportDatabase", async () => {
                const { database } = arg;
-               const api = await DatabaseRequest.export(database);
-               return api.getContent();
+               return (await DatabaseRequest.export(database)).getContent();
             });
          },
 

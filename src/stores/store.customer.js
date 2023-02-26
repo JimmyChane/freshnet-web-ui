@@ -5,14 +5,6 @@ import DeviceStore from "./store.device.js";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
-const apiThenContent = (api) => {
-   let error = api.getError();
-   let friendlyError = api.getErrorFriendly();
-
-   if (error) throw new Error(error);
-   if (friendlyError) throw new Error(friendlyError);
-   return api.getContent();
-};
 const getItemOfId = async (context, id = "") => {
    return context.state.processor.acquire("getItemOfId", async () => {
       if (!U.isString(id)) return null;
@@ -39,11 +31,9 @@ const init = (Stores) => {
 
    const context = new StoreBuilder().onFetchItems(async () => {
       const api = await CustomerRequest.list();
-      const error = api.getError();
-      if (error) throw new Error(error);
-      return U.optArray(apiThenContent(api)).map((content) => {
-         return new ItemCustomer(Stores).fromData(content);
-      });
+      return api
+         .optArrayContent()
+         .map((content) => new ItemCustomer(Stores).fromData(content));
    });
    context.onGetStore(() => Stores.customer);
    context.build();
@@ -117,7 +107,7 @@ const init = (Stores) => {
          const data = new ItemCustomer(Stores).fromData(arg).toData();
          delete data.id;
          const api = await CustomerRequest.add(data);
-         const content = apiThenContent(api);
+         const content = api.optObjectContent();
          return context.state.list.addItem(new ItemCustomer(Stores).fromData(content));
       });
    };
@@ -125,7 +115,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("removeItemOfId", async () => {
          const { _id } = arg;
          const api = await CustomerRequest.remove(_id);
-         const content = apiThenContent(api);
+         const content = api.optObjectContent();
          return context.state.list.removeItemByItem(
             new ItemCustomer(Stores).fromData(content),
          );
@@ -145,8 +135,7 @@ const init = (Stores) => {
                name,
                phoneNumber,
             );
-            const content = apiThenContent(api);
-
+            const content = api.optObjectContent();
             const inputItem = new ItemCustomer(Stores).fromData(content);
             return context.state.list.updateItemById(inputItem.id, (item) => {
                item.name = inputItem.name;
@@ -162,7 +151,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateDescriptionOfId", async () => {
          const { _id, description } = arg;
          const api = await CustomerRequest.updateDescription(_id, description);
-         const content = apiThenContent(api);
+         const content = api.optObjectContent();
          const inputItem = new ItemCustomer(Stores).fromData(content);
          return context.state.list.updateItemById(inputItem.id, (item) => {
             item.description = inputItem.description;

@@ -10,10 +10,9 @@ const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
       const user = await loginStore.dispatch("getUser");
       if (!user.isTypeAdmin() && !user.isTypeStaff()) throw new Error();
-      const api = await UserRequest.list();
-      return U.optArray(api.getContent()).map((data) => {
-         return new ItemUser(Stores).fromData(data);
-      });
+      return (await UserRequest.list())
+         .optArrayContent()
+         .map((data) => new ItemUser(Stores).fromData(data));
    });
    context.onGetStore(() => Stores.user);
    context.onIdProperty("username");
@@ -48,7 +47,7 @@ const init = (Stores) => {
 
             const { username, userType } = arg;
             const api = await UserRequest.update(username, userType);
-            const content = api.getContent();
+            const content = api.optObjectContent();
             const userChange = new ItemUser(Stores).fromData(content);
             if (!userChange) throw new Error();
             context.state.list.updateItemById(userChange.username, (item) => userChange);
@@ -75,9 +74,7 @@ const init = (Stores) => {
             arg.passwordNew,
             arg.passwordRepeat,
          );
-
-         const content = api.getContent();
-         if (!content) throw new Error();
+         const content = api.getObjectContent();
          const newUser = new ItemUser(Stores).fromData(content);
          context.state.list.addItem(newUser);
          return newUser;
@@ -90,7 +87,7 @@ const init = (Stores) => {
          if (!user.isTypeAdmin()) throw new Error();
 
          const api = await UserRequest.remove(arg.username);
-         const content = api.getContent();
+         const content = api.getStringContent();
          if (content !== "ok") throw new Error();
          context.state.list.removeItemById(arg.username);
          return true;

@@ -1,17 +1,12 @@
 import Vuex from "vuex";
 import Brand from "@/items/Brand.js";
 import BrandRequest from "@/request/Brand";
-import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
       const api = await BrandRequest.list();
-      const error = api.getError();
-      if (error) throw new Error(error);
-      return U.optArray(api.getContent()).map((content) => {
-         return new Brand(Stores).fromData(content);
-      });
+      return api.optArrayContent().map((content) => new Brand(Stores).fromData(content));
    });
    context.onGetStore(() => Stores.brand);
    context.build();

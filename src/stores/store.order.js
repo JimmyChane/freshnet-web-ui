@@ -7,11 +7,7 @@ import OrderRequest from "@/request/Order";
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
       const api = await OrderRequest.list();
-      const error = api.getError();
-      if (error) throw new Error(error);
-      return U.optArray(api.getContent()).map((data) => {
-         return new Order(Stores).fromData(data);
-      });
+      return api.optArrayContent().map((data) => new Order(Stores).fromData(data));
    });
    context.onGetStore(() => Stores.order);
    context.build();
@@ -68,18 +64,14 @@ const init = (Stores) => {
          const { data } = arg;
          if (!data) return null;
          const api = await OrderRequest.add(data);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error();
-         return context.state.list.addItem(new Order().fromData(content));
+         return context.state.list.addItem(new Order().fromData(api.optObjectContent()));
       });
    };
    context.actions.removeOItemOfId = async (context, arg = { id }) => {
       return context.state.processor.acquire("removeOItemOfId", async () => {
          const { id } = arg;
          const api = await OrderRequest.delete(id);
-         const error = api.getError();
-         if (error) throw new Error();
+         api.getContent();
          context.state.list.removeItemById(id);
       });
    };
@@ -87,8 +79,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateStatusOfId", async () => {
          const { id, status } = arg;
          const api = await OrderRequest.updateStatus(id, status);
-         const error = api.getError();
-         if (error) throw new Error();
+         api.getContent();
          return context.state.list.updateItemById(id, (item) => {
             item.status = status;
          });

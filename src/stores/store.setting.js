@@ -5,14 +5,9 @@ import SettingRequest from "@/request/Setting";
 
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await SettingRequest.list();
-      const error = api.getError();
-      const content = api.getContent();
-      if (error) throw new Error(error);
-      if (content === undefined || content === null) throw new Error("content not valid");
-      const contents = Array.isArray(content) ? content : [];
-      const settings = contents.map((content) => new SettingModule(content));
-      return settings;
+      return (await SettingRequest.list())
+         .optArrayContent()
+         .map((content) => new SettingModule(content));
    });
    context.onGetStore(() => Stores.setting);
    context.onIdProperty("key");
@@ -33,12 +28,7 @@ const init = (Stores) => {
          const { key, value } = arg;
          const setting = new SettingModule({ key, value });
          const api = SettingRequest.update(setting);
-         const error = api.getError();
-         const content = api.getContent();
-         if (error) throw new Error();
-         if (content === undefined || content === null) {
-            throw new Error("content not valid");
-         }
+         const content = api.getObjectContent();
 
          let { items } = context.state;
          let item = items.find((item) => item.key === content.key);

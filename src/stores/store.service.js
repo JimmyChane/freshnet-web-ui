@@ -4,7 +4,6 @@ import Vuex from "vuex";
 import ServiceModule from "@/items/data/Service.js";
 import ServiceCustomer from "@/items/ServiceCustomer";
 import ServiceEvent from "@/items/ServiceEvent";
-import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 import ServiceLabel from "@/items/data/ServiceLabel";
 import ServiceRequest from "@/request/Service";
@@ -26,10 +25,7 @@ const Notify = {
 
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
-      const api = await ServiceRequest.list();
-      const error = api.getError();
-      if (error) throw new Error(error);
-      return U.optArray(api.getContent()).map((content) => {
+      return (await ServiceRequest.list()).optArrayContent().map((content) => {
          return new Service(Stores).fromData(content);
       });
    });
@@ -166,20 +162,12 @@ const init = (Stores) => {
       return groups;
    };
 
-   const updateContent = async (promise) => {
-      const api = await promise;
-      const error = api.getError();
-      if (error) throw new Error();
-      return api.getContent();
-   };
-
    context.actions.importItem = async (context, arg = { data }) => {
       return context.state.processor.acquire("importItem", async () => {
          const { data } = arg;
          if (!data) throw new Error();
          const service = ServiceModule.trim(data);
-
-         const content = await updateContent(ServiceRequest.import(service));
+         const content = (await ServiceRequest.import(service)).optObjectContent();
          const inputItem = new Service(Stores).fromData(content);
          return context.state.list.addItem(inputItem);
       });
@@ -190,7 +178,7 @@ const init = (Stores) => {
          if (!data) return null;
          if (!data) throw new Error("invalid data");
 
-         const content = await updateContent(ServiceRequest.add(data));
+         const content = (await ServiceRequest.add(data)).optObjectContent();
          const inputItem = new Service(Stores).fromData(content);
          return context.state.list.addItem(inputItem);
       });
@@ -198,7 +186,7 @@ const init = (Stores) => {
    context.actions.removeItemOfId = async (context, arg = { id }) => {
       return context.state.processor.acquire("removeItemOfId", async () => {
          const { id } = arg;
-         await updateContent(ServiceRequest.remove(id));
+         (await ServiceRequest.remove(id)).getContent();
          return context.state.list.removeItemById(id);
       });
    };
@@ -206,7 +194,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateStateOfId", async () => {
          const { serviceID, state } = arg;
 
-         await updateContent(ServiceRequest.updateState(serviceID, state));
+         (await ServiceRequest.updateState(serviceID, state)).getContent();
          return context.state.list.updateItemById(serviceID, (item) => {
             item.state = state;
          });
@@ -219,7 +207,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("updateDescriptionOfId", async () => {
          const { serviceID, description } = arg;
 
-         await updateContent(ServiceRequest.updateDescription(serviceID, description));
+         (await ServiceRequest.updateDescription(serviceID, description)).getContent();
          return context.state.list.updateItemById(serviceID, (item) => {
             item.description = description;
          });
@@ -231,9 +219,9 @@ const init = (Stores) => {
    ) => {
       return context.state.processor.acquire("updateBelongingsOfId", async () => {
          const { serviceID, belongings } = arg;
-         const content = await updateContent(
-            ServiceRequest.updateBelongings(serviceID, belongings),
-         );
+         const content = (
+            await ServiceRequest.updateBelongings(serviceID, belongings)
+         ).optObjectContent();
          const inputItem = new Service(Stores).fromData(content);
          return context.state.list.updateItemById(inputItem.id, (item) => {
             if (!item) return inputItem;
@@ -247,9 +235,9 @@ const init = (Stores) => {
    ) => {
       return context.state.processor.acquire("updateCustomerOfId", async () => {
          const { serviceID, customer } = arg;
-         const content = await updateContent(
-            ServiceRequest.updateCustomer(serviceID, customer),
-         );
+         const content = (
+            await ServiceRequest.updateCustomer(serviceID, customer)
+         ).optObjectContent();
          const inputItem = new Service(Stores).fromData(content);
          return context.state.list.updateItemById(inputItem.id, (item) => {
             if (!item) return inputItem;
@@ -261,7 +249,9 @@ const init = (Stores) => {
       return context.state.processor.acquire("addEventToId", async () => {
          const { serviceID, data } = arg;
          if (!serviceID || !data) return null;
-         const content = await updateContent(ServiceRequest.addEvent(serviceID, data));
+         const content = (
+            await ServiceRequest.addEvent(serviceID, data)
+         ).optObjectContent();
          const inputItem = new Service(Stores).fromData(content);
          return context.state.list.updateItemById(inputItem.id, (item) => {
             if (!item) return inputItem;
@@ -275,7 +265,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("removeEventFromId", async () => {
          const { serviceID, time } = arg;
 
-         await updateContent(ServiceRequest.removeEvent(serviceID, time));
+         (await ServiceRequest.removeEvent(serviceID, time)).getContent();
          return context.state.list.updateItemById(serviceID, (item) => {
             item.events = item.events.filter((event) => {
                return event.timestamp.time !== time;
@@ -311,7 +301,9 @@ const init = (Stores) => {
    context.actions.addLabelToId = async (context, arg = { serviceID, label }) => {
       return context.state.processor.acquire("addLabelToId", async () => {
          const { serviceID, label } = arg;
-         const content = await updateContent(ServiceRequest.addLabel(serviceID, label));
+         const content = (
+            await ServiceRequest.addLabel(serviceID, label)
+         ).optObjectContent();
          const inputItem = new Service(Stores).fromData(content);
          return context.state.list.updateItemById(inputItem.id, (item) => {
             if (label.title === "Urgent") item.setUrgent(inputItem.isUrgent());
@@ -323,9 +315,9 @@ const init = (Stores) => {
       return context.state.processor.acquire("removeLabelFromId", async () => {
          const { serviceID, label } = arg;
 
-         const content = await updateContent(
-            ServiceRequest.removeLabel(serviceID, label),
-         );
+         const content = (
+            await ServiceRequest.removeLabel(serviceID, label)
+         ).optObjectContent();
          const inputItem = new Service(Stores).fromData(content);
          return context.state.list.updateItemById(inputItem.id, (item) => {
             if (!item) return inputItem;
@@ -338,10 +330,9 @@ const init = (Stores) => {
          const { serviceID, imageFile } = arg;
          const imageFileForm = new FormData();
          imageFileForm.append(imageFile.name, imageFile);
-         const api = await ServiceRequest.addImage(serviceID, imageFileForm);
-         if (api.error) throw new Error(api.error);
-         const { content } = api;
-
+         const content = (
+            await ServiceRequest.addImage(serviceID, imageFileForm)
+         ).optObjectContent();
          const id = content.id;
          const dataImages = content.items;
          return context.state.list.updateItemById(id, (item) => {
@@ -360,7 +351,7 @@ const init = (Stores) => {
       return context.state.processor.acquire("removeImageFromId", async () => {
          const { serviceID, image } = arg;
 
-         await updateContent(ServiceRequest.removeImage(serviceID, image));
+         (await ServiceRequest.removeImage(serviceID, image)).getContent();
          return context.state.list.updateItemById(serviceID, (item) => {
             item.imageFiles = item.imageFiles.filter((imageFile) => {
                return imageFile.name !== image.name;

@@ -4,14 +4,6 @@ import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 import DeviceRequest from "@/request/Device";
 
-const apiThenContent = (api) => {
-   let error = api.getError();
-   let friendlyError = api.getErrorFriendly();
-
-   if (error) throw new Error(error);
-   if (friendlyError) throw new Error(friendlyError);
-   return api.getContent();
-};
 const getItemOfId = async (context, id = "") => {
    return context.state.processor.acquire("getItemOfId", async () => {
       if (typeof id !== "string") return null;
@@ -36,10 +28,9 @@ const getItemsOfIds = async (context, ids = []) => {
 const init = (Stores) => {
    const context = new StoreBuilder().onFetchItems(async () => {
       const api = await DeviceRequest.list();
-      const content = apiThenContent(api);
-      return U.optArray(content).map((content) => {
-         return new ItemCustomerDevice(Stores).fromData(content);
-      });
+      return api
+         .optArrayContent()
+         .map((content) => new ItemCustomerDevice(Stores).fromData(content));
    });
    context.build();
    context.actions.refresh = async (context) => {
@@ -64,8 +55,7 @@ const init = (Stores) => {
          const data = new ItemCustomerDevice(Stores).fromData(arg).toData();
          delete data.id;
          const api = await DeviceRequest.add({ content: data });
-         const content = apiThenContent(api);
-
+         const content = api.optObjectContent();
          const item = context.state.list.addItem(
             new ItemCustomerDevice(Stores).fromData(content),
          );
@@ -84,7 +74,7 @@ const init = (Stores) => {
                deviceId: arg.id,
             },
          });
-         const content = apiThenContent(api);
+         const content = api.optObjectContent();
          const item = new ItemCustomerDevice(Stores).fromData(content);
          const customer = Stores.customer.getters.customers.find((customer) => {
             return customer.id === item.ownerCustomerId;
@@ -105,8 +95,7 @@ const init = (Stores) => {
          const api = await DeviceRequest.updateSpecification({
             content: { _id, specifications },
          });
-         const content = apiThenContent(api);
-
+         const content = api.optObjectContent();
          const inputItem = new ItemCustomerDevice(Stores).fromData(content);
          return context.state.list.updateItemById(inputItem.id, (item) => {
             item.specifications = inputItem.specifications;
@@ -122,7 +111,7 @@ const init = (Stores) => {
          const api = await DeviceRequest.updateDescription({
             content: { _id, description },
          });
-         const content = apiThenContent(api);
+         const content = api.optObjectContent();
          const inputItem = new ItemCustomerDevice(Stores).fromData(content);
          return context.state.list.updateItemById(inputItem.id, (item) => {
             item.description = inputItem.description;
