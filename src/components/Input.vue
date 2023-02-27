@@ -28,6 +28,8 @@
          name: { type: String, default: "" },
          label: { type: String, default: "" },
          type: { type: String, default: "" },
+         autocorrect: { type: String, default: "" },
+         autocapitalize: { type: String, default: "" },
 
          isRequired: { type: Boolean, default: false },
          error: { type: String, default: "" },
@@ -68,19 +70,13 @@
 
 <template>
    <div
-      :class="[
-         'Input',
-         isFocused ? 'Input-isFocused' : 'Input-isBlurred',
-         'transition',
-      ]"
+      :class="['Input', isFocused ? 'Input-isFocused' : 'Input-isBlurred', 'transition']"
    >
       <span
          :class="[
             'Input-sign',
             'Input-sign-required',
-            `Input-sign-required-${
-               isRequired && isValueEmpty ? 'isShown' : 'isHidden'
-            }`,
+            `Input-sign-required-${isRequired && isValueEmpty ? 'isShown' : 'isHidden'}`,
          ]"
          >*Required</span
       >
@@ -110,6 +106,8 @@
          ref="input"
          :name="name"
          :type="type"
+         :autocorrect="autocorrect"
+         :autocapitalize="autocapitalize"
          @focus="
             (event) => {
                isFocused = true;
@@ -148,10 +146,12 @@
       padding: 0.6em;
       background: hsla(0, 0%, 0%, 0.03);
       border-radius: 0.2em;
+      --transition-timing: cubic-bezier(1, 0, 0, 1);
 
       .Input-sign {
          font-size: 0.7em;
          font-weight: 600;
+         --transition-timing: cubic-bezier(1, 0, 0, 1);
       }
 
       .Input-sign-required {
@@ -189,6 +189,7 @@
          position: absolute;
          left: 0;
          font-size: 1em;
+         --transition-timing: cubic-bezier(1, 0, 0, 1);
       }
       .Input-label-isHidden {
          top: calc(50% - 0.5em);
@@ -222,6 +223,7 @@
          font-weight: 400;
          font-size: 1em;
          color: black;
+         --transition-timing: cubic-bezier(1, 0, 0, 1);
       }
 
       .Input-dummy {
