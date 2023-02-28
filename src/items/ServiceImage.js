@@ -3,10 +3,12 @@ import Filename from "../objects/Filename";
 import Image from "./Image";
 
 class ServiceImage {
-   stores = null;
+   stores;
+   loginStore;
 
    constructor(stores) {
       this.stores = stores;
+      this.loginStore = stores.login;
    }
 
    name = "";
@@ -46,6 +48,13 @@ class ServiceImage {
 
       const filename = new Filename(this.name);
       return `${HostApi.originApi}/service_v2/get/image/${filename.toString()}${query}`;
+   }
+   async toBlob(option = { width: 0, height: 0 }) {
+      const url = this.toUrl(option);
+      const options = { headers: { authorization: this.loginStore.getters.token } };
+      const response = await fetch(url, options);
+      const blob = await response.blob();
+      return URL.createObjectURL(blob);
    }
 }
 

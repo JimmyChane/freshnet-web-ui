@@ -14,21 +14,15 @@
 
             isShowing: false,
             isError: false,
+            isLoaded: false,
+            isAbort: false,
 
-            requestOption: null,
             requestUrl: "",
-
-            isImageLoaded: false,
-            isImageError: false,
-            isImageAbort: false,
+            requestBlob: "",
+            requestValue: "",
          };
       },
       computed: {
-         url() {
-            if (this.isSrcString()) return this.src;
-            if (this.isSrcItem()) return this.src.toUrl(this.requestOption);
-            return "";
-         },
          style() {
             return {
                "--transition-duration": `${this.transitionDuration}ms`,
@@ -36,106 +30,141 @@
                // transform: this.isShowing ? "scale(1)" : "scale(0.98)",
             };
          },
+
+         isSrcString: (c) => typeof c.src === "string",
+         isSrcItemImage: (c) => c.src instanceof Image,
+         isSrcItemServiceImage: (c) => c.src instanceof ServiceImage,
+
+         isValueEmpty: (c) =>
+            c.isSrcItemServiceImage ? c.requestBlob === "" : c.requestValue === "",
       },
       watch: {
-         src() {
-            this.onSrc();
+         async src() {
+            await this.invalidateSrc();
          },
       },
-      mounted() {
-         this.onSrc();
+      async mounted() {
+         await this.invalidateSrc();
       },
       methods: {
-         isSrcString() {
-            return typeof this.src === "string";
-         },
-         isSrcItem() {
-            return (
-               this.src instanceof Image || this.src instanceof ServiceImage
-            );
-         },
-
-         async onSrc() {
-            if (this.isSrcString()) {
-               this.requestOption = null;
-               this.onUrl();
+         async invalidateSrc() {
+            if (this.isSrcString) {
+               this.requestUrl = this.src;
+               this.requestBlob = "";
+               this.invalidateUrl();
                return;
             }
-            setTimeout(() => {
-               const width = Math.max(this._self.$el.offsetWidth, 0);
-               const height = Math.max(this._self.$el.offsetHeight, 0);
 
-               if (width > height) {
-                  this.requestOption = { width: this.extractValue(width) };
-               } else if (width < height) {
-                  this.requestOption = { height: this.extractValue(height) };
-               } else {
-                  this.requestOption = {
-                     width: this.extractValue(width),
-                     height: this.extractValue(height),
-                  };
-               }
-               this.onUrl();
-            }, 100);
+            if (this.isSrcItemImage) {
+               setTimeout(() => {
+                  const width = Math.max(this._self.$el.offsetWidth, 0);
+                  const height = Math.max(this._self.$el.offsetHeight, 0);
+                  this.requestUrl = this.src.toUrl(this.parseDimension(width, height));
+                  this.requestBlob = "";
+                  this.invalidateUrl();
+               }, 100);
+               return;
+            }
+            if (this.isSrcItemServiceImage) {
+               setTimeout(async () => {
+                  const width = Math.max(this._self.$el.offsetWidth, 0);
+                  const height = Math.max(this._self.$el.offsetHeight, 0);
+                  this.requestUrl = "";
+                  this.requestBlob = await this.src.toBlob(
+                     this.parseDimension(width, height),
+                  );
+                  this.invalidateUrl();
+               }, 100);
+               return;
+            }
+
+            this.requestUrl = "";
+            this.requestBlob = "";
          },
-         async onUrl() {
+         async invalidateUrl() {
             this.isShowing = false;
             this.isError = false;
 
-            if (this.url === this.requestUrl && this.isImageLoaded) {
+            if (
+               !this.isSrcItemServiceImage &&
+               this.requestUrl === this.requestValue &&
+               this.isLoaded
+            ) {
+               this.isShowing = true;
+               this.invalidateImageCompletion();
+               return;
+            }
+            if (
+               this.isSrcItemServiceImage &&
+               this.requestBlob === this.requestValue &&
+               this.isLoaded
+            ) {
                this.isShowing = true;
                this.invalidateImageCompletion();
                return;
             }
 
             // bind if empty, else animate then bind
-            if (this.requestUrl === "") {
-               this.requestUrl = this.url;
-            } else {
-               const url = this.url;
-               setTimeout(() => {
-                  if (url !== this.url) return;
-                  this.requestUrl = "";
-                  this.requestUrl = this.url;
-               }, this.transitionDuration);
-            }
+            if (this.isValueEmpty) return this.loadValue();
+
+            const previousValue = this.isSrcItemServiceImage
+               ? this.requestBlob
+               : this.requestUrl;
+            setTimeout(async () => {
+               if (!this.isSrcItemServiceImage && previousValue === this.requestUrl)
+                  return this.loadValue();
+               if (this.isSrcItemServiceImage && previousValue === this.requestBlob)
+                  return this.loadValue();
+            }, this.transitionDuration);
+         },
+         async loadValue() {
+            this.requestValue = this.isSrcItemServiceImage
+               ? this.requestBlob
+               : this.requestUrl;
+            this.invalidateImageCompletion();
          },
 
-         extractValue(size) {
+         parseDimension(width, height) {
+            if (width > height) return { width: this.parseSize(width) };
+            if (width < height) return { height: this.parseSize(height) };
+            return { width: this.parseSize(width), height: this.parseSize(height) };
+         },
+         parseSize(size) {
             const divide = size / this.distance;
             return this.distance * Math.max(Math.round(divide), 1);
          },
 
          invalidateImageCompletion() {
-            const { img } = this.$refs;
-            if (img) {
-               this.isError = img.completed;
+            if (this.isSrcItemServiceImage) {
+               this.isError = false;
+               return;
             }
+
+            const { img } = this.$refs;
+            if (img) this.isError = !img.complete;
          },
 
-         onLoad(event) {
-            this.isImageLoaded = true;
-            this.isImageError = false;
-            this.isImageAbort = false;
+         invalidateLoad(event) {
+            this.isLoaded = true;
+            this.isError = false;
+            this.isAbort = false;
 
             this.isShowing = true;
             this.invalidateImageCompletion();
             this.$emit("load", event);
          },
-         onError(event) {
-            this.isImageLoaded = false;
-            this.isImageError = true;
-            this.isImageAbort = false;
-
+         invalidateError(event) {
+            this.isLoaded = false;
             this.isError = true;
+            this.isAbort = false;
+
             this.$emit("error", event);
          },
-         onAbort(event) {
-            this.isImageLoaded = false;
-            this.isImageError = false;
-            this.isImageAbort = true;
+         invalidateAbort(event) {
+            this.isLoaded = false;
+            this.isError = false;
+            this.isAbort = true;
 
-            this.isError = true;
             this.$emit("abort", event);
          },
       },
@@ -144,18 +173,18 @@
 
 <template>
    <span v-if="isError" class="ImageView2-error">Error</span>
-   <div class="ImageView2-empty" v-else-if="requestUrl === ''"></div>
+   <div class="ImageView2-empty" v-else-if="isValueEmpty"></div>
    <img
       v-else
       class="ImageView2-img"
       :style="style"
       ref="img"
-      :src="requestUrl"
+      :src="requestValue"
       :alt="alt"
       loading="lazy"
-      @load="(event) => onLoad(event)"
-      @error="(event) => onError(event)"
-      @abort="(event) => onAbort(event)"
+      @load="(event) => invalidateLoad(event)"
+      @error="(event) => invalidateError(event)"
+      @abort="(event) => invalidateAbort(event)"
       @click="(event) => $emit('click', event)"
    />
 </template>
