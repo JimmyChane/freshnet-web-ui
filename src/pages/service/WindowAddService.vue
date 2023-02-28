@@ -79,8 +79,19 @@
 				};
 
 				if (this.userIsDefault && !this.nameOfUser.trim()) {
-					this.$root.feedback("You must specify your name");
-					return;
+					this.store.dispatch("snackbarShow","You must specify your name");
+				} else if (!data.customer.name) {
+					this.store.dispatch("snackbarShow","You must specify customer name");
+				} else if (!data.description) {
+					this.store.dispatch("snackbarShow","You must specify description");
+				} else {
+					if (this.userIsDefault && this.nameOfUser.trim()) {
+						data.nameOfUser = this.nameOfUser;
+					}
+
+					this.$emit("callback-create", data);
+					this.onReset();
+					this.onUser();
 				}
 				if (!data.customer.names.length) {
 					this.$root.feedback("You must specify customer name");

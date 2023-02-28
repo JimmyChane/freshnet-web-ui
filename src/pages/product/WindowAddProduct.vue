@@ -95,7 +95,7 @@
 
             if (!title) {
                this.titleError = "Title Missing";
-               this.$root.feedback("Title Missing");
+               this.store.dispatch("snackbarShow","Title Missing");
                return;
             }
 

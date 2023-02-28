@@ -1,10 +1,7 @@
 // tools
 import AppLayout from "./tools/AppLayout.js";
 import Navigation from "./tools/Navigation.js";
-import Notification from "./tools/Notification.js";
-import TimeNowGetter from "./tools/TimeNowGetter.js";
 import HostApi from "./host/HostApi.js";
-import PopupMenu from "@/app/PopupMenu.vue";
 import U from "@/U";
 import HostIcon from "@/host/HostIcon";
 
@@ -95,28 +92,20 @@ new Vue({
    router: Router,
    store: Stores.store,
 
-   data() {
-      return {
-         console: {
-            log(param1, param2) {
-               param2 === undefined ? console.log(param1) : console.log(param1, param2);
-            },
-            error(param1, param2) {
-               param2 === undefined
-                  ? console.error(param1)
-                  : console.error(param1, param2);
-            },
+   data: () => ({
+      console: {
+         log(param1, param2) {
+            param2 === undefined ? console.log(param1) : console.log(param1, param2);
          },
-         keyGetter: new TimeNowGetter(),
-         window: { innerWidth: 0, innerHeight: 0 },
+         error(param1, param2) {
+            param2 === undefined ? console.error(param1) : console.error(param1, param2);
+         },
+      },
+      window: { innerWidth: 0, innerHeight: 0 },
 
-         appLayout: null,
-         navigation: null,
-         snackbars: [],
-         imageViewer: { isShowing: false, image: null, thumbnails: [] },
-         popupMenus: [],
-      };
-   },
+      appLayout: null,
+      navigation: null,
+   }),
    computed: {
       user: (c) => c.loginStore.getters.user,
 
@@ -241,12 +230,6 @@ new Vue({
          let paths = this.currentPaths;
          return paths.length > 1 ? paths[1] : "";
       },
-
-      // app layout mode
-      APP_LAYOUT_MODE: (c) => ({
-         NORMAL: AppLayout.Layout.NORMAL,
-         FULL: AppLayout.Layout.FULL,
-      }),
    },
    watch: {
       currentPaths() {
@@ -309,71 +292,6 @@ new Vue({
    methods: {
       onBackPressed() {
          return true;
-      },
-
-      popupMenuShow(
-         anchor,
-         menus = [],
-         option = {
-            width: PopupMenu.Width.AUTO,
-            corner: PopupMenu.Corner.AUTO,
-            primaryColor: undefined,
-         },
-      ) {
-         const popupMenu = {
-            key: this.keyGetter.get(),
-            anchor,
-            menus: menus,
-            option,
-            isShowing: true,
-            isClosing: false,
-
-            hide: () => {
-               if (popupMenu.isClosing) return;
-               popupMenu.isClosing = true;
-
-               setTimeout(() => {
-                  popupMenu.isShowing = false;
-                  setTimeout(() => {
-                     this.popupMenus.splice(this.popupMenus.indexOf(popupMenu), 1);
-                  }, 300);
-               }, 300);
-            },
-         };
-
-         this.popupMenus.push(popupMenu);
-
-         return popupMenu;
-      },
-
-      imageViewerShow(image = null, thumbnails = []) {
-         this.imageViewer.image = image;
-         this.imageViewer.thumbnails = thumbnails;
-         this.imageViewer.isShowing = true;
-      },
-      imageViewerHide() {
-         this.imageViewer.isShowing = false;
-         setTimeout(() => {
-            this.imageViewer.thumbnails = [];
-            this.imageViewer.image = null;
-         }, 300);
-      },
-
-      // app layout
-      setAppLayout(layout) {
-         this.appLayout.setLayout(layout);
-      },
-
-      // send a snackbar notification
-      feedback(param) {
-         if (typeof param === "string") {
-            param = { text: param };
-         }
-
-         this.snackbars.push(new Notification(this, param).show());
-
-         return;
-         if (this.app) this.app.showSnackbar(param);
       },
 
       // external interaction

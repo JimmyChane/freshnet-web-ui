@@ -70,7 +70,7 @@
          },
          clickRefresh() {
             this.orderStore.dispatch("refresh").catch((error) => {
-               this.$root.feedback("Error While Refreshing Order");
+               this.store.dispatch("snackbarShow","Error While Refreshing Order");
                console.error(error);
             });
          },
@@ -100,7 +100,7 @@
                   this.display.showDialogAppendOrder = false;
                })
                .catch((error) => {
-                  this.$root.feedback("Error While Creating Order");
+                  this.store.dispatch("snackbarShow","Error While Creating Order");
                });
          },
       },

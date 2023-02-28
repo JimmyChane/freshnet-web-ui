@@ -18,16 +18,14 @@
       },
 
       components: { NavigationLeft, ViewerImage, Snackbar, PopupMenu, Status },
-      data() {
-         return { layoutLoginIsShown: false };
-      },
+      data: () => ({ layoutLoginIsShown: false }),
       computed: {
          isLogging: (c) => c.loginStore.getters.isLogging,
       },
       watch: {
          isLogging() {
             if (!this.loginStore.getters.user && this.isLogging)
-               this.$root.feedback("User Logging");
+               this.store.dispatch("snackbarShow","User Logging");
          },
       },
       mounted() {
@@ -40,7 +38,7 @@
       methods: {
          logout() {
             this.loginStore.dispatch("logout").then((user) => {
-               this.$root.feedback(`${user.name} is now logged out`);
+               this.store.dispatch("snackbarShow",`${user.name} is now logged out`);
             });
          },
 
@@ -92,14 +90,14 @@
 
       <Snackbar
          :style="{ 'z-index': '4' }"
-         v-for="snackbar of $root.snackbars"
+         v-for="snackbar of store.getters.snackbars"
          :key="snackbar.key"
          :item="snackbar"
       />
 
       <PopupMenu
          :style="{ 'z-index': '5' }"
-         v-for="popupMenu of $root.popupMenus"
+         v-for="popupMenu of store.getters.popupMenus"
          :key="popupMenu.key"
          :popupMenu="popupMenu"
          class="App-PopupMenu"

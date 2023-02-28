@@ -50,7 +50,7 @@
                         data: event,
                      })
                      .catch((error) => {
-                        this.$root.feedback("Failed to create an event");
+                        this.store.dispatch("snackbarShow","Failed to create an event");
                         throw error;
                      });
                },
@@ -91,7 +91,7 @@
                            context.clickService(result);
                         })
                         .catch((error) => {
-                           context.$root.feedback("Failed to create a service");
+                           context.store.dispatch("snackbarShow","Failed to create a service");
                            throw error;
                         });
                   },
@@ -119,7 +119,7 @@
                            }
                         })
                         .catch((error) => {
-                           context.$root.feedback("Delete Failed");
+                           context.store.dispatch("snackbarShow","Delete Failed");
                            throw error;
                         });
                   },
@@ -168,7 +168,7 @@
                            self.dismiss(context, self);
                         })
                         .catch((error) => {
-                           context.$root.feedback("Update Customer Failed");
+                           context.store.dispatch("snackbarShow","Update Customer Failed");
                            throw error;
                         });
                   },
@@ -191,11 +191,11 @@
                            image: data,
                         })
                         .then((service) => {
-                           context.$root.imageViewerHide();
+                           context.store.dispatch("imageViewerHide");
                            self.dismiss(context, self);
                         })
                         .catch((error) => {
-                           context.$root.feedback("Delete Image Failed");
+                           context.store.dispatch("snackbarShow","Delete Image Failed");
                            throw error;
                         });
                   },
@@ -222,7 +222,7 @@
                            self.dismiss(context, self);
                         })
                         .catch((error) => {
-                           context.$root.feedback("Update Description Failed");
+                           context.store.dispatch("snackbarShow","Update Description Failed");
                            throw error;
                         });
                   },
@@ -249,7 +249,7 @@
                            self.dismiss(context, self);
                         })
                         .catch((error) => {
-                           context.$root.feedback("Update Belongings Failed");
+                           context.store.dispatch("snackbarShow","Update Belongings Failed");
                            throw error;
                         });
                   },

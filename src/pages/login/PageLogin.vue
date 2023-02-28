@@ -34,11 +34,9 @@
 
             this.loginStore
                .dispatch("login", { username, password })
-               .then((user) =>
-                  setTimeout(() => this.$router.push(redirect), 200),
-               )
+               .then((user) => setTimeout(() => this.$router.push(redirect), 200))
                .catch(() => {
-                  this.$root.feedback("Login failed");
+                  this.store.dispatch("snackbarShow", "Login failed");
                   this.usernameErrorText = "Check your username";
                   this.passwordErrorText = "Check your password";
                });
@@ -54,10 +52,7 @@
 </script>
 
 <template>
-   <div
-      class="PageLogin"
-      @scroll="(event) => (top.shadow = event.target.scrollTop > 0)"
-   >
+   <div class="PageLogin" @scroll="(event) => (top.shadow = event.target.scrollTop > 0)">
       <Loading class="PageLogin-Loading" :isShowing="isLoading" />
 
       <Actionbar
@@ -87,11 +82,12 @@
                ref="username"
                label="Username"
                type="text"
+               :autocorrect="'off'"
+               :autocapitalize="'none'"
                @input="
                   (comp) => {
                      let value = comp.value;
-                     if (value.includes(''))
-                        comp.value = value.trim().replace(' ', '');
+                     if (value.includes('')) comp.value = value.trim().replace(' ', '');
                   }
                "
                :isRequired="true"

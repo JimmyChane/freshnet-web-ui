@@ -22,13 +22,13 @@
       },
       computed: {
          isShowing() {
-            return this.$root.imageViewer.isShowing;
+            return this.store.getters.imageViewer.isShowing;
          },
          image() {
-            return this.$root.imageViewer.image;
+            return this.store.getters.imageViewer.image;
          },
          thumbnails() {
-            return this.$root.imageViewer.thumbnails;
+            return this.store.getters.imageViewer.thumbnails;
          },
 
          style() {
@@ -65,16 +65,13 @@
       },
       methods: {
          clickDismiss() {
-            this.$root.imageViewerHide();
+            this.store.dispatch("imageViewerHide");
          },
          invalidateContainerSize() {
             const { Container } = this.$refs;
 
             if (!Container) {
-               window.removeEventListener(
-                  "resize",
-                  this.invalidateContainerSize,
-               );
+               window.removeEventListener("resize", this.invalidateContainerSize);
                return;
             }
 
@@ -165,16 +162,9 @@
                         ]"
                         v-for="thumbnail of thumbnails"
                         :key="thumbnail.toUrl()"
-                        @click="
-                           () => {
-                              $root.imageViewer.image = thumbnail;
-                           }
-                        "
+                        @click="() => store.dispatch('imageViewerSelect', thumbnail)"
                      >
-                        <ImageView
-                           class="ImageView-images-item"
-                           :src="thumbnail"
-                        />
+                        <ImageView class="ImageView-images-item" :src="thumbnail" />
                      </button>
                   </div>
                </div>
@@ -238,9 +228,7 @@
                z-index: 2;
                width: 100vw;
                max-width: 100%;
-               max-height: calc(
-                  100% - var(--thumbnail-height) - var(--actionbar-height)
-               );
+               max-height: calc(100% - var(--thumbnail-height) - var(--actionbar-height));
                padding: 1rem;
                flex-grow: 1;
 

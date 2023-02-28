@@ -44,7 +44,7 @@
 
 			clickConfirm() {
 				if (this.categoryId === this.outputCategoryId) {
-					this.$root.feedback("No Changes");
+					this.store.dispatch("snackbarShow","No Changes");
 					return;
 				}
 

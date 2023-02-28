@@ -6,13 +6,14 @@
    import ProductPreset from "@/objects/ProductPreset";
 
    import ImageView from "@/components/ImageView.vue";
+   import Label from "./ItemProduct-Label.vue";
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
    export default {
       Mode,
 
       emits: ["click"],
-      components: { ImageView },
+      components: { ImageView, Label },
       data() {
          return { primaryColorHex: "", fullTitle: "" };
       },
@@ -73,6 +74,11 @@
             return null;
          },
          specLabels: (c) => ProductPreset.generateSpecificationLabels(c.item),
+         labels: (c) => {
+            return ProductPreset.generateStockLabels(c.item).map((label) => {
+               return { title: label.text, primaryColor: chroma(label.color) };
+            });
+         },
       },
       watch: {
          preview() {
@@ -125,20 +131,25 @@
       @click="$emit('click', item)"
    >
       <div class="ItemProduct-preview transition">
-         <ImageView
-            :class="['ItemProduct-preview-image']"
-            v-if="preview"
-            :src="preview"
-         />
+         <ImageView class="ItemProduct-preview-image" v-if="preview" :src="preview" />
          <span :class="['ItemProduct-preview-empty', 'transition']" v-else
             >No Preview</span
          >
+
+         <div class="ItemProduct-preview-labels" v-if="labels.length">
+            <Label
+               v-for="label of labels"
+               :key="label.title"
+               :title="label.title"
+               :primaryColor="label.primaryColor"
+            />
+         </div>
       </div>
 
       <div class="ItemProduct-title">
          <span class="ItemProduct-title-text">{{ fullTitle }}</span>
          <div class="ItemProduct-title-specs" v-if="specLabels.length">
-            <span v-for="label in specLabels" :key="label.text">{{ label.text }}</span>
+            <Label v-for="label in specLabels" :key="label.text" :title="label.text" />
          </div>
          <span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
       </div>
@@ -169,13 +180,8 @@
          --preview-border-radius-focus: var(--border-radius);
          --transition-timing: cubic-bezier(1, 0, 0, 1);
 
-         & > * {
-            width: 100%;
-            height: 100%;
-            aspect-ratio: 16/12;
-            border-radius: var(--preview-border-radius);
-            background-color: hsl(0, 0%, 94%);
-         }
+         position: relative;
+
          .ItemProduct-preview-image {
             object-fit: contain;
          }
@@ -186,6 +192,39 @@
             display: flex;
             align-items: center;
             justify-content: center;
+         }
+
+         .ItemProduct-preview-image {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: inherit;
+            border-radius: var(--preview-border-radius);
+            background-color: hsl(0, 0%, 94%);
+         }
+         .ItemProduct-preview-empty {
+            width: 100%;
+            height: 100%;
+            aspect-ratio: inherit;
+            border-radius: var(--preview-border-radius);
+            background-color: hsl(0, 0%, 94%);
+         }
+
+         .ItemProduct-preview-labels {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+
+            width: 100%;
+            max-height: 2.3rem;
+            gap: 0.05rem;
+            padding: 0.5rem;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+
+            overflow: hidden;
          }
       }
 
@@ -214,10 +253,8 @@
          }
          .ItemProduct-title-specs {
             width: 100%;
-            gap: 0.1rem;
-            font-size: 0.6rem;
-            font-weight: 400;
-            color: black;
+            max-height: 2.3rem;
+            gap: 0.05rem;
             margin: -0.1rem;
 
             display: flex;
@@ -227,16 +264,6 @@
             align-items: flex-start;
 
             overflow: hidden;
-            max-height: 2.3rem;
-
-            & > * {
-               min-width: max-content;
-               width: max-content;
-               padding: 0.15rem 0.2rem;
-               background-color: hsla(0, 0%, 100%, 0.4);
-               border-radius: 0.2rem;
-               border: 1px solid hsla(0, 0%, 0%, 0.1);
-            }
          }
          .ItemProduct-title-price {
             font-size: 0.7rem;

@@ -76,9 +76,7 @@
       },
       computed: {
          classWide() {
-            return this.isWide
-               ? "ViewerProduct-isWide"
-               : "ViewerProduct-isThin";
+            return this.isWide ? "ViewerProduct-isWide" : "ViewerProduct-isThin";
          },
          classes() {
             return ["ViewerProduct", this.classWide];
@@ -128,8 +126,7 @@
          images: (context) => (!context.product ? [] : context.product.images),
          hasImagePrevious: (context) =>
             context.images.length > 0 && context.imagePreviewIndex > 0,
-         hasImageNext: (context) =>
-            context.images.length - 1 > context.imagePreviewIndex,
+         hasImageNext: (context) => context.images.length - 1 > context.imagePreviewIndex,
 
          settings() {
             let settings = this.settingStore.getters.items;
@@ -147,8 +144,7 @@
             return context.product ? context.product.price : null;
          },
 
-         description: (context) =>
-            context.product ? context.product.description : "",
+         description: (context) => (context.product ? context.product.description : ""),
 
          specificationKeys: () => {
             return Object.keys(ProductSpecType.Key).map((key) => {
@@ -168,14 +164,10 @@
                   let index1 = context.specificationKeys.indexOf(key1);
                   let index2 = context.specificationKeys.indexOf(key2);
 
-                  index1 =
-                     index1 >= 0 ? index1 : context.specificationKeys.length;
-                  index2 =
-                     index2 >= 0 ? index2 : context.specificationKeys.length;
+                  index1 = index1 >= 0 ? index1 : context.specificationKeys.length;
+                  index2 = index2 >= 0 ? index2 : context.specificationKeys.length;
 
-                  return index1 !== index2
-                     ? index1 - index2
-                     : key1.localeCompare(key2);
+                  return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
                });
          },
 
@@ -188,9 +180,7 @@
                   .map((gift) => gift.trim())
                   .filter((gift) => gift.length),
                ...context.bundles
-                  .filter(
-                     (bundle) => typeof bundle === "object" && bundle !== null,
-                  )
+                  .filter((bundle) => typeof bundle === "object" && bundle !== null)
                   .map((bundle) => bundle.title)
                   .filter((bundle) => typeof bundle === "string")
                   .map((bundle) => bundle.trim())
@@ -203,8 +193,7 @@
                ? chroma(this.primaryColorHex)
                : chroma("cccccc");
          },
-         primaryColorIsDark: (c) =>
-            chroma.deltaE(c.primaryColor, "000000") < 75,
+         primaryColorIsDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 75,
          actionbarColor: (c) => c.primaryColor.mix("ffffff", 0.6),
          backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.3),
          headerBackgroundColor: (c) => c.primaryColor.mix("000000", 0.4),
@@ -296,12 +285,7 @@
          addArrowListener() {
             if (this.onKeyUp === null) {
                this.onKeyUp = (event) => {
-                  if (
-                     event.shiftKey ||
-                     event.altKey ||
-                     event.ctrlKey ||
-                     event.metaKey
-                  )
+                  if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey)
                      return;
                   if (event.key === "ArrowLeft") this.clickPreviousImage();
                   if (event.key === "ArrowRight") this.clickNextImage();
@@ -374,10 +358,7 @@
       }"
       @scroll="(event) => scrolling(event)"
    >
-      <div
-         class="ViewerProduct-toolbar"
-         :style="{ 'background-color': actionbarColor }"
-      >
+      <div class="ViewerProduct-toolbar" :style="{ 'background-color': actionbarColor }">
          <Actionbar
             class="ViewerProduct-actionbar"
             :leftMenus="leftMenus"
@@ -388,8 +369,7 @@
                class="ViewerProduct-actionbar-title"
                v-if="fullTitle"
                :style="{
-                  padding:
-                     !leftMenus.length && !rightMenus.length ? '1.8rem' : '0',
+                  padding: !leftMenus.length && !rightMenus.length ? '1.8rem' : '0',
                }"
                >{{ fullTitle }}</span
             >
@@ -419,12 +399,14 @@
                :hasImageNext="hasImageNext"
                :hasProductPrevious="!!productPrevious"
                :hasProductNext="!!productNext"
-               @click-image="(image) => $root.imageViewerShow(image, images)"
+               @click-image="
+                  (image) =>
+                     store.dispatch('imageViewerShow', { image, thumbnails: images })
+               "
                @click-previous="() => clickPreviousImage()"
                @click-next="() => clickNextImage()"
                @click-remove="
-                  (image) =>
-                     $emit('click-product-imageRemove', { product, image })
+                  (image) => $emit('click-product-imageRemove', { product, image })
                "
             />
             <ProductViewerImages
@@ -434,9 +416,7 @@
                :indexAt="imagePreviewIndex"
                :isEditable="isEditable"
                :primaryColor="primaryColor"
-               @click-image="
-                  (image) => (imagePreviewIndex = images.indexOf(image))
-               "
+               @click-image="(image) => (imagePreviewIndex = images.indexOf(image))"
                @click-add-image-file="
                   (file) => {
                      productStore.dispatch('addImageOfId', {
