@@ -12,16 +12,11 @@
 
          selfClasses: (context) => {
             const classes = [
-               context.item.isSelected()
-                  ? "Tab-isSelected"
-                  : "Tab-isDeselected",
+               context.item.isSelected() ? "Tab-isSelected" : "Tab-isDeselected",
             ];
 
             if (context.isWide) classes.push("Tab-isWide");
-            else
-               classes.push(
-                  context.item.isSelected() ? "Tab-isWide" : "Tab-isThin",
-               );
+            else classes.push(context.item.isSelected() ? "Tab-isWide" : "Tab-isThin");
 
             return classes;
          },
@@ -48,7 +43,8 @@
       height: 2.4rem;
       border-radius: 0.8rem 0.8rem 0 0;
 
-      border: none;
+      border: 1px solid #acacac;
+      border-bottom: none;
       background: none;
       font-size: 1rem;
       padding-top: 0.1rem;
@@ -120,9 +116,11 @@
 
    .Tab-isSelected {
       background-color: #e4e4e4;
+      border-color: #acacac;
    }
    .Tab-isDeselected {
       background-color: transparent;
+      border-color: transparent;
       cursor: pointer;
 
       &:hover {

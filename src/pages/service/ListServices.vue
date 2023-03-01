@@ -37,7 +37,7 @@
          isOver460px: (c) => c.$root.window.innerWidth > 460,
 
          isGridView: (c) => c.layoutMode === ItemService.Mode.Grid,
-         isListView: (c) => c.layoutMode === ItemService.Mode.List, 
+         isListView: (c) => c.layoutMode === ItemService.Mode.List,
          isDetailView: (c) => c.layoutMode === ItemService.Mode.Detail,
 
          isSortDateCreated: (c) => c.sortMode === SortMode.DateCreated,
@@ -159,24 +159,17 @@
          :class="[
             'ListServices-group',
             isGridView ? 'ListServices-group-gridView' : '',
-            isListView ? 'ListServices-group-listView' : '', 
+            isListView ? 'ListServices-group-listView' : '',
             isDetailView ? 'ListServices-group-detailView' : '',
          ]"
          v-for="group of groups"
          :key="group.title"
       >
-         <div
-            class="ListServices-group-line"
-            v-if="groups.indexOf(group) !== 0"
-            :style="{ 'max-width': isListView   ? '32rem' : '100%' }"
-         ></div>
-
          <span class="ListServices-group-title" v-if="group.title">{{
             group.title
          }}</span>
 
          <div class="ListServices-items">
-            <div class="ListServices-items-header" v-if="isGridView"></div>
             <div
                class="ListServices-items-header"
                v-if="isDetailView && groups.indexOf(group) === 0"
@@ -257,16 +250,10 @@
       .ListServices-group {
          width: 100%;
          gap: 0.5rem;
+         gap: 0.2rem;
          display: flex;
          flex-direction: column;
          align-items: center;
-
-         .ListServices-group-line {
-            width: 100%;
-            min-height: 1px;
-            background-color: rgba(0, 0, 0, 0.1);
-            display: flex;
-         }
 
          .ListServices-group-title {
             font-size: 0.8rem;
@@ -274,7 +261,8 @@
             background-color: hsl(0, 0%, 96%);
             box-shadow: 0 0 0.4rem hsl(0, 0%, 80%);
             padding: 0.2rem 0.4rem;
-            border-radius: 0.3rem;
+            border-radius: 1em;
+            line-height: 1em;
 
             position: sticky;
             z-index: 1;
@@ -294,11 +282,9 @@
       .ListServices-group-gridView {
          .ListServices-items {
             max-width: var(--max-width);
-            margin-top: -0.5rem;
-            gap: 0.2rem;
+            gap: 0.1rem;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
-            grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
 
             .ListServices-items-header {
                grid-column: 1 / -1;
@@ -312,7 +298,7 @@
       .ListServices-group-listView {
          .ListServices-items {
             max-width: 32rem;
-            gap: 0.2rem;
+            gap: 0.1rem;
             display: flex;
             flex-direction: column;
             align-items: center;

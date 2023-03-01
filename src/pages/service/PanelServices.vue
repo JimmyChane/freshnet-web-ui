@@ -254,6 +254,7 @@
       }
       .PanelServices-actionbar-shadow {
          border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
+         border-bottom: 1px solid #acacac;
       }
    }
 </style>
