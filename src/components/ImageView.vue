@@ -6,6 +6,7 @@
       props: {
          src: { type: [String, Image, ServiceImage], defualt: "" },
          alt: { type: String, defualt: "" },
+         resize: { type: Boolean, default: true },
       },
       data() {
          return {
@@ -56,6 +57,13 @@
             }
 
             if (this.isSrcItemImage) {
+               if (!this.resize) {
+                  this.requestUrl = this.src.toUrl();
+                  this.requestBlob = "";
+                  this.invalidateUrl();
+                  return;
+               }
+
                setTimeout(() => {
                   const width = Math.max(this._self.$el.offsetWidth, 0);
                   const height = Math.max(this._self.$el.offsetHeight, 0);
@@ -66,6 +74,12 @@
                return;
             }
             if (this.isSrcItemServiceImage) {
+               if (!this.resize) {
+                  this.requestUrl = "";
+                  this.requestBlob = await this.src.toBlob();
+                  this.invalidateUrl();
+                  return;
+               }
                setTimeout(async () => {
                   const width = Math.max(this._self.$el.offsetWidth, 0);
                   const height = Math.max(this._self.$el.offsetHeight, 0);

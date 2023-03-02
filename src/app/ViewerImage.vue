@@ -144,7 +144,8 @@
                      class="ViewerImage-image"
                      ref="image"
                      v-if="image"
-                     :src="image.toUrl()"
+                     :src="image"
+                     :resize="false"
                      :style="style"
                      @click="() => onClickImage()"
                   />
