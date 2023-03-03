@@ -21,15 +21,9 @@
          };
       },
       computed: {
-         isShowing() {
-            return this.store.getters.imageViewer.isShowing;
-         },
-         image() {
-            return this.store.getters.imageViewer.image;
-         },
-         thumbnails() {
-            return this.store.getters.imageViewer.thumbnails;
-         },
+         isShowing: (c) => c.store.getters.imageViewer.isShowing,
+         image: (c) => c.store.getters.imageViewer.image,
+         thumbnails: (c) => c.store.getters.imageViewer.thumbnails,
 
          style() {
             const transforms = [
@@ -55,9 +49,7 @@
       },
       watch: {
          isShowing() {
-            if (this.isShowing) {
-               this.isZoomedIn = false;
-            }
+            if (this.isShowing) this.isZoomedIn = false;
          },
          isHovering() {
             if (!this.isHovering) this.isZoomedIn = false;

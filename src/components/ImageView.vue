@@ -7,6 +7,7 @@
          src: { type: [String, Image, ServiceImage], defualt: "" },
          alt: { type: String, defualt: "" },
          resize: { type: Boolean, default: true },
+         loading: { type: String, default: "lazy" },
       },
       data() {
          return {
@@ -24,11 +25,11 @@
          };
       },
       computed: {
-         style() {
+         style: (c) => {
             return {
-               "--transition-duration": `${this.transitionDuration}ms`,
-               opacity: this.isShowing ? "1" : "0.2",
-               // transform: this.isShowing ? "scale(1)" : "scale(0.98)",
+               "--transition-duration": `${c.transitionDuration}ms`,
+               opacity: c.isShowing ? "1" : "0.2",
+               // transform: c.isShowing ? "scale(1)" : "scale(0.98)",
             };
          },
 
@@ -48,56 +49,38 @@
          await this.invalidateSrc();
       },
       methods: {
-         async invalidateSrc() {
-            if (this.isSrcString) {
-               this.requestUrl = this.src;
-               this.requestBlob = "";
-               this.invalidateUrl();
-               return;
-            }
-
-            if (this.isSrcItemImage) {
-               if (!this.resize) {
-                  this.requestUrl = this.src.toUrl();
-                  this.requestBlob = "";
-                  this.invalidateUrl();
-                  return;
-               }
-
-               setTimeout(() => {
-                  const width = Math.max(this._self.$el.offsetWidth, 0);
-                  const height = Math.max(this._self.$el.offsetHeight, 0);
-                  this.requestUrl = this.src.toUrl(this.parseDimension(width, height));
-                  this.requestBlob = "";
-                  this.invalidateUrl();
-               }, 100);
-               return;
-            }
-            if (this.isSrcItemServiceImage) {
-               if (!this.resize) {
-                  this.requestUrl = "";
-                  this.requestBlob = await this.src.toBlob();
-                  this.invalidateUrl();
-                  return;
-               }
-               setTimeout(async () => {
-                  const width = Math.max(this._self.$el.offsetWidth, 0);
-                  const height = Math.max(this._self.$el.offsetHeight, 0);
-                  this.requestUrl = "";
-                  this.requestBlob = await this.src.toBlob(
-                     this.parseDimension(width, height),
-                  );
-                  this.invalidateUrl();
-               }, 100);
-               return;
-            }
-
-            this.requestUrl = "";
+         async loadString() {
+            this.requestUrl = this.src;
             this.requestBlob = "";
          },
-         async invalidateUrl() {
+         async loadUrl() {
+            const option = await this.getDimension();
+            this.requestUrl = this.src.toUrl(option);
+            this.requestBlob = "";
+         },
+         async loadBlob() {
+            const option = await this.getDimension();
+            this.requestUrl = "";
+            this.requestBlob = await this.src.toBlob(option);
+         },
+
+         async invalidateSrc() {
             this.isShowing = false;
             this.isError = false;
+
+            if (
+               !this.isSrcString &&
+               !this.isSrcItemImage &&
+               !this.isSrcItemServiceImage
+            ) {
+               this.requestUrl = "";
+               this.requestBlob = "";
+               return;
+            }
+
+            if (this.isSrcString) await this.loadString();
+            if (this.isSrcItemImage) await this.loadUrl();
+            if (this.isSrcItemServiceImage) await this.loadBlob();
 
             if (
                !this.isSrcItemServiceImage &&
@@ -118,6 +101,10 @@
                return;
             }
 
+            this.invalidateValue();
+         },
+
+         async invalidateValue() {
             // bind if empty, else animate then bind
             if (this.isValueEmpty) return this.loadValue();
 
@@ -138,6 +125,17 @@
             this.invalidateImageCompletion();
          },
 
+         async getDimension() {
+            if (!this.resize) return undefined;
+
+            return new Promise((resolve, reject) => {
+               setTimeout(() => {
+                  const width = Math.max(this._self.$el.offsetWidth, 0);
+                  const height = Math.max(this._self.$el.offsetHeight, 0);
+                  resolve(this.parseDimension(width, height));
+               }, 100);
+            });
+         },
          parseDimension(width, height) {
             if (width > height) return { width: this.parseSize(width) };
             if (width < height) return { height: this.parseSize(height) };
@@ -191,11 +189,11 @@
    <img
       v-else
       class="ImageView2-img"
-      :style="style"
       ref="img"
+      :style="style"
       :src="requestValue"
       :alt="alt"
-      loading="lazy"
+      :loading="loading"
       @load="(event) => invalidateLoad(event)"
       @error="(event) => invalidateError(event)"
       @abort="(event) => invalidateAbort(event)"
