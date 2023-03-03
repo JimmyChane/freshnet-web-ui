@@ -27,8 +27,7 @@
          cssGridTemplateAreas: (c) => {
             if (c.parsedImages.length === 2) return '"img0 img1"';
             if (c.parsedImages.length === 3) return '"img0 img1" "img2 img2"';
-            if (c.parsedImages.length === 4) return '"img0 img1" "img2 img3"';
-            return `"${c.width} ${c.width}" "${c.width} ${c.width}"`;
+            return '"img0 img1" "img2 img3"';
          },
       },
       methods: {
@@ -60,7 +59,7 @@
       }"
    >
       <ImageView
-         :class="['ImageViews-item']"
+         class="ImageViews-item"
          :style="{
             width: '100%',
             height: '100%',
@@ -84,6 +83,7 @@
    }
    .ImageViews-item {
       object-fit: cover;
-      // border: 1px solid hsl(0, 0%, 80%);
+      overflow: hidden;
+      object-fit: cover;
    }
 </style>

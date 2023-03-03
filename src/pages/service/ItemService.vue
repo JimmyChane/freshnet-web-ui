@@ -446,13 +446,6 @@
             flex-direction: row;
             align-items: center;
 
-            & > * {
-               display: flex;
-               flex-direction: row;
-               align-items: center;
-               padding: 0 0.5rem;
-            }
-
             .ItemService-customer {
                min-width: max-content;
 
@@ -462,6 +455,7 @@
                justify-content: center;
 
                gap: 0.1rem;
+               padding: 0 0.5rem;
                color: black;
                border: none;
                background: none;
@@ -479,6 +473,8 @@
             }
 
             .ItemService-description {
+               padding: 0 0.5rem;
+
                display: flex;
                align-items: flex-start;
                white-space: pre-line;
