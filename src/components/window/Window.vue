@@ -11,9 +11,7 @@
          isLoading: { type: Boolean, default: false },
          isClickable: { type: Boolean, default: true },
       },
-      data() {
-         return { scrollTop: 0 };
-      },
+      data: (c) => ({ scrollTop: 0 }),
       watch: {
          isShowing() {
             const { Window } = this.$refs;

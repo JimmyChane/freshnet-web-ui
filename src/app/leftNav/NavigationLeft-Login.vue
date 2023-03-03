@@ -2,9 +2,7 @@
    export default {
       emits: ["click-logout"],
       props: { isWide: { type: Boolean, default: true } },
-      data() {
-         return { redirect: "" };
-      },
+      data: (c) => ({ redirect: "" }),
       computed: {
          user: (context) => context.loginStore.getters.user,
          userName: (context) => context.user.name,
@@ -49,10 +47,7 @@
          </div>
       </div>
 
-      <div
-         class="LeftNavigationLogin-loggedOut"
-         v-if="!isLoginPage && user.isTypeNone()"
-      >
+      <div class="LeftNavigationLogin-loggedOut" v-if="!isLoginPage && user.isTypeNone()">
          <router-link
             class="LeftNavigationLogin-loggedOut-login transition"
             :to="{ path: '/login', query: { redirect } }"

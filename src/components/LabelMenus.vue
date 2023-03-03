@@ -14,7 +14,7 @@
          menu: { type: Object, default: () => null },
          menus: { default: () => [] },
       },
-      data: () => ({ isExpand: false }),
+      data: (c) => ({ isExpand: false }),
       computed: {
          menuCorner: () => Menu.Corner.BOTTOM,
          menuWidth: () => Menu.Width.SAME,

@@ -14,9 +14,7 @@
          items: { type: Array, default: () => [] },
          itemSelected: { type: Object, default: () => null },
       },
-      data() {
-         return { scrollTop: 0, itemSelect: null };
-      },
+      data: (c) => ({ scrollTop: 0, itemSelect: null }),
       computed: {
          iconEmpty: () => PageCustomer.icon.dark.toUrl(),
       },
@@ -41,10 +39,7 @@
 </script>
 
 <template>
-   <div
-      class="PanelCustomers"
-      @scroll="(event) => (scrollTop = event.target.scrollTop)"
-   >
+   <div class="PanelCustomers" @scroll="(event) => (scrollTop = event.target.scrollTop)">
       <Actionbar
          class="PanelCustomers-top"
          :title="title"
@@ -73,10 +68,7 @@
          </router-link>
       </div>
 
-      <Empty
-         v-if="!items.length && !customerStore.getters.isLoading"
-         :icon="iconEmpty"
-      />
+      <Empty v-if="!items.length && !customerStore.getters.isLoading" :icon="iconEmpty" />
    </div>
 </template>
 

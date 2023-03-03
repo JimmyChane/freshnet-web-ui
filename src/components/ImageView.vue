@@ -9,21 +9,19 @@
          resize: { type: Boolean, default: true },
          loading: { type: String, default: "lazy" },
       },
-      data() {
-         return {
-            transitionDuration: 300,
-            distance: 100,
+      data: (c) => ({
+         transitionDuration: 300,
+         distance: 100,
 
-            isShowing: false,
-            isError: false,
-            isLoaded: false,
-            isAbort: false,
+         isShowing: false,
+         isError: false,
+         isLoaded: false,
+         isAbort: false,
 
-            requestUrl: "",
-            requestBlob: "",
-            requestValue: "",
-         };
-      },
+         requestUrl: "",
+         requestBlob: "",
+         requestValue: "",
+      }),
       computed: {
          style: (c) => {
             return {

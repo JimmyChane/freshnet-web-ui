@@ -19,19 +19,16 @@
          hasProductPrevious: { type: Boolean, default: false },
          hasProductNext: { type: Boolean, default: false },
       },
-      data() {
-         return {
-            imageStyle: { scale: "1", x: "0%", y: "0%" },
-            imageUrl: "",
-            imageIsFetching: false,
-            imageTransitionEnabled: false,
+      data: (c) => ({
+         imageStyle: { scale: "1", x: "0%", y: "0%" },
+         imageUrl: "",
+         imageIsFetching: false,
+         imageTransitionEnabled: false,
 
-            ArrowDirection: Arrow.Direction,
-         };
-      },
+         ArrowDirection: Arrow.Direction,
+      }),
       computed: {
-         primaryColorIsDark: (c) =>
-            chroma.deltaE(c.primaryColor, "000000") < 60,
+         primaryColorIsDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 60,
 
          arrowIcon: (c) =>
             c.primaryColorIsDark
@@ -96,9 +93,7 @@
    <div
       :class="[
          'LayoutProductViewerImagePreview',
-         `LayoutProductViewerImagePreview-${
-            imageIsShowing ? 'isShown' : 'isHidden'
-         }`,
+         `LayoutProductViewerImagePreview-${imageIsShowing ? 'isShown' : 'isHidden'}`,
       ]"
    >
       <ImageView

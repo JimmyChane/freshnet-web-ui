@@ -20,21 +20,19 @@
          services: { type: Array, default: () => [] },
          currentItem: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            scrollTop: 0,
+      data: (c) => ({
+         scrollTop: 0,
 
-            stateMenuIndex: 0,
-            currentLayoutIndex: 1,
-            currentGroupIndex: 1,
-            currentSortIndex: 0,
+         stateMenuIndex: 0,
+         currentLayoutIndex: 1,
+         currentGroupIndex: 1,
+         currentSortIndex: 0,
 
-            stateMenus: [],
-            layoutMenus: [],
-            groupMenus: [],
-            sortMenus: [],
-         };
-      },
+         stateMenus: [],
+         layoutMenus: [],
+         groupMenus: [],
+         sortMenus: [],
+      }),
       computed: {
          iconEmpty: () => PageService.icon.dark.toUrl(),
 

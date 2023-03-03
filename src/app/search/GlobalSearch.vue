@@ -17,9 +17,7 @@
          ItemSearchPs2Disc,
          ItemSearchService,
       },
-      data() {
-         return { searchText: "", searches: [] };
-      },
+      data: (c) => ({ searchText: "", searches: [] }),
       computed: {
          user: (c) => c.loginStore.getters.user,
 

@@ -6,13 +6,11 @@
 
    export default {
       components: { Section },
-      data() {
-         return {
-            companyTitle: Company.name,
-            companyCategory: Company.category,
-            addressHref: Company.Location.toHref(),
-         };
-      },
+      data: (c) => ({
+         companyTitle: Company.name,
+         companyCategory: Company.category,
+         addressHref: Company.Location.toHref(),
+      }),
       computed: {
          greetTitle() {
             const periods = [

@@ -14,7 +14,7 @@
          queryBrandId: { type: String, default: "" },
          queryStock: { type: String, default: "" },
       },
-      data: () => ({ ArrowDirection: Arrow.Direction, scrollLeft: 0 }),
+      data: (c) => ({ ArrowDirection: Arrow.Direction, scrollLeft: 0 }),
       computed: {
          icon: (c) => c.group.icon,
          title: (c) => c.group.title,

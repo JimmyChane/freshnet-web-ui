@@ -5,7 +5,7 @@
    export default {
       components: { Tab, Arrow },
       props: { items: { type: Array, default: () => [] } },
-      data: () => ({ ArrowDirection: Arrow.Direction, scrollLeft: 0 }),
+      data: (c) => ({ ArrowDirection: Arrow.Direction, scrollLeft: 0 }),
       computed: {
          selectedItem() {
             return this.items.find((item) => item.isSelected());

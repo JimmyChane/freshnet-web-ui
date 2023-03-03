@@ -11,9 +11,7 @@
 
          bindValue: { default: undefined },
       },
-      data() {
-         return { input_value: "", isFocused: false };
-      },
+      data: (c) => ({ input_value: "", isFocused: false }),
       watch: {
          bindValue() {
             this.value = this.bindValue;

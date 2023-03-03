@@ -7,9 +7,7 @@
          list: { type: Array, default: () => [] },
          placeholder: { type: String, default: "Search" },
       },
-      data() {
-         return { search: "", isExpand: false, searchLastCharTime: 0 };
-      },
+      data: (c) => ({ search: "", isExpand: false, searchLastCharTime: 0 }),
       watch: {
          search(text = "") {
             this.isExpand = text.length > 0;

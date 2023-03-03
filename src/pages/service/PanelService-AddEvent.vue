@@ -6,17 +6,15 @@
 
    export default {
       components: { Menu, TextArea },
-      data() {
-         return {
-            ModuleEvent,
+      data: (c) => ({
+         ModuleEvent,
 
-            nameOfUser: "unknown",
-            eventMethod: ModuleEvent.Method.Quotation,
-            eventDescription: "",
-            eventStatus: "",
-            eventAmount: 0,
-         };
-      },
+         nameOfUser: "unknown",
+         eventMethod: ModuleEvent.Method.Quotation,
+         eventDescription: "",
+         eventStatus: "",
+         eventAmount: 0,
+      }),
       computed: {
          primaryColor: (c) => c.methodMenu.color,
          primaryColor1: (c) => c.primaryColor.mix("ffffff", 0.45),
@@ -119,11 +117,11 @@
          },
          submit() {
             if (this.isUserDefault && !this.nameOfUser.trim()) {
-               this.store.dispatch("snackbarShow","You must specify your name");
+               this.store.dispatch("snackbarShow", "You must specify your name");
                return;
             }
             if (!this.eventDescription.trim()) {
-               this.store.dispatch("snackbarShow",'You must specify "Description"');
+               this.store.dispatch("snackbarShow", 'You must specify "Description"');
                return;
             }
 

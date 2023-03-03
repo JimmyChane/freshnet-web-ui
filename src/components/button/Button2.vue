@@ -6,9 +6,7 @@
          icon: { type: String },
          iconActive: { type: String },
       },
-      data() {
-         return { focused: false, hovered: false };
-      },
+      data: (c) => ({ focused: false, hovered: false }),
       emits: ["callback-click"],
    };
 </script>

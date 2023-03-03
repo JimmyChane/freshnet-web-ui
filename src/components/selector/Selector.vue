@@ -11,7 +11,7 @@
          list: { type: Array, default: () => [] },
          keySelected: { type: String, default: "" },
       },
-      data: () => ({ isShow: false, menus: [], shouldShowIcon: false }),
+      data: (c) => ({ isShow: false, menus: [], shouldShowIcon: false }),
       computed: {
          menuCorner: (c) => Menu.Corner.BOTTOM,
          menuWidth: (c) => Menu.Width.SAME,

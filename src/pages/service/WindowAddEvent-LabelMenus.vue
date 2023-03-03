@@ -11,9 +11,7 @@
          menu: { type: Object, default: () => null },
          menus: { default: () => [] },
       },
-      data() {
-         return { state: State.Collapse };
-      },
+      data: (c) => ({ state: State.Collapse }),
       computed: {
          parsedMenus() {
             const menus = Array.isArray(this.menus) ? this.menus : [this.menus];
@@ -29,8 +27,7 @@
 
          primaryColorBackground: (c) => c.primaryColor.mix("ffffff", 0.8),
          primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),
-         primaryColorBackgroundSelected: (c) =>
-            c.primaryColor.mix("ffffff", 0.4),
+         primaryColorBackgroundSelected: (c) => c.primaryColor.mix("ffffff", 0.4),
       },
       methods: {
          toggle() {
@@ -52,29 +49,15 @@
 
 <template>
    <div
-      :class="[
-         'LabelMenus',
-         `LabelMenus-${isExpand ? 'isExpand' : 'isCollapse'}`,
-      ]"
+      :class="['LabelMenus', `LabelMenus-${isExpand ? 'isExpand' : 'isCollapse'}`]"
       :style="{ '--primary-color': primaryColor.toString() }"
    >
-      <button
-         class="LabelMenus-main"
-         @click="() => toggle()"
-         @blur="() => collapse(200)"
-      >
+      <button class="LabelMenus-main" @click="() => toggle()" @blur="() => collapse(200)">
          <span class="LabelMenus-content">
-            <img
-               class="LabelMenus-content-icon"
-               v-if="menuIcon"
-               :src="menuIcon"
-            />
+            <img class="LabelMenus-content-icon" v-if="menuIcon" :src="menuIcon" />
             {{ menuTitle }}</span
          >
-         <img
-            class="LabelMenus-arrow transition"
-            :src="host.icon('arrowDown-FFFFFF')"
-         />
+         <img class="LabelMenus-arrow transition" :src="host.icon('arrowDown-FFFFFF')" />
       </button>
 
       <div

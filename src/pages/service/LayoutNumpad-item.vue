@@ -4,11 +4,7 @@
       props: {
          title: { type: String, default: "" },
       },
-      data() {
-         return {
-            isClicking: false,
-         };
-      },
+      data: (c) => ({ isClicking: false }),
       methods: {
          keyDown() {
             const button = this.$refs.button;

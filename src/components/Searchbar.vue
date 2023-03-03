@@ -8,14 +8,9 @@
          placeholder: { type: String, default: "Search" },
          model: { default: undefined },
          backIcon: { type: String, default: Host.icon("close-000000") },
-         enterIcon: {
-            type: String,
-            default: Host.icon("search-000000"),
-         },
+         enterIcon: { type: String, default: Host.icon("search-000000") },
       },
-      data() {
-         return { search: "" };
-      },
+      data: (c) => ({ search: "" }),
       computed: {
          value: {
             get() {

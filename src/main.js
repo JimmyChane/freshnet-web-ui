@@ -92,7 +92,7 @@ new Vue({
    router: Router,
    store: Stores.store,
 
-   data: () => ({
+   data: (c) => ({
       console: {
          log(param1, param2) {
             param2 === undefined ? console.log(param1) : console.log(param1, param2);

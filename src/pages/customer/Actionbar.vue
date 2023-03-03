@@ -10,9 +10,7 @@
          title: { type: String, default: "" },
          items: { type: Array, default: () => [] },
       },
-      data() {
-         return { results: [] };
-      },
+      data: (c) => ({ results: [] }),
       methods: {
          searchResults(str) {
             return Searcher.withItems(this.items).search(str);

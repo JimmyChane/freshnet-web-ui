@@ -1,8 +1,6 @@
 <script>
    export default {
-      data() {
-         return { isShowing: false };
-      },
+      data: (c) => ({ isShowing: false }),
       computed: {
          isConnected: (c) => c.store.getters.isConnected,
       },

@@ -10,9 +10,7 @@
          item: { type: Object, default: null },
          selected: { type: Boolean, default: false },
       },
-      data() {
-         return { itemDeviceGroups: [] };
-      },
+      data: (c) => ({ itemDeviceGroups: [] }),
       computed: {
          name: (c) => c.item.name,
          phoneNumber: (c) => c.item.phoneNumber,
@@ -38,27 +36,18 @@
          async invalidate() {
             this.itemDeviceGroups = [];
             if (!this.item) return;
-            this.itemDeviceGroups = await this.item.fetchDeviceGroups(
-               "categoryKey",
-            );
+            this.itemDeviceGroups = await this.item.fetchDeviceGroups("categoryKey");
          },
       },
    };
 </script>
 
 <template>
-   <Button3
-      class="ItemCustomer"
-      :isSelected="selected"
-      @focus="$emit('click', { item })"
-   >
+   <Button3 class="ItemCustomer" :isSelected="selected" @focus="$emit('click', { item })">
       <div class="ItemCustomer-body">
          <div class="ItemCustomer-header">
             <span class="ItemCustomer-name">{{ name }}</span>
-            <div
-               class="ItemCustomer-header-dot"
-               v-if="name && phoneNumberStr"
-            />
+            <div class="ItemCustomer-header-dot" v-if="name && phoneNumberStr" />
             <span class="ItemCustomer-phoneNumber">{{ phoneNumberStr }}</span>
          </div>
 
@@ -72,9 +61,7 @@
             "
          >
             <div class="ItemCustomer-description" v-if="item.description">
-               <span class="ItemCustomer-description-body">{{
-                  item.description
-               }}</span>
+               <span class="ItemCustomer-description-body">{{ item.description }}</span>
             </div>
 
             <div class="ItemCustomer-labels">

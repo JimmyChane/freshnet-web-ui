@@ -23,22 +23,20 @@
 
       components: { PopupWindow, Loading, Actionbar, SectionOrder, Input },
       emits: ["callback-side-expand"],
-      data() {
-         return {
-            display: { showDialogAppendOrder: false },
+      data: (c) => ({
+         display: { showDialogAppendOrder: false },
 
-            contentError: "",
+         contentError: "",
 
-            customer_name: "",
-            phone_number: "",
-            content: "",
+         customer_name: "",
+         phone_number: "",
+         content: "",
 
-            scrollTop: 0,
+         scrollTop: 0,
 
-            pendingItems: [],
-            completedItems: [],
-         };
-      },
+         pendingItems: [],
+         completedItems: [],
+      }),
       computed: {
          isLoading: (c) => c.orderStore.getters.isLoading,
          items: (c) => U.optArray(c.orderStore.getters.items),
@@ -70,7 +68,7 @@
          },
          clickRefresh() {
             this.orderStore.dispatch("refresh").catch((error) => {
-               this.store.dispatch("snackbarShow","Error While Refreshing Order");
+               this.store.dispatch("snackbarShow", "Error While Refreshing Order");
                console.error(error);
             });
          },
@@ -100,7 +98,7 @@
                   this.display.showDialogAppendOrder = false;
                })
                .catch((error) => {
-                  this.store.dispatch("snackbarShow","Error While Creating Order");
+                  this.store.dispatch("snackbarShow", "Error While Creating Order");
                });
          },
       },

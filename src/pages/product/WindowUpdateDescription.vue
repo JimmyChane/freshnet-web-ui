@@ -8,9 +8,7 @@
          input: { type: Object, default: () => null },
          action: { type: Object, default: null },
       },
-      data() {
-         return { data: null };
-      },
+      data: (c) => ({ data: null }),
       computed: {
          product: (c) => (c.input ? c.input.product : ""),
          description: (c) => (c.data ? c.data.description : ""),

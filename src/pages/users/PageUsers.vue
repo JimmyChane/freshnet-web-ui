@@ -32,24 +32,22 @@
          ItemUser,
       },
       emits: ["callback-side-expand"],
-      data() {
-         return {
-            scrollTop: 0,
-            UserType: User.Type,
+      data: (c) => ({
+         scrollTop: 0,
+         UserType: User.Type,
 
-            window: {
-               addUser: {
-                  isShowing: false,
-                  username: "",
-                  name: "",
-                  passwordNew: "",
-                  passwordRepeat: "",
-               },
-               removeUser: { isShowing: false, user: null },
-               changeUserType: { isShowing: false, user: null, userType: "" },
+         window: {
+            addUser: {
+               isShowing: false,
+               username: "",
+               name: "",
+               passwordNew: "",
+               passwordRepeat: "",
             },
-         };
-      },
+            removeUser: { isShowing: false, user: null },
+            changeUserType: { isShowing: false, user: null, userType: "" },
+         },
+      }),
       computed: {
          isLoading: (c) => c.userStore.getters.isLoading,
          isCurrentUserAdmin: (c) => (c.user ? c.user.isTypeAdmin() : false),
@@ -76,7 +74,7 @@
 
          onIntentRefresh() {
             this.userStore.dispatch("refresh").catch((error) => {
-               this.store.dispatch("snackbarShow","Failed to validate user");
+               this.store.dispatch("snackbarShow", "Failed to validate user");
             });
          },
 
@@ -101,12 +99,12 @@
                      this.window.addUser.isShowing = false;
                      this.onResetAddUser();
                   } else {
-                     this.store.dispatch("snackbarShow","Failed to add user");
+                     this.store.dispatch("snackbarShow", "Failed to add user");
                      throw new Error();
                   }
                })
                .catch((error) => {
-                  this.store.dispatch("snackbarShow","Error to add user");
+                  this.store.dispatch("snackbarShow", "Error to add user");
                });
          },
          onResetAddUser() {
@@ -136,12 +134,12 @@
                      interfaceWindow.isShowing = false;
                      this.onResetRemoveUser();
                   } else {
-                     this.store.dispatch("snackbarShow","Failed to remove user");
+                     this.store.dispatch("snackbarShow", "Failed to remove user");
                      throw new Error();
                   }
                })
                .catch((error) => {
-                  this.store.dispatch("snackbarShow","Error to remove user");
+                  this.store.dispatch("snackbarShow", "Error to remove user");
                });
          },
          onResetRemoveUser() {
@@ -159,9 +157,7 @@
             this.onResetChangeUserType();
          },
          onFinishChangeUserType() {
-            let userTypeNumber = Number.parseInt(
-               this.window.changeUserType.userType,
-            );
+            let userTypeNumber = Number.parseInt(this.window.changeUserType.userType);
             if (Number.isNaN(userTypeNumber)) userTypeNumber = 0;
 
             return this.userStore
@@ -174,12 +170,15 @@
                      this.window.changeUserType.isShowing = false;
                      this.onResetChangeUserType();
                   } else {
-                     this.store.dispatch("snackbarShow","Failed to change user priviledge");
+                     this.store.dispatch(
+                        "snackbarShow",
+                        "Failed to change user priviledge",
+                     );
                      throw new Error();
                   }
                })
                .catch((error) => {
-                  this.store.dispatch("snackbarShow","Error to change user priviledge");
+                  this.store.dispatch("snackbarShow", "Error to change user priviledge");
                });
          },
          onResetChangeUserType() {
@@ -191,10 +190,7 @@
 </script>
 
 <template>
-   <div
-      class="PageUsers"
-      @scroll="(event) => (scrollTop = event.target.scrollTop)"
-   >
+   <div class="PageUsers" @scroll="(event) => (scrollTop = event.target.scrollTop)">
       <NavigationBar
          :title="$options.title"
          :rightMenus="[
@@ -227,10 +223,7 @@
          />
       </div>
 
-      <Empty
-         v-if="!users.length && !isLoading"
-         :icon="$options.icon.dark.toUrl()"
-      />
+      <Empty v-if="!users.length && !isLoading" :icon="$options.icon.dark.toUrl()" />
 
       <Loading class="PageUsers-loading" :isShowing="isLoading" />
 
@@ -282,9 +275,7 @@
       >
          <div class="PageUsers-window">
             <div class="PageUsers-window-main">
-               <p class="PageUsers-window-text"
-                  >Once removed, cannot be undone</p
-               >
+               <p class="PageUsers-window-text">Once removed, cannot be undone</p>
             </div>
          </div>
       </PopupWindowAction>
@@ -323,9 +314,7 @@
                      { key: UserType.Staff.toString(), title: 'Staff' },
                   ]"
                   :keySelected="window.changeUserType.userType.toString()"
-                  @callback-select="
-                     (key) => (window.changeUserType.userType = key)
-                  "
+                  @callback-select="(key) => (window.changeUserType.userType = key)"
                />
             </div>
          </div>

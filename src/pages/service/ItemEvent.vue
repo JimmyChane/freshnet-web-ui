@@ -6,7 +6,7 @@
       components: { MenuOption },
       props: { item: { type: Object, default: null } },
       emits: ["callback-delete"],
-      data: () => ({ nameOfUser: "loading...", isShowingMenu: false, isHovered: false }),
+      data: (c) => ({ nameOfUser: "loading...", isShowingMenu: false, isHovered: false }),
       computed: {
          timestampText() {
             if (!this.item.timestamp) return "";

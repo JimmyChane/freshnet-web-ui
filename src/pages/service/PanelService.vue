@@ -30,13 +30,7 @@
          service: { type: Object, default: () => null },
          actions: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            ServiceStates,
-            nameOfUser: "",
-            bookmarkHeaderIconIsHover: false,
-         };
-      },
+      data: (c) => ({ ServiceStates, nameOfUser: "", bookmarkHeaderIconIsHover: false }),
       computed: {
          bookmarkMenuCorner: () => MenuIcon.Corner.BOTTOM_LEFT,
 
@@ -97,7 +91,7 @@
             if (!service) return "";
 
             const name = await service.fetchName().catch((error) => {
-               this.store.dispatch("snackbarShow","Error getting user for service");
+               this.store.dispatch("snackbarShow", "Error getting user for service");
                return "";
             });
 
@@ -114,7 +108,7 @@
                })
                .then((serivce) => {})
                .catch((error) => {
-                  this.store.dispatch("snackbarShow","Failed to Add Image");
+                  this.store.dispatch("snackbarShow", "Failed to Add Image");
                });
          },
       },

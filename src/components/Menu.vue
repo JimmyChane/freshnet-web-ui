@@ -12,7 +12,7 @@
          menus: { default: undefined },
          primaryColor: { default: undefined },
       },
-      data: () => ({ popupMenu: null }),
+      data: (c) => ({ popupMenu: null }),
       computed: { isShowing: (c) => c.popupMenu && c.popupMenu.isShowing },
       watch: {
          isShowing() {

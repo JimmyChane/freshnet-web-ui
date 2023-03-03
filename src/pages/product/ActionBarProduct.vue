@@ -12,9 +12,7 @@
          leftMenus: { default: () => [] },
          rightMenus: { default: () => [] },
       },
-      data() {
-         return { searchText: "" };
-      },
+      data: (c) => ({ searchText: "" }),
       computed: {
          isOver550px: (c) => c.$root.window.innerWidth > 550,
 

@@ -7,89 +7,84 @@
 
    export default {
       components: { ExportOption, ExportLayoutOption, ExportButton, LayoutOne },
-      data() {
-         return {
-            product: null,
+      data: (c) => ({
+         product: null,
 
-            options: [
-               {
-                  title: "Orientation",
-                  items: [{ title: "Portrait" }, { title: "Landscape" }],
-                  click: () => {
-                     const items = this.options[0].items;
-                     const index = items.indexOf(this.orientation);
-                     const nextIndex = index + 1;
-                     this.orientation = items[nextIndex >= items.length ? 0 : nextIndex];
-                     this.invalidateCard();
-                  },
+         // todo
+         options: [
+            {
+               title: "Orientation",
+               items: [{ title: "Portrait" }, { title: "Landscape" }],
+               click: () => {
+                  const items = c.options[0].items;
+                  const index = items.indexOf(c.orientation);
+                  const nextIndex = index + 1;
+                  c.orientation = items[nextIndex >= items.length ? 0 : nextIndex];
+                  c.invalidateCard();
                },
-               {
-                  title: "size",
-                  items: [
-                     {
-                        title: "A5",
-                        width: 148.5 * 3.7795275591,
-                        height: 210 * 3.7795275591,
-                     },
-                     {
-                        title: "A4",
-                        width: 210 * 3.7795275591,
-                        height: 297 * 3.7795275591,
-                     },
-                  ],
-                  click: () => {
-                     const items = this.options[1].items;
-                     const index = items.indexOf(this.size);
-                     const nextIndex = index + 1;
-                     this.size = items[nextIndex >= items.length ? 0 : nextIndex];
-                     this.invalidateCard();
+            },
+            {
+               title: "size",
+               items: [
+                  {
+                     title: "A5",
+                     width: 148.5 * 3.7795275591,
+                     height: 210 * 3.7795275591,
                   },
-               },
-               {
-                  title: "Rows",
-                  items: [
-                     { title: "1", count: 1 },
-                     { title: "2", count: 2 },
-                  ],
-                  click: () => {
-                     const items = this.options[2].items;
-                     const index = items.indexOf(this.row);
-                     const nextIndex = index + 1;
-                     this.row = items[nextIndex >= items.length ? 0 : nextIndex];
-                     this.invalidateCard();
+                  {
+                     title: "A4",
+                     width: 210 * 3.7795275591,
+                     height: 297 * 3.7795275591,
                   },
+               ],
+               click: () => {
+                  const items = c.options[1].items;
+                  const index = items.indexOf(c.size);
+                  const nextIndex = index + 1;
+                  c.size = items[nextIndex >= items.length ? 0 : nextIndex];
+                  c.invalidateCard();
                },
-               {
-                  title: "Columns",
-                  items: [
-                     { title: "1", count: 1 },
-                     { title: "2", count: 2 },
-                  ],
-                  click: () => {
-                     const items = this.options[3].items;
-                     const index = items.indexOf(this.column);
-                     const nextIndex = index + 1;
-                     this.column = items[nextIndex >= items.length ? 0 : nextIndex];
-                     this.invalidateCard();
-                  },
+            },
+            {
+               title: "Rows",
+               items: [
+                  { title: "1", count: 1 },
+                  { title: "2", count: 2 },
+               ],
+               click: () => {
+                  const items = c.options[2].items;
+                  const index = items.indexOf(c.row);
+                  const nextIndex = index + 1;
+                  c.row = items[nextIndex >= items.length ? 0 : nextIndex];
+                  c.invalidateCard();
                },
-            ],
-            layouts: [
-               { title: "Layout 1" },
-               { title: "Layout 2" },
-               { title: "Layout 3" },
-            ],
+            },
+            {
+               title: "Columns",
+               items: [
+                  { title: "1", count: 1 },
+                  { title: "2", count: 2 },
+               ],
+               click: () => {
+                  const items = c.options[3].items;
+                  const index = items.indexOf(c.column);
+                  const nextIndex = index + 1;
+                  c.column = items[nextIndex >= items.length ? 0 : nextIndex];
+                  c.invalidateCard();
+               },
+            },
+         ],
+         layouts: [{ title: "Layout 1" }, { title: "Layout 2" }, { title: "Layout 3" }],
 
-            size: null,
-            orientation: null,
-            row: null,
-            column: null,
+         size: null,
+         orientation: null,
+         row: null,
+         column: null,
 
-            bodyWidth: 0,
-            bodyHeight: 0,
-            canvasScale: 0,
-         };
-      },
+         bodyWidth: 0,
+         bodyHeight: 0,
+         canvasScale: 0,
+      }),
       computed: {
          user: (c) => c.loginStore.getters.user,
          allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),

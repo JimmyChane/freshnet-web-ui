@@ -12,9 +12,7 @@
          order: { type: Object, default: () => null },
          expand: { type: Boolean, default: false },
       },
-      data() {
-         return { Order, isExpanded: false };
-      },
+      data: (c) => ({ Order, isExpanded: false }),
       computed: {
          dateCreated: (c) => {
             return format(new Date(c.order.createdAt), "hh:mmaaa dd/LL/yyyy");

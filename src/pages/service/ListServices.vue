@@ -20,19 +20,17 @@
          items: { type: Array, default: () => [] },
          item: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            properties: [
-               { key: "customerName", width: 128 },
-               { key: "customerPhoneNumber", width: 112 },
-               { key: "description", width: 224 },
-               { key: "images", width: 80 },
-               { key: "notice", width: 220 },
-               { key: "timestamp", width: 176 },
-            ],
-            itemSelected: null,
-         };
-      },
+      data: (c) => ({
+         properties: [
+            { key: "customerName", width: 128 },
+            { key: "customerPhoneNumber", width: 112 },
+            { key: "description", width: 224 },
+            { key: "images", width: 80 },
+            { key: "notice", width: 220 },
+            { key: "timestamp", width: 176 },
+         ],
+         itemSelected: null,
+      }),
       computed: {
          isOver460px: (c) => c.$root.window.innerWidth > 460,
 

@@ -29,23 +29,21 @@
 
       components: { Item },
       props: { popupMenu: { default: undefined } },
-      data() {
-         return {
-            top: 0,
-            left: 0,
+      data: (c) => ({
+         top: 0,
+         left: 0,
 
-            classTransition: "",
-            classState: "PopupMenu-isHiding",
-            stylePointerEvent: "none",
+         classTransition: "",
+         classState: "PopupMenu-isHiding",
+         stylePointerEvent: "none",
 
-            width: 0,
-            height: 0,
-            halfWidth: 0,
-            halfHeight: 0,
-            x: 0,
-            y: 0,
-         };
-      },
+         width: 0,
+         height: 0,
+         halfWidth: 0,
+         halfHeight: 0,
+         x: 0,
+         y: 0,
+      }),
       computed: {
          isShowing: (c) => c.popupMenu.isShowing,
          anchor: (c) => c.popupMenu.anchor,

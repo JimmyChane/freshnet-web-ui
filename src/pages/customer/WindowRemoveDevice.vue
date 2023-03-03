@@ -10,11 +10,7 @@
          isShowing: { type: Boolean, default: false },
          param: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            Requirement: CustomerModule.Requirement,
-         };
-      },
+      data: (c) => ({ Requirement: CustomerModule.Requirement }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,

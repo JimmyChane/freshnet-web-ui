@@ -38,231 +38,238 @@
          Drawer,
       },
       emits: ["callback-side-expand"],
-      data() {
-         return {
-            actions: {
-               onClickClose: () => this.$root.nextRoute({ query: { service: null } }),
-               onClickRemove: (x) => this.clickDeleteService(x),
-               onClickToAddEvent: (event) => {
-                  this.serviceStore
-                     .dispatch("addEventToId", {
-                        serviceID: this.currentService.id,
-                        data: event,
+      data: (c) => ({
+         actions: {
+            onClickClose: () => c.$root.nextRoute({ query: { service: null } }),
+            onClickRemove: (x) => c.clickDeleteService(x),
+            onClickToAddEvent: (event) => {
+               c.serviceStore
+                  .dispatch("addEventToId", {
+                     serviceID: c.currentService.id,
+                     data: event,
+                  })
+                  .catch((error) => {
+                     c.store.dispatch("snackbarShow", "Failed to create an event");
+                     throw error;
+                  });
+            },
+            onClickRemoveEvent: (x) => c.clickRemoveEvent(x),
+            onClickRemoveImage: (x) => c.clickRemoveImage(x),
+            onClickUpdateCustomer: (x) => c.clickUpdateCustomer(x),
+            onClickUpdateDescription: (x) => c.clickUpdateDescription(x),
+            onClickUpdateBelongings: (x) => c.clickUpdateBelongings(x),
+         },
+
+         popup: {
+            search: {
+               isShowing: false,
+               start: (context, self, data) => (self.isShowing = true),
+               dismiss: (context, self, data) => (self.isShowing = false),
+            },
+            importService: {
+               isShowing: false,
+               start: (context, self, data) => (self.isShowing = true),
+               dismiss: (context, self, data) => (self.isShowing = false),
+               ok: (context, self, data) => {
+                  self.isShowing = false;
+                  context.clickService(data);
+               },
+            },
+            newService: {
+               isShowing: false,
+               start: (context, self, data) => {
+                  self.isShowing = true;
+                  context.$refs.WindowAddService.focus();
+               },
+               dismiss: (context, self, data) => (self.isShowing = false),
+               ok: (context, self, data) => {
+                  context.serviceStore
+                     .dispatch("addItem", { data })
+                     .then((result) => {
+                        self.isShowing = !result;
+                        context.clickService(result);
                      })
                      .catch((error) => {
-                        this.store.dispatch("snackbarShow","Failed to create an event");
+                        context.store.dispatch(
+                           "snackbarShow",
+                           "Failed to create a service",
+                        );
                         throw error;
                      });
                },
-               onClickRemoveEvent: (x) => this.clickRemoveEvent(x),
-               onClickRemoveImage: (x) => this.clickRemoveImage(x),
-               onClickUpdateCustomer: (x) => this.clickUpdateCustomer(x),
-               onClickUpdateDescription: (x) => this.clickUpdateDescription(x),
-               onClickUpdateBelongings: (x) => this.clickUpdateBelongings(x),
             },
-
-            popup: {
-               search: {
-                  isShowing: false,
-                  start: (context, self, data) => (self.isShowing = true),
-                  dismiss: (context, self, data) => (self.isShowing = false),
+            removeService: {
+               isShowing: false,
+               value: null,
+               start: (context, self, data) => {
+                  self.isShowing = true;
+                  self.value = data;
                },
-               importService: {
-                  isShowing: false,
-                  start: (context, self, data) => (self.isShowing = true),
-                  dismiss: (context, self, data) => (self.isShowing = false),
-                  ok: (context, self, data) => {
-                     self.isShowing = false;
-                     context.clickService(data);
-                  },
+               dismiss: (context, self, data) => {
+                  self.isShowing = false;
+                  self.value = null;
                },
-               newService: {
-                  isShowing: false,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     context.$refs.WindowAddService.focus();
-                  },
-                  dismiss: (context, self, data) => (self.isShowing = false),
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("addItem", { data })
-                        .then((result) => {
-                           self.isShowing = !result;
-                           context.clickService(result);
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Failed to create a service");
-                           throw error;
-                        });
-                  },
-               },
-               removeService: {
-                  isShowing: false,
-                  value: null,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.value = data;
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.value = null;
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("removeItemOfId", { id: data.id })
-                        .then(() => {
-                           self.dismiss(context, self);
-                           if (context.currentServiceId === data.id) {
-                              context.$root.replaceRoute({
-                                 query: { service: null },
-                              });
-                           }
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Delete Failed");
-                           throw error;
-                        });
-                  },
-               },
-               removeEvent: {
-                  isShowing: false,
-                  value: null,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.value = data;
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.value = null;
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("removeEventFromId", {
-                           serviceID: data.service.id,
-                           time: data.event.timestamp.time,
-                        })
-                        .then((result) => {
-                           self.dismiss(context, self);
-                        });
-                  },
-               },
-               customer: {
-                  isShowing: false,
-                  value: null,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.value = data;
-                     context.$refs.WindowUpdateCustomer.focus();
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.value = null;
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("updateCustomerOfId", {
-                           serviceID: context.currentService.id,
-                           customer: data,
-                        })
-                        .then((service) => {
-                           self.dismiss(context, self);
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Update Customer Failed");
-                           throw error;
-                        });
-                  },
-               },
-               removeImage: {
-                  isShowing: false,
-                  value: null,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.value = data;
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.value = null;
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("removeImageFromId", {
-                           serviceID: context.currentService.id,
-                           image: data,
-                        })
-                        .then((service) => {
-                           context.store.dispatch("imageViewerHide");
-                           self.dismiss(context, self);
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Delete Image Failed");
-                           throw error;
-                        });
-                  },
-               },
-               editDescription: {
-                  isShowing: false,
-                  value: "",
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.value = data;
-                     context.$refs.WindowUpdateDescription.focus();
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.value = "";
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("updateDescriptionOfId", {
-                           serviceID: context.currentService.id,
-                           description: data,
-                        })
-                        .then((service) => {
-                           self.dismiss(context, self);
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Update Description Failed");
-                           throw error;
-                        });
-                  },
-               },
-               belongings: {
-                  isShowing: false,
-                  values: [],
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.values = data;
-                     context.$refs.WindowUpdateBelonging.focus();
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.values = [];
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("updateBelongingsOfId", {
-                           serviceID: context.currentService.id,
-                           belongings: data,
-                        })
-                        .then((service) => {
-                           self.dismiss(context, self);
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Update Belongings Failed");
-                           throw error;
-                        });
-                  },
+               ok: (context, self, data) => {
+                  context.serviceStore
+                     .dispatch("removeItemOfId", { id: data.id })
+                     .then(() => {
+                        self.dismiss(context, self);
+                        if (context.currentServiceId === data.id) {
+                           context.$root.replaceRoute({
+                              query: { service: null },
+                           });
+                        }
+                     })
+                     .catch((error) => {
+                        context.store.dispatch("snackbarShow", "Delete Failed");
+                        throw error;
+                     });
                },
             },
+            removeEvent: {
+               isShowing: false,
+               value: null,
+               start: (context, self, data) => {
+                  self.isShowing = true;
+                  self.value = data;
+               },
+               dismiss: (context, self, data) => {
+                  self.isShowing = false;
+                  self.value = null;
+               },
+               ok: (context, self, data) => {
+                  context.serviceStore
+                     .dispatch("removeEventFromId", {
+                        serviceID: data.service.id,
+                        time: data.event.timestamp.time,
+                     })
+                     .then((result) => {
+                        self.dismiss(context, self);
+                     });
+               },
+            },
+            customer: {
+               isShowing: false,
+               value: null,
+               start: (context, self, data) => {
+                  self.isShowing = true;
+                  self.value = data;
+                  context.$refs.WindowUpdateCustomer.focus();
+               },
+               dismiss: (context, self, data) => {
+                  self.isShowing = false;
+                  self.value = null;
+               },
+               ok: (context, self, data) => {
+                  context.serviceStore
+                     .dispatch("updateCustomerOfId", {
+                        serviceID: context.currentService.id,
+                        customer: data,
+                     })
+                     .then((service) => {
+                        self.dismiss(context, self);
+                     })
+                     .catch((error) => {
+                        context.store.dispatch("snackbarShow", "Update Customer Failed");
+                        throw error;
+                     });
+               },
+            },
+            removeImage: {
+               isShowing: false,
+               value: null,
+               start: (context, self, data) => {
+                  self.isShowing = true;
+                  self.value = data;
+               },
+               dismiss: (context, self, data) => {
+                  self.isShowing = false;
+                  self.value = null;
+               },
+               ok: (context, self, data) => {
+                  context.serviceStore
+                     .dispatch("removeImageFromId", {
+                        serviceID: context.currentService.id,
+                        image: data,
+                     })
+                     .then((service) => {
+                        context.store.dispatch("imageViewerHide");
+                        self.dismiss(context, self);
+                     })
+                     .catch((error) => {
+                        context.store.dispatch("snackbarShow", "Delete Image Failed");
+                        throw error;
+                     });
+               },
+            },
+            editDescription: {
+               isShowing: false,
+               value: "",
+               start: (context, self, data) => {
+                  self.isShowing = true;
+                  self.value = data;
+                  context.$refs.WindowUpdateDescription.focus();
+               },
+               dismiss: (context, self, data) => {
+                  self.isShowing = false;
+                  self.value = "";
+               },
+               ok: (context, self, data) => {
+                  context.serviceStore
+                     .dispatch("updateDescriptionOfId", {
+                        serviceID: context.currentService.id,
+                        description: data,
+                     })
+                     .then((service) => {
+                        self.dismiss(context, self);
+                     })
+                     .catch((error) => {
+                        context.store.dispatch(
+                           "snackbarShow",
+                           "Update Description Failed",
+                        );
+                        throw error;
+                     });
+               },
+            },
+            belongings: {
+               isShowing: false,
+               values: [],
+               start: (context, self, data) => {
+                  self.isShowing = true;
+                  self.values = data;
+                  context.$refs.WindowUpdateBelonging.focus();
+               },
+               dismiss: (context, self, data) => {
+                  self.isShowing = false;
+                  self.values = [];
+               },
+               ok: (context, self, data) => {
+                  context.serviceStore
+                     .dispatch("updateBelongingsOfId", {
+                        serviceID: context.currentService.id,
+                        belongings: data,
+                     })
+                     .then((service) => {
+                        self.dismiss(context, self);
+                     })
+                     .catch((error) => {
+                        context.store.dispatch(
+                           "snackbarShow",
+                           "Update Belongings Failed",
+                        );
+                        throw error;
+                     });
+               },
+            },
+         },
 
-            items: [],
-            searchResults: [],
+         items: [],
+         searchResults: [],
 
-            currentService: null,
-            drawerService: null,
-         };
-      },
+         currentService: null,
+         drawerService: null,
+      }),
       computed: {
          itemDrawerEdge: () => Drawer.Edge.RIGHT,
          itemDrawerMode() {

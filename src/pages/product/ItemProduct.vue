@@ -14,9 +14,7 @@
 
       emits: ["click"],
       components: { ImageView, Label },
-      data() {
-         return { primaryColorHex: "", fullTitle: "" };
-      },
+      data: (c) => ({ primaryColorHex: "", fullTitle: "" }),
       props: {
          mode: { type: Number, default: Mode.Grid },
          item: { type: Object, default: () => null },

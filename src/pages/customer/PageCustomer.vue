@@ -45,121 +45,119 @@
          WindowUpdateDeviceDescription,
       },
       emits: ["callback-side-expand"],
-      data() {
-         return {
-            windowAddCustomer: {
-               isShowing: false,
-               start: (context, self, data) => (self.isShowing = true),
-               dismiss: (context, self, data) => (self.isShowing = false),
-               cancel: (context, self, data) => (self.isShowing = false),
-               ok: (context, self, data) => (self.isShowing = false),
+      data: (c) => ({
+         windowAddCustomer: {
+            isShowing: false,
+            start: (context, self, data) => (self.isShowing = true),
+            dismiss: (context, self, data) => (self.isShowing = false),
+            cancel: (context, self, data) => (self.isShowing = false),
+            ok: (context, self, data) => (self.isShowing = false),
+         },
+         windowRemoveCustomer: {
+            isShowing: false,
+            item: null,
+            start: (context, self, data) => {
+               self.isShowing = true;
+               self.item = data.item;
             },
-            windowRemoveCustomer: {
-               isShowing: false,
-               item: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.item = data.item;
-               },
-               dismiss: (context, self, data) => (self.isShowing = false),
-               cancel: (context, self, data) => (self.isShowing = false),
-               ok: (context, self, data) => {
-                  self.isShowing = false;
-                  if (data.id === context.queryCustomerId) context.clickClose();
-               },
+            dismiss: (context, self, data) => (self.isShowing = false),
+            cancel: (context, self, data) => (self.isShowing = false),
+            ok: (context, self, data) => {
+               self.isShowing = false;
+               if (data.id === context.queryCustomerId) context.clickClose();
             },
-            windowUpdateCustomer: {
-               isShowing: false,
-               item: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.item = data.item;
-               },
-               dismiss: (context, self, data) => (self.isShowing = false),
-               cancel: (context, self, data) => (self.isShowing = false),
-               ok: (context, self, data) => (self.isShowing = false),
+         },
+         windowUpdateCustomer: {
+            isShowing: false,
+            item: null,
+            start: (context, self, data) => {
+               self.isShowing = true;
+               self.item = data.item;
             },
-            windowUpdateDescription: {
-               isShowing: false,
-               item: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.item = data.item;
-               },
-               dismiss: (context, self, data) => (self.isShowing = false),
-               cancel: (context, self, data) => (self.isShowing = false),
-               ok: (context, self, data) => (self.isShowing = false),
+            dismiss: (context, self, data) => (self.isShowing = false),
+            cancel: (context, self, data) => (self.isShowing = false),
+            ok: (context, self, data) => (self.isShowing = false),
+         },
+         windowUpdateDescription: {
+            isShowing: false,
+            item: null,
+            start: (context, self, data) => {
+               self.isShowing = true;
+               self.item = data.item;
             },
-            windowAddDevice: {
-               isShowing: false,
-               item: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.item = data.item;
-               },
-               dismiss: (context, self, data) => (self.isShowing = false),
-               cancel: (context, self, data) => (self.isShowing = false),
-               ok: (context, self, data) => (self.isShowing = false),
+            dismiss: (context, self, data) => (self.isShowing = false),
+            cancel: (context, self, data) => (self.isShowing = false),
+            ok: (context, self, data) => (self.isShowing = false),
+         },
+         windowAddDevice: {
+            isShowing: false,
+            item: null,
+            start: (context, self, data) => {
+               self.isShowing = true;
+               self.item = data.item;
             },
-            windowRemoveDevice: {
-               isShowing: false,
-               param: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.param = { customer: data.item, device: data.device };
-               },
-               dismiss: (context, self, data) => (self.isShowing = false),
-               cancel: (context, self, data) => (self.isShowing = false),
-               ok: (context, self, data) => (self.isShowing = false),
+            dismiss: (context, self, data) => (self.isShowing = false),
+            cancel: (context, self, data) => (self.isShowing = false),
+            ok: (context, self, data) => (self.isShowing = false),
+         },
+         windowRemoveDevice: {
+            isShowing: false,
+            param: null,
+            start: (context, self, data) => {
+               self.isShowing = true;
+               self.param = { customer: data.item, device: data.device };
             },
-            windowUpdateDeviceSpecifications: {
-               isShowing: false,
-               param: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.param = {
-                     customer: data.customer,
-                     device: data.device,
-                     specifications: data.specifications,
-                  };
-               },
-               dismiss: (context, self, data) => (self.isShowing = false),
-               cancel: (context, self, data) => {
-                  self.isShowing = false;
-                  self.param = null;
-               },
-               ok: (context, self, data) => {
-                  self.isShowing = false;
-                  self.param = null;
-               },
+            dismiss: (context, self, data) => (self.isShowing = false),
+            cancel: (context, self, data) => (self.isShowing = false),
+            ok: (context, self, data) => (self.isShowing = false),
+         },
+         windowUpdateDeviceSpecifications: {
+            isShowing: false,
+            param: null,
+            start: (context, self, data) => {
+               self.isShowing = true;
+               self.param = {
+                  customer: data.customer,
+                  device: data.device,
+                  specifications: data.specifications,
+               };
             },
-            windowUpdateDeviceDescription: {
-               isShowing: false,
-               customer: null,
-               device: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.customer = data.customer;
-                  self.device = data.device;
-               },
-               dismiss: (context, self, data) => (self.isShowing = false),
-               cancel: (context, self, data) => {
-                  self.isShowing = false;
-                  self.customer = null;
-                  self.device = null;
-               },
-               ok: (context, self, data) => {
-                  self.isShowing = false;
-                  self.customer = null;
-                  self.device = null;
-               },
+            dismiss: (context, self, data) => (self.isShowing = false),
+            cancel: (context, self, data) => {
+               self.isShowing = false;
+               self.param = null;
             },
+            ok: (context, self, data) => {
+               self.isShowing = false;
+               self.param = null;
+            },
+         },
+         windowUpdateDeviceDescription: {
+            isShowing: false,
+            customer: null,
+            device: null,
+            start: (context, self, data) => {
+               self.isShowing = true;
+               self.customer = data.customer;
+               self.device = data.device;
+            },
+            dismiss: (context, self, data) => (self.isShowing = false),
+            cancel: (context, self, data) => {
+               self.isShowing = false;
+               self.customer = null;
+               self.device = null;
+            },
+            ok: (context, self, data) => {
+               self.isShowing = false;
+               self.customer = null;
+               self.device = null;
+            },
+         },
 
-            drawerCustomer: null,
+         drawerCustomer: null,
 
-            items: [],
-         };
-      },
+         items: [],
+      }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isOver1200px: (c) => c.$root.window.innerWidth > 1200,
@@ -203,10 +201,7 @@
          },
          currentCustomer() {
             if (!this.currentCustomer) {
-               setTimeout(
-                  () => (this.drawerCustomer = this.currentCustomer),
-                  1000,
-               );
+               setTimeout(() => (this.drawerCustomer = this.currentCustomer), 1000);
             } else {
                this.drawerCustomer = this.currentCustomer;
             }
@@ -218,9 +213,7 @@
       methods: {
          async invalidate() {
             this.items = [];
-            this.items = await this.customerStore.dispatch(
-               "generateCustomersAcross",
-            );
+            this.items = await this.customerStore.dispatch("generateCustomersAcross");
          },
 
          clickRefresh() {
@@ -250,9 +243,7 @@
       <div
          :class="[
             'PageCustomer-body',
-            `PageCustomer-body-${
-               isOver1200px ? 'isOver1200px' : 'isLess1200px'
-            }`,
+            `PageCustomer-body-${isOver1200px ? 'isOver1200px' : 'isLess1200px'}`,
          ]"
       >
          <PanelCustomers
@@ -266,9 +257,7 @@
          />
 
          <div class="PageCustomer-PanelRightEmpty">
-            <span class="PageCustomer-PanelRightEmpty-text"
-               >Select to view</span
-            >
+            <span class="PageCustomer-PanelRightEmpty-text">Select to view</span>
          </div>
 
          <Drawer
@@ -283,12 +272,10 @@
                @click-item-close="() => clickClose()"
                @click-item-remove="(param) => this.clickItemRemove(param.item)"
                @click-item-customer-update="
-                  (param) =>
-                     windowAction('windowUpdateCustomer', 'start', param)
+                  (param) => windowAction('windowUpdateCustomer', 'start', param)
                "
                @click-item-description-update="
-                  (param) =>
-                     windowAction('windowUpdateDescription', 'start', param)
+                  (param) => windowAction('windowUpdateDescription', 'start', param)
                "
                @click-item-device-add="
                   (param) => windowAction('windowAddDevice', 'start', param)
@@ -298,19 +285,10 @@
                "
                @click-item-device-update-specifications="
                   (param) =>
-                     windowAction(
-                        'windowUpdateDeviceSpecifications',
-                        'start',
-                        param,
-                     )
+                     windowAction('windowUpdateDeviceSpecifications', 'start', param)
                "
                @click-item-device-update-description="
-                  (param) =>
-                     windowAction(
-                        'windowUpdateDeviceDescription',
-                        'start',
-                        param,
-                     )
+                  (param) => windowAction('windowUpdateDeviceDescription', 'start', param)
                "
             />
          </Drawer>
@@ -352,9 +330,7 @@
          class="PageCustomer-window"
          :isShowing="windowUpdateDescription.isShowing"
          :item="windowUpdateDescription.item"
-         @click-dismiss="
-            () => windowAction('windowUpdateDescription', 'dismiss')
-         "
+         @click-dismiss="() => windowAction('windowUpdateDescription', 'dismiss')"
          @click-cancel="() => windowAction('windowUpdateDescription', 'cancel')"
          @click-ok="() => windowAction('windowUpdateDescription', 'ok')"
       />
@@ -387,12 +363,8 @@
          @click-dismiss="
             () => windowAction('windowUpdateDeviceSpecifications', 'dismiss')
          "
-         @click-cancel="
-            () => windowAction('windowUpdateDeviceSpecifications', 'cancel')
-         "
-         @click-ok="
-            () => windowAction('windowUpdateDeviceSpecifications', 'ok')
-         "
+         @click-cancel="() => windowAction('windowUpdateDeviceSpecifications', 'cancel')"
+         @click-ok="() => windowAction('windowUpdateDeviceSpecifications', 'ok')"
       />
 
       <!-- Update Description -->
@@ -401,12 +373,8 @@
          :isShowing="windowUpdateDeviceDescription.isShowing"
          :customer="windowUpdateDeviceDescription.customer"
          :device="windowUpdateDeviceDescription.device"
-         @click-dismiss="
-            () => windowAction('windowUpdateDeviceDescription', 'dismiss')
-         "
-         @click-cancel="
-            () => windowAction('windowUpdateDeviceDescription', 'cancel')
-         "
+         @click-dismiss="() => windowAction('windowUpdateDeviceDescription', 'dismiss')"
+         @click-cancel="() => windowAction('windowUpdateDeviceDescription', 'cancel')"
          @click-ok="() => windowAction('windowUpdateDeviceDescription', 'ok')"
       />
    </div>

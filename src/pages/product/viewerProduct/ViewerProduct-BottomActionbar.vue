@@ -6,23 +6,21 @@
          product: { type: Object, default: () => null },
          isWide: { type: Boolean, default: false },
       },
-      data() {
-         return {
-            whatsappLink: "",
+      data: (c) => ({
+         whatsappLink: "",
 
-            callTypeTitle: "",
-            callTitle: "",
-            callHref: "",
-            callTarget: "",
-            callIcon: "",
+         callTypeTitle: "",
+         callTitle: "",
+         callHref: "",
+         callTarget: "",
+         callIcon: "",
 
-            whatsappTypeTitle: "",
-            whatsappTitle: "",
-            whatsappHref: "",
-            whatsappTarget: "",
-            whatsappIcon: "",
-         };
-      },
+         whatsappTypeTitle: "",
+         whatsappTitle: "",
+         whatsappHref: "",
+         whatsappTarget: "",
+         whatsappIcon: "",
+      }),
       watch: {
          product() {
             this.invalidate();
@@ -83,10 +81,7 @@
                '--primary-background-color': '#dff1ff',
             }"
          >
-            <img
-               class="ViewerProduct-BottomActionbar-item-icon"
-               :src="callIcon"
-            />
+            <img class="ViewerProduct-BottomActionbar-item-icon" :src="callIcon" />
             <div class="ViewerProduct-BottomActionbar-item-body">
                <span class="ViewerProduct-BottomActionbar-item-title">{{
                   callTypeTitle
@@ -106,10 +101,7 @@
                '--primary-background-color': '#f3fff4',
             }"
          >
-            <img
-               class="ViewerProduct-BottomActionbar-item-icon"
-               :src="whatsappIcon"
-            />
+            <img class="ViewerProduct-BottomActionbar-item-icon" :src="whatsappIcon" />
             <div class="ViewerProduct-BottomActionbar-item-body">
                <span class="ViewerProduct-BottomActionbar-item-title">{{
                   whatsappTypeTitle

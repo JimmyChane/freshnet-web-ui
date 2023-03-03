@@ -19,9 +19,7 @@
          isShowing: { type: Boolean, default: false },
          item: { type: Object, default: () => null },
       },
-      data() {
-         return { Requirement: CustomerModule.Requirement, data: {} };
-      },
+      data: (c) => ({ Requirement: CustomerModule.Requirement, data: {} }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,

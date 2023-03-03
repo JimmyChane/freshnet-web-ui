@@ -19,14 +19,12 @@
       props: {
          item: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            top: { showShadow: false },
+      data: (c) => ({
+         top: { showShadow: false },
 
-            devices: [],
-            isLoadingDevices: false,
-         };
-      },
+         devices: [],
+         isLoadingDevices: false,
+      }),
       computed: {
          id() {
             if (this.item) return this.item.id;
@@ -118,9 +116,7 @@
             class="PanelCustomer-actionbar"
             :style="{
                'background-color': actionbarColor,
-               'box-shadow': top.showShadow
-                  ? `0 0 20px ${actionbarShadow}`
-                  : 'none',
+               'box-shadow': top.showShadow ? `0 0 20px ${actionbarShadow}` : 'none',
             }"
             :leftMenus="{
                key: 'close',
@@ -147,8 +143,7 @@
                   id
                      ? {
                           icon: host.icon('edit-505050'),
-                          click: () =>
-                             $emit('click-item-customer-update', { item }),
+                          click: () => $emit('click-item-customer-update', { item }),
                        }
                      : null
                "
@@ -157,15 +152,11 @@
                   <span class="PanelCustomer-customer-content" v-if="name">{{
                      name
                   }}</span>
-                  <span class="PanelCustomer-reuse-contentEmpty" v-else
-                     >Empty</span
-                  >
+                  <span class="PanelCustomer-reuse-contentEmpty" v-else>Empty</span>
 
-                  <span
-                     class="PanelCustomer-customer-content"
-                     v-if="phoneNumber"
-                     >{{ phoneNumber }}</span
-                  >
+                  <span class="PanelCustomer-customer-content" v-if="phoneNumber">{{
+                     phoneNumber
+                  }}</span>
                   <span class="PanelCustomer-customer-empty" v-else>Empty</span>
                </div>
             </Section>
@@ -238,9 +229,7 @@
                         query: { service: service.id },
                      }"
                   >
-                     <span class="PanelCustomer-service-item-title"
-                        >Problem</span
-                     >
+                     <span class="PanelCustomer-service-item-title">Problem</span>
                      <span class="PanelCustomer-service-item-description">{{
                         service.description
                      }}</span>

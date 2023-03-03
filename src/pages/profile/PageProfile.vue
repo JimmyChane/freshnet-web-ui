@@ -23,22 +23,20 @@
          Input,
       },
       emits: ["callback-side-expand"],
-      data() {
-         return {
-            user: null,
-            isLoading: false,
-            scrollTop: 0,
+      data: (c) => ({
+         user: null,
+         isLoading: false,
+         scrollTop: 0,
 
-            window: {
-               changePassword: {
-                  isShowing: false,
-                  passwordVerify: "",
-                  passwordNew: "",
-                  passwordRepeat: "",
-               },
+         window: {
+            changePassword: {
+               isShowing: false,
+               passwordVerify: "",
+               passwordNew: "",
+               passwordRepeat: "",
             },
-         };
-      },
+         },
+      }),
       computed: {
          name: (c) => c.user.name,
          username: (c) => c.user.username,

@@ -6,9 +6,7 @@
    export default {
       components: { Section, Item },
       props: { isThin: { type: Boolean, default: false } },
-      data() {
-         return { items: Company.BusinessDays.toArray() };
-      },
+      data: (c) => ({ items: Company.BusinessDays.toArray() }),
       mounted() {
          this.items.forEach((item) => {
             if (!item.isToday()) return;

@@ -36,9 +36,7 @@
          sortMenus: { type: Array, default: () => [] },
          sortMenuIndex: { type: Number, default: -1 },
       },
-      data() {
-         return { results: [], primaryColorLabel: chroma("black") };
-      },
+      data: (c) => ({ results: [], primaryColorLabel: chroma("black") }),
       computed: {
          isWide: (c) => c.$root.window.innerWidth > 400,
          currentGroupMenu: (c) => c.groupMenus[c.groupMenuIndex],

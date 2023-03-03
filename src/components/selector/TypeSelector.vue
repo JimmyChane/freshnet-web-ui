@@ -2,9 +2,7 @@
    export default {
       emits: ["click-item-key"],
       props: { items: { type: Array }, defaultKey: { type: String } },
-      data() {
-         return { list: [], selectedKey: "" };
-      },
+      data: (c) => ({ list: [], selectedKey: "" }),
       watch: {
          items() {
             this.onInvalidateList();
@@ -19,14 +17,10 @@
       },
       methods: {
          onInvalidateList() {
-            this.list = (Array.isArray(this.items) ? this.items : []).map(
-               (item) => item,
-            );
+            this.list = (Array.isArray(this.items) ? this.items : []).map((item) => item);
          },
          onInvalidateDefaultKey() {
-            this.selectKey(
-               typeof this.defaultKey === "string" ? this.defaultKey : "",
-            );
+            this.selectKey(typeof this.defaultKey === "string" ? this.defaultKey : "");
          },
 
          selectKey(key) {

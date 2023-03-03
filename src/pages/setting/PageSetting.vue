@@ -16,43 +16,41 @@
       userPermissions: ["admin"],
 
       components: { NavigationBar, Empty, GroupSetting },
-      data() {
-         return {
-            scrollTop: 0,
-            groups: [
-               {
-                  title: "Contacts",
-                  actions: [
-                     {
-                        title: "Add",
-                        icon: this.host.icon("add-000000"),
-                        click: () => console.log("click add"),
-                     },
-                  ],
-               },
-               {
-                  title: "Location",
-                  actions: [
-                     {
-                        title: "Edit",
-                        icon: this.host.icon("edit-000000"),
-                        click: () => console.log("click edit"),
-                     },
-                  ],
-               },
-               {
-                  title: "Product Page",
-                  items: [
-                     {
-                        key: SettingModule.Key.PublicShowPrice,
-                        title: "Show Price in View Mode",
-                        type: "boolean",
-                     },
-                  ],
-               },
-            ],
-         };
-      },
+      data: (c) => ({
+         scrollTop: 0,
+         groups: [
+            {
+               title: "Contacts",
+               actions: [
+                  {
+                     title: "Add",
+                     icon: c.host.icon("add-000000"),
+                     click: () => console.log("click add"),
+                  },
+               ],
+            },
+            {
+               title: "Location",
+               actions: [
+                  {
+                     title: "Edit",
+                     icon: c.host.icon("edit-000000"),
+                     click: () => console.log("click edit"),
+                  },
+               ],
+            },
+            {
+               title: "Product Page",
+               items: [
+                  {
+                     key: SettingModule.Key.PublicShowPrice,
+                     title: "Show Price in View Mode",
+                     type: "boolean",
+                  },
+               ],
+            },
+         ],
+      }),
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
          settings: (c) => c.settingStore.getters.items,
@@ -69,10 +67,7 @@
 </script>
 
 <template>
-   <div
-      class="PageSetting"
-      @scroll="(event) => (scrollTop = event.target.scrollTop)"
-   >
+   <div class="PageSetting" @scroll="(event) => (scrollTop = event.target.scrollTop)">
       <NavigationBar
          :title="$options.title"
          :rightMenus="[
@@ -86,17 +81,10 @@
       />
 
       <div class="PageSetting-body" v-if="settings.length">
-         <GroupSetting
-            v-for="group of groups"
-            :key="group.title"
-            :group="group"
-         />
+         <GroupSetting v-for="group of groups" :key="group.title" :group="group" />
       </div>
 
-      <Empty
-         v-if="!settings.length && !isLoading"
-         :icon="$options.icon.dark.toUrl()"
-      />
+      <Empty v-if="!settings.length && !isLoading" :icon="$options.icon.dark.toUrl()" />
    </div>
 </template>
 

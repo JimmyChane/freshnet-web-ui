@@ -55,25 +55,23 @@
          productPrevious: { type: Object, default: () => null },
          productNext: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            colorTransitionDuration: "0",
+      data: (c) => ({
+         colorTransitionDuration: "0",
 
-            primaryColorHex: "inherit",
+         primaryColorHex: "inherit",
 
-            imagePreviewIndex: 0,
-            onKeyUp: null,
+         imagePreviewIndex: 0,
+         onKeyUp: null,
 
-            category: null,
-            fullTitle: "",
-            brand: null,
+         category: null,
+         fullTitle: "",
+         brand: null,
 
-            tabKeyNow: "",
+         tabKeyNow: "",
 
-            height: 0,
-            scrollTop: 0,
-         };
-      },
+         height: 0,
+         scrollTop: 0,
+      }),
       computed: {
          classWide() {
             return this.isWide ? "ViewerProduct-isWide" : "ViewerProduct-isThin";

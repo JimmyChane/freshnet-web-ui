@@ -5,21 +5,19 @@
 
    export default {
       components: { Bottomsheet, Actionbar, ImageView },
-      data() {
-         return {
-            containerWidth: 0,
-            containerHeight: 0,
-            containerMiddleX: 0,
-            containerMiddleY: 0,
+      data: (c) => ({
+         containerWidth: 0,
+         containerHeight: 0,
+         containerMiddleX: 0,
+         containerMiddleY: 0,
 
-            isZoomedIn: false,
-            isHovering: false,
-            minZoomScale: 1,
-            maxZoomScale: 4,
-            translateY: 0,
-            translateX: 0,
-         };
-      },
+         isZoomedIn: false,
+         isHovering: false,
+         minZoomScale: 1,
+         maxZoomScale: 4,
+         translateY: 0,
+         translateX: 0,
+      }),
       computed: {
          isShowing: (c) => c.store.getters.imageViewer.isShowing,
          image: (c) => c.store.getters.imageViewer.image,

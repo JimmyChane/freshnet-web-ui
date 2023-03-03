@@ -61,7 +61,7 @@
          Footer,
       },
       props: { products: { type: Array, default: () => [] } },
-      data: () => ({
+      data: (c) => ({
          labelMenuPrimaryColor: chroma("000000"),
 
          currentProductId: "",

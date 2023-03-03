@@ -8,7 +8,7 @@
    export default {
       components: { Drawer, LeftNavHeader, Search, LeftNavGroup1, LeftNavLogin },
       emits: ["click-logout"],
-      data: () => ({
+      data: (c) => ({
          expandedPagKey: "",
 
          isDragging: false,

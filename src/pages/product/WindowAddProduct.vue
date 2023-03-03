@@ -11,17 +11,15 @@
          isShowing: { type: Boolean, default: false },
          input: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            categoryMenus: [],
-            brandMenus: [],
-            titleError: "",
+      data: (c) => ({
+         categoryMenus: [],
+         brandMenus: [],
+         titleError: "",
 
-            brandMenu: { key: "none", title: "None" },
-            categoryMenu: null,
-            title: "",
-         };
-      },
+         brandMenu: { key: "none", title: "None" },
+         categoryMenu: null,
+         title: "",
+      }),
       watch: {
          isShowing() {
             if (this.isShowing) {
@@ -95,7 +93,7 @@
 
             if (!title) {
                this.titleError = "Title Missing";
-               this.store.dispatch("snackbarShow","Title Missing");
+               this.store.dispatch("snackbarShow", "Title Missing");
                return;
             }
 

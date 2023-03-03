@@ -5,9 +5,7 @@
 
    export default {
       components: { ViewerProduct, LoadingDots },
-      data() {
-         return { product: null };
-      },
+      data: (c) => ({ product: null }),
       computed: {
          isLoading: (context) => context.productStore.getters.isLoading,
          isOver1200px: (context) => context.$root.window.innerWidth > 1200,

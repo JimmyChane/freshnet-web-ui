@@ -8,24 +8,21 @@
          icon: { type: String },
          iconActive: { type: String },
       },
-      data() {
-         return {
-            focused: false,
-            hovered: false,
-            style: {
-               color: "",
-               text: "",
-               textColor: "",
-               icon: "",
-               iconActive: "",
-            },
-         };
-      },
+      data: (c) => ({
+         focused: false,
+         hovered: false,
+         style: {
+            color: "",
+            text: "",
+            textColor: "",
+            icon: "",
+            iconActive: "",
+         },
+      }),
       mounted() {
          this.style.color = this.color;
          this.style.text = this.text;
-         this.style.textColor =
-            this.textColor !== "" ? this.textColor : this.color;
+         this.style.textColor = this.textColor !== "" ? this.textColor : this.color;
          this.style.icon = this.icon;
          this.style.iconActive = this.iconActive;
       },

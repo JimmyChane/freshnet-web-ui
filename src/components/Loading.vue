@@ -1,12 +1,7 @@
 <script>
    export default {
       props: { isShowing: { type: Boolean, default: false } },
-      data() {
-         return {
-            show: false,
-            animate: false,
-         };
-      },
+      data: (c) => ({ show: false, animate: false }),
       watch: {
          isShowing() {
             this.invalidate();

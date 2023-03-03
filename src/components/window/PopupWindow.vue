@@ -5,9 +5,7 @@
       emits: ["click-show", "click-dismiss"],
       components: { DismissableContainer },
       props: { isShowing: { type: Boolean, default: false } },
-      data() {
-         return { isShown: false };
-      },
+      data: (c) => ({ isShown: false }),
       watch: {
          isShowing() {
             this.onCheckShowing();

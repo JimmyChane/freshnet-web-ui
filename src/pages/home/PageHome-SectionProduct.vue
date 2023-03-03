@@ -7,7 +7,7 @@
    export default {
       components: { ImageView },
       props: { isThin: { type: Boolean, default: false } },
-      data: () => ({
+      data: (c) => ({
          groupMenus: [],
 
          maxLength: 8,

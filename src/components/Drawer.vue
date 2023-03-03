@@ -18,22 +18,19 @@
          mode: { type: Number, default: Mode.DRAWER_COLLAPSE },
          edge: { type: Number, default: 0 },
       },
-      data() {
-         return {
-            isDragging: false,
-            dragStart: 0,
-            dragEnd: 0,
-            dragPercent: 0,
-            dragX: 0,
-            dragY: 0,
-         };
-      },
+      data: (c) => ({
+         isDragging: false,
+         dragStart: 0,
+         dragEnd: 0,
+         dragPercent: 0,
+         dragX: 0,
+         dragY: 0,
+      }),
       computed: {
          isLeft: (c) => c.edge === Edge.LEFT,
          isRight: (c) => c.edge === Edge.RIGHT,
 
-         isFixedExpand: (c) =>
-            c.mode === Mode.FIXED_EXPAND || c.mode === Mode.FIXED,
+         isFixedExpand: (c) => c.mode === Mode.FIXED_EXPAND || c.mode === Mode.FIXED,
          isFixedCollapse: (c) => c.mode === Mode.FIXED_COLLAPSE,
          isDrawer: (c) => c.isDrawerExpand || c.isDrawerCollapse,
          isDrawerExpand: (c) => c.mode === Mode.DRAWER_EXPAND,
@@ -55,14 +52,10 @@
             return "";
          },
          classModes() {
-            if (this.isFixedExpand)
-               return ["Drawer-FIXED", "Drawer-FIXED_EXPAND"];
-            if (this.isFixedCollapse)
-               return ["Drawer-FIXED", "Drawer-FIXED_COLLAPSE"];
-            if (this.isDrawerExpand)
-               return ["Drawer-DRAWER", "Drawer-DRAWER_EXPAND"];
-            if (this.isDrawerCollapse)
-               return ["Drawer-DRAWER", "Drawer-DRAWER_COLLAPSE"];
+            if (this.isFixedExpand) return ["Drawer-FIXED", "Drawer-FIXED_EXPAND"];
+            if (this.isFixedCollapse) return ["Drawer-FIXED", "Drawer-FIXED_COLLAPSE"];
+            if (this.isDrawerExpand) return ["Drawer-DRAWER", "Drawer-DRAWER_EXPAND"];
+            if (this.isDrawerCollapse) return ["Drawer-DRAWER", "Drawer-DRAWER_COLLAPSE"];
             return "";
          },
 
@@ -75,10 +68,8 @@
             };
 
             if (!this.isDragging) {
-               style["--body-transition-duration"] =
-                  "var(--transition-duration)";
-               style["--body-transition-timing-function"] =
-                  "cubic-bezier(1, 0, 0, 1)";
+               style["--body-transition-duration"] = "var(--transition-duration)";
+               style["--body-transition-timing-function"] = "cubic-bezier(1, 0, 0, 1)";
             }
 
             if (this.isDragging) {
@@ -98,10 +89,8 @@
          },
          styleBody() {
             if (!this.isDragging && this.isDrawer) return "none";
-            if (this.isLeft)
-               return { "border-right": "1px solid hsl(0, 0%, 80%)" };
-            if (this.isRight)
-               return { "border-left": "1px solid hsl(0, 0%, 80%)" };
+            if (this.isLeft) return { "border-right": "1px solid hsl(0, 0%, 80%)" };
+            if (this.isRight) return { "border-left": "1px solid hsl(0, 0%, 80%)" };
             return "none";
          },
       },

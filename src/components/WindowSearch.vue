@@ -9,9 +9,7 @@
          isShowing: { type: Boolean, default: false },
          placeholder: { type: String, default: "Search" },
       },
-      data() {
-         return { search: "", results: [] };
-      },
+      data: (c) => ({ search: "", results: [] }),
       watch: {
          isShowing() {
             this.isShowing

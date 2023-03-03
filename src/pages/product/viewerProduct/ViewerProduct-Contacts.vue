@@ -6,23 +6,21 @@
          product: { type: Object, default: () => null },
          isWide: { type: Boolean, default: false },
       },
-      data() {
-         return {
-            whatsappLink: "",
+      data: (c) => ({
+         whatsappLink: "",
 
-            callTypeTitle: "",
-            callTitle: "",
-            callHref: "",
-            callTarget: "",
-            callIcon: "",
+         callTypeTitle: "",
+         callTitle: "",
+         callHref: "",
+         callTarget: "",
+         callIcon: "",
 
-            whatsappTypeTitle: "",
-            whatsappTitle: "",
-            whatsappHref: "",
-            whatsappTarget: "",
-            whatsappIcon: "",
-         };
-      },
+         whatsappTypeTitle: "",
+         whatsappTitle: "",
+         whatsappHref: "",
+         whatsappTarget: "",
+         whatsappIcon: "",
+      }),
       watch: {
          product() {
             this.invalidate();

@@ -19,9 +19,7 @@
          isShowing: { type: Boolean, default: false },
          items: { type: Array, default: () => [] },
       },
-      data() {
-         return { search: "", results: [] };
-      },
+      data: (c) => ({ search: "", results: [] }),
       watch: {
          search() {
             this.invalidate();

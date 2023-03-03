@@ -10,19 +10,17 @@
          height: { type: Number, default: 0 },
          product: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            previousHeight: 0,
-            initialPadding: 60,
-            initialGap: 30,
-            initialSpecificationGap: 14,
+      data: (c) => ({
+         previousHeight: 0,
+         initialPadding: 60,
+         initialGap: 30,
+         initialSpecificationGap: 14,
 
-            fullTitle: "",
-            padding: 0,
-            gap: 0,
-            specificationGap: 0,
-         };
-      },
+         fullTitle: "",
+         padding: 0,
+         gap: 0,
+         specificationGap: 0,
+      }),
       computed: {
          user: (c) => c.loginStore.getters.user,
          allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
@@ -50,9 +48,7 @@
                   index1 = index1 >= 0 ? index1 : c.specificationKeys.length;
                   index2 = index2 >= 0 ? index2 : c.specificationKeys.length;
 
-                  return index1 !== index2
-                     ? index1 - index2
-                     : key1.localeCompare(key2);
+                  return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
                });
          },
 
@@ -147,10 +143,7 @@
       >
          <span class="ExportLayoutOne-title">{{ fullTitle }}</span>
 
-         <div
-            class="ExportLayoutOne-items"
-            :style="{ 'gap': `${specificationGap}px` }"
-         >
+         <div class="ExportLayoutOne-items" :style="{ 'gap': `${specificationGap}px` }">
             <Item
                v-for="specification in specifications"
                :key="specification.name"

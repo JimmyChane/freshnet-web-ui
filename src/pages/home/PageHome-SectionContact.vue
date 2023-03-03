@@ -6,28 +6,26 @@
    export default {
       components: { Section, Group },
       props: { isThin: { type: Boolean, default: false } },
-      data() {
-         return {
-            items: [
-               {
-                  title: "Beh Aik Keong",
-                  callNumber: "0167959444",
-                  whatsappNumber: "0167959444",
-               },
-               {
-                  title: "Office (Mobile)",
-                  callNumber: "0146315353",
-                  whatsappNumber: "0146315353",
-                  telegramName: "FreshnetEnterprise",
-               },
-               {
-                  title: "Office",
-                  phoneNumber: "0332897297",
-                  telephoneNumber: "0332897297",
-               },
-            ],
-         };
-      },
+      data: (c) => ({
+         items: [
+            {
+               title: "Beh Aik Keong",
+               callNumber: "0167959444",
+               whatsappNumber: "0167959444",
+            },
+            {
+               title: "Office (Mobile)",
+               callNumber: "0146315353",
+               whatsappNumber: "0146315353",
+               telegramName: "FreshnetEnterprise",
+            },
+            {
+               title: "Office",
+               phoneNumber: "0332897297",
+               telephoneNumber: "0332897297",
+            },
+         ],
+      }),
       computed: { groups: () => Company.Contacts.toGroupsByCategory() },
    };
 </script>

@@ -4,7 +4,7 @@
    export default {
       components: { Item },
       props: { isThin: { type: Boolean, default: false } },
-      data: () => ({ groups: [] }),
+      data: (c) => ({ groups: [] }),
       watch: {
          "categoryStore.getters.lastModified"() {
             this.invalidate();

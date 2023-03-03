@@ -6,9 +6,7 @@
       emtis: ["callback-click"],
       components: { ImageViews, ItemSearch },
       props: { item: { type: Object, default: null } },
-      data() {
-         return { categoryTitle: "", title: "" };
-      },
+      data: (c) => ({ categoryTitle: "", title: "" }),
       computed: { images: (c) => c.item.images },
       watch: {
          item() {

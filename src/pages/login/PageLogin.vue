@@ -9,13 +9,11 @@
       title: "Staff Login",
 
       components: { Loading, Input, Button2, Actionbar, Footer },
-      data() {
-         return {
-            top: { shadow: false },
-            usernameErrorText: "",
-            passwordErrorText: "",
-         };
-      },
+      data: (c) => ({
+         top: { shadow: false },
+         usernameErrorText: "",
+         passwordErrorText: "",
+      }),
       computed: {
          isLoading: (c) => c.loginStore.getters.isLoading,
       },

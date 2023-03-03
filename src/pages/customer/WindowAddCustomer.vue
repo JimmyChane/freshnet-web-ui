@@ -8,9 +8,7 @@
       components: { PopupWindowAction, Input, TextArea },
       emits: ["click-dismiss", "click-cancel", "click-ok"],
       props: { isShowing: { type: Boolean, default: false } },
-      data() {
-         return { Requirement: CustomerModule.Requirement, data: {} };
-      },
+      data: (c) => ({ Requirement: CustomerModule.Requirement, data: {} }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
