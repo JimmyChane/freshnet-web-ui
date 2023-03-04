@@ -1,11 +1,14 @@
 <script>
-   import Window from "@/components/window/Window.vue";
+   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
    import TextArea from "@/components/InputTextArea.vue";
 
    export default {
-      components: { Window, TextArea },
+      components: { PopupWindowAction, TextArea },
       emits: ["callback-cancel", "callback-change"],
-      props: { description: { type: String, default: "" } },
+      props: {
+         isShowing: { type: Boolean, default: false },
+         description: { type: String, default: "" },
+      },
       data: (c) => ({ value: "" }),
       watch: {
          description() {
@@ -30,11 +33,14 @@
 </script>
 
 <template>
-   <Window
-      class="WindowDescription"
+   <PopupWindowAction
       title="Edit Description"
-      @click-cancel="$emit('callback-cancel')"
+      :isShowing="isShowing"
+      :isLoading="serviceStore.getters.isFetching"
+      :isClickable="!serviceStore.getters.isFetching"
       @click-ok="onChange"
+      @click-cancel="$emit('callback-cancel')"
+      @click-dismiss="() => $emit('callback-dismiss')"
    >
       <div class="WindowDescription-main">
          <TextArea
@@ -47,22 +53,20 @@
             @input="(comp) => (value = comp.value)"
          />
       </div>
-   </Window>
+   </PopupWindowAction>
 </template>
 
 <style lang="scss" scoped>
-   .WindowDescription {
+   .WindowDescription-main {
       width: 35rem;
       max-width: 100%;
-      .WindowDescription-main {
-         display: flex;
-         flex-direction: column;
-         gap: 10px;
-         .WindowDescription-input {
-            height: 7rem;
-            background: hsla(0, 0%, 0%, 0.03);
-            padding: 0.6rem 0.4rem;
-         }
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      .WindowDescription-input {
+         height: 7rem;
+         background: hsla(0, 0%, 0%, 0.03);
+         padding: 0.6rem 0.4rem;
       }
    }
 </style>

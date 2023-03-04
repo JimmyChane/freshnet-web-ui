@@ -1,5 +1,5 @@
 <script>
-   import Window from "@/components/window/Window.vue";
+   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
    import LayoutFindCustomer from "./LayoutFindCustomer.vue";
    import BodyUser from "./WindowUpdateService-user.vue";
    import BodyCustomer from "./WindowUpdateService-customer.vue";
@@ -9,7 +9,7 @@
 
    export default {
       components: {
-         Window,
+         PopupWindowAction,
          LayoutFindCustomer,
          BodyUser,
          BodyCustomer,
@@ -17,7 +17,7 @@
          BodyBelongings,
          BodyLine,
       },
-      emits: ["callback-create", "callback-cancel"],
+      props: { isShowing: { type: Boolean, default: false } },
       data: (c) => ({
          nameOfUser: "unknown",
          data: {
@@ -97,11 +97,12 @@
 </script>
 
 <template>
-   <Window
-      class="WindowService"
+   <PopupWindowAction
       title="Add Service"
+      :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
       :isClickable="!serviceStore.getters.isFetching"
+      @click-ok="onCreate()"
       @click-cancel="
          () => {
             $emit('callback-cancel');
@@ -109,7 +110,7 @@
             onReset();
          }
       "
-      @click-ok="onCreate()"
+      @click-dismiss="() => $emit('callback-dismiss')"
    >
       <div class="WindowService-body">
          <BodyUser :name="nameOfUser" @input-name="(value) => (nameOfUser = value)" />
@@ -137,25 +138,22 @@
 
          <BodyBelongings :belongings="data.belongings" ref="BelongingListEdit" />
       </div>
-   </Window>
+   </PopupWindowAction>
 </template>
 
 <style lang="scss" scoped>
-   .WindowService {
-      max-width: 100%;
+   .WindowService-body {
       width: 35rem;
+      max-width: 100%;
 
-      .WindowService-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
+
+      .WindowService-findCustomers {
          width: 100%;
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         gap: 2.5rem;
-
-         .WindowService-findCustomers {
-            width: 100%;
-            max-height: 20rem;
-         }
+         max-height: 20rem;
       }
    }
 </style>

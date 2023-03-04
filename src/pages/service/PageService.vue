@@ -1,6 +1,5 @@
 <script>
    import Loading from "@/components/Loading.vue";
-   import PopupWindow from "@/components/window/PopupWindow.vue";
    import WindowRemove from "@/components/window/WindowRemove.vue";
    import PanelServices from "./PanelServices.vue";
    import PanelService from "./PanelService.vue";
@@ -26,7 +25,6 @@
       components: {
          PanelServices,
          Loading,
-         PopupWindow,
          PanelService,
          WindowSearch,
          WindowImportService,
@@ -467,134 +465,92 @@
          @click-item="(item) => clickService(item)"
       />
 
-      <!-- Import Service Window -->
-      <PopupWindow
+      <WindowImportService
          class="PageService-window"
          :isShowing="popup.importService.isShowing"
+         @click-cancel="() => windowAction('importService', 'dismiss')"
+         @click-ok="(service) => windowAction('importService', 'ok', service)"
          @click-dismiss="() => windowAction('importService', 'dismiss')"
-      >
-         <WindowImportService
-            class="PageService-window-child"
-            @click-cancel="() => windowAction('importService', 'dismiss')"
-            @click-ok="(service) => windowAction('importService', 'ok', service)"
-         />
-      </PopupWindow>
+      />
 
-      <!-- Add Service Window -->
-      <PopupWindow
+      <WindowAddService
          class="PageService-window"
+         ref="WindowAddService"
          :isShowing="popup.newService.isShowing"
-         @click-dismiss="() => windowAction('newService', 'dismiss')"
-      >
-         <WindowAddService
-            class="PageService-window-child"
-            ref="WindowAddService"
-            @callback-create="(data) => windowAction('newService', 'ok', data)"
-            @callback-cancel="() => windowAction('newService', 'dismiss')"
-         />
-      </PopupWindow>
+         @callback-create="(data) => windowAction('newService', 'ok', data)"
+         @callback-cancel="() => windowAction('newService', 'dismiss')"
+         @callback-dismiss="() => windowAction('newService', 'dismiss')"
+      />
 
-      <!-- Update Service Customer Window -->
-      <PopupWindow
+      <WindowUpdateCustomer
          class="PageService-window"
+         ref="WindowUpdateCustomer"
          v-if="drawerService"
          :isShowing="popup.customer.isShowing"
-         @click-dismiss="() => windowAction('customer', 'dismiss')"
-      >
-         <WindowUpdateCustomer
-            class="PageService-window-child"
-            ref="WindowUpdateCustomer"
-            :value="popup.customer.value"
-            @callback-change="(customer) => windowAction('customer', 'ok', customer)"
-            @callback-cancel="() => windowAction('customer', 'dismiss')"
-         />
-      </PopupWindow>
+         :value="popup.customer.value"
+         @callback-change="(customer) => windowAction('customer', 'ok', customer)"
+         @callback-cancel="() => windowAction('customer', 'dismiss')"
+         @callback-dismiss="() => windowAction('customer', 'dismiss')"
+      />
 
-      <!-- Update Service Description Window -->
-      <PopupWindow
+      <WindowUpdateDescription
          class="PageService-window"
+         ref="WindowUpdateDescription"
          v-if="drawerService"
          :isShowing="popup.editDescription.isShowing"
-         @click-dismiss="() => windowAction('editDescription', 'dismiss')"
-      >
-         <WindowUpdateDescription
-            class="PageService-window-child"
-            ref="WindowUpdateDescription"
-            :description="popup.editDescription.value"
-            @callback-change="
-               (description) => windowAction('editDescription', 'ok', description)
-            "
-            @callback-cancel="() => windowAction('editDescription', 'dismiss')"
-         />
-      </PopupWindow>
+         :description="popup.editDescription.value"
+         @callback-change="
+            (description) => windowAction('editDescription', 'ok', description)
+         "
+         @callback-cancel="() => windowAction('editDescription', 'dismiss')"
+         @callback-dismiss="() => windowAction('editDescription', 'dismiss')"
+      />
 
-      <!-- Update Service Belonging Window -->
-      <PopupWindow
+      <WindowUpdateBelonging
          class="PageService-window"
+         ref="WindowUpdateBelonging"
          v-if="drawerService"
          :isShowing="popup.belongings.isShowing"
-         @click-dismiss="() => windowAction('belongings', 'dismiss')"
-      >
-         <WindowUpdateBelonging
-            class="PageService-window-child"
-            ref="WindowUpdateBelonging"
-            :values="popup.belongings.values"
-            @callback-change="
-               (belongings) => windowAction('belongings', 'ok', belongings)
-            "
-            @callback-cancel="() => windowAction('belongings', 'dismiss')"
-         />
-      </PopupWindow>
+         :values="popup.belongings.values"
+         @callback-change="(belongings) => windowAction('belongings', 'ok', belongings)"
+         @callback-cancel="() => windowAction('belongings', 'dismiss')"
+         @callback-dismiss="() => windowAction('belongings', 'dismiss')"
+      />
 
-      <!-- Remove Service Window -->
-      <PopupWindow
+      <WindowRemove
          class="PageService-window"
          :isShowing="popup.removeService.isShowing"
+         title="Delete Service"
+         message="After deleting this service, it cannot be reverted."
+         :value="popup.removeService.value"
+         @click-cancel="() => windowAction('removeService', 'dismiss')"
+         @click-ok="(service) => windowAction('removeService', 'ok', service)"
          @click-dismiss="() => windowAction('removeService', 'dismiss')"
-      >
-         <WindowRemove
-            class="PageService-window-child"
-            title="Delete Service"
-            message="After deleting this service, it cannot be reverted."
-            :value="popup.removeService.value"
-            @click-cancel="() => windowAction('removeService', 'dismiss')"
-            @click-ok="(service) => windowAction('removeService', 'ok', service)"
-         />
-      </PopupWindow>
+      />
 
-      <!-- Remove Event Window -->
-      <PopupWindow
-         class="PageService-window"
+      <WindowRemove
+         class="PageService-window-child"
          v-if="drawerService"
          :isShowing="popup.removeEvent.isShowing"
+         title="Delete Event"
+         message="After deleting this event, it cannot be reverted."
+         :value="popup.removeEvent.value"
+         @click-cancel="() => windowAction('removeEvent', 'dismiss')"
+         @click-ok="(value) => windowAction('removeEvent', 'ok', value)"
          @click-dismiss="() => windowAction('removeEvent', 'dismiss')"
-      >
-         <WindowRemove
-            class="PageService-window-child"
-            title="Delete Event"
-            message="After deleting this event, it cannot be reverted."
-            :value="popup.removeEvent.value"
-            @click-cancel="() => windowAction('removeEvent', 'dismiss')"
-            @click-ok="(value) => windowAction('removeEvent', 'ok', value)"
-         />
-      </PopupWindow>
+      />
 
-      <!-- Remove Image Window -->
-      <PopupWindow
-         class="PageService-window"
+      <WindowRemove
+         class="PageService-window-child"
          v-if="drawerService"
          :isShowing="popup.removeImage.isShowing"
+         title="Delete Image"
+         message="After deleting this image, it cannot be reverted."
+         :value="popup.removeImage.value"
+         @click-cancel="() => windowAction('removeImage', 'dismiss')"
+         @click-ok="(image) => windowAction('removeImage', 'ok', image)"
          @click-dismiss="() => windowAction('removeImage', 'dismiss')"
-      >
-         <WindowRemove
-            class="PageService-window-child"
-            title="Delete Image"
-            message="After deleting this image, it cannot be reverted."
-            :value="popup.removeImage.value"
-            @click-cancel="() => windowAction('removeImage', 'dismiss')"
-            @click-ok="(image) => windowAction('removeImage', 'ok', image)"
-         />
-      </PopupWindow>
+      />
 
       <Loading class="PageService-loading" :isShowing="serviceStore.getters.isLoading" />
    </div>

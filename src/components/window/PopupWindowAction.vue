@@ -1,10 +1,10 @@
 <script>
    import PopupWindow from "./PopupWindow.vue";
-   import Window from "./Window.vue";
+   import WindowAction from "./WindowAction.vue";
 
    export default {
       emits: ["click-dismiss", "click-cancel", "click-ok"],
-      components: { PopupWindow, Window },
+      components: { PopupWindow, WindowAction },
       props: {
          title: { type: String, default: "" },
          isShowing: { type: Boolean, default: false },
@@ -20,26 +20,27 @@
       :isShowing="isShowing"
       @click-dismiss="$emit('click-dismiss')"
    >
-      <Window
-         class="PopupWindowAction-Window"
+      <WindowAction
+         class="PopupWindowAction-WindowAction"
          :title="title"
          :isShowing="isShowing"
          :isLoading="isLoading"
          :isClickable="isClickable"
          @click-cancel="$emit('click-cancel')"
          @click-ok="$emit('click-ok')"
+         @click-dismiss="$emit('click-dismiss')"
       >
          <div class="PopupWindowAction-main">
             <slot />
          </div>
-      </Window>
+      </WindowAction>
    </PopupWindow>
 </template>
 
 <style lang="scss" scoped>
    .PopupWindowAction {
       z-index: 3;
-      .PopupWindowAction-Window {
+      .PopupWindowAction-WindowAction {
          width: inherit;
          max-width: 100%;
 

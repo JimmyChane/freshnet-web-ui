@@ -1,9 +1,10 @@
 <script>
    import Loading from "@/components/Loading";
+   import Actionbar from "@/components/actionbar/Actionbar.vue";
    import WindowBottom from "./WindowBottom.vue";
 
    export default {
-      components: { Loading, WindowBottom },
+      components: { Loading, Actionbar, WindowBottom },
       emits: ["click-cancel", "click-ok"],
       props: {
          title: { type: String, default: "" },
@@ -14,8 +15,8 @@
       data: (c) => ({ scrollTop: 0 }),
       watch: {
          isShowing() {
-            const { Window } = this.$refs;
-            if (Window) Window.scrollTop = 0;
+            const { WindowAction } = this.$refs;
+            if (WindowAction && this.isShowing) WindowAction.scrollTop = 0;
          },
       },
    };
@@ -23,33 +24,39 @@
 
 <template>
    <div
-      :class="['Window', isClickable ? '' : 'Window-notClickable']"
-      ref="Window"
+      :class="['WindowAction', isClickable ? '' : 'WindowAction-notClickable']"
+      ref="WindowAction"
       @scroll="(event) => (scrollTop = event.target.scrollTop)"
    >
-      <div
-         class="Window-header transition"
-         :class="[scrollTop > 0 ? 'Window-header-isScrolledUp' : '']"
-      >
-         <span class="Window-header-title">{{ title }}</span>
-      </div>
+      <Actionbar
+         :class="[
+            'transition',
+            'WindowAction-header',
+            scrollTop > 0 ? 'WindowAction-header-isScrolledUp' : '',
+         ]"
+         :title="title"
+         :leftMenus="{
+            icon: host.icon('close-000000'),
+            click: () => $emit('click-dismiss'),
+         }"
+      />
 
-      <div class="Window-main"><slot /></div>
+      <div class="WindowAction-main"><slot /></div>
 
       <WindowBottom
-         class="Window-bottom"
+         class="WindowAction-bottom"
          @click-cancel="$emit('click-cancel')"
          @click-ok="$emit('click-ok')"
       />
 
-      <div class="Window-foreground transition"></div>
+      <div :class="['transition', 'WindowAction-foreground']"></div>
 
-      <Loading class="Window-loading" :isShowing="isLoading" />
+      <Loading class="WindowAction-loading" :isShowing="isLoading" />
    </div>
 </template>
 
 <style lang="scss" scoped>
-   .Window {
+   .WindowAction {
       width: 100%;
       height: 100%;
 
@@ -64,37 +71,22 @@
 
       scroll-padding-bottom: 4rem;
 
-      .Window-header {
+      .WindowAction-header {
          z-index: 3;
-         padding: 1.2rem 1.8rem;
-         position: sticky;
-         top: 0;
-         left: 0;
-         right: 0;
 
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         justify-content: center;
-         text-align: start;
+         // display: flex;
+         // flex-direction: column;
+         // align-items: center;
+         // justify-content: center;
+         text-align: center;
          border-bottom: 1px solid transparent;
          background-color: hsl(0, 0%, 96%);
-
-         @media screen and (max-height: 30rem) {
-            padding: 1rem 1.8rem;
-         }
-
-         .Window-header-title {
-            font-weight: 600;
-            font-size: 1.5rem;
-            color: black;
-         }
       }
-      .Window-header-isScrolledUp {
+      .WindowAction-header-isScrolledUp {
          border-bottom: 1px solid hsl(0, 0%, 90%);
       }
 
-      .Window-main {
+      .WindowAction-main {
          z-index: 1;
          width: 100%;
          height: fit-content;
@@ -104,11 +96,11 @@
          flex-direction: column;
       }
 
-      .Window-bottom {
+      .WindowAction-bottom {
          z-index: 2;
       }
 
-      .Window-foreground {
+      .WindowAction-foreground {
          z-index: 4;
          width: 100%;
          height: 100%;
@@ -118,7 +110,7 @@
          pointer-events: none;
       }
 
-      .Window-loading {
+      .WindowAction-loading {
          z-index: 5;
          position: absolute;
          width: 100%;
@@ -126,9 +118,9 @@
       }
    }
 
-   .Window-notClickable {
+   .WindowAction-notClickable {
       pointer-events: none;
-      .Window-foreground {
+      .WindowAction-foreground {
          opacity: 0.5;
       }
    }

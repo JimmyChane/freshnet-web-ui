@@ -1,5 +1,5 @@
 <script>
-   import Window from "@/components/window/Window.vue";
+   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
    import TypeSelector from "@/components/selector/TypeSelector.vue";
    import ServiceStates from "@/objects/ServiceStates.js";
    import ModuleService from "@/items/data/Service.js";
@@ -12,7 +12,7 @@
 
    export default {
       components: {
-         Window,
+         PopupWindowAction,
          TypeSelector,
          ModuleService,
          LayoutFindCustomer,
@@ -22,7 +22,7 @@
          BodyBelongings,
          BodyLine,
       },
-      emits: ["click-cancel", "click-ok"],
+      props: { isShowing: { type: Boolean, default: false } },
       data: (c) => ({
          ModuleService,
          ServiceStates,
@@ -115,13 +115,14 @@
 </script>
 
 <template>
-   <Window
-      class="WindowService"
+   <PopupWindowAction
       title="Import Service"
+      :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
       :isClickable="!serviceStore.getters.isFetching"
-      @click-cancel="onCancel()"
       @click-ok="onOk()"
+      @click-cancel="onCancel()"
+      @click-dismiss="() => $emit('click-dismiss')"
    >
       <div class="WindowService-body">
          <BodyUser
@@ -174,66 +175,60 @@
 
          <BodyBelongings :belongings="data.belongings" ref="BelongingListEdit" />
       </div>
-   </Window>
+   </PopupWindowAction>
 </template>
 
 <style lang="scss" scoped>
-   .WindowService {
+   .WindowService-body {
       max-width: 100%;
       width: 35rem;
       display: flex;
       flex-direction: column;
+      gap: 40px;
 
-      .WindowService-body {
+      // Abstract
+      .WindowService-title {
+         font-size: 1.1rem;
+         font-weight: 600;
+      }
+
+      .WindowService-datetime {
          width: 100%;
          display: flex;
          flex-direction: column;
-         gap: 40px;
+         align-items: flex-start;
 
-         // Abstract
-         .WindowService-title {
-            font-size: 1.1rem;
-            font-weight: 600;
+         .WindowService-datetime-title {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: hsl(0, 0%, 50%);
          }
-
-         .WindowService-datetime {
-            width: 100%;
+         .WindowService-datetime-body {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            .WindowService-datetime-input {
+               border: 1px solid hsla(0, 0%, 0%, 0.1);
+            }
+         }
+      }
+      .WindowService-state {
+         width: 100%;
+         display: flex;
+         flex-direction: column;
+         align-items: flex-start;
 
-            .WindowService-datetime-title {
-               font-size: 0.9rem;
-               font-weight: 400;
-               color: hsl(0, 0%, 50%);
-            }
-            .WindowService-datetime-body {
-               display: flex;
-               flex-direction: column;
-               .WindowService-datetime-input {
-                  border: 1px solid hsla(0, 0%, 0%, 0.1);
-               }
-            }
+         .WindowService-state-title {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: hsl(0, 0%, 50%);
          }
-         .WindowService-state {
+         .WindowEvent-type {
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-
-            .WindowService-state-title {
-               font-size: 0.9rem;
-               font-weight: 400;
-               color: hsl(0, 0%, 50%);
-            }
-            .WindowEvent-type {
-               width: 100%;
-            }
          }
-         .WindowService-findCustomers {
-            width: 100%;
-            max-height: 20rem;
-         }
+      }
+      .WindowService-findCustomers {
+         width: 100%;
+         max-height: 20rem;
       }
    }
 </style>
