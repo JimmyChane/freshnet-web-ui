@@ -3,45 +3,27 @@
 
    export default {
       components: { ToggleButton },
-      props: { item: { type: Object, default: () => null } },
+      props: {
+         item: { type: Object, default: () => null },
+         title: { type: String, default: "" },
+      },
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
-
-         key: (context) => context.item.key,
-         title: (context) => context.item.title,
-
-         setting() {
-            return this.settingStore.getters.items.find((setting) => {
-               return setting.key === this.key;
-            });
-         },
-
-         value() {
-            if (!this.setting) return undefined;
-            return this.setting.value;
-         },
-      },
-      methods: {
-         update(value) {
-            if (this.key === undefined) return;
-            this.settingStore.dispatch("updateItem", { key: this.key, value });
-         },
+         setting: (c) => c.item.findValue(),
+         value: (c) => (c.setting ? c.setting.value : undefined),
       },
    };
 </script>
 
 <template>
-   <div
-      class="ItemSetting_Toggle transition"
-      @click="$refs.toggleButton.$el.click()"
-   >
+   <div class="ItemSetting_Toggle transition" @click="$refs.toggleButton.$el.click()">
       <span class="ItemSetting_Toggle-title" v-if="title">{{ title }}</span>
       <ToggleButton
          class="ItemSetting_Toggle-value"
          ref="toggleButton"
          :isLoading="isLoading"
          :isToggled="value"
-         @click-toggle="(toggle) => update(toggle)"
+         @click-toggle="(toggle) => item.updateValue(toggle)"
       />
    </div>
 </template>

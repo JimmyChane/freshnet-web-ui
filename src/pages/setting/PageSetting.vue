@@ -1,10 +1,105 @@
 <script>
    import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import Empty from "@/components/Empty.vue";
-   import GroupSetting from "./GroupSetting.vue";
+   import ItemSetting from "./ItemSetting.vue";
    import SettingModule from "@/items/data/Setting.js";
 
    import HostIcon from "@/host/HostIcon";
+   import U from "@/U";
+   import Vue from "vue";
+
+   class SettingBuilder {
+      static key(key) {
+         return new SettingBuilder().key(key);
+      }
+      static title(title) {
+         return new SettingBuilder().title(title);
+      }
+      static type(type) {
+         return new SettingBuilder().title(type);
+      }
+      static list(...list) {
+         return new SettingBuilder().list(list);
+      }
+
+      key(key = "") {
+         this.key = key;
+         return this;
+      }
+      title(title = "") {
+         this.title = title;
+         return this;
+      }
+      type(type = "") {
+         this.type = type;
+         return this;
+      }
+      list(...list) {
+         this.list = list;
+         return this;
+      }
+      build() {
+         const setting = new Setting();
+         setting.key = this.key;
+         setting.title = this.title;
+         setting.type = this.type;
+
+         if (U.isArray(this.list)) {
+            setting.list = this.list.map((subSetting) => {
+               if (subSetting instanceof SettingBuilder) {
+                  subSetting = subSetting.build();
+               }
+
+               subSetting.parent = setting;
+               return subSetting;
+            });
+         }
+
+         return setting;
+      }
+   }
+
+   class Setting {
+      getKey() {
+         return U.optString(this.key);
+      }
+      getTitle() {
+         return U.optString(this.title);
+      }
+      getParentTitle() {
+         return this.parent ? this.parent.getTitle() : "";
+      }
+
+      getType() {
+         return U.optString(this.type);
+      }
+      getList() {
+         return U.optArray(this.list);
+      }
+
+      findValue() {
+         const settings = [
+            {
+               key: "location",
+               visibility: "protected",
+               value: "No. 14, Ground Floor, Jalan Melati 3/3, Bandar Melawati, 45000, Kuala Selangor, Selangor Darul Ehsan",
+            },
+            ...Vue.prototype.settingStore.getters.items,
+         ];
+
+         return settings.find((setting) => setting.key === this.key);
+
+         return Vue.prototype.settingStore.getters.items.find((setting) => {
+            return setting.key === this.key;
+         });
+      }
+      updateValue(value) {
+         if (!this.getKey().length) return;
+
+         const data = { key: this.getKey(), value };
+         Vue.prototype.settingStore.dispatch("updateItem", data);
+      }
+   }
 
    export default {
       key: "setting",
@@ -15,45 +110,33 @@
       },
       userPermissions: ["admin"],
 
-      components: { NavigationBar, Empty, GroupSetting },
+      components: { NavigationBar, Empty, ItemSetting },
       data: (c) => ({
+         SettingModule,
+         SettingBuilder,
          scrollTop: 0,
-         groups: [
-            {
-               title: "Contacts",
-               actions: [
-                  {
-                     title: "Add",
-                     icon: c.host.icon("add-000000"),
-                     click: () => console.log("click add"),
-                  },
-               ],
-            },
-            {
-               title: "Location",
-               actions: [
-                  {
-                     title: "Edit",
-                     icon: c.host.icon("edit-000000"),
-                     click: () => console.log("click edit"),
-                  },
-               ],
-            },
-            {
-               title: "Product Page",
-               items: [
-                  {
-                     key: SettingModule.Key.PublicShowPrice,
-                     title: "Show Price in View Mode",
-                     type: "boolean",
-                  },
-               ],
-            },
-         ],
+
+         list: [
+            SettingBuilder.title("Contacts").list(
+               SettingBuilder.key(SettingModule.Key.Contacts)
+                  .title("Contacts")
+                  .type("array-text"),
+            ),
+            SettingBuilder.title("Location").list(
+               SettingBuilder.key(SettingModule.Key.Contacts)
+                  .title("Address")
+                  .type("text"),
+            ),
+            SettingBuilder.title("Product Page").list(
+               SettingBuilder.key(SettingModule.Key.PublicShowPrice)
+                  .title("Show Price in View Mode")
+                  .type("boolean"),
+            ),
+         ].map((item) => item.build()),
       }),
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
-         settings: (c) => c.settingStore.getters.items,
+         isEmpty: (c) => !c.settingStore.getters.items.length,
       },
       methods: {
          refresh() {
@@ -74,17 +157,17 @@
             {
                key: 'refresh',
                title: 'Refresh',
-               icon: host.icon('refresh-2A4858'),
+               icon: host.icon('refresh-000000'),
                click: () => refresh(),
             },
          ]"
       />
 
-      <div class="PageSetting-body" v-if="settings.length">
-         <GroupSetting v-for="group of groups" :key="group.title" :group="group" />
+      <div class="PageSetting-body">
+         <ItemSetting v-for="item of list" :key="item.getTitle()" :item="item" />
       </div>
 
-      <Empty v-if="!settings.length && !isLoading" :icon="$options.icon.dark.toUrl()" />
+      <Empty v-if="isEmpty && !isLoading" :icon="$options.icon.dark.toUrl()" />
    </div>
 </template>
 
@@ -105,6 +188,7 @@
          padding: 1.8rem;
          padding-bottom: 8rem;
          gap: 2rem;
+         gap: 0.5rem;
 
          display: flex;
          flex-direction: column;

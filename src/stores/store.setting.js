@@ -21,22 +21,14 @@ const init = (Stores) => {
    context.action("updateItem", async (context, arg = { key: "", value }) => {
       const { key, value } = arg;
       const setting = new SettingModule({ key, value });
-      const api = SettingRequest.update(setting);
+      const api = await SettingRequest.update(setting);
       const content = api.getObjectContent();
 
-      let { items } = context.state;
-      let item = items.find((item) => item.key === content.key);
-
-      if (item) {
+      context.state.list.updateItemById(content.key, (item) => {
          item.value = content.value;
-      } else {
-         item = content;
-         items.push(item);
-      }
+      });
 
-      context.commit("items", items);
-      context.commit("lastModified", Date.now());
-      return context.getters.items;
+      return context.state.list.items;
    });
 
    return new Vuex.Store(context.build());

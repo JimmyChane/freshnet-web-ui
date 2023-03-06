@@ -3,9 +3,8 @@ const Text = require("./Text.js");
 class Setting {
    static Key = {
       PublicShowPrice: "public-showPrice",
-
-      // Location: "store-location",
-      // Contacts: "store-contacts",
+      Location: "store-location",
+      Contacts: "store-contacts",
    };
    static Visibility = { Protected: "protected", Private: "private" };
 
