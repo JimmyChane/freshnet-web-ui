@@ -78,26 +78,15 @@
       }
 
       findValue() {
-         const settings = [
-            {
-               key: "location",
-               visibility: "protected",
-               value: "No. 14, Ground Floor, Jalan Melati 3/3, Bandar Melawati, 45000, Kuala Selangor, Selangor Darul Ehsan",
-            },
-            ...Vue.prototype.settingStore.getters.items,
-         ];
-
-         return settings.find((setting) => setting.key === this.key);
-
          return Vue.prototype.settingStore.getters.items.find((setting) => {
             return setting.key === this.key;
          });
       }
-      updateValue(value) {
+      async updateValue(value) {
          if (!this.getKey().length) return;
 
          const data = { key: this.getKey(), value };
-         Vue.prototype.settingStore.dispatch("updateItem", data);
+         await Vue.prototype.settingStore.dispatch("updateItem", data);
       }
    }
 
@@ -123,7 +112,7 @@
                   .type("array-text"),
             ),
             SettingBuilder.title("Location").list(
-               SettingBuilder.key(SettingModule.Key.Contacts)
+               SettingBuilder.key(SettingModule.Key.Location)
                   .title("Address")
                   .type("text"),
             ),

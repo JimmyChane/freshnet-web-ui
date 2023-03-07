@@ -1,24 +1,68 @@
 <script>
+   import ItemSettingHeader from "./ItemSetting-Header.vue";
    import ToggleButton from "@/components/button/ToggleButton.vue";
 
    export default {
-      components: { ToggleButton },
+      components: { ItemSettingHeader, ToggleButton },
+      data: (c) => ({ isEditing: false, nextValue: "" }),
       props: {
          item: { type: Object, default: () => null },
          title: { type: String, default: "" },
+      },
+      watch: {
+         isEditing() {
+            this.nextValue = this.isEditing ? this.value : "";
+         },
       },
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
          setting: (c) => c.item.findValue(),
          value: (c) => (c.setting ? c.setting.value : undefined),
+
+         actions: (c) => {
+            if (c.isEditing) {
+               return [
+                  {
+                     title: "Discard",
+                     icon: c.host.icon("close-000000"),
+                     click: () => (c.isEditing = false),
+                  },
+                  {
+                     title: "Save",
+                     icon: c.host.icon("save-000000"),
+                     click: async () => {
+                        if (!c.isEditing) return;
+                        if (!c.nextValue.trim().length) return;
+                        await c.item.updateValue(c.nextValue);
+                        c.isEditing = false;
+                     },
+                  },
+               ];
+            }
+
+            return [
+               {
+                  title: "Edit",
+                  icon: c.host.icon("edit-000000"),
+                  click: () => (c.isEditing = true),
+               },
+            ];
+         },
       },
    };
 </script>
 
 <template>
-   <div class="ItemSetting-TextArea transition">
-      <span class="ItemSetting-TextArea-title" v-if="title.length">{{ title }}</span>
-      <textarea class="ItemSetting-TextArea-value" :value="value" />
+   <div :class="['ItemSetting-TextArea', 'transition']">
+      <ItemSettingHeader class="ItemSetting-header" :title="title" :actions="actions" />
+      <textarea
+         :class="['ItemSetting-TextArea-value-textarea', 'ItemSetting-TextArea-value']"
+         v-if="isEditing"
+         v-model="nextValue"
+      />
+      <p :class="['ItemSetting-TextArea-value-p', 'ItemSetting-TextArea-value']" v-else>{{
+         value
+      }}</p>
    </div>
 </template>
 
@@ -26,35 +70,34 @@
    .ItemSetting-TextArea {
       width: 100%;
       padding: 1rem;
-      gap: 0.2rem;
 
       display: flex;
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      background-color: hsla(0, 0%, 100%, 0.6);
+      background-color: hsl(0, 0%, 94%);
 
-      &:hover {
-         background-color: white;
-      }
-
-      .ItemSetting-TextArea-title {
-         font-size: 0.8rem;
+      .ItemSetting-header {
+         margin-top: -1rem;
+         font-weight: 400;
+         font-size: 0.9rem;
+         padding: 0;
       }
 
       .ItemSetting-TextArea-value {
-         --margin: 1rem;
-
          width: 100%;
-         height: 6rem;
          min-height: 4rem;
          padding: 0.8rem;
 
          background: none;
          font-size: 1rem;
-         resize: vertical;
-         border: 1px solid rgba(0, 0, 0, 0.2);
          border-radius: 0.5rem;
+         border: 1px solid rgba(0, 0, 0, 0.2);
+      }
+      .ItemSetting-TextArea-value-textarea {
+         height: 10rem;
+         resize: vertical;
+         background-color: white;
       }
    }
 </style>

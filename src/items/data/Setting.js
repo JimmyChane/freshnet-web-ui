@@ -16,8 +16,6 @@ class Setting {
       this.key = Text.trim(data.key, "").replace(" ", "");
       this.visibility = Text.trim(data.visibility, "");
       this.value = data.value;
-
-      this.title = Text.trim(data.title, ""); // planned to remove
    }
 }
 
