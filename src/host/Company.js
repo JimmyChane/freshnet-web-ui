@@ -10,36 +10,6 @@ import DateFNS, {
    isSameDay,
 } from "date-fns";
 
-class Location {
-   toLine1() {
-      return new LocationLine("No. 14, Ground Floor, Jalan Melati 3/3");
-   }
-   toLine2() {
-      return new LocationLine("Bandar Melawati, 45000");
-   }
-   toLine3() {
-      return new LocationLine("Kuala Selangor, Selangor Darul Ehsan");
-   }
-   toString() {
-      return `${this.toLine1().toStringWithSeparator()}${this.toLine2().toStringWithSeparator()}${this.toLine3()}`;
-   }
-   toHref() {
-      return "https://www.google.com/maps/dir//No.+14,+Ground+Floor,+Freshnet+Enterprise,+Jalan+Melati+3%2F3,+Bandar+Melawati,+45000+Kuala+Selangor,+Selangor/@3.329664,101.256548,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x31ccf49e980c2d07:0xadf4850c7c433d0a!2m2!1d101.2565481!2d3.3296638";
-   }
-}
-class LocationLine {
-   constructor(address) {
-      this.address = address;
-   }
-
-   toStringWithSeparator(separator = ", ") {
-      return `${this.address}${separator}`;
-   }
-   toString() {
-      return this.address;
-   }
-}
-
 class ContactCategory {
    constructor(title = "", icon = "") {
       this.title = title;
@@ -48,18 +18,9 @@ class ContactCategory {
 }
 class ContactCategories {
    static Call = new ContactCategory("Call", Host.icon("call-color"));
-   static Whatsapp = new ContactCategory(
-      "Whatsapp",
-      Host.icon("whatsapp-color"),
-   );
-   static Telegram = new ContactCategory(
-      "Telegram",
-      Host.icon("telegram-color"),
-   );
-   static Telephone = new ContactCategory(
-      "Telephone",
-      Host.icon("telephone-color"),
-   );
+   static Whatsapp = new ContactCategory("Whatsapp", Host.icon("whatsapp-color"));
+   static Telegram = new ContactCategory("Telegram", Host.icon("telegram-color"));
+   static Telephone = new ContactCategory("Telephone", Host.icon("telephone-color"));
 }
 class ContactLink {
    constructor(category, id) {
@@ -74,8 +35,7 @@ class ContactLink {
          return `tel:+6${this.id}`;
       if (this.category === ContactCategories.Whatsapp)
          return `https://api.whatsapp.com/send?phone=6${this.id}`;
-      if (this.category === ContactCategories.Telegram)
-         return `https://t.me/${this.id}`;
+      if (this.category === ContactCategories.Telegram) return `https://t.me/${this.id}`;
       return "";
    }
    toHtmlTarget() {
@@ -173,9 +133,7 @@ class WorkingHours {
       return `${timeStart} - ${timeEnd}`;
    }
    isSameDay(date) {
-      return (
-         isSameDay(this.#dateStart, date) && isSameDay(this.#dateStart, date)
-      );
+      return isSameDay(this.#dateStart, date) && isSameDay(this.#dateStart, date);
    }
    isBetween(date) {
       return this.isStartAfter(date) && this.isEndBefore(date);
@@ -262,7 +220,6 @@ export default class Company {
    static name = "Freshnet Enterprise";
    static category = "Computer Store";
 
-   static Location = new Location();
    static Contacts = new Contacts();
    static BusinessDays = new BusinessDays();
 }

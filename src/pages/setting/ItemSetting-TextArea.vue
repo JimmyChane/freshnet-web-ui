@@ -5,13 +5,11 @@
    export default {
       components: { ItemSettingHeader },
       data: (c) => ({ U, isEditing: false, value: undefined, nextValue: "" }),
-      props: {
-         item: { type: Object, default: () => null },
-         title: { type: String, default: "" },
-      },
+      props: { item: { type: Object, default: () => null } },
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
          isEmpty: (c) => !U.optString(c.value).length,
+         title: (c) => c.item.getTitle(),
          actions: (c) => {
             if (c.isEditing) {
                return [
@@ -114,6 +112,7 @@
          font-weight: 500;
          font-size: 0.9rem;
          padding: 0;
+         color: hsl(0, 0%, 20%);
       }
 
       .ItemSetting-TextArea-value {

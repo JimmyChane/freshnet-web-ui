@@ -30,6 +30,14 @@ const init = (Stores) => {
 
       return context.state.list.items;
    });
+   context.action("findItemOfKey", async (context, arg = { key: "" }) => {
+      const items = await context.dispatch("getItems");
+      return items.find((item) => item.key === arg.key);
+   });
+   context.action("findValueOfKey", async (context, arg = { key: "", default: "" }) => {
+      const item = await context.dispatch("findItemOfKey", { key: arg.key });
+      return item ? item.value : arg.default;
+   });
 
    return new Vuex.Store(context.build());
 };

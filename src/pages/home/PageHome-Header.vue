@@ -1,6 +1,7 @@
 <script>
    import Section from "./PageHome-Section.vue";
    import Company from "@/host/Company";
+   import Setting from "@/items/data/Setting";
 
    import { getHours } from "date-fns";
 
@@ -9,7 +10,7 @@
       data: (c) => ({
          companyTitle: Company.name,
          companyCategory: Company.category,
-         addressHref: Company.Location.toHref(),
+         addressHref: "",
       }),
       computed: {
          greetTitle() {
@@ -31,6 +32,21 @@
             return period ? period.title : "Hi";
          },
       },
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
+      },
+      mounted() {
+         this.invalidate();
+      },
+      methods: {
+         async invalidate() {
+            this.addressHref = await this.settingStore.dispatch("findValueOfKey", {
+               key: Setting.Key.LocationLink,
+            });
+         },
+      },
    };
 </script>
 
@@ -39,13 +55,20 @@
       <div class="HomeHeader">
          <span class="HomeHeader-title">
             <span class="HomeHeader-name">{{ companyTitle }}</span>
-            <a class="HomeHeader-classification" :href="addressHref" target="_blank"
+            <a
+               :class="['HomeHeader-classification', 'HomeHeader-classification-a']"
+               v-if="addressHref.length"
+               :href="addressHref"
+               target="_blank"
                >{{ companyCategory }}<br />Kuala Selangor District</a
+            >
+            <p class="HomeHeader-classification" v-else
+               >{{ companyCategory }}<br />Kuala Selangor District</p
             >
          </span>
          <!-- <span class="HomeHeader-description"
-			>We sell notebooks, printers, repairs, and more</span
-		> -->
+            >We sell notebooks, printers, repairs, and more</span
+         > -->
          <div class="HomeHeader-greet">
             <span class="HomeHeader-greetTitle">{{ greetTitle }}</span>
             <span class="HomeHeader-greetHelp">How can we help you?</span>
@@ -86,10 +109,11 @@
          .HomeHeader-classification {
             font-size: 0.4em;
             line-height: 1em;
-            cursor: pointer;
             color: inherit;
             text-decoration: inherit;
-
+         }
+         .HomeHeader-classification-a {
+            cursor: pointer;
             &:hover {
                text-decoration: underline;
             }

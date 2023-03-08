@@ -1,15 +1,11 @@
 <script>
    import Contact from "./Footer_Contact.vue";
    import Company from "@/host/Company";
+   import Setting from "@/items/data/Setting";
 
    export default {
       components: { Contact },
-      data: (c) => ({
-         address1: Company.Location.toLine1().toStringWithSeparator(),
-         address2: Company.Location.toLine2().toStringWithSeparator(),
-         address3: Company.Location.toLine3(),
-         addressHref: Company.Location.toHref(),
-      }),
+      data: (c) => ({ address: "", addressHref: "" }),
       computed: {
          contacts() {
             return Company.Contacts.toArray().map((contact) => {
@@ -24,6 +20,24 @@
                      };
                   }),
                };
+            });
+         },
+      },
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
+      },
+      mounted() {
+         this.invalidate();
+      },
+      methods: {
+         async invalidate() {
+            this.address = await this.settingStore.dispatch("findValueOfKey", {
+               key: Setting.Key.Location,
+            });
+            this.addressHref = await this.settingStore.dispatch("findValueOfKey", {
+               key: Setting.Key.LocationLink,
             });
          },
       },
@@ -62,15 +76,27 @@
                </div>
             </div>
 
-            <div class="PageHomeFooter-columns">
+            <div
+               class="PageHomeFooter-columns"
+               v-if="addressHref.length || address.length"
+            >
                <div class="PageHomeFooter-section">
                   <span class="PageHomeFooter-section-title">Location</span>
                   <a
-                     class="PageHomeFooter-section-item"
+                     :class="[
+                        'PageHomeFooter-section-item',
+                        'PageHomeFooter-section-item-link',
+                     ]"
                      :href="addressHref"
                      target="__blank"
-                     >{{ address1 }}<br />{{ address2 }}<br />{{ address3 }}</a
+                     v-if="addressHref.length"
                   >
+                     <p v-if="address.length">{{ address }}</p>
+                     <p v-else>Click to navigate</p>
+                  </a>
+                  <p v-else-if="address.length" class="PageHomeFooter-section-item">{{
+                     address
+                  }}</p>
                </div>
             </div>
          </div>
@@ -151,7 +177,8 @@
 
                      color: inherit;
                      text-decoration: none;
-
+                  }
+                  .PageHomeFooter-section-item-link {
                      &:hover {
                         text-decoration: underline;
                      }

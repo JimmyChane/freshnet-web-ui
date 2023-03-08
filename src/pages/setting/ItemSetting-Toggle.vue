@@ -3,13 +3,11 @@
 
    export default {
       components: { ToggleButton },
-      props: {
-         item: { type: Object, default: () => null },
-         title: { type: String, default: "" },
-      },
+      props: { item: { type: Object, default: () => null } },
       data: (c) => ({ value: undefined }),
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
+         title: (c) => c.item.getTitle(),
       },
       watch: {
          "settingStore.getters.lastModified"() {

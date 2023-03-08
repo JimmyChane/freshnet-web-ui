@@ -4,9 +4,7 @@
    export default {
       props: { item: { type: Object, default: () => null } },
       data: (c) => ({ U, values: [] }),
-      computed: {
-         isLoading: (c) => c.settingStore.getters.isLoading,
-      },
+      computed: { isLoading: (c) => c.settingStore.getters.isLoading },
       watch: {
          "settingStore.getters.lastModified"() {
             this.invalidateValue();
@@ -22,7 +20,7 @@
          invalidateValue() {
             const setting = this.item.findValue();
             this.values = setting ? setting.value : [];
-            console.log(this.values);
+            // console.log(this.values); // todo test
          },
       },
    };

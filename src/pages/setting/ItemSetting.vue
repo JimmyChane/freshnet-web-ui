@@ -13,46 +13,21 @@
          title: { type: String, default: "" },
       },
       data: (c) => ({ U }),
-      computed: {
-         isArrayText: (c) => U.optString(c.item.type) === "array-text",
-
-         actions: (c) => {
-            const actions = [];
-
-            if (c.isArrayText) {
-               actions.push({
-                  title: "Add",
-                  icon: c.host.icon("add-000000"),
-                  click: () => console.log("click add"),
-               });
-            }
-
-            return actions;
-         },
-         list: (c) => U.optArray(c.item.list),
-      },
+      computed: { list: (c) => U.optArray(c.item.list) },
    };
 </script>
 
 <template>
    <div class="ItemSetting">
-      <ItemSettingHeader :title="item.getTitle()" :actions="actions" />
+      <ItemSettingHeader :title="item.getTitle()" />
 
       <div
          class="ItemSetting-item"
          v-for="subItem in list"
-         :key="`${subItem.getKey()}${subItem.getParentTitle()}${item.getTitle()}${item.getParentTitle()}`"
+         :key="`${item.getKey()}${item.getTitle()}${item.getParentTitle()}${subItem.getKey()}${subItem.getParentTitle()}`"
       >
-         <TextArea
-            v-if="subItem.type === 'text'"
-            :item="subItem"
-            :title="subItem.getTitle()"
-         />
-         <Toggle
-            v-else-if="subItem.type === 'boolean'"
-            :item="subItem"
-            :title="subItem.getTitle()"
-         />
+         <TextArea v-if="subItem.type === 'text'" :item="subItem" />
+         <Toggle v-else-if="subItem.type === 'boolean'" :item="subItem" />
          <ItemSetting v-else :item="subItem" />
       </div>
 
@@ -69,7 +44,7 @@
       align-items: stretch;
       justify-content: flex-start;
       overflow: hidden;
-      gap: 0.2rem;
+      gap: 2px;
       border-radius: 1rem;
 
       .ItemSetting-item {

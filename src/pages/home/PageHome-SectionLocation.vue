@@ -1,5 +1,28 @@
 <script>
-   export default { props: { isThin: { type: Boolean, default: false } } };
+   import Setting from "@/items/data/Setting";
+
+   export default {
+      props: { isThin: { type: Boolean, default: false } },
+      data: (c) => ({ address: "", link: "" }),
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
+      },
+      mounted() {
+         this.invalidate();
+      },
+      methods: {
+         async invalidate() {
+            this.address = await this.settingStore.dispatch("findValueOfKey", {
+               key: Setting.Key.Location,
+            });
+            this.link = await this.settingStore.dispatch("findValueOfKey", {
+               key: Setting.Key.LocationLink,
+            });
+         },
+      },
+   };
 </script>
 
 <template>
@@ -9,16 +32,16 @@
          `HomeSectionLocation-${isThin ? 'isThin' : 'isWide'}`,
          'transition',
       ]"
-      href="https://www.google.com/maps/dir//No.+14,+Ground+Floor,+Freshnet+Enterprise,+Jalan+Melati+3%2F3,+Bandar+Melawati,+45000+Kuala+Selangor,+Selangor/@3.329664,101.256548,15z/data=!4m8!4m7!1m0!1m5!1m1!1s0x31ccf49e980c2d07:0xadf4850c7c433d0a!2m2!1d101.2565481!2d3.3296638"
+      :href="link"
       target="__blank"
+      v-if="address.length || link.length"
    >
       <div class="HomeSectionLocation-main">
          <span class="HomeSectionLocation-title">Find Us</span>
-         <div class="HomeSectionLocation-content">
-            <span>No. 14, Ground Floor, Jalan</span>
-            <span>Melati 3/3,Bandar Melawati</span>
-         </div>
-         <span class="HomeSectionLocation-click">Click to Navigate</span>
+         <p class="HomeSectionLocation-content" v-if="address.length">{{ address }}</p>
+         <span class="HomeSectionLocation-click" v-if="link.length"
+            >Click to Navigate</span
+         >
       </div>
 
       <img
