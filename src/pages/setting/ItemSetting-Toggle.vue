@@ -7,10 +7,26 @@
          item: { type: Object, default: () => null },
          title: { type: String, default: "" },
       },
+      data: (c) => ({ value: undefined }),
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
-         setting: (c) => c.item.findValue(),
-         value: (c) => (c.setting ? c.setting.value : undefined),
+      },
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidateValue();
+         },
+         item() {
+            this.invalidateValue();
+         },
+      },
+      mounted() {
+         this.invalidateValue();
+      },
+      methods: {
+         invalidateValue() {
+            const setting = this.item.findValue();
+            this.value = setting ? setting.value : undefined;
+         },
       },
    };
 </script>

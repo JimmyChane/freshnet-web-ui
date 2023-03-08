@@ -14,14 +14,7 @@
       },
       data: (c) => ({ U }),
       computed: {
-         isGroup: (c) => !!c.item.getList().length,
-         isSubGroup: (c) => !!c.item.parent,
-
-         isBoolean: (c) => c.itemType === "boolean",
-         isText: (c) => c.itemType === "text",
-         isArrayText: (c) => c.itemType === "array-text",
-
-         itemType: (c) => U.optString(c.item.type),
+         isArrayText: (c) => U.optString(c.item.type) === "array-text",
 
          actions: (c) => {
             const actions = [];
@@ -43,15 +36,33 @@
 
 <template>
    <Card>
-      <ItemSettingHeader :title="item.getParentTitle()" :actions="actions" />
+      <ItemSettingHeader :title="item.getTitle()" :actions="actions" />
 
-      <ItemSetting
+      <div
+         class="ItemSetting-item"
          v-for="subItem in list"
          :key="`${subItem.getKey()}${subItem.getParentTitle()}${item.getTitle()}${item.getParentTitle()}`"
-         :item="subItem"
-      />
-
-      <TextArea v-if="isText" :item="item" :title="item.getTitle()" />
-      <Toggle v-if="isBoolean" :item="item" :title="item.getTitle()" />
+      >
+         <TextArea
+            v-if="subItem.type === 'text'"
+            :item="subItem"
+            :title="subItem.getTitle()"
+         />
+         <Toggle
+            v-else-if="subItem.type === 'boolean'"
+            :item="subItem"
+            :title="subItem.getTitle()"
+         />
+         <ItemSetting v-else :item="subItem" />
+      </div>
    </Card>
 </template>
+
+<style lang="scss" scoped>
+   .ItemSetting-item {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+   }
+</style>

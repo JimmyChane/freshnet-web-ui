@@ -8,6 +8,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      align-items: stretch;
       justify-content: flex-start;
       overflow: hidden;
       gap: 0.2rem;

@@ -4,21 +4,13 @@
 
    export default {
       components: { ItemSettingHeader, ToggleButton },
-      data: (c) => ({ isEditing: false, nextValue: "" }),
+      data: (c) => ({ isEditing: false, value: undefined, nextValue: "" }),
       props: {
          item: { type: Object, default: () => null },
          title: { type: String, default: "" },
       },
-      watch: {
-         isEditing() {
-            this.nextValue = this.isEditing ? this.value : "";
-         },
-      },
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
-         setting: (c) => c.item.findValue(),
-         value: (c) => (c.setting ? c.setting.value : undefined),
-
          actions: (c) => {
             if (c.isEditing) {
                return [
@@ -47,6 +39,26 @@
                   click: () => (c.isEditing = true),
                },
             ];
+         },
+      },
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidateValue();
+         },
+         item() {
+            this.invalidateValue();
+         },
+         isEditing() {
+            this.nextValue = this.isEditing ? this.value : "";
+         },
+      },
+      mounted() {
+         this.invalidateValue();
+      },
+      methods: {
+         invalidateValue() {
+            const setting = this.item.findValue();
+            this.value = setting ? setting.value : undefined;
          },
       },
    };

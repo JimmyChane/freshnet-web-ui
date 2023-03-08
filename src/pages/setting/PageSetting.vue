@@ -106,14 +106,15 @@
          scrollTop: 0,
 
          list: [
-            SettingBuilder.title("Contacts").list(
-               SettingBuilder.key(SettingModule.Key.Contacts)
-                  .title("Contacts")
-                  .type("array-text"),
-            ),
+            SettingBuilder.key(SettingModule.Key.Contacts)
+               .title("Contacts")
+               .type("array-text"),
             SettingBuilder.title("Location").list(
                SettingBuilder.key(SettingModule.Key.Location)
                   .title("Address")
+                  .type("text"),
+               SettingBuilder.key(SettingModule.Key.LocationLink)
+                  .title("Link")
                   .type("text"),
             ),
             SettingBuilder.title("Product Page").list(

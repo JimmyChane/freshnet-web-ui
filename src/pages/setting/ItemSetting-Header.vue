@@ -14,15 +14,6 @@
       <span class="ItemSetting-header-title" v-if="title.length">{{ title }}</span>
 
       <div class="ItemSetting-header-actions" v-if="actions.length">
-         <!-- <button
-            class="transition"
-            v-for="action of actions"
-            :key="action.title"
-            @click="action.click"
-         >
-            <img class="transition" :src="action.icon" />
-         </button> -->
-
          <IconButton
             class="transition"
             v-for="action of actions"

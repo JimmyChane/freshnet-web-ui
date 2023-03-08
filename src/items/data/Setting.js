@@ -4,6 +4,7 @@ class Setting {
    static Key = {
       PublicShowPrice: "public-showPrice",
       Location: "store-location",
+      LocationLink: "store-location-link",
       Contacts: "store-contacts",
    };
    static Visibility = { Protected: "protected", Private: "private" };
