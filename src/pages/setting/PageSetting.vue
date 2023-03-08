@@ -107,7 +107,7 @@
 
          list: [
             SettingBuilder.key(SettingModule.Key.Contacts)
-               .title("Contacts")
+               .title("Contacts (not implemented)")
                .type("array-text"),
             SettingBuilder.title("Location").list(
                SettingBuilder.key(SettingModule.Key.Location)

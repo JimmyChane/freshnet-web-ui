@@ -1,13 +1,13 @@
 <script>
-   import Card from "./ItemSetting-Card.vue";
    import ItemSettingHeader from "./ItemSetting-Header.vue";
    import Toggle from "./ItemSetting-Toggle.vue";
    import TextArea from "./ItemSetting-TextArea.vue";
+   import List from "./ItemSetting-List.vue";
    import U from "@/U";
 
    export default {
       name: "ItemSetting",
-      components: { Card, ItemSettingHeader, Toggle, TextArea },
+      components: { ItemSettingHeader, Toggle, TextArea, List },
       props: {
          item: { type: Object, default: () => null },
          title: { type: String, default: "" },
@@ -35,7 +35,7 @@
 </script>
 
 <template>
-   <Card>
+   <div class="ItemSetting">
       <ItemSettingHeader :title="item.getTitle()" :actions="actions" />
 
       <div
@@ -55,14 +55,28 @@
          />
          <ItemSetting v-else :item="subItem" />
       </div>
-   </Card>
+
+      <List v-if="item.type === 'array-text'" :item="item" />
+   </div>
 </template>
 
 <style lang="scss" scoped>
-   .ItemSetting-item {
+   .ItemSetting {
       width: 100%;
       display: flex;
       flex-direction: column;
+      align-items: center;
       align-items: stretch;
+      justify-content: flex-start;
+      overflow: hidden;
+      gap: 0.2rem;
+      border-radius: 1rem;
+
+      .ItemSetting-item {
+         width: 100%;
+         display: flex;
+         flex-direction: column;
+         align-items: stretch;
+      }
    }
 </style>

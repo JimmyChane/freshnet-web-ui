@@ -1,16 +1,17 @@
 <script>
    import ItemSettingHeader from "./ItemSetting-Header.vue";
-   import ToggleButton from "@/components/button/ToggleButton.vue";
+   import U from "@/U";
 
    export default {
-      components: { ItemSettingHeader, ToggleButton },
-      data: (c) => ({ isEditing: false, value: undefined, nextValue: "" }),
+      components: { ItemSettingHeader },
+      data: (c) => ({ U, isEditing: false, value: undefined, nextValue: "" }),
       props: {
          item: { type: Object, default: () => null },
          title: { type: String, default: "" },
       },
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
+         isEmpty: (c) => !U.optString(c.value).length,
          actions: (c) => {
             if (c.isEditing) {
                return [
@@ -67,14 +68,33 @@
 <template>
    <div :class="['ItemSetting-TextArea', 'transition']">
       <ItemSettingHeader class="ItemSetting-header" :title="title" :actions="actions" />
+
       <textarea
-         :class="['ItemSetting-TextArea-value-textarea', 'ItemSetting-TextArea-value']"
-         v-if="isEditing"
+         :class="[
+            'transition',
+            'ItemSetting-TextArea-value',
+            'ItemSetting-TextArea-textarea',
+            isEditing
+               ? 'ItemSetting-TextArea-textarea-isShowing'
+               : 'ItemSetting-TextArea-textarea-isHiding',
+         ]"
          v-model="nextValue"
       />
-      <p :class="['ItemSetting-TextArea-value-p', 'ItemSetting-TextArea-value']" v-else>{{
-         value
-      }}</p>
+      <p
+         :class="['ItemSetting-TextArea-value', 'ItemSetting-TextArea-p']"
+         v-if="!isEmpty"
+         >{{ value }}</p
+      >
+      <span
+         :class="[
+            'transition',
+            'ItemSetting-TextArea-empty',
+            !isEditing && isEmpty
+               ? 'ItemSetting-TextArea-empty-isShowing'
+               : 'ItemSetting-TextArea-empty-isHiding',
+         ]"
+         >Empty</span
+      >
    </div>
 </template>
 
@@ -91,25 +111,52 @@
 
       .ItemSetting-header {
          margin-top: -1rem;
-         font-weight: 400;
+         font-weight: 500;
          font-size: 0.9rem;
          padding: 0;
       }
 
       .ItemSetting-TextArea-value {
          width: 100%;
-         min-height: 4rem;
          padding: 0.8rem;
+         font-size: 0.9rem;
 
          background: none;
-         font-size: 1rem;
          border-radius: 0.5rem;
          border: 1px solid rgba(0, 0, 0, 0.2);
       }
-      .ItemSetting-TextArea-value-textarea {
-         height: 10rem;
+
+      .ItemSetting-TextArea-textarea {
          resize: vertical;
          background-color: white;
+         --transition-timing: cubic-bezier(1, 0, 0, 1);
+      }
+      .ItemSetting-TextArea-textarea-isShowing {
+         height: 10rem;
+         margin-bottom: 0.5rem;
+      }
+      .ItemSetting-TextArea-textarea-isHiding {
+         height: 0;
+         padding-top: 0;
+         padding-bottom: 0;
+         border-color: transparent;
+         background: transparent;
+         margin-top: -1px;
+      }
+
+      .ItemSetting-TextArea-empty {
+         font-size: 0.8rem;
+         color: hsl(0, 0%, 75%);
+         --transition-timing: cubic-bezier(1, 0, 0, 1);
+         --transition-delay: 2s;
+         overflow: hidden;
+      }
+      .ItemSetting-TextArea-empty-isShowing {
+         height: max-content;
+      }
+      .ItemSetting-TextArea-empty-isHiding {
+         height: 0;
+         margin-top: -1px;
       }
    }
 </style>
