@@ -8,6 +8,7 @@
    import ImageView from "@/components/ImageView.vue";
    import Label from "./ItemProduct-Label.vue";
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import U from "@/U";
 
    export default {
       Mode,
@@ -29,6 +30,7 @@
                ? chroma(this.primaryColorHex)
                : chroma("cccccc");
          },
+         isPrimaryColorDark: (c) => U.isColorDark(c.primaryColor),
 
          user: (c) => c.loginStore.getters.user,
          allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
@@ -144,7 +146,14 @@
          </div>
       </div>
 
-      <div class="ItemProduct-title">
+      <div
+         :class="[
+            'ItemProduct-title',
+            !isPrimaryColorDark
+               ? 'ItemProduct-title-isDark'
+               : 'ItemProduct-title-isWhite',
+         ]"
+      >
          <span class="ItemProduct-title-text">{{ fullTitle }}</span>
          <div class="ItemProduct-title-specs" v-if="specLabels.length">
             <Label v-for="label in specLabels" :key="label.text" :title="label.text" />
@@ -214,7 +223,7 @@
 
             width: 100%;
             max-height: 2.3rem;
-            gap: 0.05rem;
+            gap: 1px;
             padding: 0.5rem;
 
             display: flex;
@@ -232,7 +241,7 @@
          justify-content: flex-start;
          text-align: start;
 
-         gap: 0.3rem;
+         gap: 0.5rem;
          color: black;
 
          .ItemProduct-title-text {
@@ -252,7 +261,7 @@
          .ItemProduct-title-specs {
             width: 100%;
             max-height: 2.3rem;
-            gap: 0.05rem;
+            gap: 1px;
             margin: -0.1rem;
 
             display: flex;
@@ -266,6 +275,12 @@
          .ItemProduct-title-price {
             font-size: 0.7rem;
          }
+      }
+      .ItemProduct-title-isDark {
+         --color-theme: black;
+      }
+      .ItemProduct-title-isWhite {
+         --color-theme: white;
       }
    }
 
@@ -298,6 +313,7 @@
       align-items: flex-start;
       justify-content: flex-start;
       aspect-ratio: 17/18;
+      gap: 0.25rem;
 
       .ItemProduct-preview {
          width: 100%;
@@ -328,12 +344,11 @@
       background-color: var(--primary-color);
       border: 1px solid rgba(0, 0, 0, 0.05);
       .ItemProduct-preview {
-         opacity: 0.5;
          transform: scale(1);
          --preview-border-radius: var(--preview-border-radius-focus);
       }
       .ItemProduct-title {
-         opacity: 0;
+         color: var(--color-theme);
       }
    }
 </style>
