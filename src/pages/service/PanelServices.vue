@@ -36,10 +36,8 @@
       computed: {
          iconEmpty: () => PageService.icon.dark.toUrl(),
 
-         items: (context) =>
-            context.stateMenus[context.stateMenuIndex]
-               ? context.stateMenus[context.stateMenuIndex].list
-               : [],
+         items: (c) =>
+            c.stateMenus[c.stateMenuIndex] ? c.stateMenus[c.stateMenuIndex].list : [],
          state: (c) => U.optString(c.$route.query.state),
 
          layoutMode: (c) => {

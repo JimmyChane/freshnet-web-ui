@@ -9,17 +9,15 @@
       computed: {
          contacts() {
             return Company.Contacts.toArray().map((contact) => {
-               return {
-                  title: contact.title,
-                  subtitle: contact.links[0].id,
-                  links: contact.links.map((link) => {
-                     return {
-                        icon: link.category.icon,
-                        href: link.toHtmlHref(),
-                        target: link.toHtmlTarget(),
-                     };
-                  }),
-               };
+               const links = contact.links.map((link) => {
+                  return {
+                     icon: link.category.icon,
+                     href: link.toHtmlHref(),
+                     target: link.toHtmlTarget(),
+                  };
+               });
+
+               return { title: contact.title, subtitle: contact.links[0].id, links };
             });
          },
       },

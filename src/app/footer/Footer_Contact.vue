@@ -6,9 +6,7 @@
          links: { type: Array, default: () => [] },
       },
       computed: {
-         primaryLink() {
-            return this.parsedLinks.length ? this.parsedLinks[0] : null;
-         },
+         primaryLink: (c) => (c.parsedLinks.length ? c.parsedLinks[0] : null),
          parsedLinks() {
             return this.links.map((link) => {
                return {

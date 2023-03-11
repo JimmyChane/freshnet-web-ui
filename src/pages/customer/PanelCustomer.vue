@@ -26,48 +26,19 @@
          isLoadingDevices: false,
       }),
       computed: {
-         id() {
-            if (this.item) return this.item.id;
-            return "";
-         },
-         name() {
-            if (this.item) return this.item.name;
-            return "";
-         },
-         phoneNumber() {
-            if (this.item) return this.item.phoneNumber;
-            return null;
-         },
-         phoneNumberStr() {
-            return this.phoneNumber ? this.phoneNumber.toString() : "";
-         },
-         description() {
-            if (this.item) return this.item.description;
-            return "";
-         },
-         deviceIds() {
-            if (this.item) return this.item.deviceIds;
-            return [];
-         },
-         services() {
-            if (this.item) return this.item.services;
-            return [];
-         },
-         orders() {
-            if (this.item) return this.item.orders;
-            return [];
-         },
+         id: (c) => (c.item ? c.item.id : ""),
+         name: (c) => (c.item ? c.item.name : ""),
+         phoneNumber: (c) => (c.item ? c.item.phoneNumber : null),
+         phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
+         description: (c) => (c.item ? c.item.description : ""),
+         deviceIds: (c) => (c.item ? c.item.deviceIds : []),
+         services: (c) => (c.item ? c.item.services : []),
+         orders: (c) => (c.item ? c.item.orders : []),
 
          primaryColor: () => chroma("294656"),
-         actionbarColor() {
-            return this.backgroundColor.brighten(0.4);
-         },
-         actionbarShadow() {
-            return this.actionbarColor.darken(0.8);
-         },
-         backgroundColor() {
-            return this.primaryColor.mix("ffffff", 0.65);
-         },
+         actionbarColor: (c) => c.backgroundColor.brighten(0.4),
+         actionbarShadow: (c) => c.actionbarColor.darken(0.8),
+         backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.65),
       },
       watch: {
          item() {

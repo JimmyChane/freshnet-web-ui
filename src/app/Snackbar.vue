@@ -1,16 +1,13 @@
 <script>
+   import U from "@/U";
    export default {
       props: {
          item: { type: Object, default: () => {} },
       },
       computed: {
-         actions() {
-            return Array.isArray(this.item.actions) ? this.item.actions : [];
-         },
-         parsed_actions() {
-            return this.actions.filter((action) => {
-               return this.actions.indexOf(action) < 2;
-            });
+         actions: (c) => U.optArray(c.items.actions),
+         parsed_actions: (c) => {
+            return c.actions.filter((action) => c.actions.indexOf(action) < 2);
          },
       },
    };

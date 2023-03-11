@@ -13,10 +13,10 @@
       computed: {
          settings: (context) => context.settingStore.getters.items,
          settingShowPrice: (c) => {
-            let theSetting = c.settings.find((setting) => {
-               return setting.key === SettingModule.Key.PublicShowPrice;
+            return c.settingStore.dispatch("findValueOfKey", {
+               key: SettingModule.Key.PublicShowPrice,
+               default: false,
             });
-            return theSetting ? theSetting.value : false;
          },
 
          priceNormal() {
@@ -74,8 +74,7 @@
          :title="title"
          :primaryColor="primaryColor"
          v-if="
-            product &&
-            (title || subtitle || !isAvailable || isPromotion || isSecondHand)
+            product && (title || subtitle || !isAvailable || isPromotion || isSecondHand)
          "
       >
          <span class="ProductViewerPriceViewer-subtitle" v-if="subtitle">
@@ -83,19 +82,13 @@
          </span>
 
          <div class="ProductViewerPriceViewer-tag">
-            <span
-               class="ProductViewerPriceViewer-tag-outOfStock"
-               v-if="!isAvailable"
+            <span class="ProductViewerPriceViewer-tag-outOfStock" v-if="!isAvailable"
                >Out of Stock</span
             >
-            <span
-               class="ProductViewerPriceViewer-tag-promotion"
-               v-if="isPromotion"
+            <span class="ProductViewerPriceViewer-tag-promotion" v-if="isPromotion"
                >Promotion</span
             >
-            <span
-               class="ProductViewerPriceViewer-tag-secondHand"
-               v-if="isSecondHand"
+            <span class="ProductViewerPriceViewer-tag-secondHand" v-if="isSecondHand"
                >Second Hand</span
             >
          </div>

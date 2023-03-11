@@ -1,6 +1,7 @@
 <script>
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
    import LeftNavItem from "./NavigationLeft-Item.vue";
+   import U from "@/U";
 
    export default {
       emits: ["click", "click-expand"],
@@ -12,26 +13,23 @@
          isSelectedDark: { type: Boolean, default: true },
       },
       computed: {
-         iconArrow() {
-            if (this.isSelected && this.isSelectedDark)
-               return this.host.icon("arrowDown-FFFFFF");
-            return this.host.icon("arrowDown-2A4858");
+         iconArrow: (c) => {
+            if (c.isSelected && c.isSelectedDark) return c.host.icon("arrowDown-FFFFFF");
+            return c.host.icon("arrowDown-2A4858");
          },
-         styleClass() {
-            if (this.isSelected) {
-               if (this.isSelectedDark) return "LeftNavQuery-isSelectedDark";
+         styleClass: (c) => {
+            if (c.isSelected) {
+               if (c.isSelectedDark) return "LeftNavQuery-isSelectedDark";
                return "LeftNavQuery-isSelected";
             }
             return "LeftNavQuery-notSelected";
          },
 
-         hasGroups() {
-            return Array.isArray(this.item.groups) && this.item.groups.length;
-         },
+         hasGroups: (c) => U.optArray(c.item.groups).length,
 
-         isWide: (context) => context.item.isWide(),
-         isSelected: (context) => context.item.isSelected(),
-         isExpanded: (context) => context.item.isExpanded(),
+         isWide: (c) => c.item.isWide(),
+         isSelected: (c) => c.item.isSelected(),
+         isExpanded: (c) => c.item.isExpanded(),
       },
    };
 </script>

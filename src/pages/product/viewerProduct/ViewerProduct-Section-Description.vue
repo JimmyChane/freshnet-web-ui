@@ -9,8 +9,7 @@
          product: { type: Object, default: () => null },
       },
       computed: {
-         description: (context) =>
-            context.product ? context.product.description : "",
+         description: (c) => (c.product ? c.product.description : ""),
 
          menu() {
             if (!this.allowEdit) return null;
@@ -37,9 +36,7 @@
       :menu="menu"
    >
       <div class="SectionDescription">
-         <p class="SectionDescription-content" v-if="description">{{
-            description
-         }}</p>
+         <p class="SectionDescription-content" v-if="description">{{ description }}</p>
 
          <span class="SectionDescription-noContent" v-else>No Description</span>
       </div>

@@ -288,62 +288,54 @@
          isOver1200px: (c) => c.$root.window.innerWidth > 1200,
 
          itemDrawerEdge: () => Drawer.Edge.RIGHT,
-         itemDrawerMode() {
-            if (this.isOver1200px) {
-               return this.product
-                  ? Drawer.Mode.FIXED_EXPAND
-                  : Drawer.Mode.FIXED_COLLAPSE;
+         itemDrawerMode: (c) => {
+            if (c.isOver1200px) {
+               return c.product ? Drawer.Mode.FIXED_EXPAND : Drawer.Mode.FIXED_COLLAPSE;
             } else {
-               return this.product
-                  ? Drawer.Mode.DRAWER_EXPAND
-                  : Drawer.Mode.DRAWER_COLLAPSE;
+               return c.product ? Drawer.Mode.DRAWER_EXPAND : Drawer.Mode.DRAWER_COLLAPSE;
             }
          },
 
-         isEditable() {
-            const { user } = this.loginStore.getters;
+         isEditable: (c) => {
+            const { user } = c.loginStore.getters;
             return user.isTypeAdmin() || user.isTypeStaff();
          },
-         isLoading() {
-            return this.productStore.getters.isLoading;
-         },
+         isLoading: (c) => c.productStore.getters.isLoading,
 
-         paths() {
-            return this.$root.paths;
+         paths: (c) => {
+            return c.$root.paths;
          },
-         lastPath() {
-            let { paths } = this;
+         lastPath: (c) => {
+            let { paths } = c;
             if (!paths.length) return "";
             return paths[paths.length - 1];
          },
 
-         products() {
-            return this.groups
+         products: (c) => {
+            return c.groups
                .reduce((products, group) => {
                   products.push(...group.products);
                   return products;
                }, [])
                .filter((product) => {
-                  if (!this.isEditable) {
+                  if (!c.isEditable) {
                      return product.isStockAvailable();
                   }
                   return true;
                });
          },
 
-         productId() {
-            return this.$route.query.productId;
-         },
+         productId: (c) => c.$route.query.productId,
 
-         productPrevious() {
+         productPrevious: (c) => {
             // return null;
-            const { products } = this;
+            const { products } = c;
             const categoryProducts = products.filter((product) => {
-               if (!this.product) return true;
-               return product.category === this.product.category;
+               if (!c.product) return true;
+               return product.category === c.product.category;
             });
 
-            let productIndex = categoryProducts.indexOf(this.product);
+            let productIndex = categoryProducts.indexOf(c.product);
             let productPreviousIndex = productIndex - 1;
             if (
                0 <= productPreviousIndex &&
@@ -354,15 +346,15 @@
 
             return null;
          },
-         productNext() {
+         productNext: (c) => {
             // return null;
-            const products = this.products;
+            const products = c.products;
             const categoryProducts = products.filter((product) => {
-               if (!this.product) return true;
-               return product.category === this.product.category;
+               if (!c.product) return true;
+               return product.category === c.product.category;
             });
 
-            let productIndex = categoryProducts.indexOf(this.product);
+            let productIndex = categoryProducts.indexOf(c.product);
             let productNextIndex = productIndex + 1;
             if (
                0 <= productNextIndex &&
@@ -424,7 +416,7 @@
                   c.popup.productBundleDelete.isShowing = true;
                },
 
-               productDescriptionUpdate: new PopupContext(this).onConfirm(
+               productDescriptionUpdate: new PopupContext(c).onConfirm(
                   (accept, reject, input) => {},
                ),
 

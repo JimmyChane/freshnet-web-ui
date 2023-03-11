@@ -15,14 +15,8 @@
          name: (c) => c.item.name,
          phoneNumber: (c) => c.item.phoneNumber,
          phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
-         services() {
-            if (this.item) return this.item.services;
-            return [];
-         },
-         orders() {
-            if (this.item) return this.item.orders;
-            return [];
-         },
+         services: (c) => (c.item ? c.item.services : []),
+         orders: (c) => (c.item ? c.item.orders : []),
       },
       watch: {
          item() {

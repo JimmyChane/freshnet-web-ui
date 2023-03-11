@@ -10,14 +10,8 @@
          product: { type: Object, default: () => null },
       },
       computed: {
-         productIsAvailable() {
-            if (!this.product) return true;
-            return this.product.isStockAvailable();
-         },
-         productIsSecondHand() {
-            if (!this.product) return false;
-            return this.product.isStockSecondHand();
-         },
+         productIsAvailable: (c) => (c.product ? c.product.isStockAvailable() : true),
+         productIsSecondHand: (c) => (c.product ? c.product.isStockSecondHand() : false),
       },
    };
 </script>

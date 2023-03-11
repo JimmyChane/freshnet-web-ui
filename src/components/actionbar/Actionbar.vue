@@ -9,9 +9,9 @@
          rightMenus: { default: () => [] },
       },
       computed: {
-         LeftMenus: (context) => context.parseMenus(context.leftMenus),
-         RightMenus: (context) => context.parseMenus(context.rightMenus),
-         hasSlot: (context) => !context.$slots.footer,
+         LeftMenus: (c) => c.parseMenus(c.leftMenus),
+         RightMenus: (c) => c.parseMenus(c.rightMenus),
+         hasSlot: (c) => !c.$slots.footer,
       },
       methods: {
          parseMenus(menus) {
@@ -35,9 +35,7 @@
 
 <style lang="scss" scoped>
    .Actionbar {
-      --actionbar-background-color-translucent: var(
-         --actionbar-background-color
-      );
+      --actionbar-background-color-translucent: var(--actionbar-background-color);
       --actionbar-background-color-light: var(--actionbar-color);
       --actionbar-background-color-dark: var(--actionbar-color);
       color: black;

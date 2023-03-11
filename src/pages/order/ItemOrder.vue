@@ -14,31 +14,16 @@
       },
       data: (c) => ({ Order, isExpanded: false }),
       computed: {
-         dateCreated: (c) => {
-            return format(new Date(c.order.createdAt), "hh:mmaaa dd/LL/yyyy");
+         dateCreated: (c) => format(new Date(c.order.createdAt), "hh:mmaaa dd/LL/yyyy"),
+
+         customer: (c) => {
+            return c.order.customer ? c.order.customer : null;
          },
 
-         customer() {
-            if (!this.order.customer) return null;
-            return this.order.customer;
-         },
-
-         name() {
-            if (!this.customer) return "";
-            return this.customer.name;
-         },
-         phoneNumber() {
-            if (!this.customer) return null;
-            return this.customer.phoneNumber;
-         },
-         phoneNumberValue() {
-            if (!this.phoneNumber) return "";
-            return this.phoneNumber.value;
-         },
-         phoneNumberStr() {
-            if (!this.phoneNumber) return "";
-            return this.phoneNumber.toString();
-         },
+         name: (c) => (c.customer ? c.customer.name : ""),
+         phoneNumber: (c) => (c.customer ? c.customer.phoneNumber : null),
+         phoneNumberValue: (c) => (c.phoneNumber ? c.phoneNumber.value : ""),
+         phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
          content: (c) => c.order.content,
       },
       watch: {

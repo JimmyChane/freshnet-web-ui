@@ -72,16 +72,16 @@
       computed: {
          iconEmpty: () => PageProduct.icon.dark.toUrl(),
 
-         isLayoutThin: (context) => context.$root.window.innerWidth < 550,
+         isLayoutThin: (c) => c.$root.window.innerWidth < 550,
          layoutMode: () => ItemProduct.Mode.Grid,
 
-         queryProductId: (context) => context.$route.query.productId,
-         queryCategoryId: (context) => context.$route.query.category,
-         queryBrandId: (context) => context.$route.query.brand,
-         queryStock: (context) => context.$route.query.stock,
+         queryProductId: (c) => c.$route.query.productId,
+         queryCategoryId: (c) => c.$route.query.category,
+         queryBrandId: (c) => c.$route.query.brand,
+         queryStock: (c) => c.$route.query.stock,
 
-         isLoading: (context) => context.productStore.getters.isLoading,
-         isEmpty: (context) => !context.isLoading && !context.productGroups.length,
+         isLoading: (c) => c.productStore.getters.isLoading,
+         isEmpty: (c) => !c.isLoading && !c.productGroups.length,
          isEditable() {
             const { user } = this.loginStore.getters;
             return user.isTypeAdmin() || user.isTypeStaff();

@@ -12,26 +12,25 @@
          isSelectedDark: { type: Boolean, default: true },
       },
       computed: {
-         iconArrow() {
-            if (this.isSelected && this.isSelectedDark)
-               return this.host.icon("arrowDown-FFFFFF");
-            return this.host.icon("arrowDown-2A4858");
+         iconArrow: (c) => {
+            if (c.isSelected && c.isSelectedDark) return c.host.icon("arrowDown-FFFFFF");
+            return c.host.icon("arrowDown-2A4858");
          },
-         styleClass() {
-            if (this.isSelected) {
-               if (this.isSelectedDark) return "LeftNavLink-isSelectedDark";
+         styleClass: (c) => {
+            if (c.isSelected) {
+               if (c.isSelectedDark) return "LeftNavLink-isSelectedDark";
                return "LeftNavLink-isSelected";
             }
             return "LeftNavLink-notSelected";
          },
-         hasGroups() {
-            const groups = this.item;
+         hasGroups: (c) => {
+            const groups = c.item;
             return Array.isArray(groups) && groups.length;
          },
 
-         isWide: (context) => context.item.isWide(),
-         isSelected: (context) => context.item.isSelected(),
-         isExpanded: (context) => context.item.isExpanded(),
+         isWide: (c) => c.item.isWide(),
+         isSelected: (c) => c.item.isSelected(),
+         isExpanded: (c) => c.item.isExpanded(),
       },
    };
 </script>

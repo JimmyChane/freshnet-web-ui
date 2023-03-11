@@ -4,11 +4,9 @@
          menu: { type: Object, default: () => null },
       },
       computed: {
-         title() {
-            return this.menu.title;
-         },
-         content() {
-            const content = this.menu.items.find((item) => item.isSelected());
+         title: (c) => c.menu.title,
+         content: (c) => {
+            const content = c.menu.items.find((item) => item.isSelected());
             return content ? content.title : "";
          },
       },

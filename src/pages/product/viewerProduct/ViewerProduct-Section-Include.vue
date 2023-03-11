@@ -9,8 +9,8 @@
          product: { type: Object, default: () => null },
       },
       computed: {
-         gifts: (context) => (context.product ? context.product.gifts : []),
-         bundles: (context) => (context.product ? context.product.bundles : []),
+         gifts: (c) => (c.product ? c.product.gifts : []),
+         bundles: (c) => (c.product ? c.product.bundles : []),
 
          items() {
             return [

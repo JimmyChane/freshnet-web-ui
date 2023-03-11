@@ -36,10 +36,7 @@
                : c.host.icon("arrowDown-black"),
 
          isThin: (c) => c.$root.window.innerWidth < 550,
-         imageIsShowing() {
-            if (this.imageIsFetching) return true;
-            return !!this.imageUrl;
-         },
+         imageIsShowing: (c) => (c.imageIsFetching ? !!c.imageUrl : true),
       },
       watch: {
          product(product, wasProduct) {

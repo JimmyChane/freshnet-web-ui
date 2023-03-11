@@ -10,12 +10,12 @@
       },
       data: (c) => ({ brand: null }),
       computed: {
-         title: (context) => (context.product ? context.product.title : ""),
+         title: (c) => (c.product ? c.product.title : ""),
 
-         brandId: (context) => (context.product ? context.product.brandId : ""),
-         brandTitle: (context) => (context.brand ? context.brand.title : ""),
-         brandIcon: (context) => (context.brand ? context.brand.icon : null),
-         brandIconUrl: (context) => (context.brandIcon ? context.brandIcon.toUrl() : ""),
+         brandId: (c) => (c.product ? c.product.brandId : ""),
+         brandTitle: (c) => (c.brand ? c.brand.title : ""),
+         brandIcon: (c) => (c.brand ? c.brand.icon : null),
+         brandIconUrl: (c) => (c.brandIcon ? c.brandIcon.toUrl() : ""),
       },
       watch: {
          product() {

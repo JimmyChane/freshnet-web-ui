@@ -15,13 +15,7 @@
          dark: new HostIcon("profile-000000.svg"),
       },
 
-      components: {
-         NavigationBar,
-         Loading,
-         ButtonIcon,
-         PopupWindowAction,
-         Input,
-      },
+      components: { NavigationBar, Loading, ButtonIcon, PopupWindowAction, Input },
       emits: ["callback-side-expand"],
       data: (c) => ({
          user: null,

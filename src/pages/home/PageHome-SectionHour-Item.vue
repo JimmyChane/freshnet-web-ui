@@ -4,15 +4,9 @@
          item: { type: Object },
       },
       computed: {
-         isToday() {
-            return this.item.isSameDay(new Date());
-         },
-         title() {
-            return this.item.title;
-         },
-         content() {
-            return this.item.hours.toString();
-         },
+         isToday: (c) => c.item.isSameDay(new Date()),
+         title: (c) => c.item.title,
+         content: (c) => c.item.hours.toString(),
       },
    };
 </script>

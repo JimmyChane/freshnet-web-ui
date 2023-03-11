@@ -17,14 +17,12 @@
          isOver550px: (c) => c.$root.window.innerWidth > 550,
 
          paths: (c) => c.$root.paths,
-         lastPath() {
-            let { paths } = this;
+         lastPath: (c) => {
+            let { paths } = c;
             if (!paths.length) return "";
             return paths[paths.length - 1];
          },
-         productSearches() {
-            return Searcher.withItems(this.products).search(this.searchText);
-         },
+         productSearches: (c) => Searcher.withItems(c.products).search(c.searchText),
 
          initRightMenus() {
             const menus = [];

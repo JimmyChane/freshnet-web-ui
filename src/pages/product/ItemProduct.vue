@@ -25,9 +25,9 @@
          isList: (c) => c.mode === Mode.List,
          isGrid: (c) => c.mode === Mode.Grid,
 
-         primaryColor() {
-            return chroma.valid(this.primaryColorHex)
-               ? chroma(this.primaryColorHex)
+         primaryColor: (c) => {
+            return chroma.valid(c.primaryColorHex)
+               ? chroma(c.primaryColorHex)
                : chroma("cccccc");
          },
          isPrimaryColorDark: (c) => U.isColorDark(c.primaryColor),

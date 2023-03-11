@@ -73,12 +73,8 @@
          scrollTop: 0,
       }),
       computed: {
-         classWide() {
-            return this.isWide ? "ViewerProduct-isWide" : "ViewerProduct-isThin";
-         },
-         classes() {
-            return ["ViewerProduct", this.classWide];
-         },
+         classWide: (c) => (c.isWide ? "ViewerProduct-isWide" : "ViewerProduct-isThin"),
+         classes: (c) => ["ViewerProduct", c.classWide],
 
          tabs() {
             if (!this.product) return [];
@@ -114,70 +110,66 @@
             });
          },
 
-         imagePreview: (context) => {
-            if (context.imagePreviewIndex >= context.images.length)
-               context.imagePreviewIndex = 0;
-            return context.images.length
-               ? context.images[context.imagePreviewIndex]
-               : null;
+         imagePreview: (c) => {
+            if (c.imagePreviewIndex >= c.images.length) c.imagePreviewIndex = 0;
+            return c.images.length ? c.images[c.imagePreviewIndex] : null;
          },
-         images: (context) => (!context.product ? [] : context.product.images),
-         hasImagePrevious: (context) =>
-            context.images.length > 0 && context.imagePreviewIndex > 0,
-         hasImageNext: (context) => context.images.length - 1 > context.imagePreviewIndex,
+         images: (c) => (!c.product ? [] : c.product.images),
+         hasImagePrevious: (c) => c.images.length > 0 && c.imagePreviewIndex > 0,
+         hasImageNext: (c) => c.images.length - 1 > c.imagePreviewIndex,
 
-         settings() {
-            let settings = this.settingStore.getters.items;
+         settings: (c) => {
+            let settings = c.settingStore.getters.items;
             return Array.isArray(settings) ? settings : [];
          },
-         settingShowPrice() {
-            let theSetting = this.settings.find((setting) => {
+         settingShowPrice: (c) => {
+            let theSetting = c.settings.find((setting) => {
                return setting.key === SettingModule.Key.PublicShowPrice;
             });
             return theSetting ? theSetting.value : false;
          },
 
-         price: (context) => {
-            if (!context.isEditable && !context.settingShowPrice) return null;
-            return context.product ? context.product.price : null;
+         price: (c) => {
+            if (!c.isEditable && !c.settingShowPrice) return null;
+            return c.product ? c.product.price : null;
          },
 
-         description: (context) => (context.product ? context.product.description : ""),
+         description: (c) => (c.product ? c.product.description : ""),
 
          specificationKeys: () => {
             return Object.keys(ProductSpecType.Key).map((key) => {
                return ProductSpecType.Key[key];
             });
          },
-         specifications: (context) => {
-            if (!context.product) return [];
-            if (!Array.isArray(context.product.specifications)) return [];
+         specifications: (c) => {
+            if (!c.product) return [];
+            if (!Array.isArray(c.product.specifications)) return [];
 
-            return context.product.specifications
+            return c.product.specifications
                .filter((spec) => spec && spec.type && spec.content)
                .sort((spec1, spec2) => {
-                  const key1 = context.obtainKeyOfSpecificationType(spec1.type);
-                  const key2 = context.obtainKeyOfSpecificationType(spec2.type);
+                  const key1 = c.obtainKeyOfSpecificationType(spec1.type);
+                  const key2 = c.obtainKeyOfSpecificationType(spec2.type);
 
-                  let index1 = context.specificationKeys.indexOf(key1);
-                  let index2 = context.specificationKeys.indexOf(key2);
+                  let index1 = c.specificationKeys.indexOf(key1);
+                  let index2 = c.specificationKeys.indexOf(key2);
 
-                  index1 = index1 >= 0 ? index1 : context.specificationKeys.length;
-                  index2 = index2 >= 0 ? index2 : context.specificationKeys.length;
+                  index1 = index1 >= 0 ? index1 : c.specificationKeys.length;
+                  index2 = index2 >= 0 ? index2 : c.specificationKeys.length;
 
                   return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
                });
          },
 
-         gifts: (context) => (context.product ? context.product.gifts : []),
-         bundles: (context) => (context.product ? context.product.bundles : []),
-         whatIncludeds: (context) => {
+         gifts: (c) => (c.product ? c.product.gifts : []),
+         bundles: (c) => (c.product ? c.product.bundles : []),
+         whatIncludeds: (c) => {
             return [
-               ...context.gifts
+               ...c.gifts
                   .filter((gift) => typeof gift === "string")
                   .map((gift) => gift.trim())
                   .filter((gift) => gift.length),
-               ...context.bundles
+               ...c.bundles
                   .filter((bundle) => typeof bundle === "object" && bundle !== null)
                   .map((bundle) => bundle.title)
                   .filter((bundle) => typeof bundle === "string")
@@ -186,20 +178,16 @@
             ];
          },
 
-         primaryColor() {
-            return chroma.valid(this.primaryColorHex)
-               ? chroma(this.primaryColorHex)
-               : chroma("cccccc");
-         },
+         primaryColor: (c) =>
+            chroma.valid(c.primaryColorHex)
+               ? chroma(c.primaryColorHex)
+               : chroma("cccccc"),
          primaryColorIsDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 75,
          actionbarColor: (c) => c.primaryColor.mix("ffffff", 0.6),
          backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.3),
          headerBackgroundColor: (c) => c.primaryColor.mix("000000", 0.4),
-         titleColor() {
-            return this.primaryColorIsDark
-               ? "white"
-               : this.primaryColor.mix("000000", 0.96);
-         },
+         titleColor: (c) =>
+            c.primaryColorIsDark ? "white" : c.primaryColor.mix("000000", 0.96),
       },
       watch: {
          isWide() {

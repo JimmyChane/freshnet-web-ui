@@ -5,18 +5,16 @@
          isWide: { type: Boolean, default: false },
       },
       computed: {
-         primaryColor: (context) => context.item.primaryColor,
-         title: (context) => context.item.title,
-         icon: (context) => context.item.icon,
-         count: (context) => context.item.list.length,
+         primaryColor: (c) => c.item.primaryColor,
+         title: (c) => c.item.title,
+         icon: (c) => c.item.icon,
+         count: (c) => c.item.list.length,
 
-         selfClasses: (context) => {
-            const classes = [
-               context.item.isSelected() ? "Tab-isSelected" : "Tab-isDeselected",
-            ];
+         selfClasses: (c) => {
+            const classes = [c.item.isSelected() ? "Tab-isSelected" : "Tab-isDeselected"];
 
-            if (context.isWide) classes.push("Tab-isWide");
-            else classes.push(context.item.isSelected() ? "Tab-isWide" : "Tab-isThin");
+            if (c.isWide) classes.push("Tab-isWide");
+            else classes.push(c.item.isSelected() ? "Tab-isWide" : "Tab-isThin");
 
             return classes;
          },

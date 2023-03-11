@@ -13,7 +13,7 @@
                .map((event) => event)
                .sort((event1, event2) => event1.compare(event2));
          },
-         totalCost: (context) => context.service.toTotalPrice(),
+         totalCost: (c) => c.service.toTotalPrice(),
          totalCostText() {
             if (this.totalCost && this.totalCost.amount !== 0) {
                return `Total Cost: ${this.totalCost}`;
@@ -39,9 +39,7 @@
             :items="events"
             @click-item-delete="(event) => $emit('click-remove-event', event)"
          />
-         <span class="PanelEvents-empty" v-if="!events.length">
-            Empty Events
-         </span>
+         <span class="PanelEvents-empty" v-if="!events.length"> Empty Events </span>
       </div>
    </div>
 </template>

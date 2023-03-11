@@ -100,15 +100,15 @@
          flex-direction: column;
          align-items: center;
          justify-content: center;
+         gap: 0.2em;
 
          .HomeHeader-name {
             font-weight: 600;
             font-size: 1.6em;
-            line-height: 1;
+            line-height: 1em;
          }
          .HomeHeader-classification {
             font-size: 0.4em;
-            line-height: 1em;
             color: inherit;
             text-decoration: inherit;
          }

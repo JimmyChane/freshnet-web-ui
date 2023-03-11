@@ -7,9 +7,7 @@
       props: { items: { type: Array, default: () => [] } },
       data: (c) => ({ ArrowDirection: Arrow.Direction, scrollLeft: 0 }),
       computed: {
-         selectedItem() {
-            return this.items.find((item) => item.isSelected());
-         },
+         selectedItem: (c) => c.items.find((item) => item.isSelected()),
       },
       watch: {
          selectedItem() {

@@ -4,9 +4,9 @@
       props: { isWide: { type: Boolean, default: true } },
       data: (c) => ({ redirect: "" }),
       computed: {
-         user: (context) => context.loginStore.getters.user,
-         userName: (context) => context.user.name,
-         isLoginPage: (context) => context.$root.currentPageKey === "login",
+         user: (c) => c.loginStore.getters.user,
+         userName: (c) => c.user.name,
+         isLoginPage: (c) => c.$root.currentPageKey === "login",
       },
       watch: {
          $route() {

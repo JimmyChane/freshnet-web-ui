@@ -17,11 +17,11 @@
          dragWidth: 0,
       }),
       computed: {
-         isWide: (context) => context.$root.navigation.isWide(),
-         isDrawer: (context) => context.$root.navigation.isDrawer(),
-         isExpand: (context) => context.$root.navigation.isExpanded(),
-         selectedPageKey: (context) => context.$root.currentPageKey,
-         selectedViewKey: (context) => context.$root.currentViewKey,
+         isWide: (c) => c.$root.navigation.isWide(),
+         isDrawer: (c) => c.$root.navigation.isDrawer(),
+         isExpand: (c) => c.$root.navigation.isExpanded(),
+         selectedPageKey: (c) => c.$root.currentPageKey,
+         selectedViewKey: (c) => c.$root.currentViewKey,
 
          drawerMode() {
             if (!this.isDrawer) return Drawer.Mode.FIXED;
