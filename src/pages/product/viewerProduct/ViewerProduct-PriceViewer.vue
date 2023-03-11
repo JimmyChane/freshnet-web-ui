@@ -10,15 +10,8 @@
          product: { type: Object, default: () => null },
          primaryColor: { type: Object },
       },
+      data: (c) => ({ settingShowPrice: false }),
       computed: {
-         settings: (context) => context.settingStore.getters.items,
-         settingShowPrice: (c) => {
-            return c.settingStore.dispatch("findValueOfKey", {
-               key: SettingModule.Key.PublicShowPrice,
-               default: false,
-            });
-         },
-
          priceNormal() {
             if (!this.product) return null;
             const normal = this.product.getPriceNormal();
@@ -63,6 +56,22 @@
          isPromotion: (context) => context.product.isPricePromotion(),
          isAvailable: (context) => context.product.isStockAvailable(),
          isSecondHand: (context) => context.product.isStockSecondHand(),
+      },
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
+      },
+      mounted() {
+         this.invalidate();
+      },
+      methods: {
+         async invalidate() {
+            this.settingShowPrice = await this.settingStore.dispatch("findValueOfKey", {
+               key: SettingModule.Key.PublicShowPrice,
+               default: false,
+            });
+         },
       },
    };
 </script>
