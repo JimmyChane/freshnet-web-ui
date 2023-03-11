@@ -265,7 +265,7 @@
       --padding-vertical: 40px;
       --gap-all: 10px;
 
-      width: 100vw;
+      width: 100dvw;
       max-width: 500px;
       height: max-content;
       align-self: center;

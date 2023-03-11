@@ -739,7 +739,7 @@
          "header info"
          "bottomactionbar bottomactionbar";
       .ViewerProduct-header {
-         height: calc(100vh - var(--actionbar-height) - 3.5rem);
+         height: calc(100dvh - var(--actionbar-height) - 3.5rem);
          position: sticky;
          left: 0;
          top: var(--actionbar-height);

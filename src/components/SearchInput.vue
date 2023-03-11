@@ -125,8 +125,8 @@
       }
 
       .SearchInput-background {
-         min-width: 100vw;
-         min-height: 100vh;
+         min-width: 100dvw;
+         min-height: 100dvh;
          position: fixed;
          top: 0;
          bottom: 0;
@@ -138,7 +138,7 @@
 
       .SearchInput-dropdown {
          width: 100%;
-         height: 100vh;
+         height: 100dvh;
          max-height: var(--dropdown-height);
 
          z-index: 1;

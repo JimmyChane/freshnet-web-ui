@@ -43,7 +43,7 @@
          --border-radius: 0.8rem;
          --border: 1px solid transparent;
          --border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
-         --dropdown-height: calc(100vh - 10rem);
+         --dropdown-height: calc(100dvh - 10rem);
       }
    }
    .NavigationLeft-Search-isWide {

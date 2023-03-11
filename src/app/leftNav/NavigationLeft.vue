@@ -74,12 +74,8 @@
             return navigations;
          },
 
-         refDrawer() {
-            return this.$refs.Drawer;
-         },
-         refBody() {
-            return this.$refs.Body;
-         },
+         refDrawer: (c) => c.$refs.Drawer,
+         refBody: (c) => c.$refs.Body,
       },
       watch: {
          isExpand() {

@@ -24,28 +24,16 @@
       },
       watch: {
          isLogging() {
-            if (!this.loginStore.getters.user && this.isLogging)
+            if (!this.loginStore.getters.user && this.isLogging) {
                this.store.dispatch("snackbarShow", "User Logging");
+            }
          },
-      },
-      mounted() {
-         window.addEventListener("resize", () => this.invalidateHeight());
-         this.invalidateHeight();
-      },
-      unmounted() {
-         window.removeEventListener("resize", this.invalidateHeight);
       },
       methods: {
          logout() {
             this.loginStore.dispatch("logout").then((user) => {
                this.store.dispatch("snackbarShow", `${user.name} is now logged out`);
             });
-         },
-
-         invalidateHeight() {
-            const { innerHeight } = window;
-            const vh = innerHeight * 0.01;
-            document.body.style.setProperty("--vh", `${vh}px`);
          },
       },
    };
@@ -55,20 +43,18 @@
    <div
       :class="[
          'App',
-         'transition',
          $root.appLayout.isNormal() ? 'App-isNormal' : '',
          $root.appLayout.isFull() ? 'App-isFull' : '',
       ]"
    >
-      <div class="App-background transition" :style="{ 'z-index': '1' }"></div>
+      <div class="App-background" :style="{ 'z-index': '1' }"></div>
 
-      <div class="App-body transition" :style="{ 'z-index': '2' }">
+      <div class="App-body" :style="{ 'z-index': '2' }">
          <div class="App-layout">
             <Status :style="{ 'z-index': '2' }" />
 
             <div
                :class="[
-                  'transition',
                   'App-layout-body',
                   $root.navigation.isDrawer()
                      ? 'App-layout-body-isDrawer'
@@ -157,34 +143,27 @@
    .App {
       position: relative;
       color: black;
-      width: 100%;
-      height: 100%;
-      height: 100vh;
-      max-height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       background: none;
-      overflow: hidden;
-
-      height: -webkit-fill-available; // fix for ios - test
-      height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-      height: calc(var(--vh, 1vh) * 100);
+      overflow-x: hidden;
 
       .App-background {
          position: absolute;
-         width: 100%;
-         height: 100%;
+         width: 100dvw;
+         height: 100dvh;
          pointer-events: none;
       }
       .App-body {
-         width: 100%;
-         height: 100%;
+         width: 100dvw;
+         height: 100dvh;
          display: flex;
          flex-direction: column;
          align-items: center;
          justify-content: center;
-         overflow: hidden;
 
          .App-layout {
             width: 100%;

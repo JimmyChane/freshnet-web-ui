@@ -145,7 +145,7 @@
          z-index: 1;
          width: 100%;
          min-height: max-content;
-         height: 100vh;
+         height: 100dvh;
          max-height: 100%;
 
          display: flex;

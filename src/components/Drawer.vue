@@ -126,7 +126,7 @@
 </script>
 
 <template>
-   <div :class="['Drawer', classEdge, ...classModes]" :style="style">
+   <div :class="['transition', 'Drawer', classEdge, ...classModes]" :style="style">
       <div class="Drawer-body" ref="Body" :style="styleBody"><slot /></div>
 
       <div

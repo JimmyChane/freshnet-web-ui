@@ -714,7 +714,7 @@
 <style lang="scss" scoped>
    .PageProduct {
       width: 100%;
-      width: 100vw;
+      width: 100dvw;
       max-width: 100%;
       height: 100%;
       display: flex;
@@ -723,7 +723,7 @@
       overflow: hidden;
 
       .PageProduct-body {
-         width: 100vw;
+         width: 100dvw;
          max-width: 100%;
          height: 100%;
          display: flex;
@@ -734,7 +734,7 @@
 
          .PageProduct-products {
             z-index: 1;
-            width: 100vw;
+            width: 100dvw;
             max-width: 100%;
          }
          .PageProduct-PanelRightEmpty {
@@ -762,36 +762,36 @@
             z-index: 3;
             .PageProduct-PanelProduct {
                height: 100%;
-               width: 100vw;
+               width: 100dvw;
                max-width: 100%;
             }
          }
       }
       .PageProduct-body-isLess1200 {
          .PageProduct-products {
-            width: 100vw;
+            width: 100dvw;
             max-width: 100%;
          }
          .PageProduct-PanelRightEmpty {
             display: none;
          }
          .PageProduct-panel-PanelProduct {
-            width: 100vw;
+            width: 100dvw;
             max-width: 100%;
          }
       }
       .PageProduct-body-isOver1200 {
          position: relative;
          .PageProduct-products {
-            width: 100vw;
+            width: 100dvw;
             max-width: 60%;
          }
          .PageProduct-PanelRightEmpty {
-            width: 100vw;
+            width: 100dvw;
             max-width: 40%;
          }
          .PageProduct-panel-PanelProduct {
-            width: 100vw;
+            width: 100dvw;
             max-width: 40%;
          }
       }

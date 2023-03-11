@@ -605,35 +605,35 @@
          .PageService-RightDrawer {
             z-index: 3;
             .PageService-PanelRight {
-               width: 100vw;
+               width: 100dvw;
                max-width: 100%;
             }
          }
       }
       .PageService-isThin {
          .PageService-PanelServices {
-            width: 100vw;
+            width: 100dvw;
             max-width: 100%;
          }
          .PageService-PanelRightEmpty {
             display: none;
          }
          .PageService-RightDrawer {
-            width: 100vw;
+            width: 100dvw;
             max-width: 100%;
          }
       }
       .PageService-isWide {
          .PageService-PanelServices {
-            width: 100vw;
+            width: 100dvw;
             max-width: 50%;
          }
          .PageService-PanelRightEmpty {
-            width: 100vw;
+            width: 100dvw;
             max-width: 50%;
          }
          .PageService-RightDrawer {
-            width: 100vw;
+            width: 100dvw;
             max-width: 50%;
             position: absolute;
          }

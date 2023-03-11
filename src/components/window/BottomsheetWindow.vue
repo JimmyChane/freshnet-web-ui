@@ -18,9 +18,7 @@
 <template>
    <DismissableContainer
       class="BottomsheetWindow transition"
-      :class="[
-         isShowing ? 'BottomsheetWindow-expand' : 'BottomsheetWindow-collapse',
-      ]"
+      :class="[isShowing ? 'BottomsheetWindow-expand' : 'BottomsheetWindow-collapse']"
       @click-dismiss="$emit('click-dismiss')"
    >
       <div class="BottomsheetWindow-body transition">
@@ -41,8 +39,8 @@
       --default-size-left: 0;
 
       .BottomsheetWindow-body {
-         height: 100vh;
-         width: 100vw;
+         height: 100dvh;
+         width: 100dvw;
          max-width: 100%;
          max-height: 100%;
          box-shadow: 1px 2px 20px 0px hsla(0, 0%, 0%, 0.7);

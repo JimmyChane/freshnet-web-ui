@@ -7,29 +7,17 @@
 <template>
    <div class="DismissableContainer transition">
       <div class="DismissableContainer-body"><slot /></div>
-      <div
-         class="DismissableContainer-hitbox-top"
-         @click="$emit('click-dismiss')"
-      />
-      <div
-         class="DismissableContainer-hitbox-left"
-         @click="$emit('click-dismiss')"
-      />
-      <div
-         class="DismissableContainer-hitbox-right"
-         @click="$emit('click-dismiss')"
-      />
-      <div
-         class="DismissableContainer-hitbox-bottom"
-         @click="$emit('click-dismiss')"
-      />
+      <div class="DismissableContainer-hitbox-top" @click="$emit('click-dismiss')" />
+      <div class="DismissableContainer-hitbox-left" @click="$emit('click-dismiss')" />
+      <div class="DismissableContainer-hitbox-right" @click="$emit('click-dismiss')" />
+      <div class="DismissableContainer-hitbox-bottom" @click="$emit('click-dismiss')" />
    </div>
 </template>
 
 <style lang="scss" scoped>
    .DismissableContainer {
-      width: 100vw;
-      height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
       z-index: 1;
       align-items: center;
       --transition-timing: cubic-bezier(1, 0, 0, 1);

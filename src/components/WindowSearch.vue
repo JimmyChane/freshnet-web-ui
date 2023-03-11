@@ -56,8 +56,8 @@
 
 <style lang="scss" scoped>
    .WindowSearch-body {
-      width: 100vw;
-      height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
       max-width: 100%;
       max-height: 100%;
       display: flex;

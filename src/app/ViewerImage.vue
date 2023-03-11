@@ -172,18 +172,15 @@
       bottom: 0;
       left: 0;
       right: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
       display: flex;
       overflow: hidden;
 
-      height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-      height: calc(var(--vh, 1vh) * 100);
-
       .App-overflow-body {
          position: relative;
-         width: 100vw;
-         height: 100vh;
+         width: 100dvw;
+         height: 100dvh;
          display: flex;
          overflow: hidden;
 
@@ -217,7 +214,7 @@
             }
             .ViewerImage-main {
                z-index: 2;
-               width: 100vw;
+               width: 100dvw;
                max-width: 100%;
                max-height: calc(100% - var(--thumbnail-height) - var(--actionbar-height));
                padding: 1rem;

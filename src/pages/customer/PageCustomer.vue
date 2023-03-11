@@ -432,7 +432,7 @@
                overflow-y: auto;
 
                height: 100%;
-               width: 100vw;
+               width: 100dvw;
                max-width: 100%;
             }
          }
@@ -440,28 +440,28 @@
 
       .PageCustomer-body-isLess1200px {
          .PageCustomer-panelLeft {
-            width: 100vw;
+            width: 100dvw;
             max-width: 100%;
          }
          .PageCustomer-PanelRightEmpty {
             display: none;
          }
          .PageCustomer-RightDrawer {
-            width: 100vw;
+            width: 100dvw;
             max-width: 100%;
          }
       }
       .PageCustomer-body-isOver1200px {
          .PageCustomer-panelLeft {
-            width: 100vw;
+            width: 100dvw;
             max-width: 50%;
          }
          .PageCustomer-PanelRightEmpty {
-            width: 100vw;
+            width: 100dvw;
             max-width: 50%;
          }
          .PageCustomer-RightDrawer {
-            width: 100vw;
+            width: 100dvw;
             max-width: 50%;
          }
       }
