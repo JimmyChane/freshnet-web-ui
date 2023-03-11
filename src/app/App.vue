@@ -25,7 +25,7 @@
       watch: {
          isLogging() {
             if (!this.loginStore.getters.user && this.isLogging)
-               this.store.dispatch("snackbarShow","User Logging");
+               this.store.dispatch("snackbarShow", "User Logging");
          },
       },
       mounted() {
@@ -38,7 +38,7 @@
       methods: {
          logout() {
             this.loginStore.dispatch("logout").then((user) => {
-               this.store.dispatch("snackbarShow",`${user.name} is now logged out`);
+               this.store.dispatch("snackbarShow", `${user.name} is now logged out`);
             });
          },
 
@@ -148,53 +148,12 @@
       transition-delay: var(--transition-delay);
    }
 
-   :root {
-      font-size: 16px;
-      @media (max-width: 320px) {
-         font-size: 14px;
-      }
+   // color schemas
+   .App {
+      --primary-color: #294656;
+      --accent-color: #fc8237;
+      --statusbar-color: #384a6a;
    }
-
-   html {
-      // @import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
-      // @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-      // @import url("https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&display=swap");
-      @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
-
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      overscroll-behavior-x: none;
-
-      body {
-         width: 100%;
-         height: 100%;
-         overscroll-behavior-x: none;
-
-         p {
-            white-space: pre-line;
-         }
-      }
-
-      * {
-         box-sizing: border-box;
-         margin: 0;
-         padding: 0;
-
-         outline: none;
-         -webkit-tap-highlight-color: transparent;
-         font-family: "Roboto", sans-serif;
-         word-break: break-word;
-      }
-
-      // color schemas
-      .App {
-         --primary-color: #294656;
-         --accent-color: #fc8237;
-         --statusbar-color: #384a6a;
-      }
-   }
-
    .App {
       position: relative;
       color: black;
