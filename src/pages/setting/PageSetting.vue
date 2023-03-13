@@ -106,15 +106,15 @@
          scrollTop: 0,
 
          list: [
-            SettingBuilder.title("Company (not implemented)").list(
-               SettingBuilder.title("Name (not implemented)").type("text"),
-               SettingBuilder.title("Category (not implemented)").type("text"),
-            ),
+            // SettingBuilder.title("Company (not implemented)").list(
+            //    SettingBuilder.title("Name (not implemented)").type("text"),
+            //    SettingBuilder.title("Category (not implemented)").type("text"),
+            // ),
             SettingBuilder.key(SettingModule.Key.Contacts)
                .title("Contacts (not implemented)")
                .type("array-text"),
             SettingBuilder.title("Location").list(
-               SettingBuilder.title("Brief Address Name (not implemented)").type("text"),
+               // SettingBuilder.title("Brief Address Name (not implemented)").type("text"),
                SettingBuilder.key(SettingModule.Key.Location)
                   .title("Address")
                   .type("text"),
@@ -122,7 +122,7 @@
                   .title("Link")
                   .type("text"),
             ),
-            SettingBuilder.title("Business Hours (not implemented)"),
+            // SettingBuilder.title("Business Hours (not implemented)"),
             SettingBuilder.title("Product Page").list(
                SettingBuilder.key(SettingModule.Key.PublicShowPrice)
                   .title("Show Price in View Mode")

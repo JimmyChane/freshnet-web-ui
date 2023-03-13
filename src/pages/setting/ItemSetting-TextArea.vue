@@ -23,7 +23,6 @@
                      icon: c.host.icon("save-000000"),
                      click: async () => {
                         if (!c.isEditing) return;
-                        if (!c.nextValue.trim().length) return;
                         await c.item.updateValue(c.nextValue);
                         c.isEditing = false;
                      },
@@ -48,7 +47,13 @@
             this.invalidateValue();
          },
          isEditing() {
-            this.nextValue = this.isEditing ? this.value : "";
+            if (this.isEditing) {
+               this.nextValue = this.value;
+               this.$refs.textarea.focus();
+            } else {
+               this.nextValue = "";
+               this.$refs.textarea.blur();
+            }
          },
       },
       mounted() {
@@ -76,6 +81,7 @@
                ? 'ItemSetting-TextArea-textarea-isShowing'
                : 'ItemSetting-TextArea-textarea-isHiding',
          ]"
+         ref="textarea"
          v-model="nextValue"
       />
       <p
@@ -126,7 +132,7 @@
       }
 
       .ItemSetting-TextArea-textarea {
-         resize: vertical;
+         resize: none;
          background-color: white;
          --transition-timing: cubic-bezier(1, 0, 0, 1);
       }
@@ -141,6 +147,8 @@
          border-color: transparent;
          background: transparent;
          margin-top: -1px;
+         pointer-events: none;
+         opacity: 0;
       }
 
       .ItemSetting-TextArea-empty {
