@@ -17,7 +17,7 @@
    import ProductSpecType from "@/items/ProductSpecType.js";
    import SettingModule from "@/items/data/Setting.js";
    import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js";
 
    export default {
       components: {
@@ -47,6 +47,7 @@
       props: {
          isWide: { type: Boolean, default: false },
          isEditable: { type: Boolean, default: false },
+         isActionbarHidden: { type: Boolean, default: false },
 
          leftMenus: { default: () => [] },
          rightMenus: { default: () => [] },
@@ -71,6 +72,8 @@
 
          height: 0,
          scrollTop: 0,
+
+         settingShowPrice: false,
       }),
       computed: {
          classWide: (c) => (c.isWide ? "ViewerProduct-isWide" : "ViewerProduct-isThin"),
@@ -117,17 +120,6 @@
          images: (c) => (!c.product ? [] : c.product.images),
          hasImagePrevious: (c) => c.images.length > 0 && c.imagePreviewIndex > 0,
          hasImageNext: (c) => c.images.length - 1 > c.imagePreviewIndex,
-
-         settings: (c) => {
-            let settings = c.settingStore.getters.items;
-            return Array.isArray(settings) ? settings : [];
-         },
-         settingShowPrice: (c) => {
-            let theSetting = c.settings.find((setting) => {
-               return setting.key === SettingModule.Key.PublicShowPrice;
-            });
-            return theSetting ? theSetting.value : false;
-         },
 
          price: (c) => {
             if (!c.isEditable && !c.settingShowPrice) return null;
@@ -187,9 +179,12 @@
          backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.3),
          headerBackgroundColor: (c) => c.primaryColor.mix("000000", 0.4),
          titleColor: (c) =>
-            c.primaryColorIsDark ? "white" : c.primaryColor.mix("000000", 0.96),
+            c.primaryColorIsDark ? "white" : c.primaryColor.mix("000000", 0.98),
       },
       watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidateSettings();
+         },
          isWide() {
             setTimeout(() => this.invalidateBound(), 500);
          },
@@ -208,6 +203,13 @@
          },
       },
       methods: {
+         async invalidateSettings() {
+            this.settingShowPrice = await this.settingStore.dispatch("findValueOfKey", {
+               key: SettingModule.Key.PublicShowPrice,
+               default: false,
+            });
+         },
+
          invalidateBound() {
             this.scrollTop = this._self.$el.scrollTop;
             this.height = this._self.$el.offsetHeight;
@@ -301,8 +303,6 @@
          scrolling(event) {
             this.invalidateBound();
 
-            const parent = event.target;
-            // const pointHeight = parent.offsetHeight / 4;
             const pointHeight = 156; // 156px
 
             this.tabKeyNow = this.tabs.reduce((tabKeyNow, tab) => {
@@ -327,6 +327,7 @@
          this.invalidateBound();
          this.invalidateProduct();
          this.invalidateImagePreview();
+         this.invalidateSettings();
       },
       destroy() {
          this.removeArrowListener();
@@ -341,12 +342,14 @@
          '--primary-color': primaryColor,
          'background-color': backgroundColor,
          '--color-transition-duration': colorTransitionDuration,
+         '--actionbar-toolbar': isActionbarHidden ? '1.5rem' : '5.5rem',
       }"
       @scroll="(event) => scrolling(event)"
    >
       <div class="ViewerProduct-toolbar" :style="{ 'background-color': actionbarColor }">
          <Actionbar
             class="ViewerProduct-actionbar"
+            v-if="!isActionbarHidden"
             :leftMenus="leftMenus"
             :rightMenus="rightMenus"
             :style="{ 'background-color': actionbarColor }"
@@ -596,6 +599,7 @@
                font-weight: 600;
                text-align: center;
                padding: 2rem;
+               margin-top: -1rem;
                transition: color var(--color-transition-duration);
 
                @media (max-width: 480px) {
@@ -604,6 +608,7 @@
             }
          }
       }
+
       .ViewerProduct-info {
          --padding: 1.2rem;
 
@@ -612,6 +617,7 @@
          width: 100%;
          z-index: 2;
          gap: 1.5rem;
+         gap: 1rem;
          color: black;
 
          display: flex;
@@ -620,7 +626,6 @@
          justify-content: flex-start;
          padding: var(--padding);
          padding-bottom: 10rem;
-         padding-bottom: 80vh;
       }
       .ViewerProduct-emtpy {
          z-index: 2;
@@ -713,24 +718,25 @@
 
       .ViewerProduct-header {
          max-width: 50rem;
+         margin-bottom: -0.6rem;
       }
       .ViewerProduct-info {
          max-width: 50rem;
+         margin-top: -0.6rem;
       }
    }
    .ViewerProduct-isWide {
-      --actionbar-height: 5.5rem;
-      grid-template-rows: var(--actionbar-height) 1fr;
+      grid-template-rows: var(--actionbar-toolbar) 1fr;
       grid-template-columns: 45% 55%;
       grid-template-areas:
          "toolbar toolbar"
          "header info"
          "bottomactionbar bottomactionbar";
       .ViewerProduct-header {
-         height: calc(100dvh - var(--actionbar-height) - 3.5rem);
+         height: calc(100dvh - var(--actionbar-toolbar) - 3.5rem);
          position: sticky;
          left: 0;
-         top: var(--actionbar-height);
+         top: var(--actionbar-toolbar);
       }
       .ViewerProduct-header {
          --padding: 2rem;

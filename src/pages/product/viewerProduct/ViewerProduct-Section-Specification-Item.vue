@@ -69,7 +69,7 @@
       max-width: 100%;
       display: flex;
       flex-direction: row;
-      padding: 1.2rem;
+      padding: 1rem 1.2rem;
       background: hsla(0, 0%, 100%, 0.6);
 
       .ItemProductSpecification-icon {

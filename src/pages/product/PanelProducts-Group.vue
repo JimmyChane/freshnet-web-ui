@@ -13,9 +13,11 @@
          currentProductId: { type: String, default: "" },
          queryBrandId: { type: String, default: "" },
          queryStock: { type: String, default: "" },
+         queryGroupKey: { type: String, default: "" },
       },
       data: (c) => ({ ArrowDirection: Arrow.Direction, scrollLeft: 0 }),
       computed: {
+         key: (c) => c.group.key,
          icon: (c) => c.group.icon,
          title: (c) => c.group.title,
          items: (c) => c.group.items,
@@ -48,13 +50,20 @@
       ]"
    >
       <div class="PanelProducts-category-header">
-         <span class="PanelProducts-category-title">{{ title }}</span>
          <img
             class="PanelProducts-category-icon"
             v-if="icon"
             :src="icon"
             :alt="`${title} Icon`"
          />
+         <span class="PanelProducts-category-title">{{ title }}</span>
+
+         <router-link
+            class="PanelProducts-category-focusGroup transition"
+            :to="{ query: { category: key } }"
+            v-if="queryGroupKey !== key"
+            >View All</router-link
+         >
       </div>
 
       <div class="PanelProducts-category-body">
@@ -114,10 +123,31 @@
          font-size: 2.5rem;
          font-weight: 500;
          gap: 0.5em;
+         padding: 0 1.2rem;
 
          .PanelProducts-category-icon {
             width: 1em;
             height: 1em;
+         }
+         .PanelProducts-category-title {
+            flex-grow: 1;
+         }
+         .PanelProducts-category-focusGroup {
+            padding: 0.6em 0.8em;
+            line-height: 1em;
+            font-size: 0.9rem;
+            color: white;
+
+            background: var(--accent-color);
+            border: none;
+            border-radius: 2em;
+
+            cursor: pointer;
+            text-decoration: none;
+
+            &:hover {
+               background: var(--accent-color-hover);
+            }
          }
       }
       .PanelProducts-category-body {
@@ -140,9 +170,6 @@
       }
    }
    .PanelProducts-category-isThin {
-      .PanelProducts-category-header {
-         padding: 0 0.9rem;
-      }
       .PanelProducts-category-items {
          padding: 0 0.7rem;
          padding-right: 50%;
@@ -170,9 +197,6 @@
       }
    }
    .PanelProducts-category-isWide {
-      .PanelProducts-category-header {
-         padding: 0 0.8rem;
-      }
       .PanelProducts-category-items {
          padding: 0 0.5rem;
 

@@ -13,15 +13,15 @@
 
 <style lang="scss" scoped>
    .Icon {
-      font-size: 1rem;
-      width: 2.5em;
-      height: 2.5em;
-      min-width: 2.5em;
-      min-height: 2.5em;
-      max-width: 2.5em;
-      max-height: 2.5em;
-      padding: 0.7em;
+      font-size: 2.5rem;
+      width: 1em;
+      height: 1em;
+      min-width: 1em;
+      min-height: 1em;
+      max-width: 1em;
+      max-height: 1em;
       background: none;
+      padding: 0.28em;
       border: none;
       display: flex;
       align-items: center;

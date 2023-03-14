@@ -138,6 +138,7 @@
    .App {
       --primary-color: #294656;
       --accent-color: #fc8237;
+      --accent-color-hover: #c45815;
       --statusbar-color: #384a6a;
    }
    .App {

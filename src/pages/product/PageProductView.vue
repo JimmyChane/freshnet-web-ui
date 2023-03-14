@@ -39,7 +39,12 @@
 
 <template>
    <div class="PageProductView">
-      <ViewerProduct :product="product" :isWide="isOver1200px" :isEditable="false" />
+      <ViewerProduct
+         :product="product"
+         :isWide="isOver1200px"
+         :isEditable="false"
+         :isActionbarHidden="true"
+      />
 
       <LoadingDots style="z-index: 2" :isShowing="isLoading" />
    </div>

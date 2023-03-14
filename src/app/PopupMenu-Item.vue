@@ -59,6 +59,7 @@
       min-height: max-content;
       padding: 1em 1.2em;
       gap: 1em;
+      text-align: inherit;
 
       img {
          --icon-size: 1em;
@@ -72,7 +73,6 @@
          min-width: max-content;
          height: max-content;
          min-height: max-content;
-         text-align: start;
          color: black;
       }
    }

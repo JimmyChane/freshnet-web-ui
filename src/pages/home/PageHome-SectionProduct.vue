@@ -139,12 +139,7 @@
          `HomeSectionProduct-${isThin ? 'isThin' : 'isWide'}`,
          'transition',
       ]"
-      :style="{
-         '--color0': color,
-         '--color1': getColorMixed(color, 0.2),
-         '--color2': getColorMixed(color, 0.3),
-         '--color3': getColorMixed(color, 0.9),
-      }"
+      :style="{ '--color0': color, '--color3': getColorMixed(color, 0.9) }"
    >
       <ImageView
          class="HomeSectionProduct-img"
@@ -218,6 +213,7 @@
          object-fit: contain;
          flex-grow: 1;
          padding: 1em;
+         padding: 3em;
          cursor: pointer;
 
          border-radius: 1rem;

@@ -1,13 +1,15 @@
 <script>
    import ImageView from "@/components/ImageView.vue";
+   import IconDynamic from "@/components/IconDynamic.vue";
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import U from "@/U";
 
    const Direction = { Left: 1, Right: 2 };
 
    export default {
       Direction,
 
-      components: { ImageView },
+      components: { ImageView, IconDynamic },
       props: {
          primaryColor: { type: Object },
          direction: { type: Number, default: Direction.Left },
@@ -21,18 +23,16 @@
             const primaryColor = chroma.valid(c.primaryColor)
                ? c.primaryColor
                : chroma("ffffff");
-            return chroma.deltaE(primaryColor, "000000") < 60;
+            return U.isColorDark(primaryColor, 60);
          },
 
-         rotation() {
-            if (this.isLeft) return "90deg";
-            if (this.isRight) return "-90deg";
+         rotation: (c) => {
+            if (c.isLeft) return "90deg";
+            if (c.isRight) return "-90deg";
             return "unset";
          },
          arrowIcon: (c) =>
-            c.primaryColorIsDark
-               ? c.host.icon("arrowDown-white")
-               : c.host.icon("arrowDown-black"),
+            c.host.icon(c.primaryColorIsDark ? "arrowDown-white" : "arrowDown-black"),
       },
    };
 </script>
@@ -40,9 +40,9 @@
 <template>
    <button
       :class="[
+         'transition',
          'ImagePreviewArrow',
          isShowing ? '' : 'ImagePreviewArrow-isHidden',
-         'transition',
       ]"
       :style="{
          '--rotation': rotation,
@@ -51,7 +51,12 @@
       }"
       @click="() => $emit('click')"
    >
-      <img class="ImagePreviewArrow-arrow transition" :src="arrowIcon" />
+      <IconDynamic
+         class="ImagePreviewArrow-arrow transition"
+         :primaryColor="primaryColor"
+         :srcLight="host.icon('arrowDown-white')"
+         :srcDark="host.icon('arrowDown-black')"
+      />
    </button>
 </template>
 
@@ -60,11 +65,11 @@
       --rotation: 90deg;
 
       position: absolute;
-      top: 0;
+      top: 3.5rem;
       bottom: 0;
 
       width: 4rem;
-      height: 100%;
+      height: calc(100% - 7rem);
 
       background: none;
       border: none;
@@ -75,9 +80,10 @@
       justify-content: center;
 
       .ImagePreviewArrow-arrow {
-         width: 1.8rem;
-         height: 1.8rem;
-         opacity: 0.66;
+         font-size: 1.8rem;
+         padding: 0;
+
+         opacity: 0.8;
          pointer-events: none;
 
          transform: rotate(var(--rotation));

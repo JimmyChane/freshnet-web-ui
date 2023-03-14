@@ -33,7 +33,7 @@
 <template>
    <Section
       v-if="allowEdit || items.length"
-      title="What's Included"
+      :title="allowEdit ? `What's Included` : ''"
       :primaryColor="primaryColor"
    >
       <div class="SectionInclude">

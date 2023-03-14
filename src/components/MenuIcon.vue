@@ -1,4 +1,5 @@
 <script>
+   import Icon from "./Icon.vue";
    import Menu from "./Menu.vue";
    const Mode = { Show: "show", Hide: "hide" };
 
@@ -7,7 +8,7 @@
       Width: Menu.Width,
       Corner: Menu.Corner,
 
-      components: { Menu },
+      components: { Menu, Icon },
       props: {
          width: { type: Number, default: Menu.Width.AUTO },
          corner: { type: Number, default: Menu.Corner.BOTTOM_LEFT },
@@ -30,7 +31,7 @@
       @show="() => $emit('show')"
       @hide="() => $emit('hide')"
    >
-      <img class="MenuIcon-icon" :src="src" :alt="alt" />
+      <Icon :src="src" :alt="alt" />
    </Menu>
 </template>
 
@@ -59,14 +60,6 @@
       &:hover,
       &:focus-within {
          background-color: hsla(0, 0%, 0%, 0.1);
-      }
-
-      .MenuIcon-icon {
-         --size: 1.4em;
-         min-width: var(--size);
-         min-height: var(--size);
-         width: var(--size);
-         height: var(--size);
       }
    }
 </style>

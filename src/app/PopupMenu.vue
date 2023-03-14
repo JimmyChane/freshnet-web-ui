@@ -70,6 +70,7 @@
                "--y": `${c.y}px`,
                "pointer-events": c.stylePointerEvent,
                "--primary-color-background": c.primaryColorBackground,
+               "text-align": c.menus.length <= 1 ? "center" : "start",
             };
 
             if (c.preferWidth === Width.MIN) {
@@ -219,6 +220,7 @@
       width: max-content;
       height: max-content;
       max-height: 20em;
+      text-align: center;
 
       border-radius: 1em;
       box-shadow: 0.1em 0.2em 1em hsla(0, 0%, 0%, 0.4);

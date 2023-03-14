@@ -155,10 +155,10 @@
          ]"
       >
          <span class="ItemProduct-title-text">{{ fullTitle }}</span>
+         <span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
          <div class="ItemProduct-title-specs" v-if="specLabels.length">
             <Label v-for="label in specLabels" :key="label.text" :title="label.text" />
          </div>
-         <span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
       </div>
    </div>
 </template>
@@ -238,6 +238,7 @@
       .ItemProduct-title {
          display: flex;
          flex-direction: column;
+         flex-grow: 1;
          justify-content: flex-start;
          text-align: start;
 
@@ -255,12 +256,13 @@
 
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
             align-items: flex-start;
+         }
+         .ItemProduct-title-price {
+            font-size: 0.7rem;
          }
          .ItemProduct-title-specs {
             width: 100%;
-            max-height: 2.3rem;
             gap: 1px;
             margin: -0.1rem;
 
@@ -268,12 +270,9 @@
             flex-direction: row;
             flex-wrap: wrap;
             justify-content: flex-start;
-            align-items: flex-start;
+            align-items: flex-end;
 
             overflow: hidden;
-         }
-         .ItemProduct-title-price {
-            font-size: 0.7rem;
          }
       }
       .ItemProduct-title-isDark {

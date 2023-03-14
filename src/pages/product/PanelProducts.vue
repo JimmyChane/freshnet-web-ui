@@ -97,13 +97,7 @@
       },
       watch: {
          queryProductId() {
-            if (!this.queryProductId) {
-               setTimeout(() => {
-                  this.currentProductId = this.queryProductId;
-               }, 500);
-            } else {
-               this.currentProductId = this.queryProductId;
-            }
+            this.invalidateProductId();
          },
          queryCategoryId() {
             this.invalidate();
@@ -129,6 +123,8 @@
       },
       methods: {
          async invalidate() {
+            this.invalidateProductId();
+
             const categoryGroups = await this.productStore.dispatch(
                "getGroupsByCategory",
             );
@@ -242,6 +238,15 @@
             //    ]),
             // );
          },
+         invalidateProductId() {
+            if (!this.queryProductId) {
+               setTimeout(() => {
+                  this.currentProductId = this.queryProductId;
+               }, 500);
+            } else {
+               this.currentProductId = this.queryProductId;
+            }
+         },
       },
    };
 </script>
@@ -279,6 +284,7 @@
                :currentProductId="currentProductId"
                :queryBrandId="queryBrandId"
                :queryStock="queryStock"
+               :queryGroupKey="queryCategoryId"
             />
          </div>
 

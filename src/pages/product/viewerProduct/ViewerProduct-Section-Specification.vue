@@ -33,9 +33,7 @@
                   index1 = index1 >= 0 ? index1 : this.keys.length;
                   index2 = index2 >= 0 ? index2 : this.keys.length;
 
-                  return index1 !== index2
-                     ? index1 - index2
-                     : key1.localeCompare(key2);
+                  return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
                });
          },
 
@@ -67,7 +65,7 @@
       v-if="allowEdit || specifications.length"
       :primaryColor="primaryColor"
       :menu="menu"
-      title="Specification"
+      :title="allowEdit ? 'Specification' : ''"
    >
       <div class="SectionSpecification">
          <div class="SectionSpecification-items" v-if="specifications.length">
@@ -79,9 +77,7 @@
             />
          </div>
 
-         <span class="SectionSpecification-noContent" v-else
-            >No Specifications</span
-         >
+         <span class="SectionSpecification-noContent" v-else>No Specifications</span>
       </div>
    </Section>
 </template>
