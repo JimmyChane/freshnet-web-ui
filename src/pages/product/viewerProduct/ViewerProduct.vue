@@ -10,6 +10,7 @@
    import SectionPlaylist from "./ViewerProduct-Section-Playlist.vue";
 
    import Tabs from "./ViewerProduct-Tabs.vue";
+   import Title from "./ViewerProduct-Title.vue";
    import ProductViewerImagePreview from "./ViewerProduct-ImagePreview.vue";
    import ProductViewerImages from "./ViewerProduct-Images.vue";
    import BottomActionbar from "./ViewerProduct-BottomActionbar.vue";
@@ -35,6 +36,7 @@
          SectionPlaylist,
          Actionbar,
          Tabs,
+         Title,
       },
       emits: [
          "click-product-imageRemove",
@@ -82,12 +84,13 @@
          tabs() {
             if (!this.product) return [];
 
-            const tabs = [
+            return [
                !this.isWide && this.imagePreview
                   ? { key: "image", title: "Image" }
                   : null,
-               this.isEditable ? { key: "brand", title: "Brand" } : null,
-               this.isEditable ? { key: "title", title: "Title" } : null,
+               // this.isEditable ? { key: "brand", title: "Brand" } : null,
+               // this.isEditable ? { key: "title", title: "Title" } : null,
+               { key: "title", title: "Title" },
                // { key: "capability", title: "Capability" },
                this.isEditable || this.specifications.length
                   ? { key: "specification", title: "Specification" }
@@ -103,9 +106,7 @@
                   : null,
                this.isEditable ? { key: "stock", title: "Stock" } : null,
                this.isEditable ? { key: "category", title: "Category" } : null,
-            ];
-
-            return tabs.filter((tab) => {
+            ].filter((tab) => {
                if (tab) {
                   tab.isSelected = () => tab.key === this.tabKeyNow;
                }
@@ -174,12 +175,8 @@
             chroma.valid(c.primaryColorHex)
                ? chroma(c.primaryColorHex)
                : chroma("cccccc"),
-         primaryColorIsDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 75,
          actionbarColor: (c) => c.primaryColor.mix("ffffff", 0.6),
          backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.3),
-         headerBackgroundColor: (c) => c.primaryColor.mix("000000", 0.4),
-         titleColor: (c) =>
-            c.primaryColorIsDark ? "white" : c.primaryColor.mix("000000", 0.98),
       },
       watch: {
          "settingStore.getters.lastModified"() {
@@ -372,15 +369,11 @@
       </div>
 
       <div class="ViewerProduct-header">
-         <div
-            class="ViewerProduct-preview"
-            v-if="product"
-            :style="{ 'background-color': headerBackgroundColor }"
-         >
+         <div class="ViewerProduct-preview" v-if="product">
             <ProductViewerImagePreview
                class="ViewerProduct-image"
                ref="keyimage"
-               :primaryColor="primaryColor"
+               :primaryColor="backgroundColor"
                :allowEdit="isEditable"
                :product="product"
                :image="imagePreview"
@@ -415,27 +408,17 @@
                   }
                "
             />
-            <div class="ViewerProduct-text" :style="{ color: titleColor }">{{
-               fullTitle
-            }}</div>
+            <Title
+               ref="keytitle"
+               :primaryColor="primaryColor"
+               :allowEdit="isEditable"
+               :product="product"
+               @click-edit="(x) => $emit('click-product-titleBrandUpdate', x)"
+            />
          </div>
       </div>
 
       <div class="ViewerProduct-info">
-         <SectionBrand
-            ref="keybrand"
-            :primaryColor="primaryColor"
-            :allowEdit="isEditable"
-            :product="product"
-            @click-edit="(x) => $emit('click-product-titleBrandUpdate', x)"
-         />
-         <SectionTitle
-            ref="keytitle"
-            :primaryColor="primaryColor"
-            :allowEdit="isEditable"
-            :product="product"
-            @click-edit="(x) => $emit('click-product-titleBrandUpdate', x)"
-         />
          <SectionSpecification
             ref="keyspecification"
             :primaryColor="primaryColor"
@@ -491,29 +474,13 @@
          <span class="ViewerProduct-emtpy-title">Viewer</span>
       </div>
 
-      <button
-         :class="[
-            'ViewerProduct-backToTop',
-            scrollTop > 10 ? '' : 'ViewerProduct-backToTop-isHidden',
-            'transition',
-         ]"
-         :style="{
-            '--parent-height': `${height}px`,
-            '--parent-scrollTop': `${scrollTop}px`,
-            'background-color': actionbarColor,
-            'box-shadow': `0 0 1rem ${headerBackgroundColor}`,
-         }"
-         @click="() => scrollToTop()"
-      >
-         <img :src="host.icon('arrow-left-000000')" />
-      </button>
-
       <BottomActionbar
          class="ViewerProduct-bottomActionbar"
          v-if="product"
-         :style="{ 'background-color': actionbarColor }"
          :product="product"
          :isWide="isWide"
+         :parentScrollTop="scrollTop"
+         @click-scrollToTop="() => scrollToTop(0)"
       />
    </div>
 </template>
@@ -570,6 +537,7 @@
       }
       .ViewerProduct-header {
          --padding: 1.2rem;
+         --padding: 0;
 
          width: 100%;
          z-index: 1;
@@ -591,21 +559,6 @@
             overflow: hidden;
             transition: background-color var(--color-transition-duration);
             border-radius: 1.5rem;
-
-            .ViewerProduct-text {
-               width: 100%;
-               color: white;
-               font-size: 2.2rem;
-               font-weight: 600;
-               text-align: center;
-               padding: 2rem;
-               margin-top: -1rem;
-               transition: color var(--color-transition-duration);
-
-               @media (max-width: 480px) {
-                  font-size: 1.6rem;
-               }
-            }
          }
       }
 
@@ -655,50 +608,6 @@
             color: black;
             opacity: 0.4;
          }
-      }
-      .ViewerProduct-backToTop {
-         --size: 3rem;
-         --margin: 0.8rem;
-         width: var(--size);
-         height: var(--size);
-
-         z-index: 3;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         border-radius: 50%;
-         position: absolute;
-         top: 0;
-         right: var(--margin);
-
-         border: none;
-         background: none;
-         cursor: pointer;
-
-         --transition-target: transform;
-         --parent-height: 0;
-         --parent-scrollTop: 0;
-
-         top: calc(
-            var(--parent-height) - var(--margin) - 3.5rem - var(--size) +
-               var(--parent-scrollTop)
-         );
-
-         &:hover {
-            transform: scale(1.1);
-         }
-
-         & > * {
-            --size: 1.2rem;
-            width: var(--size);
-            height: var(--size);
-            transform: rotate(90deg);
-         }
-      }
-      .ViewerProduct-backToTop-isHidden {
-         transform: scale(0);
-         pointer-events: none;
-         opacity: 0;
       }
 
       .ViewerProduct-bottomActionbar {

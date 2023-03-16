@@ -2,7 +2,6 @@
    import MenuOption from "@/components/button/MenuOption.vue";
    import ImageView from "@/components/ImageView.vue";
    import Arrow from "./ViewerProduct-ImagePreview-Arrow.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
    export default {
       components: { MenuOption, ImageView, Arrow },
