@@ -5,6 +5,44 @@
 
    import LayoutOne from "./PageProductExport-Layout-One.vue";
 
+   const cmToPx = (cm) => cm * 3.7795275591;
+
+   class Orientation {
+      static Portrait = new Orientation("Portrait");
+      static Landscape = new Orientation("Landscape");
+
+      constructor(title = "") {
+         this.title = title;
+      }
+   }
+   class Size {
+      static A5 = new Size("A5", cmToPx(148.5), cmToPx(210));
+      static A4 = new Size("A4", cmToPx(210), cmToPx(297));
+
+      constructor(title = "", width = 0, height = 0) {
+         this.title = title;
+         this.width = width;
+         this.height = height;
+      }
+   }
+   class GridCount {
+      static One = new GridCount("1", 1);
+      static Two = new GridCount("2", 2);
+
+      constructor(title = "", count = 0) {
+         this.title = title;
+         this.count = count;
+      }
+   }
+
+   class Option {
+      constructor(title = "", items = [], click = () => {}) {
+         this.title = title;
+         this.items = items;
+         this.click = click;
+      }
+   }
+
    export default {
       components: { ExportOption, ExportLayoutOption, ExportButton, LayoutOne },
       data: (c) => ({
@@ -12,67 +50,38 @@
 
          // todo
          options: [
-            {
-               title: "Orientation",
-               items: [{ title: "Portrait" }, { title: "Landscape" }],
-               click: () => {
+            new Option(
+               "Orientation",
+               [Orientation.Portrait, Orientation.Landscape],
+               () => {
                   const items = c.options[0].items;
                   const index = items.indexOf(c.orientation);
                   const nextIndex = index + 1;
                   c.orientation = items[nextIndex >= items.length ? 0 : nextIndex];
                   c.invalidateCard();
                },
-            },
-            {
-               title: "size",
-               items: [
-                  {
-                     title: "A5",
-                     width: 148.5 * 3.7795275591,
-                     height: 210 * 3.7795275591,
-                  },
-                  {
-                     title: "A4",
-                     width: 210 * 3.7795275591,
-                     height: 297 * 3.7795275591,
-                  },
-               ],
-               click: () => {
-                  const items = c.options[1].items;
-                  const index = items.indexOf(c.size);
-                  const nextIndex = index + 1;
-                  c.size = items[nextIndex >= items.length ? 0 : nextIndex];
-                  c.invalidateCard();
-               },
-            },
-            {
-               title: "Rows",
-               items: [
-                  { title: "1", count: 1 },
-                  { title: "2", count: 2 },
-               ],
-               click: () => {
-                  const items = c.options[2].items;
-                  const index = items.indexOf(c.row);
-                  const nextIndex = index + 1;
-                  c.row = items[nextIndex >= items.length ? 0 : nextIndex];
-                  c.invalidateCard();
-               },
-            },
-            {
-               title: "Columns",
-               items: [
-                  { title: "1", count: 1 },
-                  { title: "2", count: 2 },
-               ],
-               click: () => {
-                  const items = c.options[3].items;
-                  const index = items.indexOf(c.column);
-                  const nextIndex = index + 1;
-                  c.column = items[nextIndex >= items.length ? 0 : nextIndex];
-                  c.invalidateCard();
-               },
-            },
+            ),
+            new Option("size", [Size.A5, Size.A4], () => {
+               const items = c.options[1].items;
+               const index = items.indexOf(c.size);
+               const nextIndex = index + 1;
+               c.size = items[nextIndex >= items.length ? 0 : nextIndex];
+               c.invalidateCard();
+            }),
+            new Option("Rows", [new GridCount("1", 1), new GridCount("2", 2)], () => {
+               const items = c.options[2].items;
+               const index = items.indexOf(c.row);
+               const nextIndex = index + 1;
+               c.row = items[nextIndex >= items.length ? 0 : nextIndex];
+               c.invalidateCard();
+            }),
+            new Option("Columns", [new GridCount("1", 1), new GridCount("2", 2)], () => {
+               const items = c.options[3].items;
+               const index = items.indexOf(c.column);
+               const nextIndex = index + 1;
+               c.column = items[nextIndex >= items.length ? 0 : nextIndex];
+               c.invalidateCard();
+            }),
          ],
          layouts: [{ title: "Layout 1" }, { title: "Layout 2" }, { title: "Layout 3" }],
 
@@ -110,9 +119,7 @@
             this.invalidate();
          },
          user(userNow, userWas) {
-            if (userWas && !userNow) {
-               this.redirectToLogin();
-            }
+            if (userWas && !userNow) this.redirectToLogin();
          },
       },
       methods: {
