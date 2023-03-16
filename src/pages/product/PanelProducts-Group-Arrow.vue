@@ -1,6 +1,7 @@
 <script>
    import ImageView from "@/components/ImageView.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js";
+   import U from "@/U";
 
    const Direction = { Left: 1, Right: 2 };
 
@@ -21,7 +22,7 @@
             const primaryColor = chroma.valid(c.primaryColor)
                ? c.primaryColor
                : chroma("ffffff");
-            return chroma.deltaE(primaryColor, "000000") < 60;
+            return U.isColorDark(primaryColor, 60);
          },
 
          rotation() {
@@ -39,19 +40,16 @@
 
 <template>
    <button
-      :class="[
-         'PanelProductsGroupArrow',
-         isShowing ? '' : 'PanelProductsGroupArrow-isHidden',
-         'transition',
-      ]"
+      :class="['PanelProductsGroupArrow', 'transition']"
       :style="{
          '--rotation': rotation,
-         left: isLeft ? '1rem' : 'unset',
-         right: isRight ? '1rem' : 'unset',
+         left: isLeft ? '0' : 'unset',
+         right: isRight ? '0' : 'unset',
       }"
+      :isShowing="`${isShowing}`"
       @click="() => $emit('click')"
    >
-      <img class="PanelProductsGroupArrow-arrow transition" :src="arrowIcon" />
+      <img class="PanelProductsGroupArrow-arrow" :src="arrowIcon" />
    </button>
 </template>
 
@@ -59,12 +57,16 @@
    .PanelProductsGroupArrow {
       --rotation: 90deg;
 
-      --size: 2.5rem;
+      --size: 3rem;
       width: var(--size);
       height: var(--size);
+      min-width: var(--size);
+      min-height: var(--size);
+      max-width: var(--size);
+      max-height: var(--size);
       aspect-ratio: 1;
 
-      position: absolute;
+      position: sticky;
       top: calc(50% - var(--size));
       bottom: 0;
 
@@ -93,7 +95,7 @@
          transform: scale(1.05);
       }
    }
-   .PanelProductsGroupArrow-isHidden {
+   .PanelProductsGroupArrow[isShowing="false"] {
       opacity: 0;
       pointer-events: none;
    }

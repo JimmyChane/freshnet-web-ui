@@ -73,7 +73,16 @@
             :style="{ 'z-index': '1' }"
             @scroll="(e) => (scrollLeft = e.target.scrollLeft)"
          >
+            <Arrow
+               v-if="!isWide"
+               :style="{ 'z-index': '2', 'margin-right': '-3rem' }"
+               :direction="ArrowDirection.Left"
+               :isShowing="scrollLeft > 0"
+               @click="() => clickPrevious()"
+            />
+
             <router-link
+               class="PanelProducts-category-items-item"
                v-for="item of items"
                :key="item.id"
                :to="{
@@ -86,22 +95,15 @@
                   :isSelected="item.id === currentProductId"
                />
             </router-link>
-         </div>
 
-         <Arrow
-            v-if="!isWide"
-            :style="{ 'z-index': '2' }"
-            :direction="ArrowDirection.Left"
-            :isShowing="scrollLeft > 0"
-            @click="() => clickPrevious()"
-         />
-         <Arrow
-            v-if="!isWide"
-            :style="{ 'z-index': '2' }"
-            :direction="ArrowDirection.Right"
-            :isShowing="true"
-            @click="() => clickNext()"
-         />
+            <Arrow
+               v-if="!isWide"
+               :style="{ 'z-index': '2', 'margin-left': '3rem' }"
+               :direction="ArrowDirection.Right"
+               :isShowing="true"
+               @click="() => clickNext()"
+            />
+         </div>
       </div>
    </div>
 </template>
@@ -112,8 +114,6 @@
       flex-direction: column;
       align-items: stretch;
       padding: 1rem 0;
-
-      --floating-button-size: 2rem;
 
       .PanelProducts-category-header {
          display: flex;
@@ -152,14 +152,14 @@
       }
       .PanelProducts-category-body {
          width: 100%;
-         position: relative;
          display: flex;
          flex-direction: row;
 
          .PanelProducts-category-items {
             width: 100%;
+            position: relative;
 
-            & > * {
+            .PanelProducts-category-items-item {
                text-decoration: none;
                & > * {
                   width: 100%;
@@ -171,8 +171,8 @@
    }
    .PanelProducts-category-isThin {
       .PanelProducts-category-items {
+         width: 100%;
          padding: 0 0.7rem;
-         padding-right: 50%;
 
          display: flex;
          flex-direction: row;
@@ -188,7 +188,7 @@
          scroll-snap-type: x proximity;
          scroll-padding: 4rem;
 
-         & > * {
+         .PanelProducts-category-items-item {
             scroll-snap-align: start;
             width: 10rem;
             min-width: 10rem;
