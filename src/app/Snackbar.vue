@@ -5,7 +5,7 @@
          item: { type: Object, default: () => {} },
       },
       computed: {
-         actions: (c) => U.optArray(c.items.actions),
+         actions: (c) => U.optArray(c.item.actions),
          parsed_actions: (c) => {
             return c.actions.filter((action) => c.actions.indexOf(action) < 2);
          },
