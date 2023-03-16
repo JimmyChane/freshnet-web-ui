@@ -1,6 +1,4 @@
 <script>
-   import SectionBrand from "./ViewerProduct-Section-Brand.vue";
-   import SectionTitle from "./ViewerProduct-Section-Title.vue";
    import SectionSpecification from "./ViewerProduct-Section-Specification.vue";
    import SectionInclude from "./ViewerProduct-Section-Include.vue";
    import SectionDescription from "./ViewerProduct-Section-Description.vue";
@@ -25,8 +23,6 @@
          ProductViewerImagePreview,
          ProductViewerImages,
          BottomActionbar,
-         SectionBrand,
-         SectionTitle,
          SectionSpecification,
          SectionInclude,
          SectionDescription,

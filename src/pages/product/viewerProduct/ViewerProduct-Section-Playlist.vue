@@ -32,31 +32,28 @@
 </script>
 
 <template>
-   <div class="SectionPlaylist" v-if="nextProduct || previousProduct">
-      <Section v-if="previousProduct" title="Previous" :primaryColor="primaryColor">
-         <div class="SectionPlaylist-playlist">
-            <router-link
-               ref="keyprevious"
-               :to="{ query: { productId: previousProductId } }"
-               replace
-            >
-               <ItemProductSuggest :item="previousProduct" />
-            </router-link>
-         </div>
-      </Section>
-
-      <Section v-if="nextProduct" title="Next" :primaryColor="primaryColor">
-         <div class="SectionPlaylist-playlist">
-            <router-link
-               ref="keynext"
-               :to="{ query: { productId: nextProductId } }"
-               replace
-            >
-               <ItemProductSuggest :item="nextProduct" />
-            </router-link>
-         </div>
-      </Section>
-   </div>
+   <Section
+      class="SectionPlaylist"
+      v-if="nextProduct || previousProduct"
+      :primaryColor="primaryColor"
+   >
+      <div class="SectionPlaylist-playlist">
+         <ItemProductSuggest
+            v-if="previousProduct"
+            ref="keyprevious"
+            title="Previous"
+            :item="previousProduct"
+            :to="{ query: { productId: previousProductId } }"
+         />
+         <ItemProductSuggest
+            v-if="nextProduct"
+            ref="keynext"
+            title="Next"
+            :item="nextProduct"
+            :to="{ query: { productId: nextProductId } }"
+         />
+      </div>
+   </Section>
 </template>
 
 <style lang="scss" scoped>
@@ -64,7 +61,6 @@
       grid-area: playlist;
       width: 100%;
       max-width: 50rem;
-      gap: 1rem;
       margin-top: 4rem;
 
       display: flex;
@@ -78,18 +74,7 @@
          flex-direction: row;
          flex-wrap: wrap;
          justify-content: space-between;
-         column-gap: 2rem;
-         row-gap: 1rem;
-
-         & > * {
-            width: 100%;
-            font-size: 1rem;
-            text-decoration: none;
-            color: inherit;
-            & > * {
-               margin: auto;
-            }
-         }
+         gap: 1px;
       }
    }
 </style>
