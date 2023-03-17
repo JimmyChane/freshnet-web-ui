@@ -5,6 +5,7 @@
    import PageManage from "@/pages/manage/PageManage.vue";
 
    import NavigationLeft from "./leftNav/NavigationLeft.vue";
+   import NavigationBottom from "./NavigationBottom.vue";
    import ViewerImage from "./ViewerImage.vue";
    import Snackbar from "./Snackbar.vue";
    import PopupMenu from "./PopupMenu.vue";
@@ -17,11 +18,16 @@
          return [PageHome, PageProduct, PagePrint, PageManage];
       },
 
-      components: { NavigationLeft, ViewerImage, Snackbar, PopupMenu, Status },
-      data: (c) => ({ layoutLoginIsShown: false }),
-      computed: {
-         isLogging: (c) => c.loginStore.getters.isLogging,
+      components: {
+         NavigationLeft,
+         NavigationBottom,
+         ViewerImage,
+         Snackbar,
+         PopupMenu,
+         Status,
       },
+      data: (c) => ({ layoutLoginIsShown: false }),
+      computed: { isLogging: (c) => c.loginStore.getters.isLogging },
       watch: {
          isLogging() {
             if (!this.loginStore.getters.user && this.isLogging) {
@@ -41,26 +47,21 @@
 
 <template>
    <div
-      :class="[
-         'App',
-         $root.appLayout.isNormal() ? 'App-isNormal' : '',
-         $root.appLayout.isFull() ? 'App-isFull' : '',
-      ]"
+      class="App"
+      :isNormal="`${$root.appLayout.isNormal()}`"
+      :isFull="`${$root.appLayout.isFull()}`"
    >
-      <div class="App-background" :style="{ 'z-index': '1' }"></div>
+      <div class="App-background" style="z-index: 1"></div>
 
-      <div class="App-body" :style="{ 'z-index': '2' }">
+      <div class="App-body" style="z-index: 2">
          <div class="App-layout">
-            <Status :style="{ 'z-index': '2' }" />
+            <Status style="z-index: 2" />
 
             <div
-               :class="[
-                  'App-layout-body',
-                  $root.navigation.isDrawer()
-                     ? 'App-layout-body-isDrawer'
-                     : 'App-layout-body-isFixed',
-               ]"
-               :style="{ 'z-index': '1' }"
+               class="App-layout-body"
+               :isDrawer="`${$root.navigation.isDrawer()}`"
+               :isFixed="`${!$root.navigation.isDrawer()}`"
+               style="z-index: 1"
             >
                <NavigationLeft
                   class="App-NavigationLeft"
@@ -69,20 +70,20 @@
                />
                <router-view class="App-routerView" ref="AppRouterView" />
             </div>
+
+            <NavigationBottom v-if="$root.navigation.isDrawer()" />
          </div>
       </div>
 
-      <ViewerImage :style="{ 'z-index': 'auto' }" />
-
+      <ViewerImage style="z-index: auto" />
       <Snackbar
-         :style="{ 'z-index': '4' }"
+         style="z-index: 4"
          v-for="snackbar of store.getters.snackbars"
          :key="snackbar.key"
          :item="snackbar"
       />
-
       <PopupMenu
-         :style="{ 'z-index': '5' }"
+         style="z-index: 5"
          v-for="popupMenu of store.getters.popupMenus"
          :key="popupMenu.key"
          :popupMenu="popupMenu"
@@ -152,6 +153,8 @@
       background: none;
       overflow-x: hidden;
 
+      --navigation-bottom-height: 4rem;
+
       .App-background {
          position: absolute;
          width: 100dvw;
@@ -176,7 +179,6 @@
 
             .App-layout-body {
                width: 100%;
-               height: 100%;
                display: flex;
                flex-direction: row;
                align-items: center;
@@ -193,7 +195,8 @@
                   height: 100%;
                }
             }
-            .App-layout-body-isDrawer {
+            .App-layout-body[isDrawer="true"] {
+               height: calc(100% - var(--navigation-bottom-height)); // todo testing
                .App-NavigationLeft {
                   z-index: 2;
                }
@@ -202,23 +205,20 @@
                   z-index: 1;
                }
             }
-            .App-layout-body-isFixed {
+            .App-layout-body[isFixed="true"] {
+               height: 100%;
                .App-NavigationLeft {
                   z-index: 1;
                }
                .App-routerView {
                   flex-grow: 2;
                   z-index: 2;
-
-                  // border-radius: 1rem 0 0 1rem;
-                  // box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.2);
                }
             }
          }
       }
    }
-
-   .App-isNormal {
+   .App[isNormal="true"] {
       @media (min-width: 1600px) {
          .App-body {
             padding: 1vh 4vw;
@@ -239,7 +239,7 @@
          }
       }
    }
-   .App-isFull {
+   .App[isFull="true"] {
       background: none;
       .App-background {
          opacity: 0;

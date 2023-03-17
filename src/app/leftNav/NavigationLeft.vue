@@ -9,8 +9,6 @@
       components: { Drawer, LeftNavHeader, Search, LeftNavGroup1, LeftNavLogin },
       emits: ["click-logout"],
       data: (c) => ({
-         expandedPagKey: "",
-
          isDragging: false,
          dragTrigger: 20,
          dragOpen: 80,
