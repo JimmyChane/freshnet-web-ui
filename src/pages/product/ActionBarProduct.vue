@@ -19,6 +19,7 @@
          paths: (c) => c.$root.paths,
          lastPath: (c) => {
             let { paths } = c;
+            if (!Array.isArray(paths)) return "";
             if (!paths.length) return "";
             return paths[paths.length - 1];
          },

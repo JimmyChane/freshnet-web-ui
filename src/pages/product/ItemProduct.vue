@@ -39,7 +39,7 @@
             let setting = c.settingStore.getters.items.find((setting) => {
                return setting.key === Setting.Key.PublicShowPrice;
             });
-            return setting ? setting.value : false;
+            return setting?.value ?? false;
          },
 
          preview: (c) => (c.item ? c.item.toImageThumbnail() : null),
@@ -98,16 +98,24 @@
       },
       methods: {
          async invalidateFullTitle() {
+            try {
+               this.fullTitle = "";
+               if (!this.item) return;
+               this.fullTitle = await this.item.fetchFullTitle();
+            } catch (error) {
+               console.error(error);
+               this.fullTitle = "";
+            }
+
             this.fullTitle = "";
-            if (!this.item) return;
-            this.fullTitle = await this.item.fetchFullTitle();
+            if (this.item) {
+               this.fullTitle =
+                  (await this.item.fetchFullTitle()?.catch(() => null)) ?? "";
+            }
          },
          async invalidatePreview() {
-            const color = this.preview
-               ? await this.preview.fetchColor().catch(() => null)
-               : null;
-
-            this.primaryColorHex = color ? color.toString() : "inherit";
+            const color = this.preview?.fetchColor()?.catch(() => null) ?? null;
+            this.primaryColorHex = color?.toString() ?? "inherit";
          },
       },
    };

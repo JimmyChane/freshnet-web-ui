@@ -1,38 +1,41 @@
 const Mixin = {
-	created() {
-		const onTitle = (title) => {
-			title = typeof title === "function" ? title.call(this) : title;
-			title = typeof title === "string" ? title.trim() : "";
-			return title;
-		};
-		const onColor = (color = {}) => {
-			color = typeof color === "function" ? color.call(this) : color;
-			color = typeof color === "object" ? color : {};
+   created() {
+      const getTitle = () => {
+         let title = this.$options.title;
+         if (typeof title === "function") {
+            title = title.call(this);
+         }
+         return typeof title === "string" ? title.trim() : "";
+      };
+      const getColors = () => {
+         let color = this.$options.color;
+         if (typeof color === "function") {
+            color = color.call(this);
+         }
+         color = typeof color === "object" ? color : {};
 
-			let {
-				primary = "",
-				primaryLight = "",
-				primaryDark = "",
-				accent = "",
-			} = color;
+         const { primary = "", primaryLight = "", primaryDark = "", accent = "" } = color;
 
-			return { primary, primaryLight, primaryDark, accent };
-		};
-		const onIcon = (icon) => {
-			icon = typeof icon === "function" ? icon.call(this) : icon;
-			icon = typeof icon === "object" ? icon : {};
+         return { primary, primaryLight, primaryDark, accent };
+      };
+      const getIcons = () => {
+         let icon = this.$options.icon;
+         if (typeof icon === "function") {
+            icon = icon.call(this);
+         }
+         icon = typeof icon === "object" ? icon : {};
 
-			let { light = "", dark = "", color = "" } = icon;
+         const { light = "", dark = "", color = "" } = icon;
 
-			return { light, dark, color };
-		};
+         return { light, dark, color };
+      };
 
-		const title = onTitle(this.$options.title);
+      const title = getTitle();
 
-		if (title) {
-			document.title = title;
-		}
-	},
+      if (title) {
+         document.title = title;
+      }
+   },
 };
 
 export default Mixin;

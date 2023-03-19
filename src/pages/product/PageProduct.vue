@@ -115,6 +115,14 @@
       }
    }
 
+   class QueryParameter {
+      constructor(key = "", title = "", values = []) {
+         this.key = key;
+         this.title = title;
+         this.values = values;
+      }
+   }
+
    export default {
       key: "product",
       title: "Products",
@@ -125,40 +133,24 @@
 
       _queries_old() {
          return [
-            { key: "", title: "", values: [{ key: "", title: "All" }] },
-            {
-               key: "category",
-               title: "Category",
-               values: [
-                  { key: "laptop", title: "Laptop" },
-                  { key: "printer", title: "Printer" },
-               ],
-            },
-            {
-               key: "brand",
-               title: "Brand",
-               values: [
-                  { key: "hp", title: "HP" },
-                  { key: "dell", title: "Dell" },
-               ],
-            },
-            {
-               key: "size",
-               title: "Size",
-               values: [
-                  { key: "14", title: '14"' },
-                  { key: "15.6", title: '15.6"' },
-               ],
-            },
-            {
-               key: "storage",
-               title: "Storage",
-               values: [
-                  { key: "ssd512gb", title: "SSD 512GB" },
-                  { key: "ssd256gb", title: "SSD 256GB" },
-                  { key: "hdd1tb", title: "HDD 1TB" },
-               ],
-            },
+            new QueryParameter("", "", [{ key: "", title: "All" }]),
+            new QueryParameter("category", "Category", [
+               { key: "laptop", title: "Laptop" },
+               { key: "printer", title: "Printer" },
+            ]),
+            new QueryParameter("brand", "Brand", [
+               { key: "hp", title: "HP" },
+               { key: "dell", title: "Dell" },
+            ]),
+            new QueryParameter("size", "Size", [
+               { key: "14", title: '14"' },
+               { key: "15.6", title: '15.6"' },
+            ]),
+            new QueryParameter("storage", "Storage", [
+               { key: "ssd512gb", title: "SSD 512GB" },
+               { key: "ssd256gb", title: "SSD 256GB" },
+               { key: "hdd1tb", title: "HDD 1TB" },
+            ]),
          ];
       },
 

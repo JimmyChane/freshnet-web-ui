@@ -1,16 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-Vue.use(VueRouter);
-
 import PageHome from "@/pages/home/PageHome";
 import PagePrint from "@/pages/print/PagePrint.vue";
 import PageLogin from "@/pages/login/PageLogin";
 import Page404 from "@/pages/error/Page404.vue";
-
 import PageProduct from "./pages/product/PageProduct.vue";
 import PageProductView from "./pages/product/PageProductView.vue";
 import PageProductExport from "./pages/product/PageProductExport.vue";
-
 import PageManage from "./pages/manage/PageManage";
 import PageCustomer from "./pages/customer/PageCustomer.vue";
 import PageService from "./pages/service/PageService.vue";
@@ -19,6 +15,8 @@ import PageProfile from "./pages/profile/PageProfile.vue";
 import PageUsers from "./pages/users/PageUsers.vue";
 import PageDatabase from "./pages/database/PageDatabase.vue";
 import PageSetting from "./pages/setting/PageSetting.vue";
+
+Vue.use(VueRouter);
 
 const productRoutes = () => [
    // id
