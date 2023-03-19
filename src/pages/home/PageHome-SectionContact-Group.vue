@@ -29,12 +29,11 @@
       :href="fisrtHref"
       :target="fisrtTarget"
    >
+      <img class="ContactGroup-icon" :src="icon" />
       <div class="ContactGroup-main">
          <span class="ContactGroup-title">{{ title }}</span>
          <Item v-for="item of items" :key="item.title" :item="item" />
       </div>
-
-      <img class="ContactGroup-icon" :src="icon" />
    </a>
 </template>
 
@@ -47,26 +46,24 @@
 
       width: 100%;
       height: 100%;
-      padding: 1em;
-      padding-left: 1.2em;
-      border-radius: 0.5em;
+      padding: 2em;
+      border-radius: 1em;
       gap: 1em;
 
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      background-color: #f3f3f3;
 
       &:hover,
       &:focus {
-         box-shadow: 0px 0px 1.5rem hsla(0, 0%, 0%, 0.1);
+         background: white;
       }
 
       .ContactGroup-main {
          flex-grow: 1;
          height: 100%;
-         gap: 0.2em;
+         gap: 0.5em;
 
          display: flex;
          flex-direction: column;
@@ -74,8 +71,7 @@
 
          .ContactGroup-title {
             font-weight: 600;
-            font-size: 1em;
-            padding: 0.5em 0.7em;
+            font-size: 1.1em;
          }
       }
       .ContactGroup-icon {
@@ -85,6 +81,9 @@
          height: var(--size);
 
          padding: 1em;
+
+         background: #e4e4e4;
+         border-radius: 1.2em;
       }
    }
    .ContactGroup-isThin {

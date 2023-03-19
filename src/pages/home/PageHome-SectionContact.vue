@@ -31,7 +31,7 @@
 </script>
 
 <template>
-   <Section title="Contact Us">
+   <Section>
       <div
          :class="[
             'HomeSectionContact',
@@ -41,10 +41,7 @@
          <Group
             v-for="group of groups"
             :key="group.title"
-            :style="{
-               'grid-column': 'auto / span 1',
-               'grid-row': 'auto / span 2',
-            }"
+            :style="{ 'grid-column': 'auto / span 1', 'grid-row': 'auto / span 2' }"
             :isThin="isThin"
             :group="group"
          />
@@ -61,7 +58,9 @@
    }
    .HomeSectionContact {
       width: 100%;
-      gap: 0.5rem;
+      background-color: #f3f3f3;
+      border-radius: 1em;
+      overflow: hidden;
 
       display: grid;
       grid-auto-flow: row;
