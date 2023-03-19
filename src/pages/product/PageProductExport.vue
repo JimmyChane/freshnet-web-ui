@@ -1,9 +1,9 @@
 <script>
-   import ExportOption from "./PageProductExport-Option.vue";
+   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import ExportLayoutOption from "./PageProductExport-LayoutOption.vue";
    import ExportButton from "./PageProductExport-Export.vue";
-
    import LayoutOne from "./PageProductExport-Layout-One.vue";
+   import PanelOption from "./PageProductExport-PanelOption.vue";
 
    const cmToPx = (cm) => cm * 3.7795275591;
 
@@ -36,65 +36,57 @@
    }
 
    class Option {
-      constructor(title = "", items = [], click = () => {}) {
+      selectedItem = null;
+
+      constructor(title = "", items = [], defaultIndex = 0) {
          this.title = title;
          this.items = items;
-         this.click = click;
+
+         this.items.forEach((item) => {
+            item.isSelected = () => item === this.selectedItem;
+            item.click = () => (this.selectedItem = item);
+         });
+
+         this.selectedItem = this.items[defaultIndex];
+      }
+
+      click() {
+         const index = this.items.indexOf(this.selectedItem);
+         const nextIndex = index + 1;
+         this.selectedItem = this.items[nextIndex >= this.items.length ? 0 : nextIndex];
       }
    }
 
    export default {
-      components: { ExportOption, ExportLayoutOption, ExportButton, LayoutOne },
+      components: {
+         NavigationBar,
+         ExportLayoutOption,
+         ExportButton,
+         LayoutOne,
+         PanelOption,
+      },
       data: (c) => ({
          product: null,
 
          // todo
          options: [
-            new Option(
-               "Orientation",
-               [Orientation.Portrait, Orientation.Landscape],
-               () => {
-                  const items = c.options[0].items;
-                  const index = items.indexOf(c.orientation);
-                  const nextIndex = index + 1;
-                  c.orientation = items[nextIndex >= items.length ? 0 : nextIndex];
-                  c.invalidateCard();
-               },
-            ),
-            new Option("size", [Size.A5, Size.A4], () => {
-               const items = c.options[1].items;
-               const index = items.indexOf(c.size);
-               const nextIndex = index + 1;
-               c.size = items[nextIndex >= items.length ? 0 : nextIndex];
-               c.invalidateCard();
-            }),
-            new Option("Rows", [new GridCount("1", 1), new GridCount("2", 2)], () => {
-               const items = c.options[2].items;
-               const index = items.indexOf(c.row);
-               const nextIndex = index + 1;
-               c.row = items[nextIndex >= items.length ? 0 : nextIndex];
-               c.invalidateCard();
-            }),
-            new Option("Columns", [new GridCount("1", 1), new GridCount("2", 2)], () => {
-               const items = c.options[3].items;
-               const index = items.indexOf(c.column);
-               const nextIndex = index + 1;
-               c.column = items[nextIndex >= items.length ? 0 : nextIndex];
-               c.invalidateCard();
-            }),
+            new Option("Orientation", [Orientation.Portrait, Orientation.Landscape], 0),
+            new Option("Size", [Size.A5, Size.A4], 1),
+            new Option("Rows", [new GridCount("1", 1), new GridCount("2", 2)], 1),
+            new Option("Columns", [new GridCount("1", 1), new GridCount("2", 2)], 0),
          ],
          layouts: [{ title: "Layout 1" }, { title: "Layout 2" }, { title: "Layout 3" }],
-
-         size: null,
-         orientation: null,
-         row: null,
-         column: null,
 
          bodyWidth: 0,
          bodyHeight: 0,
          canvasScale: 0,
       }),
       computed: {
+         orientation: (c) => c.options[0].selectedItem,
+         size: (c) => c.options[1].selectedItem,
+         row: (c) => c.options[2].selectedItem,
+         column: (c) => c.options[3].selectedItem,
+
          user: (c) => c.loginStore.getters.user,
          allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
@@ -120,6 +112,19 @@
          },
          user(userNow, userWas) {
             if (userWas && !userNow) this.redirectToLogin();
+         },
+
+         orientation() {
+            this.invalidateCard();
+         },
+         size() {
+            this.invalidateCard();
+         },
+         row() {
+            this.invalidateCard();
+         },
+         column() {
+            this.invalidateCard();
          },
       },
       methods: {
@@ -148,7 +153,7 @@
             this.product = product;
          },
          invalidateCard(repeatTimeout = 300) {
-            const ref = this.$refs.body;
+            const ref = this.$refs.preview;
             if (!ref) return;
 
             this.bodyWidth = ref.offsetWidth;
@@ -179,25 +184,6 @@
             });
          },
       },
-      created() {
-         this.options[0].items.forEach((item) => {
-            item.isSelected = () => item === this.orientation;
-         });
-         this.options[1].items.forEach((item) => {
-            item.isSelected = () => item === this.size;
-         });
-         this.options[2].items.forEach((item) => {
-            item.isSelected = () => item === this.row;
-         });
-         this.options[3].items.forEach((item) => {
-            item.isSelected = () => item === this.column;
-         });
-
-         this.orientation = this.options[0].items[0];
-         this.size = this.options[1].items[1];
-         this.row = this.options[2].items[1];
-         this.column = this.options[3].items[0];
-      },
       beforeMount() {
          window.addEventListener("resize", this.listenerResize);
          document.addEventListener("keydown", this.listenKeyDown);
@@ -222,44 +208,54 @@
 
 <template>
    <div class="PageProductExport" v-if="allowEdit">
-      <div class="PageProductExport-body" ref="body">
+      <NavigationBar :style="{ 'grid-area': 'toolbar' }">
+         <div class="PageProductExport-toolbar">
+            <ExportButton @click="() => clickExport()" />
+         </div>
+      </NavigationBar>
+
+      <div class="PageProductExport-body">
          <div
-            class="PageProductExport-canvas"
-            ref="canvas"
-            :style="{
-               '--body-width': `${bodyWidth}px`,
-               '--body-height': `${bodyHeight}px`,
-
-               '--canvas-width': `${canvasWidth}px`,
-               '--canvas-height': `${canvasHeight}px`,
-               '--canvas-scale': `${canvasScale}`,
-
-               '--item-width': `${itemWidth}px`,
-               '--item-height': `${itemHeight}px`,
-
-               '--row-count': `${canvasRowCount}`,
-               '--column-count': `${canvasColumnCount}`,
-            }"
+            class="PageProductExport-preview"
+            ref="preview"
+            :style="{ 'grid-area': 'preview' }"
          >
-            <LayoutOne :width="itemWidth" :height="itemHeight" :product="product" />
+            <div
+               class="PageProductExport-canvas"
+               ref="canvas"
+               :style="{
+                  '--preview-width': `${bodyWidth}px`,
+                  '--preview-height': `${bodyHeight}px`,
+
+                  '--canvas-width': `${canvasWidth}px`,
+                  '--canvas-height': `${canvasHeight}px`,
+                  '--canvas-scale': `${canvasScale}`,
+
+                  '--item-width': `${itemWidth}px`,
+                  '--item-height': `${itemHeight}px`,
+
+                  '--row-count': `${canvasRowCount}`,
+                  '--column-count': `${canvasColumnCount}`,
+               }"
+            >
+               <LayoutOne :width="itemWidth" :height="itemHeight" :product="product" />
+            </div>
          </div>
+
+         <!-- <div class="PageProductExport-layouts" :style="{ 'grid-area': 'layouts' }">
+            <ExportLayoutOption
+               v-for="layout of layouts"
+               :key="layout.title"
+               :title="layout.title"
+            />
+         </div> -->
+
+         <PanelOption
+            class="PageProductExport-panelOption"
+            :style="{ 'grid-area': 'panelOption' }"
+            :items="options"
+         />
       </div>
-
-      <div class="PageProductExport-toolbar">
-         <div class="PageProductExport-options">
-            <ExportOption v-for="option of options" :key="option.title" :menu="option" />
-         </div>
-
-         <ExportButton @click="() => clickExport()" />
-      </div>
-
-      <!-- <div class="PageProductExport-layouts">
-			<ExportLayoutOption
-				v-for="layout of layouts"
-				:key="layout.title"
-				:title="layout.title"
-			/>
-		</div> -->
    </div>
 </template>
 
@@ -267,55 +263,19 @@
    .PageProductExport {
       width: 100%;
       height: 100%;
+      overflow: hidden;
 
-      display: grid;
-      grid-template-areas:
-         "body layouts"
-         "toolbar layouts";
-      grid-template-rows: 1fr 4rem;
-      grid-template-columns: 1fr;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: stretch;
 
-      .PageProductExport-body {
-         grid-area: body;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         position: relative;
-         margin: 1rem;
-
-         .PageProductExport-canvas {
-            width: var(--canvas-width);
-            height: var(--canvas-height);
-            min-width: var(--canvas-width);
-            min-height: var(--canvas-height);
-            max-width: var(--canvas-width);
-            max-height: var(--canvas-height);
-
-            background: white;
-            box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.2);
-            transform: scale(var(--canvas-scale));
-            position: absolute;
-            top: calc(0 - var(--canvas-height) * var(--canvas-scale));
-            left: calc(0 - var(--canvas-width) * var(--canvas-scale));
-
-            align-items: center;
-            justify-content: center;
-
-            display: grid;
-            grid-template-rows: repeat(var(--row-count), 1fr);
-            grid-template-columns: repeat(var(--column-count), 1fr);
-
-            overflow: hidden;
-         }
-      }
       .PageProductExport-toolbar {
-         grid-area: toolbar;
-         border-top: 1px solid hsla(0, 0%, 0%, 0.1);
-
+         flex-grow: 1;
          display: flex;
          flex-direction: row;
          align-items: center;
-         justify-content: space-between;
+         justify-content: flex-end;
          gap: 0.5rem;
          padding: 0.5rem;
 
@@ -328,17 +288,61 @@
             justify-content: flex-start;
          }
       }
-      .PageProductExport-layouts {
-         grid-area: layouts;
-         background-color: white;
-         border-left: 1px solid hsla(0, 0%, 0%, 0.1);
-         gap: 0.5rem;
-         padding: 1rem;
+      .PageProductExport-body {
+         width: 100%;
+         height: 100%;
+         overflow: hidden;
+         display: grid;
+         grid-template-areas: "layouts preview panelOption";
+         grid-template-rows: 1fr;
+         grid-template-columns: 14rem 1fr;
 
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         justify-content: flex-start;
+         grid-template-areas: "preview panelOption";
+         grid-template-rows: 1fr;
+         grid-template-columns: 1fr 14rem;
+
+         .PageProductExport-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin: 1rem;
+
+            .PageProductExport-canvas {
+               width: var(--canvas-width);
+               height: var(--canvas-height);
+               min-width: var(--canvas-width);
+               min-height: var(--canvas-height);
+               max-width: var(--canvas-width);
+               max-height: var(--canvas-height);
+
+               background: white;
+               box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.2);
+               transform: scale(var(--canvas-scale));
+               position: absolute;
+               top: calc(0 - var(--canvas-height) * var(--canvas-scale));
+               left: calc(0 - var(--canvas-width) * var(--canvas-scale));
+
+               align-items: center;
+               justify-content: center;
+
+               display: grid;
+               grid-template-rows: repeat(var(--row-count), 1fr);
+               grid-template-columns: repeat(var(--column-count), 1fr);
+
+               overflow: hidden;
+            }
+         }
+         .PageProductExport-layouts {
+            background-color: white;
+            gap: 0.5rem;
+            padding: 1rem;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+         }
       }
    }
 </style>
