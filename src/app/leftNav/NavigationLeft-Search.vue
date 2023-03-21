@@ -28,7 +28,12 @@
          "
       />
 
-      <GlobalSearch class="NavigationLeft-Search-comp" ref="globalsearch" />
+      <GlobalSearch
+         class="NavigationLeft-Search-comp"
+         ref="globalsearch"
+         @expand="() => $emit('expand')"
+         @collapse="() => $emit('collapse')"
+      />
    </div>
 </template>
 

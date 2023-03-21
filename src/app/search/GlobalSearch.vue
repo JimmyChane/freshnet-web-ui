@@ -122,6 +122,8 @@
       class="GlobalSearch"
       :list="searches"
       @callback-search="(text) => search(text)"
+      @expand="() => $emit('expand')"
+      @collapse="() => $emit('collapse')"
       v-slot="{ collapse }"
    >
       <div class="GlobalSearch-item" v-for="x in searches" :key="x.item.id">

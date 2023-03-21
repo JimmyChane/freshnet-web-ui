@@ -21,6 +21,9 @@
             this.searchLastCharTime = time;
             setTimeout(() => this.$emit("callback-search", text), elapseTimeDesigned);
          },
+         isExpand() {
+            this.isExpand ? this.$emit("expand") : this.$emit("collapse");
+         },
       },
       emits: ["callback-search"],
       methods: {

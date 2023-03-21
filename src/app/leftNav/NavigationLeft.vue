@@ -13,6 +13,8 @@
          dragTrigger: 20,
          dragOpen: 80,
          dragWidth: 0,
+
+         searchIsExpand: false,
       }),
       computed: {
          isWide: (c) => c.$root.navigation.isWide(),
@@ -185,20 +187,33 @@
 <template>
    <Drawer
       ref="Drawer"
-      :class="[
-         'NavigationLeft',
-         !isWide ? 'NavigationLeft-isThin' : 'NavigationLeft-isWide',
-      ]"
+      class="NavigationLeft"
+      :isWide="`${isWide}`"
+      :isThin="`${!isWide}`"
       :mode="drawerMode"
       :edge="drawerEdge"
       @click-collapse="() => emitCollapse()"
    >
       <div class="NavigationLeft-body scrollbar transition" ref="Body">
-         <LeftNavHeader :isWide="isWide" />
+         <LeftNavHeader
+            :style="{ 'z-index': searchIsExpand ? '3' : '4' }"
+            :isWide="isWide"
+         />
 
-         <Search ref="search" v-if="isWide" :isWide="isWide" />
+         <Search
+            ref="search"
+            :style="{ 'z-index': searchIsExpand ? '4' : '3' }"
+            v-if="isWide"
+            :isWide="isWide"
+            @expand="() => (searchIsExpand = true)"
+            @collapse="() => (searchIsExpand = false)"
+         />
 
-         <div class="NavigationLeft-navigations" v-if="navigations.length">
+         <div
+            class="NavigationLeft-navigations"
+            style="z-index: 1"
+            v-if="navigations.length"
+         >
             <LeftNavGroup1
                v-for="group1 of navigations"
                :key="group1.key"
@@ -208,6 +223,7 @@
          </div>
 
          <LeftNavLogin
+            style="z-index: 2"
             v-if="$root.currentPageKey !== 'login'"
             @click-logout="$emit('click-logout')"
             :isWide="isWide"
@@ -255,8 +271,7 @@
          --scrollbar-track-color-hover: hsla(0, 0%, 0%, 0.2);
       }
    }
-
-   .NavigationLeft-isWide {
+   .NavigationLeft[isWide="true"] {
       .NavigationLeft-body {
          .NavigationLeft-navigations {
             padding-top: 0.8em;
@@ -264,7 +279,7 @@
          }
       }
    }
-   .NavigationLeft-isThin {
+   .NavigationLeft[isThin="true"] {
       .NavigationLeft-body {
          width: fit-content;
          .NavigationLeft-navigations {

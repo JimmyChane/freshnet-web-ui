@@ -67,6 +67,11 @@
       justify-content: space-between;
       padding: 0.4rem;
 
+      position: sticky;
+      top: 0;
+
+      background-color: inherit;
+
       .LeftNavHeader-logo {
          gap: 0.5rem;
          padding: 1rem;
