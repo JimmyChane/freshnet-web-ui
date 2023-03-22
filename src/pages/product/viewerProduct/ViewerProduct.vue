@@ -554,7 +554,6 @@
             justify-content: center;
             overflow: hidden;
             transition: background-color var(--color-transition-duration);
-            border-radius: 1.5rem;
          }
       }
 
