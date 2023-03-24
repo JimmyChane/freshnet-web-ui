@@ -1,4 +1,4 @@
-const Text = require("./Text.js");
+const { default: U } = require("@/U.js");
 
 class ServiceBelonging {
    static trim(data) {
@@ -6,12 +6,9 @@ class ServiceBelonging {
    }
 
    constructor(data = null) {
-      this.title = Text.trim(data.title, "");
+      this.title = U.trimText(data.title);
       this.time = data.time;
-      this.quantity =
-         typeof data.quantity === "number" && data.quantity > 0
-            ? data.quantity
-            : 1;
+      this.quantity = Math.max(U.optNumber(data.quantity), 1);
    }
 }
 

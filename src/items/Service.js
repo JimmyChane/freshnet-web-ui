@@ -96,7 +96,10 @@ class Service {
          if (textContains(stateTitle, str)) count++;
          return count;
       }, 0);
-      count += this.events.reduce((count, event) => count + event.toCount(strs), 0);
+      count += this.events.reduce(
+         (count, event) => count + event.toCount(strs),
+         0,
+      );
       if (timestamp && timestamp.toCount(strs)) count++;
       if (customer && customer.toCount(strs)) count++;
 
@@ -128,7 +131,8 @@ class Service {
    }
 
    async fetchUser() {
-      if (!U.isString(this.username) || this.username.trim().length === 0) return null;
+      if (!U.isString(this.username) || this.username.trim().length === 0)
+         return null;
       return await this.userStore.dispatch("getUserByUsername", this.username);
    }
    async fetchName() {
@@ -147,7 +151,9 @@ class Service {
       return !!this.labels.find((label) => label.isEqual(ServiceLabels.Urgent));
    }
    isWarranty() {
-      return !!this.labels.find((label) => label.isEqual(ServiceLabels.Warranty));
+      return !!this.labels.find((label) =>
+         label.isEqual(ServiceLabels.Warranty),
+      );
    }
 
    toTotalPrice() {
@@ -169,7 +175,9 @@ class Service {
       if (bool && !existingLabel) {
          this.setLabels([...labels, ServiceLabels.Urgent]);
       } else if (!bool && existingLabel) {
-         this.setLabels(labels.filter((label) => !label.isEqual(ServiceLabels.Urgent)));
+         this.setLabels(
+            labels.filter((label) => !label.isEqual(ServiceLabels.Urgent)),
+         );
       }
    }
    // deprecated
@@ -182,12 +190,14 @@ class Service {
       if (bool && !existingLabel) {
          this.setLabels([...labels, ServiceLabels.Warranty]);
       } else if (!bool && existingLabel) {
-         this.setLabels(labels.filter((label) => !label.isEqual(ServiceLabels.Warranty)));
+         this.setLabels(
+            labels.filter((label) => !label.isEqual(ServiceLabels.Warranty)),
+         );
       }
    }
 
    setLabels(labels) {
-      this.labels = (Array.isArray(labels) ? labels : [])
+      this.labels = U.optArray(labels)
          .filter((label) => label.title !== " " || label.title !== "")
          .map((label) => new ServiceLabel().fromData(label.toData()));
    }

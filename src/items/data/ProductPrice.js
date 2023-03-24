@@ -1,5 +1,5 @@
-const Text = require("./Text.js");
 const Bundle = require("./ProductBundle.js");
+const { default: U } = require("@/U.js");
 
 class ProductPrice {
    static trim(data) {
@@ -13,20 +13,16 @@ class ProductPrice {
       );
 
       // deprecated on 2022_04_09
-      const bundles1 = (
-         Array.isArray(price1.bundles) ? price1.bundles : []
-      ).filter((bundle1) =>
-         (Array.isArray(price2.bundles) ? price2.bundles : []).find(
-            (bundle2) => bundle2.title === bundle1.title
-         )
-      );
-      const bundles2 = (
-         Array.isArray(price2.bundles) ? price2.bundles : []
-      ).filter((bundle2) =>
-         (Array.isArray(price1.bundles) ? price1.bundles : []).find(
-            (bundle1) => bundle1.title === bundle2.title
-         )
-      );
+      const bundles1 = U.optArray(price1.bundles).filter((bundle1) => {
+         return U.optArray(price2.bundles).find((bundle2) => {
+            return bundle2.title === bundle1.title;
+         });
+      });
+      const bundles2 = U.optArray(price2.bundles).filter((bundle2) => {
+         return U.optArray(price1.bundles).find((bundle1) => {
+            return bundle1.title === bundle2.title;
+         });
+      });
 
       return (
          price1.normal === price2.normal ||
@@ -36,11 +32,11 @@ class ProductPrice {
    }
 
    constructor(data = null) {
-      this.normal = Text.trim(data.normal, "");
-      this.promotion = Text.trim(data.promotion, "");
+      this.normal = U.trimText(data.normal);
+      this.promotion = U.trimText(data.promotion);
 
       // deprecated on 2022_04_09
-      this.bundles = (Array.isArray(data.bundles) ? data.bundles : [])
+      this.bundles = U.optArray(data.bundles)
          .map((bundle) => Bundle.trim(bundle))
          .filter((bundle) => bundle.title.length);
 

@@ -1,5 +1,5 @@
-const Text = require("./Text.js");
 const Image = require("./Image.js");
+const { default: U } = require("@/U.js");
 
 class Category {
    static Key = {
@@ -26,12 +26,13 @@ class Category {
    }
 
    constructor(data = null) {
-      this._id = Text.trim(data._id, data._id);
-      this.key = Text.trim(data.key, "").replace(" ", "");
-      this.title = Text.trim(data.title, "");
-      this.icon = typeof data.icon === "object" ? Image.trim(data.icon) : undefined;
-      this.background =
-         typeof data.background === "object" ? Image.trim(data.background) : undefined;
+      this._id = U.trimId(data._id);
+      this.key = U.trimId(data.key);
+      this.title = U.trimStringAll(data.title);
+      this.icon = U.isObject(data.icon) ? Image.trim(data.icon) : undefined;
+      this.background = U.isObject(data.background)
+         ? Image.trim(data.background)
+         : undefined;
    }
 }
 

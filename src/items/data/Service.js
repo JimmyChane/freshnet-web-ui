@@ -1,4 +1,3 @@
-const Text = require("./Text.js");
 const ServiceCustomer = require("./ServiceCustomer.js");
 const ServiceEvent = require("./ServiceEvent.js");
 const ServiceBelonging = require("./ServiceBelonging.js");
@@ -6,6 +5,7 @@ const ServiceImageFile = require("./ServiceImageFile.js");
 const ServiceNotice = require("./ServiceNotice.js");
 const ServiceLabel = require("./ServiceLabel.js");
 const PhoneNumber = require("./PhoneNumber.js");
+const { default: U } = require("@/U.js");
 
 class Service {
    static State = {
@@ -17,26 +17,28 @@ class Service {
 
    static search(item, searches) {
       const data = {
-         description: Text.parse(item.description),
-         customerName:
-            typeof item.customer === "object" ? Text.parse(item.customer.name) : "",
-         customerNumber:
-            typeof item.customer === "object"
-               ? PhoneNumber.parseToString(item.customer.phoneNumber)
-               : "",
-         timeString: (item.timestamp ? item.timestamp : "").toString(),
+         description: U.optString(item.description),
+         customerName: U.isObject(item.customer)
+            ? U.optString(item.customer.name)
+            : "",
+         customerNumber: U.isObject(item.customer)
+            ? PhoneNumber.parseToString(item.customer.phoneNumber)
+            : "",
+         timeString: U.optString(item.timestamp).toString(),
          urgent: item.isUrgent() ? "urgent" : "",
          warranty: item.isWarranty() ? "warranty" : "",
       };
 
-      const stateKey = Object.keys(Service.State).find((state) => state === item.state);
+      const stateKey = Object.keys(Service.State).find((state) => {
+         return state === item.state;
+      });
 
       const contexts = [
          data.description,
          data.customerName,
          data.customerNumber,
          data.timeString,
-         typeof stateKey === "string" ? Service.State[stateKey] : "",
+         U.isString(stateKey) ? Service.State[stateKey] : "",
          data.urgent,
          data.warranty,
       ];
@@ -58,55 +60,61 @@ class Service {
    }
 
    constructor(data = null) {
-      this._id = Text.trim(data._id, data._id);
+      this._id = U.trimId(data._id);
       this.time = data.time;
-      this.username = Text.trim(data.username, "").replace(" ", "");
-      this.nameOfUser = Text.trim(data.nameOfUser, "");
+      this.username = U.trimId(data.username);
+      this.nameOfUser = U.trimText(data.nameOfUser);
+      this.state = U.trimId(data.state);
+      if (
+         ![
+            Service.State.Pending,
+            Service.State.Waiting,
+            Service.State.Completed,
+            Service.State.Rejected,
+         ].includes(this.state)
+      ) {
+         this.state = Service.State.Pending;
+      }
 
-      this.state = Text.trim(data.state, Service.State.Pending).replace(" ", "");
+      this.customer = U.isObject(data.customer)
+         ? ServiceCustomer.trim(data.customer)
+         : undefined;
 
-      this.customer =
-         typeof data.customer === "object"
-            ? ServiceCustomer.trim(data.customer)
-            : undefined;
+      this.description = U.trimText(data.description, "");
 
-      this.description = Text.trim(data.description, "");
-
-      this.belongings = (Array.isArray(data.belongings) ? data.belongings : []).map(
-         (belonging) => ServiceBelonging.trim(belonging)
-      );
-
-      this.events = (Array.isArray(data.events) ? data.events : []).map((event) =>
-         ServiceEvent.trim(event)
-      );
-
-      this.imageFiles = (Array.isArray(data.imageFiles) ? data.imageFiles : []).map(
-         (imageFile) => ServiceImageFile.trim(imageFile)
-      );
+      this.belongings = U.optArray(data.belongings).map((belonging) => {
+         return ServiceBelonging.trim(belonging);
+      });
+      this.events = U.optArray(data.events).map((event) => {
+         return ServiceEvent.trim(event);
+      });
+      this.imageFiles = U.optArray(data.imageFiles).map((imageFile) => {
+         return ServiceImageFile.trim(imageFile);
+      });
 
       // parsing notice
       this.notice = ServiceNotice.trim(
-         typeof data.notice === "object" && data.notice
-            ? data.notice
-            : { isUrgent: false, isWarranty: false }
+         U.optObjectOnly(data.notice, { isUrgent: false, isWarranty: false }),
       );
 
       // parsing labels
-      this.labels = (Array.isArray(data.labels) ? data.labels : [])
+      this.labels = U.optArray(data.labels)
          .map((label) => new ServiceLabel(label))
          .filter((label) => label.title !== " " || label.title !== "");
 
       // refactoring notice to labels
-      const existingLabelUrgent = this.labels.find(
-         (label) => label.title === ServiceLabel.Defaults.Urgent.title
-      );
-      const existingLabelWarranty = this.labels.find(
-         (label) => label.title === ServiceLabel.Defaults.Warranty.title
-      );
-      if (this.notice.isUrgent && !existingLabelUrgent)
+      const existingLabelUrgent = this.labels.find((label) => {
+         return label.title === ServiceLabel.Defaults.Urgent.title;
+      });
+      const existingLabelWarranty = this.labels.find((label) => {
+         return label.title === ServiceLabel.Defaults.Warranty.title;
+      });
+      if (this.notice.isUrgent && !existingLabelUrgent) {
          this.labels.push(ServiceLabel.Defaults.Urgent);
-      if (this.notice.isWarranty && !existingLabelWarranty)
+      }
+      if (this.notice.isWarranty && !existingLabelWarranty) {
          this.labels.push(ServiceLabel.Defaults.Warranty);
+      }
    }
 }
 

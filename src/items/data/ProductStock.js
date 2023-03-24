@@ -1,3 +1,4 @@
+const { default: U } = require("@/U.js");
 const ProductPrice = require("./ProductPrice.js");
 
 class ProductStock {
@@ -6,13 +7,11 @@ class ProductStock {
    }
 
    constructor(data = null) {
-      this.isAvailable =
-         typeof data.isAvailable === "boolean" ? data.isAvailable : true;
-      this.isSecondHand =
-         typeof data.isSecondHand === "boolean" ? data.isSecondHand : false;
+      this.isAvailable = U.optBoolean(data.isAvailable, true);
+      this.isSecondHand = U.optBoolean(data.isSecondHand, false);
 
       // deprecated on 2022_04_09
-      this.prices = (Array.isArray(data.prices) ? data.prices : [])
+      this.prices = U.optArray(data.prices)
          .map((price) => ProductPrice.trim(price))
          .filter((price) => price && Object.keys(price).length);
    }

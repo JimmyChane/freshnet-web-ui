@@ -1,4 +1,4 @@
-const Text = require("./Text.js");
+const { default: U } = require("@/U.js");
 
 class ProductImage {
    static Method = {
@@ -16,8 +16,8 @@ class ProductImage {
    }
 
    constructor(data = null) {
-      this.method = Text.trim(data.method, "");
-      this.path = Text.trim(data.path, "");
+      this.method = U.trimId(data.method);
+      this.path = U.trimId(data.path);
    }
 }
 

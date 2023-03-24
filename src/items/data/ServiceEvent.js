@@ -1,5 +1,5 @@
-const Text = require("./Text.js");
 const ServicePrice = require("./ServicePrice.js");
+const { default: U } = require("@/U.js");
 
 class ServiceEvent {
    static Method = {
@@ -14,16 +14,17 @@ class ServiceEvent {
 
    constructor(data = null) {
       this.time = data.time;
-      this.username = Text.trim(data.username, "").replace(" ", "");
-      this.nameOfUser = Text.trim(data.nameOfUser, "");
-      this.description = Text.trim(data.description, "");
+      this.username = U.trimId(data.username);
+      this.nameOfUser = U.trimText(data.nameOfUser);
+      this.description = U.trimText(data.description);
 
-      this.method = Text.trim(data.method, "").replace(" ", "");
+      this.method = U.trimId(data.method);
       // for method info
-      this.status = Text.trim(data.status, "");
+      this.status = U.trimId(data.status);
       // for method purchase
-      this.price =
-         typeof data.price === "object" ? ServicePrice.trim(data.price) : undefined;
+      this.price = U.isObject(data.price)
+         ? ServicePrice.trim(data.price)
+         : undefined;
    }
 }
 

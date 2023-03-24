@@ -1,19 +1,5 @@
-const parse = (text) => {
-   return typeof text === "string" ? text : "";
-};
-const replaceAll = (text = "", regex = "", replacement = "") => {
-   text = parse(text).trim();
-   regex = parse(regex).trim();
-   replacement = parse(replacement).trim();
-
-   if (regex === replacement) return text;
-
-   while (text.includes(regex)) {
-      text = text.replace(regex, replacement);
-   }
-
-   return text;
-};
+const { default: U } = require("@/U");
+const Text = require("./Text");
 
 class SocketData {
    content = null;
@@ -21,8 +7,8 @@ class SocketData {
    constructor(content = null, key = "") {
       this.content = content;
 
-      if (typeof key !== "string") key = "";
-      key = key ? replaceAll(key, " ", "") : "";
+      key = U.optString(key);
+      key = Text.replaceAll(key, " ", "");
       if (key.length) this.key = key;
    }
 }

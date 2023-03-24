@@ -1,4 +1,4 @@
-const Text = require("./Text.js");
+const { default: U } = require("@/U.js");
 
 class Order {
    static Status = { Pending: 0, Completed: 1 };
@@ -8,10 +8,10 @@ class Order {
    }
 
    constructor(data = null) {
-      this._id = Text.trim(data._id, data._id);
-      this.content = Text.trim(data.content, "");
-      this.customer_name = Text.trim(data.customer_name, "");
-      this.phone_number = Text.trim(data.phone_number, "");
+      this._id = U.trimId(data._id);
+      this.content = U.trimText(data.content);
+      this.customer_name = U.trimText(data.customer_name);
+      this.phone_number = U.trimText(data.phone_number);
       this.status =
          data.status !== Order.Status.Completed
             ? Order.Status.Pending

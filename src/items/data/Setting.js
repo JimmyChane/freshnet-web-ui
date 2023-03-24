@@ -1,4 +1,4 @@
-const Text = require("./Text.js");
+const { default: U } = require("@/U.js");
 
 class Setting {
    static Key = {
@@ -14,8 +14,8 @@ class Setting {
    }
 
    constructor(data = null) {
-      this.key = Text.trim(data.key, "").replace(" ", "");
-      this.visibility = Text.trim(data.visibility, "");
+      this.key = U.trimId(data.key);
+      this.visibility = U.trimId(data.visibility);
       this.value = data.value;
    }
 }

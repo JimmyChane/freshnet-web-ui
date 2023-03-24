@@ -1,4 +1,4 @@
-const Text = require("./Text.js");
+const { default: U } = require("@/U.js");
 
 class ServiceCustomer {
    static trim(data) {
@@ -6,8 +6,8 @@ class ServiceCustomer {
    }
 
    constructor(data = null) {
-      this.name = Text.trim(data.name, "");
-      this.phoneNumber = Text.trim(data.phoneNumber, undefined);
+      this.name = U.trimText(data.name);
+      this.phoneNumber = U.trimStringAll(data.phoneNumber, undefined);
    }
 }
 

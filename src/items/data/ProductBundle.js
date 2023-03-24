@@ -1,4 +1,4 @@
-const Text = require("./Text.js");
+const { default: U } = require("@/U.js");
 
 class ProductBundle {
    static trim(data) {
@@ -6,7 +6,7 @@ class ProductBundle {
    }
 
    constructor(data = null) {
-      this.title = Text.trim(data.title, "");
+      this.title = U.trimText(data.title);
    }
 }
 

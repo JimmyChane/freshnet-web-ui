@@ -58,7 +58,7 @@
                return {
                   key: item.key,
                   title: item.title,
-                  icon: U.isObject(item.icon) ? item.icon.color : "",
+                  icon: U.isObjectOnly(item.icon) ? item.icon.color : "",
                   primaryColor: item.color,
                   isSelected: () => item.key === this.keySelected,
                   click: () => this.$emit("callback-select", item.key),

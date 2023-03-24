@@ -36,8 +36,7 @@ class ServiceImage {
       return 0;
    }
    toUrl(option = { width: 0, height: 0 }) {
-      const { width = 0, height = 0 } =
-         U.isObject(option) && option !== null ? option : {};
+      const { width = 0, height = 0 } = U.optObjectOnly(option);
 
       const { path, method } = this;
       const dimensionQuery = Image.dimensionToQuery(width, height);
@@ -47,18 +46,23 @@ class ServiceImage {
          const prefix = "/api/image/name/";
          const name = path.substring(prefix.length, path.length);
          const filename = new Filename(name);
-         return `${HostApi.originApi}/image/name/${filename.toString()}${query}`;
+         return `${
+            HostApi.originApi
+         }/image/name/${filename.toString()}${query}`;
       }
 
       const filename = new Filename(this.name);
-      return `${HostApi.originApi}/service_v2/get/image/${filename.toString()}${query}`;
+      return `${
+         HostApi.originApi
+      }/service_v2/get/image/${filename.toString()}${query}`;
    }
    async toBlob(option = { width: 0, height: 0 }) {
-      const { width = 0, height = 0 } =
-         U.isObject(option) && option !== null ? option : {};
+      const { width = 0, height = 0 } = U.optObjectOnly(option);
 
       const url = this.toUrl({ width, height });
-      const options = { headers: { authorization: this.loginStore.getters.token } };
+      const options = {
+         headers: { authorization: this.loginStore.getters.token },
+      };
       const response = await fetch(url, options);
       const blob = await response.blob();
       return URL.createObjectURL(blob);

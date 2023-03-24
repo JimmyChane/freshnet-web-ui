@@ -4,8 +4,8 @@ class ServiceNotice {
    }
 
    constructor(data = null) {
-      this.isUrgent = data.isUrgent ? true : false;
-      this.isWarranty = data.isWarranty ? true : false;
+      this.isUrgent = !!data.isUrgent;
+      this.isWarranty = !!data.isWarranty;
    }
 }
 

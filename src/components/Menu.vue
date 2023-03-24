@@ -28,13 +28,14 @@
             if (this.popupMenu) this.popupMenu.hide();
 
             const menus =
-               U.isObject(this.menus) && !U.isArray(this.menus)
+               U.isObjectOnly(this.menus) && !U.isArray(this.menus)
                   ? [this.menus]
                   : U.optArray(this.menus);
 
             for (const menu of menus) {
                const isLegacy =
-                  typeof menu.click !== "function" && typeof menu.interact === "function";
+                  typeof menu.click !== "function" &&
+                  typeof menu.interact === "function";
                if (isLegacy) menu.click = () => menu.interact();
             }
 

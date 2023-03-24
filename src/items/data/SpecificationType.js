@@ -1,5 +1,5 @@
-const Text = require("./Text.js");
 const Image = require("./Image.js");
+const { default: U } = require("@/U.js");
 
 class SpecificationType {
    static Key = {
@@ -37,13 +37,10 @@ class SpecificationType {
    }
 
    constructor(data = null) {
-      this.key = Text.trim(data.key, "").replace(" ", "");
-      this.title = Text.trim(data.title, "");
-      this.icon =
-         typeof data.icon === "object" && data.icon
-            ? Image.trim(data.icon)
-            : undefined;
-      this.color = Text.trim(data.color, "").replace(" ", "");
+      this.key = U.trimId(data.key);
+      this.title = U.trimText(data.title);
+      this.icon = U.isObjectOnly(data.icon) ? Image.trim(data.icon) : undefined;
+      this.color = U.trimId(data.color);
    }
 }
 

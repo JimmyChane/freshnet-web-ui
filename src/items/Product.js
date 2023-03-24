@@ -95,7 +95,8 @@ class Product {
          if (category && textContains(category.title, str)) count++;
 
          count += specifications.reduce((count, specContent) => {
-            if (specContent.type && textContains(specContent.type.title, str)) count++;
+            if (specContent.type && textContains(specContent.type.title, str))
+               count++;
             if (textContains(specContent.content, str)) count++;
             return count;
          }, 0);
@@ -215,7 +216,9 @@ class Product {
       let normalValue = price.normal ? price.normal.value : 0;
       let promotionValue = price.normal ? price.promotion.value : 0;
 
-      return normalValue > 0 && promotionValue > 0 && normalValue > promotionValue;
+      return (
+         normalValue > 0 && promotionValue > 0 && normalValue > promotionValue
+      );
    }
    isStockAvailable() {
       let stock = this.stock;
@@ -235,10 +238,10 @@ class Product {
       this.fetchCategory().then((category) => (this.category = category));
    }
    setPrice(price) {
-      let { normal, promotion } = price ? price : {};
+      const { normal, promotion } = U.optObjectOnly(price);
       this.price = {
-         normal: ProductPrice.parseString(U.isString(normal) ? normal : ""),
-         promotion: ProductPrice.parseString(U.isString(promotion) ? promotion : ""),
+         normal: ProductPrice.parseString(U.optString(normal)),
+         promotion: ProductPrice.parseString(U.optString(promotion)),
       };
    }
 
@@ -289,9 +292,9 @@ class Product {
    }
 
    setBundles(data = []) {
-      this.bundles = (Array.isArray(data) ? data : []).map((bundle) =>
-         ModuleBundle.trim(bundle),
-      );
+      this.bundles = U.optArray(data).map((bundle) => {
+         return ModuleBundle.trim(bundle);
+      });
    }
    addBundle(bundle) {
       this.bundles.push(bundle);
@@ -303,7 +306,7 @@ class Product {
    }
 
    setGifts(data = []) {
-      this.gifts = (Array.isArray(data) ? data : [])
+      this.gifts = U.optArray(data)
          .map((gift) => (U.isString(gift) ? gift.trim() : ""))
          .filter((gift) => gift);
    }

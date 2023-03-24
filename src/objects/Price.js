@@ -1,14 +1,17 @@
 import ItemSearcher from "@/objects/ItemSearcher.js";
+import U from "@/U";
 const textContains = ItemSearcher.textContains;
 
 export default class Price {
    static #parseCurrency(content) {
       const indexStart = content.indexOf(this.DefaultCurrency);
-      const indexEnd = indexStart === -1 ? -1 : indexStart + this.DefaultCurrency.length;
+      const indexEnd =
+         indexStart === -1 ? -1 : indexStart + this.DefaultCurrency.length;
       return {
          indexStart,
          indexEnd,
-         value: indexStart === -1 ? "" : content.substring(indexStart, indexEnd),
+         value:
+            indexStart === -1 ? "" : content.substring(indexStart, indexEnd),
       };
    }
    static #parseAmount(content) {
@@ -50,8 +53,8 @@ export default class Price {
    }
    static parse(any) {
       if (any instanceof Price) return any;
-      if (typeof any === "number") return new Price(any);
-      if (typeof any === "string") {
+      if (U.isNumber(any)) return new Price(any);
+      if (U.isString(any)) {
          const currencyParses = [];
          const amountParsed = this.#parseAmount(any);
 
@@ -75,10 +78,9 @@ export default class Price {
    #currency;
 
    constructor(amount = 0, currency = "RM") {
-      this.#currency =
-         typeof currency === "string"
-            ? currency.trim().replace(" ", "").toUpperCase()
-            : "";
+      this.#currency = U.isString(currency)
+         ? currency.trim().replace(" ", "").toUpperCase()
+         : "";
       this.#currency =
          this.#currency.length === 0 ? this.DefaultCurrency : this.#currency;
       this.#amount = isNaN(amount) ? 0 : Number(amount);
@@ -122,6 +124,9 @@ export default class Price {
    }
 
    toCount(strs) {
-      return strs.reduce((count, str) => count + textContains(this.toString(), str), 0);
+      return strs.reduce(
+         (count, str) => count + textContains(this.toString(), str),
+         0,
+      );
    }
 }

@@ -1,4 +1,4 @@
-const Text = require("./Text.js");
+const { default: U } = require("@/U.js");
 
 class Ps2Disc {
    static trim(data) {
@@ -6,9 +6,9 @@ class Ps2Disc {
    }
 
    constructor(data = null) {
-      this._id = Text.trim(data._id, data._id);
-      this.code = Text.trim(data.code, "").replace(" ", "");
-      this.title = Text.trim(data.title, "");
+      this._id = U.trimId(data._id);
+      this.code = U.trimId(data.code);
+      this.title = U.trimText(data.title);
    }
 }
 

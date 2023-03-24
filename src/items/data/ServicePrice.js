@@ -1,4 +1,4 @@
-const Text = require("./Text.js");
+const { default: U } = require("@/U.js");
 
 class ServicePrice {
    static trim(data) {
@@ -6,8 +6,8 @@ class ServicePrice {
    }
 
    constructor(data = null) {
-      this.currency = Text.trim(data.currency, "").replace(" ", "");
-      this.amount = Text.trim(data.amount, "").replace(" ", "");
+      this.currency = U.trimId(data.currency);
+      this.amount = U.trimId(data.amount);
    }
 }
 

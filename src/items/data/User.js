@@ -1,4 +1,4 @@
-const Text = require("./Text.js");
+const { default: U } = require("@/U.js");
 
 class User {
    static Type = { None: -1, Admin: 0, Staff: 1, Customer: 2 };
@@ -19,8 +19,8 @@ class User {
    }
 
    constructor(data = null) {
-      this.username = Text.trim(data.username, "").replace(" ", "");
-      this.name = Text.trim(data.name, "");
+      this.username = U.trimId(data.username);
+      this.name = U.trimText(data.name);
       this.userType = data.userType;
    }
 }

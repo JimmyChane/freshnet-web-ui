@@ -1,5 +1,5 @@
-const Text = require("./Text.js");
 const CustomerDeviceSpecification = require("./CustomerDeviceSpecification.js");
+const { default: U } = require("@/U.js");
 
 class CustomerDevice {
    static trim(data) {
@@ -7,22 +7,17 @@ class CustomerDevice {
    }
 
    constructor(data = null) {
-      this._id = Text.trim(data._id, data._id);
-      this.ownerCustomerId = Text.trim(data.ownerCustomerId, "").replace(
-         " ",
-         ""
-      );
-      this.description = Text.trim(data.description, "");
-      this.categoryKey = Text.trim(data.categoryKey, "").replace(" ", "");
-      this.specifications = (
-         Array.isArray(data.specifications) ? data.specifications : []
-      )
-         .map((specification) =>
-            CustomerDeviceSpecification.trim(specification)
-         )
-         .filter(
-            (specification) => specification.typeKey && specification.content
-         );
+      this._id = U.trimId(data._id);
+      this.ownerCustomerId = U.trimId(data.ownerCustomerId);
+      this.description = U.trimText(data.description, "");
+      this.categoryKey = U.trimId(data.categoryKey);
+      this.specifications = U.optArray(data.specifications)
+         .map((specification) => {
+            return CustomerDeviceSpecification.trim(specification);
+         })
+         .filter((specification) => {
+            return specification.typeKey && specification.content;
+         });
    }
 }
 

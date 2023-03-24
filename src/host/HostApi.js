@@ -1,4 +1,3 @@
-import Text from "@/items/data/Text.js";
 import config from "@/../freshnet.config";
 import U from "@/U";
 import HostIcon from "./HostIcon";
@@ -52,7 +51,12 @@ class HostRequest {
    async send() {
       this.contentTypeJson();
 
-      let { method = "GET", url = "", headers = {}, body = undefined } = this.#bind;
+      let {
+         method = "GET",
+         url = "",
+         headers = {},
+         body = undefined,
+      } = this.#bind;
 
       if (url) url = `${config.hostApi}/${url}`;
       if (window.localStorage.getItem("userToken")) {
@@ -67,7 +71,12 @@ class HostRequest {
       return hostResponse;
    }
    async sendNotJson() {
-      let { method = "GET", url = "", headers = {}, body = undefined } = this.#bind;
+      let {
+         method = "GET",
+         url = "",
+         headers = {},
+         body = undefined,
+      } = this.#bind;
 
       if (url) url = `${config.hostApi}/${url}`;
       if (window.localStorage.getItem("userToken")) {
@@ -129,12 +138,7 @@ class HostResponse {
    }
    optObjectContent() {
       const content = this.getContent();
-      if (
-         U.isArray(content) ||
-         !U.isObject(content) ||
-         content === undefined ||
-         content === null
-      ) {
+      if (U.isArray(content) || !U.isObjectOnly(content)) {
          return {};
       }
       return U.optObject(content);
@@ -142,7 +146,9 @@ class HostResponse {
 
    getStringContent() {
       const content = this.getContent();
-      if (typeof content !== "string") throw new Error("content not string");
+      if (!U.isString(content)) {
+         throw new Error("content not string");
+      }
       return content;
    }
    optStringContent() {
@@ -166,7 +172,7 @@ class HostApi {
    }
    cloudinary(param = { url: "" }) {
       let { url } = param;
-      url = U.isString(url) ? Text.trim(url, "") : "";
+      url = U.trimId(url);
       if (url === "") return "";
       return `${config.cloudinaryRes}/${url}`;
    }

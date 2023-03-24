@@ -1,13 +1,13 @@
-const Text = require("./Text.js");
 const Image = require("./Image.js");
 const ProductStock = require("./ProductStock.js");
 const ProductBundle = require("./ProductBundle.js");
 const ProductPrice = require("./ProductPrice.js");
 const ProductSpecification = require("./ProductSpecification.js");
+const { default: U } = require("@/U.js");
 
 const textContains = (text, keyword) => {
    return (
-      typeof text == "string" &&
+      U.isString(text) &&
       text.toLowerCase().replaceAll(" ", "").includes(keyword)
    );
 };
@@ -33,34 +33,37 @@ class Product {
    }
 
    static #trimSpecification(item, data) {
-      item.specifications = (
-         Array.isArray(data.specifications) ? data.specifications : []
-      ).map((specification) => ProductSpecification.trim(specification));
+      item.specifications = U.optArray(data.specifications).map(
+         (specification) => {
+            return ProductSpecification.trim(specification);
+         },
+      );
 
-      if (typeof data.specification === "object" && data.specification) {
+      if (U.isObjectOnly(data.specification)) {
          item.specifications.unshift(
             ...Object.keys(data.specification)
                .map((type) => ({ type, content: data.specification[type] }))
-               .map((spec) => ProductSpecification.trim(spec))
+               .map((spec) => ProductSpecification.trim(spec)),
          );
       }
    }
    static #trimImage(item, data) {
-      item.images = (Array.isArray(data.images) ? data.images : [])
+      item.images = U.optArray(data.images)
          .map((image) => Image.trim(image))
          .filter((image) => image);
 
-      let dataImage =
-         typeof data.image === "object" ? Image.trim(data.image) : undefined;
+      let dataImage = U.isObject(data.image)
+         ? Image.trim(data.image)
+         : undefined;
       if (dataImage) {
          item.images.unshift(dataImage);
       }
    }
    static #trimPrice(item, data) {
       let { prices = [] } = data.stock ? data.stock : {};
-      prices = prices.filter(
-         (price) => price && (price.normal || price.promotion)
-      );
+      prices = prices.filter((price) => {
+         return price?.normal || price.promotion;
+      });
 
       if (data.price) {
          item.price = ProductPrice.trim(data.price);
@@ -80,20 +83,18 @@ class Product {
    }
 
    constructor(data = null) {
-      this._id = Text.trim(data._id, data._id);
-      this.title = Text.trim(data.title);
-      this.description = Text.trim(data.description);
-      this.categoryId = Text.trim(data.categoryId);
-      this.brandId = Text.trim(data.brandId);
-      this.bundles = (Array.isArray(data.bundles) ? data.bundles : []).map(
-         (bundle) => ProductBundle.trim(bundle)
-      );
-      this.gifts = (Array.isArray(data.gifts) ? data.gifts : [])
-         .map((gift) => Text.trim(gift))
+      this._id = U.trimId(data._id);
+      this.title = U.trimText(data.title);
+      this.description = U.trimText(data.description);
+      this.categoryId = U.trimId(data.categoryId);
+      this.brandId = U.trimId(data.brandId);
+      this.bundles = U.optArray(data.bundles).map((bundle) => {
+         return ProductBundle.trim(bundle);
+      });
+      this.gifts = U.optArray(data.gifts)
+         .map((gift) => U.trimText(gift))
          .filter((gift) => gift);
-      this.stock = ProductStock.trim(
-         typeof data.stock === "object" ? data.stock : {}
-      );
+      this.stock = ProductStock.trim(U.optObject(data.stock));
 
       Product.#trimImage(this, data);
       Product.#trimSpecification(this, data);

@@ -1,4 +1,4 @@
-const Text = require("./Text.js");
+const { default: U } = require("@/U.js");
 
 class ServiceLabel {
    static Defaults = {
@@ -7,8 +7,8 @@ class ServiceLabel {
    };
 
    constructor(data = null) {
-      this.title = Text.trim(data.title, "");
-      this.hexColor = Text.trim(data.hexColor, "").replace(" ", "");
+      this.title = U.trimText(data.title);
+      this.hexColor = U.trimId(data.hexColor);
    }
 }
 

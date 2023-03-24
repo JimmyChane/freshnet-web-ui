@@ -1,6 +1,7 @@
 import Image from "./Image";
 import ModuleCategory from "./data/Category";
 import ItemSearcher from "../objects/ItemSearcher.js";
+import U from "@/U";
 const textContains = ItemSearcher.textContains;
 
 const getBackground = (key) => {
@@ -105,7 +106,9 @@ class Category {
       this.id = data._id;
       this.key = data.key;
       this.title = data.title;
-      this.icon = typeof data.icon === "object" ? new Image().fromData(data.icon) : null;
+      this.icon = U.isObject(data.icon)
+         ? new Image().fromData(data.icon)
+         : null;
       this.background = getBackground(this.key);
 
       return this;
@@ -121,7 +124,8 @@ class Category {
    }
    toCount(strs) {
       return strs.reduce((count, str) => {
-         if (this.title === "Notebook") count += textContains("Laptop", str) ? 1 : 0;
+         if (this.title === "Notebook")
+            count += textContains("Laptop", str) ? 1 : 0;
          if (this.title === "Notebook" && textContains("Laptop", str)) count++;
          if (textContains(this.title, str)) count++;
          if (textContains("category", str)) count++;

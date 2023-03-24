@@ -1,5 +1,5 @@
-const Text = require("./Text.js");
 const Image = require("./Image.js");
+const { default: U } = require("@/U.js");
 
 class ServiceImageFile {
    static Method = Image.Method;
@@ -12,10 +12,10 @@ class ServiceImageFile {
    constructor(data = null) {
       const image = Image.trim(data);
 
-      this.name = Text.trim(data.name, "");
+      this.name = U.trimId(data.name);
       this.path = image.path;
       this.method = image.method;
-      this.storageType = Text.trim(data.storageType, "").replace(" ", "");
+      this.storageType = U.trimId(data.storageType);
    }
 }
 

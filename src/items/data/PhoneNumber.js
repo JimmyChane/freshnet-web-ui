@@ -1,7 +1,6 @@
+const { default: U } = require("@/U");
+
 class PhoneNumber {
-   static #parseString(value, fallback = "") {
-      return typeof value === "string" ? value : fallback;
-   }
    static #spliceString(text, index, count = 1) {
       if (count <= 0) return text;
       if (index === 0) return text.slice(index + count, text.length);
@@ -9,7 +8,7 @@ class PhoneNumber {
       return text.slice(0, index) + text.slice(index + count, text.length);
    }
    static #parsePhoneNumber(value) {
-      value = this.#parseString(value);
+      value = U.isString(value);
 
       for (let i = 0; i < value.length; i++) {
          let char = value.charAt(i);
