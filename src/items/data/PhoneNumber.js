@@ -8,7 +8,7 @@ class PhoneNumber {
       return text.slice(0, index) + text.slice(index + count, text.length);
    }
    static #parsePhoneNumber(value) {
-      value = U.isString(value);
+      value = U.optString(value);
 
       for (let i = 0; i < value.length; i++) {
          let char = value.charAt(i);

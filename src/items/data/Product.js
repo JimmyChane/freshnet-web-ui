@@ -6,10 +6,7 @@ const ProductSpecification = require("./ProductSpecification.js");
 const { default: U } = require("@/U.js");
 
 const textContains = (text, keyword) => {
-   return (
-      U.isString(text) &&
-      text.toLowerCase().replaceAll(" ", "").includes(keyword)
-   );
+   return U.optString(text).toLowerCase().replaceAll(" ", "").includes(keyword);
 };
 
 class Product {

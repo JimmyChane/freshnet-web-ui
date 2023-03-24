@@ -131,8 +131,9 @@ class Service {
    }
 
    async fetchUser() {
-      if (!U.isString(this.username) || this.username.trim().length === 0)
+      if (!U.isString(this.username) || this.username.trim().length === 0) {
          return null;
+      }
       return await this.userStore.dispatch("getUserByUsername", this.username);
    }
    async fetchName() {
@@ -140,9 +141,15 @@ class Service {
 
       const username = user ? user.username : "";
 
-      if (username.length && this.name) return `${this.name}(${username})`;
-      if (!username.length && this.name) return this.name;
-      if (username.length && !this.name) return username;
+      if (username.length && this.name) {
+         return `${this.name}(${username})`;
+      }
+      if (!username.length && this.name) {
+         return this.name;
+      }
+      if (username.length && !this.name) {
+         return username;
+      }
 
       throw new Error("unknown");
    }
@@ -151,9 +158,9 @@ class Service {
       return !!this.labels.find((label) => label.isEqual(ServiceLabels.Urgent));
    }
    isWarranty() {
-      return !!this.labels.find((label) =>
-         label.isEqual(ServiceLabels.Warranty),
-      );
+      return !!this.labels.find((label) => {
+         return label.isEqual(ServiceLabels.Warranty);
+      });
    }
 
    toTotalPrice() {
