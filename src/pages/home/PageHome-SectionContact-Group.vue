@@ -21,11 +21,8 @@
 
 <template>
    <a
-      :class="[
-         'ContactGroup',
-         `ContactGroup-${isThin ? 'isThin' : 'isWide'}`,
-         'transition',
-      ]"
+      :class="['ContactGroup', 'transition']"
+      :isThin="`${isThin}`"
       :href="fisrtHref"
       :target="fisrtTarget"
    >
@@ -57,7 +54,7 @@
 
       &:hover,
       &:focus {
-         background: white;
+         background: #f8f8f8;
       }
 
       .ContactGroup-main {
@@ -82,14 +79,14 @@
 
          padding: 1em;
 
-         background: #e4e4e4;
+         background: hsl(0, 0%, 94%);
          border-radius: 1.2em;
       }
    }
-   .ContactGroup-isThin {
+   .ContactGroup[isThin="true"] {
       font-size: 1rem;
    }
-   .ContactGroup-isWide {
+   .ContactGroup[isThin="false"] {
       font-size: 1.3rem;
    }
 </style>

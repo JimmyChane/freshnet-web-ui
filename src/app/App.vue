@@ -38,7 +38,10 @@
       methods: {
          logout() {
             this.loginStore.dispatch("logout").then((user) => {
-               this.store.dispatch("snackbarShow", `${user.name} is now logged out`);
+               this.store.dispatch(
+                  "snackbarShow",
+                  `${user.name} is now logged out`,
+               );
             });
          },
       },
@@ -141,6 +144,7 @@
       --accent-color: #fc8237;
       --accent-color-hover: #c45815;
       --statusbar-color: #384a6a;
+      --App-background-color: #f1f1f1;
    }
    .App {
       position: relative;
@@ -183,7 +187,7 @@
                flex-direction: row;
                align-items: center;
                justify-content: stretch;
-               background-color: #e4e4e4;
+               background-color: var(--App-background-color);
 
                --background-color-light: var(--background-color);
                --background-color-dark: var(--background-color);
@@ -196,7 +200,9 @@
                }
             }
             .App-layout-body[isDrawer="true"] {
-               height: calc(100% - var(--navigation-bottom-height)); // todo testing
+               height: calc(
+                  100% - var(--navigation-bottom-height)
+               ); // todo testing
                .App-NavigationLeft {
                   z-index: 2;
                }

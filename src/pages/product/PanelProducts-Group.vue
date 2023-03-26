@@ -46,7 +46,9 @@
    <div
       :class="[
          'PanelProducts-category',
-         isWide ? 'PanelProducts-category-isWide' : 'PanelProducts-category-isThin',
+         isWide
+            ? 'PanelProducts-category-isWide'
+            : 'PanelProducts-category-isThin',
       ]"
    >
       <div class="PanelProducts-category-header">
@@ -86,7 +88,11 @@
                v-for="item of items"
                :key="item.id"
                :to="{
-                  query: { productId: item.id, brand: queryBrandId, stock: queryStock },
+                  query: {
+                     productId: item.id,
+                     brand: queryBrandId,
+                     stock: queryStock,
+                  },
                }"
             >
                <ItemProduct
@@ -120,7 +126,7 @@
          flex-direction: row;
          align-items: center;
 
-         font-size: 2.5rem;
+         font-size: 2rem;
          font-weight: 500;
          gap: 0.5em;
          padding: 0 1.2rem;

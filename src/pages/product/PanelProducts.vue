@@ -128,10 +128,14 @@
             const categoryGroups = await this.productStore.dispatch(
                "getGroupsByCategory",
             );
-            const brandGroups = await this.productStore.dispatch("getGroupsByBrand");
+            const brandGroups = await this.productStore.dispatch(
+               "getGroupsByBrand",
+            );
 
             this.productGroups = categoryGroups
-               .sort((group1, group2) => group1.category.compare(group2.category))
+               .sort((group1, group2) =>
+                  group1.category.compare(group2.category),
+               )
                .map((group) => {
                   const items = group.items
                      .filter((item) => {
@@ -150,18 +154,28 @@
                   return {
                      key: group.category.id,
                      title: group.category.title,
-                     icon: group.category.icon ? group.category.icon.toUrl() : "",
+                     icon: group.category.icon
+                        ? group.category.icon.toUrl()
+                        : "",
                      items,
                   };
                })
                .filter((group) => group.items.length > 0);
 
-            const categoryMenuGroup = new MenuGroup(this, "category", "Category", [
-               { title: "All" },
-               ...categoryGroups.map((group) => {
-                  return { key: group.category.id, title: group.category.title };
-               }),
-            ]);
+            const categoryMenuGroup = new MenuGroup(
+               this,
+               "category",
+               "Category",
+               [
+                  { title: "All" },
+                  ...categoryGroups.map((group) => {
+                     return {
+                        key: group.category.id,
+                        title: group.category.title,
+                     };
+                  }),
+               ],
+            );
             const brandMenuGroup = new MenuGroup(this, "brand", "Brand", [
                { title: "All" },
                ...brandGroups
@@ -261,7 +275,10 @@
             @click-search="$emit('click-search')"
          />
 
-         <div :style="{ 'z-index': '1' }" :class="['scrollbar', 'PanelProducts-filters']">
+         <div
+            :style="{ 'z-index': '1' }"
+            :class="['scrollbar', 'PanelProducts-filters']"
+         >
             <LabelMenus
                :primaryColor="labelMenuPrimaryColor"
                v-for="filterMenu of filterMenus"
@@ -308,8 +325,6 @@
       align-items: flex-start;
       overflow-y: auto;
 
-      background-color: #dddddd;
-
       .PanelProducts-actionbar {
          width: 100%;
          z-index: 2;
@@ -330,7 +345,7 @@
             overflow-x: auto;
             z-index: 3;
             border-bottom: 1px solid hsl(0, 0%, 80%);
-            background-color: #dddddd;
+            background: var(--App-background-color);
 
             --scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
             --scrollbar-thumb-color-hover: rgba(0, 0, 0, 0.2);

@@ -4,10 +4,7 @@
    export default {
       components: { Item },
       props: { preview: { type: Object } },
-      computed: {
-         title: (c) => c.preview.title,
-         icon: (c) => c.preview.icon,
-      },
+      computed: { title: (c) => c.preview.title, icon: (c) => c.preview.icon },
    };
 </script>
 
@@ -31,11 +28,11 @@
 
 <style lang="scss" scoped>
    .PagePrint-card {
-      background-color: #f3f3f3;
+      background-color: white;
 
       padding: 1rem;
       gap: 1rem;
-      border-radius: 0.5rem;
+      border-radius: 1rem;
 
       display: flex;
       flex-direction: column;

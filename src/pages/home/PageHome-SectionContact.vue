@@ -32,16 +32,14 @@
 
 <template>
    <Section>
-      <div
-         :class="[
-            'HomeSectionContact',
-            `HomeSectionContact-${isThin ? 'isThin' : 'isWide'}`,
-         ]"
-      >
+      <div class="HomeSectionContact" :isThin="`${isThin}`">
          <Group
             v-for="group of groups"
             :key="group.title"
-            :style="{ 'grid-column': 'auto / span 1', 'grid-row': 'auto / span 2' }"
+            :style="{
+               'grid-column': 'auto / span 1',
+               'grid-row': 'auto / span 2',
+            }"
             :isThin="isThin"
             :group="group"
          />
@@ -50,15 +48,9 @@
 </template>
 
 <style lang="scss" scoped>
-   .HomeSectionContact-isThin {
-      font-size: 1rem;
-   }
-   .HomeSectionContact-isWide {
-      font-size: 1.3rem;
-   }
    .HomeSectionContact {
       width: 100%;
-      background-color: #f3f3f3;
+      background-color: white;
       border-radius: 1em;
       overflow: hidden;
 
@@ -70,5 +62,11 @@
       align-items: center;
       justify-items: center;
       align-content: center;
+   }
+   .HomeSectionContact[isThin="true"] {
+      font-size: 1rem;
+   }
+   .HomeSectionContact[isThin="false"] {
+      font-size: 1.3rem;
    }
 </style>

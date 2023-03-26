@@ -30,7 +30,7 @@
 
 <style lang="scss" scoped>
    .HomeSectionWhatElse {
-      background-color: #f3f3f3;
+      background: white;
       overflow: hidden;
       color: black;
 

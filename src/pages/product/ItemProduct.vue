@@ -127,7 +127,6 @@
          'ItemProduct',
          isList ? 'ItemProduct-modeList' : '',
          isGrid ? 'ItemProduct-modeGrid' : '',
-         isSelected ? 'ItemProduct-isSelected' : 'ItemProduct-isDeselected',
          'transition',
       ]"
       :style="{
@@ -136,10 +135,15 @@
          '--background-color-hover': primaryColor.mix('ffffff', 0.2),
       }"
       :ref="item.id"
+      :isSelected="`${isSelected}`"
       @click="$emit('click', item)"
    >
       <div class="ItemProduct-preview transition">
-         <ImageView class="ItemProduct-preview-image" v-if="preview" :src="preview" />
+         <ImageView
+            class="ItemProduct-preview-image"
+            v-if="preview"
+            :src="preview"
+         />
          <span :class="['ItemProduct-preview-empty', 'transition']" v-else
             >No Preview</span
          >
@@ -163,9 +167,15 @@
          ]"
       >
          <span class="ItemProduct-title-text">{{ fullTitle }}</span>
-         <span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
+         <span class="ItemProduct-title-price" v-if="price">{{
+            price.to
+         }}</span>
          <div class="ItemProduct-title-specs" v-if="specLabels.length">
-            <Label v-for="label in specLabels" :key="label.text" :title="label.text" />
+            <Label
+               v-for="label in specLabels"
+               :key="label.text"
+               :title="label.text"
+            />
          </div>
       </div>
    </div>
@@ -214,14 +224,14 @@
             height: 100%;
             aspect-ratio: inherit;
             border-radius: var(--preview-border-radius);
-            background-color: hsl(0, 0%, 94%);
+            background: white;
          }
          .ItemProduct-preview-empty {
             width: 100%;
             height: 100%;
             aspect-ratio: inherit;
             border-radius: var(--preview-border-radius);
-            background-color: hsl(0, 0%, 94%);
+            background: white;
          }
 
          .ItemProduct-preview-labels {
@@ -307,7 +317,8 @@
          min-height: var(--height);
          max-height: var(--height);
          transform: scale(0.92);
-         --preview-border-radius-focus: var(--border-radius) 0 0 var(--border-radius);
+         --preview-border-radius-focus: var(--border-radius) 0 0
+            var(--border-radius);
       }
       .ItemProduct-title {
          flex-grow: 1;
@@ -325,7 +336,8 @@
       .ItemProduct-preview {
          width: 100%;
          transform: scale(0.92) translateY(1rem);
-         --preview-border-radius-focus: var(--border-radius) var(--border-radius) 0 0;
+         --preview-border-radius-focus: var(--border-radius)
+            var(--border-radius) 0 0;
       }
       .ItemProduct-title {
          width: 100%;
@@ -333,22 +345,22 @@
       }
    }
 
-   .ItemProduct-isDeselected {
+   .ItemProduct[isSelected="false"] {
       cursor: pointer;
       border: 1px solid transparent;
 
       &:hover,
       &:focus,
       &:focus-within {
-         background-color: rgba(0, 0, 0, 0.08);
+         background: hsl(0, 0%, 98%);
          .ItemProduct-preview {
             transform: scale(1);
             --preview-border-radius: var(--preview-border-radius-focus);
          }
       }
    }
-   .ItemProduct-isSelected {
-      background-color: var(--primary-color);
+   .ItemProduct[isSelected="true"] {
+      background: var(--primary-color);
       border: 1px solid rgba(0, 0, 0, 0.05);
       .ItemProduct-preview {
          transform: scale(1);

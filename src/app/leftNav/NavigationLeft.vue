@@ -6,7 +6,13 @@
    import LeftNavLogin from "./NavigationLeft-Login.vue";
 
    export default {
-      components: { Drawer, LeftNavHeader, Search, LeftNavGroup1, LeftNavLogin },
+      components: {
+         Drawer,
+         LeftNavHeader,
+         Search,
+         LeftNavGroup1,
+         LeftNavLogin,
+      },
       emits: ["click-logout"],
       data: (c) => ({
          isDragging: false,
@@ -39,7 +45,8 @@
                nav.isSelected = () => this.selectedPageKey === nav.key;
                nav.isWide = () => this.isWide;
                nav.clickExpand = () => {
-                  this.expandedPageKey = this.expandedPageKey === nav.key ? "" : nav.key;
+                  this.expandedPageKey =
+                     this.expandedPageKey === nav.key ? "" : nav.key;
                };
                nav.click = () => this.emitCollapse();
 
@@ -124,14 +131,16 @@
          onTouchMove(e) {
             if (!this.isDragging) return;
             const touch = [...e.changedTouches][0];
-            const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
+            const x =
+               touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
             const y = touch.pageY;
             this.refDrawer.onDragMove(x, y);
          },
          onTouchEnd(e) {
             if (!this.isDragging) return;
             const touch = [...e.changedTouches][0];
-            const x = touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
+            const x =
+               touch.pageX > this.dragWidth ? this.dragWidth : touch.pageX;
             const y = touch.pageY;
             this.refDrawer.onDragEnd(x, y);
             if (x > this.dragOpen) {
@@ -189,7 +198,6 @@
       ref="Drawer"
       class="NavigationLeft"
       :isWide="`${isWide}`"
-      :isThin="`${!isWide}`"
       :mode="drawerMode"
       :edge="drawerEdge"
       @click-collapse="() => emitCollapse()"
@@ -208,6 +216,8 @@
             @expand="() => (searchIsExpand = true)"
             @collapse="() => (searchIsExpand = false)"
          />
+
+         <div class="NavigationLeft-line"></div>
 
          <div
             class="NavigationLeft-navigations"
@@ -246,13 +256,19 @@
          background-color: hsl(0, 0%, 84%);
          position: relative;
 
+         .NavigationLeft-line {
+            background: hsl(0, 0%, 70%);
+            min-height: 1px;
+            margin: 1.2rem 0.8rem;
+         }
+
          .NavigationLeft-navigations {
             flex-grow: 1;
             width: 100%;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            padding: 0.2em;
+            padding: 0 0.2em;
             padding-bottom: 4em;
          }
          .NavigationLeft-login {
@@ -274,12 +290,11 @@
    .NavigationLeft[isWide="true"] {
       .NavigationLeft-body {
          .NavigationLeft-navigations {
-            padding-top: 0.8em;
             align-items: flex-start;
          }
       }
    }
-   .NavigationLeft[isThin="true"] {
+   .NavigationLeft[isWide="false"] {
       .NavigationLeft-body {
          width: fit-content;
          .NavigationLeft-navigations {

@@ -12,7 +12,7 @@
 </script>
 
 <template>
-   <div :class="['HourItem', isToday ? 'HourItem-isToday' : '']">
+   <div class="HourItem" :isToday="`${isToday}`">
       <span class="HourItem-title">{{ title }}</span>
       <span class="HourItem-content">{{ content }}</span>
    </div>
@@ -28,7 +28,8 @@
       display: flex;
       flex-direction: row;
       gap: 0.5em;
-      padding: 0 0.5em;
+      padding: 0.1em 0.5em;
+      line-height: 1em;
 
       .HourItem-title {
          text-align: start;
@@ -39,13 +40,11 @@
          text-align: end;
       }
    }
-   .HourItem-isToday {
+   .HourItem[isToday="true"] {
       font-weight: 900;
-      color: black;
-      background-color: rgba(0, 0, 0, 0.03);
       background-color: black;
       color: white;
-      padding: 0.3em 0.5em;
+      padding: 0.5em 0.5em;
       border-radius: 0.5em;
    }
 </style>
