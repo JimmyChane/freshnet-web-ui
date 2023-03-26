@@ -5,7 +5,7 @@
    export default {
       props: {
          title: { type: String, default: "" },
-         primaryColor: { type: chroma.Color, default: () => chroma("#f5f5f5") },
+         primaryColor: { type: chroma.Color, default: () => chroma("#ffffff") },
       },
       computed: { isPrimaryColorDark: (c) => U.isColorDark(c.primaryColor) },
    };

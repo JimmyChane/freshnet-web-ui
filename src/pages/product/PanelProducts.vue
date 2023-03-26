@@ -66,6 +66,8 @@
 
          currentProductId: "",
 
+         categoryFilter: null,
+
          filterMenus: [],
          productGroups: [],
       }),
@@ -133,9 +135,9 @@
             );
 
             this.productGroups = categoryGroups
-               .sort((group1, group2) =>
-                  group1.category.compare(group2.category),
-               )
+               .sort((group1, group2) => {
+                  return group1.category.compare(group2.category);
+               })
                .map((group) => {
                   const items = group.items
                      .filter((item) => {
@@ -162,20 +164,15 @@
                })
                .filter((group) => group.items.length > 0);
 
-            const categoryMenuGroup = new MenuGroup(
-               this,
-               "category",
-               "Category",
-               [
-                  { title: "All" },
-                  ...categoryGroups.map((group) => {
-                     return {
-                        key: group.category.id,
-                        title: group.category.title,
-                     };
-                  }),
-               ],
-            );
+            this.categoryFilter = new MenuGroup(this, "category", "Category", [
+               { title: "All" },
+               ...categoryGroups.map((group) => {
+                  return {
+                     key: group.category.id,
+                     title: group.category.title,
+                  };
+               }),
+            ]);
             const brandMenuGroup = new MenuGroup(this, "brand", "Brand", [
                { title: "All" },
                ...brandGroups
@@ -186,7 +183,7 @@
                   }),
             ]);
 
-            this.filterMenus = [categoryMenuGroup, brandMenuGroup];
+            this.filterMenus = [brandMenuGroup];
             if (this.isEditable) {
                this.filterMenus.push(
                   new MenuGroup(this, "stock", "Stock", [
@@ -276,6 +273,20 @@
          />
 
          <div
+            v-if="categoryFilter"
+            :class="['scrollbar', 'PanelProducts-categoryFilter']"
+         >
+            <button
+               v-for="menu of categoryFilter.menus"
+               class="PanelProducts-categoryFilter-item transition"
+               :isSelected="`${categoryFilter.menu === menu}`"
+               :key="menu.key"
+               @click="() => menu.click(menu)"
+               >{{ menu.title }}</button
+            >
+         </div>
+
+         <div
             :style="{ 'z-index': '1' }"
             :class="['scrollbar', 'PanelProducts-filters']"
          >
@@ -331,9 +342,47 @@
          position: sticky;
          top: 0;
 
+         border-bottom: 1px solid hsl(0, 0%, 80%);
+         background: var(--App-background-color);
+
+         .PanelProducts-categoryFilter {
+            gap: 0.2rem;
+            width: 100%;
+            padding: 0.4rem 1rem;
+            padding-bottom: 0.2rem;
+
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            align-items: center;
+            justify-content: flex-start;
+
+            overflow-x: auto;
+
+            .PanelProducts-categoryFilter-item {
+               border: 1px solid black;
+               padding: 0.4rem 0.8rem;
+               border-radius: 0.5rem;
+               min-width: max-content;
+               --transition-duration: 0.1s;
+            }
+            .PanelProducts-categoryFilter-item[isSelected="true"] {
+               background: black;
+               color: white;
+            }
+            .PanelProducts-categoryFilter-item[isSelected="false"] {
+               cursor: pointer;
+
+               &:hover,
+               &:focus {
+                  background: hsl(0, 0%, 90%)
+               }
+            }
+         }
          .PanelProducts-filters {
             width: 100%;
-            padding: 1rem;
+            padding: 0.4rem 1rem;
+            padding-top: 0.2rem;
             gap: 0.5rem;
 
             display: flex;
@@ -344,13 +393,6 @@
 
             overflow-x: auto;
             z-index: 3;
-            border-bottom: 1px solid hsl(0, 0%, 80%);
-            background: var(--App-background-color);
-
-            --scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
-            --scrollbar-thumb-color-hover: rgba(0, 0, 0, 0.2);
-            --scrollbar-track-margin: 1rem;
-            --scrollbar-size: 0.2rem;
          }
       }
       .PanelProducts-body {
@@ -366,8 +408,8 @@
          .PanelProducts-categories {
             z-index: 2;
             width: 100%;
-            gap: 2rem;
-            padding: 2rem 0;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
             display: flex;
             flex-direction: column;
          }

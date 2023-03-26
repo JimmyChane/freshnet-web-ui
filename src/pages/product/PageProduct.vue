@@ -174,32 +174,48 @@
       data: (c) => ({
          scrollTop: 0,
          popup: {
-            search: new PopupContext(c),
-            productAdd: new PopupContext(c).onConfirm((accept, reject, output) => {
-               c.productStore
-                  .dispatch("addItem", { data: output })
-                  .then((product) => {
-                     accept();
-                     c.setProduct(product);
-                  })
-                  .catch((error) => reject(error, "Product Creation Failed"));
+            search: new PopupContext(c).onDismiss((accept, reject, input) => {
+               const { windowSearch } = c.$refs;
+               if (windowSearch) {
+                  windowSearch.blur();
+               }
+               accept();
             }),
-            productRemove: new PopupContext(c).onConfirm((accept, reject, input) => {
-               c.productStore
-                  .dispatch("removeItemOfId", { id: input.productId })
-                  .then(() => {
-                     accept();
-                     c.setProduct(null);
-                  })
-                  .catch((error) => reject(error, "Product Deletion Failed"));
-            }),
-            productImageRemove: new PopupContext(c).onConfirm((accept, reject, input) => {
-               const { product, image } = input;
-               c.productStore
-                  .dispatch("removeImageOfId", { id: product.id, image })
-                  .then(() => accept())
-                  .catch(() => reject());
-            }),
+            productAdd: new PopupContext(c).onConfirm(
+               (accept, reject, output) => {
+                  c.productStore
+                     .dispatch("addItem", { data: output })
+                     .then((product) => {
+                        accept();
+                        c.setProduct(product);
+                     })
+                     .catch((error) =>
+                        reject(error, "Product Creation Failed"),
+                     );
+               },
+            ),
+            productRemove: new PopupContext(c).onConfirm(
+               (accept, reject, input) => {
+                  c.productStore
+                     .dispatch("removeItemOfId", { id: input.productId })
+                     .then(() => {
+                        accept();
+                        c.setProduct(null);
+                     })
+                     .catch((error) =>
+                        reject(error, "Product Deletion Failed"),
+                     );
+               },
+            ),
+            productImageRemove: new PopupContext(c).onConfirm(
+               (accept, reject, input) => {
+                  const { product, image } = input;
+                  c.productStore
+                     .dispatch("removeImageOfId", { id: product.id, image })
+                     .then(() => accept())
+                     .catch(() => reject());
+               },
+            ),
             productTitleBrandUpdate: new PopupContext(c).onConfirm(
                (accept, reject, input) => {
                   const { product, title, brandId } = input;
@@ -217,13 +233,15 @@
                      .catch((error) => reject(error, "Some Cannot Update"));
                },
             ),
-            productPriceUpdate: new PopupContext(c).onConfirm((accept, reject, input) => {
-               const { product, price } = input;
-               c.productStore
-                  .dispatch("updatePriceOfId", { id: product.id, price })
-                  .then((product) => accept())
-                  .catch((error) => reject(error, "Cannot Update"));
-            }),
+            productPriceUpdate: new PopupContext(c).onConfirm(
+               (accept, reject, input) => {
+                  const { product, price } = input;
+                  c.productStore
+                     .dispatch("updatePriceOfId", { id: product.id, price })
+                     .then((product) => accept())
+                     .catch((error) => reject(error, "Cannot Update"));
+               },
+            ),
             productDescriptionUpdate: new PopupContext(c).onConfirm(
                (accept, reject, input) => {
                   const { product, description } = input;
@@ -282,9 +300,13 @@
          itemDrawerEdge: () => Drawer.Edge.RIGHT,
          itemDrawerMode: (c) => {
             if (c.isOver1200px) {
-               return c.product ? Drawer.Mode.FIXED_EXPAND : Drawer.Mode.FIXED_COLLAPSE;
+               return c.product
+                  ? Drawer.Mode.FIXED_EXPAND
+                  : Drawer.Mode.FIXED_COLLAPSE;
             } else {
-               return c.product ? Drawer.Mode.DRAWER_EXPAND : Drawer.Mode.DRAWER_COLLAPSE;
+               return c.product
+                  ? Drawer.Mode.DRAWER_EXPAND
+                  : Drawer.Mode.DRAWER_COLLAPSE;
             }
          },
 
@@ -461,11 +483,15 @@
          async invalidate() {
             this.groups = [];
 
-            let groups = await this.productStore.dispatch("getGroupsByCategory");
+            let groups = await this.productStore.dispatch(
+               "getGroupsByCategory",
+            );
 
             const categories = await this.categoryStore.dispatch("getItems");
             categories.forEach((category) => {
-               const group = groups.find((group) => group.category.id === category.id);
+               const group = groups.find(
+                  (group) => group.category.id === category.id,
+               );
                if (!group) groups.push({ category, items: [] });
             });
 
@@ -473,7 +499,9 @@
                const products = !this.isEditable
                   ? group.items.filter((product) => product.isStockAvailable())
                   : group.items;
-               products.sort((product1, product2) => product1.compare(product2));
+               products.sort((product1, product2) =>
+                  product1.compare(product2),
+               );
                return { category: group.category, products };
             });
             groups = groups.filter((group) => group.products.length > 0);
@@ -588,7 +616,9 @@
                :isWide="false"
                :isEditable="isEditable"
                @click-dismiss="() => setProduct(null)"
-               @click-productRemove="(output) => popup.productRemove.show(output)"
+               @click-productRemove="
+                  (output) => popup.productRemove.show(output)
+               "
                @click-product-imageRemove="
                   (output) => popup.productImageRemove.show(output)
                "
@@ -615,6 +645,7 @@
       <WindowSearch
          class="PageService-window"
          v-if="$root.window.innerWidth <= 550"
+         ref="windowSearch"
          :isShowing="popup.search.isShowing"
          :items="products"
          @click-dismiss="() => popup.search.dismiss()"
@@ -654,7 +685,9 @@
          :input="popup.productTitleBrandUpdate.input"
          @click-dismiss="() => popup.productTitleBrandUpdate.dismiss()"
          @click-cancel="() => popup.productTitleBrandUpdate.cancel()"
-         @click-confirm="(output) => popup.productTitleBrandUpdate.confirm(output)"
+         @click-confirm="
+            (output) => popup.productTitleBrandUpdate.confirm(output)
+         "
       />
       <!-- Popup Product Price Update -->
       <WindowUpdatePrice
@@ -672,7 +705,9 @@
          :input="popup.productDescriptionUpdate.input"
          @click-dismiss="() => popup.productDescriptionUpdate.dismiss()"
          @click-cancel="() => popup.productDescriptionUpdate.cancel()"
-         @click-confirm="(output) => popup.productDescriptionUpdate.confirm(output)"
+         @click-confirm="
+            (output) => popup.productDescriptionUpdate.confirm(output)
+         "
       />
       <!-- Popup Product Category Update -->
       <WindowUpdateCategory
@@ -681,7 +716,9 @@
          :input="popup.productCategoryUpdate.input"
          @click-dismiss="() => popup.productCategoryUpdate.dismiss()"
          @click-cancel="() => popup.productCategoryUpdate.cancel()"
-         @click-confirm="(output) => popup.productCategoryUpdate.confirm(output)"
+         @click-confirm="
+            (output) => popup.productCategoryUpdate.confirm(output)
+         "
       />
       <!-- Popup Product Description Update -->
       <WindowUpdateSpecifications
@@ -690,7 +727,9 @@
          :input="popup.productSpecificationsUpdate.input"
          @click-dismiss="() => popup.productSpecificationsUpdate.dismiss()"
          @click-cancel="() => popup.productSpecificationsUpdate.cancel()"
-         @click-confirm="(output) => popup.productSpecificationsUpdate.confirm(output)"
+         @click-confirm="
+            (output) => popup.productSpecificationsUpdate.confirm(output)
+         "
       />
    </div>
 </template>

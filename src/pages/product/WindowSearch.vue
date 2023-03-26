@@ -34,6 +34,13 @@
             this.results = this.inputText(this.search);
          },
 
+         blur() {
+            this.$refs.windowSearch.blur();
+         },
+         focus() {
+            this.$refs.windowSearch.focus();
+         },
+
          inputText(text) {
             const str = text;
 
@@ -72,6 +79,7 @@
 <template>
    <WindowSearch
       class="WindowSearch"
+      ref="windowSearch"
       :isShowing="isShowing"
       placeholder="Search products"
       @input-text="(text) => (search = text)"

@@ -24,6 +24,13 @@
          this.onInput();
       },
       methods: {
+         blur() {
+            this.$refs.inputSearch.blur();
+         },
+         focus() {
+            this.$refs.inputSearch.focus();
+         },
+
          onInput() {
             this.$emit("input-text", this.search);
          },
