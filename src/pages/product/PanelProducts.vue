@@ -360,8 +360,9 @@
             overflow-x: auto;
 
             .PanelProducts-categoryFilter-item {
-               border: 1px solid black;
-               padding: 0.4rem 0.8rem;
+               border: none;
+               background: none;
+               padding: 0.5rem 1rem;
                border-radius: 0.5rem;
                min-width: max-content;
                --transition-duration: 0.1s;
@@ -372,10 +373,11 @@
             }
             .PanelProducts-categoryFilter-item[isSelected="false"] {
                cursor: pointer;
+               background: hsla(0, 0%, 0%, 0.1);
 
                &:hover,
                &:focus {
-                  background: hsl(0, 0%, 90%)
+                  background: hsla(0, 0%, 0%, 0.2);
                }
             }
          }

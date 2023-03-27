@@ -1,4 +1,5 @@
 <script>
+   import U from "@/U";
    import Section from "./ViewerProduct-Section.vue";
 
    export default {
@@ -12,17 +13,14 @@
          gifts: (c) => (c.product ? c.product.gifts : []),
          bundles: (c) => (c.product ? c.product.bundles : []),
 
-         items() {
+         items: (c) => {
             return [
-               ...this.gifts
-                  .filter((gift) => typeof gift === "string")
-                  .map((gift) => gift.trim())
+               ...c.gifts
+                  .map((gift) => U.optString(gift).trim())
                   .filter((gift) => gift.length),
-               ...this.bundles
-                  .filter((bundle) => typeof bundle === "object" && bundle !== null)
-                  .map((bundle) => bundle.title)
-                  .filter((bundle) => typeof bundle === "string")
-                  .map((bundle) => bundle.trim())
+               ...c.bundles
+                  .filter((bundle) => U.isObjectOnly(bundle))
+                  .map((bundle) => U.optString(bundle.title).trim())
                   .filter((bundle) => bundle.length),
             ];
          },
@@ -31,16 +29,23 @@
 </script>
 
 <template>
+   <!-- <Section 
+      :title="allowEdit ? `What's Included` : ''" 
+   > -->
+
    <Section
       v-if="allowEdit || items.length"
-      :title="allowEdit ? `What's Included` : ''"
+      :title="`What's Included`"
       :primaryColor="primaryColor"
    >
       <div class="SectionInclude">
          <div class="SectionInclude-items" v-if="items.length">
-            <span class="SectionInclude-item" v-for="item of items" :key="item">{{
-               item
-            }}</span>
+            <span
+               class="SectionInclude-item"
+               v-for="item of items"
+               :key="item"
+               >{{ item }}</span
+            >
          </div>
 
          <span class="SectionInclude-noContent" v-else>Nothing Included</span>
@@ -52,37 +57,49 @@
    .SectionInclude {
       grid-area: gift;
       width: 100%;
+      gap: 2px;
       font-size: 1rem;
 
       display: flex;
       flex-direction: column;
       align-items: flex-start;
 
-      .SectionInclude-items {
+      & > * {
          width: 100%;
-         gap: 1px;
-         line-height: 0.8;
+         padding: 1.2rem;
+         background: hsla(0, 0%, 100%, 0.6);
+      }
+
+      .SectionInclude-items {
+         gap: 0.2rem;
+
          overflow: hidden;
+         overflow-x: auto;
 
          display: flex;
-         flex-direction: column;
-         flex-wrap: nowrap;
+         flex-direction: row;
          align-items: flex-start;
 
          .SectionInclude-item {
-            width: 100%;
-            padding: 1.2rem;
-            background: hsla(0, 0%, 100%, 0.6);
-            font-weight: 600;
+            --size: 8rem;
+            width: var(--size);
+            min-width: var(--size);
+            height: var(--size);
+            padding: 0.8rem;
+
+            border-radius: 1rem;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border: 1px solid hsla(0, 0%, 0%, 0.2);
          }
       }
       .SectionInclude-noContent {
-         width: 100%;
-         padding: 1.2rem;
          font-style: italic;
          font-size: 0.8rem;
          color: hsla(0, 0%, 0%, 0.6);
-         background: hsla(0, 0%, 100%, 0.6);
       }
    }
 </style>

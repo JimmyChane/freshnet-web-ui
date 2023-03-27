@@ -33,7 +33,9 @@
                   index1 = index1 >= 0 ? index1 : this.keys.length;
                   index2 = index2 >= 0 ? index2 : this.keys.length;
 
-                  return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
+                  return index1 !== index2
+                     ? index1 - index2
+                     : key1.localeCompare(key2);
                });
          },
 
@@ -73,11 +75,13 @@
                v-for="spec in specifications"
                :key="spec.name"
                :productSpecification="spec"
-               :isVertical="false"
+               :isVertical="true"
             />
          </div>
 
-         <span class="SectionSpecification-noContent" v-else>No Specifications</span>
+         <span class="SectionSpecification-noContent" v-else
+            >No Specifications</span
+         >
       </div>
    </Section>
 </template>
@@ -94,7 +98,7 @@
 
       .SectionSpecification-items {
          width: 100%;
-         gap: 1px;
+         gap: 2px;
          display: flex;
          flex-direction: column;
       }

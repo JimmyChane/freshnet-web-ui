@@ -22,7 +22,9 @@
 <template>
    <div class="ProductViewerSection">
       <div class="ProductViewerSection-header" v-if="title || menu">
-         <span class="ProductViewerSection-title" v-if="title">{{ title }}</span>
+         <span class="ProductViewerSection-title" v-if="title">{{
+            title
+         }}</span>
          <ButtonIcon v-if="menu" :src="menu.icon" @click="() => menu.click()" />
       </div>
       <div class="ProductViewerSection-body">
@@ -34,11 +36,13 @@
 <style lang="scss" scoped>
    .ProductViewerSection {
       width: 100%;
-      gap: 1px;
+      gap: 2px;
+      border-radius: 1rem;
 
       display: flex;
       flex-direction: column;
       align-items: stretch;
+      overflow: hidden;
 
       .ProductViewerSection-header {
          display: flex;
@@ -46,12 +50,15 @@
          align-items: center;
          justify-content: space-between;
 
+         background: hsla(0, 0%, 100%, 0.6);
+
          gap: 0.5rem;
+         padding-right: 0.6rem;
 
          .ProductViewerSection-title {
             font-weight: 600;
-            font-size: 1.2rem;
-            padding: 1.2rem 0;
+            font-size: 1rem;
+            padding: 1.2rem;
             padding-right: 1.2rem;
             color: black;
          }
@@ -59,8 +66,6 @@
       .ProductViewerSection-body {
          display: flex;
          flex-direction: column;
-         border-radius: 1rem;
-         overflow: hidden;
       }
    }
 </style>

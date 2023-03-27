@@ -43,14 +43,7 @@
 </script>
 
 <template>
-   <div
-      :class="[
-         'ItemProductSpecification',
-         isVertical
-            ? 'ItemProductSpecification-isVertical'
-            : 'ItemProductSpecification-isHorizontal',
-      ]"
-   >
+   <div class="ItemProductSpecification" :isVertical="`${isVertical}`">
       <img
          class="ItemProductSpecification-icon"
          :style="{ opacity: icon ? '1' : '0' }"
@@ -70,6 +63,8 @@
       display: flex;
       flex-direction: row;
       padding: 1rem 1.2rem;
+      padding: 1rem;
+      padding: 0.8rem 1rem;
       background: hsla(0, 0%, 100%, 0.6);
 
       .ItemProductSpecification-icon {
@@ -80,10 +75,12 @@
       }
       .ItemProductSpecification-main {
          width: 100%;
+         gap: 0.2rem;
          flex-grow: 1;
          display: flex;
          align-items: flex-start;
          justify-content: flex-start;
+
          .ItemProductSpecification-title {
             height: max-content;
 
@@ -92,12 +89,13 @@
             align-items: center;
             font-weight: 400;
             font-size: 0.7rem;
+
+            color: hsla(0, 0%, 0%, 0.8);
          }
          .ItemProductSpecification-content {
             height: max-content;
             min-height: 1.6rem;
 
-            font-weight: 600;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -106,14 +104,17 @@
       }
    }
 
-   .ItemProductSpecification-isVertical {
+   .ItemProductSpecification[isVertical="true"] {
       gap: 1.2rem;
+      .ItemProductSpecification-icon {
+         height: 2rem;
+      }
       .ItemProductSpecification-main {
          flex-direction: column;
          min-height: 2rem;
       }
    }
-   .ItemProductSpecification-isHorizontal {
+   .ItemProductSpecification[isVertical="false"] {
       gap: 0;
 
       .ItemProductSpecification-main {
