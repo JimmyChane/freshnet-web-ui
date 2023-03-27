@@ -125,6 +125,7 @@
       },
       methods: {
          async invalidate() {
+            this.scrollToTop();
             this.invalidateProductId();
 
             const categoryGroups = await this.productStore.dispatch(
@@ -257,6 +258,10 @@
             } else {
                this.currentProductId = this.queryProductId;
             }
+         },
+
+         scrollToTop() {
+            this._self.$el.scrollTo({ top: 0, behavior: "smooth" });
          },
       },
    };

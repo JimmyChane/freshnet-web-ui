@@ -139,14 +139,15 @@
             flex-grow: 1;
          }
          .PanelProducts-category-focusGroup {
-            padding: 0.6em 0.8em;
+            padding: 0.8em 1.2em;
             line-height: 1em;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            line-height: 1.2em;
             color: white;
 
             background: var(--accent-color);
             border: none;
-            border-radius: 2em;
+            border-radius: 1em;
 
             cursor: pointer;
             text-decoration: none;
