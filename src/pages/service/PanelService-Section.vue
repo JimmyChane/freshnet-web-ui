@@ -1,5 +1,6 @@
 <script>
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
+   import U from "@/U";
    export default {
       components: { ButtonIcon },
       props: {
@@ -8,8 +9,12 @@
       },
       computed: {
          theMenus: (c) => {
-            if (Array.isArray(c.menus)) return c.menus;
-            if (typeof c.menus === "object") return [c.menus];
+            if (U.isArray(c.menus)) {
+               return c.menus;
+            }
+            if (U.isObjectOnly(c.menus)) {
+               return [c.menus];
+            }
             return [];
          },
 
@@ -20,17 +25,15 @@
 </script>
 
 <template>
-   <div
-      :class="[
-         'PanelService-section',
-         !hasTitle && hasMenus
-            ? 'PanelService-section-body-isHorizontal'
-            : 'PanelService-section-body-isVertical',
-      ]"
-   >
-      <div class="PanelService-section-body">
+   <div class="PanelService-section">
+      <div
+         class="PanelService-section-body"
+         :isHorizontal="`${!hasTitle && hasMenus}`"
+      >
          <div class="PanelService-section-header" v-if="hasTitle || hasMenus">
-            <div class="PanelService-section-title" v-if="hasTitle">{{ title }}</div>
+            <div class="PanelService-section-title" v-if="hasTitle">{{
+               title
+            }}</div>
 
             <div class="PanelService-section-menus" v-if="hasMenus">
                <ButtonIcon
@@ -95,18 +98,13 @@
             padding-top: 0.4rem;
          }
       }
-   }
-   .PanelService-section-body-isVertical {
-      .PanelService-section-body {
+      .PanelService-section-body[isHorizontal="false"] {
          flex-direction: column;
-
          .PanelService-section-header {
             width: 100%;
          }
       }
-   }
-   .PanelService-section-body-isHorizontal {
-      .PanelService-section-body {
+      .PanelService-section-body[isHorizontal="true"] {
          flex-direction: row-reverse;
          .PanelService-section-header {
             .PanelService-section-menus {

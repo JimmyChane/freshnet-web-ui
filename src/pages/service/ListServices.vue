@@ -38,6 +38,19 @@
          isListView: (c) => c.layoutMode === ItemService.Mode.List,
          isDetailView: (c) => c.layoutMode === ItemService.Mode.Detail,
 
+         viewMode: (c) => {
+            switch (c.layoutMode) {
+               case ItemService.Mode.Grid:
+                  return "grid";
+               case ItemService.Mode.List:
+                  return "list";
+               case ItemService.Mode.Detail:
+                  return "detail";
+               default:
+                  "";
+            }
+         },
+
          isSortDateCreated: (c) => c.sortMode === SortMode.DateCreated,
          isSortName: (c) => c.sortMode === SortMode.Name,
          isSortPhoneNumber: (c) => c.sortMode === SortMode.PhoneNumber,
@@ -109,7 +122,8 @@
 
                if (ts.isToday()) putItem("Today");
                else if (ts.isYesterday()) putItem("Yesterday");
-               else if (isWithinWeek()) putItem(format(time, "EEEE, dd/LL/yyyy"));
+               else if (isWithinWeek())
+                  putItem(format(time, "EEEE, dd/LL/yyyy"));
                else if (ts.isThisYear()) putItem(format(time, "dd/LL/yyyy"));
                else putItem(ts.getYear().toString());
 
@@ -154,12 +168,8 @@
 <template>
    <div class="ListServices">
       <div
-         :class="[
-            'ListServices-group',
-            isGridView ? 'ListServices-group-gridView' : '',
-            isListView ? 'ListServices-group-listView' : '',
-            isDetailView ? 'ListServices-group-detailView' : '',
-         ]"
+         class="ListServices-group"
+         :viewMode="viewMode"
          v-for="group of groups"
          :key="group.title"
       >
@@ -182,7 +192,9 @@
                <span
                   class="Property-customerPhoneNumber"
                   :style="{
-                     '--width': `${getPropertyByKey('customerPhoneNumber').width}px`,
+                     '--width': `${
+                        getPropertyByKey('customerPhoneNumber').width
+                     }px`,
                   }"
                   >Customer Phone Number</span
                >
@@ -277,7 +289,7 @@
          }
       }
 
-      .ListServices-group-gridView {
+      .ListServices-group[viewMode="grid"] {
          .ListServices-items {
             max-width: var(--max-width);
             gap: 0.1rem;
@@ -293,7 +305,7 @@
             }
          }
       }
-      .ListServices-group-listView {
+      .ListServices-group[viewMode="list"] {
          .ListServices-items {
             max-width: 32rem;
             gap: 0.1rem;
@@ -306,7 +318,7 @@
             }
          }
       }
-      .ListServices-group-detailView {
+      .ListServices-group[viewMode="detail"] {
          align-items: flex-start;
          .ListServices-group-title {
             left: 1rem;

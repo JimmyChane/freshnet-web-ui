@@ -57,7 +57,6 @@
       justify-content: flex-start;
 
       border: 1px solid rgba(0, 0, 0, 0.05);
-      border-radius: 1rem;
       overflow: hidden;
 
       .PanelEvents-header {

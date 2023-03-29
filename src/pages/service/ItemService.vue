@@ -186,13 +186,7 @@
 
       <div v-if="isList" :class="['transition', 'ItemService-body']">
          <div class="ItemService-top">
-            <router-link
-               :class="['ItemService-customer', 'transition']"
-               :to="{
-                  path: '/manage/customer',
-                  query: { name: name, phoneNumber: phoneNumberStr },
-               }"
-            >
+            <div class="ItemService-customer">
                <span class="ItemService-customer-name" v-if="name.length">{{
                   name
                }}</span>
@@ -201,7 +195,7 @@
                   v-if="phoneNumberStr.length"
                   >{{ phoneNumberStr }}</span
                >
-            </router-link>
+            </div>
 
             <span class="ItemService-description">{{ description }}</span>
 

@@ -21,22 +21,30 @@
          primaryColor2: (c) => c.primaryColor.mix("ffffff", 0.6),
 
          isMethodInfo: (c) => c.eventMethod === ModuleEvent.Method.Info,
-         isMethodQuotation: (c) => c.eventMethod === ModuleEvent.Method.Quotation,
+         isMethodQuotation: (c) =>
+            c.eventMethod === ModuleEvent.Method.Quotation,
          isMethodPurchase: (c) => c.eventMethod === ModuleEvent.Method.Purchase,
 
-         methodMenu: (c) => c.methodMenus.find((menu) => menu.key === c.eventMethod),
+         methodMenu: (c) =>
+            c.methodMenus.find((menu) => menu.key === c.eventMethod),
          methodMenus: (c) => [
             {
                key: ModuleEvent.Method.Quotation,
                title: "Quotation",
                color: chroma("961d96"),
-               click: (menu) => (c.eventMethod = menu.key),
+               click: (menu) => {
+                  c.eventMethod = menu.key;
+                  c.invalidateMethod();
+               },
             },
             {
                key: ModuleEvent.Method.Purchase,
                title: "Purchase",
                color: chroma("258915"),
-               click: (menu) => (c.eventMethod = menu.key),
+               click: (menu) => {
+                  c.eventMethod = menu.key;
+                  c.invalidateMethod();
+               },
             },
          ],
          methodMenuCorner: () => Menu.Corner.BOTTOM,
@@ -74,8 +82,12 @@
       methods: {
          invalidateMethod() {
             const { InputStatus, InputAmount } = this.$refs;
-            if (this.isMethodInfo) InputStatus.focus();
-            if (this.isMethodQuotation || this.isMethodPurchase) InputAmount.focus();
+            if (this.isMethodInfo) {
+               InputStatus.focus();
+            }
+            if (this.isMethodQuotation || this.isMethodPurchase) {
+               InputAmount.focus();
+            }
          },
          invalidateUser() {
             const user = this.user;
@@ -111,17 +123,21 @@
             this.eventStatus = "";
             this.eventAmount = 0;
 
-            this.focus();
-            this.invalidateMethod();
             this.invalidateUser();
          },
          submit() {
             if (this.isUserDefault && !this.nameOfUser.trim()) {
-               this.store.dispatch("snackbarShow", "You must specify your name");
+               this.store.dispatch(
+                  "snackbarShow",
+                  "You must specify your name",
+               );
                return;
             }
             if (!this.eventDescription.trim()) {
-               this.store.dispatch("snackbarShow", 'You must specify "Description"');
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify "Description"',
+               );
                return;
             }
 
@@ -154,7 +170,9 @@
          '--primary-color-2': primaryColor2,
       }"
    >
-      <span class="AddEvent-header" :style="{ 'grid-area': 'header' }">Add Event</span>
+      <span class="AddEvent-header" :style="{ 'grid-area': 'header' }"
+         >Add Event</span
+      >
 
       <textarea
          class="AddEvent-description scrollbar"
@@ -197,7 +215,9 @@
             :corner="methodMenuCorner"
             :width="methodMenuWidth"
          >
-            <span class="AddEvent-status-header-title">{{ methodMenu.title }}</span>
+            <span class="AddEvent-status-header-title">{{
+               methodMenu.title
+            }}</span>
             <img
                class="AddEvent-status-header-arrow"
                :src="host.icon('arrowDown-FFFFFF')"
@@ -247,7 +267,6 @@
       grid-template-columns: 1fr 10rem;
 
       background-color: var(--primary-color-2);
-      border-radius: 0.5em;
       overflow: hidden;
 
       .AddEvent-description {

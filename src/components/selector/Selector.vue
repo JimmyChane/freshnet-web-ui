@@ -18,22 +18,20 @@
 
          currentMenu: (c) => {
             const menu = c.menus.find((menu) => menu.isSelected());
-            if (menu) return menu;
-            return selectionNone;
+            return menu ? menu : selectionNone;
          },
          currentIcon: (c) => {
             const item = c.list.find((item) => item.key === c.currentMenu.key);
             const icon = item.icon;
-            if (icon) return icon.white;
-            return "";
+            return icon ? icon.white : "";
          },
          currentColor: (c) => {
-            if (!c.currentMenu || !U.isString(c.currentMenu.primaryColor))
+            if (!c.currentMenu || !U.isString(c.currentMenu.primaryColor)) {
                return "hsl(0, 0%, 96%)";
+            }
             return c.currentMenu.primaryColor;
          },
          currentFontColor: (c) => {
-            if (!c.currentMenu || !U.isString(c.currentMenu.primaryColor)) return "black";
             return U.isColorDark(c.currentColor, 80) ? "white" : "black";
          },
       },
@@ -103,7 +101,9 @@
       <div class="Selector-separator transition" />
       <img
          class="Selector-arrow"
-         :src="host.res(`icon/arrow_down-${currentColor ? 'white' : 'black'}.svg`)"
+         :src="
+            host.res(`icon/arrow_down-${currentColor ? 'white' : 'black'}.svg`)
+         "
          :style="{ transform: [isShow ? 'rotate(-180deg)' : 'rotate(0deg)'] }"
       />
    </Menu>

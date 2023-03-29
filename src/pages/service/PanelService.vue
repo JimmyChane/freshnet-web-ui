@@ -8,7 +8,7 @@
    import ItemBelonging from "./ItemBelonging.vue";
    import Section from "./PanelService-Section.vue";
    import AddEvent from "./PanelService-AddEvent.vue";
-   import PanelEvents from "./PanelEvents.vue";
+   import Events from "./PanelEvents.vue";
 
    import ServiceStates from "@/objects/ServiceStates.js";
 
@@ -22,7 +22,7 @@
          ButtonAddImage,
          ButtonImage,
          AddEvent,
-         PanelEvents,
+         Events,
          ItemBelonging,
          Section,
       },
@@ -30,8 +30,16 @@
          service: { type: Object, default: () => null },
          actions: { type: Object, default: () => null },
       },
-      data: (c) => ({ ServiceStates, nameOfUser: "", bookmarkHeaderIconIsHover: false }),
+      data: (c) => ({
+         ServiceStates,
+         nameOfUser: "",
+         bookmarkHeaderIconIsHover: false,
+      }),
       computed: {
+         windowWidth: (c) => c.$root.window.innerWidth,
+
+         isWide: (c) => c.windowWidth > 600,
+
          bookmarkMenuCorner: () => MenuIcon.Corner.BOTTOM_LEFT,
 
          isUrgent: (c) => c.service.isUrgent(),
@@ -51,29 +59,40 @@
 
          primaryColor: (c) => c.stateColor,
          stateColor() {
-            if (this.service) {
-               const res = ServiceStates.list.find((s) => {
-                  return s.key === this.service.state;
-               });
-               if (res) return chroma(res.color);
+            if (!this.service) {
+               return;
             }
 
-            return chroma("white");
+            const res = ServiceStates.list.find((s) => {
+               return s.key === this.service.state;
+            });
+            if (!res) {
+               return chroma("white");
+            }
+
+            return chroma(res.color);
          },
          backgroundColor() {
             const { primaryColor } = this;
-            if (primaryColor) return primaryColor.mix("e6e6e6", 0.9);
-            return chroma("white");
+
+            if (!primaryColor) {
+               return chroma("white");
+            }
+            return primaryColor.mix("e6e6e6", 0.9);
          },
          actionbarColor() {
             const { backgroundColor } = this;
-            if (backgroundColor) return backgroundColor.brighten(0.4);
-            return "inherit";
+            if (!backgroundColor) {
+               return "inherit";
+            }
+            return backgroundColor.brighten(0.4);
          },
          actionbarBorder() {
             const { actionbarColor } = this;
-            if (actionbarColor) return actionbarColor.darken(0.8);
-            return "none";
+            if (!actionbarColor) {
+               return "none";
+            }
+            return actionbarColor.darken(0.8);
          },
       },
       watch: {
@@ -88,15 +107,24 @@
          async getOwnerNameFromItem() {
             const { service } = this;
 
-            if (!service) return "";
+            if (!service) {
+               return "";
+            }
 
             const name = await service.fetchName().catch((error) => {
-               this.store.dispatch("snackbarShow", "Error getting user for service");
+               this.store.dispatch(
+                  "snackbarShow",
+                  "Error getting user for service",
+               );
                return "";
             });
 
-            if (service !== this.service) return;
-            if (name.length) return name;
+            if (service !== this.service) {
+               return;
+            }
+            if (name.length) {
+               return name;
+            }
 
             return "unknown";
          },
@@ -129,7 +157,7 @@
       />
 
       <div v-if="service" class="PanelService-body">
-         <div class="PanelService-body-body">
+         <div class="PanelService-body-body" :isWide="`${isWide}`">
             <div class="PanelService-body-header">
                <Selector
                   class="PanelService-actionbar-state-selector"
@@ -161,7 +189,9 @@
                            }
                         "
                      >
-                        <span class="PanelService-section-labels-item-title transition">
+                        <span
+                           class="PanelService-section-labels-item-title transition"
+                        >
                            {{ label.title }}
                         </span>
                         <img
@@ -214,9 +244,13 @@
                </div>
             </div>
 
-            <AddEvent @callback-create="(event) => actions.onClickToAddEvent(event)" />
+            <AddEvent
+               class="PanelService-AddEvent"
+               @callback-create="(event) => actions.onClickToAddEvent(event)"
+            />
 
-            <PanelEvents
+            <Events
+               class="PanelService-Events"
                v-if="service"
                :service="service"
                @click-remove-event="
@@ -226,21 +260,20 @@
 
             <div class="PanelService-sections">
                <div class="PanelService-sections-body">
-                  <Section title="Collected By">
-                     <div class="PanelService-section-collectedBy">
-                        <span>{{ nameOfUser }}</span>
-                     </div>
-                  </Section>
-
                   <Section
                      title="Problem"
                      :menus="{
                         title: 'Update Problem',
                         icon: host.icon('edit-505050'),
-                        click: () => actions.onClickUpdateDescription(description),
+                        click: () => {
+                           actions.onClickUpdateDescription(description);
+                        },
                      }"
                   >
-                     <div class="PanelService-section-description" v-if="description">
+                     <div
+                        class="PanelService-section-description"
+                        v-if="description"
+                     >
                         <p class="PanelService-section-description-text">{{
                            description
                         }}</p>
@@ -252,10 +285,14 @@
                      :menus="{
                         title: 'Update Belongings',
                         icon: host.icon('edit-505050'),
-                        click: () => actions.onClickUpdateBelongings(belongings),
+                        click: () =>
+                           actions.onClickUpdateBelongings(belongings),
                      }"
                   >
-                     <div class="PanelService-section-belonging" v-if="belongings.length">
+                     <div
+                        class="PanelService-section-belonging"
+                        v-if="belongings.length"
+                     >
                         <ItemBelonging
                            v-for="belonging in belongings"
                            :key="belonging.title"
@@ -267,7 +304,7 @@
                      </div>
                   </Section>
 
-                  <Section>
+                  <Section title="Image Reference">
                      <div class="PanelService-section-image">
                         <ButtonAddImage
                            class="PanelService-section-image-add"
@@ -293,6 +330,12 @@
                         >
                            <span>No Images</span>
                         </div>
+                     </div>
+                  </Section>
+
+                  <Section title="Collected By">
+                     <div class="PanelService-section-collectedBy">
+                        <span>{{ nameOfUser }}</span>
                      </div>
                   </Section>
                </div>
@@ -326,19 +369,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 1rem;
 
             .PanelService-body-header {
                z-index: 2;
                width: 100%;
                max-width: 40rem;
+               gap: 1.2rem;
+
                display: flex;
                flex-direction: row;
                flex-wrap: nowrap;
                flex-grow: 1;
                align-items: flex-start;
                justify-content: space-between;
-               gap: 1.2rem;
 
                .PanelService-actionbar-state-selector {
                   width: 100%;
@@ -404,7 +447,6 @@
 
                border: 1px solid rgba(0, 0, 0, 0.05);
                border-bottom: none;
-               border-radius: 1rem;
                overflow: hidden;
 
                .PanelService-section-collectedBy {
@@ -500,6 +542,26 @@
                .PanelService-section-image-empty {
                   padding: 0.25rem 1.2rem 0.25rem 1.2rem;
                }
+            }
+         }
+
+         .PanelService-body-body[isWide="true"] {
+            padding: 1rem;
+
+            .PanelService-AddEvent {
+               border-radius: 1em;
+            }
+            .PanelService-Events {
+               border-radius: 1rem;
+            }
+            .PanelService-sections {
+               border-radius: 1rem;
+            }
+         }
+         .PanelService-body-body[isWide="false"] {
+            .PanelService-body-header {
+               padding: 1rem;
+               margin-bottom: -1rem;
             }
          }
       }
