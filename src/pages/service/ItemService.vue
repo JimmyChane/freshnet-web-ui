@@ -50,69 +50,90 @@
          },
          totalCost: (c) => {
             return c.events.reduce((cost, event) => {
-               if (event.isPurchase()) return cost.plus(event.price);
+               if (event.isPurchase()) {
+                  return cost.plus(event.price);
+               }
                return cost;
             }, new ServicePrice().fromData({ amount: 0 }));
          },
          totalQuote: (c) => {
             return c.events.reduce((cost, event) => {
-               if (event.isQuotation()) return cost.plus(event.price);
+               if (event.isQuotation()) {
+                  return cost.plus(event.price);
+               }
                return cost;
             }, new ServicePrice().fromData({ amount: 0 }));
          },
          timestampText: (c) => {
-            if (!c.timestamp) return "";
+            if (!c.timestamp) {
+               return "";
+            }
             if (c.timestamp.isThisYear()) {
                return format(c.timestamp.time, "hh:mmaaa");
             }
-
             return format(c.timestamp.time, "EEEE, hh:mmaaa, dd/LL/yyyy");
          },
          labels: (c) => {
             const labels = [];
 
-            if (c.isUrgent)
-               labels.push({ key: "urgent", title: "Urgent", primaryColor: "#d93f35" });
-            if (c.isWarranty)
+            if (c.isUrgent) {
+               labels.push({
+                  key: "urgent",
+                  title: "Urgent",
+                  primaryColor: "#d93f35",
+               });
+            }
+            if (c.isWarranty) {
                labels.push({
                   key: "warranty",
                   title: "Warranty",
                   primaryColor: "#db950c",
                });
-            if (c.totalCostAmount !== 0)
+            }
+            if (c.totalCostAmount !== 0) {
                labels.push({
                   key: `price${c.totalCost.toString()}`,
                   title: c.totalCost.toString(),
                   primaryColor: "#258915",
                });
-            if (c.totalQuoteAmount !== 0)
+            }
+            if (c.totalQuoteAmount !== 0) {
                labels.push({
                   key: `quotation${c.totalQuote.toString()}`,
                   title: c.totalQuote.toString(),
                   primaryColor: "#961d96",
                });
-            if (c.events.length)
+            }
+            if (c.events.length) {
                labels.push({
                   key: "event",
                   title: "Event",
                   count: c.events.length,
                   primaryColor: "#294656",
                });
-            if (c.images.length)
+            }
+            if (c.images.length) {
                labels.push({
                   key: "images",
                   icon: c.host.icon("image-FFFFFF"),
                   count: c.images.length,
                   primaryColor: "#8C623A",
                });
+            }
 
             return labels;
          },
 
          classes: (c) => {
-            if (c.isGrid) return ["ItemService-isGrid"];
-            if (c.isList) return ["ItemService-isList"];
-            if (c.isDetail) return ["ItemService-isDetail"];
+            if (c.isGrid) {
+               return ["ItemService-isGrid"];
+            }
+            if (c.isList) {
+               return ["ItemService-isList"];
+            }
+            if (c.isDetail) {
+               return ["ItemService-isDetail"];
+            }
             return [];
          },
       },
@@ -134,18 +155,12 @@
       <div v-if="isGrid" :class="['transition', 'ItemService-body']">
          <div class="ItemService-top">
             <div class="ItemService-top-customer">
-               <router-link
-                  class="ItemService-link-customer transition"
-                  :to="{
-                     path: '/manage/customer',
-                     query: { name: name, phoneNumber: phoneNumberStr },
-                  }"
-               >
+               <div class="ItemService-link-customer">
                   <span class="ItemService-link-customer-name">{{ name }}</span>
                   <span class="ItemService-link-customer-phoneNumber">{{
                      phoneNumberStr
                   }}</span>
-               </router-link>
+               </div>
             </div>
 
             <div class="ItemService-top-dot-body">
@@ -289,18 +304,11 @@
             gap: 0.6rem;
             padding: 0.3rem 0.5rem;
             color: black;
-            border: 1px solid #dddddd;
-            border-radius: 1em;
-            background-color: #f4f4f4;
             font-weight: 600;
             font-size: 0.8rem;
 
             text-decoration: none;
             cursor: pointer;
-
-            &:hover {
-               background-color: #ebebeb;
-            }
 
             .ItemService-link-customer-icon {
                width: 0.5rem;
@@ -463,13 +471,6 @@
                font-size: 0.8rem;
 
                text-decoration: none;
-               cursor: pointer;
-
-               border-radius: 0.5em;
-
-               &:hover {
-                  background-color: #ebebeb;
-               }
             }
 
             .ItemService-description {
