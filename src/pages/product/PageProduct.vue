@@ -42,9 +42,12 @@
             return;
          }
          const reject = (error, reason) => {
-            if (typeof reason === "string" && reason.length)
+            if (typeof reason === "string" && reason.length) {
                this.context.store.dispatch("snackbarShow", reason);
-            if (error !== undefined) console.error(error);
+            }
+            if (error !== undefined) {
+               console.error(error);
+            }
          };
          this.onShowCallback(accept, reject, input);
       }
@@ -58,9 +61,12 @@
             return;
          }
          const reject = (error, reason) => {
-            if (typeof reason === "string" && reason.length)
+            if (typeof reason === "string" && reason.length) {
                this.context.store.dispatch("snackbarShow", reason);
-            if (error !== undefined) console.error(error);
+            }
+            if (error !== undefined) {
+               console.error(error);
+            }
          };
          this.onDismissCallback(accept, reject);
       }
@@ -74,9 +80,12 @@
             return;
          }
          const reject = (error, reason) => {
-            if (typeof reason === "string" && reason.length)
+            if (typeof reason === "string" && reason.length) {
                this.context.store.dispatch("snackbarShow", reason);
-            if (error !== undefined) console.error(error);
+            }
+            if (error !== undefined) {
+               console.error(error);
+            }
          };
          this.onCancelCallback(accept, reject);
       }
@@ -90,9 +99,12 @@
             return;
          }
          const reject = (error, reason) => {
-            if (typeof reason === "string" && reason.length)
+            if (typeof reason === "string" && reason.length) {
                this.context.store.dispatch("snackbarShow", reason);
-            if (error !== undefined) console.error(error);
+            }
+            if (error !== undefined) {
+               console.error(error);
+            }
          };
          this.onConfirmCallback(accept, reject, output);
       }
@@ -321,7 +333,9 @@
          },
          lastPath: (c) => {
             let { paths } = c;
-            if (!paths.length) return "";
+            if (!paths.length) {
+               return "";
+            }
             return paths[paths.length - 1];
          },
 
@@ -345,7 +359,9 @@
             // return null;
             const { products } = c;
             const categoryProducts = products.filter((product) => {
-               if (!c.product) return true;
+               if (!c.product) {
+                  return true;
+               }
                return product.category === c.product.category;
             });
 
@@ -364,7 +380,9 @@
             // return null;
             const products = c.products;
             const categoryProducts = products.filter((product) => {
-               if (!c.product) return true;
+               if (!c.product) {
+                  return true;
+               }
                return product.category === c.product.category;
             });
 
@@ -492,24 +510,29 @@
                const group = groups.find(
                   (group) => group.category.id === category.id,
                );
-               if (!group) groups.push({ category, items: [] });
+               if (!group) {
+                  groups.push({ category, items: [] });
+               }
             });
 
-            groups = groups.map((group) => {
-               const products = !this.isEditable
-                  ? group.items.filter((product) => product.isStockAvailable())
-                  : group.items;
-               products.sort((product1, product2) =>
-                  product1.compare(product2),
-               );
-               return { category: group.category, products };
-            });
-            groups = groups.filter((group) => group.products.length > 0);
-            groups = groups.sort((group1, group2) => {
-               return group1.category.compare(group2.category);
-            });
-
-            this.groups = groups;
+            this.groups = groups
+               .map((group) => {
+                  const products = !this.isEditable
+                     ? group.items.filter((product) => {
+                          return product.isStockAvailable();
+                       })
+                     : group.items;
+                  products.sort((product1, product2) => {
+                     return product1.compare(product2);
+                  });
+                  return { category: group.category, products };
+               })
+               .filter((group) => {
+                  return group.products.length > 0;
+               })
+               .sort((group1, group2) => {
+                  return group1.category.compare(group2.category);
+               });
          },
          async invalidateStyle() {
             this.invalidateStylePanelProducts();
@@ -524,8 +547,9 @@
             if (this.product) {
                const compare = this.product;
                setTimeout(() => {
-                  if (compare === this.product)
+                  if (compare === this.product) {
                      this.stylePanelProducts = { display: "none" };
+                  }
                }, 700);
                return;
             }
@@ -540,8 +564,9 @@
             if (this.product) {
                const compare = this.product;
                setTimeout(() => {
-                  if (compare === this.product)
+                  if (compare === this.product) {
                      this.stylePanelEmpty = { display: "none" };
+                  }
                }, 700);
                return;
             }
@@ -584,12 +609,7 @@
 
 <template>
    <div class="PageProduct">
-      <div
-         :class="[
-            'PageProduct-body',
-            `PageProduct-body-${isOver1200px ? 'isOver1200' : 'isLess1200'}`,
-         ]"
-      >
+      <div class="PageProduct-body" :isOver1200px="`${isOver1200px}`">
          <PanelProducts
             class="PageProduct-products"
             :style="stylePanelProducts"
@@ -790,7 +810,7 @@
             }
          }
       }
-      .PageProduct-body-isLess1200 {
+      .PageProduct-body[isOver1200px="false"] {
          .PageProduct-products {
             width: 100dvw;
             max-width: 100%;
@@ -803,7 +823,7 @@
             max-width: 100%;
          }
       }
-      .PageProduct-body-isOver1200 {
+      .PageProduct-body[isOver1200px="true"] {
          position: relative;
          .PageProduct-products {
             width: 100dvw;

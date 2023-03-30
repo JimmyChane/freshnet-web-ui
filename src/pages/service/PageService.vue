@@ -38,7 +38,7 @@
       emits: ["callback-side-expand"],
       data: (c) => ({
          actions: {
-            onClickClose: () => c.$root.nextRoute({ query: { service: null } }),
+            onClickClose: () => c.clickService(null),
             onClickRemove: (x) => c.clickDeleteService(x),
             onClickToAddEvent: (event) => {
                c.serviceStore
@@ -47,7 +47,10 @@
                      data: event,
                   })
                   .catch((error) => {
-                     c.store.dispatch("snackbarShow", "Failed to create an event");
+                     c.store.dispatch(
+                        "snackbarShow",
+                        "Failed to create an event",
+                     );
                      throw error;
                   });
             },
@@ -168,7 +171,10 @@
                         self.dismiss(context, self);
                      })
                      .catch((error) => {
-                        context.store.dispatch("snackbarShow", "Update Customer Failed");
+                        context.store.dispatch(
+                           "snackbarShow",
+                           "Update Customer Failed",
+                        );
                         throw error;
                      });
                },
@@ -195,7 +201,10 @@
                         self.dismiss(context, self);
                      })
                      .catch((error) => {
-                        context.store.dispatch("snackbarShow", "Delete Image Failed");
+                        context.store.dispatch(
+                           "snackbarShow",
+                           "Delete Image Failed",
+                        );
                         throw error;
                      });
                },
@@ -333,16 +342,6 @@
          currentServiceId() {
             this.invalidate();
          },
-
-         currentService() {
-            if (!this.currentService) {
-               setTimeout(() => {
-                  this.drawerService = this.currentService;
-               }, 700);
-            } else {
-               this.drawerService = this.currentService;
-            }
-         },
       },
       mounted() {
          this.invalidate();
@@ -364,16 +363,29 @@
          async invalidateServiceId() {
             this.currentService = null;
 
-            if (!this.currentServiceId) return;
+            if (!this.currentServiceId) {
+               return;
+            }
 
-            const currentService = await this.serviceStore.dispatch(
+            const service = await this.serviceStore.dispatch(
                "getItemOfId",
                this.currentServiceId,
             );
 
-            if (!currentService) return;
-            if (this.currentServiceId === currentService.id)
-               this.currentService = currentService;
+            if (this.currentServiceId === service.id) {
+               this.updateServiceUI(service);
+            }
+         },
+
+         updateServiceUI(service) {
+            const hasNextService = !!service;
+
+            this.currentService = service ? service : null;
+            if (hasNextService) {
+               this.drawerService = service;
+            } else {
+               setTimeout(() => (this.drawerService = service), 700);
+            }
          },
 
          clickRefresh() {
@@ -389,15 +401,19 @@
             this.windowAction("removeService", "start", service);
          },
          clickService(service) {
-            if (this.currentService) {
-               this.$root.replaceRoute({
-                  query: { service: service ? service.id : null },
-               });
+            service = service ? service : null;
+
+            const hasPreviousSerivce = !!this.currentService;
+            const hasNextService = !!service;
+            const query = { service: service ? service.id : null };
+
+            if (hasPreviousSerivce && hasNextService) {
+               this.$root.replaceRoute({ query });
             } else {
-               this.$root.nextRoute({
-                  query: { service: service ? service.id : null },
-               });
+               this.$root.nextRoute({ query });
             }
+
+            this.updateServiceUI(service);
          },
          clickRemoveEvent(event) {
             this.windowAction("removeEvent", "start", event);
@@ -425,7 +441,7 @@
 
 <template>
    <div class="PageService">
-      <div :class="['PageService-panels', `PageService-${isWide ? 'isWide' : 'isThin'}`]">
+      <div class="PageService-panels" :isWide="`${isWide}`">
          <PanelServices
             class="PageService-PanelServices"
             :menus="actionMenus"
@@ -441,7 +457,6 @@
 
          <Drawer
             class="PageService-RightDrawer"
-            :class="[isWide ? 'PageService-RightDrawer-isWide' : '']"
             :edge="itemDrawerEdge"
             :mode="itemDrawerMode"
             :isExpand="!!currentService"
@@ -488,7 +503,9 @@
          v-if="drawerService"
          :isShowing="popup.customer.isShowing"
          :value="popup.customer.value"
-         @callback-change="(customer) => windowAction('customer', 'ok', customer)"
+         @callback-change="
+            (customer) => windowAction('customer', 'ok', customer)
+         "
          @callback-cancel="() => windowAction('customer', 'dismiss')"
          @callback-dismiss="() => windowAction('customer', 'dismiss')"
       />
@@ -512,7 +529,9 @@
          v-if="drawerService"
          :isShowing="popup.belongings.isShowing"
          :values="popup.belongings.values"
-         @callback-change="(belongings) => windowAction('belongings', 'ok', belongings)"
+         @callback-change="
+            (belongings) => windowAction('belongings', 'ok', belongings)
+         "
          @callback-cancel="() => windowAction('belongings', 'dismiss')"
          @callback-dismiss="() => windowAction('belongings', 'dismiss')"
       />
@@ -552,7 +571,10 @@
          @click-dismiss="() => windowAction('removeImage', 'dismiss')"
       />
 
-      <Loading class="PageService-loading" :isShowing="serviceStore.getters.isLoading" />
+      <Loading
+         class="PageService-loading"
+         :isShowing="serviceStore.getters.isLoading"
+      />
    </div>
 </template>
 
@@ -610,7 +632,7 @@
             }
          }
       }
-      .PageService-isThin {
+      .PageService-panels[isWide="false"] {
          .PageService-PanelServices {
             width: 100dvw;
             max-width: 100%;
@@ -623,7 +645,7 @@
             max-width: 100%;
          }
       }
-      .PageService-isWide {
+      .PageService-panels[isWide="true"] {
          .PageService-PanelServices {
             width: 100dvw;
             max-width: 50%;
