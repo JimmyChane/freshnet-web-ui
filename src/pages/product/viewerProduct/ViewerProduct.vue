@@ -17,6 +17,7 @@
    import SettingModule from "@/items/data/Setting.js";
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import chroma from "chroma-js";
+   import U from "@/U";
 
    export default {
       components: {
@@ -74,52 +75,60 @@
          settingShowPrice: false,
       }),
       computed: {
-         classWide: (c) => (c.isWide ? "ViewerProduct-isWide" : "ViewerProduct-isThin"),
-         classes: (c) => ["ViewerProduct", c.classWide],
-
          tabs() {
-            if (!this.product) return [];
+            if (!this.product) {
+               return [];
+            }
 
-            return [
-               !this.isWide && this.imagePreview
-                  ? { key: "image", title: "Image" }
-                  : null,
-               // this.isEditable ? { key: "brand", title: "Brand" } : null,
-               // this.isEditable ? { key: "title", title: "Title" } : null,
-               { key: "title", title: "Title" },
-               // { key: "capability", title: "Capability" },
-               this.isEditable || this.specifications.length
-                  ? { key: "specification", title: "Specification" }
-                  : null,
-               this.isEditable || this.whatIncludeds.length
-                  ? { key: "include", title: "What's Included" }
-                  : null,
-               this.isEditable || this.description
-                  ? { key: "description", title: "Description" }
-                  : null,
-               this.isEditable || this.settingShowPrice
-                  ? { key: "price", title: "Price" }
-                  : null,
-               this.isEditable ? { key: "stock", title: "Stock" } : null,
-               this.isEditable ? { key: "category", title: "Category" } : null,
-            ].filter((tab) => {
-               if (tab) {
-                  tab.isSelected = () => tab.key === this.tabKeyNow;
+            const tabs = [];
+
+            if (!this.isWide && this.imagePreview) {
+               tabs.push({ key: "image", title: "Image" });
+            }
+
+            tabs.push({ key: "title", title: "Title" });
+            // tabs.push({ key: "capability", title: "Capability" });
+
+            if (this.isEditable) {
+               if (this.specifications.length) {
+                  tabs.push({ key: "specification", title: "Specification" });
                }
-               return tab;
+               if (this.whatIncludeds.length) {
+                  tabs.push({ key: "include", title: "What's Included" });
+               }
+               if (this.description) {
+                  tabs.push({ key: "description", title: "Description" });
+               }
+               if (this.settingShowPrice) {
+                  tabs.push({ key: "price", title: "Price" });
+               }
+
+               tabs.push({ key: "stock", title: "Stock" });
+               tabs.push({ key: "category", title: "Category" });
+            }
+
+            tabs.forEach((tab) => {
+               tab.isSelected = () => tab.key === this.tabKeyNow;
             });
+
+            return tabs;
          },
 
          imagePreview: (c) => {
-            if (c.imagePreviewIndex >= c.images.length) c.imagePreviewIndex = 0;
+            if (c.imagePreviewIndex >= c.images.length) {
+               c.imagePreviewIndex = 0;
+            }
             return c.images.length ? c.images[c.imagePreviewIndex] : null;
          },
          images: (c) => (!c.product ? [] : c.product.images),
-         hasImagePrevious: (c) => c.images.length > 0 && c.imagePreviewIndex > 0,
+         hasImagePrevious: (c) =>
+            c.images.length > 0 && c.imagePreviewIndex > 0,
          hasImageNext: (c) => c.images.length - 1 > c.imagePreviewIndex,
 
          price: (c) => {
-            if (!c.isEditable && !c.settingShowPrice) return null;
+            if (!c.isEditable && !c.settingShowPrice) {
+               return null;
+            }
             return c.product ? c.product.price : null;
          },
 
@@ -131,8 +140,12 @@
             });
          },
          specifications: (c) => {
-            if (!c.product) return [];
-            if (!Array.isArray(c.product.specifications)) return [];
+            if (!c.product) {
+               return [];
+            }
+            if (!Array.isArray(c.product.specifications)) {
+               return [];
+            }
 
             return c.product.specifications
                .filter((spec) => spec && spec.type && spec.content)
@@ -146,7 +159,9 @@
                   index1 = index1 >= 0 ? index1 : c.specificationKeys.length;
                   index2 = index2 >= 0 ? index2 : c.specificationKeys.length;
 
-                  return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
+                  return index1 !== index2
+                     ? index1 - index2
+                     : key1.localeCompare(key2);
                });
          },
 
@@ -159,7 +174,9 @@
                   .map((gift) => gift.trim())
                   .filter((gift) => gift.length),
                ...c.bundles
-                  .filter((bundle) => typeof bundle === "object" && bundle !== null)
+                  .filter(
+                     (bundle) => typeof bundle === "object" && bundle !== null,
+                  )
                   .map((bundle) => bundle.title)
                   .filter((bundle) => typeof bundle === "string")
                   .map((bundle) => bundle.trim())
@@ -197,10 +214,13 @@
       },
       methods: {
          async invalidateSettings() {
-            this.settingShowPrice = await this.settingStore.dispatch("findValueOfKey", {
-               key: SettingModule.Key.PublicShowPrice,
-               default: false,
-            });
+            this.settingShowPrice = await this.settingStore.dispatch(
+               "findValueOfKey",
+               {
+                  key: SettingModule.Key.PublicShowPrice,
+                  default: false,
+               },
+            );
          },
 
          invalidateBound() {
@@ -208,16 +228,23 @@
             this.height = this._self.$el.offsetHeight;
          },
          async invalidateProduct() {
-            if (this.product) this.scrollToTop(0);
+            if (this.product) {
+               this.scrollToTop(0);
+            }
             this.tabKeyNow = this.tabs.length ? this.tabs[0].key : "";
 
-            if (this.product) this.addArrowListener();
-            else this.removeArrowListener();
+            if (this.product) {
+               this.addArrowListener();
+            } else {
+               this.removeArrowListener();
+            }
 
             this.category = null;
             this.fullTitle = "";
             this.brand = null;
-            if (!this.product) return;
+            if (!this.product) {
+               return;
+            }
             this.category = await this.product.fetchCategory();
             this.fullTitle = await this.product.fetchFullTitle();
             this.brand = await this.product.fetchBrand();
@@ -236,9 +263,13 @@
                return;
             }
 
-            if (this.hasImagePrevious || !this.productPrevious) return;
+            if (this.hasImagePrevious || !this.productPrevious) {
+               return;
+            }
             const ref = this.$refs.keyplaylist;
-            if (!ref) return;
+            if (!ref) {
+               return;
+            }
 
             this.imagePreviewIndex = this.productPrevious.images.length - 1;
             ref.clickPreviousProduct();
@@ -249,27 +280,42 @@
                return;
             }
 
-            if (this.hasImageNext || !this.productNext) return;
+            if (this.hasImageNext || !this.productNext) {
+               return;
+            }
             const ref = this.$refs.keyplaylist;
-            if (!ref) return;
+            if (!ref) {
+               return;
+            }
 
             this.imagePreviewIndex = 0;
             ref.clickNextProduct();
          },
 
          obtainKeyOfSpecificationType(type) {
-            if (typeof type === "object") return type.key;
-            if (typeof type === "string") return type;
-            return "";
+            if (U.isObjectOnly(type)) {
+               return this.obtainKeyOfSpecificationType(type.key);
+            }
+            return U.optString(type);
          },
 
          addArrowListener() {
             if (this.onKeyUp === null) {
                this.onKeyUp = (event) => {
-                  if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey)
+                  if (
+                     event.shiftKey ||
+                     event.altKey ||
+                     event.ctrlKey ||
+                     event.metaKey
+                  ) {
                      return;
-                  if (event.key === "ArrowLeft") this.clickPreviousImage();
-                  if (event.key === "ArrowRight") this.clickNextImage();
+                  }
+                  if (event.key === "ArrowLeft") {
+                     this.clickPreviousImage();
+                  }
+                  if (event.key === "ArrowRight") {
+                     this.clickNextImage();
+                  }
                };
                window.addEventListener("keyup", this.onKeyUp);
             }
@@ -290,7 +336,9 @@
          },
          scrollTo(key = "") {
             const ref = this.$refs[`key${key}`];
-            if (!ref) return;
+            if (!ref) {
+               return;
+            }
             ref.$el.scrollIntoView({ behavior: "smooth", block: "start" });
          },
          scrolling(event) {
@@ -300,17 +348,25 @@
 
             this.tabKeyNow = this.tabs.reduce((tabKeyNow, tab) => {
                const ref = this.$refs[`key${tab.key}`];
-               if (!ref) return tabKeyNow;
+               if (!ref) {
+                  return tabKeyNow;
+               }
                const target = ref.$el;
-               if (!target) return tabKeyNow;
+               if (!target) {
+                  return tabKeyNow;
+               }
 
                const bound = target.getBoundingClientRect();
 
                const start = bound.y;
-               if (0 < start && start < pointHeight) return tab.key;
+               if (0 < start && start < pointHeight) {
+                  return tab.key;
+               }
 
                const end = bound.y + bound.height;
-               if (0 < end && end < pointHeight) return tab.key;
+               if (0 < end && end < pointHeight) {
+                  return tab.key;
+               }
 
                return tabKeyNow;
             }, this.tabKeyNow);
@@ -330,16 +386,20 @@
 
 <template>
    <div
-      :class="classes"
+      class="ViewerProduct"
       :style="{
          '--primary-color': primaryColor,
          'background-color': backgroundColor,
          '--color-transition-duration': colorTransitionDuration,
          '--actionbar-toolbar': isActionbarHidden ? '1.5rem' : '5.5rem',
       }"
+      :isWide="`${isWide}`"
       @scroll="(event) => scrolling(event)"
    >
-      <div class="ViewerProduct-toolbar" :style="{ 'background-color': actionbarColor }">
+      <div
+         class="ViewerProduct-toolbar"
+         :style="{ 'background-color': actionbarColor }"
+      >
          <Actionbar
             class="ViewerProduct-actionbar"
             v-if="!isActionbarHidden"
@@ -351,7 +411,8 @@
                class="ViewerProduct-actionbar-title"
                v-if="fullTitle"
                :style="{
-                  padding: !leftMenus.length && !rightMenus.length ? '1.8rem' : '0',
+                  padding:
+                     !leftMenus.length && !rightMenus.length ? '1.8rem' : '0',
                }"
                >{{ fullTitle }}</span
             >
@@ -379,12 +440,16 @@
                :hasProductNext="!!productNext"
                @click-image="
                   (image) =>
-                     store.dispatch('imageViewerShow', { image, thumbnails: images })
+                     store.dispatch('imageViewerShow', {
+                        image,
+                        thumbnails: images,
+                     })
                "
                @click-previous="() => clickPreviousImage()"
                @click-next="() => clickNextImage()"
                @click-remove="
-                  (image) => $emit('click-product-imageRemove', { product, image })
+                  (image) =>
+                     $emit('click-product-imageRemove', { product, image })
                "
             />
             <ProductViewerImages
@@ -394,7 +459,9 @@
                :indexAt="imagePreviewIndex"
                :isEditable="isEditable"
                :primaryColor="primaryColor"
-               @click-image="(image) => (imagePreviewIndex = images.indexOf(image))"
+               @click-image="
+                  (image) => (imagePreviewIndex = images.indexOf(image))
+               "
                @click-add-image-file="
                   (file) => {
                      productStore.dispatch('addImageOfId', {
@@ -611,7 +678,7 @@
       }
    }
 
-   .ViewerProduct-isThin {
+   .ViewerProduct[isWide="false"] {
       grid-template-rows: 8rem max-content minmax(1fr, max-content);
       grid-template-columns: 100%;
       grid-template-areas:
@@ -629,7 +696,7 @@
          margin-top: -0.6rem;
       }
    }
-   .ViewerProduct-isWide {
+   .ViewerProduct[isWide="true"] {
       grid-template-rows: var(--actionbar-toolbar) 1fr;
       grid-template-columns: 45% 55%;
       grid-template-areas:
