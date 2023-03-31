@@ -75,8 +75,12 @@
 </script>
 
 <template>
-   <div class="ViewerProduct-BottomActionbar">
+   <div
+      class="ViewerProduct-BottomActionbar"
+      :isButtonTopHidden="parentScrollTop <= 10"
+   >
       <ButtonContact
+         class="ViewerProduct-BottomActionbar-whatsapp"
          :target="whatsappTarget"
          :href="whatsappHref"
          :icon="whatsappIcon"
@@ -85,6 +89,7 @@
          primaryColorHex="#4caf50"
       />
       <ButtonContact
+         class="ViewerProduct-BottomActionbar-call"
          :target="callTarget"
          :href="callHref"
          :icon="callIcon"
@@ -114,5 +119,13 @@
       justify-content: flex-end;
       padding: 0.5rem 1rem;
       padding: 1rem;
+   }
+   .ViewerProduct-BottomActionbar[isButtonTopHidden="true"] {
+      .ViewerProduct-BottomActionbar-whatsapp {
+         transform: translateX(4.3rem);
+      }
+      .ViewerProduct-BottomActionbar-call {
+         transform: translateX(4.3rem);
+      }
    }
 </style>

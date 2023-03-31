@@ -60,6 +60,7 @@
 
       background: white;
       box-shadow: 0 0 5rem hsla(0, 0%, 0%, 0.3);
+      transition-timing-function: cubic-bezier(1, 0, 0, 1);
 
       .ButtonContact-icon {
          width: var(--icon-size);
@@ -81,6 +82,11 @@
             grid-area: content;
             font-size: 0.8rem;
          }
+      }
+
+      &:hover,
+      &:focus {
+         background: hsl(0, 0%, 90%);
       }
    }
 
