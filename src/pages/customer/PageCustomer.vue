@@ -64,7 +64,9 @@
             cancel: (context, self, data) => (self.isShowing = false),
             ok: (context, self, data) => {
                self.isShowing = false;
-               if (data.id === context.queryCustomerId) context.clickClose();
+               if (data.id === context.queryCustomerId) {
+                  context.clickClose();
+               }
             },
          },
          windowUpdateCustomer: {
@@ -178,12 +180,14 @@
          queryName: (c) => c.$route.query.name,
          queryPhoneNumber: (c) => c.$route.query.phoneNumber,
 
-         currentCustomer() {
-            if (!this.items.length) return null;
+         currentCustomer: (c) => {
+            if (!c.items.length) {
+               return null;
+            }
 
-            const { queryName, queryPhoneNumber } = this;
+            const { queryName, queryPhoneNumber } = c;
 
-            const customer = this.items.find((customer) => {
+            const customer = c.items.find((customer) => {
                const { phoneNumber } = customer;
                const phoneNumberValue = phoneNumber ? phoneNumber.value : "";
 
@@ -201,7 +205,10 @@
          },
          currentCustomer() {
             if (!this.currentCustomer) {
-               setTimeout(() => (this.drawerCustomer = this.currentCustomer), 1000);
+               setTimeout(
+                  () => (this.drawerCustomer = this.currentCustomer),
+                  1000,
+               );
             } else {
                this.drawerCustomer = this.currentCustomer;
             }
@@ -213,7 +220,9 @@
       methods: {
          async invalidate() {
             this.items = [];
-            this.items = await this.customerStore.dispatch("generateCustomersAcross");
+            this.items = await this.customerStore.dispatch(
+               "generateCustomersAcross",
+            );
          },
 
          clickRefresh() {
@@ -240,12 +249,7 @@
 
 <template>
    <div class="PageCustomer">
-      <div
-         :class="[
-            'PageCustomer-body',
-            `PageCustomer-body-${isOver1200px ? 'isOver1200px' : 'isLess1200px'}`,
-         ]"
-      >
+      <div class="PageCustomer-body" :isOver1200px="`${isOver1200px}`">
          <PanelCustomers
             class="PageCustomer-panelLeft transition"
             :items="items"
@@ -257,7 +261,9 @@
          />
 
          <div class="PageCustomer-PanelRightEmpty">
-            <span class="PageCustomer-PanelRightEmpty-text">Select to view</span>
+            <span class="PageCustomer-PanelRightEmpty-text"
+               >Select to view</span
+            >
          </div>
 
          <Drawer
@@ -272,10 +278,12 @@
                @click-item-close="() => clickClose()"
                @click-item-remove="(param) => this.clickItemRemove(param.item)"
                @click-item-customer-update="
-                  (param) => windowAction('windowUpdateCustomer', 'start', param)
+                  (param) =>
+                     windowAction('windowUpdateCustomer', 'start', param)
                "
                @click-item-description-update="
-                  (param) => windowAction('windowUpdateDescription', 'start', param)
+                  (param) =>
+                     windowAction('windowUpdateDescription', 'start', param)
                "
                @click-item-device-add="
                   (param) => windowAction('windowAddDevice', 'start', param)
@@ -285,10 +293,19 @@
                "
                @click-item-device-update-specifications="
                   (param) =>
-                     windowAction('windowUpdateDeviceSpecifications', 'start', param)
+                     windowAction(
+                        'windowUpdateDeviceSpecifications',
+                        'start',
+                        param,
+                     )
                "
                @click-item-device-update-description="
-                  (param) => windowAction('windowUpdateDeviceDescription', 'start', param)
+                  (param) =>
+                     windowAction(
+                        'windowUpdateDeviceDescription',
+                        'start',
+                        param,
+                     )
                "
             />
          </Drawer>
@@ -330,7 +347,9 @@
          class="PageCustomer-window"
          :isShowing="windowUpdateDescription.isShowing"
          :item="windowUpdateDescription.item"
-         @click-dismiss="() => windowAction('windowUpdateDescription', 'dismiss')"
+         @click-dismiss="
+            () => windowAction('windowUpdateDescription', 'dismiss')
+         "
          @click-cancel="() => windowAction('windowUpdateDescription', 'cancel')"
          @click-ok="() => windowAction('windowUpdateDescription', 'ok')"
       />
@@ -363,8 +382,12 @@
          @click-dismiss="
             () => windowAction('windowUpdateDeviceSpecifications', 'dismiss')
          "
-         @click-cancel="() => windowAction('windowUpdateDeviceSpecifications', 'cancel')"
-         @click-ok="() => windowAction('windowUpdateDeviceSpecifications', 'ok')"
+         @click-cancel="
+            () => windowAction('windowUpdateDeviceSpecifications', 'cancel')
+         "
+         @click-ok="
+            () => windowAction('windowUpdateDeviceSpecifications', 'ok')
+         "
       />
 
       <!-- Update Description -->
@@ -373,8 +396,12 @@
          :isShowing="windowUpdateDeviceDescription.isShowing"
          :customer="windowUpdateDeviceDescription.customer"
          :device="windowUpdateDeviceDescription.device"
-         @click-dismiss="() => windowAction('windowUpdateDeviceDescription', 'dismiss')"
-         @click-cancel="() => windowAction('windowUpdateDeviceDescription', 'cancel')"
+         @click-dismiss="
+            () => windowAction('windowUpdateDeviceDescription', 'dismiss')
+         "
+         @click-cancel="
+            () => windowAction('windowUpdateDeviceDescription', 'cancel')
+         "
          @click-ok="() => windowAction('windowUpdateDeviceDescription', 'ok')"
       />
    </div>
@@ -437,8 +464,7 @@
             }
          }
       }
-
-      .PageCustomer-body-isLess1200px {
+      .PageCustomer-body[isOver1200px="false"] {
          .PageCustomer-panelLeft {
             width: 100dvw;
             max-width: 100%;
@@ -451,7 +477,7 @@
             max-width: 100%;
          }
       }
-      .PageCustomer-body-isOver1200px {
+      .PageCustomer-body[isOver1200px="true"] {
          .PageCustomer-panelLeft {
             width: 100dvw;
             max-width: 50%;

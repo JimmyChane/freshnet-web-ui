@@ -5,6 +5,7 @@
    import Empty from "@/components/Empty.vue";
 
    import PageCustomer from "@/pages/customer/PageCustomer.vue";
+   import U from "@/U";
 
    export default {
       components: { Actionbar, ItemCustomer, Empty },
@@ -23,23 +24,32 @@
             return `${this.itemName(item)}${this.itemPhoneNumberValue(item)}`;
          },
          itemName(item) {
-            if (item) return item.name;
-            return "";
+            if (!item) {
+               return "";
+            }
+            return U.optString(item.name);
          },
          itemPhoneNumberValue(item) {
-            if (item && item.phoneNumber) return item.phoneNumber.value;
-            return "";
+            if (!item || !item.phoneNumber) {
+               return "";
+            }
+            return item.phoneNumber.value;
          },
          itemPhoneNumberStr(item) {
-            if (item && item.phoneNumber) return item.phoneNumber.toUrl();
-            return "";
+            if (!item) {
+               return "";
+            }
+            return item.phoneNumber.toUrl();
          },
       },
    };
 </script>
 
 <template>
-   <div class="PanelCustomers" @scroll="(event) => (scrollTop = event.target.scrollTop)">
+   <div
+      class="PanelCustomers"
+      @scroll="(event) => (scrollTop = event.target.scrollTop)"
+   >
       <Actionbar
          class="PanelCustomers-top"
          :title="title"
@@ -68,7 +78,10 @@
          </router-link>
       </div>
 
-      <Empty v-if="!items.length && !customerStore.getters.isLoading" :icon="iconEmpty" />
+      <Empty
+         v-if="!items.length && !customerStore.getters.isLoading"
+         :icon="iconEmpty"
+      />
    </div>
 </template>
 
