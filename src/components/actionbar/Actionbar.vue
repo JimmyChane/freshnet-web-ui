@@ -1,4 +1,5 @@
 <script>
+   import U from "@/U";
    import Menus from "./Actionbar-Menus.vue";
 
    export default {
@@ -15,9 +16,14 @@
       },
       methods: {
          parseMenus(menus) {
-            if (Array.isArray(menus))
-               return menus.filter((menu) => typeof menu === "object" && menu);
-            if (typeof menus === "object") return [menus];
+            if (Array.isArray(menus)) {
+               return menus.filter((menu) => {
+                  return U.optObjectOnly(menu);
+               });
+            }
+            if (typeof menus === "object") {
+               return [menus];
+            }
             return [];
          },
       },

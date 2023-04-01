@@ -2,13 +2,14 @@
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import Loading from "@/components/Loading.vue";
 
-   import Section from "./PanelCustomer_Section.vue";
+   import Section from "@/pages/manage/PanelItemSection.vue";
+   import Item from "./PanelCustomer-Item.vue";
    import ItemDevice from "./ItemDevice.vue";
 
    import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
 
    export default {
-      components: { Actionbar, Loading, Section, ItemDevice },
+      components: { Actionbar, Loading, Section, Item, ItemDevice },
       emits: [
          "click-item-close",
          "click-item-remove",
@@ -26,6 +27,8 @@
          isLoadingDevices: false,
       }),
       computed: {
+         isWide: (c) => c.$root.window.innerWidth > 600,
+
          id: (c) => (c.item ? c.item.id : ""),
          name: (c) => (c.item ? c.item.name : ""),
          phoneNumber: (c) => (c.item ? c.item.phoneNumber : null),
@@ -42,29 +45,30 @@
       },
       watch: {
          item() {
-            this.invalidate();
+            this.invalidateDevices();
          },
          "item.deviceIds"() {
             this.invalidateDevices();
          },
       },
       mounted() {
-         this.invalidate();
+         this.invalidateDevices();
       },
       methods: {
-         async invalidate() {
-            this.invalidateDevices();
-         },
          async invalidateDevices() {
             this.devices = [];
 
-            if (!this.deviceIds.length) return;
+            if (!this.deviceIds.length) {
+               return;
+            }
 
             const cacheItem = this.item;
             this.isLoadingDevices = true;
 
             const devices = await this.customerStore.dispatch("getDevices");
-            if (this.item !== cacheItem) return;
+            if (this.item !== cacheItem) {
+               return;
+            }
 
             this.isLoadingDevices = false;
             this.devices = this.item.deviceIds.map((deviceId) => {
@@ -87,7 +91,9 @@
             class="PanelCustomer-actionbar"
             :style="{
                'background-color': actionbarColor,
-               'box-shadow': top.showShadow ? `0 0 20px ${actionbarShadow}` : 'none',
+               'box-shadow': top.showShadow
+                  ? `0 0 20px ${actionbarShadow}`
+                  : 'none',
             }"
             :leftMenus="{
                key: 'close',
@@ -107,82 +113,88 @@
             "
          />
 
-         <div class="PanelCustomer-main">
-            <Section
-               title="Name & Phone Number"
-               :menus="
-                  id
-                     ? {
-                          icon: host.icon('edit-505050'),
-                          click: () => $emit('click-item-customer-update', { item }),
-                       }
-                     : null
-               "
-            >
-               <div class="PanelCustomer-customer">
-                  <span class="PanelCustomer-customer-content" v-if="name">{{
-                     name
-                  }}</span>
-                  <span class="PanelCustomer-reuse-contentEmpty" v-else>Empty</span>
+         <div class="PanelCustomer-main" :isWide="`${isWide}`">
+            <div>
+               <Section
+                  title="Customer Info"
+                  :menus="
+                     id
+                        ? {
+                             icon: host.icon('edit-505050'),
+                             click: () =>
+                                $emit('click-item-customer-update', { item }),
+                          }
+                        : null
+                  "
+               >
+                  <div class="PanelCustomer-customer">
+                     <span class="PanelCustomer-customer-content" v-if="name">{{
+                        name
+                     }}</span>
+                     <span class="PanelCustomer-reuse-contentEmpty" v-else
+                        >Empty</span
+                     >
 
-                  <span class="PanelCustomer-customer-content" v-if="phoneNumber">{{
-                     phoneNumber
-                  }}</span>
-                  <span class="PanelCustomer-customer-empty" v-else>Empty</span>
-               </div>
-            </Section>
+                     <span
+                        class="PanelCustomer-customer-content"
+                        v-if="phoneNumber"
+                        >{{ phoneNumber }}</span
+                     >
+                     <span class="PanelCustomer-customer-empty" v-else
+                        >Empty</span
+                     >
+                  </div>
+               </Section>
+
+               <Section
+                  title="Description"
+                  v-if="id"
+                  :menus="{
+                     icon: host.icon('edit-505050'),
+                     click: () =>
+                        $emit('click-item-description-update', { item }),
+                  }"
+               >
+                  <span v-if="description">{{ description }}</span>
+               </Section>
+            </div>
 
             <Section
-               title="Description"
-               v-if="id"
-               :menus="{
-                  icon: host.icon('edit-505050'),
-                  click: () => $emit('click-item-description-update', { item }),
-               }"
-            >
-               <div class="PanelCustomer-description" v-if="description">
-                  <span>{{ description }}</span>
-               </div>
-            </Section>
-
-            <Section
-               title="Devices"
+               title="Owned Devices"
                v-if="id"
                :menus="{
                   icon: host.icon('add-505050'),
                   click: () => $emit('click-item-device-add', { item }),
                }"
             >
-               <div class="PanelCustomer-devices-items" v-if="devices.length">
-                  <ItemDevice
-                     v-for="deviceContext of devices"
-                     :key="deviceContext.deviceId"
-                     :item="deviceContext.device"
-                     @click-remove="
-                        (param) =>
-                           $emit('click-item-device-remove', {
-                              item,
-                              device: param.item,
-                           })
-                     "
-                     @click-update-specifications="
-                        (param) =>
-                           $emit('click-item-device-update-specifications', {
-                              item,
-                              device: param.item,
-                              specifications: param.item.specifications,
-                           })
-                     "
-                     @click-update-description="
-                        (param) =>
-                           $emit('click-item-device-update-description', {
-                              item,
-                              device: param.item,
-                              description: param.item.description,
-                           })
-                     "
-                  />
-               </div>
+               <ItemDevice
+                  v-for="deviceContext of devices"
+                  :key="deviceContext.deviceId"
+                  :item="deviceContext.device"
+                  @click-remove="
+                     (param) =>
+                        $emit('click-item-device-remove', {
+                           item,
+                           device: param.item,
+                        })
+                  "
+                  @click-update-specifications="
+                     (param) =>
+                        $emit('click-item-device-update-specifications', {
+                           item,
+                           device: param.item,
+                           specifications: param.item.specifications,
+                        })
+                  "
+                  @click-update-description="
+                     (param) =>
+                        $emit('click-item-device-update-description', {
+                           item,
+                           device: param.item,
+                           description: param.item.description,
+                        })
+                  "
+               />
                <Loading
                   class="PanelCustomer-devices-loading"
                   :isShowing="isLoadingDevices"
@@ -190,38 +202,31 @@
             </Section>
 
             <Section title="Services" v-if="services.length">
-               <div class="PanelCustomer-service">
-                  <router-link
-                     class="PanelCustomer-service-item"
-                     v-for="service of services"
-                     :key="service.id"
-                     :to="{
-                        path: '/manage/service',
-                        query: { service: service.id },
-                     }"
-                  >
-                     <span class="PanelCustomer-service-item-title">Problem</span>
-                     <span class="PanelCustomer-service-item-description">{{
-                        service.description
-                     }}</span>
-                  </router-link>
-               </div>
+               <Item
+                  v-for="service of services"
+                  :key="service.id"
+                  :to="{
+                     path: '/manage/service',
+                     query: { service: service.id },
+                  }"
+                  title="Problem"
+               >
+                  <span>{{ service.description }}</span>
+               </Item>
             </Section>
 
             <Section title="Orders" v-if="orders.length">
-               <div class="PanelCustomer-order">
-                  <router-link
-                     class="PanelCustomer-order-item"
-                     v-for="order of orders"
-                     :key="order.id"
-                     :to="{ path: '/manage/order', query: { order: order.id } }"
-                  >
-                     <span class="PanelCustomer-order-item-title">Content</span>
-                     <span class="PanelCustomer-order-item-description">{{
-                        order.content
-                     }}</span>
-                  </router-link>
-               </div>
+               <Item
+                  v-for="order of orders"
+                  :key="order.id"
+                  :to="{
+                     path: '/manage/order',
+                     query: { order: order.id },
+                  }"
+                  title="Content"
+               >
+                  <span>{{ order.content }}</span>
+               </Item>
             </Section>
          </div>
       </div>
@@ -243,113 +248,55 @@
          flex-direction: column;
 
          .PanelCustomer-main {
-            padding: 1rem;
             padding-bottom: 10rem;
             display: flex;
             flex-direction: column;
             gap: 2rem;
             row-gap: 0.5rem;
 
+            .PanelCustomer-customer {
+               display: flex;
+               flex-direction: column;
+               flex-wrap: wrap;
+               flex-grow: 1;
+               align-items: flex-start;
+               gap: 0.5rem;
+               overflow: hidden;
+
+               & > * {
+                  flex-grow: 1;
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+               }
+
+               .PanelCustomer-customer-content {
+                  flex-grow: 1;
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+               }
+               .PanelCustomer-customer-empty {
+                  font-weight: 400;
+                  font-size: 0.9rem;
+                  color: #535353;
+               }
+            }
+            .PanelCustomer-devices-loading {
+               width: 100%;
+               height: 4px;
+            }
+         }
+         .PanelCustomer-main[isWide="true"] {
+            padding: 1rem;
+
             & > * {
                border-radius: 1rem;
                overflow: hidden;
             }
          }
-
-         .PanelCustomer-customer {
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            flex-grow: 1;
-            align-items: flex-start;
-            gap: 0.5rem;
-            overflow: hidden;
-
-            & > * {
-               flex-grow: 1;
-               display: flex;
-               flex-direction: row;
-               align-items: center;
-            }
-
-            .PanelCustomer-customer-content {
-               flex-grow: 1;
-               display: flex;
-               flex-direction: row;
-               align-items: center;
-            }
-            .PanelCustomer-customer-empty {
-               font-weight: 400;
-               font-size: 0.9rem;
-               color: #535353;
-            }
-         }
-         .PanelCustomer-description {
-            display: flex;
-            flex-direction: column;
-         }
-         .PanelCustomer-devices-items {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            align-items: stretch;
-            gap: 0.5rem;
-         }
-         .PanelCustomer-devices-loading {
-            width: 100%;
-            height: 4px;
-         }
-         .PanelCustomer-service {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-
-            .PanelCustomer-service-item {
-               width: 100%;
-               display: flex;
-               flex-direction: column;
-               gap: 0.2rem;
-               padding: 1rem;
-
-               border-radius: 1rem;
-               background: white;
-               border: 1px solid hsla(0, 0%, 0%, 0.2);
-               font-size: 1rem;
-               cursor: pointer;
-               text-align: start;
-               text-decoration: none;
-               color: inherit;
-
-               .PanelCustomer-service-item-title {
-                  font-weight: 600;
-               }
-            }
-         }
-         .PanelCustomer-order {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-
-            .PanelCustomer-order-item {
-               width: 100%;
-               display: flex;
-               flex-direction: column;
-               gap: 0.2rem;
-               padding: 1rem;
-
-               border-radius: 1rem;
-               background: white;
-               border: 1px solid hsla(0, 0%, 0%, 0.2);
-               font-size: 1rem;
-               cursor: pointer;
-               text-align: start;
-               text-decoration: none;
-               color: inherit;
-
-               .PanelCustomer-order-item-title {
-                  font-weight: 600;
-               }
-            }
+         .PanelCustomer-main[isWide="false"] {
+            padding: 1rem 0;
          }
       }
    }

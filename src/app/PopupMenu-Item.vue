@@ -11,29 +11,61 @@
       computed: {
          icon: (c) => c.menu.icon,
          title: (c) => c.menu.title,
+         href: (c) => U.optString(c.menu.href),
+         target: (c) => U.optString(c.menu.target),
+         to: (c) => c.menu.to,
+
          isSelected: (c) => {
             if (typeof c.menu.isSelected !== "function") return false;
             return c.menu.isSelected();
          },
          hasIcon: (c) => {
-            if (U.isString(c.icon)) return c.icon.length > 0;
-            return !c;
+            return U.optString(c.icon).length > 0;
          },
       },
    };
 </script>
 
 <template>
-   <button
-      :class="[
-         'transition',
-         'PopupMenu-Item',
-         isSelected ? 'PopupMenu-Item-isSelected' : 'PopupMenu-Item-isDeselected',
-      ]"
+   <a
+      v-if="href.length"
+      :class="['transition', 'PopupMenu-Item']"
       :style="{
          '--primary-color-hover': primaryColorBackgroundHover,
          '--primary-color-isSelected': primaryColorBackgroundSelected,
       }"
+      :isSelected="`${isSelected}`"
+      :href="href"
+      :target="target"
+      @click="() => $emit('click', menu)"
+   >
+      <img v-if="hasIcon" :src="icon" :alt="`Icon ${title}`" />
+      <span>{{ title }}</span>
+   </a>
+
+   <router-link
+      v-else-if="to !== undefined"
+      :class="['transition', 'PopupMenu-Item']"
+      :style="{
+         '--primary-color-hover': primaryColorBackgroundHover,
+         '--primary-color-isSelected': primaryColorBackgroundSelected,
+      }"
+      :isSelected="`${isSelected}`"
+      :to="to"
+      @click="() => $emit('click', menu)"
+   >
+      <img v-if="hasIcon" :src="icon" :alt="`Icon ${title}`" />
+      <span>{{ title }}</span>
+   </router-link>
+
+   <button
+      v-else
+      :class="['transition', 'PopupMenu-Item']"
+      :style="{
+         '--primary-color-hover': primaryColorBackgroundHover,
+         '--primary-color-isSelected': primaryColorBackgroundSelected,
+      }"
+      :isSelected="`${isSelected}`"
       @click="() => $emit('click', menu)"
    >
       <img v-if="hasIcon" :src="icon" :alt="`Icon ${title}`" />
@@ -60,6 +92,7 @@
       padding: 1em 1.2em;
       gap: 1em;
       text-align: inherit;
+      text-decoration: none;
 
       img {
          --icon-size: 1em;
@@ -76,15 +109,14 @@
          color: black;
       }
    }
-
-   .PopupMenu-Item-isDeselected {
+   .PopupMenu-Item[isSelected="false"] {
       cursor: pointer;
       &:hover {
          background: hsla(0, 0%, 0%, 0.1);
          background: var(--primary-color-hover);
       }
    }
-   .PopupMenu-Item-isSelected {
+   .PopupMenu-Item[isSelected="true"] {
       background: hsla(0, 0%, 0%, 0.2);
       background: var(--primary-color-isSelected);
    }

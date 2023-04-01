@@ -1,6 +1,7 @@
 <script>
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
    import U from "@/U";
+
    export default {
       components: { ButtonIcon },
       props: {
@@ -25,17 +26,17 @@
 </script>
 
 <template>
-   <div class="PanelService-section">
+   <div class="PanelItemSection">
       <div
-         class="PanelService-section-body"
+         class="PanelItemSection-body"
          :isHorizontal="`${!hasTitle && hasMenus}`"
       >
-         <div class="PanelService-section-header" v-if="hasTitle || hasMenus">
-            <div class="PanelService-section-title" v-if="hasTitle">{{
+         <div class="PanelItemSection-header" v-if="hasTitle || hasMenus">
+            <div class="PanelItemSection-title" v-if="hasTitle">{{
                title
             }}</div>
 
-            <div class="PanelService-section-menus" v-if="hasMenus">
+            <div class="PanelItemSection-menus" v-if="hasMenus">
                <ButtonIcon
                   v-for="menu of theMenus"
                   :key="menu.title"
@@ -45,19 +46,19 @@
             </div>
          </div>
 
-         <div class="PanelService-section-main"><slot /></div>
+         <div class="PanelItemSection-main"><slot /></div>
       </div>
    </div>
 </template>
 
 <style lang="scss" scoped>
-   .PanelService-section {
+   .PanelItemSection {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
 
-      .PanelService-section-body {
+      .PanelItemSection-body {
          width: 100%;
          display: flex;
          align-items: flex-start;
@@ -65,7 +66,8 @@
 
          background: hsla(0, 0%, 100%, 0.5);
          border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-         .PanelService-section-header {
+
+         .PanelItemSection-header {
             display: flex;
             flex-direction: row;
             flex-wrap: nowrap;
@@ -73,7 +75,7 @@
             justify-content: space-between;
             min-height: 1.8rem;
 
-            .PanelService-section-title {
+            .PanelItemSection-title {
                text-align: start;
                font-weight: 600;
                flex-grow: 1;
@@ -82,7 +84,7 @@
                padding: 1rem;
                padding-bottom: 0.4rem;
             }
-            .PanelService-section-menus {
+            .PanelItemSection-menus {
                width: max-content;
                display: flex;
                flex-direction: row;
@@ -92,27 +94,33 @@
                margin-right: 0.2rem;
             }
          }
-         .PanelService-section-main {
+         .PanelItemSection-main {
             width: 100%;
             padding: 1rem;
             padding-top: 0.4rem;
+
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            gap: 0.2rem;
          }
       }
-      .PanelService-section-body[isHorizontal="false"] {
+      .PanelItemSection-body[isHorizontal="false"] {
          flex-direction: column;
-         .PanelService-section-header {
+         .PanelItemSection-header {
             width: 100%;
          }
       }
-      .PanelService-section-body[isHorizontal="true"] {
+      .PanelItemSection-body[isHorizontal="true"] {
          flex-direction: row-reverse;
-         .PanelService-section-header {
-            .PanelService-section-menus {
+         .PanelItemSection-header {
+            .PanelItemSection-menus {
                flex-direction: column;
                align-items: center;
             }
          }
-         .PanelService-section-main {
+         .PanelItemSection-main {
             flex-grow: 1;
             padding-top: 0.8rem;
          }

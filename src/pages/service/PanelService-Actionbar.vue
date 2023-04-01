@@ -49,6 +49,8 @@
                isHidden: true,
             });
 
+            console.log(menus);
+
             return menus;
          },
       },
