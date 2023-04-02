@@ -1,7 +1,7 @@
 <script>
    const State = { Expand: 1, Collapse: 2 };
 
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js";
    import Menu from "@/components/Menu.vue";
 
    export default {
@@ -37,7 +37,8 @@
 
          primaryColorBackground: (c) => c.primaryColor.mix("ffffff", 0.8),
          primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),
-         primaryColorBackgroundSelected: (c) => c.primaryColor.mix("ffffff", 0.4),
+         primaryColorBackgroundSelected: (c) =>
+            c.primaryColor.mix("ffffff", 0.4),
       },
    };
 </script>
@@ -60,10 +61,17 @@
       >
          <span class="LabelMenus-title">{{ title }}</span>
          <span class="LabelMenus-content">
-            <img class="LabelMenus-content-icon" v-if="menuIcon" :src="menuIcon" />
+            <img
+               class="LabelMenus-content-icon"
+               v-if="menuIcon"
+               :src="menuIcon"
+            />
             {{ menuTitle }}</span
          >
-         <img class="LabelMenus-arrow transition" :src="host.icon('arrowDown-505050')" />
+         <img
+            class="LabelMenus-arrow transition"
+            :src="host.icon('arrowDown-505050')"
+         />
       </Menu>
    </div>
 </template>

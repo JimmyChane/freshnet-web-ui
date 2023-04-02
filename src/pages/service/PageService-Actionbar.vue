@@ -5,7 +5,7 @@
    import LabelMenus from "@/components/LabelMenus.vue";
 
    import ItemService from "./ItemService.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js"; 
    import Searcher from "@/tools/Searcher";
    import Tab from "./PageService-Actionbar-Tab.vue";
 

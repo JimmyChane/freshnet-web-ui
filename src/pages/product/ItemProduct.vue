@@ -7,7 +7,7 @@
 
    import ImageView from "@/components/ImageView.vue";
    import Label from "./ItemProduct-Label.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js"; 
    import U from "@/U";
 
    export default {

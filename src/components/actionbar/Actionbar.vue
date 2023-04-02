@@ -47,8 +47,8 @@
       --actionbar-background-color-light: var(--actionbar-color);
       --actionbar-background-color-dark: var(--actionbar-color);
       color: black;
-      background-color: hsl(0, 0%, 90%);
-      border-bottom: 1px solid hsl(0, 0%, 80%);
+      background: white;
+      border-bottom: 1px solid hsl(0, 0%, 90%);
 
       position: sticky;
       top: 0;

@@ -70,7 +70,11 @@
 
 <template>
    <div :class="['ItemSetting-TextArea', 'transition']">
-      <ItemSettingHeader class="ItemSetting-header" :title="title" :actions="actions" />
+      <ItemSettingHeader
+         class="ItemSetting-header"
+         :title="title"
+         :actions="actions"
+      />
 
       <textarea
          :class="[
@@ -111,7 +115,7 @@
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      background-color: hsl(0, 0%, 94%);
+      background: white;
 
       .ItemSetting-header {
          margin-top: -1rem;
@@ -133,7 +137,7 @@
 
       .ItemSetting-TextArea-textarea {
          resize: none;
-         background-color: white;
+         background: hsl(0, 0%, 90%);
          --transition-timing: cubic-bezier(1, 0, 0, 1);
       }
       .ItemSetting-TextArea-textarea-isShowing {

@@ -12,10 +12,10 @@
          selected: { type: Boolean, default: false },
       },
       computed: {
-         category() {
-            const { categoryKey } = this.item;
+         category: (c) => {
+            const { categoryKey } = c.item;
 
-            return this.categoryStore.getters.items.find((category) => {
+            return c.categoryStore.getters.items.find((category) => {
                return category.key === categoryKey;
             });
          },

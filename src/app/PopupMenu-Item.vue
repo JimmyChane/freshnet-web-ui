@@ -19,9 +19,7 @@
             if (typeof c.menu.isSelected !== "function") return false;
             return c.menu.isSelected();
          },
-         hasIcon: (c) => {
-            return U.optString(c.icon).length > 0;
-         },
+         hasIcon: (c) => U.optString(c.icon).length>0,
       },
    };
 </script>

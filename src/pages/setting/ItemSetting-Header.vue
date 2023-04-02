@@ -11,7 +11,9 @@
 
 <template>
    <div class="ItemSetting-header" v-if="title.length || actions.length">
-      <span class="ItemSetting-header-title" v-if="title.length">{{ title }}</span>
+      <span class="ItemSetting-header-title" v-if="title.length">{{
+         title
+      }}</span>
 
       <div class="ItemSetting-header-actions" v-if="actions.length">
          <IconButton
@@ -42,7 +44,7 @@
       align-items: center;
       justify-content: space-between;
 
-      background-color: hsl(0, 0%, 94%);
+      background: white;
 
       .ItemSetting-header-title {
          padding: inherit;
@@ -57,7 +59,7 @@
 
          & > * {
             &:hover {
-               background-color: hsl(0, 0%, 98%);
+               background: hsl(0, 0%, 90%);
             }
             &:focus {
                transform: scale(0.8);

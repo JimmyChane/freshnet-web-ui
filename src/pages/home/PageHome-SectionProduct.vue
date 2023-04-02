@@ -1,7 +1,7 @@
 <script>
    import Category from "@/items/Category";
    import ImageView from "@/components/ImageView.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js"; 
    import U from "@/U";
 
    export default {

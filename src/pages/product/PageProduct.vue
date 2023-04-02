@@ -127,43 +127,12 @@
       }
    }
 
-   class QueryParameter {
-      constructor(key = "", title = "", values = []) {
-         this.key = key;
-         this.title = title;
-         this.values = values;
-      }
-   }
-
    export default {
       key: "product",
       title: "Products",
       icon: {
          light: new HostIcon("products-FFFFFF.svg"),
          dark: new HostIcon("products-000000.svg"),
-      },
-
-      _queries_old() {
-         return [
-            new QueryParameter("", "", [{ key: "", title: "All" }]),
-            new QueryParameter("category", "Category", [
-               { key: "laptop", title: "Laptop" },
-               { key: "printer", title: "Printer" },
-            ]),
-            new QueryParameter("brand", "Brand", [
-               { key: "hp", title: "HP" },
-               { key: "dell", title: "Dell" },
-            ]),
-            new QueryParameter("size", "Size", [
-               { key: "14", title: '14"' },
-               { key: "15.6", title: '15.6"' },
-            ]),
-            new QueryParameter("storage", "Storage", [
-               { key: "ssd512gb", title: "SSD 512GB" },
-               { key: "ssd256gb", title: "SSD 256GB" },
-               { key: "hdd1tb", title: "HDD 1TB" },
-            ]),
-         ];
       },
 
       components: {
@@ -507,9 +476,9 @@
 
             const categories = await this.categoryStore.dispatch("getItems");
             categories.forEach((category) => {
-               const group = groups.find(
-                  (group) => group.category.id === category.id,
-               );
+               const group = groups.find((group) => {
+                  return group.category.id === category.id;
+               });
                if (!group) {
                   groups.push({ category, items: [] });
                }

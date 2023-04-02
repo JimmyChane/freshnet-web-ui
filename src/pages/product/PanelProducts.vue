@@ -8,7 +8,7 @@
    import ActionbarProduct from "./ActionBarProduct.vue";
    import ItemProduct from "./ItemProduct.vue";
    import Group from "./PanelProducts-Group.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js"; 
 
    import PageProduct from "@/pages/product/PageProduct.vue";
 

@@ -1,7 +1,7 @@
 <script>
    const State = { Expand: 1, Collapse: 2 };
 
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js"; 
 
    export default {
       State,

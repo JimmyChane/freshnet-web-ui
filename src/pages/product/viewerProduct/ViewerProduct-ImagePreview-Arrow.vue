@@ -1,7 +1,7 @@
 <script>
    import ImageView from "@/components/ImageView.vue";
    import IconDynamic from "@/components/IconDynamic.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js"; 
    import U from "@/U";
 
    const Direction = { Left: 1, Right: 2 };

@@ -6,13 +6,13 @@
    import ButtonAddImage from "./ButtonAddImage.vue";
    import ButtonImage from "./ButtonImage.vue";
    import ItemBelonging from "./ItemBelonging.vue";
-   import Section from "@/pages/manage/PanelItemSection.vue";
+   import Section from "@/pages/manage/PanelItem-Section.vue";
    import AddEvent from "./PanelService-AddEvent.vue";
    import Events from "./PanelEvents.vue";
 
    import ServiceStates from "@/objects/ServiceStates.js";
 
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js";
 
    export default {
       components: {

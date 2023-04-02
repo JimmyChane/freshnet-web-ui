@@ -2,11 +2,11 @@
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import Loading from "@/components/Loading.vue";
 
-   import Section from "@/pages/manage/PanelItemSection.vue";
+   import Section from "@/pages/manage/PanelItem-Section.vue";
    import Item from "./PanelCustomer-Item.vue";
    import ItemDevice from "./ItemDevice.vue";
 
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js";
 
    export default {
       components: { Actionbar, Loading, Section, Item, ItemDevice },

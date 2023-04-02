@@ -28,9 +28,12 @@
 
 <template>
    <div class="ItemSetting-List">
-      <span class="ItemSetting-List-item" v-for="value of values" :key="value">{{
-         value
-      }}</span>
+      <span
+         class="ItemSetting-List-item"
+         v-for="value of values"
+         :key="value"
+         >{{ value }}</span
+      >
       <span class="ItemSetting-List-empty" v-if="!values.length">Empty</span>
    </div>
 </template>
@@ -43,7 +46,7 @@
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      background-color: hsl(0, 0%, 94%);
+      background: white;
 
       .ItemSetting-List-item {
          border: 1px solid rgba(0, 0, 0, 0.2);
