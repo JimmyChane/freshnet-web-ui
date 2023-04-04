@@ -13,6 +13,8 @@
 
    import HostIcon from "@/host/HostIcon";
 
+   import PopupContext from "@/tools/PopupContext";
+
    export default {
       key: "service",
       title: "Services",
@@ -62,213 +64,149 @@
          },
 
          popup: {
-            search: {
-               isShowing: false,
-               start: (context, self, data) => (self.isShowing = true),
-               dismiss: (context, self, data) => (self.isShowing = false),
-            },
-            importService: {
-               isShowing: false,
-               start: (context, self, data) => (self.isShowing = true),
-               dismiss: (context, self, data) => (self.isShowing = false),
-               ok: (context, self, data) => {
-                  self.isShowing = false;
-                  context.clickService(data);
+            search: new PopupContext(c),
+            importService: new PopupContext(c).onConfirm(
+               (accept, reject, data) => {
+                  accept();
+                  c.clickService(data);
                },
-            },
-            newService: {
-               isShowing: false,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  context.$refs.WindowAddService.focus();
-               },
-               dismiss: (context, self, data) => (self.isShowing = false),
-               ok: (context, self, data) => {
-                  context.serviceStore
-                     .dispatch("addItem", { data })
-                     .then((result) => {
-                        self.isShowing = !result;
-                        context.clickService(result);
-                     })
-                     .catch((error) => {
-                        context.store.dispatch(
-                           "snackbarShow",
-                           "Failed to create a service",
-                        );
-                        throw error;
+            ),
+            newService: new PopupContext(c)
+               .onShow((accept, reject) => {
+                  c.$refs.WindowAddService.focus();
+                  accept();
+               })
+               .onConfirm(async (accept, reject, data) => {
+                  try {
+                     const result = await c.serviceStore.dispatch("addItem", {
+                        data,
                      });
-               },
-            },
-            removeService: {
-               isShowing: false,
-               value: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.value = data;
-               },
-               dismiss: (context, self, data) => {
-                  self.isShowing = false;
-                  self.value = null;
-               },
-               ok: (context, self, data) => {
-                  context.serviceStore
-                     .dispatch("removeItemOfId", { id: data.id })
-                     .then(() => {
-                        self.dismiss(context, self);
-                        if (context.currentServiceId === data.id) {
-                           context.$root.replaceRoute({
-                              query: { service: null },
-                           });
-                        }
-                     })
-                     .catch((error) => {
-                        context.store.dispatch("snackbarShow", "Delete Failed");
-                        throw error;
+
+                     result ? accept() : reject();
+                     c.clickService(result);
+                  } catch (error) {
+                     c.store.dispatch(
+                        "snackbarShow",
+                        "Failed to create a service",
+                     );
+                     reject();
+                     throw error;
+                  }
+               }),
+            removeService: new PopupContext(c).onConfirm(
+               async (accept, reject, data) => {
+                  try {
+                     await c.serviceStore.dispatch("removeItemOfId", {
+                        id: data.id,
                      });
+                     accept();
+                     if (c.currentServiceId === data.id) {
+                        c.$root.replaceRoute({ query: { service: null } });
+                     }
+                  } catch (error) {
+                     c.store.dispatch("snackbarShow", "Delete Failed");
+                     reject();
+                     throw error;
+                  }
                },
-            },
-            removeEvent: {
-               isShowing: false,
-               value: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.value = data;
+            ),
+            removeEvent: new PopupContext(c).onShow(
+               async (accept, reject, data) => {
+                  await c.serviceStore.dispatch("removeEventFromId", {
+                     serviceID: data.service.id,
+                     time: data.event.timestamp.time,
+                  });
+                  accept();
                },
-               dismiss: (context, self, data) => {
-                  self.isShowing = false;
-                  self.value = null;
+            ),
+            customer: new PopupContext(c)
+               .onShow((accept, reject, data) => {
+                  accept();
+                  c.$refs.WindowUpdateCustomer.focus();
+               })
+               .onConfirm(async (accept, reject, data) => {
+                  try {
+                     const service = await c.serviceStore.dispatch(
+                        "updateCustomerOfId",
+                        {
+                           serviceID: c.currentService.id,
+                           customer: data,
+                        },
+                     );
+                     accept();
+                  } catch (error) {
+                     c.store.dispatch("snackbarShow", "Update Customer Failed");
+                     reject();
+                     throw error;
+                  }
+               }),
+            removeImage: new PopupContext(c).onConfirm(
+               async (accept, reject, data) => {
+                  try {
+                     const service = await c.serviceStore.dispatch(
+                        "removeImageFromId",
+                        {
+                           serviceID: c.currentService.id,
+                           image: data,
+                        },
+                     );
+                     c.store.dispatch("imageViewerHide");
+                     accept();
+                  } catch (error) {
+                     c.store.dispatch("snackbarShow", "Delete Image Failed");
+                     reject();
+                     throw error;
+                  }
                },
-               ok: (context, self, data) => {
-                  context.serviceStore
-                     .dispatch("removeEventFromId", {
-                        serviceID: data.service.id,
-                        time: data.event.timestamp.time,
-                     })
-                     .then((result) => {
-                        self.dismiss(context, self);
-                     });
-               },
-            },
-            customer: {
-               isShowing: false,
-               value: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.value = data;
-                  context.$refs.WindowUpdateCustomer.focus();
-               },
-               dismiss: (context, self, data) => {
-                  self.isShowing = false;
-                  self.value = null;
-               },
-               ok: (context, self, data) => {
-                  context.serviceStore
-                     .dispatch("updateCustomerOfId", {
-                        serviceID: context.currentService.id,
-                        customer: data,
-                     })
-                     .then((service) => {
-                        self.dismiss(context, self);
-                     })
-                     .catch((error) => {
-                        context.store.dispatch(
-                           "snackbarShow",
-                           "Update Customer Failed",
-                        );
-                        throw error;
-                     });
-               },
-            },
-            removeImage: {
-               isShowing: false,
-               value: null,
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.value = data;
-               },
-               dismiss: (context, self, data) => {
-                  self.isShowing = false;
-                  self.value = null;
-               },
-               ok: (context, self, data) => {
-                  context.serviceStore
-                     .dispatch("removeImageFromId", {
-                        serviceID: context.currentService.id,
-                        image: data,
-                     })
-                     .then((service) => {
-                        context.store.dispatch("imageViewerHide");
-                        self.dismiss(context, self);
-                     })
-                     .catch((error) => {
-                        context.store.dispatch(
-                           "snackbarShow",
-                           "Delete Image Failed",
-                        );
-                        throw error;
-                     });
-               },
-            },
-            editDescription: {
-               isShowing: false,
-               value: "",
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.value = data;
-                  context.$refs.WindowUpdateDescription.focus();
-               },
-               dismiss: (context, self, data) => {
-                  self.isShowing = false;
-                  self.value = "";
-               },
-               ok: (context, self, data) => {
-                  context.serviceStore
-                     .dispatch("updateDescriptionOfId", {
-                        serviceID: context.currentService.id,
-                        description: data,
-                     })
-                     .then((service) => {
-                        self.dismiss(context, self);
-                     })
-                     .catch((error) => {
-                        context.store.dispatch(
-                           "snackbarShow",
-                           "Update Description Failed",
-                        );
-                        throw error;
-                     });
-               },
-            },
-            belongings: {
-               isShowing: false,
-               values: [],
-               start: (context, self, data) => {
-                  self.isShowing = true;
-                  self.values = data;
-                  context.$refs.WindowUpdateBelonging.focus();
-               },
-               dismiss: (context, self, data) => {
-                  self.isShowing = false;
-                  self.values = [];
-               },
-               ok: (context, self, data) => {
-                  context.serviceStore
-                     .dispatch("updateBelongingsOfId", {
-                        serviceID: context.currentService.id,
-                        belongings: data,
-                     })
-                     .then((service) => {
-                        self.dismiss(context, self);
-                     })
-                     .catch((error) => {
-                        context.store.dispatch(
-                           "snackbarShow",
-                           "Update Belongings Failed",
-                        );
-                        throw error;
-                     });
-               },
-            },
+            ),
+            editDescription: new PopupContext(c)
+               .onShow((accept, reject, data) => {
+                  accept();
+                  c.$refs.WindowUpdateDescription.focus();
+               })
+               .onConfirm(async (accept, reject, data) => {
+                  try {
+                     const service = await c.serviceStore.dispatch(
+                        "updateDescriptionOfId",
+                        {
+                           serviceID: c.currentService.id,
+                           description: data,
+                        },
+                     );
+                     accept();
+                  } catch (error) {
+                     c.store.dispatch(
+                        "snackbarShow",
+                        "Update Description Failed",
+                     );
+                     reject();
+                     throw error;
+                  }
+               }),
+            belongings: new PopupContext(c)
+               .onShow((accept, reject, data) => {
+                  accept();
+                  c.$refs.WindowUpdateBelonging.focus();
+               })
+               .onConfirm(async (accept, reject, data) => {
+                  try {
+                     const service = await c.serviceStore.dispatch(
+                        "updateBelongingsOfId",
+                        {
+                           serviceID: c.currentService.id,
+                           belongings: data,
+                        },
+                     );
+                     accept();
+                  } catch (error) {
+                     c.store.dispatch(
+                        "snackbarShow",
+                        "Update Belongings Failed",
+                     );
+                     reject();
+                     throw error;
+                  }
+               }),
          },
 
          items: [],
@@ -433,6 +371,22 @@
 
          windowAction(window, action, data) {
             const self = this.popup[window];
+
+            if (self instanceof PopupContext) {
+               switch (action) {
+                  case "start":
+                     self.show(data);
+                     break;
+                  case "dismiss":
+                     self.dismiss();
+                     break;
+                  case "ok":
+                     self.confirm(data);
+                     break;
+               }
+               return;
+            }
+
             self[action](this, self, data);
          },
       },
@@ -502,7 +456,7 @@
          ref="WindowUpdateCustomer"
          v-if="drawerService"
          :isShowing="popup.customer.isShowing"
-         :value="popup.customer.value"
+         :value="popup.customer.input"
          @callback-change="
             (customer) => windowAction('customer', 'ok', customer)
          "
@@ -515,7 +469,7 @@
          ref="WindowUpdateDescription"
          v-if="drawerService"
          :isShowing="popup.editDescription.isShowing"
-         :description="popup.editDescription.value"
+         :description="popup.editDescription.input"
          @callback-change="
             (description) => windowAction('editDescription', 'ok', description)
          "
@@ -528,7 +482,7 @@
          ref="WindowUpdateBelonging"
          v-if="drawerService"
          :isShowing="popup.belongings.isShowing"
-         :values="popup.belongings.values"
+         :values="popup.belongings.input"
          @callback-change="
             (belongings) => windowAction('belongings', 'ok', belongings)
          "
@@ -541,7 +495,7 @@
          :isShowing="popup.removeService.isShowing"
          title="Delete Service"
          message="After deleting this service, it cannot be reverted."
-         :value="popup.removeService.value"
+         :value="popup.removeService.input"
          @click-cancel="() => windowAction('removeService', 'dismiss')"
          @click-ok="(service) => windowAction('removeService', 'ok', service)"
          @click-dismiss="() => windowAction('removeService', 'dismiss')"
@@ -553,7 +507,7 @@
          :isShowing="popup.removeEvent.isShowing"
          title="Delete Event"
          message="After deleting this event, it cannot be reverted."
-         :value="popup.removeEvent.value"
+         :value="popup.removeEvent.input"
          @click-cancel="() => windowAction('removeEvent', 'dismiss')"
          @click-ok="(value) => windowAction('removeEvent', 'ok', value)"
          @click-dismiss="() => windowAction('removeEvent', 'dismiss')"
@@ -565,7 +519,7 @@
          :isShowing="popup.removeImage.isShowing"
          title="Delete Image"
          message="After deleting this image, it cannot be reverted."
-         :value="popup.removeImage.value"
+         :value="popup.removeImage.input"
          @click-cancel="() => windowAction('removeImage', 'dismiss')"
          @click-ok="(image) => windowAction('removeImage', 'ok', image)"
          @click-dismiss="() => windowAction('removeImage', 'dismiss')"

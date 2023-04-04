@@ -49,8 +49,6 @@
                isHidden: true,
             });
 
-            console.log(menus);
-
             return menus;
          },
       },
@@ -76,9 +74,11 @@
       >
          <div class="PanelService-actionbar-customer" v-if="customer">
             <div class="PanelService-actionbar-customer-data">
-               <span class="PanelService-actionbar-customer-name" v-if="name.length">{{
-                  name
-               }}</span>
+               <span
+                  class="PanelService-actionbar-customer-name"
+                  v-if="name.length"
+                  >{{ name }}</span
+               >
                <span
                   class="PanelService-actionbar-customer-phoneNumber"
                   v-if="phoneNumberStr.length"
