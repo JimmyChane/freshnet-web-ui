@@ -18,6 +18,8 @@
 
    import HostIcon from "@/host/HostIcon";
 
+   import PopupContext from "@/tools/PopupContext";
+
    export default {
       key: "customer",
       title: "Customers",
@@ -46,115 +48,21 @@
       },
       emits: ["callback-side-expand"],
       data: (c) => ({
-         windowAddCustomer: {
-            isShowing: false,
-            start: (context, self, data) => (self.isShowing = true),
-            dismiss: (context, self, data) => (self.isShowing = false),
-            cancel: (context, self, data) => (self.isShowing = false),
-            ok: (context, self, data) => (self.isShowing = false),
-         },
-         windowRemoveCustomer: {
-            isShowing: false,
-            item: null,
-            start: (context, self, data) => {
-               self.isShowing = true;
-               self.item = data.item;
-            },
-            dismiss: (context, self, data) => (self.isShowing = false),
-            cancel: (context, self, data) => (self.isShowing = false),
-            ok: (context, self, data) => {
-               self.isShowing = false;
-               if (data.id === context.queryCustomerId) {
-                  context.clickClose();
+         windowAddCustomer: new PopupContext(c),
+         windowRemoveCustomer: new PopupContext(c).onConfirm(
+            (accept, reject, data) => {
+               accept();
+               if (data.id === c.queryCustomerId) {
+                  c.clickClose();
                }
             },
-         },
-         windowUpdateCustomer: {
-            isShowing: false,
-            item: null,
-            start: (context, self, data) => {
-               self.isShowing = true;
-               self.item = data.item;
-            },
-            dismiss: (context, self, data) => (self.isShowing = false),
-            cancel: (context, self, data) => (self.isShowing = false),
-            ok: (context, self, data) => (self.isShowing = false),
-         },
-         windowUpdateDescription: {
-            isShowing: false,
-            item: null,
-            start: (context, self, data) => {
-               self.isShowing = true;
-               self.item = data.item;
-            },
-            dismiss: (context, self, data) => (self.isShowing = false),
-            cancel: (context, self, data) => (self.isShowing = false),
-            ok: (context, self, data) => (self.isShowing = false),
-         },
-         windowAddDevice: {
-            isShowing: false,
-            item: null,
-            start: (context, self, data) => {
-               self.isShowing = true;
-               self.item = data.item;
-            },
-            dismiss: (context, self, data) => (self.isShowing = false),
-            cancel: (context, self, data) => (self.isShowing = false),
-            ok: (context, self, data) => (self.isShowing = false),
-         },
-         windowRemoveDevice: {
-            isShowing: false,
-            param: null,
-            start: (context, self, data) => {
-               self.isShowing = true;
-               self.param = { customer: data.item, device: data.device };
-            },
-            dismiss: (context, self, data) => (self.isShowing = false),
-            cancel: (context, self, data) => (self.isShowing = false),
-            ok: (context, self, data) => (self.isShowing = false),
-         },
-         windowUpdateDeviceSpecifications: {
-            isShowing: false,
-            param: null,
-            start: (context, self, data) => {
-               self.isShowing = true;
-               self.param = {
-                  customer: data.customer,
-                  device: data.device,
-                  specifications: data.specifications,
-               };
-            },
-            dismiss: (context, self, data) => (self.isShowing = false),
-            cancel: (context, self, data) => {
-               self.isShowing = false;
-               self.param = null;
-            },
-            ok: (context, self, data) => {
-               self.isShowing = false;
-               self.param = null;
-            },
-         },
-         windowUpdateDeviceDescription: {
-            isShowing: false,
-            customer: null,
-            device: null,
-            start: (context, self, data) => {
-               self.isShowing = true;
-               self.customer = data.customer;
-               self.device = data.device;
-            },
-            dismiss: (context, self, data) => (self.isShowing = false),
-            cancel: (context, self, data) => {
-               self.isShowing = false;
-               self.customer = null;
-               self.device = null;
-            },
-            ok: (context, self, data) => {
-               self.isShowing = false;
-               self.customer = null;
-               self.device = null;
-            },
-         },
+         ),
+         windowUpdateCustomer: new PopupContext(c),
+         windowUpdateDescription: new PopupContext(c),
+         windowAddDevice: new PopupContext(c),
+         windowRemoveDevice: new PopupContext(c),
+         windowUpdateDeviceSpecifications: new PopupContext(c),
+         windowUpdateDeviceDescription: new PopupContext(c),
 
          drawerCustomer: null,
 
@@ -241,6 +149,25 @@
 
          windowAction(window, action, data) {
             const self = this[window];
+
+            if (self instanceof PopupContext) {
+               switch (action) {
+                  case "start":
+                     self.show(data);
+                     break;
+                  case "dismiss":
+                     self.dismiss();
+                     break;
+                  case "cancel":
+                     self.cancel();
+                     break;
+                  case "ok":
+                     self.confirm(data);
+                     break;
+               }
+               return;
+            }
+
             self[action](this, self, data);
          },
       },
@@ -326,7 +253,9 @@
       <WindowRemoveCustomer
          class="PageCustomer-window"
          :isShowing="windowRemoveCustomer.isShowing"
-         :item="windowRemoveCustomer.item"
+         :item="
+            windowRemoveCustomer.input ? windowRemoveCustomer.input.item : null
+         "
          @click-dismiss="() => windowAction('windowRemoveCustomer', 'dismiss')"
          @click-cancel="() => windowAction('windowRemoveCustomer', 'cancel')"
          @click-ok="(item) => windowAction('windowRemoveCustomer', 'ok', item)"
@@ -336,7 +265,9 @@
       <WindowUpdateCustomer
          class="PageCustomer-window"
          :isShowing="windowUpdateCustomer.isShowing"
-         :item="windowUpdateCustomer.item"
+         :item="
+            windowUpdateCustomer.input ? windowUpdateCustomer.input.item : null
+         "
          @click-dismiss="() => windowAction('windowUpdateCustomer', 'dismiss')"
          @click-cancel="() => windowAction('windowUpdateCustomer', 'cancel')"
          @click-ok="() => windowAction('windowUpdateCustomer', 'ok')"
@@ -346,7 +277,11 @@
       <WindowUpdateDescription
          class="PageCustomer-window"
          :isShowing="windowUpdateDescription.isShowing"
-         :item="windowUpdateDescription.item"
+         :item="
+            windowUpdateDescription.input
+               ? windowUpdateDescription.input.item
+               : null
+         "
          @click-dismiss="
             () => windowAction('windowUpdateDescription', 'dismiss')
          "
@@ -358,7 +293,7 @@
       <WindowAddDevice
          class="PageCustomer-window"
          :isShowing="windowAddDevice.isShowing"
-         :item="windowAddDevice.item"
+         :item="windowAddDevice.input ? windowAddDevice.input.item : null"
          @click-dismiss="() => windowAction('windowAddDevice', 'dismiss')"
          @click-cancel="() => windowAction('windowAddDevice', 'cancel')"
          @click-ok="() => windowAction('windowAddDevice', 'ok')"
@@ -368,7 +303,14 @@
       <WindowRemoveDevice
          class="PageCustomer-window"
          :isShowing="windowRemoveDevice.isShowing"
-         :param="windowRemoveDevice.param"
+         :param="
+            windowRemoveDevice.input
+               ? {
+                    customer: windowRemoveDevice.input.item,
+                    device: windowRemoveDevice.input.device,
+                 }
+               : null
+         "
          @click-dismiss="() => windowAction('windowRemoveDevice', 'dismiss')"
          @click-cancel="() => windowAction('windowRemoveDevice', 'cancel')"
          @click-ok="() => windowAction('windowRemoveDevice', 'ok')"
@@ -378,7 +320,16 @@
       <WindowUpdateDeviceSpecifications
          class="PageCustomer-window"
          :isShowing="windowUpdateDeviceSpecifications.isShowing"
-         :param="windowUpdateDeviceSpecifications.param"
+         :param="
+            windowUpdateDeviceSpecifications.input
+               ? {
+                    customer: windowUpdateDeviceSpecifications.input.customer,
+                    device: windowUpdateDeviceSpecifications.input.device,
+                    specifications:
+                       windowUpdateDeviceSpecifications.input.specifications,
+                 }
+               : null
+         "
          @click-dismiss="
             () => windowAction('windowUpdateDeviceSpecifications', 'dismiss')
          "
@@ -394,8 +345,16 @@
       <WindowUpdateDeviceDescription
          class="PageCustomer-window"
          :isShowing="windowUpdateDeviceDescription.isShowing"
-         :customer="windowUpdateDeviceDescription.customer"
-         :device="windowUpdateDeviceDescription.device"
+         :customer="
+            windowUpdateDeviceDescription.input
+               ? windowUpdateDeviceDescription.input.customer
+               : null
+         "
+         :device="
+            windowUpdateDeviceDescription.input
+               ? windowUpdateDeviceDescription.input.device
+               : null
+         "
          @click-dismiss="
             () => windowAction('windowUpdateDeviceDescription', 'dismiss')
          "

@@ -73,10 +73,14 @@ const init = (Stores) => {
          return customer;
       };
 
-      const serviceGroups = await Stores.service.dispatch("getGroupsByCustomer");
+      const serviceGroups = await Stores.service.dispatch(
+         "getGroupsByCustomer",
+      );
       const orderGroups = await Stores.order.dispatch("getGroupsByCustomer");
       for (const serviceGroup of serviceGroups) {
-         optCustomer(serviceGroup.customer).services.push(...serviceGroup.items);
+         optCustomer(serviceGroup.customer).services.push(
+            ...serviceGroup.items,
+         );
       }
       for (const orderGroup of orderGroups) {
          optCustomer(orderGroup.customer).orders.push(...orderGroup.items);
@@ -89,7 +93,9 @@ const init = (Stores) => {
       delete data.id;
       const api = await CustomerRequest.add(data);
       const content = api.optObjectContent();
-      return context.state.list.addItem(new ItemCustomer(Stores).fromData(content));
+      return context.state.list.addItem(
+         new ItemCustomer(Stores).fromData(content),
+      );
    });
    context.action("removeItemOfId", async (context, arg = { _id }) => {
       const { _id } = arg;
@@ -103,7 +109,11 @@ const init = (Stores) => {
       "updateNamePhoneNumberOfItemId",
       async (context, arg = { _id, name, phoneNumber }) => {
          const { _id, name, phoneNumber } = arg;
-         const api = await CustomerRequest.updateNamePhoneNumber(_id, name, phoneNumber);
+         const api = await CustomerRequest.updateNamePhoneNumber(
+            _id,
+            name,
+            phoneNumber,
+         );
          const content = api.optObjectContent();
          const inputItem = new ItemCustomer(Stores).fromData(content);
          return context.state.list.updateItemById(inputItem.id, (item) => {
@@ -112,15 +122,18 @@ const init = (Stores) => {
          });
       },
    );
-   context.action("updateDescriptionOfId", async (arg = { _id, description }) => {
-      const { _id, description } = arg;
-      const api = await CustomerRequest.updateDescription(_id, description);
-      const content = api.optObjectContent();
-      const inputItem = new ItemCustomer(Stores).fromData(content);
-      return context.state.list.updateItemById(inputItem.id, (item) => {
-         item.description = inputItem.description;
-      });
-   });
+   context.action(
+      "updateDescriptionOfId",
+      async (context, arg = { _id, description }) => {
+         const { _id, description } = arg;
+         const api = await CustomerRequest.updateDescription(_id, description);
+         const content = api.optObjectContent();
+         const inputItem = new ItemCustomer(Stores).fromData(content);
+         return context.state.list.updateItemById(inputItem.id, (item) => {
+            item.description = inputItem.description;
+         });
+      },
+   );
 
    // legacy
    context.actions.getDevices = () => deviceStore.dispatch("getItems");
@@ -128,7 +141,8 @@ const init = (Stores) => {
       deviceStore.dispatch("getItemOfId", id);
    context.actions.getDevicesByIds = (context, ids) =>
       deviceStore.dispatch("getItemsOfIds", ids);
-   context.actions.addDevice = (context, arg) => deviceStore.dispatch("addItem", arg);
+   context.actions.addDevice = (context, arg) =>
+      deviceStore.dispatch("addItem", arg);
    context.actions.removeDevice = (context, arg) =>
       deviceStore.dispatch("removeItemOfId", arg);
    context.actions.updateDeviceSpecifications = (context, arg) =>

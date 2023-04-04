@@ -61,15 +61,21 @@
             this.data.phoneNumber = this.data.phoneNumber.trim();
 
             if (this.Requirement.name.isRequired && !this.data.name) {
-               this.store.dispatch("snackbarShow", 'You must specify the "Name"');
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify the "Name"',
+               );
             } else if (
                this.Requirement.phoneNumber.isRequired &&
                !this.data.phoneNumber
             ) {
-               this.store.dispatch("snackbarShow", 'You must specify the "Phone Number"');
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify the "Phone Number"',
+               );
             } else {
                this.customerStore
-                  .dispatch("updateNamePhoneNumberOfId", {
+                  .dispatch("updateNamePhoneNumberOfItemId", {
                      _id: this.item.id,
                      name: this.data.name,
                      phoneNumber: this.data.phoneNumber,
