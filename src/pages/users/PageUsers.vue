@@ -12,6 +12,9 @@
 
    import HostIcon from "@/host/HostIcon";
 
+   import PopupContext from "@/tools/PopupContext";
+   import U from "@/U";
+
    export default {
       key: "users",
       title: "Other Users",
@@ -31,21 +34,128 @@
          Input,
          ItemUser,
       },
-      emits: ["callback-side-expand"],
       data: (c) => ({
          scrollTop: 0,
          UserType: User.Type,
 
          window: {
-            addUser: {
-               isShowing: false,
-               username: "",
-               name: "",
-               passwordNew: "",
-               passwordRepeat: "",
-            },
-            removeUser: { isShowing: false, user: null },
             changeUserType: { isShowing: false, user: null, userType: "" },
+
+            addUser: new PopupContext(c)
+               .onShow((accept, reject, input) => {
+                  accept();
+                  c.window.addUser.username = "";
+                  c.window.addUser.name = "";
+                  c.window.addUser.passwordNew = "";
+                  c.window.addUser.passwordRepeat = "";
+               })
+               .onDismiss((accept, reject) => {
+                  accept();
+                  c.window.addUser.username = "";
+                  c.window.addUser.name = "";
+                  c.window.addUser.passwordNew = "";
+                  c.window.addUser.passwordRepeat = "";
+               })
+               .onCancel((accept, reject) => {
+                  accept();
+                  c.window.addUser.username = "";
+                  c.window.addUser.name = "";
+                  c.window.addUser.passwordNew = "";
+                  c.window.addUser.passwordRepeat = "";
+               })
+               .onConfirm(async (accept, reject, output) => {
+                  try {
+                     const user = await c.userStore.dispatch("addUser", {
+                        username: c.window.addUser.username,
+                        name: c.window.addUser.name,
+                        passwordNew: c.window.addUser.passwordNew,
+                        passwordRepeat: c.window.addUser.passwordRepeat,
+                     });
+
+                     if (user) {
+                        accept();
+                        c.window.addUser.username = "";
+                        c.window.addUser.name = "";
+                        c.window.addUser.passwordNew = "";
+                        c.window.addUser.passwordRepeat = "";
+                        return;
+                     }
+                     c.store.dispatch("snackbarShow", "Failed to add user");
+                     throw new Error();
+                  } catch (error) {
+                     c.store.dispatch("snackbarShow", "Error to add user");
+                     reject();
+                  }
+               }),
+            removeUser: new PopupContext(c).onConfirm(
+               async (accept, reject, output) => {
+                  try {
+                     const result = await c.userStore.dispatch(
+                        "removeUserByUsername",
+                        { username: c.window.removeUser.input.username },
+                     );
+
+                     if (result) {
+                        accept();
+                        return;
+                     }
+                     c.store.dispatch("snackbarShow", "Failed to remove user");
+                     throw new Error();
+                  } catch (error) {
+                     c.store.dispatch("snackbarShow", "Error to remove user");
+                     reject();
+                  }
+               },
+            ),
+            changeUserType: new PopupContext(c)
+               .onShow((accept, reject, input) => {
+                  accept();
+                  c.window.changeUserType.user = input;
+                  c.window.changeUserType.userType = input.userType;
+               })
+               .onDismiss((accept, reject) => {
+                  accept();
+                  c.window.changeUserType.user = null;
+                  c.window.changeUserType.userType = "";
+               })
+               .onCancel((accept, reject) => {
+                  accept();
+                  c.window.changeUserType.user = null;
+                  c.window.changeUserType.userType = "";
+               })
+               .onConfirm(async (accept, reject, output) => {
+                  try {
+                     const userTypeNumber = U.optNumber(
+                        Number.parseInt(c.window.changeUserType.userType),
+                        0,
+                     );
+
+                     const userChange = await c.userStore.dispatch(
+                        "updateTypeOfUserByUsername",
+                        {
+                           username: c.window.changeUserType.user.username,
+                           userType: userTypeNumber,
+                        },
+                     );
+                     if (userChange) {
+                        accept();
+                        c.window.changeUserType.user = null;
+                        c.window.changeUserType.userType = "";
+                        return;
+                     }
+                     c.store.dispatch(
+                        "snackbarShow",
+                        "Failed to change user priviledge",
+                     );
+                     throw new Error();
+                  } catch (error) {
+                     c.store.dispatch(
+                        "snackbarShow",
+                        "Error to change user priviledge",
+                     );
+                     reject();
+                  }
+               }),
          },
       }),
       computed: {
@@ -63,6 +173,9 @@
             );
          },
       },
+      created() {
+         this.window.changeUserType.userType = "";
+      },
       mounted() {
          this.onIntentRefresh();
       },
@@ -77,120 +190,15 @@
                this.store.dispatch("snackbarShow", "Failed to validate user");
             });
          },
-
-         onIntentAddUser() {
-            this.onResetAddUser();
-            this.window.addUser.isShowing = true;
-         },
-         onDismissAddUser() {
-            this.window.addUser.isShowing = false;
-            this.onResetAddUser();
-         },
-         onFinishAddUser() {
-            this.userStore
-               .dispatch("addUser", {
-                  username: this.window.addUser.username,
-                  name: this.window.addUser.name,
-                  passwordNew: this.window.addUser.passwordNew,
-                  passwordRepeat: this.window.addUser.passwordRepeat,
-               })
-               .then((user) => {
-                  if (user) {
-                     this.window.addUser.isShowing = false;
-                     this.onResetAddUser();
-                  } else {
-                     this.store.dispatch("snackbarShow", "Failed to add user");
-                     throw new Error();
-                  }
-               })
-               .catch((error) => {
-                  this.store.dispatch("snackbarShow", "Error to add user");
-               });
-         },
-         onResetAddUser() {
-            this.window.addUser.username = "";
-            this.window.addUser.name = "";
-            this.window.addUser.passwordNew = "";
-            this.window.addUser.passwordRepeat = "";
-         },
-
-         onIntentRemoveUser(user) {
-            this.onResetRemoveUser();
-            this.window.removeUser.user = user;
-            this.window.removeUser.isShowing = true;
-         },
-         onDismissRemoveUser() {
-            this.window.removeUser.isShowing = false;
-            this.onResetRemoveUser();
-         },
-         onFinishRemoveUser() {
-            const interfaceWindow = this.window.removeUser;
-            this.userStore
-               .dispatch("removeUserByUsername", {
-                  username: interfaceWindow.user.username,
-               })
-               .then((result) => {
-                  if (result) {
-                     interfaceWindow.isShowing = false;
-                     this.onResetRemoveUser();
-                  } else {
-                     this.store.dispatch("snackbarShow", "Failed to remove user");
-                     throw new Error();
-                  }
-               })
-               .catch((error) => {
-                  this.store.dispatch("snackbarShow", "Error to remove user");
-               });
-         },
-         onResetRemoveUser() {
-            this.window.removeUser.user = null;
-         },
-
-         onIntentChangeUserType(user) {
-            this.onResetChangeUserType();
-            this.window.changeUserType.isShowing = true;
-            this.window.changeUserType.user = user;
-            this.window.changeUserType.userType = user.userType;
-         },
-         onDismissChangeUserType() {
-            this.window.changeUserType.isShowing = false;
-            this.onResetChangeUserType();
-         },
-         onFinishChangeUserType() {
-            let userTypeNumber = Number.parseInt(this.window.changeUserType.userType);
-            if (Number.isNaN(userTypeNumber)) userTypeNumber = 0;
-
-            return this.userStore
-               .dispatch("updateTypeOfUserByUsername", {
-                  username: this.window.changeUserType.user.username,
-                  userType: userTypeNumber,
-               })
-               .then((userChange) => {
-                  if (userChange) {
-                     this.window.changeUserType.isShowing = false;
-                     this.onResetChangeUserType();
-                  } else {
-                     this.store.dispatch(
-                        "snackbarShow",
-                        "Failed to change user priviledge",
-                     );
-                     throw new Error();
-                  }
-               })
-               .catch((error) => {
-                  this.store.dispatch("snackbarShow", "Error to change user priviledge");
-               });
-         },
-         onResetChangeUserType() {
-            this.window.changeUserType.user = null;
-            this.window.changeUserType.userType = "";
-         },
       },
    };
 </script>
 
 <template>
-   <div class="PageUsers" @scroll="(event) => (scrollTop = event.target.scrollTop)">
+   <div
+      class="PageUsers"
+      @scroll="(event) => (scrollTop = event.target.scrollTop)"
+   >
       <NavigationBar
          :title="$options.title"
          :rightMenus="[
@@ -199,7 +207,7 @@
                     key: 'addUser',
                     title: 'Add User',
                     icon: host.icon('add-000000'),
-                    click: onIntentAddUser,
+                    click: () => window.addUser.show(),
                  }
                : null,
             {
@@ -218,12 +226,15 @@
             :item="user"
             :isEditable="isCurrentUserAdmin && !isCurrentUser(user)"
             :isCurrentUser="isCurrentUser(user)"
-            @click-changeUserType="(item) => onIntentChangeUserType(item)"
-            @click-remove="(item) => onIntentRemoveUser(item)"
+            @click-changeUserType="(item) => window.changeUserType.show(item)"
+            @click-remove="(item) => window.removeUser.show(item)"
          />
       </div>
 
-      <Empty v-if="!users.length && !isLoading" :icon="$options.icon.dark.toUrl()" />
+      <Empty
+         v-if="!users.length && !isLoading"
+         :icon="$options.icon.dark.toUrl()"
+      />
 
       <Loading class="PageUsers-loading" :isShowing="isLoading" />
 
@@ -231,9 +242,9 @@
       <PopupWindowAction
          title="Add User"
          :isShowing="window.addUser.isShowing"
-         @click-dismiss="onDismissAddUser"
-         @click-cancel="onDismissAddUser"
-         @click-ok="onFinishAddUser"
+         @click-dismiss="() => window.addUser.dismiss()"
+         @click-cancel="() => window.addUser.cancel()"
+         @click-ok="() => window.addUser.confirm()"
       >
          <div class="PageUsers-window">
             <Input
@@ -269,13 +280,15 @@
       <PopupWindowAction
          title="Remove User?"
          :isShowing="window.removeUser.isShowing"
-         @click-dismiss="onDismissRemoveUser"
-         @click-cancel="onDismissRemoveUser"
-         @click-ok="onFinishRemoveUser"
+         @click-dismiss="() => window.removeUser.dismiss()"
+         @click-cancel="() => window.removeUser.cancel()"
+         @click-ok="() => window.removeUser.confirm()"
       >
          <div class="PageUsers-window">
             <div class="PageUsers-window-main">
-               <p class="PageUsers-window-text">Once removed, cannot be undone</p>
+               <p class="PageUsers-window-text"
+                  >Once removed, cannot be undone</p
+               >
             </div>
          </div>
       </PopupWindowAction>
@@ -284,9 +297,9 @@
       <PopupWindowAction
          title="Change User Type"
          :isShowing="window.changeUserType.isShowing"
-         @click-dismiss="onDismissChangeUserType"
-         @click-cancel="onDismissChangeUserType"
-         @click-ok="onFinishChangeUserType"
+         @click-dismiss="() => window.changeUserType.dismiss()"
+         @click-cancel="() => window.changeUserType.cancel()"
+         @click-ok="() => window.changeUserType.confirm()"
       >
          <div class="PageUsers-window">
             <div class="PageUsers-window-main">
@@ -314,7 +327,9 @@
                      { key: UserType.Staff.toString(), title: 'Staff' },
                   ]"
                   :keySelected="window.changeUserType.userType.toString()"
-                  @callback-select="(key) => (window.changeUserType.userType = key)"
+                  @callback-select="
+                     (key) => (window.changeUserType.userType = key)
+                  "
                />
             </div>
          </div>

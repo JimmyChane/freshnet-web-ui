@@ -5,7 +5,7 @@ class U {
       return typeof str === "string";
    }
    static isNumber(num) {
-      return typeof num === "number";
+      return typeof num === "number" && !Number.isNaN(num);
    }
    static isBoolean(bool) {
       return typeof bool === "boolean";
