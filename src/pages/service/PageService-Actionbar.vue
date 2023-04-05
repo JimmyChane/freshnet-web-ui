@@ -4,7 +4,7 @@
    import LayoutViewSelector from "@/pages/service/PageService-LayoutViewSelector.vue";
    import LabelMenus from "@/components/LabelMenus.vue";
 
-   import ItemService from "./ItemService.vue";
+   import ItemService from "./item-service/ItemService.vue";
    import chroma from "chroma-js"; 
    import Searcher from "@/tools/Searcher";
    import Tab from "./PageService-Actionbar-Tab.vue";

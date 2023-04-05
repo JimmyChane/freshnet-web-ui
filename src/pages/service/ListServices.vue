@@ -2,7 +2,7 @@
    const SortMode = { DateCreated: 1, Name: 2, PhoneNumber: 3, Price: 4 };
    const GroupMode = { None: 0, DateCreated: 1 };
 
-   import ItemService from "./ItemService.vue";
+   import ItemService from "./item-service/ItemService.vue";
 
    import { getDay, previousDay, endOfDay, format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
 
@@ -21,7 +21,7 @@
          item: { type: Object, default: () => null },
       },
       data: (c) => ({
-         properties: [
+         detailProperties: [
             { key: "customerName", width: 128 },
             { key: "customerPhoneNumber", width: 112 },
             { key: "description", width: 224 },
@@ -159,7 +159,9 @@
          },
 
          getPropertyByKey(key) {
-            return this.properties.find((property) => property.key === key);
+            return this.detailProperties.find(
+               (property) => property.key === key,
+            );
          },
       },
    };
@@ -235,7 +237,7 @@
                :key="`service${item.id}`"
                :item="item"
                :isSelected="isItemSelected(item)"
-               :properties="properties"
+               :detailProperties="detailProperties"
                @click="() => clickItem(item)"
             />
          </div>

@@ -10,19 +10,32 @@
    import ServicePrice from "@/items/ServicePrice";
    import ServiceStates from "@/objects/ServiceStates.js";
 
-   import { format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
+   import { format } from "date-fns";
    import U from "@/U";
+
+   import ItemServiceCustomer from "./ItemService-Customer.vue";
+   import ItemServiceTimestamp from "./ItemService-Timestamp.vue";
+   import ItemServiceDetailColumn from "./ItemService-DetailColumn.vue";
 
    export default {
       Mode,
 
-      components: { MenuOption, Button3, LabelCount, ImageViews, ImageView },
+      components: {
+         MenuOption,
+         Button3,
+         LabelCount,
+         ImageViews,
+         ImageView,
+         ItemServiceCustomer,
+         ItemServiceTimestamp,
+         ItemServiceDetailColumn,
+      },
       emits: ["click"],
       props: {
          mode: { type: Number, default: Mode.List },
          item: { type: Object, default: null },
          isSelected: { type: Boolean, default: false },
-         properties: { type: Array, default: () => [] },
+         detailProperties: { type: Array, default: () => [] },
       },
       computed: {
          isGrid: (c) => c.mode === Mode.Grid,
@@ -139,7 +152,9 @@
       },
       methods: {
          getPropertyByKey(key) {
-            return this.properties.find((property) => property.key === key);
+            return this.detailProperties.find((property) => {
+               return property.key === key;
+            });
          },
       },
    };
@@ -154,106 +169,73 @@
    >
       <div v-if="isGrid" :class="['transition', 'ItemService-body']">
          <div class="ItemService-top">
-            <div class="ItemService-top-customer">
-               <div class="ItemService-link-customer">
-                  <span class="ItemService-link-customer-name">{{ name }}</span>
-                  <span class="ItemService-link-customer-phoneNumber">{{
-                     phoneNumberStr
-                  }}</span>
-               </div>
-            </div>
+            <ItemServiceCustomer
+               :name="name"
+               :phoneNumberStr="phoneNumberStr"
+            />
 
-            <div class="ItemService-top-dot-body">
-               <div class="ItemService-state-dot"></div>
-            </div>
+            <div class="ItemService-state-dot"></div>
          </div>
-
          <div class="ItemService-middle">
-            <div class="ItemService-images">
-               <ImageView
-                  class="ItemService-image"
-                  v-for="image of images"
-                  :key="image.name"
-                  :src="image"
-               />
-            </div>
+            <ImageView
+               class="ItemService-image"
+               v-for="image of images"
+               :key="image.name"
+               :src="image"
+            />
          </div>
-
          <div class="ItemService-bottom">
-            <span class="ItemService-timestamp">{{ timestampText }}</span>
+            <ItemServiceTimestamp :timestampText="timestampText" />
          </div>
       </div>
 
       <div v-if="isList" :class="['transition', 'ItemService-body']">
          <div class="ItemService-top">
-            <div class="ItemService-customer">
-               <span class="ItemService-customer-name" v-if="name.length">{{
-                  name
-               }}</span>
-               <span
-                  class="ItemService-customer-phoneNumber"
-                  v-if="phoneNumberStr.length"
-                  >{{ phoneNumberStr }}</span
-               >
-            </div>
-
+            <ItemServiceCustomer
+               :name="name"
+               :phoneNumberStr="phoneNumberStr"
+            />
             <span class="ItemService-description">{{ description }}</span>
-
             <ImageViews
                class="ItemService-image"
-               :width="40"
+               :width="60"
                :height="40"
                :images="images"
             />
          </div>
-
          <div class="ItemService-bottom">
-            <LabelCount
-               class="ItemService-label"
-               v-for="label of labels"
-               :key="label.key"
-               :style="{ '--primary-color': label.primaryColor }"
-               :title="label.title"
-               :icon="label.icon"
-               :count="label.count"
-            />
-            <span class="ItemService-timestamp">{{ timestampText }}</span>
+            <div class="ItemService-labels">
+               <LabelCount
+                  class="ItemService-label"
+                  v-for="label of labels"
+                  :key="label.key"
+                  :style="{ '--primary-color': label.primaryColor }"
+                  :title="label.title"
+                  :icon="label.icon"
+                  :count="label.count"
+               />
+            </div>
+            <ItemServiceTimestamp :timestampText="timestampText" />
          </div>
       </div>
 
       <div v-if="isDetail" :class="['transition', 'ItemService-body']">
-         <span
-            class="ItemService-customerName"
-            :style="{
-               '--width': `${getPropertyByKey('customerName').width}px`,
-            }"
-            >{{ name }}</span
+         <ItemServiceDetailColumn
+            :width="getPropertyByKey('customerName').width"
+            >{{ name }}</ItemServiceDetailColumn
          >
-         <span
-            class="ItemService-customerPhoneNumber"
-            :style="{
-               '--width': `${getPropertyByKey('customerPhoneNumber').width}px`,
-            }"
-            >{{ phoneNumber }}</span
+         <ItemServiceDetailColumn
+            :width="getPropertyByKey('customerPhoneNumber').width"
+            >{{ phoneNumberStr }}</ItemServiceDetailColumn
          >
-
-         <div
-            class="ItemService-description"
-            :style="{ '--width': `${getPropertyByKey('description').width}px` }"
-            >{{ description }}</div
+         <ItemServiceDetailColumn
+            :width="getPropertyByKey('description').width"
+            >{{ description }}</ItemServiceDetailColumn
          >
-
-         <div
-            class="ItemService-images"
-            :style="{ '--width': `${getPropertyByKey('images').width}px` }"
+         <ItemServiceDetailColumn :width="getPropertyByKey('images').width"
+            >Images x{{ images.length }}</ItemServiceDetailColumn
          >
-            <span>Images x{{ images.length }}</span>
-         </div>
-
-         <div
-            class="ItemService-notices"
-            :style="{ '--width': `${getPropertyByKey('notice').width}px` }"
-         >
+         <ItemServiceDetailColumn :width="getPropertyByKey('notice').width">
             <LabelCount
                class="ItemService-label"
                v-for="label of labels"
@@ -263,12 +245,10 @@
                :icon="label.icon"
                :count="label.count"
             />
-         </div>
-
-         <span
-            class="ItemService-timestamp"
-            :style="{ '--width': `${getPropertyByKey('timestamp').width}px` }"
-            >{{ timestampText }}</span
+         </ItemServiceDetailColumn>
+         <ItemServiceDetailColumn
+            :width="getPropertyByKey('timestamp').width"
+            >{{ timestampText }}</ItemServiceDetailColumn
          >
       </div>
    </Button3>
@@ -283,59 +263,14 @@
       flex-direction: row;
       align-items: center;
 
-      .ItemService-top-customer {
-         display: flex;
-         flex-direction: row;
-         flex-grow: 1;
-         align-items: center;
-
-         .ItemService-link-customer {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-
-            gap: 0.6rem;
-            padding: 0.3rem 0.5rem;
-            color: black;
-            font-weight: 600;
-            font-size: 0.8rem;
-
-            text-decoration: none;
-            cursor: pointer;
-
-            .ItemService-link-customer-icon {
-               width: 0.5rem;
-               height: 0.5rem;
-            }
-            .ItemService-link-customer-dot {
-               --size: 0.3em;
-               width: var(--size);
-               height: var(--size);
-               min-height: var(--size);
-               max-width: var(--size);
-               min-width: var(--size);
-               max-height: var(--size);
-               display: flex;
-               background: hsla(0, 0%, 0%, 0.3);
-               border-radius: 50%;
-            }
-         }
-      }
-      .ItemService-top-dot-body {
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         justify-content: flex-end;
-         .ItemService-state-dot {
-            --size: 0.5em;
-            min-width: var(--size);
-            min-height: var(--size);
-            width: var(--size);
-            height: var(--size);
-            background: var(--primary-color);
-            border-radius: var(--size);
-         }
+      .ItemService-state-dot {
+         --size: 0.5em;
+         min-width: var(--size);
+         min-height: var(--size);
+         width: var(--size);
+         height: var(--size);
+         background: var(--primary-color);
+         border-radius: var(--size);
       }
    }
 
@@ -366,45 +301,26 @@
             padding: 0;
             padding-bottom: 0.6rem;
 
-            .ItemService-top-customer {
-               .ItemService-link-customer {
-                  flex-direction: column;
-                  align-items: flex-start;
-                  gap: 0;
-               }
-            }
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
          }
          .ItemService-middle {
-            width: 100%;
-            height: 100%;
-            gap: 0.7em;
-            font-weight: 400;
-            font-size: 1em;
-            color: black;
-            text-align: start;
-            line-height: 1.1;
+            gap: 0.2em;
+
+            flex-grow: 1;
             overflow: hidden;
 
             display: flex;
             flex-direction: row;
-            flex-direction: column;
             flex-wrap: wrap;
-            flex-grow: 1;
             align-items: flex-start;
-            justify-content: space-between;
+            justify-content: flex-start;
 
-            .ItemService-images {
-               flex-grow: 0;
-               display: flex;
-               flex-direction: row;
-               flex-wrap: wrap;
-               align-items: flex-start;
-               justify-content: flex-start;
-               gap: 0.2em;
-               overflow: hidden;
-               .ItemService-image {
-                  height: 40px;
-               }
+            .ItemService-image {
+               width: 60px;
+               height: 60px;
+               border-radius: 0.5rem;
             }
          }
          .ItemService-bottom {
@@ -414,12 +330,6 @@
             align-items: flex-end;
             justify-content: flex-start;
             gap: 1rem;
-
-            .ItemService-timestamp {
-               font-size: 0.8em;
-               color: rgb(112, 112, 112);
-               text-align: start;
-            }
          }
       }
    }
@@ -448,25 +358,6 @@
             flex-direction: row;
             align-items: center;
 
-            .ItemService-customer {
-               min-width: max-content;
-
-               display: flex;
-               flex-direction: column;
-               align-items: flex-start;
-               justify-content: center;
-
-               gap: 0.1rem;
-               padding: 0 0.5rem;
-               color: black;
-               border: none;
-               background: none;
-               font-weight: 600;
-               font-size: 0.8rem;
-
-               text-decoration: none;
-            }
-
             .ItemService-description {
                padding: 0 0.5rem;
 
@@ -491,18 +382,23 @@
             display: flex;
             flex-direction: row;
             align-items: center;
-            justify-content: flex-start;
-            flex-wrap: wrap;
+            justify-content: flex-end;
             flex-wrap: nowrap;
 
-            .ItemService-label {
-               border-radius: 0.5rem;
-               padding: 0.4rem;
-            }
-            .ItemService-timestamp {
-               color: rgb(112, 112, 112);
+            .ItemService-labels {
+               gap: 0.1rem;
+
                flex-grow: 1;
-               text-align: end;
+               display: flex;
+               flex-direction: row;
+               align-items: center;
+               justify-content: flex-start;
+               flex-wrap: nowrap;
+
+               .ItemService-label {
+                  border-radius: 0.5rem;
+                  padding: 0.4rem;
+               }
             }
          }
       }
@@ -526,64 +422,6 @@
          display: flex;
          flex-direction: row;
          align-items: flex-start;
-
-         & > * {
-            --width: 2rem;
-            height: 1.1rem;
-            white-space: pre-line;
-            text-overflow: ellipsis;
-            word-wrap: break-word;
-            overflow: hidden;
-         }
-
-         .ItemService-customerName {
-            width: var(--width);
-            min-width: var(--width);
-            max-width: var(--width);
-         }
-
-         .ItemService-customerPhoneNumber {
-            width: var(--width);
-            min-width: var(--width);
-            max-width: var(--width);
-         }
-
-         .ItemService-description {
-            width: var(--width);
-            min-width: var(--width);
-            max-width: var(--width);
-         }
-
-         .ItemService-images {
-            width: var(--width);
-            min-width: var(--width);
-            max-width: var(--width);
-
-            display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            justify-content: flex-start;
-            .ItemService-image {
-               height: 40px;
-            }
-         }
-
-         .ItemService-notices {
-            width: var(--width);
-            min-width: var(--width);
-            max-width: var(--width);
-
-            gap: 0.1rem;
-
-            display: flex;
-            flex-direction: row;
-         }
-
-         .ItemService-timestamp {
-            width: var(--width);
-            min-width: var(--width);
-            max-width: var(--width);
-         }
       }
    }
 </style>

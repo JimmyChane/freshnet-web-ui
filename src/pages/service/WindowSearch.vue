@@ -3,7 +3,7 @@
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import SearchInput from "@/components/SearchInput.vue";
 
-   import ItemService from "./ItemService.vue";
+   import ItemService from "./item-service/ItemService.vue";
 
    import WindowSearch from "@/components/WindowSearch.vue";
 
