@@ -382,7 +382,9 @@
          />
 
          <div class="PageService-PanelRightEmpty">
-            <span class="PageService-PanelRightEmpty-text">Select to view</span>
+            <span class="PageService-PanelRightEmpty-text"
+               >Select service to view</span
+            >
          </div>
 
          <Drawer
@@ -545,7 +547,7 @@
             align-items: center;
             justify-content: center;
             .PageService-PanelRightEmpty-text {
-               font-weight: 600;
+               // font-weight: 600;
                font-size: 1.2rem;
                color: hsl(0, 0%, 84%);
                background: hsla(0, 0%, 0%, 0.04);

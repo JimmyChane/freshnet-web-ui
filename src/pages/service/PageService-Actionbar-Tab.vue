@@ -24,7 +24,7 @@
    >
       <img class="Tab-icon" :src="item.isSelected() ? iconSelected : icon" />
       <span :class="['Tab-title', 'transition']">{{ title }}</span>
-      <span class="Tab-count">{{ count }}</span>
+      <span class="Tab-count">({{ count }})</span>
    </button>
 </template>
 
@@ -42,7 +42,6 @@
       flex-direction: row;
       align-items: center;
       justify-content: center;
-      position: relative;
 
       transition-timing-function: cubic-bezier(1, 0, 0, 1);
 
@@ -62,38 +61,18 @@
          transition-timing-function: cubic-bezier(1, 0, 0, 1);
       }
       .Tab-count {
-         z-index: 3;
-         position: absolute;
-         top: 0.5em;
-         right: 0.5em;
-         font-size: 0.6rem;
-         line-height: 1em;
-
-         --size: 1.8em;
-         width: var(--size);
-         height: var(--size);
-         min-height: var(--size);
-         min-height: var(--size);
-         max-height: var(--size);
-         max-height: var(--size);
-
-         display: flex;
-         align-items: center;
-         justify-content: center;
-
-         border-radius: 50%;
+         min-width: max-content;
+         font-size: 0.8em;
       }
    }
 
    .Tab[isWide="true"] {
-      width: 8.2rem;
+      width: 10rem;
+      width: 9rem;
       gap: 0.2rem;
-      .Tab-title {
-         width: 4.8rem;
-      }
    }
    .Tab[isWide="false"] {
-      width: 2.8rem;
+      width: 4rem;
       gap: 0;
       .Tab-title {
          width: 0;
@@ -105,21 +84,11 @@
    .Tab[isSelected="true"] {
       background: var(--primary-color);
       color: white;
-
-      .Tab-count {
-         background: white;
-         color: var(--primary-color);
-      }
    }
    .Tab[isSelected="false"] {
       background: none;
       cursor: pointer;
       color: var(--primary-color);
-
-      .Tab-count {
-         background: black;
-         color: white;
-      }
 
       &:hover {
          background-color: #e2e2e2;

@@ -1,9 +1,10 @@
 <script>
    import MenuOption from "@/components/button/MenuOption.vue";
    import User from "@/items/User";
+   import Row from "./ItemUser-Row.vue";
 
    export default {
-      components: { MenuOption },
+      components: { MenuOption, Row },
       props: {
          item: { type: User },
          isEditable: { type: Boolean, default: false },
@@ -13,17 +14,20 @@
 </script>
 
 <template>
-   <div class="ItemUser">
-      <div class="ItemUser-header">
-         <span class="ItemUser-title">{{ item.name }}</span>
+   <div class="ItemUser" :isCurrentUser="`${isCurrentUser}`">
+      <div class="ItemUser-body">
+         <span>{{ item.name }}</span>
+
+         <div class="ItemUser-content">
+            <Row title="Username" :text="`@${item.username}`" />
+            <Row title="User Type" :text="item.toTextUserType()" />
+         </div>
+
          <span class="ItemUser-using" v-if="isCurrentUser"
-            >Currently Using</span
+            >Currently Login</span
          >
       </div>
-      <div class="ItemUser-content">
-         <span class="ItemUser-username">{{ item.username }}</span>
-         <span class="ItemUser-type">{{ item.toTextUserType() }}</span>
-      </div>
+
       <MenuOption
          v-if="isEditable"
          :menus="[
@@ -54,27 +58,30 @@
       padding: 1rem;
       border-radius: 1rem;
 
-      .ItemUser-header {
+      .ItemUser-body {
+         width: 100%;
+         gap: 1rem;
          flex-grow: 1;
          display: flex;
          flex-direction: column;
          align-items: flex-start;
-         justify-content: center;
-         .ItemUser-title {
-            font-size: 1rem;
+         justify-content: flex-start;
+
+         .ItemUser-content {
+            display: flex;
+            flex-direction: row;
+            flex-direction: column;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: hsl(0, 0%, 30%);
+            line-height: 1.2;
          }
          .ItemUser-using {
             font-size: 0.8rem;
          }
       }
-      .ItemUser-content {
-         display: flex;
-         flex-direction: row;
-         flex-direction: column;
-         justify-content: center;
-         font-size: 0.8rem;
-         color: hsl(0, 0%, 30%);
-         line-height: 1.2;
-      }
+   }
+   .ItemUser[isCurrentUser="true"] {
+      margin-bottom: 2rem;
    }
 </style>

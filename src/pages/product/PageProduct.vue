@@ -482,7 +482,7 @@
          />
 
          <div class="PageProduct-PanelRightEmpty" :style="stylePanelEmpty">
-            <span class="PageProduct-PanelRightEmpty-text">Select to view</span>
+            <span class="PageProduct-PanelRightEmpty-text">Select product to view</span>
          </div>
 
          <Drawer

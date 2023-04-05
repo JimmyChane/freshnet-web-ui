@@ -8,15 +8,16 @@
       emits: ["click-add-event", "click-remove-event"],
       props: { service: { type: Object, default: () => null } },
       computed: {
-         events() {
-            return this.service.events
+         events: (c) => {
+            return c.service.events
                .map((event) => event)
                .sort((event1, event2) => event1.compare(event2));
          },
          totalCost: (c) => c.service.toTotalPrice(),
-         totalCostText() {
-            if (this.totalCost && this.totalCost.amount !== 0) {
-               return `Total Cost: ${this.totalCost}`;
+         totalCostText: (c) => {
+            return `Total Cost: ${c.totalCost}`;
+            if (c.totalCost && c.totalCost.amount !== 0) {
+               return `Total Cost: ${c.totalCost}`;
             }
             return "";
          },
@@ -27,10 +28,8 @@
 <template>
    <div class="PanelEvents">
       <div class="PanelEvents-header">
-         <span class="PanelEvents-totalCost" v-if="totalCostText">{{
-            totalCostText
-         }}</span>
-         <span class="PanelEvents-title" v-else>Events</span>
+         <span class="PanelEvents-title">Events</span>
+         <span class="PanelEvents-totalCost">{{ totalCostText }}</span>
       </div>
 
       <div :class="['PanelEvents-body', 'PanelEvents-body-empty']">
@@ -39,7 +38,9 @@
             :items="events"
             @click-item-delete="(event) => $emit('click-remove-event', event)"
          />
-         <span class="PanelEvents-empty" v-if="!events.length"> Empty Events </span>
+         <span class="PanelEvents-empty" v-if="!events.length">
+            Empty Events
+         </span>
       </div>
    </div>
 </template>
@@ -73,18 +74,13 @@
 
          .PanelEvents-title {
             text-align: start;
-            font-weight: 600;
             flex-grow: 1;
-            font-size: 1.1rem;
-            color: hsla(0, 0%, 0%, 0.4);
          }
 
          .PanelEvents-totalCost {
-            text-align: start;
+            min-width: max-content;
+            text-align: end;
             font-weight: 600;
-            flex-grow: 1;
-            font-size: 1.1rem;
-            color: hsla(0, 0%, 0%, 0.8);
          }
       }
 

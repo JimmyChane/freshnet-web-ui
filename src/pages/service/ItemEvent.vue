@@ -6,7 +6,11 @@
       components: { MenuOption },
       props: { item: { type: Object, default: null } },
       emits: ["callback-delete"],
-      data: (c) => ({ nameOfUser: "loading...", isShowingMenu: false, isHovered: false }),
+      data: (c) => ({
+         nameOfUser: "loading...",
+         isShowingMenu: false,
+         isHovered: false,
+      }),
       computed: {
          timestampText() {
             if (!this.item.timestamp) return "";
@@ -48,7 +52,10 @@
             if (!item) return (this.nameOfUser = "");
 
             const name = await this.item.fetchName().catch((error) => {
-               this.store.dispatch("snackbarShow","Error getting user for event");
+               this.store.dispatch(
+                  "snackbarShow",
+                  "Error getting user for event",
+               );
                return "";
             });
 
@@ -72,12 +79,23 @@
          <div class="ItemEvent-middle">
             <span class="ItemEvent-description">{{ description }}</span>
             <div class="ItemEvent-header">
-               <span class="ItemService-timestamp">{{ timestampText }}</span>
+               <span class="ItemService-method">{{ methodTitle }}</span>
+
                <div
                   class="ItemService-header-dot"
                   v-if="timestampText && nameOfUser"
                ></div>
-               <span class="ItemEvent-user" v-if="nameOfUser">{{ nameOfUser }}</span>
+
+               <span class="ItemService-timestamp">{{ timestampText }}</span>
+
+               <div
+                  class="ItemService-header-dot"
+                  v-if="timestampText && nameOfUser"
+               ></div>
+
+               <span class="ItemEvent-user" v-if="nameOfUser">{{
+                  nameOfUser
+               }}</span>
             </div>
          </div>
       </div>
@@ -85,12 +103,16 @@
       <div
          :class="[
             'ItemEvent-right',
-            shouldShowMenu ? 'ItemEvent-right-isShow' : 'ItemEvent-right-isHide',
+            shouldShowMenu
+               ? 'ItemEvent-right-isShow'
+               : 'ItemEvent-right-isHide',
          ]"
       >
-         <span :class="['ItemEvent-result', 'transition']" v-if="methodResult">{{
-            methodResult
-         }}</span>
+         <span
+            :class="['ItemEvent-result', 'transition']"
+            v-if="methodResult"
+            >{{ methodResult }}</span
+         >
 
          <MenuOption
             class="ItemEvent-menu"
@@ -128,7 +150,10 @@
          .ItemEvent-colorbar {
             background-color: var(--primary-color);
             height: 100%;
-            width: 3px;
+            --width: 3px;
+            width: var(--width);
+            min-width: var(--width);
+            max-width: var(--width);
          }
          .ItemEvent-middle {
             padding: 0.6rem;
@@ -144,7 +169,8 @@
                align-items: center;
                justify-content: flex-start;
                gap: 0.5rem;
-               font-size: 0.6rem;
+               font-size: 0.7rem;
+               color: hsla(0, 0%, 0%, 0.8);
                & > * {
                   min-width: max-content;
                   width: max-content;
@@ -161,7 +187,6 @@
                width: 100%;
                line-height: 1.1;
                font-size: 1rem;
-               font-weight: 600;
                white-space: pre-line;
             }
          }
@@ -176,6 +201,9 @@
          border-radius: 0 var(--border-radius) var(--border-radius) 0;
 
          .ItemEvent-result {
+            width: max-content;
+            max-width: 8rem;
+
             display: flex;
             align-items: center;
             justify-content: center;
@@ -186,6 +214,8 @@
             font-size: 0.8rem;
             padding: 0.4rem;
             border-radius: 0.3rem;
+
+            transition-timing-function: cubic-bezier(1, 0, 0, 1);
          }
          .ItemEvent-menu {
             border-radius: 50%;

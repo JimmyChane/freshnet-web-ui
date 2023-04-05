@@ -81,7 +81,6 @@
       height: 100%;
       padding: 0.2em;
       border-radius: 2em;
-      gap: 0.1em;
 
       color: #5c5c5c;
 
@@ -92,7 +91,7 @@
       transition-timing-function: cubic-bezier(1, 0, 0, 1);
 
       .Searchbar-icon {
-         font-size: 0.9em;
+         font-size: 0.8em;
       }
       .Searchbar-input {
          width: 100%;

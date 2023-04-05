@@ -189,7 +189,7 @@
 
          <div class="PageCustomer-PanelRightEmpty">
             <span class="PageCustomer-PanelRightEmpty-text"
-               >Select to view</span
+               >Select customer to view</span
             >
          </div>
 
