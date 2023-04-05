@@ -3,6 +3,7 @@
    import ExportLayoutOption from "./PageProductExport-LayoutOption.vue";
    import ExportButton from "./PageProductExport-Export.vue";
    import LayoutOne from "./PageProductExport-Layout-One.vue";
+   import LayoutTwo from "./PageProductExport-Layout-Two.vue";
    import PanelOption from "./PageProductExport-PanelOption.vue";
 
    const cmToPx = (cm) => cm * 3.7795275591;
@@ -34,6 +35,14 @@
          this.count = count;
       }
    }
+   class Layout {
+      static One = new Layout("Layout One");
+      static Two = new Layout("Layout Two");
+
+      constructor(title = "") {
+         this.title = title;
+      }
+   }
 
    class Option {
       selectedItem = null;
@@ -53,7 +62,8 @@
       click() {
          const index = this.items.indexOf(this.selectedItem);
          const nextIndex = index + 1;
-         this.selectedItem = this.items[nextIndex >= this.items.length ? 0 : nextIndex];
+         this.selectedItem =
+            this.items[nextIndex >= this.items.length ? 0 : nextIndex];
       }
    }
 
@@ -63,40 +73,55 @@
          ExportLayoutOption,
          ExportButton,
          LayoutOne,
+         LayoutTwo,
          PanelOption,
       },
       data: (c) => ({
          product: null,
 
-         // todo
          options: [
-            new Option("Orientation", [Orientation.Portrait, Orientation.Landscape], 0),
+            new Option(
+               "Orientation",
+               [Orientation.Portrait, Orientation.Landscape],
+               0,
+            ),
             new Option("Size", [Size.A5, Size.A4], 1),
-            new Option("Rows", [new GridCount("1", 1), new GridCount("2", 2)], 1),
-            new Option("Columns", [new GridCount("1", 1), new GridCount("2", 2)], 0),
+            new Option(
+               "Rows",
+               [new GridCount("1", 1), new GridCount("2", 2)],
+               1,
+            ),
+            new Option(
+               "Columns",
+               [new GridCount("1", 1), new GridCount("2", 2)],
+               0,
+            ),
+            new Option("Layouts", [Layout.One, Layout.Two], 0),
          ],
-         layouts: [{ title: "Layout 1" }, { title: "Layout 2" }, { title: "Layout 3" }],
+         layouts: [
+            { title: "Layout 1" },
+            { title: "Layout 2" },
+            { title: "Layout 3" },
+         ],
 
          bodyWidth: 0,
          bodyHeight: 0,
          canvasScale: 0,
       }),
       computed: {
-         orientation: (c) => c.options[0].selectedItem,
-         size: (c) => c.options[1].selectedItem,
-         row: (c) => c.options[2].selectedItem,
-         column: (c) => c.options[3].selectedItem,
-
          user: (c) => c.loginStore.getters.user,
          allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
          productId: (context) => context.$route.query.productId,
 
-         isPortrait: (c) => c.orientation.title === "Portrait",
-         isLandscape: (c) => c.orientation.title === "Landscape",
+         orientation: (c) => c.options[0].selectedItem,
+         size: (c) => c.options[1].selectedItem,
+         row: (c) => c.options[2].selectedItem,
+         column: (c) => c.options[3].selectedItem,
+         layout: (c) => c.options[4].selectedItem,
 
-         isA5: (c) => c.orientation.title === "A5",
-         isA4: (c) => c.orientation.title === "A4",
+         isPortrait: (c) => c.orientation === Orientation.Portrait,
+         isLandscape: (c) => c.orientation === Orientation.Landscape,
 
          canvasWidth: (c) => (c.isPortrait ? c.size.width : c.size.height),
          canvasHeight: (c) => (c.isPortrait ? c.size.height : c.size.width),
@@ -105,6 +130,9 @@
 
          itemWidth: (c) => c.canvasWidth / c.canvasColumnCount,
          itemHeight: (c) => c.canvasHeight / c.canvasRowCount,
+
+         isLayoutOne: (c) => c.layout === Layout.One,
+         isLayoutTwo: (c) => c.layout === Layout.Two,
       },
       watch: {
          productId() {
@@ -164,7 +192,8 @@
             const scaleWidth = this.bodyWidth / canvasWidth;
             const scaleHeight = this.bodyHeight / canvasHeight;
 
-            this.canvasScale = scaleWidth > scaleHeight ? scaleHeight : scaleWidth;
+            this.canvasScale =
+               scaleWidth > scaleHeight ? scaleHeight : scaleWidth;
 
             if (repeatTimeout) {
                setTimeout(() => this.invalidateCard(0), repeatTimeout);
@@ -238,17 +267,20 @@
                   '--column-count': `${canvasColumnCount}`,
                }"
             >
-               <LayoutOne :width="itemWidth" :height="itemHeight" :product="product" />
+               <LayoutOne
+                  v-if="isLayoutOne"
+                  :width="itemWidth"
+                  :height="itemHeight"
+                  :product="product"
+               />
+               <LayoutTwo
+                  v-if="isLayoutTwo"
+                  :width="itemWidth"
+                  :height="itemHeight"
+                  :product="product"
+               />
             </div>
          </div>
-
-         <!-- <div class="PageProductExport-layouts" :style="{ 'grid-area': 'layouts' }">
-            <ExportLayoutOption
-               v-for="layout of layouts"
-               :key="layout.title"
-               :title="layout.title"
-            />
-         </div> -->
 
          <PanelOption
             class="PageProductExport-panelOption"
