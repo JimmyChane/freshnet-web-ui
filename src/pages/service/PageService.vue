@@ -231,44 +231,18 @@
 
          isWide: (c) => c.$root.window.innerWidth > 1200,
 
-         actionMenus() {
-            let actionMenus = [];
-
-            if (this.isCurrentStatePending) {
-               actionMenus.push({
-                  key: "add",
-                  title: "Add",
-                  icon: this.host.icon("add-000000"),
-                  click: this.clickAddService,
-               });
-            }
-
-            if (this.isCurrentStatePending && this.isCurrentUserAdmin) {
-               actionMenus.push({
-                  key: "import",
-                  title: "Import",
-                  click: this.clickImportService,
-               });
-            }
-
-            if (this.currentUser) {
-               actionMenus.push({
+         actionMenus: (c) => {
+            return [
+               {
                   key: "refresh",
                   title: "Refresh",
-                  icon: this.host.icon("refresh-000000"),
-                  click: this.clickRefresh,
-               });
-            }
-
-            return actionMenus;
+                  icon: c.host.icon("refresh-000000"),
+                  click: () => c.clickRefresh(),
+               },
+            ];
          },
 
          currentUser: (c) => c.loginStore.getters.user,
-         isCurrentUserAdmin: (c) => c.currentUser.isTypeAdmin(),
-         isCurrentUserDefault: (c) => c.currentUser.isDefault(),
-
-         currentState: (c) => c.$route.query.state,
-         isCurrentStatePending: (c) => c.currentState === "pending",
 
          lastModified: (c) => c.serviceStore.getters.lastModified,
          currentServiceId: (c) => c.$route.query.service,
@@ -403,6 +377,8 @@
             :currentItem="currentService"
             @click-service="(item) => clickService(item)"
             @click-search="() => windowAction('search', 'start')"
+            @click-add="() => clickAddService()"
+            @click-import="() => clickImportService()"
          />
 
          <div class="PageService-PanelRightEmpty">

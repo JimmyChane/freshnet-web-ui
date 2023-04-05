@@ -5,7 +5,7 @@
    import LabelMenus from "@/components/LabelMenus.vue";
 
    import ItemService from "./item-service/ItemService.vue";
-   import chroma from "chroma-js"; 
+   import chroma from "chroma-js";
    import Searcher from "@/tools/Searcher";
    import Tab from "./PageService-Actionbar-Tab.vue";
 
@@ -38,7 +38,8 @@
       },
       data: (c) => ({ results: [], primaryColorLabel: chroma("black") }),
       computed: {
-         isWide: (c) => c.$root.window.innerWidth > 400,
+         isOver350: (c) => c.$root.window.innerWidth > 350,
+         isOver550: (c) => c.$root.window.innerWidth > 550,
          currentGroupMenu: (c) => c.groupMenus[c.groupMenuIndex],
          currentSortMenu: (c) => c.sortMenus[c.sortMenuIndex],
       },
@@ -55,7 +56,7 @@
       <NavigationBar
          class="PageServiceActionbar-top"
          :rightMenus="[
-            isWide
+            isOver350
                ? null
                : {
                     title: 'Search',
@@ -67,7 +68,7 @@
       >
          <SearchInput
             class="PageServiceActionbar-SearchInput"
-            v-if="isWide && services.length"
+            v-if="isOver350 && services.length"
             placeholder="Search services"
             :list="results"
             @callback-search="(strs) => (results = searchResults(strs))"
@@ -87,34 +88,36 @@
          </SearchInput>
       </NavigationBar>
 
-      <div class="PageServiceActionbar-toolbar scrollbar">
-         <div>
-            <LayoutViewSelector :menus="layoutMenus" :index="layoutMenuIndex" />
-            <LabelMenus
-               title="Group"
-               :style="{ '--primary-color': primaryColorLabel.toString() }"
-               :primaryColor="primaryColorLabel"
-               :menu="currentGroupMenu ? currentGroupMenu : null"
-               :menus="groupMenus"
-            />
-            <LabelMenus
-               title="Sort"
-               :style="{ '--primary-color': primaryColorLabel.toString() }"
-               :primaryColor="primaryColorLabel"
-               :menu="currentSortMenu ? currentSortMenu : null"
-               :menus="sortMenus"
-            />
-         </div>
-      </div>
-
       <div class="PageServiceActionbar-tabs">
          <div>
             <Tab
                v-for="stateMenu of stateMenus"
                :key="stateMenu.title"
                :item="stateMenu"
-               :isWide="isWide"
+               :isWide="isOver550"
             />
+         </div>
+      </div>
+
+      <div class="PageServiceActionbar-toolbar scrollbar">
+         <div>
+            <LayoutViewSelector :menus="layoutMenus" :index="layoutMenuIndex" />
+            <div class="PageServiceActionbar-toolbar-menus">
+               <LabelMenus
+                  title="Group"
+                  :style="{ '--primary-color': primaryColorLabel.toString() }"
+                  :primaryColor="primaryColorLabel"
+                  :menu="currentGroupMenu ? currentGroupMenu : null"
+                  :menus="groupMenus"
+               />
+               <LabelMenus
+                  title="Sort"
+                  :style="{ '--primary-color': primaryColorLabel.toString() }"
+                  :primaryColor="primaryColorLabel"
+                  :menu="currentSortMenu ? currentSortMenu : null"
+                  :menus="sortMenus"
+               />
+            </div>
          </div>
       </div>
    </div>
@@ -140,7 +143,34 @@
             flex-grow: 2;
          }
       }
+      .PageServiceActionbar-tabs {
+         z-index: 1;
+         width: 100%;
+         padding: 0.3rem 1rem;
+         overflow-x: auto;
 
+         --scrollbar-size: 0.2rem;
+         --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.05);
+         --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.1);
+         --scrollbar-track-color: transparent;
+         --scrollbar-track-color-hover: transparent;
+         --scrollbar-track-margin: 1rem;
+
+         display: flex;
+         flex-direction: column;
+         align-items: flex-start;
+
+         & > * {
+            width: 100%;
+            max-width: max-content;
+            gap: 0.1rem;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+         }
+      }
       .PageServiceActionbar-toolbar {
          width: 100%;
          padding: 0.3rem 1rem;
@@ -163,35 +193,18 @@
             flex-direction: row;
             flex-wrap: nowrap;
             align-items: center;
-            // justify-content: space-between;
             justify-content: flex-start;
          }
-      }
 
-      .PageServiceActionbar-tabs {
-         z-index: 1;
-         width: 100%;
-         padding: 0 1rem;
-         overflow-x: auto;
+         .PageServiceActionbar-toolbar-menus {
+            gap: 0.5rem;
 
-         --scrollbar-size: 0.2rem;
-         --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.05);
-         --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.1);
-         --scrollbar-track-color: transparent;
-         --scrollbar-track-color-hover: transparent;
-         --scrollbar-track-margin: 1rem;
-
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-
-         & > * {
-            width: 100%;
-            max-width: var(--max-width);
+            flex-grow: 1;
             display: flex;
             flex-direction: row;
+            flex-wrap: nowrap;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: flex-end;
          }
       }
    }

@@ -13,7 +13,12 @@
    const { State } = ModuleService;
 
    export default {
-      emits: ["click-service", "click-service-delete"],
+      emits: [
+         "click-add",
+         "click-import",
+         "click-service",
+         "click-service-delete",
+      ],
       components: { Empty, Actionbar, ListServices },
       props: {
          menus: { type: Array, default: () => [] },
@@ -37,13 +42,16 @@
          iconEmpty: () => PageService.icon.dark.toUrl(),
 
          items: (c) =>
-            c.stateMenus[c.stateMenuIndex] ? c.stateMenus[c.stateMenuIndex].list : [],
+            c.stateMenus[c.stateMenuIndex]
+               ? c.stateMenus[c.stateMenuIndex].list
+               : [],
          state: (c) => U.optString(c.$route.query.state),
 
          layoutMode: (c) => {
             if (c.currentLayoutIndex === 0) return ListServices.LayoutMode.Grid;
             if (c.currentLayoutIndex === 1) return ListServices.LayoutMode.List;
-            if (c.currentLayoutIndex === 2) return ListServices.LayoutMode.Detail;
+            if (c.currentLayoutIndex === 2)
+               return ListServices.LayoutMode.Detail;
             return 0;
          },
          sortMode: (c) => {
@@ -54,6 +62,13 @@
             const menu = c.groupMenus.find((menu) => menu.isSelected());
             return menu ? menu.key : ListServices.GroupMode.DateCreated;
          },
+
+         currentUser: (c) => c.loginStore.getters.user,
+         isCurrentUserAdmin: (c) => c.currentUser.isTypeAdmin(),
+         isCurrentUserDefault: (c) => c.currentUser.isDefault(),
+
+         currentState: (c) => c.$route.query.state,
+         isCurrentStatePending: (c) => c.currentState === "pending",
       },
       watch: {
          state() {
@@ -78,7 +93,8 @@
 
          filterList(services, key) {
             const tab = this.stateMenus.find((tab) => tab.key === key);
-            if (tab) tab.list = services.filter((service) => service.state === key);
+            if (tab)
+               tab.list = services.filter((service) => service.state === key);
          },
 
          invalidateList() {
@@ -191,11 +207,7 @@
 <template>
    <div class="PanelServices" @scroll="(e) => (scrollTop = e.target.scrollTop)">
       <Actionbar
-         :class="[
-            'PanelServices-actionbar',
-            scrollTop > 0 ? 'PanelServices-actionbar-shadow' : '',
-            'transition',
-         ]"
+         :class="['PanelServices-actionbar', 'transition']"
          :menus="menus"
          :services="services"
          :stateMenus="stateMenus"
@@ -209,8 +221,17 @@
          @click-search="() => $emit('click-search')"
       />
 
+      <div class="PanelServices-toolbar" v-if="isCurrentStatePending">
+         <button @click="() => $emit('click-add')">Add</button>
+         <button @click="() => $emit('click-import')" v-if="isCurrentUserAdmin"
+            >Import</button
+         >
+      </div>
+
       <ListServices
-         v-if="stateMenus[stateMenuIndex] && stateMenus[stateMenuIndex].list.length"
+         v-if="
+            stateMenus[stateMenuIndex] && stateMenus[stateMenuIndex].list.length
+         "
          :layoutMode="layoutMode"
          :sortMode="sortMode"
          :groupMode="groupMode"
@@ -219,7 +240,10 @@
          @click-item="(item) => $emit('click-service', item)"
       />
 
-      <Empty v-if="!items.length && !serviceStore.getters.isLoading" :icon="iconEmpty" />
+      <Empty
+         v-if="!items.length && !serviceStore.getters.isLoading"
+         :icon="iconEmpty"
+      />
    </div>
 </template>
 
@@ -229,7 +253,7 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      align-items: stretch;
+      align-items: center;
       justify-content: flex-start;
       overflow-y: auto;
       overflow-x: auto;
@@ -248,9 +272,35 @@
          z-index: 2;
          border-bottom: 1px solid #e4e4e4;
       }
-      .PanelServices-actionbar-shadow {
-         border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
-         border-bottom: 1px solid #acacac;
+      .PanelServices-toolbar {
+         width: 100%;
+         max-width: 34rem;
+         min-height: 4.5rem;
+         padding: 1rem;
+         gap: 0.2rem;
+
+         display: flex;
+         flex-direction: row;
+         align-items: stretch;
+         justify-content: space-between;
+
+         & > * {
+            border-radius: 1rem;
+            background: none;
+            background: hsl(0, 0%, 98%);
+            border: 1px solid hsl(0, 0%, 75%);
+            font-size: 0.7rem;
+
+            cursor: pointer;
+
+            flex-grow: 1;
+
+            transition: all 0.2s;
+
+            &:hover {
+               background: white;
+            }
+         }
       }
    }
 </style>

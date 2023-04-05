@@ -84,15 +84,16 @@
 
 <style lang="scss" scoped>
    .SearchInput {
-      --background-color: hsla(0, 0%, 100%, 0.3);
+      --background-color: hsla(0, 0%, 100%, 0.6);
       --background-color-active: white;
       --background-color-focus: white;
 
-      --border-radius: 0.4rem;
-      --border-radius-active: 0.4rem;
+      --border-radius: 0.8rem;
+      --border-radius-active: 0.8rem;
 
       --border: 1px solid hsla(0, 0%, 0%, 0.15);
       --border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
+      --border-active: white;
 
       --dropdown-height: 80vh;
 

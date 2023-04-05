@@ -89,6 +89,8 @@
       flex-direction: row;
       align-items: center;
 
+      transition-timing-function: cubic-bezier(1, 0, 0, 1);
+
       .Searchbar-icon {
          font-size: 0.9em;
       }
@@ -96,12 +98,12 @@
          width: 100%;
          font-size: 1em;
          flex-grow: 1;
-         border: none;
          outline: none;
          border: none;
          background: none;
          display: flex;
          flex-direction: row;
+         transition-timing-function: cubic-bezier(1, 0, 0, 1);
          &::placeholder {
             color: hsla(0, 0%, 0%, 0.4);
             font-size: 0.8em;

@@ -8,28 +8,22 @@
          primaryColor: (c) => c.item.primaryColor,
          title: (c) => c.item.title,
          icon: (c) => c.item.icon,
+         iconSelected: (c) => c.item.iconSelected,
          count: (c) => c.item.list.length,
-
-         selfClasses: (c) => {
-            const classes = [c.item.isSelected() ? "Tab-isSelected" : "Tab-isDeselected"];
-
-            if (c.isWide) classes.push("Tab-isWide");
-            else classes.push(c.item.isSelected() ? "Tab-isWide" : "Tab-isThin");
-
-            return classes;
-         },
       },
    };
 </script>
 
 <template>
    <button
-      :class="['Tab', 'transition', ...selfClasses]"
+      :class="['Tab', 'transition']"
       :style="{ '--primary-color': primaryColor }"
+      :isWide="`${item.isSelected() || isWide}`"
+      :isSelected="`${item.isSelected()}`"
       @click="item.click()"
    >
-      <img class="Tab-icon" :src="icon" />
-      <span class="Tab-title transition">{{ title }}</span>
+      <img class="Tab-icon" :src="item.isSelected() ? iconSelected : icon" />
+      <span :class="['Tab-title', 'transition']">{{ title }}</span>
       <span class="Tab-count">{{ count }}</span>
    </button>
 </template>
@@ -39,19 +33,18 @@
       --primary-color: inherit;
 
       height: 2.4rem;
-      border-radius: 0.8rem 0.8rem 0 0;
-
-      border: 1px solid #acacac;
-      border-bottom: none;
-      background: none;
+      border: none;
+      border-radius: 0.8rem;
       font-size: 1rem;
-      padding-top: 0.1rem;
+      padding: 0.5rem;
 
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
       position: relative;
+
+      transition-timing-function: cubic-bezier(1, 0, 0, 1);
 
       .Tab-icon {
          z-index: 2;
@@ -66,7 +59,7 @@
          white-space: nowrap;
          overflow: hidden;
          font-weight: 600;
-         color: var(--primary-color);
+         transition-timing-function: cubic-bezier(1, 0, 0, 1);
       }
       .Tab-count {
          z-index: 3;
@@ -75,7 +68,6 @@
          right: 0.5em;
          font-size: 0.6rem;
          line-height: 1em;
-         --primary-color: black;
 
          --size: 1.8em;
          width: var(--size);
@@ -89,20 +81,18 @@
          align-items: center;
          justify-content: center;
 
-         background-color: var(--primary-color);
          border-radius: 50%;
-         color: white;
       }
    }
 
-   .Tab-isWide {
+   .Tab[isWide="true"] {
       width: 8.2rem;
-      gap: 0.5rem;
+      gap: 0.2rem;
       .Tab-title {
          width: 4.8rem;
       }
    }
-   .Tab-isThin {
+   .Tab[isWide="false"] {
       width: 2.8rem;
       gap: 0;
       .Tab-title {
@@ -112,14 +102,24 @@
       }
    }
 
-   .Tab-isSelected {
-      background-color: #e4e4e4;
-      border-color: #acacac;
+   .Tab[isSelected="true"] {
+      background: var(--primary-color);
+      color: white;
+
+      .Tab-count {
+         background: white;
+         color: var(--primary-color);
+      }
    }
-   .Tab-isDeselected {
-      background-color: transparent;
-      border-color: transparent;
+   .Tab[isSelected="false"] {
+      background: none;
       cursor: pointer;
+      color: var(--primary-color);
+
+      .Tab-count {
+         background: black;
+         color: white;
+      }
 
       &:hover {
          background-color: #e2e2e2;

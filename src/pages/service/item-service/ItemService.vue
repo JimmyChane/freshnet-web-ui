@@ -318,9 +318,10 @@
             justify-content: flex-start;
 
             .ItemService-image {
-               width: 60px;
-               height: 60px;
-               border-radius: 0.5rem;
+               --size: 2.5rem;
+               width: var(--size);
+               height: var(--size);
+               border-radius: 0.4rem;
             }
          }
          .ItemService-bottom {
