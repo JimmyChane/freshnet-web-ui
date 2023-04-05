@@ -1,4 +1,4 @@
-const host = "http://localhost";
+const host = "https://api.freshnet.app";
 
 module.exports = {
    devPort: 8080,
