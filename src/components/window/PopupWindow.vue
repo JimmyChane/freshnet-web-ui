@@ -70,7 +70,7 @@
          max-height: max-content;
          display: flex;
          flex-direction: column;
-         border-radius: 0.5rem;
+         border-radius: 1.5rem;
          background-color: white;
          box-shadow: 1px 2px 20px 0px hsla(0, 0%, 0%, 0.2);
          box-shadow: 1px 2px 10px 0px hsla(0, 0%, 0%, 0.8);
