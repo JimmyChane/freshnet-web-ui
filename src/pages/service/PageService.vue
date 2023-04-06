@@ -110,7 +110,7 @@
                   }
                },
             ),
-            removeEvent: new PopupContext(c).onShow(
+            removeEvent: new PopupContext(c).onConfirm(
                async (accept, reject, data) => {
                   await c.serviceStore.dispatch("removeEventFromId", {
                      serviceID: data.service.id,

@@ -1,10 +1,9 @@
 <script>
    import ListEvents from "./ListEvents.vue";
-   import ItemEvent from "./ItemEvent.vue";
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
 
    export default {
-      components: { ButtonIcon, ListEvents, ItemEvent },
+      components: { ButtonIcon, ListEvents },
       emits: ["click-add-event", "click-remove-event"],
       props: { service: { type: Object, default: () => null } },
       computed: {

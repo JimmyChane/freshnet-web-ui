@@ -89,6 +89,8 @@
             }
 
             this.stateMenuIndex = this.stateMenus.indexOf(menu);
+
+            this._self.$el.scrollTop = 0;
          },
 
          filterList(services, key) {

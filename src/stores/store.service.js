@@ -260,7 +260,7 @@ const init = (Stores) => {
       "updateWarrantyOfId",
       async (context, arg = { serviceID, isWarranty }) => {
          const label = ServiceLabel.Defaults.Warranty;
-         if (arg.isUrgent) {
+         if (arg.isWarranty) {
             return context.dispatch("addLabelToId", { serviceID: arg.serviceID, label });
          } else {
             return context.dispatch("removeLabelFromId", {

@@ -29,7 +29,7 @@
                });
                menus.push({
                   title: "Call Customer",
-                  icon: c.host.icon("call-000000"),
+                  icon: c.host.icon("call-color"),
                   href: `tel:+6${c.phoneNumberStr}`,
                });
             }
