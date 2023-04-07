@@ -8,7 +8,7 @@
    import ActionbarProduct from "./ActionBarProduct.vue";
    import ItemProduct from "./ItemProduct.vue";
    import Group from "./PanelProducts-Group.vue";
-   import chroma from "chroma-js"; 
+   import chroma from "chroma-js";
 
    import PageProduct from "@/pages/product/PageProduct.vue";
 
@@ -153,6 +153,9 @@
                      .filter((product) => {
                         if (!this.queryBrandId) return true;
                         return product.brandId === this.queryBrandId;
+                     })
+                     .sort((product1, product2) => {
+                        return product1.compare(product2);
                      });
                   return {
                      key: group.category.id,

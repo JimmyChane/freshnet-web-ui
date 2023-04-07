@@ -110,6 +110,7 @@ class Product {
    compare(item) {
       let value = 0;
       if (value === 0) value = this.compareAvailable(item);
+      if (value === 0) value = this.title.localeCompare(item.title);
       if (value === 0) value = this.comparePromotions(item);
       if (value === 0) value = this.compareSecondHand(item);
       if (value === 0) value = this.compareImage(item);
