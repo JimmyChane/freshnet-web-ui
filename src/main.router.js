@@ -18,8 +18,8 @@ import PageSetting from "./pages/setting/PageSetting.vue";
 
 Vue.use(VueRouter);
 
-const productRoutes = () => [
-   // id
+const routes = [
+   // product id
    {
       path: "/item/id/:id",
       beforeEnter(to, from, next) {
@@ -33,7 +33,7 @@ const productRoutes = () => [
       },
    },
 
-   // combo
+   // product combo
    {
       path: "/product/combo",
       redirect: "/product/browse",
@@ -55,8 +55,8 @@ const productRoutes = () => [
    },
    { path: "/product/view", component: PageProductView },
    { path: "/product/export", component: PageProductExport },
-];
-const manageRoutes = () => [
+
+   // manage
    {
       path: "/manage",
       beforeEnter(to, from, next) {
@@ -105,19 +105,18 @@ const manageRoutes = () => [
          { path: "setting", component: PageSetting },
       ],
    },
-];
 
-const routes = [
-   { path: "/login", name: "login", component: PageLogin },
+   // home
    { path: "/home", name: "home", component: PageHome },
+   // login
+   { path: "/login", name: "login", component: PageLogin },
+   // print
    { path: "/print", name: "print", component: PagePrint },
-   ...productRoutes(),
-   ...manageRoutes(),
+   // error
+   { path: "/error/404", name: "error/404", component: Page404 },
 
    { path: "/", redirect: { path: "/home" } },
-
    { path: "*", redirect: { path: "/error/404" } },
-   { path: "/error/404", name: "error/404", component: Page404 },
 ];
 
 export default new VueRouter({ mode: "hash", routes });

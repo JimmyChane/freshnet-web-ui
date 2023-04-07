@@ -1,3 +1,5 @@
+import U from "@/U";
+
 class PopupContext {
    context = null;
    isShowing = false;
@@ -16,7 +18,7 @@ class PopupContext {
          this.isShowing = true;
          this.input = input;
       };
-      if (typeof this.onShowCallback !== "function") {
+      if (!U.isFunction(this.onShowCallback)) {
          accept();
          return;
       }
@@ -35,7 +37,7 @@ class PopupContext {
          this.isShowing = false;
          this.input = null;
       };
-      if (typeof this.onDismissCallback !== "function") {
+      if (!U.isFunction(this.onDismissCallback)) {
          accept();
          return;
       }
@@ -54,7 +56,7 @@ class PopupContext {
          this.isShowing = false;
          this.input = null;
       };
-      if (typeof this.onCancelCallback !== "function") {
+      if (!U.isFunction(this.onCancelCallback)) {
          accept();
          return;
       }
@@ -73,7 +75,7 @@ class PopupContext {
          this.isShowing = false;
          this.input = null;
       };
-      if (typeof this.onConfirmCallback !== "function") {
+      if (!U.isFunction(this.onConfirmCallback)) {
          accept();
          return;
       }

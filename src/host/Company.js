@@ -1,14 +1,5 @@
 import Host from "@/host/HostApi";
-import DateFNS, {
-   differenceInHours,
-   isAfter,
-   isBefore,
-   format,
-   getDay,
-   isToday,
-   parse,
-   isSameDay,
-} from "date-fns";
+import { isAfter, isBefore, format, parse, isSameDay } from "date-fns";
 
 class ContactCategory {
    constructor(title = "", icon = "") {
@@ -18,9 +9,18 @@ class ContactCategory {
 }
 class ContactCategories {
    static Call = new ContactCategory("Call", Host.icon("call-color"));
-   static Whatsapp = new ContactCategory("Whatsapp", Host.icon("whatsapp-color"));
-   static Telegram = new ContactCategory("Telegram", Host.icon("telegram-color"));
-   static Telephone = new ContactCategory("Telephone", Host.icon("telephone-color"));
+   static Whatsapp = new ContactCategory(
+      "Whatsapp",
+      Host.icon("whatsapp-color"),
+   );
+   static Telegram = new ContactCategory(
+      "Telegram",
+      Host.icon("telegram-color"),
+   );
+   static Telephone = new ContactCategory(
+      "Telephone",
+      Host.icon("telephone-color"),
+   );
 }
 class ContactLink {
    constructor(category, id) {
@@ -35,7 +35,8 @@ class ContactLink {
          return `tel:+6${this.id}`;
       if (this.category === ContactCategories.Whatsapp)
          return `https://api.whatsapp.com/send?phone=6${this.id}`;
-      if (this.category === ContactCategories.Telegram) return `https://t.me/${this.id}`;
+      if (this.category === ContactCategories.Telegram)
+         return `https://t.me/${this.id}`;
       return "";
    }
    toHtmlTarget() {
@@ -133,7 +134,9 @@ class WorkingHours {
       return `${timeStart} - ${timeEnd}`;
    }
    isSameDay(date) {
-      return isSameDay(this.#dateStart, date) && isSameDay(this.#dateStart, date);
+      return (
+         isSameDay(this.#dateStart, date) && isSameDay(this.#dateStart, date)
+      );
    }
    isBetween(date) {
       return this.isStartAfter(date) && this.isEndBefore(date);

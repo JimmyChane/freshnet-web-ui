@@ -63,10 +63,4 @@
       justify-items: center;
       align-content: center;
    }
-   .HomeSectionContact[isThin="true"] {
-      font-size: 1rem;
-   }
-   .HomeSectionContact[isThin="false"] {
-      font-size: 1.3rem;
-   }
 </style>

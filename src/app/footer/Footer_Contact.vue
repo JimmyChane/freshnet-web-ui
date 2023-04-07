@@ -7,8 +7,8 @@
       },
       computed: {
          primaryLink: (c) => (c.parsedLinks.length ? c.parsedLinks[0] : null),
-         parsedLinks() {
-            return this.links.map((link) => {
+         parsedLinks: (c) => {
+            return c.links.map((link) => {
                return {
                   icon: link.icon,
                   href: link.href,
@@ -21,37 +21,37 @@
 </script>
 
 <template>
-   <div class="PageHomeFooterContact">
-      <div class="PageHomeFooterContact-header">
-         <span class="PageHomeFooterContact-title" v-if="title">{{ title }}</span>
+   <div class="Footer-Contact">
+      <div class="Footer-Contact-header">
+         <span class="Footer-Contact-title" v-if="title">{{ title }}</span>
 
          <a
-            class="PageHomeFooterContact-primaryLink"
+            class="Footer-Contact-primaryLink"
             v-if="primaryLink"
             :href="primaryLink.href"
             :target="primaryLink.target"
          >
-            <span class="PageHomeFooterContact-subtitle">{{ subtitle }}</span>
+            <span class="Footer-Contact-subtitle">{{ subtitle }}</span>
          </a>
-         <span class="PageHomeFooterContact-subtitle" v-else>{{ subtitle }}</span>
+         <span class="Footer-Contact-subtitle" v-else>{{ subtitle }}</span>
       </div>
 
-      <div class="PageHomeFooter-links">
+      <div class="Footer-Contact-links">
          <a
-            class="PageHomeFooterContact-link"
+            class="Footer-Contact-link"
             v-for="link of links"
             :key="link.href"
             :href="link.href"
             :target="link.target"
          >
-            <img class="PageHomeFooterContact-icon" :src="link.icon" />
+            <img class="Footer-Contact-icon" :src="link.icon" />
          </a>
       </div>
    </div>
 </template>
 
 <style lang="scss" scoped>
-   .PageHomeFooterContact {
+   .Footer-Contact {
       width: 100%;
       gap: 1rem;
 
@@ -61,7 +61,7 @@
       align-items: center;
       justify-content: flex-start;
 
-      .PageHomeFooterContact-header {
+      .Footer-Contact-header {
          display: flex;
          flex-direction: column;
          flex-wrap: nowrap;
@@ -70,11 +70,11 @@
 
          font-weight: 400;
          text-align: start;
-         .PageHomeFooterContact-title {
+         .Footer-Contact-title {
             font-size: 0.9rem;
          }
 
-         .PageHomeFooterContact-primaryLink {
+         .Footer-Contact-primaryLink {
             color: inherit;
             text-decoration: inherit;
             font-size: inherit;
@@ -83,13 +83,13 @@
                text-decoration: underline;
             }
          }
-         .PageHomeFooterContact-subtitle {
+         .Footer-Contact-subtitle {
             font-size: 1rem;
             opacity: 1;
          }
       }
 
-      .PageHomeFooter-links {
+      .Footer-Contact-links {
          gap: 0.1rem;
 
          display: flex;
@@ -97,7 +97,7 @@
          flex-wrap: nowrap;
          align-items: center;
          justify-content: flex-start;
-         .PageHomeFooterContact-link {
+         .Footer-Contact-link {
             --size: 2.5rem;
             width: var(--size);
             height: var(--size);
@@ -106,7 +106,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            .PageHomeFooterContact-icon {
+            .Footer-Contact-icon {
                --size: 1.2rem;
                width: var(--size);
                height: var(--size);

@@ -138,9 +138,9 @@ new Vue({
             key = parseKey(page.key);
             title = U.optString(page.title).trim();
             icon = parseIcon(page.icon);
-            const children = typeof _children === "function" ? _children() : [];
-            const groups = typeof _groups === "function" ? _groups() : [];
-            const queries = typeof _queries === "function" ? _queries() : [];
+            const children = U.isFunction(_children) ? _children() : [];
+            const groups = U.isFunction(_groups) ? _groups() : [];
+            const queries = U.isFunction(_queries) ? _queries() : [];
 
             // parsing
             const parsedChildren = parseGroup2s([{ values: children }]).map(

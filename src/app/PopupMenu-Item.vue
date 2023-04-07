@@ -16,10 +16,9 @@
          to: (c) => c.menu.to,
 
          isSelected: (c) => {
-            if (typeof c.menu.isSelected !== "function") return false;
-            return c.menu.isSelected();
+            return U.isFunction(c.menu.isSelected) && c.menu.isSelected();
          },
-         hasIcon: (c) => U.optString(c.icon).length>0,
+         hasIcon: (c) => U.optString(c.icon).length > 0,
       },
    };
 </script>

@@ -68,7 +68,6 @@
 
          .ContactGroup-title {
             font-weight: 600;
-            font-size: 1.1em;
          }
       }
       .ContactGroup-icon {
@@ -82,11 +81,5 @@
          background: hsl(0, 0%, 94%);
          border-radius: 1.2em;
       }
-   }
-   .ContactGroup[isThin="true"] {
-      font-size: 1rem;
-   }
-   .ContactGroup[isThin="false"] {
-      font-size: 1.3rem;
    }
 </style>

@@ -34,8 +34,7 @@
 
             for (const menu of menus) {
                const isLegacy =
-                  typeof menu.click !== "function" &&
-                  typeof menu.interact === "function";
+                  !U.isFunction(menu.click) && U.isFunction(menu.interact);
                if (isLegacy) menu.click = () => menu.interact();
             }
 

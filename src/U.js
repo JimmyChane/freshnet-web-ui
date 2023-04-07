@@ -19,6 +19,9 @@ class U {
    static isObjectOnly(obj) {
       return this.isObject(obj) && obj;
    }
+   static isFunction(fun) {
+      return typeof fun === "function";
+   }
 
    static optString(str, fallback = "") {
       return this.isString(str) ? str : fallback;

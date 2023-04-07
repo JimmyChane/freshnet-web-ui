@@ -22,6 +22,7 @@
 
    import Item from "./PopupMenu-Item.vue";
    import chroma from "chroma-js";
+   import U from "@/U";
 
    export default {
       Width,
@@ -184,7 +185,7 @@
             this.style["pointer-events"] = "none";
          },
          clickMenu(menu) {
-            if (typeof menu.click === "function") {
+            if (U.isFunction(menu.click)) {
                menu.click(menu);
                this.hide();
             }
