@@ -305,7 +305,7 @@
                   </Section>
 
                   <Section title="Image Reference">
-                     <div class="PanelService-section-image">
+                     <div class="PanelService-section-image scrollbar">
                         <ButtonAddImage
                            class="PanelService-section-image-add"
                            @callback-result="onImageAdd"
@@ -504,7 +504,8 @@
                   --image-width: 5.5rem;
                   --image-height: 5.5rem;
                   --scrollbar-size: 0.3em;
-                  --scrollbar-track-margin: 1.2rem;
+                  --scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+                  --scrollbar-thumb-color-hover: rgba(0, 0, 0, 0.4);
 
                   & > * {
                      border-radius: 0.5rem;
