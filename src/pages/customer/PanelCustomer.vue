@@ -4,12 +4,20 @@
 
    import Section from "@/pages/manage/PanelItem-Section.vue";
    import Item from "./PanelCustomer-Item.vue";
+   import ItemService from "@/pages/service/item-service/ItemService.vue";
    import ItemDevice from "./ItemDevice.vue";
 
    import chroma from "chroma-js";
 
    export default {
-      components: { Actionbar, Loading, Section, Item, ItemDevice },
+      components: {
+         Actionbar,
+         Loading,
+         Section,
+         Item,
+         ItemService,
+         ItemDevice,
+      },
       emits: [
          "click-item-close",
          "click-item-remove",
@@ -202,17 +210,17 @@
             </Section>
 
             <Section title="Services" v-if="services.length">
-               <Item
+               <router-link
+                  class="PanelCustomer-SectionService-item"
                   v-for="service of services"
                   :key="service.id"
                   :to="{
                      path: '/manage/service',
                      query: { service: service.id },
                   }"
-                  title="Problem"
                >
-                  <span>{{ service.description }}</span>
-               </Item>
+                  <ItemService :headerCustomer="false" :item="service" />
+               </router-link>
             </Section>
 
             <Section title="Orders" v-if="orders.length">
@@ -285,6 +293,14 @@
             .PanelCustomer-devices-loading {
                width: 100%;
                height: 4px;
+            }
+            .PanelCustomer-SectionService-item {
+               width: 100%;
+               border-radius: 1rem;
+               text-decoration: none;
+               display: flex;
+               flex-direction: column;
+               align-items: stretch;
             }
          }
          .PanelCustomer-main[isWide="true"] {

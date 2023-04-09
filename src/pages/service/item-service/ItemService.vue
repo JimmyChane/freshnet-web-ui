@@ -36,6 +36,7 @@
          item: { type: Object, default: null },
          isSelected: { type: Boolean, default: false },
          detailProperties: { type: Array, default: () => [] },
+         headerCustomer: { type: Boolean, default: true },
       },
       computed: {
          isGrid: (c) => c.mode === Mode.Grid,
@@ -170,6 +171,7 @@
       <div v-if="isGrid" :class="['transition', 'ItemService-body']">
          <div class="ItemService-top">
             <ItemServiceCustomer
+               v-if="headerCustomer"
                :name="name"
                :phoneNumberStr="phoneNumberStr"
             />
@@ -192,6 +194,7 @@
       <div v-if="isList" :class="['transition', 'ItemService-body']">
          <div class="ItemService-top">
             <ItemServiceCustomer
+               v-if="headerCustomer"
                :name="name"
                :phoneNumberStr="phoneNumberStr"
             />
