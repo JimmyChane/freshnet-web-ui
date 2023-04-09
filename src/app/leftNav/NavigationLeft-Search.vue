@@ -46,7 +46,7 @@
       .NavigationLeft-Search-comp {
          --background-color: hsl(0, 0%, 94%);
          --border-radius: 0.8rem;
-         --border: 1px solid transparent;
+         --border: 1px solid hsla(0, 0%, 0%, 0.15);
          --border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
          --dropdown-height: calc(100dvh - 10rem);
       }

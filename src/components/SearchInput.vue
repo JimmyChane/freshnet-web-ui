@@ -163,7 +163,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.1rem;
 
             border-radius: 0 0 var(--border-radius-active) var(--border-radius-active);
 

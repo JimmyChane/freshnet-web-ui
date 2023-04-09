@@ -111,7 +111,6 @@
       border: 1px solid;
       border-radius: 1rem;
       transition-timing-function: cubic-bezier(1, 0, 0, 1);
-      transition-timing-function: linear;
 
       &:hover,
       &:focus {
@@ -215,13 +214,11 @@
       }
       .ItemOrder-option[isExpand="false"] {
          height: 0;
-         max-height: 0;
          pointer-events: none;
          opacity: 0;
       }
       .ItemOrder-option[isExpand="true"] {
          height: unset;
-         max-height: unset;
          margin-top: 1.25rem;
          pointer-events: initial;
          opacity: 1;

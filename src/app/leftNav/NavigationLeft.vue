@@ -253,7 +253,7 @@
          align-items: stretch;
          overflow-y: auto;
          overflow-x: hidden;
-         background-color: hsl(0, 0%, 84%);
+         background: hsl(0, 0%, 90%);
          position: relative;
 
          .NavigationLeft-line {

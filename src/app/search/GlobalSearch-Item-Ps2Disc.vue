@@ -1,9 +1,10 @@
 <script>
    import ImageView from "@/components/ImageView.vue";
    import ItemSearch from "./GlobalSearch-Item.vue";
+   import Labels from "./GlobalSearch-Item-Labels.vue";
 
    export default {
-      components: { ImageView, ItemSearch },
+      components: { ImageView, ItemSearch, Labels },
       props: { item: { type: Object, default: null } },
       computed: {
          thumbnail: (c) => c.host.cloudinary({ url: `ps2/disc/${c.code}.jpg` }),
@@ -26,11 +27,7 @@
          <ImageView class="ItemSearchPs2Disc-thumbnail" :src="thumbnail" />
       </div>
       <div class="ItemSearchPs2Disc-body">
-         <div class="ItemSearchPs2Disc-labels">
-            <span class="ItemSearchPs2Disc-label">Product</span>
-            <span class="ItemSearchPs2Disc-label">PS2</span>
-            <span class="ItemSearchPs2Disc-label">Disc</span>
-         </div>
+         <Labels :labels="['Product', 'PS2', 'Disc']" />
          <span class="ItemSearchPs2Disc-title">{{ title }}</span>
          <span class="ItemSearchPs2Disc-subTitle">{{ code }}</span>
       </div>
@@ -39,17 +36,6 @@
 
 <style lang="scss" scoped>
    .ItemSearchPs2Disc {
-      width: 100%;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: flex-start;
-      gap: 0.5em;
-      padding: 0.5em;
-      color: black;
-      border-radius: 0.3em;
-      font-size: 1.1em;
-
       .ItemSearchPs2Disc-image {
          width: 3.5em;
          height: 3.5em;
@@ -74,18 +60,7 @@
          flex-direction: column;
          justify-content: center;
          gap: 0.3em;
-         .ItemSearchPs2Disc-labels {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 0.2em;
-            .ItemSearchPs2Disc-label {
-               background: #ffffff80;
-               font-size: 0.6em;
-               padding: 0.4em 0.6em;
-               border-radius: 0.3em;
-            }
-         }
+
          .ItemSearchPs2Disc-title {
             font-weight: 600;
          }

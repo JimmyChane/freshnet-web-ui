@@ -69,7 +69,6 @@
       }
       .ItemOrder-Action-text {
          color: inherit;
-         font-weight: 800;
          font-size: 0.8rem;
       }
 

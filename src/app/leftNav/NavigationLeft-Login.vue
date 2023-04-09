@@ -47,7 +47,10 @@
          </div>
       </div>
 
-      <div class="LeftNavigationLogin-loggedOut" v-if="!isLoginPage && user.isTypeNone()">
+      <div
+         class="LeftNavigationLogin-loggedOut"
+         v-if="!isLoginPage && user.isTypeNone()"
+      >
          <router-link
             class="LeftNavigationLogin-loggedOut-login transition"
             :to="{ path: '/login', query: { redirect } }"
@@ -67,7 +70,7 @@
       flex-direction: column;
       gap: 2px;
       border-top: 1px solid hsla(0, 0%, 0%, 0.1);
-      background-color: hsl(0, 0%, 84%);
+      background: inherit;
 
       .LeftNavigationLogin-loggedIn {
          display: flex;

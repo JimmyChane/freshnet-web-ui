@@ -414,7 +414,6 @@
             .PageCustomer-PanelCustomer {
                flex-grow: 1;
                height: 100%;
-               box-shadow: 0px 0px 20px rgba(42, 72, 88, 0.25);
                overflow-y: auto;
 
                height: 100%;

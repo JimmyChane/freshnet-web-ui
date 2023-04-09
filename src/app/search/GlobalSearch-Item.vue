@@ -17,19 +17,22 @@
 <style lang="scss" scoped>
    .GlobalSearch-item {
       width: 100%;
+      gap: 0.5em;
+      padding: 0.5em;
+      // font-size: 1.1em;
       cursor: pointer;
 
       display: flex;
-      flex-direction: column;
-      text-decoration: none;
-      justify-content: center;
+      flex-direction: row;
       align-items: flex-start;
+      justify-content: flex-start;
 
       color: black;
       text-align: start;
+      text-decoration: none;
       border: none;
       background: none;
-      border-radius: 0.5em;
+      border-radius: 0.8em;
 
       &:hover {
          background: rgba(255, 255, 255, 0.5);

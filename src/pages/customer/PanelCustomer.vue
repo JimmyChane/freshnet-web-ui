@@ -2,10 +2,13 @@
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import Loading from "@/components/Loading.vue";
 
+   import PanelItemCustomer from "@/pages/manage/PanelItem-Customer.vue";
    import Section from "@/pages/manage/PanelItem-Section.vue";
+
    import Item from "./PanelCustomer-Item.vue";
    import ItemService from "@/pages/service/item-service/ItemService.vue";
    import ItemDevice from "./ItemDevice.vue";
+   import PanelCustomerEmpty from "./PanelCustomer-Empty.vue";
 
    import chroma from "chroma-js";
 
@@ -17,6 +20,8 @@
          Item,
          ItemService,
          ItemDevice,
+         PanelCustomerEmpty,
+         PanelItemCustomer,
       },
       emits: [
          "click-item-close",
@@ -37,10 +42,39 @@
       computed: {
          isWide: (c) => c.$root.window.innerWidth > 600,
 
+         menus: (c) => {
+            const menus = [];
+
+            if (c.isPhoneNumber) {
+               menus.push({
+                  title: "Chat with Customer on Whatsapp",
+                  icon: c.host.icon("whatsapp-color"),
+                  alth: "Chat on Whatsapp",
+                  href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
+                  target: "_blank",
+               });
+               menus.push({
+                  title: "Call Customer",
+                  icon: c.host.icon("call-color"),
+                  href: `tel:+6${c.phoneNumberStr}`,
+               });
+            }
+
+            menus.push({
+               title: "Delete Customer",
+               icon: c.host.icon("trash-000000"),
+               click: () => c.$emit("click-item-remove", { item: c.item }),
+               isHidden: true,
+            });
+
+            return menus;
+         },
+
          id: (c) => (c.item ? c.item.id : ""),
          name: (c) => (c.item ? c.item.name : ""),
          phoneNumber: (c) => (c.item ? c.item.phoneNumber : null),
          phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
+         isPhoneNumber: (c) => !!c.phoneNumberStr,
          description: (c) => (c.item ? c.item.description : ""),
          deviceIds: (c) => (c.item ? c.item.deviceIds : []),
          services: (c) => (c.item ? c.item.services : []),
@@ -109,69 +143,36 @@
                icon: host.icon('close-000000'),
                click: () => $emit('click-item-close', { item }),
             }"
-            :rightMenus="
-               id
-                  ? {
-                       key: 'remove',
-                       title: 'Delete',
-                       icon: host.icon('trash-000000'),
-                       click: () => $emit('click-item-remove', { item }),
-                    }
-                  : null
-            "
-         />
+            :rightMenus="menus"
+         >
+            <PanelItemCustomer
+               v-if="item"
+               :customer="item"
+               :isEditable="!!id"
+               @click-edit="
+                  (item) => $emit('click-item-customer-update', { item })
+               "
+            />
+         </Actionbar>
 
          <div class="PanelCustomer-main" :isWide="`${isWide}`">
-            <div>
-               <Section
-                  title="Customer Info"
-                  :menus="
-                     id
-                        ? {
-                             icon: host.icon('edit-505050'),
-                             click: () =>
-                                $emit('click-item-customer-update', { item }),
-                          }
-                        : null
-                  "
-               >
-                  <div class="PanelCustomer-customer">
-                     <span class="PanelCustomer-customer-content" v-if="name">{{
-                        name
-                     }}</span>
-                     <span class="PanelCustomer-reuse-contentEmpty" v-else
-                        >Empty</span
-                     >
-
-                     <span
-                        class="PanelCustomer-customer-content"
-                        v-if="phoneNumber"
-                        >{{ phoneNumber }}</span
-                     >
-                     <span class="PanelCustomer-customer-empty" v-else
-                        >Empty</span
-                     >
-                  </div>
-               </Section>
-
-               <Section
-                  title="Description"
-                  v-if="id"
-                  :menus="{
-                     icon: host.icon('edit-505050'),
-                     click: () =>
-                        $emit('click-item-description-update', { item }),
-                  }"
-               >
-                  <span v-if="description">{{ description }}</span>
-               </Section>
-            </div>
+            <Section
+               title="Description"
+               v-if="id"
+               :menus="{
+                  icon: host.icon('edit-000000'),
+                  click: () => $emit('click-item-description-update', { item }),
+               }"
+            >
+               <span v-if="description">{{ description }}</span>
+               <PanelCustomerEmpty v-else />
+            </Section>
 
             <Section
                title="Owned Devices"
                v-if="id"
                :menus="{
-                  icon: host.icon('add-505050'),
+                  icon: host.icon('add-000000'),
                   click: () => $emit('click-item-device-add', { item }),
                }"
             >
@@ -203,13 +204,15 @@
                         })
                   "
                />
+
+               <PanelCustomerEmpty v-if="!devices.length" />
                <Loading
                   class="PanelCustomer-devices-loading"
                   :isShowing="isLoadingDevices"
                />
             </Section>
 
-            <Section title="Services" v-if="services.length">
+            <Section title="Services">
                <router-link
                   class="PanelCustomer-SectionService-item"
                   v-for="service of services"
@@ -221,9 +224,10 @@
                >
                   <ItemService :headerCustomer="false" :item="service" />
                </router-link>
+               <PanelCustomerEmpty v-if="!services.length" />
             </Section>
 
-            <Section title="Orders" v-if="orders.length">
+            <Section title="Orders">
                <Item
                   v-for="order of orders"
                   :key="order.id"
@@ -235,6 +239,7 @@
                >
                   <span>{{ order.content }}</span>
                </Item>
+               <PanelCustomerEmpty v-if="!orders.length" />
             </Section>
          </div>
       </div>
@@ -254,8 +259,12 @@
       .PanelCustomer-body {
          display: flex;
          flex-direction: column;
+         align-items: center;
 
          .PanelCustomer-main {
+            width: 40rem;
+            max-width: 100%;
+
             padding-bottom: 10rem;
             display: flex;
             flex-direction: column;
@@ -276,18 +285,6 @@
                   display: flex;
                   flex-direction: row;
                   align-items: center;
-               }
-
-               .PanelCustomer-customer-content {
-                  flex-grow: 1;
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-               }
-               .PanelCustomer-customer-empty {
-                  font-weight: 400;
-                  font-size: 0.9rem;
-                  color: #535353;
                }
             }
             .PanelCustomer-devices-loading {

@@ -39,14 +39,20 @@
       @click-ok="clickOk()"
    >
       <div class="WindowRemoveCustomer-body" v-if="item">
+         <p>Services and Orders might not effected</p>
+
          <div class="WindowRemoveCustomer-namePhoneNumber">
-            <div class="WindowRemoveCustomer-namePhoneNumber-section" v-if="item.name">
+            <div
+               class="WindowRemoveCustomer-namePhoneNumber-section"
+               v-if="item.name"
+            >
                <span class="WindowRemoveCustomer-namePhoneNumber-section-header"
                   >Name</span
                >
-               <span class="WindowRemoveCustomer-namePhoneNumber-section-content">{{
-                  item.name
-               }}</span>
+               <span
+                  class="WindowRemoveCustomer-namePhoneNumber-section-content"
+                  >{{ item.name }}</span
+               >
             </div>
 
             <div
@@ -56,14 +62,17 @@
                <span class="WindowRemoveCustomer-namePhoneNumber-section-header"
                   >Phone Number</span
                >
-               <span class="WindowRemoveCustomer-namePhoneNumber-section-content">{{
-                  item.phoneNumber
-               }}</span>
+               <span
+                  class="WindowRemoveCustomer-namePhoneNumber-section-content"
+                  >{{ item.phoneNumber }}</span
+               >
             </div>
          </div>
 
          <div class="WindowRemoveCustomer-description" v-if="item.description">
-            <span class="WindowRemoveCustomer-description-header">Description</span>
+            <span class="WindowRemoveCustomer-description-header"
+               >Description</span
+            >
             <span class="WindowRemoveCustomer-description-body">{{
                item.description
             }}</span>

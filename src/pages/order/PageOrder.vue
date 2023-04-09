@@ -114,7 +114,6 @@
 <template>
    <div
       class="PageOrder transition"
-      ref="orderRoot"
       @scroll="(event) => (scrollTop = event.target.scrollTop)"
    >
       <Actionbar

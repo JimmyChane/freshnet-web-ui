@@ -1,5 +1,5 @@
 <script>
-   import Actionbar from "./PageService-Actionbar.vue";
+   import Actionbar from "./PanelServices-Actionbar.vue";
    import ListServices from "./ListServices.vue";
 
    import ModuleService from "@/items/data/Service.js";

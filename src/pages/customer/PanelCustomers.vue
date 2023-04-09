@@ -1,5 +1,5 @@
 <script>
-   import Actionbar from "./Actionbar.vue";
+   import Actionbar from "./PanelCustomers-Actionbar.vue";
    import ItemCustomer from "./ItemCustomer.vue";
 
    import Empty from "@/components/Empty.vue";
@@ -108,7 +108,7 @@
          display: flex;
          flex-direction: column;
          align-items: center;
-         gap: 0.2rem;
+         gap: 0.1rem;
 
          .PanelCustomers-item {
             width: 100%;

@@ -2,9 +2,10 @@
    import ServiceStates from "@/objects/ServiceStates.js";
    import ImageViews from "@/components/ImageViews.vue";
    import ItemSearch from "./GlobalSearch-Item.vue";
+   import Labels from "./GlobalSearch-Item-Labels.vue";
 
    export default {
-      components: { ImageViews, ItemSearch },
+      components: { ImageViews, ItemSearch, Labels },
       props: { item: { type: Object, default: null } },
       computed: {
          images: (c) => (c.item ? c.item.imageFiles : []),
@@ -42,12 +43,7 @@
          />
       </div>
       <div class="ItemSearchService-body">
-         <div class="ItemSearchService-labels">
-            <span class="ItemSearchService-label">Service</span>
-            <span class="ItemSearchService-label" v-if="stateTitle">{{
-               stateTitle
-            }}</span>
-         </div>
+         <Labels :labels="['Service', stateTitle]" />
          <span class="ItemSearchService-title">{{ title }}</span>
          <span class="ItemSearchService-subTitle">{{ description }}</span>
       </div>
@@ -56,17 +52,6 @@
 
 <style lang="scss" scoped>
    .ItemSearchService {
-      width: 100%;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: flex-start;
-      gap: 0.5em;
-      padding: 0.5em;
-      color: black;
-      border-radius: 0.3em;
-      font-size: 1.1em;
-
       .ItemSearchService-image {
          width: 3.5em;
          height: 3.5em;
@@ -99,17 +84,12 @@
          flex-direction: column;
          justify-content: center;
          gap: 0.3em;
+
          .ItemSearchService-labels {
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
             gap: 0.2em;
-            .ItemSearchService-label {
-               background: #ffffff80;
-               font-size: 0.6em;
-               padding: 0.4em 0.6em;
-               border-radius: 0.3em;
-            }
          }
          .ItemSearchService-title {
             font-weight: 600;

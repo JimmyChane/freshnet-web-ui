@@ -7,7 +7,8 @@
    import ItemService from "./item-service/ItemService.vue";
    import chroma from "chroma-js";
    import Searcher from "@/tools/Searcher";
-   import Tab from "./PageService-Actionbar-Tab.vue";
+
+   import PanelItemsTabLayout from "../manage/PanelItems-TabLayout.vue";
 
    export default {
       components: {
@@ -16,7 +17,7 @@
          LayoutViewSelector,
          LabelMenus,
          ItemService,
-         Tab,
+         PanelItemsTabLayout,
       },
       emits: ["click-service"],
       props: {
@@ -42,6 +43,25 @@
          isOver550: (c) => c.$root.window.innerWidth > 550,
          currentGroupMenu: (c) => c.groupMenus[c.groupMenuIndex],
          currentSortMenu: (c) => c.sortMenus[c.sortMenuIndex],
+
+         tabLayoutMenus: (c) => {
+            return c.stateMenus.map((stateMenu) => {
+               return {
+                  title: stateMenu.title,
+                  icon: stateMenu.isSelected()
+                     ? stateMenu.iconSelected
+                     : stateMenu.icon,
+                  count: stateMenu.list.length,
+                  primaryColor: stateMenu.primaryColor,
+                  isSelected: (menu) => {
+                     return stateMenu.isSelected();
+                  },
+                  click: (menu) => {
+                     stateMenu.click();
+                  },
+               };
+            });
+         },
       },
       methods: {
          searchResults(str) {
@@ -52,9 +72,9 @@
 </script>
 
 <template>
-   <div class="PageServiceActionbar">
+   <div class="PanelServices-Actionbar">
       <NavigationBar
-         class="PageServiceActionbar-top"
+         class="PanelServices-Actionbar-top"
          :rightMenus="[
             isOver350
                ? null
@@ -67,7 +87,7 @@
          ]"
       >
          <SearchInput
-            class="PageServiceActionbar-SearchInput"
+            class="PanelServices-Actionbar-SearchInput"
             v-if="isOver350 && services.length"
             placeholder="Search services"
             :list="results"
@@ -88,21 +108,16 @@
          </SearchInput>
       </NavigationBar>
 
-      <div class="PageServiceActionbar-tabs">
-         <div>
-            <Tab
-               v-for="stateMenu of stateMenus"
-               :key="stateMenu.title"
-               :item="stateMenu"
-               :isWide="isOver550"
-            />
-         </div>
-      </div>
+      <PanelItemsTabLayout
+         class="PanelServices-Actionbar-tabs"
+         :isScreenWide="isOver550"
+         :menus="tabLayoutMenus"
+      />
 
-      <div class="PageServiceActionbar-toolbar scrollbar">
+      <div class="PanelServices-Actionbar-toolbar scrollbar">
          <div>
             <LayoutViewSelector :menus="layoutMenus" :index="layoutMenuIndex" />
-            <div class="PageServiceActionbar-toolbar-menus">
+            <div class="PanelServices-Actionbar-toolbar-menus">
                <LabelMenus
                   title="Group"
                   :style="{ '--primary-color': primaryColorLabel.toString() }"
@@ -124,7 +139,7 @@
 </template>
 
 <style lang="scss" scoped>
-   .PageServiceActionbar {
+   .PanelServices-Actionbar {
       height: max-content;
       background-color: #f3f3f3;
       display: flex;
@@ -132,46 +147,21 @@
       justify-content: center;
       align-items: center;
 
-      .PageServiceActionbar-top {
+      .PanelServices-Actionbar-top {
          z-index: 3;
          max-width: var(--max-width);
 
-         .PageServiceActionbar-SearchInput {
+         .PanelServices-Actionbar-SearchInput {
             z-index: 3;
             width: 100%;
             padding: 0;
             flex-grow: 2;
          }
       }
-      .PageServiceActionbar-tabs {
-         z-index: 1;
-         width: 100%;
+      .PanelServices-Actionbar-tabs {
          padding: 0.3rem 1rem;
-         overflow-x: auto;
-
-         --scrollbar-size: 0.2rem;
-         --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.05);
-         --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.1);
-         --scrollbar-track-color: transparent;
-         --scrollbar-track-color-hover: transparent;
-         --scrollbar-track-margin: 1rem;
-
-         display: flex;
-         flex-direction: column;
-         align-items: flex-start;
-
-         & > * {
-            width: 100%;
-            max-width: max-content;
-            gap: 0.1rem;
-
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-start;
-         }
       }
-      .PageServiceActionbar-toolbar {
+      .PanelServices-Actionbar-toolbar {
          width: 100%;
          padding: 0.3rem 1rem;
 
@@ -196,7 +186,7 @@
             justify-content: flex-start;
          }
 
-         .PageServiceActionbar-toolbar-menus {
+         .PanelServices-Actionbar-toolbar-menus {
             gap: 0.5rem;
 
             flex-grow: 1;

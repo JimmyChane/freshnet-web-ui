@@ -10,12 +10,8 @@
       },
       computed: {
          theMenus: (c) => {
-            if (U.isArray(c.menus)) {
-               return c.menus;
-            }
-            if (U.isObjectOnly(c.menus)) {
-               return [c.menus];
-            }
+            if (U.isArray(c.menus)) return c.menus;
+            if (U.isObjectOnly(c.menus)) return [c.menus];
             return [];
          },
 
@@ -80,7 +76,7 @@
                font-weight: 600;
                flex-grow: 1;
                font-size: 0.9rem;
-               color: hsl(0, 0%, 0%);
+               color: black;
                padding: 1rem;
                padding-bottom: 0.4rem;
             }
