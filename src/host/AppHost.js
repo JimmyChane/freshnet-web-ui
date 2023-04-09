@@ -28,7 +28,7 @@ class AppHost {
    get path() {
       return getClientPort() == AppHost.#dev_port
          ? `${this.origin}/#`
-         : `${this.origin}/page/#`;
+         : `${this.origin}/#`;
    }
 }
 
