@@ -1,14 +1,15 @@
 <script>
    import Loading from "@/components/Loading";
    import Input from "@/components/Input.vue";
-   import Button2 from "@/components/button/Button2.vue";
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import Footer from "@/app/footer/Footer.vue";
+
+   import ButtonLogin from "./ButtonLogin.vue";
 
    export default {
       title: "Staff Login",
 
-      components: { Loading, Input, Button2, Actionbar, Footer },
+      components: { Loading, Input, ButtonLogin, Actionbar, Footer },
       data: (c) => ({
          top: { shadow: false },
          usernameErrorText: "",
@@ -32,7 +33,9 @@
 
             this.loginStore
                .dispatch("login", { username, password })
-               .then((user) => setTimeout(() => this.$router.push(redirect), 200))
+               .then((user) =>
+                  setTimeout(() => this.$router.push(redirect), 200),
+               )
                .catch(() => {
                   this.store.dispatch("snackbarShow", "Login failed");
                   this.usernameErrorText = "Check your username";
@@ -50,7 +53,10 @@
 </script>
 
 <template>
-   <div class="PageLogin" @scroll="(event) => (top.shadow = event.target.scrollTop > 0)">
+   <div
+      class="PageLogin"
+      @scroll="(event) => (top.shadow = event.target.scrollTop > 0)"
+   >
       <Loading class="PageLogin-Loading" :isShowing="isLoading" />
 
       <Actionbar
@@ -85,7 +91,8 @@
                @input="
                   (comp) => {
                      let value = comp.value;
-                     if (value.includes('')) comp.value = value.trim().replace(' ', '');
+                     if (value.includes(''))
+                        comp.value = value.trim().replace(' ', '');
                   }
                "
                :isRequired="true"
@@ -100,7 +107,7 @@
                :error="passwordErrorText"
             />
 
-            <Button2 class="PageLogin-button" text="Login" />
+            <ButtonLogin class="PageLogin-button" text="Login" />
          </form>
       </div>
 
@@ -193,6 +200,9 @@
                max-width: 200px;
                margin-top: 20px;
                padding: 10px;
+
+               --Button2-color: black;
+               --Button2-color-text: black;
             }
          }
       }

@@ -1,11 +1,10 @@
 <script>
    import MenuOption from "@/components/button/MenuOption.vue";
-   import Button3 from "@/components/button/Button3.vue";
    import ItemSpecification from "./ItemSpecification.vue";
    import Item from "./PanelCustomer-Item.vue";
 
    export default {
-      components: { MenuOption, Button3, ItemSpecification, Item },
+      components: { MenuOption, ItemSpecification, Item },
       emtis: ["click", "click-remove"],
       props: {
          item: { type: Object, default: null },

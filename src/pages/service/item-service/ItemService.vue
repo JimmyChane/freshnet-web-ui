@@ -2,7 +2,7 @@
    const Mode = { Grid: 1, List: 2, Detail: 4 };
 
    import MenuOption from "@/components/button/MenuOption.vue";
-   import Button3 from "@/components/button/Button3.vue";
+   import ItemButton from "@/pages/manage/PanelItems-ItemButton.vue";
    import LabelCount from "@/components/LabelCount.vue";
    import ImageViews from "@/components/ImageViews.vue";
    import ImageView from "@/components/ImageView.vue";
@@ -22,7 +22,7 @@
 
       components: {
          MenuOption,
-         Button3,
+         ItemButton,
          LabelCount,
          ImageViews,
          ImageView,
@@ -162,7 +162,7 @@
 </script>
 
 <template>
-   <Button3
+   <ItemButton
       :class="['ItemService', ...classes]"
       :style="{ '--primary-color': primaryColor }"
       :isSelected="isSelected"
@@ -254,7 +254,7 @@
             >{{ timestampText }}</ItemServiceDetailColumn
          >
       </div>
-   </Button3>
+   </ItemButton>
 </template>
 
 <style lang="scss" scoped>

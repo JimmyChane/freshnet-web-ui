@@ -1,10 +1,10 @@
 <script>
-   import Button3 from "@/components/button/Button3.vue";
+   import ItemButton from "@/pages/manage/PanelItems-ItemButton.vue";
    import LabelCount from "@/components/LabelCount.vue";
    import ItemDeviceCount from "./ItemDeviceCount.vue";
 
    export default {
-      components: { Button3, LabelCount, ItemDeviceCount },
+      components: { ItemButton, LabelCount, ItemDeviceCount },
       emtis: ["click", "click-remove"],
       props: {
          item: { type: Object, default: null },
@@ -30,18 +30,27 @@
          async invalidate() {
             this.itemDeviceGroups = [];
             if (!this.item) return;
-            this.itemDeviceGroups = await this.item.fetchDeviceGroups("categoryKey");
+            this.itemDeviceGroups = await this.item.fetchDeviceGroups(
+               "categoryKey",
+            );
          },
       },
    };
 </script>
 
 <template>
-   <Button3 class="ItemCustomer" :isSelected="selected" @focus="$emit('click', { item })">
+   <ItemButton
+      class="ItemCustomer"
+      :isSelected="selected"
+      @focus="$emit('click', { item })"
+   >
       <div class="ItemCustomer-body">
          <div class="ItemCustomer-header">
             <span class="ItemCustomer-name">{{ name }}</span>
-            <div class="ItemCustomer-header-dot" v-if="name && phoneNumberStr" />
+            <div
+               class="ItemCustomer-header-dot"
+               v-if="name && phoneNumberStr"
+            />
             <span class="ItemCustomer-phoneNumber">{{ phoneNumberStr }}</span>
          </div>
 
@@ -55,7 +64,9 @@
             "
          >
             <div class="ItemCustomer-description" v-if="item.description">
-               <span class="ItemCustomer-description-body">{{ item.description }}</span>
+               <span class="ItemCustomer-description-body">{{
+                  item.description
+               }}</span>
             </div>
 
             <div class="ItemCustomer-labels">
@@ -78,7 +89,7 @@
             </div>
          </div>
       </div>
-   </Button3>
+   </ItemButton>
 </template>
 
 <style lang="scss" scoped>

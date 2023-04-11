@@ -3,29 +3,28 @@
       emits: ["click"],
       props: {
          isSelected: { type: Boolean, default: false },
+         href: { type: String, default: "" },
+         to: { default: undefined },
       },
    };
 </script>
 
 <template>
    <button
-      :class="[
-         'Button3',
-         `Button3-${isSelected ? 'isSelected' : 'isDeselected'}`,
-         'transition',
-      ]"
+      class="PanelItems-ItemButton transition"
+      :isSelected="`${isSelected}`"
       @click="$emit('click')"
       @focus="$emit('focus')"
    >
-      <div class="Button3-background transition"></div>
-      <div class="Button3-color transition"></div>
+      <div class="PanelItems-ItemButton-overlay transition"></div>
+      <div class="PanelItems-ItemButton-color transition"></div>
 
       <slot />
    </button>
 </template>
 
 <style lang="scss" scoped>
-   .Button3 {
+   .PanelItems-ItemButton {
       position: relative;
       width: 100%;
       height: 100%;
@@ -38,7 +37,7 @@
       flex-direction: row;
       align-items: center;
 
-      .Button3-color {
+      .PanelItems-ItemButton-color {
          --width: 0.5rem;
          --width: 4px;
 
@@ -58,7 +57,7 @@
          border-top-left-radius: 0.3rem;
          border-bottom-left-radius: 0.3rem;
       }
-      .Button3-background {
+      .PanelItems-ItemButton-overlay {
          position: absolute;
          min-width: 100%;
          min-height: 100%;
@@ -70,26 +69,26 @@
       }
    }
 
-   .Button3-isSelected {
+   .PanelItems-ItemButton[isSelected="true"] {
       border: 1px solid var(--primary-color);
 
-      .Button3-color {
+      .PanelItems-ItemButton-color {
          opacity: 1;
       }
-      .Button3-background {
+      .PanelItems-ItemButton-overlay {
          opacity: 0.1;
       }
    }
-   .Button3-isDeselected {
+   .PanelItems-ItemButton[isSelected="false"] {
       border: 1px solid #dcdcdc;
       cursor: pointer;
 
       &:hover,
       &:focus {
-         .Button3-color {
+         .PanelItems-ItemButton-color {
             opacity: 0.3;
          }
-         .Button3-background {
+         .PanelItems-ItemButton-overlay {
             opacity: 0.05;
          }
       }
