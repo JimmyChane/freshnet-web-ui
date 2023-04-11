@@ -186,6 +186,7 @@
             <Input
                class="PageOrder-input"
                label="Customer Name"
+               autocapitalize="words"
                :bindValue="customer_name"
                @input="(comp) => (customer_name = comp.value)"
             />

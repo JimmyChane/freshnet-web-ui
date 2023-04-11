@@ -100,7 +100,7 @@
       </span>
       <div class="Selector-separator transition" />
       <img
-         class="Selector-arrow"
+         class="Selector-arrow transition"
          :src="
             host.res(`icon/arrow_down-${currentColor ? 'white' : 'black'}.svg`)
          "
@@ -126,6 +126,7 @@
       flex-direction: row;
       flex-wrap: nowrap;
       align-items: stretch;
+      align-items: center;
 
       border-radius: 6px;
       font-weight: 400;

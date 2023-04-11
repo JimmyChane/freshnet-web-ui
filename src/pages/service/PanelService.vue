@@ -237,8 +237,8 @@
                      @mouseleave="bookmarkHeaderIconIsHover = false"
                      :src="
                         bookmarkHeaderIconIsHover
-                           ? host.icon('bookmark-add-505050')
-                           : host.icon('bookmark-505050')
+                           ? host.icon('bookmark-add-000000')
+                           : host.icon('bookmark-000000')
                      "
                   />
                </div>

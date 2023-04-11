@@ -68,7 +68,9 @@
                });
 
             if (!this.brandMenu) {
-               this.brandMenu = this.brandMenus.find((menu) => menu.key === "none");
+               this.brandMenu = this.brandMenus.find(
+                  (menu) => menu.key === "none",
+               );
             }
 
             const categoryOther = categories.find((category) => {
@@ -116,12 +118,17 @@
       <div class="WindowAddProduct-body">
          <div class="WindowAddProduct-menus">
             <LabelMenus title="Brand" :menus="brandMenus" :menu="brandMenu" />
-            <LabelMenus title="Category" :menus="categoryMenus" :menu="categoryMenu" />
+            <LabelMenus
+               title="Category"
+               :menus="categoryMenus"
+               :menu="categoryMenu"
+            />
          </div>
 
          <Input
             class="WindowAddProduct-title"
             label="Title"
+            autocapitalize="words"
             :isRequired="true"
             :bindValue="title"
             :error="titleError"

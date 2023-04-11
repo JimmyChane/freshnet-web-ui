@@ -46,22 +46,33 @@
             this.data.description = this.data.description.trim();
 
             if (this.Requirement.name.isRequired && !this.data.name) {
-               this.store.dispatch("snackbarShow", 'You must specify the "Name"');
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify the "Name"',
+               );
             } else if (
                this.Requirement.phoneNumber.isRequired &&
                !this.data.phoneNumber
             ) {
-               this.store.dispatch("snackbarShow", 'You must specify the "Phone Number"');
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify the "Phone Number"',
+               );
             } else if (
                this.Requirement.description.isRequired &&
                !this.data.description
             ) {
-               this.store.dispatch("snackbarShow", 'You must specify the "Description"');
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify the "Description"',
+               );
             } else {
-               this.customerStore.dispatch("addItem", this.data).then((item) => {
-                  this.$emit("click-ok", { item });
-                  this.resetData(700);
-               });
+               this.customerStore
+                  .dispatch("addItem", this.data)
+                  .then((item) => {
+                     this.$emit("click-ok", { item });
+                     this.resetData(700);
+                  });
             }
          },
       },
@@ -89,6 +100,7 @@
             class="WindowAddCustomer-customer-input"
             label="Name"
             type="text"
+            autocapitalize="words"
             :isRequired="true"
             :bindValue="data.name"
             @input="(comp) => (data.name = comp.value)"

@@ -14,7 +14,8 @@
       quantity: 0,
       time: TimeGetter.getTimeNow(),
    });
-   const isBelongingEmpty = (data) => data.title.trim() === "" && data.quantity <= 0;
+   const isBelongingEmpty = (data) =>
+      data.title.trim() === "" && data.quantity <= 0;
 
    import Input from "@/components/Input.vue";
 
@@ -71,7 +72,8 @@
 
          getResults() {
             return this.belongings.filter((belonging) => {
-               if (belonging.time === 0) belonging.time = TimeGetter.getTimeNow();
+               if (belonging.time === 0)
+                  belonging.time = TimeGetter.getTimeNow();
                return belonging.title.trim() && belonging.quantity;
             });
          },
@@ -103,6 +105,7 @@
             class="BelongingListEdit-item-input"
             ref="input"
             type="text"
+            autocapitalize="words"
             :placeholder="`Item ${belongings.indexOf(belonging) + 1}`"
             :value="belonging.title"
             @input="
@@ -110,7 +113,8 @@
                   let value = event.target.value.trim();
                   if (value === '') belonging.quantity = 0;
                   else
-                     belonging.quantity = belonging.quantity > 0 ? belonging.quantity : 1;
+                     belonging.quantity =
+                        belonging.quantity > 0 ? belonging.quantity : 1;
 
                   belonging.title = value;
 
@@ -122,7 +126,8 @@
                   let value = event.target.value.trim();
                   if (value === '') belonging.quantity = 0;
                   else
-                     belonging.quantity = belonging.quantity > 0 ? belonging.quantity : 1;
+                     belonging.quantity =
+                        belonging.quantity > 0 ? belonging.quantity : 1;
 
                   onInput();
                }

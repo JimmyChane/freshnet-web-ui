@@ -53,6 +53,7 @@
             class="WindowCustomer-input"
             label="Name"
             ref="InputName"
+            autocapitalize="words"
             :isRequired="true"
             :bindValue="customerName"
             @input="(comp) => (customerName = comp.value)"

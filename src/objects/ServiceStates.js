@@ -13,7 +13,7 @@ class ServiceState {
 export default class ServiceStates {
    static Pending = new ServiceState(
       ModuleService.State.Pending,
-      "Pending",
+      "Working",
       {
          white: HostApi.icon("page/service/pending-white"),
          color: HostApi.icon("page/service/pending-color"),
@@ -22,7 +22,7 @@ export default class ServiceStates {
    );
    static Waiting = new ServiceState(
       ModuleService.State.Waiting,
-      "Waiting",
+      "Waiting for Pickup",
       {
          white: HostApi.icon("page/service/waiting-white"),
          color: HostApi.icon("page/service/waiting-color"),
@@ -31,7 +31,7 @@ export default class ServiceStates {
    );
    static Completed = new ServiceState(
       ModuleService.State.Completed,
-      "Completed",
+      "Finished & Pickup",
       {
          white: HostApi.icon("page/service/completed-white"),
          color: HostApi.icon("page/service/completed-color"),
@@ -40,7 +40,7 @@ export default class ServiceStates {
    );
    static Rejected = new ServiceState(
       ModuleService.State.Rejected,
-      "Rejected",
+      "Rejected & Pickup",
       {
          white: HostApi.icon("page/service/rejected-white"),
          color: HostApi.icon("page/service/rejected-color"),

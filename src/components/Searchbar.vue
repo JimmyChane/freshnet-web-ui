@@ -60,6 +60,8 @@
          class="Searchbar-input transition"
          ref="input"
          v-model="search"
+         type="search"
+         results="2"
          :placeholder="placeholder"
          @focus="(e) => $emit('focus', this._self)"
          @blur="(e) => $emit('blur', this._self)"
@@ -106,6 +108,12 @@
          &::placeholder {
             color: hsla(0, 0%, 0%, 0.4);
             font-size: 0.8em;
+         }
+         &::-webkit-search-decoration,
+         &::-webkit-search-cancel-button,
+         &::-webkit-search-results-button,
+         &::-webkit-search-results-decoration {
+            display: none;
          }
       }
 

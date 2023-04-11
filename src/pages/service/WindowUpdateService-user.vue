@@ -39,6 +39,7 @@
    <Input
       class="WindowServiceUpdate-input"
       v-if="isUserDefault"
+      autocapitalize="words"
       :label="`${nameUserType}${name.trim() === '' ? ' (Your name here)' : ''}`"
       :isRequired="true"
       :bindValue="name"

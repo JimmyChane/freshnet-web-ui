@@ -255,6 +255,7 @@
             />
             <Input
                label="Name"
+               autocapitalize="words"
                :isRequired="true"
                :bindValue="window.addUser.name"
                @input="(comp) => (window.addUser.name = comp.value)"

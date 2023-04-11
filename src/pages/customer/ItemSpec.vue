@@ -36,6 +36,7 @@
          ref="ItemSpecInput"
          type="text"
          v-model="item.content"
+         autocapitalize="words"
          @input="(event) => $emit('input-content', event.target.value)"
          @change="(event) => $emit('change-content', event.target.value)"
       />

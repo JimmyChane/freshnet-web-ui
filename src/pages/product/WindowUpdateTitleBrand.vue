@@ -14,7 +14,8 @@
          product: (c) => (c.input ? c.input.product : ""),
          title: (c) => (c.data ? c.data.title : ""),
          brandId: (c) => (c.data ? c.data.brandId : ""),
-         brand: (c) => c.brandStore.getters.items.find((brand) => brand.id === c.brandId),
+         brand: (c) =>
+            c.brandStore.getters.items.find((brand) => brand.id === c.brandId),
          brandTitle: (c) => (c.brand ? c.brand.title : ""),
          parsedTitleBrand: (c) => {
             if (c.title && c.brandTitle) return `${c.brandTitle} ${c.title}`;
@@ -24,15 +25,16 @@
          },
 
          brandMenus: (c) => {
-            return [{ _id: "", title: "None" }, ...c.brandStore.getters.items].map(
-               (item) => {
-                  return {
-                     key: item.id,
-                     title: item.title,
-                     icon: item.icon ? item.icon.toUrl() : "",
-                  };
-               },
-            );
+            return [
+               { _id: "", title: "None" },
+               ...c.brandStore.getters.items,
+            ].map((item) => {
+               return {
+                  key: item.id,
+                  title: item.title,
+                  icon: item.icon ? item.icon.toUrl() : "",
+               };
+            });
          },
       },
       watch: {
@@ -86,6 +88,7 @@
       <div class="WindowUpdateTitleBrand-body">
          <Input
             class="WindowUpdateTitleBrand-input"
+            autocapitalize="words"
             :bindValue="title"
             :isRequired="true"
             @input="(comp) => (data.title = comp.value)"
