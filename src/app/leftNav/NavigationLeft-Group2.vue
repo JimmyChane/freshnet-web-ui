@@ -15,8 +15,10 @@
 </script>
 
 <template>
-   <div :class="['LeftNavGroup2', `LeftNavGroup2-${isWide ? 'isWide' : 'isThin'}`]">
-      <span class="LeftNavGroup2-title" v-if="isWide && title">{{ title }}</span>
+   <div class="LeftNavGroup2" :isWide="`${isWide}`">
+      <span class="LeftNavGroup2-title" v-if="isWide && title">{{
+         title
+      }}</span>
 
       <div class="LeftNavGroup2-groups" v-if="group3s">
          <LeftNavGroup3
@@ -54,7 +56,7 @@
       }
    }
 
-   .LeftNavGroup2-isWide {
+   .LeftNavGroup2[isWide="true"] {
       width: 100%;
       .LeftNavGroup2-group3s {
          width: 100%;

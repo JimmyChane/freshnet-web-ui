@@ -13,7 +13,8 @@
       },
       computed: {
          iconArrow: (c) => {
-            if (c.isSelected && c.isSelectedDark) return c.host.icon("arrowDown-FFFFFF");
+            if (c.isSelected && c.isSelectedDark)
+               return c.host.icon("arrowDown-FFFFFF");
             return c.host.icon("arrowDown-2A4858");
          },
          styleClass: (c) => {
@@ -37,13 +38,10 @@
 
 <template>
    <router-link
-      :class="[
-         'LeftNavLink',
-         styleClass,
-         `LeftNavLink-${isWide ? 'isWide' : 'isThin'}`,
-         isSelected && isExpanded ? 'LeftNavLink-isExpanded' : '',
-         hasGroup2s && isSelected ? 'LeftNavLink-hasGroup2s-isSelected' : '',
-      ]"
+      :class="['LeftNavLink', styleClass]"
+      :isWide="`${isWide}`"
+      :isExpand="`${isSelected && isExpanded}`"
+      :hasGroup2IsSelected="`${hasGroup2s && isSelected}`"
       :to="{ path: href }"
       @click="$emit('click', item)"
    >
@@ -59,12 +57,7 @@
 
          <div class="LeftNavLink-arrow" v-if="isWide && hasGroups">
             <ButtonIcon
-               :class="[
-                  'LeftNavLink-arrow-button',
-                  `LeftNavLink-arrow-button-${
-                     !isSelected && isExpanded ? 'isExpanded' : 'isCollapsed'
-                  }`,
-               ]"
+               class="LeftNavLink-arrow-button"
                :src="iconArrow"
                @click="$emit('click-open', item)"
             />
@@ -161,7 +154,7 @@
       }
    }
 
-   .LeftNavLink-isWide {
+   .LeftNavLink[isWide="true"] {
       .LeftNavLink-body {
          width: 100%;
          border-radius: 0.5em;
@@ -170,9 +163,8 @@
          }
       }
    }
-   .LeftNavLink-isThin {
+   .LeftNavLink[isWide="false"] {
       .LeftNavLink-body {
-         // border-radius: 50%;
          border-radius: 0.5rem;
          align-items: center;
          justify-content: center;
@@ -185,7 +177,7 @@
       }
    }
 
-   .LeftNavLink-isExpanded {
+   .LeftNavLink[isExpand="true"] {
       .LeftNavLink-body {
          background: #d9dbdd;
          .LeftNavLink-arrow {
@@ -196,7 +188,7 @@
       }
    }
 
-   .LeftNavLink-hasGroup2s-isSelected {
+   .LeftNavLink[hasGroup2IsSelected="true"] {
       width: 100%;
       border-radius: 0;
       padding: 0;

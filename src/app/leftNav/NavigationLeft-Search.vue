@@ -14,7 +14,7 @@
 </script>
 
 <template>
-   <div :class="['NavigationLeft-Search', isWide ? 'NavigationLeft-Search-isWide' : '']">
+   <div class="NavigationLeft-Search" :isWide="`${isWide}`">
       <ButtonIcon
          class="NavigationLeft-Search-button"
          v-if="!isWide"
@@ -51,7 +51,7 @@
          --dropdown-height: calc(100dvh - 10rem);
       }
    }
-   .NavigationLeft-Search-isWide {
+   .NavigationLeft-Search[isWide="true"] {
       margin: 0 0.7rem;
    }
 </style>

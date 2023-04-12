@@ -32,12 +32,7 @@
 </script>
 
 <template>
-   <div
-      :class="[
-         'LeftNavHeader',
-         isWide ? 'LeftNavHeader-isWide' : 'LeftNavHeader-isThin',
-      ]"
-   >
+   <div class="LeftNavHeader" :isWide="`${isWide}`">
       <router-link class="LeftNavHeader-logo transition" :to="{ path: '/' }">
          <img
             class="LeftNavHeader-icon transition"
@@ -114,7 +109,7 @@
       }
    }
 
-   .LeftNavHeader-isWide {
+   .LeftNavHeader[isWide="true"] {
       flex-direction: row;
       .LeftNavHeader-logo {
          .LeftNavHeader-icon {
@@ -133,7 +128,7 @@
          }
       }
    }
-   .LeftNavHeader-isThin {
+   .LeftNavHeader[isWide="false"] {
       flex-direction: column-reverse;
       gap: 0.5rem;
       .LeftNavHeader-logo {

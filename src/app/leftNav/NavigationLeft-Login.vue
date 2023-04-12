@@ -29,10 +29,8 @@
 
 <template>
    <div
-      :class="[
-         'LeftNavigationLogin',
-         `LeftNavigationLogin-${isWide ? 'isWide' : 'isThin'}`,
-      ]"
+      class="LeftNavigationLogin"
+      :isWide="`${isWide}`"
       v-if="!isLoginPage || user.isTypeNone()"
    >
       <div class="LeftNavigationLogin-loggedIn" v-if="!user.isTypeNone()">
@@ -139,10 +137,10 @@
       }
    }
 
-   .LeftNavigationLogin-isWide {
+   .LeftNavigationLogin[isWide="true"] {
       padding: 0.5rem;
    }
-   .LeftNavigationLogin-isThin {
+   .LeftNavigationLogin[isWide="false"] {
       padding: 0.2rem;
       .LeftNavigationLogin-loggedIn {
          gap: 0;

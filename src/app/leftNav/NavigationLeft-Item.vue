@@ -32,7 +32,7 @@
 </script>
 
 <template>
-   <div :class="['LeftNavItem', `LeftNavItem-${isWide ? 'isWide' : 'isThin'}`]">
+   <div class="LeftNavItem" :isWide="`${isWide}`">
       <img class="LeftNavItem-icon" v-if="iconUrl" :src="iconUrl" />
       <span class="LeftNavItem-title" v-if="iconUrl ? isWide && title : true">{{
          title
@@ -76,11 +76,11 @@
       }
    }
 
-   .LeftNavItem-isWide {
+   .LeftNavItem[isWide="true"] {
       width: 100%;
       justify-content: space-between;
    }
-   .LeftNavItem-isThin {
+   .LeftNavItem[isWide="false"] {
       align-items: center;
       justify-content: center;
       .LeftNavItem-title {
