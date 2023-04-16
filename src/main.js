@@ -24,39 +24,6 @@ const objectToArray = (object = {}) => {
       value: object[key],
    }));
 };
-const confineRouteQuery = (previousQuery, nextQuery) => {
-   let nextQueries = objectToArray(previousQuery);
-   let queries = objectToArray(nextQuery);
-   let isChanged = false;
-
-   for (let query of queries) {
-      const current = nextQueries.find((current) => current.key === query.key);
-
-      if (current && current.value !== query.value) {
-         current.value = query.value;
-         isChanged = true;
-      } else if (
-         !current &&
-         query.value !== null &&
-         query.value !== undefined
-      ) {
-         nextQueries.push({ key: query.key, value: query.value });
-         isChanged = true;
-      }
-
-      if (current && current.value === null) {
-         nextQueries.splice(nextQueries.indexOf(current), 1);
-         isChanged = true;
-      }
-   }
-
-   if (!isChanged) return;
-
-   return nextQueries.reduce((query, newQuery) => {
-      query[newQuery.key] = newQuery.value;
-      return query;
-   }, {});
-};
 const isPassed = (user, permissions) => {
    permissions = Array.isArray(permissions) ? permissions : [];
 
@@ -94,6 +61,63 @@ const parseGroup2s = (array) => {
       };
    });
 };
+
+class RouteQuery {
+   static isValidKey(key) {
+      return U.isString(key) && !key.includes(" ");
+   }
+   static isValidValue(value) {
+      return value !== null && value !== undefined && value !== "";
+   }
+   static replace(currentQuery, pendingQuery) {
+      const nextQueries = objectToArray(currentQuery);
+      const pendingQueries = objectToArray(pendingQuery);
+      let isChanged = false;
+
+      for (const pendingQuery of pendingQueries) {
+         if (!U.isObjectOnly(pendingQuery)) continue;
+
+         const { key, value } = pendingQuery;
+         if (!this.isValidKey(key)) continue;
+
+         const nextQuery = nextQueries.find((nextQuery) => {
+            return nextQuery.key === key;
+         });
+
+         if (!U.isObjectOnly(nextQuery)) {
+            nextQueries.push({ key, value });
+            isChanged = true;
+            continue;
+         }
+
+         if (nextQuery.value !== pendingQuery.value) {
+            nextQuery.value = pendingQuery.value;
+            isChanged = true;
+            continue;
+         }
+
+         if (!this.isValidValue(nextQuery.value)) {
+            nextQueries.splice(nextQueries.indexOf(nextQuery), 1);
+            isChanged = true;
+            continue;
+         }
+      }
+
+      if (!isChanged) return;
+
+      return nextQueries
+         .filter((nextQuery) => {
+            return (
+               this.isValidKey(nextQuery.key) &&
+               this.isValidValue(nextQuery.value)
+            );
+         })
+         .reduce((query, nextQuery) => {
+            query[nextQuery.key] = nextQuery.value;
+            return query;
+         }, {});
+   }
+}
 
 new Vue({
    host: HostApi,
@@ -415,9 +439,15 @@ new Vue({
          this.setRoute(param, false);
       },
       setRoute(param = {}, isNext = true) {
-         let query = confineRouteQuery(this.$route.query, param.query);
-         if (isNext) this.$router.push({ query });
-         else this.$router.replace({ query });
+         const query = RouteQuery.replace(this.$route.query, param.query);
+
+         if (!query) return;
+
+         if (isNext) {
+            this.$router.push({ query });
+         } else {
+            this.$router.replace({ query });
+         }
       },
 
       // window

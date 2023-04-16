@@ -64,6 +64,7 @@
             class="PanelProducts-category-focusGroup transition"
             :to="{ query: { category: key } }"
             v-if="queryGroupKey !== key"
+            replace
             >View All</router-link
          >
       </div>
@@ -90,8 +91,9 @@
                :to="{
                   query: {
                      productId: item.id,
-                     brand: queryBrandId,
-                     stock: queryStock,
+                     brand: queryBrandId ? queryBrandId : undefined,
+                     stock: queryStock ? queryStock : undefined,
+                     category: queryGroupKey ? queryGroupKey : undefined,
                   },
                }"
             >
