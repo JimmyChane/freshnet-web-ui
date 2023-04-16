@@ -4,6 +4,7 @@
    import ItemCustomerSearch from "./ItemCustomerSearch.vue";
    import Searcher from "@/tools/Searcher";
    import TabLayout from "@/components/tabLayout/TabLayout.vue";
+   import U from "@/U";
 
    export default {
       components: { NavigationBar, SearchInput, ItemCustomerSearch, TabLayout },
@@ -12,6 +13,59 @@
          items: { type: Array, default: () => [] },
       },
       data: (c) => ({ results: [] }),
+      computed: {
+         filter: (c) => U.optString(c.$route.query.filter),
+         list: (c) => {
+            switch (c.filter) {
+               case "service":
+                  return c.listService;
+               case "order":
+                  return c.listOrder;
+               default:
+                  return c.items;
+            }
+         },
+
+         listService: (c) => c.items.filter((item) => item.services.length),
+         listOrder: (c) => c.items.filter((item) => item.orders.length),
+
+         navigationMenus: (c) => {
+            return [
+               {
+                  title: "Add",
+                  icon: c.host.icon("add-000000"),
+                  click: () => c.$emit("click-item-add"),
+               },
+               {
+                  title: "Refresh",
+                  icon: c.host.icon("refresh-000000"),
+                  click: () => c.$emit("click-refresh"),
+               },
+            ];
+         },
+         tabLayoutMenus: (c) => {
+            return [
+               { key: "", title: "All", count: c.items.length },
+               {
+                  key: "service",
+                  title: "From Services",
+                  count: c.listService.length,
+               },
+               {
+                  key: "order",
+                  title: "From Orders",
+                  count: c.listOrder.length,
+               },
+               // { title: 'Devices Only', count: 0 },
+            ].map((menu) => {
+               menu.isSelected = (menu) => c.filter === menu.key;
+               menu.click = (menu) => {
+                  c.$root.replaceRoute({ query: { filter: menu.key } });
+               };
+               return menu;
+            });
+         },
+      },
       methods: {
          searchResults(str) {
             return Searcher.withItems(this.items).search(str);
@@ -41,18 +95,7 @@
       <NavigationBar
          class="PanelCustomers-navigationbar"
          :title="items.length ? '' : title"
-         :rightMenus="[
-            {
-               title: 'Add',
-               icon: host.icon('add-000000'),
-               click: () => $emit('click-item-add'),
-            },
-            {
-               title: 'Refresh',
-               icon: host.icon('refresh-000000'),
-               click: () => $emit('click-refresh'),
-            },
-         ]"
+         :rightMenus="navigationMenus"
       >
          <SearchInput
             class="Actionbar-search"
@@ -82,17 +125,7 @@
       <TabLayout
          class="PanelCustomers-tabLayout"
          :isScreenWide="true"
-         :menus="[
-            {
-               title: 'All',
-               count: items.length,
-               isSelected: (menu) => true,
-               click: (menu) => {},
-            },
-            // { title: 'Devices Only', count: 0 },
-            // { title: 'Services Only', count: 0 },
-            // { title: 'Orders Only', count: 0 },
-         ]"
+         :menus="tabLayoutMenus"
       />
    </div>
 </template>

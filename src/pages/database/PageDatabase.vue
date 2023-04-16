@@ -17,7 +17,6 @@
       userPermissions: ["admin"],
 
       components: { Loading, PopupWindow, Empty, NavigationBar, ItemDatabase },
-      emits: ["callback-side-expand"],
       data: (c) => ({
          scrollTop: 0,
          imports: { data: null },
@@ -26,7 +25,9 @@
       computed: {
          isLoading: (c) => {
             const { loginStore, databaseStore } = c;
-            return loginStore.getters.isLoading || databaseStore.getters.isLoading;
+            return (
+               loginStore.getters.isLoading || databaseStore.getters.isLoading
+            );
          },
          user: (c) => c.loginStore.getters.user,
          baseInfo: (c) => c.databaseStore.getters.baseInfo,
@@ -79,7 +80,10 @@
                   return this.databaseStore.dispatch("loadBaseInfo");
                })
                .catch((error) => {
-                  this.store.dispatch("snackbarShow", "Error Loading Databases");
+                  this.store.dispatch(
+                     "snackbarShow",
+                     "Error Loading Databases",
+                  );
                   throw error;
                });
          },
@@ -88,7 +92,10 @@
 </script>
 
 <template>
-   <div class="PageDatabase" @scroll="(event) => (scrollTop = event.target.scrollTop)">
+   <div
+      class="PageDatabase"
+      @scroll="(event) => (scrollTop = event.target.scrollTop)"
+   >
       <NavigationBar
          style="z-index: 2"
          :title="$options.title"
@@ -102,7 +109,10 @@
          ]"
       />
 
-      <div class="PageDatabase-body" v-if="user && baseInfo && databases.length">
+      <div
+         class="PageDatabase-body"
+         v-if="user && baseInfo && databases.length"
+      >
          <div class="PageDatabase-import">
             <span class="PageDatabase-title">Import</span>
             <input

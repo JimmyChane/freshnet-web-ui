@@ -37,7 +37,6 @@
          WindowRemove,
          Drawer,
       },
-      emits: ["callback-side-expand"],
       data: (c) => ({
          actions: {
             onClickClose: () => c.clickService(null),

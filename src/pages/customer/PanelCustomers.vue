@@ -18,16 +18,28 @@
       data: (c) => ({ scrollTop: 0, itemSelect: null }),
       computed: {
          iconEmpty: () => PageCustomer.icon.dark.toUrl(),
+
+         filter: (c) => U.optString(c.$route.query.filter),
+         list: (c) => {
+            switch (c.filter) {
+               case "service":
+                  return c.listService;
+               case "order":
+                  return c.listOrder;
+               default:
+                  return c.items;
+            }
+         },
+
+         listService: (c) => c.items.filter((item) => item.services.length),
+         listOrder: (c) => c.items.filter((item) => item.orders.length),
       },
       methods: {
          itemKey(item) {
             return `${this.itemName(item)}${this.itemPhoneNumberValue(item)}`;
          },
          itemName(item) {
-            if (!item) {
-               return "";
-            }
-            return U.optString(item.name);
+            return U.optString(item?.name);
          },
          itemPhoneNumberValue(item) {
             if (!item || !item.phoneNumber) {
@@ -36,10 +48,7 @@
             return item.phoneNumber.value;
          },
          itemPhoneNumberStr(item) {
-            if (!item) {
-               return "";
-            }
-            return item.phoneNumber.toUrl();
+            return U.optString(item?.phoneNumber.toUrl());
          },
       },
    };
@@ -58,10 +67,10 @@
          @click-refresh="() => $emit('click-refresh')"
       />
 
-      <div class="PanelCustomers-body" v-if="items.length">
+      <div class="PanelCustomers-body" v-if="list.length">
          <router-link
             class="PanelCustomers-item"
-            v-for="item of items"
+            v-for="item of list"
             :key="itemKey(item)"
             :to="{
                query: {
@@ -79,7 +88,7 @@
       </div>
 
       <Empty
-         v-if="!items.length && !customerStore.getters.isLoading"
+         v-if="!list.length && !customerStore.getters.isLoading"
          :icon="iconEmpty"
       />
    </div>

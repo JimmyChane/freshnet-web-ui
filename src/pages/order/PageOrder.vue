@@ -22,7 +22,6 @@
       userPermissions: ["admin", "staff"],
 
       components: { PopupWindow, Loading, Actionbar, SectionOrder, Input },
-      emits: ["callback-side-expand"],
       data: (c) => ({
          display: { showDialogAppendOrder: false },
 

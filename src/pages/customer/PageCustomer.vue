@@ -46,7 +46,6 @@
          WindowUpdateDeviceSpecifications,
          WindowUpdateDeviceDescription,
       },
-      emits: ["callback-side-expand"],
       data: (c) => ({
          windowAddCustomer: new PopupContext(c),
          windowRemoveCustomer: new PopupContext(c).onConfirm(
@@ -89,9 +88,7 @@
          queryPhoneNumber: (c) => c.$route.query.phoneNumber,
 
          currentCustomer: (c) => {
-            if (!c.items.length) {
-               return null;
-            }
+            if (!c.items.length) return null;
 
             const { queryName, queryPhoneNumber } = c;
 
