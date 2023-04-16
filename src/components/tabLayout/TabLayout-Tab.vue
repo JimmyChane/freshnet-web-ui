@@ -10,6 +10,7 @@
          icon: (c) => c.menu.icon,
          count: (c) => c.menu.count,
          primaryColor: (c) => c.menu.primaryColor ?? "black",
+         primaryColorTint: (c) => c.menu.primaryColorTint ?? "transparent",
       },
       methods: {
          isSelected() {
@@ -29,35 +30,36 @@
 
 <template>
    <button
-      :class="['PanelItems-TabLayout-Tab', 'transition']"
-      :style="{ '--primary-color': primaryColor }"
+      :class="['TabLayout-Tab', 'transition']"
+      :style="{
+         '--primary-color': primaryColor,
+         '--primary-color-tint': primaryColorTint,
+      }"
       :isExpand="`${isSelected() || isScreenWide}`"
       :isSelected="`${isSelected()}`"
       @click="() => click()"
    >
-      <img v-if="icon" class="PanelItems-TabLayout-Tab-icon" :src="icon" />
+      <img v-if="icon" class="TabLayout-Tab-icon" :src="icon" />
       <span
          v-if="title.length"
-         :class="['PanelItems-TabLayout-Tab-title', 'transition']"
+         :class="['TabLayout-Tab-title', 'transition']"
          >{{ title }}</span
       >
-      <span
-         v-if="typeof count === 'number'"
-         class="PanelItems-TabLayout-Tab-count"
+      <span v-if="typeof count === 'number'" class="TabLayout-Tab-count"
          >({{ count }})</span
       >
    </button>
 </template>
 
 <style lang="scss" scoped>
-   .PanelItems-TabLayout-Tab {
+   .TabLayout-Tab {
       --primary-color: inherit;
 
       height: 2.4rem;
       border: none;
       border-radius: 0.8rem;
       font-size: 1rem;
-      padding: 0.5rem;
+      padding: 0.6rem;
 
       display: flex;
       flex-direction: row;
@@ -66,13 +68,13 @@
 
       transition-timing-function: cubic-bezier(1, 0, 0, 1);
 
-      .PanelItems-TabLayout-Tab-icon {
+      .TabLayout-Tab-icon {
          z-index: 2;
          width: 1.5rem;
          height: 1.5rem;
          padding: 0.25rem;
       }
-      .PanelItems-TabLayout-Tab-title {
+      .TabLayout-Tab-title {
          z-index: 1;
          text-align: start;
          text-overflow: ellipsis;
@@ -80,35 +82,37 @@
          overflow: hidden;
          font-weight: 600;
          transition-timing-function: cubic-bezier(1, 0, 0, 1);
+         font-size: 0.9em;
       }
-      .PanelItems-TabLayout-Tab-count {
+      .TabLayout-Tab-count {
          min-width: max-content;
          font-size: 0.8em;
       }
    }
 
-   .PanelItems-TabLayout-Tab[isExpand="true"] {
+   .TabLayout-Tab[isExpand="true"] {
       width: 10rem;
       width: 9rem;
       gap: 0.2rem;
    }
-   .PanelItems-TabLayout-Tab[isExpand="false"] {
+   .TabLayout-Tab[isExpand="false"] {
       width: 4rem;
       gap: 0;
-      .PanelItems-TabLayout-Tab-title {
+      .TabLayout-Tab-title {
          width: 0;
          height: 0;
          opacity: 0;
       }
    }
 
-   .PanelItems-TabLayout-Tab[isSelected="true"] {
+   .TabLayout-Tab[isSelected="true"] {
       background: var(--primary-color);
       color: white;
    }
-   .PanelItems-TabLayout-Tab[isSelected="false"] {
-      background: none;
+   .TabLayout-Tab[isSelected="false"] {
+      // background: none;
       cursor: pointer;
+      background: var(--primary-color-tint);
       color: var(--primary-color);
 
       &:hover {

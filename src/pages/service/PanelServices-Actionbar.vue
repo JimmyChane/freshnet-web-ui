@@ -8,7 +8,7 @@
    import chroma from "chroma-js";
    import Searcher from "@/tools/Searcher";
 
-   import PanelItemsTabLayout from "../manage/PanelItems-TabLayout.vue";
+   import TabLayout from "@/components/tabLayout/TabLayout.vue";
 
    export default {
       components: {
@@ -17,7 +17,7 @@
          LayoutViewSelector,
          LabelMenus,
          ItemService,
-         PanelItemsTabLayout,
+         TabLayout,
       },
       emits: ["click-service"],
       props: {
@@ -108,7 +108,7 @@
          </SearchInput>
       </NavigationBar>
 
-      <PanelItemsTabLayout
+      <TabLayout
          class="PanelServices-Actionbar-tabs"
          :isScreenWide="isOver550"
          :menus="tabLayoutMenus"

@@ -3,7 +3,7 @@
    import SearchInput from "@/components/SearchInput.vue";
    import ItemCustomerSearch from "./ItemCustomerSearch.vue";
    import Searcher from "@/tools/Searcher";
-   import TabLayout from "@/pages/manage/PanelItems-TabLayout.vue";
+   import TabLayout from "@/components/tabLayout/TabLayout.vue";
 
    export default {
       components: { NavigationBar, SearchInput, ItemCustomerSearch, TabLayout },

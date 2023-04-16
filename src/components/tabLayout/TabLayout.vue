@@ -1,5 +1,5 @@
 <script>
-   import Tab from "./PanelItems-TabLayout-Tab.vue";
+   import Tab from "./TabLayout-Tab.vue";
 
    export default {
       components: { Tab },
@@ -11,7 +11,7 @@
 </script>
 
 <template>
-   <div :class="['PanelItems-TabLayout', 'scrollbar']">
+   <div :class="['TabLayout', 'scrollbar']">
       <div>
          <Tab
             v-for="menu of menus"
@@ -24,7 +24,7 @@
 </template>
 
 <style lang="scss" scoped>
-   .PanelItems-TabLayout {
+   .TabLayout {
       z-index: 1;
       width: 100%;
       height: max-content;

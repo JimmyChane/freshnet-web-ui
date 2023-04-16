@@ -4,8 +4,8 @@
    import LabelMenus from "@/components/LabelMenus.vue";
    import Footer from "@/app/footer/Footer.vue";
 
-   import Actionbar from "@/components/actionbar/Actionbar.vue";
    import ActionbarProduct from "./ActionBarProduct.vue";
+   import TabLayout from "@/components/tabLayout/TabLayout.vue";
    import ItemProduct from "./ItemProduct.vue";
    import Group from "./PanelProducts-Group.vue";
    import chroma from "chroma-js";
@@ -51,8 +51,8 @@
    export default {
       emits: ["click-productAdd"],
       components: {
-         Actionbar,
          ActionbarProduct,
+         TabLayout,
          ItemProduct,
          Group,
          LabelMenus,
@@ -95,6 +95,19 @@
             const icon = this.host.icon("add-000000");
             const click = () => this.$emit("click-productAdd");
             return { title, icon, click };
+         },
+
+         tabLayoutCategories: (c) => {
+            if (!c.categoryFilter) return [];
+            return c.categoryFilter.menus.map((menu) => {
+               return {
+                  title: menu.title,
+                  primaryColor: "black",
+                  primaryColorTint: "hsla(0, 0%, 0%, 0.1)",
+                  click: () => menu.click(menu),
+                  isSelected: () => c.categoryFilter.menu === menu,
+               };
+            });
          },
       },
       watch: {
@@ -280,19 +293,11 @@
             @click-search="$emit('click-search')"
          />
 
-         <div
-            v-if="categoryFilter"
-            :class="['scrollbar', 'PanelProducts-categoryFilter']"
-         >
-            <button
-               v-for="menu of categoryFilter.menus"
-               class="PanelProducts-categoryFilter-item transition"
-               :isSelected="`${categoryFilter.menu === menu}`"
-               :key="menu.key"
-               @click="() => menu.click(menu)"
-               >{{ menu.title }}</button
-            >
-         </div>
+         <TabLayout
+            class="PanelProducts-tabLayout"
+            :isScreenWide="true"
+            :menus="tabLayoutCategories"
+         />
 
          <div
             :style="{ 'z-index': '1' }"
@@ -353,42 +358,11 @@
          border-bottom: 1px solid hsl(0, 0%, 80%);
          background: var(--App-background-color);
 
-         .PanelProducts-categoryFilter {
-            gap: 0.2rem;
-            width: 100%;
+         .PanelProducts-tabLayout {
             padding: 0.4rem 1rem;
-            padding-bottom: 0.2rem;
-
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-items: center;
-            justify-content: flex-start;
-
-            overflow-x: auto;
-
-            .PanelProducts-categoryFilter-item {
-               border: none;
-               background: none;
-               padding: 0.5rem 1rem;
-               border-radius: 0.5rem;
-               min-width: max-content;
-               --transition-duration: 0.1s;
-            }
-            .PanelProducts-categoryFilter-item[isSelected="true"] {
-               background: black;
-               color: white;
-            }
-            .PanelProducts-categoryFilter-item[isSelected="false"] {
-               cursor: pointer;
-               background: hsla(0, 0%, 0%, 0.1);
-
-               &:hover,
-               &:focus {
-                  background: hsla(0, 0%, 0%, 0.2);
-               }
-            }
+            padding-right: 2rem;
          }
+
          .PanelProducts-filters {
             width: 100%;
             padding: 0.4rem 1rem;
