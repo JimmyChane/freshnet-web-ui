@@ -41,32 +41,29 @@ const init = (Stores) => {
          return results;
       })
       .action("generateCustomersAcross", async (context) => {
-         const customers = (await context.dispatch("getItems")).map(
-            (customer) => {
-               customer = new ItemCustomer(Stores).fromData(customer.toData());
-               customer.services = [];
-               customer.orders = [];
+         const cloneCustomer = (customer) => {
+            customer = new ItemCustomer(Stores).fromData(customer.toData());
+            return customer;
+         };
 
-               return customer;
-            },
-         );
+         const customers = await context.dispatch("getItems");
+         for (const customer of customers) {
+            customer.cachedServices = [];
+            customer.cachedOrders = [];
+         }
          const optCustomer = (eCustomer) => {
             let customer = customers.find((customer) => {
                const eName = U.optString(customer.name);
-               const ePhoneNumber = customer.phoneNumber;
-               const ePhoneNumberValue = ePhoneNumber ? ePhoneNumber.value : "";
+               const ePhoneNumberValue = customer.phoneNumber?.value ?? "";
 
                const name = U.optString(eCustomer.name);
-               const phoneNumber = eCustomer.phoneNumber;
-               const phoneNumberValue = phoneNumber ? phoneNumber.value : "";
+               const phoneNumberValue = eCustomer.phoneNumber?.value ?? "";
 
                return eName === name && ePhoneNumberValue === phoneNumberValue;
             });
 
             if (!customer) {
-               customer = new ItemCustomer(Stores).fromData(eCustomer.toData());
-               customer.services = [];
-               customer.orders = [];
+               customer = cloneCustomer(eCustomer);
                customers.push(customer);
             }
 
@@ -78,12 +75,12 @@ const init = (Stores) => {
          );
          const orderGroups = await Stores.order.dispatch("getGroupsByCustomer");
          for (const serviceGroup of serviceGroups) {
-            optCustomer(serviceGroup.customer).services.push(
-               ...serviceGroup.items,
-            );
+            const customer = optCustomer(serviceGroup.customer);
+            customer.cachedServices.push(...serviceGroup.items);
          }
          for (const orderGroup of orderGroups) {
-            optCustomer(orderGroup.customer).orders.push(...orderGroup.items);
+            const customer = optCustomer(orderGroup.customer);
+            customer.cachedOrders.push(...orderGroup.items);
          }
 
          return customers;
@@ -93,17 +90,15 @@ const init = (Stores) => {
          delete data.id;
          const api = await CustomerRequest.add(data);
          const content = api.optObjectContent();
-         return context.state.list.addItem(
-            new ItemCustomer(Stores).fromData(content),
-         );
+         const item = new ItemCustomer(Stores).fromData(content);
+         return context.state.list.addItem(item);
       })
       .action("removeItemOfId", async (context, arg = { _id }) => {
          const { _id } = arg;
          const api = await CustomerRequest.remove(_id);
          const content = api.optObjectContent();
-         return context.state.list.removeItemByItem(
-            new ItemCustomer(Stores).fromData(content),
-         );
+         const item = new ItemCustomer(Stores).fromData(content);
+         return context.state.list.removeItemByItem(item);
       })
       .action(
          "updateNamePhoneNumberOfItemId",

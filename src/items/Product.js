@@ -107,6 +107,26 @@ class Product {
       return this.images.length ? this.images[0] : null;
    }
 
+   isPricePromotion() {
+      let price = this.price;
+      if (!price) return false;
+
+      let normalValue = price.normal ? price.normal.value : 0;
+      let promotionValue = price.normal ? price.promotion.value : 0;
+
+      return (
+         normalValue > 0 && promotionValue > 0 && normalValue > promotionValue
+      );
+   }
+   isStockAvailable() {
+      let stock = this.stock;
+      return stock ? stock.isAvailable : true;
+   }
+   isStockSecondHand() {
+      let stock = this.stock;
+      return stock ? stock.isSecondHand : false;
+   }
+
    compare(item) {
       let value = 0;
       if (value === 0) value = this.compareAvailable(item);
@@ -171,23 +191,6 @@ class Product {
       return 0;
    }
 
-   getPriceNormal() {
-      return this.price ? this.price.normal : null;
-   }
-   getPricePromotion() {
-      return this.price ? this.price.promotion : null;
-   }
-   getPriceNormalValue() {
-      const normal = this.getPriceNormal();
-      return normal ? normal.value : 0;
-   }
-   getPricePromotionValue() {
-      const promotion = this.getPricePromotion();
-      return promotion ? promotion.value : 0;
-   }
-   getLink() {
-      return `${AppHost.path}/item/id/${this.id}`;
-   }
    async fetchBrand() {
       if (!this.brandId) return null;
       const brands = await this.brandStore.dispatch("getItems");
@@ -210,24 +213,22 @@ class Product {
       return categories.find((category) => category.id === this.categoryId);
    }
 
-   isPricePromotion() {
-      let price = this.price;
-      if (!price) return false;
-
-      let normalValue = price.normal ? price.normal.value : 0;
-      let promotionValue = price.normal ? price.promotion.value : 0;
-
-      return (
-         normalValue > 0 && promotionValue > 0 && normalValue > promotionValue
-      );
+   getPriceNormal() {
+      return this.price ? this.price.normal : null;
    }
-   isStockAvailable() {
-      let stock = this.stock;
-      return stock ? stock.isAvailable : true;
+   getPricePromotion() {
+      return this.price ? this.price.promotion : null;
    }
-   isStockSecondHand() {
-      let stock = this.stock;
-      return stock ? stock.isSecondHand : false;
+   getPriceNormalValue() {
+      const normal = this.getPriceNormal();
+      return normal ? normal.value : 0;
+   }
+   getPricePromotionValue() {
+      const promotion = this.getPricePromotion();
+      return promotion ? promotion.value : 0;
+   }
+   getLink() {
+      return `${AppHost.path}/item/id/${this.id}`;
    }
 
    setBrandId(brandId) {

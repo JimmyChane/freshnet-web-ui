@@ -1,18 +1,3 @@
-const Month = {
-   Jan: { short: "Jan", full: "January" },
-   Feb: { short: "Feb", full: "Febuary" },
-   Mar: { short: "Mar", full: "March" },
-   Arp: { short: "Arp", full: "April" },
-   May: { short: "May", full: "May" },
-   Jun: { short: "Jun", full: "June" },
-   Jul: { short: "Jul", full: "July" },
-   Aug: { short: "Aug", full: "August" },
-   Sep: { short: "Sep", full: "September" },
-   Oct: { short: "Oct", full: "October" },
-   Nov: { short: "Nov", full: "November" },
-   Dec: { short: "Dec", full: "December" },
-};
-
 const getTextOfDayNumber = (day) => {
    if (day === 0) return "Sunday";
    if (day === 1) return "Monday";
@@ -24,38 +9,14 @@ const getTextOfDayNumber = (day) => {
    return "";
 };
 
-const getTextOfMonthNumber = (month) => {
-   if (month === 0) return "January";
-   if (month === 1) return "Febuary";
-   if (month === 2) return "March";
-   if (month === 3) return "April";
-   if (month === 4) return "May";
-   if (month === 5) return "June";
-   if (month === 6) return "July";
-   if (month === 7) return "August";
-   if (month === 8) return "September";
-   if (month === 9) return "October";
-   if (month === 10) return "November";
-   if (month === 11) return "December";
-   return "";
-};
-const getTextShortOfMonthNumber = (month) => {
-   if (month === 0) return "Jan";
-   if (month === 1) return "Feb";
-   if (month === 2) return "Mar";
-   if (month === 3) return "Apr";
-   if (month === 4) return "May";
-   if (month === 5) return "Jun";
-   if (month === 6) return "Jul";
-   if (month === 7) return "Aug";
-   if (month === 8) return "Sep";
-   if (month === 9) return "Oct";
-   if (month === 10) return "Nov";
-   if (month === 11) return "Dec";
-   return "";
-};
-
-import { isToday, isYesterday, isThisYear, getDay, getMonth, getYear } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
+import {
+   isToday,
+   isYesterday,
+   isThisYear,
+   getDay,
+   getMonth,
+   getYear,
+} from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
 import U from "@/U.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
@@ -103,12 +64,6 @@ class ServiceTimestamp {
       return `${hour.toString().length === 1 ? `0${hour}` : hour}:${
          minute.toString().length === 1 ? `0${minute}` : minute
       }${afterTime}`;
-   }
-
-   compare(item) {
-      let time1 = U.optNumber(this.time);
-      let time2 = U.optNumber(item.time);
-      return time2 - time1;
    }
 
    isToday() {
@@ -186,6 +141,13 @@ class ServiceTimestamp {
    isThisYear() {
       return isThisYear(this.time);
    }
+
+   compare(item) {
+      let time1 = U.optNumber(this.time);
+      let time2 = U.optNumber(item.time);
+      return time2 - time1;
+   }
+
    getYear() {
       return getYear(this.time);
    }

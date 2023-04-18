@@ -36,6 +36,18 @@ class ServiceCustomer {
       return count;
    }
 
+   isEqual(item) {
+      const eName = U.optString(item.name);
+      const ePhoneNumber = item.phoneNumber;
+      const ePhoneNumberValue = ePhoneNumber ? ePhoneNumber.value : "";
+
+      const name = U.optString(this.name);
+      const phoneNumber = this.phoneNumber;
+      const phoneNumberValue = phoneNumber ? phoneNumber.value : "";
+
+      return eName === name && ePhoneNumberValue === phoneNumberValue;
+   }
+
    compare(item) {
       return this.compareName(item) + this.comparePhoneNumber(item);
    }
@@ -49,18 +61,6 @@ class ServiceCustomer {
       if (this.phoneNumber && !item.phoneNumber) return 1;
       if (!this.phoneNumber && item.phoneNumber) return -1;
       return this.phoneNumber.compare(item.phoneNumber);
-   }
-
-   isEqual(item) {
-      const eName = U.optString(item.name);
-      const ePhoneNumber = item.phoneNumber;
-      const ePhoneNumberValue = ePhoneNumber ? ePhoneNumber.value : "";
-
-      const name = U.optString(this.name);
-      const phoneNumber = this.phoneNumber;
-      const phoneNumberValue = phoneNumber ? phoneNumber.value : "";
-
-      return eName === name && ePhoneNumberValue === phoneNumberValue;
    }
 }
 

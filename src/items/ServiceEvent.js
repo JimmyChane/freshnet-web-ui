@@ -60,24 +60,10 @@ class ServiceEvent {
 
       return count;
    }
-
-   compare(item) {
-      return item.timestamp.time - this.timestamp.time;
-   }
-
-   async fetchUser() {
-      if (!U.isString(this.username) || this.username.trim().length === 0) return null;
-      return await this.userStore.dispatch("getUserByUsername", this.username);
-   }
-   async fetchName() {
-      const user = await this.fetchUser();
-      const username = user ? user.username : "";
-
-      if (username.length && this.name) return `${this.name}(${username})`;
-      if (!username.length && this.name) return this.name;
-      if (username.length && !this.name) return username;
-
-      throw new Error("unknown");
+   toResult() {
+      if (this.isQuotation() || this.isPurchase()) return this.price;
+      if (this.isInfo()) return this.status;
+      return null;
    }
 
    isQuotation() {
@@ -90,10 +76,24 @@ class ServiceEvent {
       return this.method === ModuleEvent.Method.Info;
    }
 
-   toResult() {
-      if (this.isQuotation() || this.isPurchase()) return this.price;
-      if (this.isInfo()) return this.status;
-      return null;
+   compare(item) {
+      return item.timestamp.time - this.timestamp.time;
+   }
+
+   async fetchUser() {
+      if (!U.isString(this.username) || this.username.trim().length === 0)
+         return null;
+      return await this.userStore.dispatch("getUserByUsername", this.username);
+   }
+   async fetchName() {
+      const user = await this.fetchUser();
+      const username = user ? user.username : "";
+
+      if (username.length && this.name) return `${this.name}(${username})`;
+      if (!username.length && this.name) return this.name;
+      if (username.length && !this.name) return username;
+
+      throw new Error("unknown");
    }
 }
 

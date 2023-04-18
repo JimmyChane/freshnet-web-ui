@@ -84,24 +84,43 @@
             }
          },
 
+         queryId: (c) => c.$route.query.id,
          queryName: (c) => c.$route.query.name,
          queryPhoneNumber: (c) => c.$route.query.phoneNumber,
 
          currentCustomer: (c) => {
             if (!c.items.length) return null;
 
-            const { queryName, queryPhoneNumber } = c;
+            const { queryId, queryName, queryPhoneNumber } = c;
 
-            const customer = c.items.find((customer) => {
-               const { phoneNumber } = customer;
-               const phoneNumberValue = phoneNumber ? phoneNumber.value : "";
+            const isSearchById = !!queryId;
 
-               const isNameSame = customer.name === queryName;
-               const isPhoneNumerSame = phoneNumberValue === queryPhoneNumber;
-               return isNameSame && isPhoneNumerSame;
-            });
+            let customer = null;
 
-            return customer ? customer : null;
+            if (isSearchById) {
+               customer = c.items.find((customer) => customer.id === queryId);
+            } else {
+               customer = c.items.find((customer) => {
+                  const phoneNumberValue = customer.phoneNumber?.value ?? "";
+
+                  const isNameSame = customer.name === queryName;
+                  const isPhoneNumerSame =
+                     phoneNumberValue === queryPhoneNumber;
+                  return isNameSame && isPhoneNumerSame;
+               });
+            }
+
+            if (!isSearchById && (customer?.isFromStoreCustomer() ?? false)) {
+               c.$root.replaceRoute({
+                  query: {
+                     id: customer.id,
+                     name: null,
+                     phoneNumber: null,
+                  },
+               });
+            }
+
+            return customer;
          },
       },
       watch: {
@@ -135,7 +154,9 @@
             this.invalidate();
          },
          clickClose() {
-            this.$root.nextRoute({ query: { name: null, phoneNumber: null } });
+            this.$root.nextRoute({
+               query: { id: null, name: null, phoneNumber: null },
+            });
          },
          clickItemAdd() {
             this.windowAction("windowAddCustomer", "start");

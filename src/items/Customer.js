@@ -20,6 +20,16 @@ class Customer {
    description = "";
    deviceIds = [];
 
+   cachedServices = [];
+   cachedOrders = [];
+
+   get services() {
+      return this.cachedServices;
+   }
+   get orders() {
+      return this.cachedOrders;
+   }
+
    fromData(data) {
       data = ModuleCustomer.trim(data);
       this.id = data._id;
@@ -50,6 +60,13 @@ class Customer {
       }, 0);
 
       return count;
+   }
+
+   isFromStoreCustomer() {
+      return !!this.id;
+   }
+   isModifiable() {
+      return this.isFromStoreCustomer();
    }
 
    compare(item) {

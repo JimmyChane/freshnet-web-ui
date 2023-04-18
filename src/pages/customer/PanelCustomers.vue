@@ -42,10 +42,7 @@
             return U.optString(item?.name);
          },
          itemPhoneNumberValue(item) {
-            if (!item || !item.phoneNumber) {
-               return "";
-            }
-            return item.phoneNumber.value;
+            return item?.phoneNumber?.value ?? "";
          },
          itemPhoneNumberStr(item) {
             return U.optString(item?.phoneNumber.toUrl());

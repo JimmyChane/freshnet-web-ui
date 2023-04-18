@@ -106,6 +106,15 @@ class Service {
       return count;
    }
 
+   isUrgent() {
+      return !!this.labels.find((label) => label.isEqual(ServiceLabels.Urgent));
+   }
+   isWarranty() {
+      return !!this.labels.find((label) => {
+         return label.isEqual(ServiceLabels.Warranty);
+      });
+   }
+
    compare(item) {
       let value = 0;
       if (value === 0) value = this.compareState(item);
@@ -152,15 +161,6 @@ class Service {
       }
 
       throw new Error("unknown");
-   }
-
-   isUrgent() {
-      return !!this.labels.find((label) => label.isEqual(ServiceLabels.Urgent));
-   }
-   isWarranty() {
-      return !!this.labels.find((label) => {
-         return label.isEqual(ServiceLabels.Warranty);
-      });
    }
 
    toTotalPrice() {

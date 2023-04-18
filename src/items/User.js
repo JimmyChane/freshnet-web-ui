@@ -44,10 +44,6 @@ export default class User {
       return "Other";
    }
 
-   compare(item) {
-      return 0;
-   }
-
    isTypeNone() {
       return (
          this.userType === User.Type.None ||
@@ -68,5 +64,9 @@ export default class User {
          this.username === User.ReservedUsername.Admin ||
          this.username === User.ReservedUsername.Staff
       );
+   }
+
+   compare(item) {
+      return 0;
    }
 }

@@ -29,12 +29,12 @@ class PhoneNumber {
       }, 0);
    }
 
-   compare(item) {
-      return U.optString(this.value).localeCompare(U.optString(item.value));
-   }
-
    isEqual(item) {
       return item.value === this.value;
+   }
+
+   compare(item) {
+      return U.optString(this.value).localeCompare(U.optString(item.value));
    }
 }
 

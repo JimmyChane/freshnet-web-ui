@@ -60,12 +60,14 @@
                });
             }
 
-            menus.push({
-               title: "Delete Customer",
-               icon: c.host.icon("trash-000000"),
-               click: () => c.$emit("click-item-remove", { item: c.item }),
-               isHidden: true,
-            });
+            if (c.item?.isFromStoreCustomer() ?? false) {
+               menus.push({
+                  title: "Delete Customer",
+                  icon: c.host.icon("trash-000000"),
+                  click: () => c.$emit("click-item-remove", { item: c.item }),
+                  isHidden: true,
+               });
+            }
 
             return menus;
          },
@@ -148,7 +150,7 @@
             <PanelItemCustomer
                v-if="item"
                :customer="item"
-               :isEditable="!!id"
+               :isEditable="item.isModifiable()"
                @click-edit="
                   (item) => $emit('click-item-customer-update', { item })
                "
