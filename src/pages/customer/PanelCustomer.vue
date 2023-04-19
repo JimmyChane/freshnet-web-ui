@@ -60,7 +60,7 @@
                });
             }
 
-            if (c.item?.isFromStoreCustomer() ?? false) {
+            if (c.isFromStoreCustomer) {
                menus.push({
                   title: "Delete Customer",
                   icon: c.host.icon("trash-000000"),
@@ -81,6 +81,7 @@
          deviceIds: (c) => (c.item ? c.item.deviceIds : []),
          services: (c) => (c.item ? c.item.services : []),
          orders: (c) => (c.item ? c.item.orders : []),
+         isFromStoreCustomer: (c) => c.item?.isFromStoreCustomer() ?? false,
 
          primaryColor: () => chroma("294656"),
          actionbarColor: (c) => c.backgroundColor.brighten(0.4),
@@ -172,7 +173,7 @@
 
             <Section
                title="Owned Devices"
-               v-if="id"
+               v-if="isFromStoreCustomer"
                :menus="{
                   icon: host.icon('add-000000'),
                   click: () => $emit('click-item-device-add', { item }),

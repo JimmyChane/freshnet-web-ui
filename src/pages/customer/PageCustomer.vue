@@ -102,11 +102,10 @@
             } else {
                customer = c.items.find((customer) => {
                   const phoneNumberValue = customer.phoneNumber?.value ?? "";
-
-                  const isNameSame = customer.name === queryName;
-                  const isPhoneNumerSame =
-                     phoneNumberValue === queryPhoneNumber;
-                  return isNameSame && isPhoneNumerSame;
+                  return (
+                     customer.name === queryName &&
+                     phoneNumberValue === queryPhoneNumber
+                  );
                });
             }
 
