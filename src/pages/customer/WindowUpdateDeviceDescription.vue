@@ -1,12 +1,12 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import WindowSection from "./WindowSection.vue";
    import CustomerModule from "@/items/data/Customer.js";
    import ItemSpecification from "./ItemSpecification.vue";
    import TextArea from "@/components/InputTextArea.vue";
 
    export default {
-      components: { PopupWindowAction, WindowSection, ItemSpecification, TextArea },
+      components: { WindowAction, WindowSection, ItemSpecification, TextArea },
       emits: ["click-dismiss", "click-cancel", "click-ok"],
       props: {
          isShowing: { type: Boolean, default: false },
@@ -77,7 +77,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowUpdateDeviceDescription"
       :title="`Update Device Description${customer ? ` for ${customer.name}` : ''}`"
       :isShowing="isShowing"
@@ -113,7 +113,7 @@
             @input="(comp) => (data.description = comp.value)"
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

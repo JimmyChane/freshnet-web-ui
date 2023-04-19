@@ -1,9 +1,9 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
 
    export default {
-      components: { PopupWindowAction, Input },
+      components: { WindowAction, Input },
       props: {
          isShowing: { type: Boolean, default: false },
          input: { type: Object, default: () => null },
@@ -44,7 +44,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       title="Add Price"
       :isShowing="isShowing"
       @click-dismiss="$emit('click-dismiss') && clear()"
@@ -69,7 +69,7 @@
             @input="(comp) => (promotion = comp.value)"
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

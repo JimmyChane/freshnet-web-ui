@@ -1,11 +1,11 @@
 <script>
    import ModuleCategory from "@/items/data/Category.js";
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
    import LabelMenus from "@/components/LabelMenus.vue";
 
    export default {
-      components: { PopupWindowAction, Input, LabelMenus },
+      components: { WindowAction, Input, LabelMenus },
       emits: ["callback-cancel", "callback-confirm"],
       props: {
          isShowing: { type: Boolean, default: false },
@@ -107,7 +107,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowAddProduct"
       title="New Product"
       :isShowing="isShowing"
@@ -135,7 +135,7 @@
             @input="(comp) => (title = comp.value)"
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

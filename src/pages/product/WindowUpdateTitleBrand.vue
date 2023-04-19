@@ -1,10 +1,10 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Selector3 from "@/components/selector/Selector3.vue";
    import Input from "@/components/Input.vue";
 
    export default {
-      components: { PopupWindowAction, Selector3, Input },
+      components: { WindowAction, Selector3, Input },
       props: {
          isShowing: { type: Boolean, default: false },
          input: { type: Object, default: () => null },
@@ -77,7 +77,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowUpdateTitleBrand"
       title="Update Title &amp; Brand"
       :isShowing="isShowing"
@@ -104,7 +104,7 @@
             "
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

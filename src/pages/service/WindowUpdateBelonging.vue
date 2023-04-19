@@ -1,9 +1,9 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import BelongingListEdit from "./BelongingListEdit.vue";
 
    export default {
-      components: { PopupWindowAction, BelongingListEdit },
+      components: { WindowAction, BelongingListEdit },
       emits: ["callback-cancel", "callback-change"],
       props: {
          isShowing: { type: Boolean, default: false },
@@ -22,7 +22,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       title="Edit Belongings"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
@@ -36,7 +36,7 @@
          :values="values"
          ref="BelongingListEdit"
       />
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

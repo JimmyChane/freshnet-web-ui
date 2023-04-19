@@ -1,5 +1,5 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import LayoutFindCustomer from "./LayoutFindCustomer.vue";
    import BodyUser from "./WindowUpdateService-user.vue";
    import BodyCustomer from "./WindowUpdateService-customer.vue";
@@ -9,7 +9,7 @@
 
    export default {
       components: {
-         PopupWindowAction,
+         WindowAction,
          LayoutFindCustomer,
          BodyUser,
          BodyCustomer,
@@ -97,7 +97,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       title="Add Service"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
@@ -138,7 +138,7 @@
 
          <BodyBelongings :belongings="data.belongings" ref="BelongingListEdit" />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

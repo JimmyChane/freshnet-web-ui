@@ -1,9 +1,9 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Selector4 from "@/components/selector/Selector4.vue";
 
    export default {
-      components: { PopupWindowAction, Selector4 },
+      components: { WindowAction, Selector4 },
       props: {
          isShowing: { type: Boolean, default: false },
          input: { type: Object, default: null },
@@ -58,7 +58,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowUpdateCategory"
       title="Edit Category"
       :isShowing="isShowing"
@@ -78,7 +78,7 @@
             "
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

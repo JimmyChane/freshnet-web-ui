@@ -4,7 +4,7 @@
    import MenuOption from "@/components/button/MenuOption.vue";
    import Selector from "@/components/selector/Selector.vue";
    import Empty from "@/components/Empty.vue";
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
    import ItemUser from "./ItemUser.vue";
 
@@ -30,7 +30,7 @@
          MenuOption,
          Selector,
          Empty,
-         PopupWindowAction,
+         WindowAction,
          Input,
          ItemUser,
       },
@@ -239,7 +239,7 @@
       <Loading class="PageUsers-loading" :isShowing="isLoading" />
 
       <!-- add user -->
-      <PopupWindowAction
+      <WindowAction
          title="Add User"
          :isShowing="window.addUser.isShowing"
          @click-dismiss="() => window.addUser.dismiss()"
@@ -275,10 +275,10 @@
                @input="(comp) => (window.addUser.passwordRepeat = comp.value)"
             />
          </div>
-      </PopupWindowAction>
+      </WindowAction>
 
       <!-- remove user -->
-      <PopupWindowAction
+      <WindowAction
          title="Remove User?"
          :isShowing="window.removeUser.isShowing"
          @click-dismiss="() => window.removeUser.dismiss()"
@@ -292,10 +292,10 @@
                >
             </div>
          </div>
-      </PopupWindowAction>
+      </WindowAction>
 
       <!-- change user -->
-      <PopupWindowAction
+      <WindowAction
          title="Change User Type"
          :isShowing="window.changeUserType.isShowing"
          @click-dismiss="() => window.changeUserType.dismiss()"
@@ -334,7 +334,7 @@
                />
             </div>
          </div>
-      </PopupWindowAction>
+      </WindowAction>
    </div>
 </template>
 

@@ -1,6 +1,6 @@
 <script>
    import CustomerModule from "@/items/data/Customer.js";
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Selector3 from "@/components/selector/Selector3.vue";
    import WindowSection from "./WindowSection.vue";
    import SpecificationInputs from "./SpecificationInputs.vue";
@@ -8,7 +8,7 @@
 
    export default {
       components: {
-         PopupWindowAction,
+         WindowAction,
          WindowSection,
          Selector3,
          SpecificationInputs,
@@ -108,7 +108,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowAddDevice"
       :title="`Add New Device${item ? ` for ${item.name}` : ''}`"
       :isShowing="isShowing"
@@ -145,7 +145,7 @@
             <SpecificationInputs :items="dataSpecifications" />
          </WindowSection>
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

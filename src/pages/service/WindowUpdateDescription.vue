@@ -1,9 +1,9 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import TextArea from "@/components/InputTextArea.vue";
 
    export default {
-      components: { PopupWindowAction, TextArea },
+      components: { WindowAction, TextArea },
       emits: ["callback-cancel", "callback-change"],
       props: {
          isShowing: { type: Boolean, default: false },
@@ -33,7 +33,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       title="Edit Description"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
@@ -53,7 +53,7 @@
             @input="(comp) => (value = comp.value)"
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

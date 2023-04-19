@@ -1,8 +1,8 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import TextArea from "@/components/InputTextArea.vue";
    export default {
-      components: { PopupWindowAction, TextArea },
+      components: { WindowAction, TextArea },
       props: {
          isShowing: { type: Boolean, default: false },
          input: { type: Object, default: () => null },
@@ -46,7 +46,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowUpdateDescription"
       title="Update Description"
       :isShowing="isShowing"
@@ -63,7 +63,7 @@
             @input="(comp) => (data.description = comp.value)"
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

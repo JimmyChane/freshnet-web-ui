@@ -1,10 +1,10 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import SpecificationInputs from "@/pages/customer/SpecificationInputs.vue";
    import SpecificationModule from "@/items/data/CustomerDeviceSpecification.js";
 
    export default {
-      components: { PopupWindowAction, SpecificationInputs },
+      components: { WindowAction, SpecificationInputs },
       props: {
          isShowing: { type: Boolean, default: false },
          input: { type: Object, default: () => null },
@@ -53,7 +53,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowUpdateSpecifications"
       title="Update Specifications"
       :isShowing="isShowing"
@@ -64,7 +64,7 @@
       <div class="WindowUpdateSpecifications-body">
          <SpecificationInputs :items="specifications" />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

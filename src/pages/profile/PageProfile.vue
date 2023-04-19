@@ -2,7 +2,7 @@
    import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import Loading from "@/components/Loading.vue";
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
 
    import HostIcon from "@/host/HostIcon";
@@ -19,7 +19,7 @@
          NavigationBar,
          Loading,
          ButtonIcon,
-         PopupWindowAction,
+         WindowAction,
          Input,
       },
       data: (c) => ({
@@ -141,7 +141,7 @@
          </div>
       </div>
 
-      <PopupWindowAction
+      <WindowAction
          title="Change Your Password"
          :isShowing="window.changePassword.isShowing"
          @click-dismiss="onDiscardChangePassword"
@@ -180,7 +180,7 @@
                "
             />
          </div>
-      </PopupWindowAction>
+      </WindowAction>
 
       <Loading class="PageProfile-loading" :isShowing="isLoading" />
    </div>

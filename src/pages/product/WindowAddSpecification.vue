@@ -1,5 +1,5 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Spinner from "@/components/selector/Spinner.vue";
    import ProductSpecType from "@/items/ProductSpecType.js";
    import Input from "@/components/Input.vue";
@@ -9,7 +9,7 @@
    });
 
    export default {
-      components: { PopupWindowAction, Spinner, Input },
+      components: { WindowAction, Spinner, Input },
       props: {
          isShowing: { type: Boolean, default: false },
          action: { type: Object, default: null },
@@ -79,7 +79,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowSpecificationAdd"
       title="Add Specification"
       :isShowing="isShowing"
@@ -106,7 +106,7 @@
             />
          </div>
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

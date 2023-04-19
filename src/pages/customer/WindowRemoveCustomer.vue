@@ -1,10 +1,10 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import WindowSection from "./WindowSection.vue";
    import CustomerModule from "@/items/data/Customer.js";
 
    export default {
-      components: { PopupWindowAction, WindowSection },
+      components: { WindowAction, WindowSection },
       emits: ["click-dismiss", "click-cancel", "click-ok"],
       props: {
          isShowing: { type: Boolean, default: false },
@@ -28,7 +28,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowRemoveCustomer"
       title="Remove Customer?"
       :isShowing="isShowing"
@@ -78,7 +78,7 @@
             }}</span>
          </div>
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

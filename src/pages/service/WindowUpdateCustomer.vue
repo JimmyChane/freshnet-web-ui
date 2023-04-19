@@ -1,10 +1,10 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
    import U from "@/U.js";
 
    export default {
-      components: { PopupWindowAction, Input },
+      components: { WindowAction, Input },
       emits: ["callback-cancel", "callback-change"],
       props: {
          value: { type: Object, default: null },
@@ -39,7 +39,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       title="Edit Customer"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
@@ -67,7 +67,7 @@
             @input="(comp) => (customerPhoneNumber = comp.value)"
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

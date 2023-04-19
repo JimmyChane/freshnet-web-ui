@@ -46,7 +46,6 @@
          text-align: center;
          background: none;
       }
-
       .WindowRemove-main {
          width: 100%;
          display: flex;

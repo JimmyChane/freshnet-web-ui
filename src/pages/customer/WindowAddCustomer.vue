@@ -1,11 +1,11 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
    import TextArea from "@/components/InputTextArea.vue";
    import CustomerModule from "@/items/data/Customer.js";
 
    export default {
-      components: { PopupWindowAction, Input, TextArea },
+      components: { WindowAction, Input, TextArea },
       emits: ["click-dismiss", "click-cancel", "click-ok"],
       props: { isShowing: { type: Boolean, default: false } },
       data: (c) => ({ Requirement: CustomerModule.Requirement, data: {} }),
@@ -80,7 +80,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowAddCustomer"
       title="Add New Customer"
       :isShowing="isShowing"
@@ -120,7 +120,7 @@
             @input="(comp) => (data.description = comp.value)"
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

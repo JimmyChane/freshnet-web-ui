@@ -1,8 +1,8 @@
 <script>
-	import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+	import WindowAction from "@/components/window/WindowAction.vue";
 
 	export default {
-		components: { PopupWindowAction },
+		components: { WindowAction },
 		props: {
 			isShowing: { type: Boolean, default: false },
 			input: { type: Object, default: () => null },
@@ -14,7 +14,7 @@
 </script>
 
 <template>
-	<PopupWindowAction
+	<WindowAction
 		:title="`Delete ${product ? product.title : ''}?`"
 		:isShowing="isShowing"
 		@click-dismiss="$emit('click-dismiss')"
@@ -28,5 +28,5 @@
 				</p>
 			</div>
 		</div>
-	</PopupWindowAction>
+	</WindowAction>
 </template>

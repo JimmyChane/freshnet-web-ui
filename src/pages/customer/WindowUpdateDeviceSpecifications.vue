@@ -1,12 +1,12 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import WindowSection from "./WindowSection.vue";
    import SpecificationInputs from "./SpecificationInputs.vue";
    import CustomerModule from "@/items/data/Customer.js";
    import SpecificationModule from "@/items/data/CustomerDeviceSpecification.js";
 
    export default {
-      components: { PopupWindowAction, WindowSection, SpecificationInputs },
+      components: { WindowAction, WindowSection, SpecificationInputs },
       emits: ["click-dismiss", "click-cancel", "click-ok"],
       props: {
          isShowing: { type: Boolean, default: false },
@@ -82,7 +82,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowUpdateDeviceSpecifications"
       :title="`Update Device Specifications${customer ? ` for ${customer.name}` : ''}`"
       :isShowing="isShowing"
@@ -100,7 +100,7 @@
             <SpecificationInputs :items="data.specifications" />
          </WindowSection>
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

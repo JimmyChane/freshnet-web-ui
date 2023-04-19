@@ -1,5 +1,5 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import TypeSelector from "@/components/selector/TypeSelector.vue";
    import ServiceStates from "@/objects/ServiceStates.js";
    import ModuleService from "@/items/data/Service.js";
@@ -12,7 +12,7 @@
 
    export default {
       components: {
-         PopupWindowAction,
+         WindowAction,
          TypeSelector,
          ModuleService,
          LayoutFindCustomer,
@@ -115,7 +115,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       title="Import Service"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
@@ -175,7 +175,7 @@
 
          <BodyBelongings :belongings="data.belongings" ref="BelongingListEdit" />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>
