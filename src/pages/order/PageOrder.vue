@@ -62,8 +62,8 @@
                return group.status === Order.Status.Completed;
             });
 
-            this.pendingItems = groupPending ? groupPending.items : [];
-            this.completedItems = groupCompleted ? groupCompleted.items : [];
+            this.pendingItems = groupPending?.items ?? [];
+            this.completedItems = groupCompleted?.items ?? [];
          },
          refresh() {
             this.orderStore.dispatch("refresh").catch((error) => {

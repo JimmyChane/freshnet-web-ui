@@ -27,23 +27,20 @@ const init = (Stores) => {
       .action("getItemOfId", async (context, id = "") => {
          if (!U.isString(id)) return null;
          const items = await context.dispatch("getItems");
-         const item = items.find((item) => item.id === id);
-         return item ? item : null;
+         return items.find((item) => item.id === id) ?? null;
       })
       .action("getItemsOfIds", async (context, ids = []) => {
          if (!U.isArray(ids)) return [];
 
          const items = await context.dispatch("getItems");
          const results = ids.map((id) => {
-            const item = items.find((item) => item.id === id);
-            return item ? item : null;
+            return items.find((item) => item.id === id) ?? null;
          });
          return results;
       })
       .action("generateCustomersAcross", async (context) => {
          const cloneCustomer = (customer) => {
-            customer = new ItemCustomer(Stores).fromData(customer.toData());
-            return customer;
+            return new ItemCustomer(Stores).fromData(customer.toData());
          };
 
          const customers = await context.dispatch("getItems");

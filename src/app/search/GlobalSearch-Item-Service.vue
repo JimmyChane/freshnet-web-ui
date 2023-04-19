@@ -8,19 +8,19 @@
       components: { ImageViews, ItemSearch, Labels },
       props: { item: { type: Object, default: null } },
       computed: {
-         images: (c) => (c.item ? c.item.imageFiles : []),
+         images: (c) => c.item?.imageFiles ?? [],
          stateTitle: (c) => {
-            const key = c.item ? c.item.state : "";
+            const key = c.item?.state ?? "";
             const state = ServiceStates.findByKey(key);
-            return state ? state.title : "";
+            return state?.title ?? "";
          },
          title: (c) => {
-            const customer = c.item ? c.item.customer : null;
-            const name = customer ? customer.name : "";
-            const phoneNumber = customer ? customer.phoneNumber : "";
+            const customer = c.item?.customer ?? null;
+            const name = customer?.name ?? "";
+            const phoneNumber = customer?.phoneNumber ?? "";
             return `${name} ${phoneNumber}`;
          },
-         description: (c) => (c.item ? c.item.description : ""),
+         description: (c) => c.item?.description ?? "",
       },
    };
 </script>

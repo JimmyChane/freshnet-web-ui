@@ -9,7 +9,7 @@
          input: { type: Object, default: () => null },
       },
       computed: {
-         product: (c) => (c.input ? c.input.product : null),
+         product: (c) => c.input?.product ?? null,
       },
       data: (c) => ({ normal: "", promotion: "" }),
       watch: {

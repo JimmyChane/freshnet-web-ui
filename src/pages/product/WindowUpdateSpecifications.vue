@@ -2,6 +2,7 @@
    import WindowAction from "@/components/window/WindowAction.vue";
    import SpecificationInputs from "@/pages/customer/SpecificationInputs.vue";
    import SpecificationModule from "@/items/data/CustomerDeviceSpecification.js";
+   import U from "@/U";
 
    export default {
       components: { WindowAction, SpecificationInputs },
@@ -11,12 +12,9 @@
       },
       data: (c) => ({ data: null }),
       computed: {
-         product: (c) => (c.input ? c.input.product : null),
-         inputSpecifications: (c) =>
-            c.input && Array.isArray(c.input.specifications)
-               ? c.input.specifications
-               : [],
-         specifications: (c) => (c.data ? c.data.specifications : []),
+         product: (c) => c.input?.product ?? null,
+         inputSpecifications: (c) => U.optArray(c.input?.specifications),
+         specifications: (c) => c.data?.specifications ?? [],
       },
       watch: {
          input() {

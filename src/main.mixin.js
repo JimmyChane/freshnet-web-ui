@@ -7,14 +7,14 @@ const Mixin = {
          if (U.isFunction(title)) {
             title = title.call(this);
          }
-         return typeof title === "string" ? title.trim() : "";
+         return U.optString(title).trim();
       };
       const getColors = () => {
          let color = this.$options.color;
          if (U.isFunction(color)) {
             color = color.call(this);
          }
-         color = typeof color === "object" ? color : {};
+         color = U.isObjectOnly(color) ? color : {};
 
          const {
             primary = "",
@@ -30,7 +30,7 @@ const Mixin = {
          if (U.isFunction(icon)) {
             icon = icon.call(this);
          }
-         icon = typeof icon === "object" ? icon : {};
+         icon = U.isObjectOnly(icon) ? icon : {};
 
          const { light = "", dark = "", color = "" } = icon;
 

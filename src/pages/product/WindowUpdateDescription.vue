@@ -10,8 +10,8 @@
       },
       data: (c) => ({ data: null }),
       computed: {
-         product: (c) => (c.input ? c.input.product : ""),
-         description: (c) => (c.data ? c.data.description : ""),
+         product: (c) => c.input?.product ?? "",
+         description: (c) => c.data?.description ?? "",
       },
       watch: {
          input() {

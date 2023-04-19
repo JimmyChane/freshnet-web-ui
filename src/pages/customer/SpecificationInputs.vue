@@ -24,7 +24,7 @@
                .map((item) => ({
                   key: item.key,
                   title: item.title,
-                  icon: item.icon ? item.icon.toUrl() : "",
+                  icon: item.icon?.toUrl() ?? "",
                }))
                .filter((menu) => {
                   if (menu.key === "none") return true;
@@ -36,7 +36,8 @@
                })
                .sort(
                   (menu1, menu2) =>
-                     c.SpecKeys.indexOf(menu1.key) - c.SpecKeys.indexOf(menu2.key),
+                     c.SpecKeys.indexOf(menu1.key) -
+                     c.SpecKeys.indexOf(menu2.key),
                );
          },
       },

@@ -51,7 +51,7 @@ const init = (Stores) => {
          for (const item of items) {
             let category = await item.fetchCategory();
             if (!category) category = categoryOther;
-            let categoryId = category ? category.id : "";
+            let categoryId = category?.id ?? "";
 
             let group = groups.find((group) => {
                return group.category.id === categoryId;
@@ -72,7 +72,7 @@ const init = (Stores) => {
          const groups = [];
          for (const item of items) {
             let group = groups.find((group) => {
-               const brandId = group.brand ? group.brand.id : "";
+               const brandId = group.brand?.id ?? "";
                return brandId === item.brandId;
             });
 

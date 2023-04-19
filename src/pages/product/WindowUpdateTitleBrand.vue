@@ -11,12 +11,12 @@
       },
       data: (c) => ({ data: null }),
       computed: {
-         product: (c) => (c.input ? c.input.product : ""),
-         title: (c) => (c.data ? c.data.title : ""),
-         brandId: (c) => (c.data ? c.data.brandId : ""),
+         product: (c) => c.input?.product ?? "",
+         title: (c) => c.data?.title ?? "",
+         brandId: (c) => c.data?.brandId ?? "",
          brand: (c) =>
             c.brandStore.getters.items.find((brand) => brand.id === c.brandId),
-         brandTitle: (c) => (c.brand ? c.brand.title : ""),
+         brandTitle: (c) => c.brand?.title ?? "",
          parsedTitleBrand: (c) => {
             if (c.title && c.brandTitle) return `${c.brandTitle} ${c.title}`;
             if (c.title) return c.title;
@@ -32,7 +32,7 @@
                return {
                   key: item.id,
                   title: item.title,
-                  icon: item.icon ? item.icon.toUrl() : "",
+                  icon: item.icon?.toUrl() ?? "",
                };
             });
          },

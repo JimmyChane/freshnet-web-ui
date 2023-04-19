@@ -13,8 +13,8 @@
          items: (c) => c.group.items,
 
          firstItem: (c) => (c.items.length > 0 ? c.items[0] : null),
-         fisrtHref: (c) => (c.firstItem ? c.firstItem.href : ""),
-         fisrtTarget: (c) => (c.firstItem ? c.firstItem.target : undefined),
+         fisrtHref: (c) => c.firstItem?.href ?? "",
+         fisrtTarget: (c) => c.firstItem?.target ?? undefined,
       },
    };
 </script>

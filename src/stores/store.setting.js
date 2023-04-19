@@ -41,7 +41,7 @@ const init = (Stores) => {
             const item = await context.dispatch("findItemOfKey", {
                key: arg.key,
             });
-            return item ? item.value : arg.default;
+            return item?.value ?? arg.default;
          },
       )
       .build();

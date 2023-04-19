@@ -22,7 +22,7 @@ class ServiceCustomer {
    toData() {
       return {
          name: this.name,
-         phoneNumber: this.phoneNumber ? this.phoneNumber.toData() : "",
+         phoneNumber: this.phoneNumber?.toData() ?? "",
       };
    }
    toCount(strs) {
@@ -39,11 +39,11 @@ class ServiceCustomer {
    isEqual(item) {
       const eName = U.optString(item.name);
       const ePhoneNumber = item.phoneNumber;
-      const ePhoneNumberValue = ePhoneNumber ? ePhoneNumber.value : "";
+      const ePhoneNumberValue = ePhoneNumber?.value ?? "";
 
       const name = U.optString(this.name);
       const phoneNumber = this.phoneNumber;
-      const phoneNumberValue = phoneNumber ? phoneNumber.value : "";
+      const phoneNumberValue = phoneNumber?.value ?? "";
 
       return eName === name && ePhoneNumberValue === phoneNumberValue;
    }

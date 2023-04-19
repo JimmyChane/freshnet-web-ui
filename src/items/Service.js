@@ -70,7 +70,7 @@ class Service {
    toData() {
       return new ModuleService({
          _id: this.id,
-         time: this.timestamp ? this.timestamp.time : null,
+         time: this.timestamp?.time ?? null,
          username: this.username,
          nameOfUser: this.name,
          state: this.state,
@@ -86,7 +86,7 @@ class Service {
       const { customer, timestamp, state, description } = this;
 
       const stateRes = ServiceStates.findByKey(state);
-      const stateTitle = stateRes ? stateRes.title : "";
+      const stateTitle = stateRes?.title ?? "";
 
       let count = strs.reduce((count, str) => {
          if (textContains("service", str)) count++;

@@ -10,8 +10,8 @@
          product: { type: Object, default: () => null },
       },
       computed: {
-         productIsAvailable: (c) => (c.product ? c.product.isStockAvailable() : true),
-         productIsSecondHand: (c) => (c.product ? c.product.isStockSecondHand() : false),
+         productIsAvailable: (c) => c.product?.isStockAvailable() ?? true,
+         productIsSecondHand: (c) => c.product?.isStockSecondHand() ?? false,
       },
    };
 </script>

@@ -12,7 +12,7 @@
                return {
                   icon: link.icon,
                   href: link.href,
-                  target: link ? link.target : "",
+                  target: link?.target ?? "",
                };
             });
          },

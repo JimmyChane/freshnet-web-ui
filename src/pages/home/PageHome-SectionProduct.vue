@@ -1,7 +1,7 @@
 <script>
    import Category from "@/items/Category";
    import ImageView from "@/components/ImageView.vue";
-   import chroma from "chroma-js"; 
+   import chroma from "chroma-js";
    import U from "@/U";
 
    export default {
@@ -26,15 +26,18 @@
             this.invalidate();
          },
          item() {
-            if (this.productIndex < 0) this.productIndex = this.products.length - 1;
-            if (this.productIndex >= this.products.length) this.productIndex = 0;
+            if (this.productIndex < 0)
+               this.productIndex = this.products.length - 1;
+            if (this.productIndex >= this.products.length)
+               this.productIndex = 0;
             return this.products[this.productIndex];
          },
-         itemImage: (c) => (c.item ? c.item.toImageThumbnail() : null),
-         itemImageUrl: (c) => (c.itemImage ? c.itemImage.toUrl({ width: 350 }) : ""),
+         itemImage: (c) => c.item?.toImageThumbnail() ?? null,
+         itemImageUrl: (c) => c.itemImage?.toUrl({ width: 350 }) ?? "",
          itemId: (c) => c.item?.id ?? "",
 
-         color: (c) => (chroma.valid(c.primaryColor) ? c.primaryColor : chroma("cccccc")),
+         color: (c) =>
+            chroma.valid(c.primaryColor) ? c.primaryColor : chroma("cccccc"),
          color1: (c) => c.getColorMixed(c.color, 0.2),
          color2: (c) => c.getColorMixed(c.color, 0.3),
          color3: (c) => c.getColorMixed(c.color, 0.9),
@@ -74,7 +77,9 @@
 
          async invalidate() {
             this.products = [];
-            const groups = await this.productStore.dispatch("getGroupsByCategory");
+            const groups = await this.productStore.dispatch(
+               "getGroupsByCategory",
+            );
             if (!groups.length) return;
 
             this.itemTitle = "";
@@ -86,13 +91,17 @@
                      group.category.key === Category.Key.Printer
                   );
                })
-               .sort((group1, group2) => group1.category.compare(group2.category))
+               .sort((group1, group2) =>
+                  group1.category.compare(group2.category),
+               )
                .reduce((products, group) => {
                   products.push(...group.items);
                   return products;
                }, [])
                .filter((product) => {
-                  return product.toImageThumbnail() && product.isStockAvailable();
+                  return (
+                     product.toImageThumbnail() && product.isStockAvailable()
+                  );
                });
 
             while (products.length > this.maxLength) {
@@ -117,7 +126,10 @@
          },
 
          getColorMixed(color, value) {
-            return color.mix(U.isColorDark(this.color) ? "#ffffff" : "#000000", value);
+            return color.mix(
+               U.isColorDark(this.color) ? "#ffffff" : "#000000",
+               value,
+            );
          },
 
          clickNext() {
@@ -145,7 +157,10 @@
          class="HomeSectionProduct-img"
          v-if="itemImage"
          :src="itemImage"
-         @click="() => $router.push({ path: '/product', query: { productId: itemId } })"
+         @click="
+            () =>
+               $router.push({ path: '/product', query: { productId: itemId } })
+         "
       />
 
       <span class="HomeSectionProduct-header">{{ itemTitle }}</span>
@@ -156,7 +171,9 @@
                'transition',
                'HomeSectionProduct-footer-item',
                `HomeSectionProduct-footer-item-${
-                  products.indexOf(item) === productIndex ? 'isSelected' : 'isDeselected'
+                  products.indexOf(item) === productIndex
+                     ? 'isSelected'
+                     : 'isDeselected'
                }`,
             ]"
             v-for="item of products"

@@ -11,9 +11,7 @@
       },
       computed: {
          titleColor: (c) => {
-            return c.primaryColor
-               ? c.primaryColor.mix("000000", 0.9).toString()
-               : "#4E504D";
+            return c.primaryColor?.mix("000000", 0.9).toString() ?? "#4E504D";
          },
       },
    };

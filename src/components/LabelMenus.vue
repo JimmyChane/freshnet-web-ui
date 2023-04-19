@@ -3,6 +3,7 @@
 
    import chroma from "chroma-js";
    import Menu from "@/components/Menu.vue";
+   import U from "@/U";
 
    export default {
       State,
@@ -20,8 +21,7 @@
          menuWidth: () => Menu.Width.SAME,
 
          parsedMenus() {
-            const menus = Array.isArray(this.menus) ? this.menus : [this.menus];
-            return menus
+            return U.optArray(this.menus, [this.menus])
                .filter((menu) => {
                   return typeof menu === "object" && menu !== null;
                })
@@ -31,9 +31,9 @@
                });
          },
 
-         menuKey: (c) => (c.menu ? c.menu.key : ""),
-         menuTitle: (c) => (c.menu ? c.menu.title : ""),
-         menuIcon: (c) => (c.menu ? c.menu.icon : ""),
+         menuKey: (c) => c.menu?.key ?? "",
+         menuTitle: (c) => c.menu?.title ?? "",
+         menuIcon: (c) => c.menu?.icon ?? "",
 
          primaryColorBackground: (c) => c.primaryColor.mix("ffffff", 0.8),
          primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),

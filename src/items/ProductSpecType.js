@@ -25,7 +25,9 @@ class ProductSpecType {
       this.id = data._id;
       this.key = data.key;
       this.title = data.title;
-      this.icon = U.isObjectOnly(data.icon) ? new Image().fromData(data.icon) : "";
+      this.icon = U.isObjectOnly(data.icon)
+         ? new Image().fromData(data.icon)
+         : "";
       this.color = data.color;
 
       return this;
@@ -35,7 +37,7 @@ class ProductSpecType {
          _id: this.id,
          key: this.key,
          title: this.title,
-         icon: this.icon ? this.icon.toData() : {},
+         icon: this.icon?.toData() ?? {},
          color: this.color,
       };
    }

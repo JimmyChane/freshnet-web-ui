@@ -75,16 +75,13 @@
             return `${this.itemName(item)}${this.itemPhoneNumberValue(item)}`;
          },
          itemName(item) {
-            if (item) return item.name;
-            return "";
+            return item?.name ?? "";
          },
          itemPhoneNumberValue(item) {
-            if (item && item.phoneNumber) return item.phoneNumber.value;
-            return "";
+            return item?.phoneNumber?.value ?? "";
          },
          itemPhoneNumberStr(item) {
-            if (item && item.phoneNumber) return item.phoneNumber.toString();
-            return "";
+            return item?.phoneNumber?.toString();
          },
       },
    };

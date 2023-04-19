@@ -8,8 +8,8 @@
       props: { item: { type: Object, default: null } },
       computed: {
          thumbnail: (c) => c.host.cloudinary({ url: `ps2/disc/${c.code}.jpg` }),
-         title: (c) => (c.item ? c.item.title : ""),
-         code: (c) => (c.item ? c.item.code : ""),
+         title: (c) => c.item?.title ?? "",
+         code: (c) => c.item?.code ?? "",
       },
    };
 </script>

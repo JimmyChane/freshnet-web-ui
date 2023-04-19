@@ -30,7 +30,7 @@
             ].map((item) => ({
                key: item.key,
                title: item.title,
-               icon: item.icon ? item.icon.toUrl() : "",
+               icon: item.icon?.toUrl() ?? "",
             })),
 
          dataSpecifications: (c) => c.data.specifications,
@@ -78,7 +78,7 @@
          },
 
          clickOk() {
-            this.data.ownerCustomerId = this.item ? this.item.id : "";
+            this.data.ownerCustomerId = this.item?.id ?? "";
             this.data.description = this.data.description.trim();
             this.data.categoryKey = this.data.categoryKey.trim();
             this.data.serialNumber = this.data.serialNumber.trim();

@@ -66,20 +66,20 @@ class Product {
          specification[itemSpecification.type.key] = itemSpecification.content;
       }
 
-      let price = this.price ? this.price : {};
+      let price = this.price ?? {};
       let pricePromotion = price.promotion;
       let priceNormal = price.normal;
 
       return {
          _id: this.id,
-         title: this.title ? this.title : undefined,
-         description: this.description ? this.description : undefined,
+         title: this.title ?? undefined,
+         description: this.description ?? undefined,
          brandId: U.optString(this.brandId),
          categoryId: U.optString(this.categoryId),
          stock: ModuleStock.trim(this.stock),
          gifts: this.gifts.map((gift) => gift),
          bundles: this.bundles.map((bundle) => ModuleBundle.trim(bundle)),
-         image: this.image ? this.image.toData() : {},
+         image: this.image?.toData() ?? {},
          specification,
          price: { normal: pricePromotion, promotion: priceNormal },
       };
@@ -111,20 +111,18 @@ class Product {
       let price = this.price;
       if (!price) return false;
 
-      let normalValue = price.normal ? price.normal.value : 0;
-      let promotionValue = price.normal ? price.promotion.value : 0;
+      let normalValue = price.normal?.value ?? 0;
+      let promotionValue = price.promotion?.value ?? 0;
 
       return (
          normalValue > 0 && promotionValue > 0 && normalValue > promotionValue
       );
    }
    isStockAvailable() {
-      let stock = this.stock;
-      return stock ? stock.isAvailable : true;
+      return this.stock?.isAvailable ?? true;
    }
    isStockSecondHand() {
-      let stock = this.stock;
-      return stock ? stock.isSecondHand : false;
+      return this.stock?.isSecondHand ?? false;
    }
 
    compare(item) {
@@ -214,18 +212,16 @@ class Product {
    }
 
    getPriceNormal() {
-      return this.price ? this.price.normal : null;
+      return this.price?.normal ?? null;
    }
    getPricePromotion() {
-      return this.price ? this.price.promotion : null;
+      return this.price?.promotion ?? null;
    }
    getPriceNormalValue() {
-      const normal = this.getPriceNormal();
-      return normal ? normal.value : 0;
+      return this.getPriceNormal()?.value ?? 0;
    }
    getPricePromotionValue() {
-      const promotion = this.getPricePromotion();
-      return promotion ? promotion.value : 0;
+      return this.getPricePromotion()?.value ?? 0;
    }
    getLink() {
       return `${AppHost.path}/item/id/${this.id}`;

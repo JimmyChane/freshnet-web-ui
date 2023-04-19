@@ -31,7 +31,7 @@ class ProductSpecContent {
    }
    toData() {
       return {
-         key: this.type ? this.type.key : undefined,
+         key: this.type?.key ?? undefined,
          content: this.content,
       };
    }

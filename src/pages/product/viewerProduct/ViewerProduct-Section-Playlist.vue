@@ -13,8 +13,8 @@
          nextProduct: { type: Object, default: () => null },
       },
       computed: {
-         previousProductId: (c) => (c.previousProduct ? c.previousProduct.id : ""),
-         nextProductId: (c) => (c.nextProduct ? c.nextProduct.id : ""),
+         previousProductId: (c) => c.previousProduct?.id ?? "",
+         nextProductId: (c) => c.nextProduct?.id ?? "",
       },
       methods: {
          clickPreviousProduct() {

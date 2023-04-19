@@ -16,7 +16,7 @@
       methods: {
          invalidate() {
             this.specificationStore
-               .dispatch("getItemOfKey", this.item ? this.item.typeKey : "")
+               .dispatch("getItemOfKey", this.item?.typeKey ?? "")
                .then((specificationType) => {
                   this.specificationType = specificationType;
                });

@@ -1,7 +1,7 @@
 <script>
    const State = { Expand: 1, Collapse: 2 };
 
-   import chroma from "chroma-js"; 
+   import chroma from "chroma-js";
 
    export default {
       State,
@@ -21,13 +21,14 @@
          },
          isExpand: (c) => c.state === State.Expand,
 
-         menuKey: (c) => (c.menu ? c.menu.key : ""),
-         menuTitle: (c) => (c.menu ? c.menu.title : ""),
-         menuIcon: (c) => (c.menu ? c.menu.icon : ""),
+         menuKey: (c) => c.menu?.key ?? "",
+         menuTitle: (c) => c.menu?.title ?? "",
+         menuIcon: (c) => c.menu?.icon ?? "",
 
          primaryColorBackground: (c) => c.primaryColor.mix("ffffff", 0.8),
          primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),
-         primaryColorBackgroundSelected: (c) => c.primaryColor.mix("ffffff", 0.4),
+         primaryColorBackgroundSelected: (c) =>
+            c.primaryColor.mix("ffffff", 0.4),
       },
       methods: {
          toggle() {
@@ -49,15 +50,29 @@
 
 <template>
    <div
-      :class="['LabelMenus', `LabelMenus-${isExpand ? 'isExpand' : 'isCollapse'}`]"
+      :class="[
+         'LabelMenus',
+         `LabelMenus-${isExpand ? 'isExpand' : 'isCollapse'}`,
+      ]"
       :style="{ '--primary-color': primaryColor.toString() }"
    >
-      <button class="LabelMenus-main" @click="() => toggle()" @blur="() => collapse(200)">
+      <button
+         class="LabelMenus-main"
+         @click="() => toggle()"
+         @blur="() => collapse(200)"
+      >
          <span class="LabelMenus-content">
-            <img class="LabelMenus-content-icon" v-if="menuIcon" :src="menuIcon" />
+            <img
+               class="LabelMenus-content-icon"
+               v-if="menuIcon"
+               :src="menuIcon"
+            />
             {{ menuTitle }}</span
          >
-         <img class="LabelMenus-arrow transition" :src="host.icon('arrowDown-FFFFFF')" />
+         <img
+            class="LabelMenus-arrow transition"
+            :src="host.icon('arrowDown-FFFFFF')"
+         />
       </button>
 
       <div

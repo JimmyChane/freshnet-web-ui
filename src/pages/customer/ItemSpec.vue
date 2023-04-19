@@ -12,16 +12,16 @@
             ].map((item) => ({
                key: item.key,
                title: item.title,
-               icon: item.icon ? item.icon.toUrl() : "",
+               icon: item.icon?.toUrl() ?? "",
             }));
          },
 
          specType: (c) =>
-            c.specifications.find(
-               (specType) => specType.key === c.item.typeKey,
-            ),
-         icon: (c) => (c.specType ? c.specType.icon : ""),
-         title: (c) => (c.specType ? c.specType.title : ""),
+            c.specifications.find((specType) => {
+               return specType.key === c.item.typeKey;
+            }),
+         icon: (c) => c.specType?.icon ?? "",
+         title: (c) => c.specType?.title ?? "",
       },
       mounted() {
          this.$refs.ItemSpecInput.focus();

@@ -120,7 +120,7 @@
             }
             return c.images.length ? c.images[c.imagePreviewIndex] : null;
          },
-         images: (c) => (!c.product ? [] : c.product.images),
+         images: (c) => c.product?.images ?? [],
          hasImagePrevious: (c) =>
             c.images.length > 0 && c.imagePreviewIndex > 0,
          hasImageNext: (c) => c.images.length - 1 > c.imagePreviewIndex,
@@ -129,10 +129,10 @@
             if (!c.isEditable && !c.settingShowPrice) {
                return null;
             }
-            return c.product ? c.product.price : null;
+            return c.product?.price ?? null;
          },
 
-         description: (c) => (c.product ? c.product.description : ""),
+         description: (c) => c.product?.description ?? "",
 
          specificationKeys: () => {
             return Object.keys(ProductSpecType.Key).map((key) => {
@@ -165,8 +165,8 @@
                });
          },
 
-         gifts: (c) => (c.product ? c.product.gifts : []),
-         bundles: (c) => (c.product ? c.product.bundles : []),
+         gifts: (c) => c.product?.gifts ?? [],
+         bundles: (c) => c.product?.bundles ?? [],
          whatIncludeds: (c) => {
             return [
                ...c.gifts
@@ -254,7 +254,7 @@
                ? await this.imagePreview.fetchColor().catch(() => null)
                : null;
 
-            this.primaryColorHex = color ? color.toString() : "inherit";
+            this.primaryColorHex = color?.toString() ?? "inherit";
          },
 
          clickPreviousImage() {

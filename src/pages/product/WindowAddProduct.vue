@@ -90,8 +90,8 @@
          },
          clickConfirm() {
             const title = this.title.trim();
-            const brandId = this.brandMenu ? this.brandMenu.key : "";
-            const categoryId = this.categoryMenu ? this.categoryMenu.key : "";
+            const brandId = this.brandMenu?.key ?? "";
+            const categoryId = this.categoryMenu?.key ?? "";
 
             if (!title) {
                this.titleError = "Title Missing";

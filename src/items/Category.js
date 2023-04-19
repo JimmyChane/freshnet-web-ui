@@ -118,8 +118,8 @@ class Category {
          _id: this.id,
          key: this.key,
          title: this.title,
-         icon: this.icon ? this.icon.toData() : {},
-         background: this.background ? this.background.toData() : {},
+         icon: this.icon?.toData() ?? {},
+         background: this.background?.toData() ?? {},
       };
    }
    toCount(strs) {

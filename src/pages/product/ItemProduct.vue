@@ -7,7 +7,7 @@
 
    import ImageView from "@/components/ImageView.vue";
    import Label from "./ItemProduct-Label.vue";
-   import chroma from "chroma-js"; 
+   import chroma from "chroma-js";
    import U from "@/U";
 
    export default {
@@ -42,23 +42,19 @@
             return setting?.value ?? false;
          },
 
-         preview: (c) => (c.item ? c.item.toImageThumbnail() : null),
-         productBrandId: (c) => (c.item ? c.item.brandId : ""),
-         isAvailable: (c) => (c.item ? c.item.isStockAvailable() : false),
+         preview: (c) => c.item?.toImageThumbnail() ?? null,
+         productBrandId: (c) => c.item?.brandId ?? "",
+         isAvailable: (c) => c.item?.isStockAvailable() ?? false,
 
          productPrice: (c) => {
             if (!c.allowEdit && !c.shouldShowPrice) return null;
             return c.item.price;
          },
          productPriceNormal: (c) => {
-            return c.productPrice && c.productPrice.normal
-               ? c.productPrice.normal
-               : new ProductPrice();
+            return c.productPrice?.normal ?? new ProductPrice();
          },
          productPricePromotion: (c) => {
-            return c.productPrice && c.productPrice.promotion
-               ? c.productPrice.promotion
-               : new ProductPrice();
+            return c.productPrice?.promotion ?? new ProductPrice();
          },
          price: (c) => {
             if (!c.allowEdit && !c.shouldShowPrice) return null;

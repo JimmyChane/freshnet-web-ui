@@ -10,8 +10,8 @@
       },
       data: (c) => ({ outputCategoryId: "" }),
       computed: {
-         product: (c) => (c.input ? c.input.product : null),
-         categoryId: (c) => (c.input ? c.input.categoryId : ""),
+         product: (c) => c.input?.product ?? null,
+         categoryId: (c) => c.input?.categoryId ?? "",
          categories: (c) => c.categoryStore.getters.items,
          items: (c) => [
             { key: "", title: "None" },
@@ -27,7 +27,7 @@
             c.items.map((item) => ({
                key: item.key,
                title: item.title,
-               icon: item.icon ? item.icon.toUrl() : "",
+               icon: item.icon?.toUrl() ?? "",
             })),
       },
       watch: {
@@ -72,7 +72,9 @@
             :selectedKey="outputCategoryId"
             @click-menu="
                (menu) => {
-                  let item = items.find((category) => category.key === menu.key);
+                  let item = items.find(
+                     (category) => category.key === menu.key,
+                  );
                   outputCategoryId = item ? item.key : '';
                }
             "

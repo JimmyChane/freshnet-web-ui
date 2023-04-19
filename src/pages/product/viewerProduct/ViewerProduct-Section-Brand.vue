@@ -12,10 +12,9 @@
       computed: {
          title: (c) => (c.product ? c.product.title : ""),
 
-         brandId: (c) => (c.product ? c.product.brandId : ""),
-         brandTitle: (c) => (c.brand ? c.brand.title : ""),
-         brandIcon: (c) => (c.brand ? c.brand.icon : null),
-         brandIconUrl: (c) => (c.brandIcon ? c.brandIcon.toUrl() : ""),
+         brandId: (c) => c.product?.brandId ?? "",
+         brandTitle: (c) => c.brand?.title ?? "",
+         brandIconUrl: (c) => c.brand?.icon?.toUrl() ?? "",
       },
       watch: {
          product() {
@@ -46,12 +45,17 @@
       :menu="{
          title: 'Edit',
          icon: host.icon('edit-000000'),
-         click: () => $emit('click-edit', { product, title: title, brandId: brandId }),
+         click: () =>
+            $emit('click-edit', { product, title: title, brandId: brandId }),
       }"
    >
       <div class="SectionBrand">
          <div class="SectionBrand-item" v-if="brand">
-            <img class="SectionBrand-item-icon" v-if="brandIconUrl" :src="brandIconUrl" />
+            <img
+               class="SectionBrand-item-icon"
+               v-if="brandIconUrl"
+               :src="brandIconUrl"
+            />
             <span class="SectionBrand-item-title" v-if="brandTitle">{{
                brandTitle
             }}</span>

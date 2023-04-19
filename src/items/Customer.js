@@ -45,7 +45,7 @@ class Customer {
       return {
          _id: this.id,
          name: this.name,
-         phoneNumber: this.phoneNumber ? this.phoneNumber.toData() : "",
+         phoneNumber: this.phoneNumber?.toData() ?? "",
          description: this.description,
          deviceIds: this.deviceIds.map((deviceId) => deviceId),
       };

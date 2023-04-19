@@ -17,13 +17,11 @@
          menuWidth: (c) => Menu.Width.SAME,
 
          currentMenu: (c) => {
-            const menu = c.menus.find((menu) => menu.isSelected());
-            return menu ? menu : selectionNone;
+            return c.menus.find((menu) => menu.isSelected()) ?? selectionNone;
          },
          currentIcon: (c) => {
             const item = c.list.find((item) => item.key === c.currentMenu.key);
-            const icon = item.icon;
-            return icon ? icon.white : "";
+            return item?.icon?.white ?? "";
          },
          currentColor: (c) => {
             if (!c.currentMenu || !U.isString(c.currentMenu.primaryColor)) {
@@ -56,7 +54,7 @@
                return {
                   key: item.key,
                   title: item.title,
-                  icon: U.isObjectOnly(item.icon) ? item.icon.color : "",
+                  icon: item.icon?.color ?? "",
                   primaryColor: item.color,
                   isSelected: () => item.key === this.keySelected,
                   click: () => this.$emit("callback-select", item.key),

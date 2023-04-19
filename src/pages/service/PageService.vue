@@ -277,7 +277,7 @@
          updateServiceUI(service) {
             const hasNextService = !!service;
 
-            this.currentService = service ? service : null;
+            this.currentService = service ?? null;
             if (hasNextService) {
                this.drawerService = service;
             } else {
@@ -302,7 +302,7 @@
 
             const hasPreviousSerivce = !!this.currentService;
             const hasNextService = !!service;
-            const query = { service: service ? service.id : null };
+            const query = { service: service?.id ?? null };
 
             if (hasPreviousSerivce && hasNextService) {
                this.$root.replaceQuery({ query });

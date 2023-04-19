@@ -67,7 +67,7 @@
          return U.optString(this.title);
       }
       getParentTitle() {
-         return this.parent ? this.parent.getTitle() : "";
+         return this.parent?.getTitle() ?? "";
       }
 
       getType() {
@@ -146,7 +146,10 @@
 </script>
 
 <template>
-   <div class="PageSetting" @scroll="(event) => (scrollTop = event.target.scrollTop)">
+   <div
+      class="PageSetting"
+      @scroll="(event) => (scrollTop = event.target.scrollTop)"
+   >
       <NavigationBar
          :title="$options.title"
          :rightMenus="[
@@ -160,7 +163,11 @@
       />
 
       <div class="PageSetting-body">
-         <ItemSetting v-for="item of list" :key="item.getTitle()" :item="item" />
+         <ItemSetting
+            v-for="item of list"
+            :key="item.getTitle()"
+            :item="item"
+         />
       </div>
 
       <Empty v-if="isEmpty && !isLoading" :icon="$options.icon.dark.toUrl()" />

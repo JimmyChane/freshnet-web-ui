@@ -448,12 +448,10 @@
          },
 
          setProduct(product) {
-            this.setProductId(product ? product.id : null);
+            this.setProductId(product?.id ?? null);
          },
          setProductId(productId) {
-            this.$root.nextQuery({
-               query: { productId: productId ? productId : null },
-            });
+            this.$root.nextQuery({ query: { productId: productId ?? null } });
          },
       },
    };

@@ -9,7 +9,7 @@
          to: { default: undefined },
       },
       data: (c) => ({ itemTitle: "" }),
-      computed: { itemThumbnail: (c) => (c.item ? c.item.toImageThumbnail() : null) },
+      computed: { itemThumbnail: (c) => c.item?.toImageThumbnail() ?? null },
       watch: {
          item() {
             this.invalidateItem();
@@ -31,7 +31,9 @@
 <template>
    <router-link class="ItemProductSuggest2 transition" :to="to" replace>
       <div class="ItemProductSuggest2-header">
-         <span class="ItemProductSuggest2-title" v-if="title.length">{{ title }}</span>
+         <span class="ItemProductSuggest2-title" v-if="title.length">{{
+            title
+         }}</span>
          <span>{{ itemTitle }}</span>
       </div>
       <ImageView

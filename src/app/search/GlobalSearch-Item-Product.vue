@@ -26,7 +26,7 @@
 
             this.categoryTitle = await this.item
                .fetchCategory()
-               .then((category) => (category ? category.title : ""))
+               .then((category) => category?.title ?? "")
                .catch((error) => "");
             this.title = await this.item.fetchFullTitle().catch((error) => "");
          },

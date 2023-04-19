@@ -41,10 +41,7 @@
       computed: {
          iconEmpty: () => PageService.icon.dark.toUrl(),
 
-         items: (c) =>
-            c.stateMenus[c.stateMenuIndex]
-               ? c.stateMenus[c.stateMenuIndex].list
-               : [],
+         items: (c) => c.stateMenus[c.stateMenuIndex]?.list ?? [],
          state: (c) => U.optString(c.$route.query.state),
 
          layoutMode: (c) => {
@@ -56,11 +53,11 @@
          },
          sortMode: (c) => {
             const menu = c.sortMenus.find((menu) => menu.isSelected());
-            return menu ? menu.key : ListServices.SortMode.DateCreated;
+            return menu?.key ?? ListServices.SortMode.DateCreated;
          },
          groupMode: (c) => {
             const menu = c.groupMenus.find((menu) => menu.isSelected());
-            return menu ? menu.key : ListServices.GroupMode.DateCreated;
+            return menu?.key ?? ListServices.GroupMode.DateCreated;
          },
 
          currentUser: (c) => c.loginStore.getters.user,

@@ -20,13 +20,13 @@
          },
 
          customer: (c) => {
-            return c.order.customer ? c.order.customer : null;
+            return c.order.customer ?? null;
          },
 
-         name: (c) => (c.customer ? c.customer.name : ""),
-         phoneNumber: (c) => (c.customer ? c.customer.phoneNumber : null),
-         phoneNumberValue: (c) => (c.phoneNumber ? c.phoneNumber.value : ""),
-         phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
+         name: (c) => c.customer?.name ?? "",
+         phoneNumber: (c) => c.customer?.phoneNumber ?? null,
+         phoneNumberValue: (c) => c.phoneNumber?.value ?? "",
+         phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
          content: (c) => c.order.content,
       },
    };

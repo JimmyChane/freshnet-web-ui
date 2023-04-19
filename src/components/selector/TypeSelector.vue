@@ -1,4 +1,5 @@
 <script>
+   import U from "@/U";
    export default {
       emits: ["click-item-key"],
       props: { items: { type: Array }, defaultKey: { type: String } },
@@ -17,10 +18,10 @@
       },
       methods: {
          onInvalidateList() {
-            this.list = (Array.isArray(this.items) ? this.items : []).map((item) => item);
+            this.list = U.optArray(this.items).map((item) => item);
          },
          onInvalidateDefaultKey() {
-            this.selectKey(typeof this.defaultKey === "string" ? this.defaultKey : "");
+            this.selectKey(U.optString(this.defaultKey));
          },
 
          selectKey(key) {

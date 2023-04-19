@@ -7,8 +7,8 @@
       props: { item: { type: Object, default: null } },
       computed: {
          icon: (c) => c.item.icon,
-         thumbnail: (c) => (c.icon ? c.icon.toUrl() : ""),
-         title: (c) => (c.item ? c.item.title : ""),
+         thumbnail: (c) => c.icon?.toUrl() ?? "",
+         title: (c) => c.item?.title ?? "",
       },
    };
 </script>

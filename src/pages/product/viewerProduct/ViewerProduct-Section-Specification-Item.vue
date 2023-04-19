@@ -19,14 +19,12 @@
             this.icon = "";
             this.content = "";
 
-            const type = this.productSpecification
-               ? await this.productSpecification.fetchType()
-               : null;
+            const type = (await this.productSpecification?.fetchType()) ?? null;
 
             this.title = type
                ? type.title
                : this.parseKeyToTitle(this.productSpecification.typeKey);
-            this.icon = type && type.icon ? type.icon.toUrl() : "";
+            this.icon = type?.icon?.toUrl() ?? "";
             this.content = this.productSpecification.content;
          },
          parseKeyToTitle(key = "") {

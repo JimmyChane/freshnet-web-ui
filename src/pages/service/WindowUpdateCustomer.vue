@@ -18,11 +18,9 @@
       },
       methods: {
          onNewValue() {
-            const value = this.value !== null ? this.value : {};
+            const value = this.value ?? {};
             this.customerName = U.optString(value.name);
-            this.customerPhoneNumber = value.phoneNumber
-               ? value.phoneNumber.toString()
-               : "";
+            this.customerPhoneNumber = value.phoneNumber?.toString() ?? "";
          },
          onChange() {
             this.$emit("callback-change", {

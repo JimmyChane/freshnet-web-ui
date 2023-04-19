@@ -25,7 +25,7 @@
          user: (c) => c.loginStore.getters.user,
          allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
-         brandId: (c) => (c.product ? c.product.brandId : ""),
+         brandId: (c) => c.product?.brandId ?? "",
 
          specificationKeys: () => {
             return Object.keys(ProductSpecType.Key).map((key) => {
@@ -48,7 +48,9 @@
                   index1 = index1 >= 0 ? index1 : c.specificationKeys.length;
                   index2 = index2 >= 0 ? index2 : c.specificationKeys.length;
 
-                  return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
+                  return index1 !== index2
+                     ? index1 - index2
+                     : key1.localeCompare(key2);
                });
          },
 
@@ -143,7 +145,10 @@
       >
          <span class="ExportLayoutOne-title">{{ fullTitle }}</span>
 
-         <div class="ExportLayoutOne-items" :style="{ 'gap': `${specificationGap}px` }">
+         <div
+            class="ExportLayoutOne-items"
+            :style="{ 'gap': `${specificationGap}px` }"
+         >
             <Item
                v-for="specification in specifications"
                :key="specification.name"

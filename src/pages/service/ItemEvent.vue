@@ -31,8 +31,7 @@
             return "";
          },
          methodResult: (c) => {
-            const result = c.item.toResult();
-            return result ? result : "";
+            return c.item.toResult() ?? "";
          },
 
          shouldShowMenu: (c) => c.isShowingMenu || c.isHovered,

@@ -23,7 +23,7 @@
       methods: {
          invalidateValue() {
             const setting = this.item.findValue();
-            this.value = setting ? setting.value : undefined;
+            this.value = setting?.value ?? undefined;
          },
       },
    };

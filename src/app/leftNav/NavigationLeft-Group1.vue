@@ -1,4 +1,5 @@
 <script>
+   import U from "@/U";
    import LeftNavGroup2 from "./NavigationLeft-Group2.vue";
    import LeftNavLink from "./NavigationLeft-Link.vue";
 
@@ -8,7 +9,7 @@
          group1: { type: Object, default: () => null },
       },
       computed: {
-         group2s: (c) => (Array.isArray(c.group1.groups) ? c.group1.groups : []),
+         group2s: (c) => U.optArray(c.group1.groups),
          hasGroup2s: (c) => c.group2s.length > 0,
 
          isExpanded: (c) => c.group1.isExpanded(),

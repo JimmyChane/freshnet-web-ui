@@ -18,9 +18,7 @@ class Service {
    static search(item, searches) {
       const data = {
          description: U.optString(item.description),
-         customerName: U.isObject(item.customer)
-            ? U.optString(item.customer.name)
-            : "",
+         customerName: U.optString(item.customer?.name),
          customerNumber: U.isObject(item.customer)
             ? PhoneNumber.parseToString(item.customer.phoneNumber)
             : "",

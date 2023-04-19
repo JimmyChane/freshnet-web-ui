@@ -10,10 +10,9 @@
       },
       data: (c) => ({ category: null }),
       computed: {
-         categoryId: (c) => (c.product ? c.product.categoryId : ""),
-         categoryTitle: (c) => (c.category ? c.category.title : ""),
-         categoryIcon: (c) => (c.category ? c.category.icon : null),
-         categoryIconUrl: (c) => (c.categoryIcon ? c.categoryIcon.toUrl() : ""),
+         categoryId: (c) => c.product?.categoryId ?? "",
+         categoryTitle: (c) => c.category?.title ?? "",
+         categoryIconUrl: (c) => c.category?.icon?.toUrl() ?? "",
       },
       watch: {
          product() {

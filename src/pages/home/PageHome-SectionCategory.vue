@@ -20,9 +20,11 @@
          async invalidate() {
             this.groups = [];
 
-            const groups = (await this.productStore.dispatch("getGroupsByCategory")).sort(
-               (group1, group2) => group1.category.compare(group2.category),
-            );
+            const groups = (
+               await this.productStore.dispatch("getGroupsByCategory")
+            ).sort((group1, group2) => {
+               return group1.category.compare(group2.category);
+            });
 
             this.groups = groups;
          },

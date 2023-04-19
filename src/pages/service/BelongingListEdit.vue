@@ -18,6 +18,7 @@
       data.title.trim() === "" && data.quantity <= 0;
 
    import Input from "@/components/Input.vue";
+   import U from "@/U";
 
    export default {
       components: { Input },
@@ -33,15 +34,13 @@
       },
       methods: {
          onReset() {
-            const values = (Array.isArray(this.values) ? this.values : []).map(
-               (value) => {
-                  return {
-                     title: value.title,
-                     quantity: value.quantity > 0 ? value.quantity : 1,
-                     time: TimeGetter.getTimeNow(),
-                  };
-               },
-            );
+            const values = U.optArray(this.values).map((value) => {
+               return {
+                  title: value.title,
+                  quantity: value.quantity > 0 ? value.quantity : 1,
+                  time: TimeGetter.getTimeNow(),
+               };
+            });
 
             this.belongings = [...values, getNewBelongingTemplate()];
          },

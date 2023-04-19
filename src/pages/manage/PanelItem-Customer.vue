@@ -10,7 +10,7 @@
       computed: {
          name: (c) => c.customer.name,
          phoneNumber: (c) => c.customer.phoneNumber,
-         phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
+         phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
          isPhoneNumber: (c) => !!c.phoneNumberStr,
       },
    };

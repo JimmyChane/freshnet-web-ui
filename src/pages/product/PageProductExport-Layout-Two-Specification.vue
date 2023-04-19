@@ -23,10 +23,8 @@
 
             const type = this.item ? await this.item.fetchType() : null;
 
-            this.title = type
-               ? type.title
-               : this.parseKeyToTitle(this.item.typeKey);
-            this.icon = type && type.icon ? type.icon.toUrl() : "";
+            this.title = type?.title ?? this.parseKeyToTitle(this.item.typeKey);
+            this.icon = type?.icon?.toUrl() ?? "";
             this.content = this.item.content;
          },
          parseKeyToTitle(key = "") {

@@ -9,8 +9,8 @@
          product: { type: Object, default: () => null },
       },
       computed: {
-         title: (c) => (c.product ? c.product.title : ""),
-         brandId: (c) => (c.product ? c.product.brandId : ""),
+         title: (c) => c.product?.title ?? "",
+         brandId: (c) => c.product?.brandId ?? "",
       },
    };
 </script>
@@ -23,7 +23,8 @@
       :menu="{
          title: 'Edit',
          icon: host.icon('edit-000000'),
-         click: () => $emit('click-edit', { product, title: title, brandId: brandId }),
+         click: () =>
+            $emit('click-edit', { product, title: title, brandId: brandId }),
       }"
    >
       <div class="ViewerProduct-title">

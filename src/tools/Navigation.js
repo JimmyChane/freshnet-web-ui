@@ -70,14 +70,14 @@ class Navigation {
       const view = this.#getCurrentViewKey();
       const request = this.#getVisibilityRequest(page, view);
 
-      return request ? request : null;
+      return request ?? null;
    }
    getCurrentLayoutRequest() {
       const page = this.#getCurrentPageKey();
       const view = this.#getCurrentViewKey();
       const request = this.#getLayoutRequest(page, view);
 
-      return request ? request : null;
+      return request ?? null;
    }
 
    getCurrentVisibility() {

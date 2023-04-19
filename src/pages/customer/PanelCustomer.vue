@@ -72,15 +72,15 @@
             return menus;
          },
 
-         id: (c) => (c.item ? c.item.id : ""),
-         name: (c) => (c.item ? c.item.name : ""),
-         phoneNumber: (c) => (c.item ? c.item.phoneNumber : null),
-         phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
+         id: (c) => c.item?.id ?? "",
+         name: (c) => c.item?.name ?? "",
+         phoneNumber: (c) => c.item?.phoneNumber ?? null,
+         phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
          isPhoneNumber: (c) => !!c.phoneNumberStr,
-         description: (c) => (c.item ? c.item.description : ""),
-         deviceIds: (c) => (c.item ? c.item.deviceIds : []),
-         services: (c) => (c.item ? c.item.services : []),
-         orders: (c) => (c.item ? c.item.orders : []),
+         description: (c) => c.item?.description ?? "",
+         deviceIds: (c) => c.item?.deviceIds ?? [],
+         services: (c) => c.item?.services ?? [],
+         orders: (c) => c.item?.orders ?? [],
          isFromStoreCustomer: (c) => c.item?.isFromStoreCustomer() ?? false,
 
          primaryColor: () => chroma("294656"),

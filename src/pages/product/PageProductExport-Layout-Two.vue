@@ -27,7 +27,7 @@
          user: (c) => c.loginStore.getters.user,
          allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
-         brandId: (c) => (c.product ? c.product.brandId : ""),
+         brandId: (c) => c.product?.brandId ?? "",
 
          specificationKeys: () => {
             return Object.keys(ProductSpecType.Key).map((key) => {
@@ -72,14 +72,10 @@
             return c.product.price;
          },
          productPriceNormal: (c) => {
-            if (!c.productPrice) return new ProductPrice();
-            if (!c.productPrice.normal) return new ProductPrice();
-            return c.productPrice.normal;
+            return c.productPrice?.normal ?? new ProductPrice();
          },
          productPricePromotion: (c) => {
-            if (!c.productPrice) return new ProductPrice();
-            if (!c.productPrice.promotion) return new ProductPrice();
-            return c.productPrice.promotion;
+            return c.productPrice?.promotion ?? new ProductPrice();
          },
          price: (c) => {
             if (!c.allowEdit) return null;
@@ -96,13 +92,13 @@
          },
 
          gifts: (c) => {
-            const gifts = c.product ? c.product.gifts : [];
+            const gifts = c.product?.gifts ?? [];
             return gifts
                .map((gift) => U.optString(gift).trim())
                .filter((gift) => gift.length);
          },
          bundles: (c) => {
-            const bundles = c.product ? c.product.bundles : [];
+            const bundles = c.product?.bundles ?? [];
             return bundles
                .filter((bundle) => U.isObjectOnly(bundle))
                .map((bundle) => U.optString(bundle.title).trim())

@@ -17,9 +17,7 @@
       methods: {
          parseMenus(menus) {
             if (Array.isArray(menus)) {
-               return menus.filter((menu) => {
-                  return U.optObjectOnly(menu);
-               });
+               return menus.filter((menu) => U.optObjectOnly(menu));
             }
             if (typeof menus === "object") {
                return [menus];

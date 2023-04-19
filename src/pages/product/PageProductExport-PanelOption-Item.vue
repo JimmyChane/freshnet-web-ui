@@ -22,7 +22,7 @@
 
          selectedKey: (c) => {
             const menu = c.menus.find((menu) => menu.isSelected());
-            return menu ? menu.key : "";
+            return menu?.key ?? "";
          },
       },
       methods: {
@@ -30,10 +30,11 @@
             const menu = this.menus.find((menu) => menu.title === key);
             if (!menu) return;
 
-            const item = this.item.items.find((item) => item.title === menu.key);
-            if (!item) return;
+            const item = this.item.items.find((item) => {
+               return item.title === menu.key;
+            });
 
-            item.click();
+            item?.click() ?? null;
          },
       },
    };

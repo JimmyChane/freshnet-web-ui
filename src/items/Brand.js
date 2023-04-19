@@ -25,7 +25,7 @@ class Brand {
       return {
          _id: this.id,
          title: this.title,
-         icon: this.icon ? this.icon.toData() : {},
+         icon: this.icon?.toData() ?? {},
       };
    }
    toCount(strs) {

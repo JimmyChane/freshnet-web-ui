@@ -12,10 +12,12 @@
       data: (c) => ({ fullTitle: "" }),
       computed: {
          titleColor: (c) =>
-            U.isColorDark(c.primaryColor) ? "white" : c.primaryColor.mix("000000", 0.98),
+            U.isColorDark(c.primaryColor)
+               ? "white"
+               : c.primaryColor.mix("000000", 0.98),
 
-         title: (c) => (c.product ? c.product.title : ""),
-         brandId: (c) => (c.product ? c.product.brandId : ""),
+         title: (c) => c.product?.title ?? "",
+         brandId: (c) => c.product?.brandId ?? "",
       },
       watch: {
          product() {
@@ -43,7 +45,10 @@
          class="ViewerProduct-button"
          v-if="allowEdit"
          :src="host.icon('edit-000000')"
-         @click="() => $emit('click-edit', { product, title: title, brandId: brandId })"
+         @click="
+            () =>
+               $emit('click-edit', { product, title: title, brandId: brandId })
+         "
       />
    </div>
 </template>

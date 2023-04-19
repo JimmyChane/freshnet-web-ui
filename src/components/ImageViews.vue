@@ -2,6 +2,7 @@
    import Image from "@/items/Image";
    import ServiceImage from "@/items/ServiceImage";
    import ImageView from "@/components/ImageView.vue";
+   import U from "@/U";
 
    export default {
       components: { ImageView },
@@ -12,14 +13,19 @@
       },
       computed: {
          parsedImages() {
-            return (Array.isArray(this.images) ? this.images : [this.images])
-               .filter((image) => image instanceof Image || image instanceof ServiceImage)
+            return U.optArray(this.images, [this.images])
+               .filter((image) => {
+                  return (
+                     image instanceof Image || image instanceof ServiceImage
+                  );
+               })
                .reduce((images, image, index, sources) => {
                   if (index < 4) images.push(image);
                   return images;
                }, []);
          },
-         parsedImage: (c) => (c.parsedImages.length === 1 ? c.parsedImages[0] : null),
+         parsedImage: (c) =>
+            c.parsedImages.length === 1 ? c.parsedImages[0] : null,
 
          cssWidth: (c) => `${c.width}px`,
          cssHeight: (c) => `${c.height}px`,
@@ -42,7 +48,11 @@
    <ImageView
       v-if="parsedImages.length === 1"
       class="ImageViews-item"
-      :style="{ width: cssWidth, height: cssHeight, 'border-radius': cssBorderRadius }"
+      :style="{
+         width: cssWidth,
+         height: cssHeight,
+         'border-radius': cssBorderRadius,
+      }"
       :src="parsedImage"
       @load="(event) => onLoad(event.target, parsedImage)"
       @error="(event) => onError(event.target, parsedImage)"
