@@ -1,13 +1,16 @@
 <script>
-   import LabelCount from "@/components/LabelCount.vue";
+   import Label from "./ItemCustomer-Label.vue";
 
    export default {
-      components: { LabelCount },
+      components: { Label },
       props: {
          categoryKey: { type: String, default: "" },
          count: { type: Number, default: 0 },
       },
       data: (c) => ({ category: null }),
+      computed: {
+         icon: (c) => c.category?.icon?.toUrl() ?? "",
+      },
       watch: {
          categoryKey() {
             this.invalidate();
@@ -29,5 +32,5 @@
 </script>
 
 <template>
-   <LabelCount :icon="category ? category.icon.toUrl() : ''" :count="count" />
+   <Label :icon="icon" :count="count" />
 </template>

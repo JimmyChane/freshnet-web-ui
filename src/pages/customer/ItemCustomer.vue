@@ -1,10 +1,10 @@
 <script>
    import ItemButton from "@/pages/manage/PanelItems-ItemButton.vue";
-   import LabelCount from "@/components/LabelCount.vue";
-   import ItemDeviceCount from "./ItemDeviceCount.vue";
+   import Label from "./ItemCustomer-Label.vue";
+   import LabelDevice from "./ItemCustomer-LabelDevice.vue";
 
    export default {
-      components: { ItemButton, LabelCount, ItemDeviceCount },
+      components: { ItemButton, Label, LabelDevice },
       emtis: ["click", "click-remove"],
       props: {
          item: { type: Object, default: null },
@@ -14,9 +14,9 @@
       computed: {
          name: (c) => c.item.name,
          phoneNumber: (c) => c.item.phoneNumber,
-         phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
-         services: (c) => (c.item ? c.item.services : []),
-         orders: (c) => (c.item ? c.item.orders : []),
+         phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
+         services: (c) => c.item?.services ?? [],
+         orders: (c) => c.item?.orders ?? [],
       },
       watch: {
          item() {
@@ -70,20 +70,20 @@
             </div>
 
             <div class="ItemCustomer-labels">
-               <ItemDeviceCount
+               <LabelDevice
                   v-for="group of itemDeviceGroups"
                   :key="group.categoryKey"
                   :categoryKey="group.categoryKey"
                   :count="group.devices.length"
                />
-               <LabelCount
+               <Label
                   v-if="services.length"
-                  :icon="host.icon('service-FFFFFF')"
+                  :icon="host.icon('service-505050')"
                   :count="services.length"
                />
-               <LabelCount
+               <Label
                   v-if="orders.length"
-                  :icon="host.icon('order-FFFFFF')"
+                  :icon="host.icon('order-505050')"
                   :count="orders.length"
                />
             </div>
@@ -171,6 +171,7 @@
                gap: 0.1rem;
                & > * {
                   --primary-color: #444;
+                  --primary-color: black;
                   border-radius: 0.5rem;
                   padding: 0.4rem;
                }
