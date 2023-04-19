@@ -7,10 +7,22 @@
 <template>
    <div class="DismissableContainer transition">
       <div class="DismissableContainer-body"><slot /></div>
-      <div class="DismissableContainer-hitbox-top" @click="$emit('click-dismiss')" />
-      <div class="DismissableContainer-hitbox-left" @click="$emit('click-dismiss')" />
-      <div class="DismissableContainer-hitbox-right" @click="$emit('click-dismiss')" />
-      <div class="DismissableContainer-hitbox-bottom" @click="$emit('click-dismiss')" />
+      <div
+         class="DismissableContainer-hitbox-top"
+         @click="$emit('click-dismiss')"
+      />
+      <div
+         class="DismissableContainer-hitbox-left"
+         @click="$emit('click-dismiss')"
+      />
+      <div
+         class="DismissableContainer-hitbox-right"
+         @click="$emit('click-dismiss')"
+      />
+      <div
+         class="DismissableContainer-hitbox-bottom"
+         @click="$emit('click-dismiss')"
+      />
    </div>
 </template>
 
@@ -47,32 +59,26 @@
       --default-size-bottom: 3rem;
       --default-size-left: 3rem;
 
-      .DismissableContainer-hitbox-top {
-         grid-area: top;
+      & > * {
          z-index: 1;
          width: 100%;
          height: 100%;
+      }
+
+      .DismissableContainer-hitbox-top {
+         grid-area: top;
          min-height: var(--default-size-top);
       }
       .DismissableContainer-hitbox-right {
          grid-area: right;
-         z-index: 1;
-         width: 100%;
-         height: 100%;
          min-width: var(--default-size-right);
       }
       .DismissableContainer-hitbox-bottom {
          grid-area: bottom;
-         z-index: 1;
-         width: 100%;
-         height: 100%;
          min-height: var(--default-size-bottom);
       }
       .DismissableContainer-hitbox-left {
          grid-area: left;
-         z-index: 1;
-         width: 100%;
-         height: 100%;
          min-width: var(--default-size-left);
       }
 
