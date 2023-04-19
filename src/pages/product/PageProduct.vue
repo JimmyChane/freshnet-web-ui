@@ -462,7 +462,7 @@
             this.setProductId(product ? product.id : null);
          },
          setProductId(productId) {
-            this.$root.nextRoute({
+            this.$root.nextQuery({
                query: { productId: productId ? productId : null },
             });
          },

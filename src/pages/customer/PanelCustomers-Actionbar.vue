@@ -60,7 +60,7 @@
             ].map((menu) => {
                menu.isSelected = (menu) => c.filter === menu.key;
                menu.click = (menu) => {
-                  c.$root.replaceRoute({ query: { filter: menu.key } });
+                  c.$root.replaceQuery({ query: { filter: menu.key } });
                };
                return menu;
             });

@@ -174,7 +174,7 @@
          @click-dismiss="
             () => {
                if ($route.fullPath !== '/ps2') {
-                  $root.replaceRoute({ query: { discCode: null } });
+                  $root.replaceQuery({ query: { discCode: null } });
                }
             }
          "

@@ -100,7 +100,7 @@
                      });
                      accept();
                      if (c.currentServiceId === data.id) {
-                        c.$root.replaceRoute({ query: { service: null } });
+                        c.$root.replaceQuery({ query: { service: null } });
                      }
                   } catch (error) {
                      c.store.dispatch("snackbarShow", "Delete Failed");
@@ -319,9 +319,9 @@
             const query = { service: service ? service.id : null };
 
             if (hasPreviousSerivce && hasNextService) {
-               this.$root.replaceRoute({ query });
+               this.$root.replaceQuery({ query });
             } else {
-               this.$root.nextRoute({ query });
+               this.$root.nextQuery({ query });
             }
 
             this.updateServiceUI(service);
@@ -392,7 +392,7 @@
             :mode="itemDrawerMode"
             :isExpand="!!currentService"
             :isDrawer="!isWide || !!drawerService"
-            @click-collapse="$root.nextRoute({ query: { service: null } })"
+            @click-collapse="$root.nextQuery({ query: { service: null } })"
          >
             <PanelService
                class="PageService-PanelRight"

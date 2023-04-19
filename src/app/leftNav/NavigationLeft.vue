@@ -176,14 +176,14 @@
                (this.hasQueryKey("") && this.getQueryValue("") === undefined) ||
                (key === "" && nextValue === "")
             ) {
-               this.$root.replaceRoute({});
+               this.$root.replaceQuery({});
                return;
             }
 
             const query = {};
             query[key] = nextValue;
 
-            this.$root.replaceRoute({ query });
+            this.$root.replaceQuery({ query });
          },
 
          focus() {

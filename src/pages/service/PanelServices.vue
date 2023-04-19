@@ -83,7 +83,7 @@
             const menu = this.stateMenus.find((menu) => menu.key === state);
 
             if (!menu && this.stateMenus.length && Object.keys(State).length) {
-               this.$root.replaceRoute({
+               this.$root.replaceQuery({
                   query: { state: State[Object.keys(State)[0]] },
                });
             }
@@ -175,7 +175,7 @@
             };
             menu.click = () => {
                if (this.state === menu.key) return;
-               this.$root.replaceRoute({ query: { state: menu.key } });
+               this.$root.replaceQuery({ query: { state: menu.key } });
             };
          }
          for (const menu of this.layoutMenus) {

@@ -33,7 +33,7 @@
                query[this.key] = menu.key;
 
                if (this.context.$route.query[this.key] !== menu.key) {
-                  this.context.$root.replaceRoute({ query });
+                  this.context.$root.replaceQuery({ query });
                }
             };
 

@@ -120,7 +120,7 @@
          :title="$options.title"
          :items="items"
          @click-item="
-            (item) => $root.replaceRoute({ query: { order: item.id } })
+            (item) => $root.replaceQuery({ query: { order: item.id } })
          "
          @click-item-add="
             () =>
@@ -136,10 +136,10 @@
             :items="pendingItems"
             :currentItemIdSelected="currentExpandedOrderid"
             @click-collapse="
-               (item) => $root.replaceRoute({ query: { order: null } })
+               (item) => $root.replaceQuery({ query: { order: null } })
             "
             @click-expand="
-               (item) => $root.replaceRoute({ query: { order: item.id } })
+               (item) => $root.replaceQuery({ query: { order: item.id } })
             "
             @click-complete="
                (item) => orderStore.dispatch('updateToCompletedOfId', item.id)
@@ -155,10 +155,10 @@
             :items="completedItems"
             :currentItemIdSelected="currentExpandedOrderid"
             @click-collapse="
-               (item) => $root.replaceRoute({ query: { order: null } })
+               (item) => $root.replaceQuery({ query: { order: null } })
             "
             @click-expand="
-               (item) => $root.replaceRoute({ query: { order: item.id } })
+               (item) => $root.replaceQuery({ query: { order: item.id } })
             "
             @click-pending="
                (item) => orderStore.dispatch('updateToPendingOfId', item.id)

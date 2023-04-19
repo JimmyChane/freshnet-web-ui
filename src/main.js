@@ -432,13 +432,13 @@ new Vue({
       },
 
       // routes
-      nextRoute(param = {}) {
-         this.setRoute(param, true);
+      nextQuery(param = {}) {
+         this.setQuery(param, true);
       },
-      replaceRoute(param = {}) {
-         this.setRoute(param, false);
+      replaceQuery(param = {}) {
+         this.setQuery(param, false);
       },
-      setRoute(param = {}, isNext = true) {
+      setQuery(param = {}, isNext = true) {
          const query = RouteQuery.replace(this.$route.query, param.query);
 
          if (!query) return;
