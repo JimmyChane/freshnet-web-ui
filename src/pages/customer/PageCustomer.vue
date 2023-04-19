@@ -1,5 +1,4 @@
 <script>
-   import Drawer from "@/components/Drawer.vue";
    import Loading from "@/components/Loading.vue";
    import PopupWindow from "@/components/window/PopupWindow.vue";
    import Input from "@/components/Input.vue";
@@ -15,6 +14,7 @@
 
    import PanelCustomers from "./PanelCustomers.vue";
    import PanelCustomer from "./PanelCustomer.vue";
+   import PanelRight from "@/components/panel/PanelRight.vue";
 
    import HostIcon from "@/host/HostIcon";
 
@@ -31,12 +31,12 @@
       userPermissions: ["admin", "staff"],
 
       components: {
-         Drawer,
          Loading,
          PopupWindow,
          Input,
          PanelCustomers,
          PanelCustomer,
+         PanelRight,
          WindowAddCustomer,
          WindowRemoveCustomer,
          WindowUpdateCustomer,
@@ -47,6 +47,10 @@
          WindowUpdateDeviceDescription,
       },
       data: (c) => ({
+         panelListened: { isWide: false },
+         items: [],
+         drawerCustomer: null,
+
          windowAddCustomer: new PopupContext(c),
          windowRemoveCustomer: new PopupContext(c).onConfirm(
             (accept, reject, data) => {
@@ -62,27 +66,9 @@
          windowRemoveDevice: new PopupContext(c),
          windowUpdateDeviceSpecifications: new PopupContext(c),
          windowUpdateDeviceDescription: new PopupContext(c),
-
-         drawerCustomer: null,
-
-         items: [],
       }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
-         isOver1200px: (c) => c.$root.window.innerWidth > 1200,
-
-         itemDrawerEdge: () => Drawer.Edge.RIGHT,
-         itemDrawerMode() {
-            if (this.isOver1200px) {
-               return this.currentCustomer
-                  ? Drawer.Mode.FIXED_EXPAND
-                  : Drawer.Mode.FIXED_COLLAPSE;
-            } else {
-               return this.currentCustomer
-                  ? Drawer.Mode.DRAWER_EXPAND
-                  : Drawer.Mode.DRAWER_COLLAPSE;
-            }
-         },
 
          queryId: (c) => c.$route.query.id,
          queryName: (c) => c.$route.query.name,
@@ -193,7 +179,7 @@
 
 <template>
    <div class="PageCustomer">
-      <div class="PageCustomer-body" :isOver1200px="`${isOver1200px}`">
+      <div class="PageCustomer-body" :isPanelWide="`${panelListened.isWide}`">
          <PanelCustomers
             class="PageCustomer-panelLeft transition"
             :items="items"
@@ -204,17 +190,12 @@
             @click-item-remove="(param) => clickItemRemove(param.item)"
          />
 
-         <div class="PageCustomer-PanelRightEmpty">
-            <span class="PageCustomer-PanelRightEmpty-text"
-               >Select customer to view</span
-            >
-         </div>
-
-         <Drawer
-            class="PageCustomer-RightDrawer"
-            :edge="itemDrawerEdge"
-            :mode="itemDrawerMode"
+         <PanelRight
+            class="PageCustomer-PanelRight"
+            titleEmpty="Select customer to view"
+            :isShowing="!!currentCustomer"
             @click-collapse="() => clickClose()"
+            @on-isWide="(isWide) => (panelListened.isWide = isWide)"
          >
             <PanelCustomer
                class="PageCustomer-PanelCustomer transition"
@@ -252,7 +233,7 @@
                      )
                "
             />
-         </Drawer>
+         </PanelRight>
       </div>
 
       <Loading class="PageCustomer-loading" :isShowing="isLoading" />
@@ -406,62 +387,18 @@
             z-index: 1;
             height: 100%;
          }
-         .PageCustomer-PanelRightEmpty {
+         .PageCustomer-PanelRight {
             z-index: 2;
-            background-color: #adb8bb;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            .PageCustomer-PanelRightEmpty-text {
-               font-weight: 600;
-               font-size: 1.2rem;
-               color: hsl(0, 0%, 84%);
-               background: hsla(0, 0%, 0%, 0.04);
-               border-radius: 1rem;
-               padding: 4rem 5rem;
-            }
-         }
-         .PageCustomer-RightDrawer {
-            z-index: 3;
-            .PageCustomer-PanelCustomer {
-               flex-grow: 1;
-               height: 100%;
-               overflow-y: auto;
-
-               height: 100%;
-               width: 100dvw;
-               max-width: 100%;
-            }
          }
       }
-      .PageCustomer-body[isOver1200px="false"] {
+      .PageCustomer-body[isPanelWide="false"] {
          .PageCustomer-panelLeft {
             width: 100dvw;
             max-width: 100%;
          }
-         .PageCustomer-PanelRightEmpty {
-            display: none;
-         }
-         .PageCustomer-RightDrawer {
-            width: 100dvw;
-            max-width: 100%;
-         }
       }
-      .PageCustomer-body[isOver1200px="true"] {
+      .PageCustomer-body[isPanelWide="true"] {
          .PageCustomer-panelLeft {
-            width: 100dvw;
-            max-width: 50%;
-         }
-         .PageCustomer-PanelRightEmpty {
-            width: 100dvw;
-            max-width: 50%;
-         }
-         .PageCustomer-RightDrawer {
             width: 100dvw;
             max-width: 50%;
          }

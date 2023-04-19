@@ -1,6 +1,4 @@
 <script>
-   import Drawer from "@/components/Drawer.vue";
-
    import Navigation from "@/tools/Navigation.js";
 
    import Footer from "@/app/footer/Footer.vue";
@@ -17,6 +15,8 @@
    import WindowUpdateCategory from "./WindowUpdateCategory.vue";
    import WindowUpdateSpecifications from "./WindowUpdateSpecifications.vue";
 
+   import PanelRight from "@/components/panel/PanelRight.vue";
+
    import HostIcon from "@/host/HostIcon";
 
    import PopupContext from "@/tools/PopupContext";
@@ -32,7 +32,7 @@
       components: {
          Footer,
 
-         Drawer,
+         PanelRight,
          PanelProducts,
          PanelProduct,
 
@@ -47,7 +47,6 @@
          WindowUpdateSpecifications,
       },
       data: (c) => ({
-         scrollTop: 0,
          popup: {
             search: new PopupContext(c).onDismiss((accept, reject, input) => {
                const { windowSearch } = c.$refs;
@@ -159,32 +158,18 @@
                },
             ),
          },
+         stylePanelProducts: {},
+         stylePanelEmpty: {},
+         panelListened: { isShowing: false, isWide: false },
+
+         groups: [],
 
          product: null,
          drawerProduct: null,
          productBrand: null,
-
-         groups: [],
-
-         stylePanelProducts: {},
-         stylePanelEmpty: {},
+         scrollTop: 0,
       }),
       computed: {
-         isOver1200px: (c) => c.$root.window.innerWidth > 1200,
-
-         itemDrawerEdge: () => Drawer.Edge.RIGHT,
-         itemDrawerMode: (c) => {
-            if (c.isOver1200px) {
-               return c.product
-                  ? Drawer.Mode.FIXED_EXPAND
-                  : Drawer.Mode.FIXED_COLLAPSE;
-            } else {
-               return c.product
-                  ? Drawer.Mode.DRAWER_EXPAND
-                  : Drawer.Mode.DRAWER_COLLAPSE;
-            }
-         },
-
          isEditable: (c) => {
             const { user } = c.loginStore.getters;
             return user.isTypeAdmin() || user.isTypeStaff();
@@ -331,12 +316,8 @@
          },
       },
       watch: {
-         isOver1200px() {
-            this.invalidateStyle();
-         },
          product() {
             this.onProduct();
-            this.invalidateStyle();
          },
          productId() {
             this.onProductId();
@@ -357,7 +338,6 @@
          this.invalidate();
          this.onProduct();
          this.onProductId();
-         this.invalidateStyle();
          this.$root.navigation.setLayout(Navigation.Layout.THIN);
       },
       methods: {
@@ -397,43 +377,52 @@
                   return group1.category.compare(group2.category);
                });
          },
-         async invalidateStyle() {
-            this.invalidateStylePanelProducts();
-            this.invalidateStylePanelEmpty();
-         },
-         async invalidateStylePanelProducts() {
-            if (this.isOver1200px) {
-               this.stylePanelProducts = {};
-               return;
-            }
 
-            if (this.product) {
-               const compare = this.product;
-               setTimeout(() => {
-                  if (compare === this.product) {
+         invalidateStyle() {
+            if (this.panelListened.isWide || !this.panelListened.isShowing) {
+               this.stylePanelProducts = {};
+            } else {
+               this.delayOnPanelListened((isSamePreviously) => {
+                  if (isSamePreviously) {
                      this.stylePanelProducts = { display: "none" };
                   }
-               }, 700);
-               return;
-            }
-            this.stylePanelProducts = {};
-         },
-         async invalidateStylePanelEmpty() {
-            if (!this.isOver1200px) {
-               this.stylePanelEmpty = {};
-               return;
+               });
             }
 
-            if (this.product) {
-               const compare = this.product;
-               setTimeout(() => {
-                  if (compare === this.product) {
+            if (!this.panelListened.isWide || !this.panelListened.isShowing) {
+               this.stylePanelEmpty = {};
+            } else {
+               this.delayOnPanelListened((isSamePreviously) => {
+                  if (isSamePreviously) {
                      this.stylePanelEmpty = { display: "none" };
                   }
-               }, 700);
-               return;
+               });
             }
-            this.stylePanelEmpty = {};
+         },
+
+         delayOnPanelListened(
+            callback = (isSamePreviously) => {},
+            delay = 700,
+         ) {
+            setTimeout(() => {
+               const isPreviousWide = this.panelListened.isWide;
+               const isPreviousShowing = this.panelListened.isShowing;
+
+               const isSamePreviously =
+                  this.panelListened.isWide === isPreviousWide &&
+                  this.panelListened.isShowing === isPreviousShowing;
+
+               callback(isSamePreviously);
+            }, delay);
+         },
+
+         invalidatePanelShowing(isShowing) {
+            this.panelListened.isShowing = isShowing;
+            this.invalidateStyle();
+         },
+         invalidatePanelWide(isWide) {
+            this.panelListened.isWide = isWide;
+            this.invalidateStyle();
          },
 
          async onProduct() {
@@ -472,7 +461,7 @@
 
 <template>
    <div class="PageProduct">
-      <div class="PageProduct-body" :isOver1200px="`${isOver1200px}`">
+      <div class="PageProduct-body" :isPanelWide="`${panelListened.isWide}`">
          <PanelProducts
             class="PageProduct-products"
             :style="stylePanelProducts"
@@ -480,16 +469,13 @@
             @click-productAdd="() => popup.productAdd.show()"
             @click-search="() => popup.search.show()"
          />
-
-         <div class="PageProduct-PanelRightEmpty" :style="stylePanelEmpty">
-            <span class="PageProduct-PanelRightEmpty-text">Select product to view</span>
-         </div>
-
-         <Drawer
-            class="PageProduct-panel-PanelProduct"
-            :edge="itemDrawerEdge"
-            :mode="itemDrawerMode"
-            @click-collapse="setProduct(null)"
+         <PanelRight
+            class="PageProduct-PanelRight"
+            titleEmpty="Select product to view"
+            :isShowing="!!product"
+            @click-collapse="() => setProduct(null)"
+            @on-isShowing="(isShowing) => invalidatePanelShowing(isShowing)"
+            @on-isWide="(isWide) => invalidatePanelWide(isWide)"
          >
             <PanelProduct
                class="PageProduct-PanelProduct"
@@ -521,7 +507,7 @@
                   (output) => popup.productSpecificationsUpdate.show(output)
                "
             />
-         </Drawer>
+         </PanelRight>
       </div>
 
       <!-- Popup Product Search -->
@@ -619,10 +605,9 @@
 
 <style lang="scss" scoped>
    .PageProduct {
-      width: 100%;
       width: 100dvw;
-      max-width: 100%;
       height: 100%;
+      max-width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
@@ -638,67 +623,25 @@
          justify-content: flex-start;
          overflow: hidden;
 
+         position: relative;
+
          .PageProduct-products {
             z-index: 1;
-            width: 100dvw;
-            max-width: 100%;
          }
-         .PageProduct-PanelRightEmpty {
+         .PageProduct-PanelRight {
             z-index: 2;
-            background-color: #adb8bb;
-            background-color: hsla(0, 0%, 0%, 0.6);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            .PageProduct-PanelRightEmpty-text {
-               font-weight: 600;
-               font-size: 1.2rem;
-               color: hsl(0, 0%, 84%);
-               background: hsla(0, 0%, 0%, 0.04);
-               border-radius: 1rem;
-               padding: 4rem 5rem;
-            }
-         }
-         .PageProduct-panel-PanelProduct {
-            z-index: 3;
-            .PageProduct-PanelProduct {
-               height: 100%;
-               width: 100dvw;
-               max-width: 100%;
-            }
          }
       }
-      .PageProduct-body[isOver1200px="false"] {
+      .PageProduct-body[isPanelWide="false"] {
          .PageProduct-products {
-            width: 100dvw;
-            max-width: 100%;
-         }
-         .PageProduct-PanelRightEmpty {
-            display: none;
-         }
-         .PageProduct-panel-PanelProduct {
-            width: 100dvw;
             max-width: 100%;
          }
       }
-      .PageProduct-body[isOver1200px="true"] {
-         position: relative;
+      .PageProduct-body[isPanelWide="true"] {
          .PageProduct-products {
             width: 100dvw;
             max-width: 60%;
-         }
-         .PageProduct-PanelRightEmpty {
-            width: 100dvw;
-            max-width: 40%;
-         }
-         .PageProduct-panel-PanelProduct {
-            width: 100dvw;
-            max-width: 40%;
+            min-width: 60%;
          }
       }
    }

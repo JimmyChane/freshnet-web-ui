@@ -9,11 +9,12 @@
    import WindowUpdateDescription from "./WindowUpdateDescription.vue";
    import WindowUpdateBelonging from "./WindowUpdateBelonging.vue";
    import WindowUpdateCustomer from "./WindowUpdateCustomer.vue";
-   import Drawer from "@/components/Drawer.vue";
 
    import HostIcon from "@/host/HostIcon";
 
    import PopupContext from "@/tools/PopupContext";
+
+   import PanelRight from "@/components/panel/PanelRight.vue";
 
    export default {
       key: "service",
@@ -35,7 +36,7 @@
          WindowUpdateDescription,
          WindowUpdateBelonging,
          WindowRemove,
-         Drawer,
+         PanelRight,
       },
       data: (c) => ({
          actions: {
@@ -61,7 +62,6 @@
             onClickUpdateDescription: (x) => c.clickUpdateDescription(x),
             onClickUpdateBelongings: (x) => c.clickUpdateBelongings(x),
          },
-
          popup: {
             search: new PopupContext(c),
             importService: new PopupContext(c).onConfirm(
@@ -207,6 +207,7 @@
                   }
                }),
          },
+         panelListened: { isWide: false },
 
          items: [],
          searchResults: [],
@@ -215,21 +216,6 @@
          drawerService: null,
       }),
       computed: {
-         itemDrawerEdge: () => Drawer.Edge.RIGHT,
-         itemDrawerMode() {
-            if (this.isWide) {
-               return this.currentService
-                  ? Drawer.Mode.FIXED_EXPAND
-                  : Drawer.Mode.FIXED_COLLAPSE;
-            } else {
-               return this.currentService
-                  ? Drawer.Mode.DRAWER_EXPAND
-                  : Drawer.Mode.DRAWER_COLLAPSE;
-            }
-         },
-
-         isWide: (c) => c.$root.window.innerWidth > 1200,
-
          actionMenus: (c) => {
             return [
                {
@@ -368,7 +354,7 @@
 
 <template>
    <div class="PageService">
-      <div class="PageService-panels" :isWide="`${isWide}`">
+      <div class="PageService-panels" :isPanelWide="`${panelListened.isWide}`">
          <PanelServices
             class="PageService-PanelServices"
             :menus="actionMenus"
@@ -380,26 +366,21 @@
             @click-import="() => clickImportService()"
          />
 
-         <div class="PageService-PanelRightEmpty">
-            <span class="PageService-PanelRightEmpty-text"
-               >Select service to view</span
-            >
-         </div>
-
-         <Drawer
-            class="PageService-RightDrawer"
-            :edge="itemDrawerEdge"
-            :mode="itemDrawerMode"
-            :isExpand="!!currentService"
-            :isDrawer="!isWide || !!drawerService"
-            @click-collapse="$root.nextQuery({ query: { service: null } })"
+         <PanelRight
+            class="PageService-PanelRight"
+            titleEmpty="Select service to view"
+            :isShowing="!!currentService"
+            @click-collapse="
+               () => $root.nextQuery({ query: { service: null } })
+            "
+            @on-isWide="(isWide) => (panelListened.isWide = isWide)"
          >
             <PanelService
                class="PageService-PanelRight"
                :service="drawerService"
                :actions="actions"
             />
-         </Drawer>
+         </PanelRight>
       </div>
 
       <WindowSearch
@@ -538,57 +519,20 @@
          .PageService-PanelServices {
             z-index: 1;
          }
-         .PageService-PanelRightEmpty {
+         .PageService-PanelRight {
             z-index: 2;
-            background-color: hsla(0, 0%, 0%, 0.6);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            .PageService-PanelRightEmpty-text {
-               // font-weight: 600;
-               font-size: 1.2rem;
-               color: hsl(0, 0%, 84%);
-               background: hsla(0, 0%, 0%, 0.04);
-               border-radius: 1rem;
-               padding: 4rem 5rem;
-            }
-         }
-
-         .PageService-RightDrawer {
-            z-index: 3;
-            .PageService-PanelRight {
-               width: 100dvw;
-               max-width: 100%;
-            }
          }
       }
-      .PageService-panels[isWide="false"] {
+      .PageService-panels[isPanelWide="false"] {
          .PageService-PanelServices {
             width: 100dvw;
             max-width: 100%;
          }
-         .PageService-PanelRightEmpty {
-            display: none;
-         }
-         .PageService-RightDrawer {
-            width: 100dvw;
-            max-width: 100%;
-         }
       }
-      .PageService-panels[isWide="true"] {
+      .PageService-panels[isPanelWide="true"] {
          .PageService-PanelServices {
             width: 100dvw;
             max-width: 50%;
-         }
-         .PageService-PanelRightEmpty {
-            width: 100dvw;
-            max-width: 50%;
-         }
-         .PageService-RightDrawer {
-            width: 100dvw;
-            max-width: 50%;
-            position: absolute;
          }
       }
 

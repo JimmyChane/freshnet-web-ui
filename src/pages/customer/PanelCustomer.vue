@@ -252,6 +252,8 @@
 <style lang="scss" scoped>
    .PanelCustomer {
       width: 100%;
+      width: 100dvw;
+      max-width: 100%;
       height: 100%;
       overflow-y: auto;
       display: flex;
