@@ -203,6 +203,8 @@
          --default-size-bottom: 0;
          --default-size-left: 0;
 
+         --default-border-radius: 0;
+
          --actionbar-height: 5rem;
          --thumbnails-height: 5rem;
          --thumbnail-height: 4.2rem;
