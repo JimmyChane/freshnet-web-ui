@@ -1,8 +1,10 @@
 <script>
    import Drawer from "@/components/Drawer.vue";
+   import BottomsheetWindow from "@/components/window/BottomsheetWindow.vue";
+
    export default {
       emits: ["click-collapse", "on-showing"],
-      components: { Drawer },
+      components: { Drawer, BottomsheetWindow },
       props: {
          wideWidthThreshold: { type: Number, default: 1200 },
          isShowing: { type: Boolean, default: false },
@@ -63,18 +65,14 @@
       </Drawer>
    </div>
 
-   <Drawer
+   <BottomsheetWindow
       v-else
-      class="PanelRight-Drawer"
-      :edge="drawerEdge"
-      :mode="drawerMode"
-      :isWide="`${isWide}`"
-      @click-collapse="() => $emit('click-collapse')"
+      class="PanelRight-Bottomsheet"
+      :isShowing="isShowing"
+      @click-dismiss="() => $emit('click-collapse')"
    >
-      <div class="PanelRight-Drawer-body">
-         <slot />
-      </div>
-   </Drawer>
+      <slot />
+   </BottomsheetWindow>
 </template>
 
 <style lang="scss" scoped>
@@ -115,22 +113,16 @@
             padding: 4rem 5rem;
          }
       }
+      .PanelRight-Drawer {
+         z-index: 2;
+      }
 
       & > * {
          width: 100dvw;
          max-width: 100%;
       }
    }
-   .PanelRight-Drawer {
-      width: 100%;
-      z-index: 2;
-
-      .PanelRight-Drawer-body {
-         width: 100dvw;
-         height: 100dvh;
-         max-width: 100%;
-         max-height: 100%;
-         overflow: hidden;
-      }
+   .PanelRight-Bottomsheet {
+      --default-size-top: 0;
    }
 </style>

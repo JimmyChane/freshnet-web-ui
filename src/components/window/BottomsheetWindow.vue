@@ -18,7 +18,9 @@
 <template>
    <DismissableContainer
       class="BottomsheetWindow transition"
-      :class="[isShowing ? 'BottomsheetWindow-expand' : 'BottomsheetWindow-collapse']"
+      :class="[
+         isShowing ? 'BottomsheetWindow-expand' : 'BottomsheetWindow-collapse',
+      ]"
       @click-dismiss="$emit('click-dismiss')"
    >
       <div class="BottomsheetWindow-body transition">
@@ -38,6 +40,8 @@
       --default-size-bottom: 0;
       --default-size-left: 0;
 
+      --default-border-radius: 1.5rem;
+
       .BottomsheetWindow-body {
          height: 100dvh;
          width: 100dvw;
@@ -49,6 +53,9 @@
          display: flex;
          flex-direction: column;
          justify-content: flex-start;
+
+         border-radius: var(--default-border-radius)
+            var(--default-border-radius) 0 0;
       }
    }
    .BottomsheetWindow-expand {
