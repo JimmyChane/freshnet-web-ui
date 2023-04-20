@@ -3,10 +3,9 @@
    import Menu from "@/components/Menu.vue";
    import ModuleEvent from "@/items/data/ServiceEvent.js";
    import TextArea from "@/components/InputTextArea.vue";
-   import AddImage from "./PanelService-AddEvent-AddImage.vue";
 
    export default {
-      components: { Menu, TextArea, AddImage },
+      components: { Menu, TextArea },
       data: (c) => ({
          ModuleEvent,
 
@@ -15,9 +14,6 @@
          eventDescription: "",
          eventStatus: "",
          eventAmount: 0,
-
-         eventImages: [], // todo test
-         eventImagePreviews: [], // todo test
       }),
       computed: {
          primaryColor: (c) => c.methodMenu.color,
@@ -123,9 +119,7 @@
             this.eventDescription = "";
             this.eventStatus = "";
             this.eventAmount = 0;
-            this.eventImages = [];
 
-            this.invalidateEventImages();
             this.invalidateUser();
          },
          submit() {
@@ -160,35 +154,6 @@
                this.$refs.InputDescription.focus();
             }, 100);
          },
-
-         // todo test
-         onInputFile(event) {
-            const { files } = event.target;
-
-            for (const file of files) {
-               const eventImage = this.eventImages.find((eventImage) => {
-                  return eventImage.name === file.name;
-               });
-
-               if (!eventImage) this.eventImages.push(file);
-            }
-
-            this.invalidateEventImages();
-         },
-         async invalidateEventImages() {
-            const promises = this.eventImages.map((eventImage) => {
-               return new Promise((resolve) => {
-                  const reader = new FileReader();
-                  reader.onload = (event) => {
-                     resolve(event.target.result);
-                  };
-                  reader.readAsDataURL(eventImage);
-               });
-            });
-
-            const results = await Promise.allSettled(promises);
-            this.eventImagePreviews = results.map((result) => result.value);
-         },
       },
    };
 </script>
@@ -214,51 +179,6 @@
          placeholder="Description"
          v-model="eventDescription"
       />
-
-      <!-- todo test -->
-      <div class="AddEvent-images scrollbar" :style="{ 'grid-area': 'images' }">
-         <img
-            v-for="eventImagePreview of eventImagePreviews"
-            :key="eventImagePreview"
-            :src="eventImagePreview"
-            alt=""
-         />
-      </div>
-
-      <div class="AddEvent-footer" :style="{ 'grid-area': 'footer' }">
-         <!-- <AddImage @change="(event) => onInputFile(event)" /> -->
-
-         <!-- <div class="AddEvent-line"></div> -->
-
-         <input
-            v-if="isUserDefault"
-            class="AddEvent-user"
-            :style="{ 'grid-area': 'user' }"
-            type="text"
-            placeholder="Your name here"
-            v-model="nameOfUser"
-         />
-         <span v-else class="AddEvent-user" :style="{ 'grid-area': 'user' }">{{
-            nameOfUser
-         }}</span>
-      </div>
-
-      <div class="AddEvent-confirm" :style="{ 'grid-area': 'confirm' }">
-         <button
-            class="AddEvent-enter transition"
-            :style="{ 'grid-area': 'enter' }"
-            @click="() => submit()"
-            >Enter</button
-         >
-         <button
-            class="AddEvent-clear transition"
-            :style="{ 'grid-area': 'clear' }"
-            @click="() => clear()"
-         >
-            <!-- <img :src="host.icon('trash-505050')" alt="Click to clear" /> -->
-            Discard
-         </button>
-      </div>
 
       <div class="AddEvent-status" :style="{ 'grid-area': 'status' }">
          <div class="AddEvent-status-amount">
@@ -302,6 +222,34 @@
             />
          </Menu>
       </div>
+
+      <div class="AddEvent-footer" :style="{ 'grid-area': 'footer' }">
+         <input
+            v-if="isUserDefault"
+            class="AddEvent-user"
+            :style="{ 'grid-area': 'user' }"
+            type="text"
+            placeholder="Your name here"
+            v-model="nameOfUser"
+         />
+         <span v-else class="AddEvent-user" :style="{ 'grid-area': 'user' }">{{
+            nameOfUser
+         }}</span>
+
+         <button
+            class="AddEvent-enter transition"
+            :style="{ 'grid-area': 'enter' }"
+            @click="() => submit()"
+            >Enter</button
+         >
+         <button
+            class="AddEvent-clear transition"
+            :style="{ 'grid-area': 'clear' }"
+            @click="() => clear()"
+         >
+            <img :src="host.icon('trash-505050')" alt="Click to clear" />
+         </button>
+      </div>
    </div>
 </template>
 
@@ -312,21 +260,12 @@
       margin-top: 1rem;
 
       display: grid;
-      grid-template-areas:
-         "header status"
-         "description status"
-         "images status"
-         "footer confirm";
+      grid-template-areas: "header status" "description status" "footer status";
       grid-template-columns: 1fr 10rem;
 
       background-color: var(--primary-color-2);
       overflow: hidden;
 
-      .AddEvent-header {
-         font-size: 0.7rem;
-         margin: 1rem;
-         margin-bottom: 0;
-      }
       .AddEvent-description {
          resize: none;
          background: none;
@@ -350,36 +289,23 @@
             color: rgba(0, 0, 0, 0.4);
          }
       }
-      .AddEvent-images {
-         width: 100%;
-         display: flex;
-         flex-direction: row;
-         padding: 1rem;
-         gap: 2px;
-
-         overflow-x: auto;
-
-         & > * {
-            height: 3rem;
-            border-radius: 0.3rem;
-            background-color: white;
-         }
+      .AddEvent-header {
+         font-size: 0.7rem;
+         margin: 1rem;
+         margin-bottom: 0;
       }
       .AddEvent-footer {
-         border-top: 1px solid rgba(0, 0, 0, 0.1);
-         gap: 0.2rem;
-         margin: 0 0.5rem;
-
          display: flex;
          flex-direction: row;
          align-items: center;
 
-         .AddEvent-line {
-            min-width: 1px;
-            margin: 0.5rem 0;
-            height: calc(100% - 1rem);
-            background: rgba(0, 0, 0, 0.1);
-         }
+         border-top: 1px solid rgba(0, 0, 0, 0.1);
+         gap: 0.8rem;
+         margin: 0 0.5rem;
+
+         display: grid;
+         grid-template-areas: "user clear enter";
+         grid-template-columns: 1fr max-content max-content;
 
          .AddEvent-user {
             font-size: 0.8rem;
@@ -388,35 +314,30 @@
             background: none;
             flex-grow: 1;
          }
-      }
-      .AddEvent-confirm {
-         display: flex;
-         flex-direction: row-reverse;
-         align-items: center;
-         justify-content: space-between;
-
-         padding: 0.5rem;
-
-         & > * {
-            font-size: 0.8rem;
+         .AddEvent-clear {
             border: none;
             background: none;
             cursor: pointer;
-         }
-
-         .AddEvent-clear {
-            color: var(--primary-color);
-
             img {
                width: 1rem;
                height: 1rem;
             }
+
+            &:hover,
+            &:focus {
+               transform: scale(1.1);
+            }
          }
          .AddEvent-enter {
-            border-radius: 0.5rem;
-            padding: 0.5rem 0.8rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+
             background: var(--primary-color);
             color: white;
+            border-radius: 0.5rem;
+            padding: 0.6rem 1rem;
+            margin: 0.5rem 0;
 
             &:hover,
             &:focus {
@@ -429,7 +350,6 @@
          overflow: hidden;
          margin: 0.5rem;
          margin-left: 0;
-         margin-bottom: 0;
 
          display: flex;
          flex-direction: column-reverse;
