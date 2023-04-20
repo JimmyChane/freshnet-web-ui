@@ -1,6 +1,7 @@
 <script>
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import PanelItemCustomer from "@/pages/manage/PanelItem-Customer.vue";
+   import { format } from "date-fns";
 
    export default {
       components: { Actionbar, PanelItemCustomer },
@@ -16,6 +17,18 @@
          phoneNumber: (c) => c.customer.phoneNumber,
          phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
          isPhoneNumber: (c) => !!c.phoneNumberStr,
+         timestamp: (c) => c.service.timestamp,
+         timestampText: (c) => {
+            const { time } = c.timestamp;
+
+            if (c.timestamp.isToday()) {
+               return `Today, ${format(time, "EEEE, dd/LL/yyyy hh:mmaaa")}`;
+            } else if (c.timestamp.isYesterday()) {
+               return `Yesterday, ${format(time, "EEEE, dd/LL/yyyy hh:mmaaa")}`;
+            } else {
+               return format(time, "EEEE, dd/LL/yyyy hh:mmaaa");
+            }
+         },
 
          menus: (c) => {
             const menus = [];
@@ -81,7 +94,7 @@
       </Actionbar>
 
       <span class="PanelService-actionbar-timestamp" v-if="service">{{
-         service.timestamp
+         timestampText
       }}</span>
    </div>
 </template>

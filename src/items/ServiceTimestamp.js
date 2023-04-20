@@ -16,7 +16,10 @@ import {
    getDay,
    getMonth,
    getYear,
-} from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
+   previousDay,
+   endOfDay,
+} from "date-fns";
+
 import U from "@/U.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
@@ -140,6 +143,13 @@ class ServiceTimestamp {
 
    isThisYear() {
       return isThisYear(this.time);
+   }
+   isWithinWeek() {
+      const today = new Date();
+      const dayWeek = getDay(today);
+      const dayWeekPrevious = previousDay(today, dayWeek);
+      const timeStartWeek = endOfDay(dayWeekPrevious);
+      return this.time > timeStartWeek;
    }
 
    compare(item) {

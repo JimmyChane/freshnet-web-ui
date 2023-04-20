@@ -2,7 +2,7 @@
    import ItemOrderAction from "@/pages/order/ItemOrder-Action.vue";
    import Order from "@/items/Order";
 
-   import { format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
+   import { format } from "date-fns";
 
    export default {
       components: { ItemOrderAction },

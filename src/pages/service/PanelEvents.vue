@@ -27,7 +27,9 @@
 <template>
    <div class="PanelEvents">
       <div class="PanelEvents-header">
-         <span class="PanelEvents-title">Events</span>
+         <span class="PanelEvents-title">{{
+            `Events (${events.length})`
+         }}</span>
          <span class="PanelEvents-totalCost">{{ totalCostText }}</span>
       </div>
 

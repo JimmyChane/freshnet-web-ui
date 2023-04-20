@@ -33,7 +33,6 @@
    .BottomsheetWindow {
       width: 100%;
       height: 100%;
-      background-color: hsla(0, 0%, 0%, 0.7);
 
       --default-size-top: 0.5rem;
       --default-size-right: 0;
@@ -41,6 +40,10 @@
       --default-size-left: 0;
 
       --default-border-radius: 1.5rem;
+
+      --default-background-color: hsla(0, 0%, 0%, 0.7);
+
+      background-color: var(--default-background-color);
 
       .BottomsheetWindow-body {
          height: 100dvh;

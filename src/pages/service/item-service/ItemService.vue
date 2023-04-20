@@ -79,13 +79,8 @@
             }, new ServicePrice().fromData({ amount: 0 }));
          },
          timestampText: (c) => {
-            if (!c.timestamp) {
-               return "";
-            }
-            if (c.timestamp.isThisYear()) {
-               return format(c.timestamp.time, "hh:mmaaa");
-            }
-            return format(c.timestamp.time, "EEEE, hh:mmaaa, dd/LL/yyyy");
+            if (!c.timestamp) return "";
+            return format(c.timestamp.time, "EEE, dd/LL/yyyy hh:mmaaa");
          },
          labels: (c) => {
             const labels = [];

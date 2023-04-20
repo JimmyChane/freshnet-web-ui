@@ -281,7 +281,7 @@
                   </Section>
 
                   <Section
-                     title="Belongings"
+                     :title="`Belongings (${belongings.length})`"
                      :menus="{
                         title: 'Update Belongings',
                         icon: host.icon('edit-505050'),
@@ -304,7 +304,7 @@
                      </div>
                   </Section>
 
-                  <Section title="Image Reference">
+                  <Section :title="`Image Reference (${imageFiles.length})`">
                      <div class="PanelService-section-image scrollbar">
                         <ButtonAddImage
                            class="PanelService-section-image-add"
@@ -500,10 +500,11 @@
                .PanelService-section-image {
                   display: flex;
                   flex-direction: row;
+                  flex-wrap: wrap;
                   align-items: center;
                   overflow-y: visible;
                   overflow-x: auto;
-                  gap: 8px;
+                  gap: 2px;
 
                   --image-width: 5.5rem;
                   --image-height: 5.5rem;

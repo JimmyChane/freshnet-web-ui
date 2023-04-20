@@ -4,7 +4,7 @@
 
    import ItemService from "./item-service/ItemService.vue";
 
-   import { getDay, previousDay, endOfDay, format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
+   import { format } from "date-fns";
 
    export default {
       LayoutMode: ItemService.Mode,
@@ -105,14 +105,6 @@
                const ts = item.timestamp;
                const time = ts.time;
 
-               const isWithinWeek = () => {
-                  const today = new Date();
-                  const dayWeek = getDay(today);
-                  const dayWeekPrevious = previousDay(today, dayWeek);
-                  const timeStartWeek = endOfDay(dayWeekPrevious);
-                  return time > timeStartWeek;
-               };
-
                const optGroup = (title) => {
                   let group = groups.find((group) => group.title === title);
                   if (!group) groups.push((group = { title, items: [] }));
@@ -120,12 +112,13 @@
                };
                const putItem = (title) => optGroup(title).items.push(item);
 
-               if (ts.isToday()) putItem("Today");
-               else if (ts.isYesterday()) putItem("Yesterday");
-               else if (isWithinWeek())
-                  putItem(format(time, "EEEE, dd/LL/yyyy"));
-               else if (ts.isThisYear()) putItem(format(time, "dd/LL/yyyy"));
-               else putItem(ts.getYear().toString());
+               if (ts.isToday()) {
+                  putItem(`Today, ${format(time, "EEE, dd/LL/yyyy")}`);
+               } else if (ts.isYesterday()) {
+                  putItem(`Yesterday, ${format(time, "EEE, dd/LL/yyyy")}`);
+               } else {
+                  putItem(format(time, "EEE, dd/LL/yyyy"));
+               }
 
                return groups;
             }, []);

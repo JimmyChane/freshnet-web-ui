@@ -61,7 +61,10 @@
             const { Container } = this.$refs;
 
             if (!Container) {
-               window.removeEventListener("resize", this.invalidateContainerSize);
+               window.removeEventListener(
+                  "resize",
+                  this.invalidateContainerSize,
+               );
                return;
             }
 
@@ -153,9 +156,14 @@
                         ]"
                         v-for="thumbnail of thumbnails"
                         :key="thumbnail.toUrl()"
-                        @click="() => store.dispatch('imageViewerSelect', thumbnail)"
+                        @click="
+                           () => store.dispatch('imageViewerSelect', thumbnail)
+                        "
                      >
-                        <ImageView class="ImageView-images-item" :src="thumbnail" />
+                        <ImageView
+                           class="ImageView-images-item"
+                           :src="thumbnail"
+                        />
                      </button>
                   </div>
                </div>
@@ -216,7 +224,9 @@
                z-index: 2;
                width: 100dvw;
                max-width: 100%;
-               max-height: calc(100% - var(--thumbnail-height) - var(--actionbar-height));
+               max-height: calc(
+                  100% - var(--thumbnail-height) - var(--actionbar-height)
+               );
                padding: 1rem;
                flex-grow: 1;
 
@@ -245,6 +255,7 @@
                   width: max-content;
                   max-width: 100%;
                   height: var(--thumbnails-height);
+                  padding: 0 1rem;
                   overflow-y: auto;
                   display: flex;
                   flex-direction: row;
@@ -254,6 +265,7 @@
                   gap: 0.5rem;
 
                   .ImageView-images-item-button {
+                     min-width: max-content;
                      height: var(--thumbnail-height);
                      background: none;
                      border: none;

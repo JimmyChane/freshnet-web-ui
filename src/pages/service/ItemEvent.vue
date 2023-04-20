@@ -1,5 +1,5 @@
 <script>
-   import { format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
+   import { format } from "date-fns";
    import MenuOption from "@/components/button/MenuOption.vue";
 
    export default {
