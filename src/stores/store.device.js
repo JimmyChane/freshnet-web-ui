@@ -56,7 +56,7 @@ const init = (Stores) => {
          });
          const content = api.optObjectContent();
          const item = new ItemCustomerDevice(Stores).fromData(content);
-         const customer = Stores.customer.getters.customers.find((customer) => {
+         const customer = Stores.customer.getters.items.find((customer) => {
             return customer.id === item.ownerCustomerId;
          });
          customer.deviceIds = customer.deviceIds.filter((deviceId) => {

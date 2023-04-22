@@ -393,6 +393,7 @@
                align-items: center;
                justify-content: flex-start;
                flex-wrap: nowrap;
+               flex-wrap: wrap;
 
                .ItemService-label {
                   border-radius: 0.5rem;

@@ -407,7 +407,7 @@
                      flex-direction: row;
                      flex-wrap: wrap;
                      align-items: center;
-                     justify-content: flex-start;
+                     justify-content: flex-end;
                      gap: 0.1em;
                      & > * {
                         display: flex;
@@ -529,7 +529,6 @@
                      // width: var(--image-width);
                   }
                   .PanelService-section-image-empty {
-                     width: 100%;
                      height: var(--image-height);
                      flex-grow: 1;
 
@@ -544,9 +543,9 @@
                         color: hsla(0, 0%, 0%, 0.5);
                      }
                   }
-               }
-               .PanelService-section-image-empty {
-                  padding: 0.25rem 1.2rem 0.25rem 1.2rem;
+                  .PanelService-section-image-empty {
+                     padding: 0.25rem 1.2rem 0.25rem 1.2rem;
+                  }
                }
             }
          }

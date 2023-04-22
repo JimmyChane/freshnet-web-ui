@@ -25,7 +25,11 @@ const init = (Stores) => {
    const { store } = Stores;
 
    const loginStore = new Vuex.Store({
-      state: { lastModified: Date.now(), user: noneUser, loader: new Processor() },
+      state: {
+         lastModified: Date.now(),
+         user: noneUser,
+         loader: new Processor(),
+      },
       mutations: {
          lastModified: (state, time) => (state.lastModified = time),
          user: (state, user) => (state.user = user),
@@ -52,7 +56,11 @@ const init = (Stores) => {
                   });
                   const content = api.getObjectContent();
                   const { token, user } = content;
-                  const newUser = onNewCredentail(context, { token, user }, Stores);
+                  const newUser = onNewCredentail(
+                     context,
+                     { token, user },
+                     Stores,
+                  );
                   store.dispatch("restartSocket");
                   return newUser;
                } catch (error) {
@@ -142,7 +150,7 @@ const init = (Stores) => {
                const { token } = api.optObjectContent();
                const outputUser = onNewCredentail(
                   context,
-                  { token, user: content },
+                  { token, user },
                   Stores,
                );
                store.dispatch("restartSocket");

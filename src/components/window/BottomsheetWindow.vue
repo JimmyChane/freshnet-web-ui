@@ -41,7 +41,7 @@
 
       --default-border-radius: 1.5rem;
 
-      --default-background-color: hsla(0, 0%, 0%, 0.7);
+      --default-background-color: hsla(0, 0%, 0%, 0.8);
 
       background-color: var(--default-background-color);
 
@@ -59,6 +59,8 @@
 
          border-radius: var(--default-border-radius)
             var(--default-border-radius) 0 0;
+
+         --transition-timing: cubic-bezier(1, 0, 0, 1);
       }
    }
    .BottomsheetWindow-expand {

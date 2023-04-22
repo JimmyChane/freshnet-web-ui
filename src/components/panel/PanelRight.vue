@@ -122,7 +122,4 @@
          max-width: 100%;
       }
    }
-   .PanelRight-Bottomsheet {
-      --default-size-top: 0;
-   }
 </style>

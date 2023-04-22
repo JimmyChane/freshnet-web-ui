@@ -52,7 +52,7 @@
             if (this.item) {
                const { name, phoneNumber } = this.item;
                this.data.name = name;
-               this.data.phoneNumber = phoneNumber;
+               this.data.phoneNumber = phoneNumber?.toString() ?? "";
             }
          },
 
