@@ -404,10 +404,10 @@
             callback = (isSamePreviously) => {},
             delay = 700,
          ) {
-            setTimeout(() => {
-               const isPreviousWide = this.panelListened.isWide;
-               const isPreviousShowing = this.panelListened.isShowing;
+            const isPreviousWide = this.panelListened.isWide;
+            const isPreviousShowing = this.panelListened.isShowing;
 
+            setTimeout(() => {
                const isSamePreviously =
                   this.panelListened.isWide === isPreviousWide &&
                   this.panelListened.isShowing === isPreviousShowing;
