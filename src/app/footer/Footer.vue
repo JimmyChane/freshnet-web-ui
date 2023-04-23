@@ -1,30 +1,10 @@
 <script>
    import Contact from "./Footer_Contact.vue";
-   import Company from "@/host/Company";
    import Setting from "@/items/data/Setting";
 
    export default {
       components: { Contact },
-      data: (c) => ({ address: "", addressHref: "" }),
-      computed: {
-         contacts: (c) => {
-            return Company.Contacts.toArray().map((contact) => {
-               const links = contact.links.map((link) => {
-                  return {
-                     icon: link.category.icon,
-                     href: link.toHtmlHref(),
-                     target: link.toHtmlTarget(),
-                  };
-               });
-
-               return {
-                  title: contact.title,
-                  subtitle: contact.links[0].id,
-                  links,
-               };
-            });
-         },
-      },
+      data: (c) => ({ contacts: [], address: "", addressHref: "" }),
       watch: {
          "settingStore.getters.lastModified"() {
             this.invalidate();
@@ -42,6 +22,26 @@
                "findValueOfKey",
                { key: Setting.Key.LocationLink },
             );
+
+            const contacts = await this.settingStore.dispatch(
+               "findValueOfKey",
+               { key: Setting.Key.Contacts, default: [] },
+            );
+            this.contacts = contacts.map((contact) => {
+               const links = contact.links.map((link) => {
+                  return {
+                     icon: link.category.icon,
+                     href: link.toHtmlHref(),
+                     target: link.toHtmlTarget(),
+                  };
+               });
+
+               return {
+                  title: contact.title,
+                  subtitle: contact.links[0].id,
+                  links,
+               };
+            });
          },
       },
    };

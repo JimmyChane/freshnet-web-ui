@@ -1,7 +1,7 @@
 <script>
-   import Company from "@/host/Company";
    import ButtonContact from "./BottomActionbar-ButtonContact.vue";
    import ButtonTop from "./BottomActionbar-ButtonTop.vue";
+   import Setting from "@/items/data/Setting";
 
    export default {
       components: { ButtonContact, ButtonTop },
@@ -26,6 +26,9 @@
          whatsappIcon: "",
       }),
       watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
          product() {
             this.invalidate();
          },
@@ -35,28 +38,35 @@
       },
       methods: {
          async invalidate() {
-            const contact = Company.Contacts.findByTitle("Beh Aik Keong");
-
-            const contactCall = contact.links.find(
-               (link) => link.category.title === "Call",
+            const contacts = await this.settingStore.dispatch(
+               "findValueOfKey",
+               { key: Setting.Key.Contacts, default: [] },
             );
-            this.callTypeTitle = contactCall.category.title;
-            this.callTitle = contact.title;
-            this.callHref = contactCall.toHtmlHref();
-            this.callTarget = contactCall.toHtmlTarget();
-            this.callIcon = contactCall.category.icon;
+            const contact = this.findContactByTitle(contacts, "Beh Aik Keong");
 
-            const contactWhatsapp = contact.links.find(
-               (link) => link.category.title === "Whatsapp",
-            );
-            this.whatsappTypeTitle = contactWhatsapp.category.title;
-            this.whatsappTitle = contact.title;
-            this.whatsappTarget = contactWhatsapp.toHtmlTarget();
-            this.whatsappIcon = contactWhatsapp.category.icon;
+            const contactCall =
+               contact?.links.find((link) => link.category.title === "Call") ??
+               null;
+            const contactWhatsapp =
+               contact?.links.find(
+                  (link) => link.category.title === "Whatsapp",
+               ) ?? null;
+
+            this.callTypeTitle = contactCall?.category?.title ?? "";
+            this.callTitle = contact?.title ?? "";
+            this.callHref = contactCall?.toHtmlHref() ?? "";
+            this.callTarget = contactCall?.toHtmlTarget() ?? "";
+            this.callIcon = contactCall?.category?.icon ?? "";
+            this.whatsappTypeTitle = contactWhatsapp?.category?.title ?? "";
+            this.whatsappTitle = contact?.title ?? "";
+            this.whatsappTarget = contactWhatsapp?.toHtmlTarget() ?? "";
+            this.whatsappIcon = contactWhatsapp?.category?.icon ?? "";
+
+            const whatsappHref = contactWhatsapp?.toHtmlHref() ?? "";
 
             let { product } = this;
             if (!product) {
-               this.whatsappHref = contactWhatsapp.toHtmlHref();
+               this.whatsappHref = whatsappHref;
                return;
             }
 
@@ -68,7 +78,11 @@
             if (productLink) text += `\n${productLink}`;
             const textUri = encodeURIComponent(text);
 
-            this.whatsappHref = `${contactWhatsapp.toHtmlHref()}&text=${textUri}`;
+            this.whatsappHref = `${whatsappHref}&text=${textUri}`;
+         },
+
+         findContactByTitle(contacts = [], title = "") {
+            return contacts.find((contact) => contact.title === title);
          },
       },
    };
