@@ -12,7 +12,14 @@ const init = (Stores) => {
          const items = list.map((content) => new SettingModule(content));
 
          const trimmedItems = items.filter((item) => {
-            return item.key !== SettingModule.Key.Contacts;
+            switch (item.key) {
+               default:
+                  return true;
+               case SettingModule.Key.CompanyName:
+               case SettingModule.Key.CompanyCategory:
+               case SettingModule.Key.Contacts:
+                  return false;
+            }
          });
 
          const contacts = [
@@ -47,6 +54,20 @@ const init = (Stores) => {
                value: contacts,
             }),
          );
+         trimmedItems.push(
+            new SettingModule({
+               key: SettingModule.Key.CompanyName,
+               visibility: SettingModule.Visibility.Protected,
+               value: "Freshnet Enterprise",
+            }),
+         );
+         trimmedItems.push(
+            new SettingModule({
+               key: SettingModule.Key.CompanyCategory,
+               visibility: SettingModule.Visibility.Protected,
+               value: "Computer Store",
+            }),
+         );
 
          return trimmedItems;
       })
@@ -62,7 +83,13 @@ const init = (Stores) => {
       .action("updateItem", async (context, arg = { key: "", value }) => {
          const { key, value } = arg;
 
-         if (key === SettingModule.Key.Contacts) {
+         if (
+            [
+               SettingModule.Key.Contacts,
+               SettingModule.Key.CompanyName,
+               SettingModule.Key.CompanyCategory,
+            ].includes(key)
+         ) {
             throw new Error("testing");
          }
 

@@ -10,33 +10,24 @@
    import Vue from "vue";
 
    class SettingBuilder {
-      static key(key) {
-         return new SettingBuilder().key(key);
-      }
-      static title(title) {
-         return new SettingBuilder().title(title);
-      }
-      static type(type) {
-         return new SettingBuilder().title(type);
-      }
-      static list(...list) {
-         return new SettingBuilder().list(list);
-      }
-
-      key(key = "") {
+      setKey(key = "") {
          this.key = key;
          return this;
       }
-      title(title = "") {
+      setTitle(title = "") {
          this.title = title;
          return this;
       }
-      type(type = "") {
+      setType(type = "") {
          this.type = type;
          return this;
       }
-      list(...list) {
+      setList(...list) {
          this.list = list;
+         return this;
+      }
+      setReadonly(readonly = false) {
+         this.readonly = readonly;
          return this;
       }
       build() {
@@ -44,6 +35,7 @@
          setting.key = this.key;
          setting.title = this.title;
          setting.type = this.type;
+         setting.readonly = this.readonly;
 
          if (U.isArray(this.list)) {
             setting.list = this.list.map((subSetting) => {
@@ -77,6 +69,9 @@
       getList() {
          return U.optArray(this.list);
       }
+      isReadonly() {
+         return this.readonly;
+      }
 
       findValue() {
          return Vue.prototype.settingStore.getters.items.find((setting) => {
@@ -101,33 +96,7 @@
       userPermissions: ["admin"],
 
       components: { NavigationBar, Empty, ItemSetting, ItemSettingContacts },
-      data: (c) => ({
-         SettingModule,
-         SettingBuilder,
-         scrollTop: 0,
-
-         list: [
-            // SettingBuilder.title("Company (not implemented)").list(
-            //    SettingBuilder.title("Name (not implemented)").type("text"),
-            //    SettingBuilder.title("Category (not implemented)").type("text"),
-            // ),
-            SettingBuilder.title("Location").list(
-               // SettingBuilder.title("Brief Address Name (not implemented)").type("text"),
-               SettingBuilder.key(SettingModule.Key.Location)
-                  .title("Address")
-                  .type("text"),
-               SettingBuilder.key(SettingModule.Key.LocationLink)
-                  .title("Link")
-                  .type("text"),
-            ),
-            // SettingBuilder.title("Business Hours (not implemented)"),
-            SettingBuilder.title("Product Page").list(
-               SettingBuilder.key(SettingModule.Key.PublicShowPrice)
-                  .title("Show Price in View Mode")
-                  .type("boolean"),
-            ),
-         ].map((item) => item.build()),
-      }),
+      data: (c) => ({ SettingModule, SettingBuilder }),
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
          isEmpty: (c) => !c.settingStore.getters.items.length,
@@ -144,10 +113,7 @@
 </script>
 
 <template>
-   <div
-      class="PageSetting"
-      @scroll="(event) => (scrollTop = event.target.scrollTop)"
-   >
+   <div class="PageSetting">
       <NavigationBar
          :title="$options.title"
          :rightMenus="[
@@ -161,11 +127,67 @@
       />
 
       <div class="PageSetting-body">
-         <ItemSettingContacts />
          <ItemSetting
-            v-for="item of list"
-            :key="item.getTitle()"
-            :item="item"
+            :item="
+               new SettingBuilder()
+                  .setTitle('Company (Readonly)')
+                  .setReadonly(true)
+                  .setList(
+                     new SettingBuilder()
+                        .setKey(SettingModule.Key.CompanyName)
+                        .setReadonly(true)
+                        .setTitle('Name')
+                        .setType('text'),
+                     new SettingBuilder()
+                        .setKey(SettingModule.Key.CompanyCategory)
+                        .setReadonly(true)
+                        .setTitle('Category')
+                        .setType('text'),
+                  )
+                  .build()
+            "
+         />
+         <ItemSetting
+            :item="
+               new SettingBuilder()
+                  .setTitle('Location')
+                  .setList(
+                     // new SettingBuilder()
+                     //    .setTitle('Brief Address Name (not implemented))
+                     //    .setType('text),
+                     new SettingBuilder()
+                        .setKey(SettingModule.Key.Location)
+                        .setTitle('Address')
+                        .setType('text'),
+                     new SettingBuilder()
+                        .setKey(SettingModule.Key.LocationLink)
+                        .setTitle('Link')
+                        .setType('text'),
+                  )
+                  .build()
+            "
+         />
+         <ItemSettingContacts />
+         <!-- <ItemSetting
+            :item="
+               new SettingBuilder()
+                  .setTitle('Business Hours (Not Implemented)')
+                  .build()
+            "
+         /> -->
+
+         <ItemSetting
+            :item="
+               new SettingBuilder()
+                  .setTitle('Product Page')
+                  .setList(
+                     new SettingBuilder()
+                        .setKey(SettingModule.Key.PublicShowPrice)
+                        .setTitle('Show Price in View Mode')
+                        .setType('boolean'),
+                  )
+                  .build()
+            "
          />
       </div>
 

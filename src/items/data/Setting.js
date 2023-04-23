@@ -6,6 +6,8 @@ class Setting {
       Location: "store-location",
       LocationLink: "store-location-link",
       Contacts: "store-contacts",
+      CompanyName: "store-name",
+      CompanyCategory: "store-category",
    };
    static Visibility = { Protected: "protected", Private: "private" };
 

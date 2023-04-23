@@ -1,17 +1,12 @@
 <script>
    import Section from "./PageHome-Section.vue";
-   import Company from "@/host/Company";
    import Setting from "@/items/data/Setting";
 
    import { getHours } from "date-fns";
 
    export default {
       components: { Section },
-      data: (c) => ({
-         companyTitle: Company.name,
-         companyCategory: Company.category,
-         addressHref: "",
-      }),
+      data: (c) => ({ companyTitle: "", companyCategory: "", addressHref: "" }),
       computed: {
          greetTitle() {
             const periods = [
@@ -42,9 +37,18 @@
       },
       methods: {
          async invalidate() {
-            this.addressHref = await this.settingStore.dispatch("findValueOfKey", {
-               key: Setting.Key.LocationLink,
-            });
+            this.companyTitle = await this.settingStore.dispatch(
+               "findValueOfKey",
+               { key: Setting.Key.CompanyName, default: "" },
+            );
+            this.companyCategory = await this.settingStore.dispatch(
+               "findValueOfKey",
+               { key: Setting.Key.CompanyCategory, default: "" },
+            );
+            this.addressHref = await this.settingStore.dispatch(
+               "findValueOfKey",
+               { key: Setting.Key.LocationLink, default: "" },
+            );
          },
       },
    };
@@ -56,7 +60,10 @@
          <span class="HomeHeader-title">
             <span class="HomeHeader-name">{{ companyTitle }}</span>
             <a
-               :class="['HomeHeader-classification', 'HomeHeader-classification-a']"
+               :class="[
+                  'HomeHeader-classification',
+                  'HomeHeader-classification-a',
+               ]"
                v-if="addressHref.length"
                :href="addressHref"
                target="_blank"

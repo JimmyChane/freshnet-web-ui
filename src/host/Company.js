@@ -106,8 +106,5 @@ class BusinessDays {
 }
 
 export default class Company {
-   static name = "Freshnet Enterprise";
-   static category = "Computer Store";
-
    static BusinessDays = new BusinessDays();
 }

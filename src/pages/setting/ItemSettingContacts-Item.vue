@@ -19,7 +19,7 @@
 
       <ContactLink
          v-for="link of links"
-         :key="`${title}${link.id}`"
+         :key="`${title}${link.category.key}${link.id}`"
          :link="link"
       />
    </div>

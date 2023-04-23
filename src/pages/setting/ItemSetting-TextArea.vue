@@ -11,6 +11,10 @@
          isEmpty: (c) => !U.optString(c.value).length,
          title: (c) => c.item.getTitle(),
          actions: (c) => {
+            if (c.item.isReadonly()) {
+               return [];
+            }
+
             if (c.isEditing) {
                return [
                   {
