@@ -2,6 +2,7 @@
    import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import Empty from "@/components/Empty.vue";
    import ItemSetting from "./ItemSetting.vue";
+   import ItemSettingContacts from "./ItemSettingContacts.vue";
    import SettingModule from "@/items/data/Setting.js";
 
    import HostIcon from "@/host/HostIcon";
@@ -99,7 +100,7 @@
       },
       userPermissions: ["admin"],
 
-      components: { NavigationBar, Empty, ItemSetting },
+      components: { NavigationBar, Empty, ItemSetting, ItemSettingContacts },
       data: (c) => ({
          SettingModule,
          SettingBuilder,
@@ -110,9 +111,6 @@
             //    SettingBuilder.title("Name (not implemented)").type("text"),
             //    SettingBuilder.title("Category (not implemented)").type("text"),
             // ),
-            SettingBuilder.key(SettingModule.Key.Contacts)
-               .title("Contacts (not implemented)")
-               .type("array-text"),
             SettingBuilder.title("Location").list(
                // SettingBuilder.title("Brief Address Name (not implemented)").type("text"),
                SettingBuilder.key(SettingModule.Key.Location)
@@ -163,6 +161,7 @@
       />
 
       <div class="PageSetting-body">
+         <ItemSettingContacts />
          <ItemSetting
             v-for="item of list"
             :key="item.getTitle()"

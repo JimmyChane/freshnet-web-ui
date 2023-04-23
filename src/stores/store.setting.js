@@ -35,10 +35,10 @@ const init = (Stores) => {
                title: "Office",
                links: [{ category: "telephone", id: "0332897297" }],
             }),
-            new Contact(Stores).fromData({
-               title: "Office",
-               links: [{ category: "telephone", id: "0332811526" }],
-            }),
+            // new Contact(Stores).fromData({
+            //    title: "Office",
+            //    links: [{ category: "telephone", id: "0332811526" }],
+            // }),
          ];
          trimmedItems.push(
             new SettingModule({
