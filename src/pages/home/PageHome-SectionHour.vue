@@ -1,17 +1,27 @@
 <script>
    import Section from "./PageHome-Section.vue";
    import Item from "./PageHome-SectionHour-Item.vue";
-   import Company from "@/host/Company";
+   import Setting from "@/items/data/Setting";
 
    export default {
       components: { Section, Item },
       props: { isThin: { type: Boolean, default: false } },
-      data: (c) => ({ items: Company.BusinessDays.toArray() }),
+      data: (c) => ({ items: [] }),
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
+      },
+      methods: {
+         async invalidate() {
+            this.items = await this.settingStore.dispatch("findValueOfKey", {
+               key: Setting.Key.CompanyWorkingHours,
+               default: [],
+            });
+         },
+      },
       mounted() {
-         this.items.forEach((item) => {
-            if (!item.isToday()) return;
-            Company.BusinessDays.getNextWorkingDay(item);
-         });
+         this.invalidate();
       },
    };
 </script>

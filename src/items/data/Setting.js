@@ -8,6 +8,7 @@ class Setting {
       Contacts: "store-contacts",
       CompanyName: "store-name",
       CompanyCategory: "store-category",
+      CompanyWorkingHours: "store-working-hours",
    };
    static Visibility = { Protected: "protected", Private: "private" };
 

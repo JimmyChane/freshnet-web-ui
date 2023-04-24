@@ -2,14 +2,15 @@
    import U from "@/U";
    import SettingModule from "@/items/data/Setting.js";
    import ItemSettingHeader from "./ItemSetting-Header.vue";
-   import ContactItem from "./ItemSettingContacts-Item.vue";
+   import BusinessHoursItem from "./ItemSettingBusinessHours-Item.vue";
 
    export default {
-      components: { ItemSettingHeader, ContactItem },
+      name: "ItemSetting",
+      components: { ItemSettingHeader, BusinessHoursItem },
       data: (c) => ({
          U,
-         key: SettingModule.Key.Contacts,
-         title: "Contacts (Readonly)",
+         key: SettingModule.Key.CompanyWorkingHours,
+         title: "Business Hours (Readonly)",
          values: [],
       }),
       watch: {
@@ -23,6 +24,7 @@
                key: this.key,
                default: [],
             });
+            console.log(this.values);
          },
       },
       mounted() {
@@ -32,16 +34,16 @@
 </script>
 
 <template>
-   <div class="ItemSettingContacts">
+   <div class="ItemSettingBusinessHours">
       <ItemSettingHeader :title="title" />
 
-      <div class="ItemSettingContacts-body">
-         <ContactItem
+      <div class="ItemSettingBusinessHours-body">
+         <BusinessHoursItem
             v-for="value of values"
             :key="value.title"
             :value="value"
          />
-         <span class="ItemSettingContacts-empty" v-if="!values.length"
+         <span class="ItemSettingBusinessHours-empty" v-if="!values.length"
             >Empty</span
          >
       </div>
@@ -49,7 +51,7 @@
 </template>
 
 <style lang="scss" scoped>
-   .ItemSettingContacts {
+   .ItemSettingBusinessHours {
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -60,7 +62,7 @@
       gap: 2px;
       border-radius: 1rem;
 
-      .ItemSettingContacts-body {
+      .ItemSettingBusinessHours-body {
          padding: 1rem;
          gap: 0.2rem;
 
@@ -69,7 +71,7 @@
          align-items: stretch;
          background: white;
 
-         .ItemSettingContacts-empty {
+         .ItemSettingBusinessHours-empty {
             font-size: 0.8rem;
             color: hsl(0, 0%, 75%);
          }

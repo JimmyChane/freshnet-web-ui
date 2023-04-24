@@ -3,6 +3,7 @@
    import Empty from "@/components/Empty.vue";
    import ItemSetting from "./ItemSetting.vue";
    import ItemSettingContacts from "./ItemSettingContacts.vue";
+   import ItemSettingBusinessHours from "./ItemSettingBusinessHours.vue";
    import SettingModule from "@/items/data/Setting.js";
 
    import HostIcon from "@/host/HostIcon";
@@ -95,7 +96,13 @@
       },
       userPermissions: ["admin"],
 
-      components: { NavigationBar, Empty, ItemSetting, ItemSettingContacts },
+      components: {
+         NavigationBar,
+         Empty,
+         ItemSetting,
+         ItemSettingContacts,
+         ItemSettingBusinessHours,
+      },
       data: (c) => ({ SettingModule, SettingBuilder }),
       computed: {
          isLoading: (c) => c.settingStore.getters.isLoading,
@@ -168,14 +175,7 @@
             "
          />
          <ItemSettingContacts />
-         <!-- <ItemSetting
-            :item="
-               new SettingBuilder()
-                  .setTitle('Business Hours (Not Implemented)')
-                  .build()
-            "
-         /> -->
-
+         <ItemSettingBusinessHours />
          <ItemSetting
             :item="
                new SettingBuilder()

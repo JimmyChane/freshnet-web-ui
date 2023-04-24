@@ -1,19 +1,21 @@
 <script>
    import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import GlobalSearch from "@/app/search/GlobalSearch.vue";
-
-   import Company from "@/host/Company";
+   import Setting from "@/items/data/Setting";
    import { format, differenceInMinutes } from "date-fns";
 
    export default {
       components: { NavigationBar, GlobalSearch },
       props: { isThin: { type: Boolean, default: false } },
+      data: (c) => ({ days: [] }),
       computed: {
-         businessHourDescription() {
+         businessHourDescription: (c) => {
             const now = new Date();
-            const days = Company.BusinessDays.toArray();
 
-            const today = days.find((day) => day.isToday());
+            const today = c.days.find((day) => day.isToday());
+
+            if (!today) return "";
+
             const todayHourEnd = today.hours.getDateEnd();
 
             const remainingHourCount = differenceInMinutes(todayHourEnd, now);
@@ -32,13 +34,29 @@
                )}`;
             }
 
-            const nextDay = Company.BusinessDays.getNextWorkingDay(today);
+            const nextDay = today.getNextWorkingDay();
             const nextDayStartDate = nextDay.hours.getDateStart();
             return `Sorry, we're closed\nCome back at ${format(
                nextDayStartDate,
                "h:mmaaa",
             )} tomorrow`;
          },
+      },
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
+      },
+      methods: {
+         async invalidate() {
+            this.days = await this.settingStore.dispatch("findValueOfKey", {
+               key: Setting.Key.CompanyWorkingHours,
+               default: [],
+            });
+         },
+      },
+      mounted() {
+         this.invalidate();
       },
    };
 </script>
@@ -60,7 +78,9 @@
       <p
          class="HomeActionbar-description"
          :class="[
-            $root.window.innerWidth > 800 ? 'HomeActionbar-description-isWide' : '',
+            $root.window.innerWidth > 800
+               ? 'HomeActionbar-description-isWide'
+               : '',
          ]"
          v-if="businessHourDescription"
          >{{ businessHourDescription }}</p
