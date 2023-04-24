@@ -24,7 +24,6 @@
                key: this.key,
                default: [],
             });
-            console.log(this.values);
          },
       },
       mounted() {
