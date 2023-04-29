@@ -1,7 +1,7 @@
 <script>
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import PanelItemCustomer from "@/pages/manage/PanelItem-Customer.vue";
-   import { format } from "date-fns";
+   import { format, formatDistanceToNow } from "date-fns";
 
    export default {
       components: { Actionbar, PanelItemCustomer },
@@ -21,13 +21,18 @@
          timestampText: (c) => {
             const { time } = c.timestamp;
 
-            if (c.timestamp.isToday()) {
-               return `Today, ${format(time, "EEEE, dd/LL/yyyy hh:mmaaa")}`;
-            } else if (c.timestamp.isYesterday()) {
-               return `Yesterday, ${format(time, "EEEE, dd/LL/yyyy hh:mmaaa")}`;
-            } else {
-               return format(time, "EEEE, dd/LL/yyyy hh:mmaaa");
-            }
+            const timeText = format(time, "EEEE, dd/LL/yyyy hh:mmaaa");
+
+            const distance = formatDistanceToNow(time);
+            const distanceText = `(${distance} ago)`;
+
+            const day = c.timestamp.isToday()
+               ? "Today, "
+               : c.timestamp.isYesterday()
+               ? "Yesterday, "
+               : "";
+
+            return `${day}${timeText} ${distanceText}`;
          },
 
          menus: (c) => {

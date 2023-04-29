@@ -1,7 +1,24 @@
 <script>
+   import { format, formatDistanceToNow } from "date-fns";
+
    export default {
       props: {
-         timestampText: { type: String, default: "" },
+         service: { type: Object },
+      },
+      computed: {
+         timestamp: (c) => c.service.timestamp ?? null,
+         timestampText: (c) => {
+            if (!c.timestamp) return "";
+
+            const time = c.timestamp.time;
+
+            const distance = formatDistanceToNow(time);
+            const distanceText = `(${distance} ago)`;
+
+            const timeText = format(time, "EEE, dd/LL/yyyy hh:mmaaa");
+
+            return `${timeText} ${distanceText}`;
+         },
       },
    };
 </script>

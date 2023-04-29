@@ -78,10 +78,10 @@
                return cost;
             }, new ServicePrice().fromData({ amount: 0 }));
          },
-         timestampText: (c) => {
-            if (!c.timestamp) return "";
-            return format(c.timestamp.time, "EEE, dd/LL/yyyy hh:mmaaa");
-         },
+         // timestampText: (c) => {
+         //    if (!c.timestamp) return "";
+         //    return format(c.timestamp.time, "EEE, dd/LL/yyyy hh:mmaaa");
+         // },
          labels: (c) => {
             const labels = [];
 
@@ -182,7 +182,7 @@
             />
          </div>
          <div class="ItemService-bottom">
-            <ItemServiceTimestamp :timestampText="timestampText" />
+            <ItemServiceTimestamp :service="item" />
          </div>
       </div>
 
@@ -213,7 +213,7 @@
                   :count="label.count"
                />
             </div>
-            <ItemServiceTimestamp :timestampText="timestampText" />
+            <ItemServiceTimestamp :service="item" />
          </div>
       </div>
 
@@ -244,10 +244,12 @@
                :count="label.count"
             />
          </ItemServiceDetailColumn>
-         <ItemServiceDetailColumn
-            :width="getPropertyByKey('timestamp').width"
-            >{{ timestampText }}</ItemServiceDetailColumn
-         >
+         <ItemServiceDetailColumn :width="getPropertyByKey('timestamp').width">
+            <ItemServiceTimestamp
+               class="ItemService-body-timestamp"
+               :service="item"
+            />
+         </ItemServiceDetailColumn>
       </div>
    </ItemButton>
 </template>
@@ -422,6 +424,11 @@
          display: flex;
          flex-direction: row;
          align-items: flex-start;
+
+         .ItemService-body-timestamp {
+            text-align: start;
+            color: inherit;
+         }
       }
    }
 </style>

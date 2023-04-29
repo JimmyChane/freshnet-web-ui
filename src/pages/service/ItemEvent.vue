@@ -1,6 +1,12 @@
 <script>
-   import { format } from "date-fns";
+   import { format, formatDistanceToNow } from "date-fns";
    import MenuOption from "@/components/button/MenuOption.vue";
+
+   const stateContext = {
+      info: { title: "Info", primaryColor: "#0771d2" /* blue */ },
+      quotation: { title: "Quotation", primaryColor: "#961d96" /* purple */ },
+      purchase: { title: "Purchase", primaryColor: "#258915" /* green */ },
+   };
 
    export default {
       components: { MenuOption },
@@ -12,27 +18,22 @@
          isHovered: false,
       }),
       computed: {
-         timestampText() {
-            if (!this.item.timestamp) return "";
-            return format(this.item.timestamp.time, "hh:mmaaa");
+         timestampText: (c) => {
+            const time = c.item?.timestamp?.time ?? null;
+            if (!time) return "";
+
+            const distance = formatDistanceToNow(time);
+            const distanceText = `(${distance} ago)`;
+
+            const timeText = format(time, "hh:mmaaa");
+
+            return `${timeText} ${distanceText}`;
          },
 
          description: (c) => c.item.description,
-         methodPrimaryColor() {
-            if (this.item.isInfo()) return "#0771d2"; // blue
-            if (this.item.isQuotation()) return "#961d96"; // purple
-            if (this.item.isPurchase()) return "#258915"; // green
-            return "";
-         },
-         methodTitle() {
-            if (this.item.isInfo()) return "Info";
-            if (this.item.isQuotation()) return "Quotation";
-            if (this.item.isPurchase()) return "Purchase";
-            return "";
-         },
-         methodResult: (c) => {
-            return c.item.toResult() ?? "";
-         },
+         methodPrimaryColor: (c) => c.methodContext("primaryColor") ?? "",
+         methodTitle: (c) => c.methodContext("title") ?? "",
+         methodResult: (c) => c.item.toResult() ?? "",
 
          shouldShowMenu: (c) => c.isShowingMenu || c.isHovered,
       },
@@ -60,6 +61,14 @@
 
             if (this.item !== item) return;
             if (name) this.nameOfUser = name;
+         },
+
+         methodContext(property = "") {
+            if (this.item.isInfo()) return stateContext.info[property];
+            if (this.item.isQuotation())
+               return stateContext.quotation[property];
+            if (this.item.isPurchase()) return stateContext.purchase[property];
+            return null;
          },
       },
    };
