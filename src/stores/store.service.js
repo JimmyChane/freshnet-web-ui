@@ -139,20 +139,23 @@ const init = (Stores) => {
             });
          },
       )
-      .action("addEventToId", async (context, arg = { serviceID, data }) => {
-         const { serviceID, data } = arg;
-         if (!serviceID || !data) return null;
-         const content = (
-            await ServiceRequest.addEvent(serviceID, data)
-         ).optObjectContent();
-         const inputItem = new Service(Stores).fromData(content);
-         return context.state.list.updateItemById(inputItem.id, (item) => {
-            if (!item) return inputItem;
-            item.events = inputItem.events.sort((event1, event2) => {
-               return event1.compare(event2);
+      .action(
+         "addEventToId",
+         async (context, arg = { serviceID: "", data: null }) => {
+            const { serviceID: id, data: eventData } = arg;
+            if (!id || !eventData) return null;
+
+            const api = await ServiceRequest.addEvent(id, eventData);
+            const content = api.optObjectContent();
+            const inputItem = new Service(Stores).fromData(content);
+            return context.state.list.updateItemById(inputItem.id, (item) => {
+               if (!item) return inputItem;
+               item.events = inputItem.events.sort((event1, event2) => {
+                  return event1.compare(event2);
+               });
             });
-         });
-      })
+         },
+      )
       .action(
          "removeEventFromId",
          async (context, arg = { serviceID, time }) => {

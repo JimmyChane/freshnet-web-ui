@@ -246,7 +246,7 @@
 
             <AddEvent
                class="PanelService-AddEvent"
-               @callback-create="(event) => actions.onClickToAddEvent(event)"
+               @click-submit="(event) => actions.onClickToAddEvent(event)"
             />
 
             <Events

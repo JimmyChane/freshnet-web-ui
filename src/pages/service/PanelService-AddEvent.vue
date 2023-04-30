@@ -16,8 +16,8 @@
          eventStatus: "",
          eventAmount: 0,
 
-         eventImages: [], // todo test
-         eventImagePreviews: [], // todo test
+         eventImages: [],
+         eventImagePreviews: [],
       }),
       computed: {
          primaryColor: (c) => c.methodMenu.color,
@@ -149,8 +149,10 @@
                event.nameOfUser = this.nameOfUser;
             }
 
+            // todo this.eventImages
+
             if (event) {
-               this.$emit("callback-create", event);
+               this.$emit("click-submit", event);
                this.clear();
             }
          },
@@ -161,7 +163,6 @@
             }, 100);
          },
 
-         // todo test
          onInputFile(event) {
             const { files } = event.target;
 
@@ -215,7 +216,6 @@
          v-model="eventDescription"
       />
 
-      <!-- todo test -->
       <div class="AddEvent-images scrollbar" :style="{ 'grid-area': 'images' }">
          <img
             v-for="eventImagePreview of eventImagePreviews"

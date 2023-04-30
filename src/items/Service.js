@@ -10,14 +10,8 @@ const textContains = ItemSearcher.textContains;
 
 import ModuleService from "./data/Service.js";
 import ModuleEvent from "./data/ServiceEvent.js";
-import ModuleLabel from "./data/ServiceLabel.js";
 
 import U from "@/U.js";
-
-const ServiceLabels = {
-   Urgent: new ServiceLabel().fromData(ModuleLabel.Defaults.Urgent),
-   Warranty: new ServiceLabel().fromData(ModuleLabel.Defaults.Warranty),
-};
 
 class Service {
    static #serviceStates = Object.keys(ModuleService.State).map((key) => {
@@ -107,11 +101,11 @@ class Service {
    }
 
    isUrgent() {
-      return !!this.labels.find((label) => label.isEqual(ServiceLabels.Urgent));
+      return !!this.labels.find((label) => label.isEqual(ServiceLabel.URGENT));
    }
    isWarranty() {
       return !!this.labels.find((label) => {
-         return label.isEqual(ServiceLabels.Warranty);
+         return label.isEqual(ServiceLabel.WARRANTY);
       });
    }
 
@@ -172,41 +166,37 @@ class Service {
       }, new ServicePrice().fromData({ amount: 0 }));
    }
 
-   // deprecated
-   setUrgent(bool) {
-      const labels = this.labels;
-      const existingLabel = labels.find((label) => {
-         return label.isEqual(ServiceLabels.Urgent);
-      });
-
-      if (bool && !existingLabel) {
-         this.setLabels([...labels, ServiceLabels.Urgent]);
-      } else if (!bool && existingLabel) {
-         this.setLabels(
-            labels.filter((label) => !label.isEqual(ServiceLabels.Urgent)),
-         );
-      }
-   }
-   // deprecated
-   setWarranty(bool) {
-      const labels = this.labels;
-      const existingLabel = labels.find((label) => {
-         return label.isEqual(ServiceLabels.Warranty);
-      });
-
-      if (bool && !existingLabel) {
-         this.setLabels([...labels, ServiceLabels.Warranty]);
-      } else if (!bool && existingLabel) {
-         this.setLabels(
-            labels.filter((label) => !label.isEqual(ServiceLabels.Warranty)),
-         );
-      }
-   }
-
-   setLabels(labels) {
+   setLabels(labels = []) {
       this.labels = U.optArray(labels)
          .filter((label) => label.title !== " " || label.title !== "")
          .map((label) => new ServiceLabel().fromData(label.toData()));
+   }
+   addLabel(label = null) {
+      const labels = this.labels;
+      const existingLabel = labels.find((l) => l.isEqual(label));
+
+      if (!existingLabel) {
+         this.setLabels([...labels, label]);
+      }
+   }
+   removeLabel(label = null) {
+      const labels = this.labels;
+      const existingLabel = labels.find((l) => l.isEqual(label));
+
+      if (existingLabel) {
+         this.setLabels(labels.filter((l) => !l.isEqual(label)));
+      }
+   }
+
+   setUrgent(bool = false) {
+      U.optBoolean(bool)
+         ? this.addLabel(ServiceLabel.URGENT)
+         : this.removeLabel(ServiceLabel.URGENT);
+   }
+   setWarranty(bool = false) {
+      U.optBoolean(bool)
+         ? this.addLabel(ServiceLabel.WARRANTY)
+         : this.removeLabel(ServiceLabel.WARRANTY);
    }
 }
 

@@ -1,5 +1,6 @@
 import ServiceTimestamp from "./ServiceTimestamp";
 import ServicePrice from "./ServicePrice.js";
+// import ServiceImage from "./ServiceImage";
 
 import ModuleEvent from "./data/ServiceEvent.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
@@ -23,6 +24,7 @@ class ServiceEvent {
    description = "";
    status = "";
    price = null;
+   // images = [];
 
    fromData(data) {
       data = new ModuleEvent(data);
@@ -33,6 +35,9 @@ class ServiceEvent {
       this.description = data.description;
       this.status = data.status;
       this.price = data.price ? new ServicePrice().fromData(data.price) : null;
+      // this.images = U.optArray(data.images).map((image) => {
+      //    return new ServiceImage(this.stores).fromData(image);
+      // });
       return this;
    }
    toData() {
@@ -43,7 +48,8 @@ class ServiceEvent {
          method: this.method,
          description: this.description,
          status: this.status,
-         price: this.price ? this.price.toData() : null,
+         price: this.price?.toData() ?? null,
+         // images: this.images.map((image) => image.toData()),
       });
    }
    toCount(strs) {

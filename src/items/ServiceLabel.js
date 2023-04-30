@@ -1,6 +1,9 @@
 import ModuleLabel from "./data/ServiceLabel.js";
 
 class Label {
+   static URGENT = new Label().fromData(ModuleLabel.Defaults.Urgent);
+   static WARRANTY = new Label().fromData(ModuleLabel.Defaults.Warranty);
+
    title = "";
    hexColor = "";
 

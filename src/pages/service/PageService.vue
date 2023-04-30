@@ -41,26 +41,26 @@
       data: (c) => ({
          actions: {
             onClickClose: () => c.clickService(null),
-            onClickRemove: (x) => c.clickDeleteService(x),
+            onClickRemove: (service) =>
+               c.windowAction("removeService", "start", service),
             onClickToAddEvent: (event) => {
-               c.serviceStore
-                  .dispatch("addEventToId", {
-                     serviceID: c.currentService.id,
-                     data: event,
-                  })
-                  .catch((error) => {
-                     c.store.dispatch(
-                        "snackbarShow",
-                        "Failed to create an event",
-                     );
-                     throw error;
-                  });
+               const arg = { serviceID: c.currentService.id, data: event };
+
+               c.serviceStore.dispatch("addEventToId", arg).catch((error) => {
+                  c.store.dispatch("snackbarShow", "Failed to create an event");
+                  throw error;
+               });
             },
-            onClickRemoveEvent: (x) => c.clickRemoveEvent(x),
-            onClickRemoveImage: (x) => c.clickRemoveImage(x),
-            onClickUpdateCustomer: (x) => c.clickUpdateCustomer(x),
-            onClickUpdateDescription: (x) => c.clickUpdateDescription(x),
-            onClickUpdateBelongings: (x) => c.clickUpdateBelongings(x),
+            onClickRemoveEvent: (event) =>
+               c.windowAction("removeEvent", "start", event),
+            onClickRemoveImage: (x) =>
+               c.windowAction("removeImage", "start", image),
+            onClickUpdateCustomer: (customer) =>
+               c.windowAction("customer", "start", customer),
+            onClickUpdateDescription: (description) =>
+               c.windowAction("editDescription", "start", description),
+            onClickUpdateBelongings: (belongings) =>
+               c.windowAction("belongings", "start", belongings),
          },
          popup: {
             search: new PopupContext(c),
@@ -294,9 +294,6 @@
          clickImportService() {
             this.windowAction("importService", "start");
          },
-         clickDeleteService(service) {
-            this.windowAction("removeService", "start", service);
-         },
          clickService(service) {
             service = service ? service : null;
 
@@ -311,21 +308,6 @@
             }
 
             this.updateServiceUI(service);
-         },
-         clickRemoveEvent(event) {
-            this.windowAction("removeEvent", "start", event);
-         },
-         clickUpdateCustomer(customer) {
-            this.windowAction("customer", "start", customer);
-         },
-         clickUpdateDescription(description) {
-            this.windowAction("editDescription", "start", description);
-         },
-         clickUpdateBelongings(belongings) {
-            this.windowAction("belongings", "start", belongings);
-         },
-         clickRemoveImage(image) {
-            this.windowAction("removeImage", "start", image);
          },
 
          windowAction(window, action, data) {
