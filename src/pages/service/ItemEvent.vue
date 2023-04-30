@@ -1,12 +1,7 @@
 <script>
    import { format, formatDistanceToNow } from "date-fns";
    import MenuOption from "@/components/button/MenuOption.vue";
-
-   const stateContext = {
-      info: { title: "Info", primaryColor: "#0771d2" /* blue */ },
-      quotation: { title: "Quotation", primaryColor: "#961d96" /* purple */ },
-      purchase: { title: "Purchase", primaryColor: "#258915" /* green */ },
-   };
+   import Method from "@/items/ServiceEventMethod";
 
    export default {
       components: { MenuOption },
@@ -64,10 +59,9 @@
          },
 
          methodContext(property = "") {
-            if (this.item.isInfo()) return stateContext.info[property];
-            if (this.item.isQuotation())
-               return stateContext.quotation[property];
-            if (this.item.isPurchase()) return stateContext.purchase[property];
+            if (this.item.isInfo()) return Method.INFO[property];
+            if (this.item.isQuotation()) return Method.QUOTATION[property];
+            if (this.item.isPurchase()) return Method.PURCHASE[property];
             return null;
          },
       },

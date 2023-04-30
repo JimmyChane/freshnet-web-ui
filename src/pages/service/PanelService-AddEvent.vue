@@ -4,6 +4,7 @@
    import ModuleEvent from "@/items/data/ServiceEvent.js";
    import TextArea from "@/components/InputTextArea.vue";
    import AddImage from "./PanelService-AddEvent-AddImage.vue";
+   import Method from "@/items/ServiceEventMethod.js";
 
    export default {
       components: { Menu, TextArea, AddImage },
@@ -11,7 +12,7 @@
          ModuleEvent,
 
          nameOfUser: "unknown",
-         eventMethod: ModuleEvent.Method.Quotation,
+         eventMethod: Method.QUOTATION.key,
          eventDescription: "",
          eventStatus: "",
          eventAmount: 0,
@@ -24,16 +25,15 @@
          primaryColor1: (c) => c.primaryColor.mix("ffffff", 0.45),
          primaryColor2: (c) => c.primaryColor.mix("ffffff", 0.6),
 
-         isMethodInfo: (c) => c.eventMethod === ModuleEvent.Method.Info,
-         isMethodQuotation: (c) =>
-            c.eventMethod === ModuleEvent.Method.Quotation,
-         isMethodPurchase: (c) => c.eventMethod === ModuleEvent.Method.Purchase,
+         isMethodInfo: (c) => c.eventMethod === Method.INFO.key,
+         isMethodQuotation: (c) => c.eventMethod === Method.QUOTATION.key,
+         isMethodPurchase: (c) => c.eventMethod === Method.PURCHASE.key,
 
          methodMenu: (c) =>
             c.methodMenus.find((menu) => menu.key === c.eventMethod),
          methodMenus: (c) => [
             {
-               key: ModuleEvent.Method.Quotation,
+               key: Method.QUOTATION.key,
                title: "Quotation",
                color: chroma("961d96"),
                click: (menu) => {
@@ -42,7 +42,7 @@
                },
             },
             {
-               key: ModuleEvent.Method.Purchase,
+               key: Method.PURCHASE.key,
                title: "Purchase",
                color: chroma("258915"),
                click: (menu) => {

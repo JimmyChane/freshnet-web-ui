@@ -3,6 +3,7 @@ import ServicePrice from "./ServicePrice.js";
 // import ServiceImage from "./ServiceImage";
 
 import ModuleEvent from "./data/ServiceEvent.js";
+import Method from "./ServiceEventMethod";
 import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
@@ -72,14 +73,14 @@ class ServiceEvent {
       return null;
    }
 
+   isInfo() {
+      return this.method === Method.INFO.key;
+   }
    isQuotation() {
-      return this.method === ModuleEvent.Method.Quotation;
+      return this.method === Method.QUOTATION.key;
    }
    isPurchase() {
-      return this.method === ModuleEvent.Method.Purchase;
-   }
-   isInfo() {
-      return this.method === ModuleEvent.Method.Info;
+      return this.method === Method.PURCHASE.key;
    }
 
    compare(item) {

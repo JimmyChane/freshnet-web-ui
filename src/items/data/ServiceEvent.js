@@ -2,12 +2,6 @@ const ServicePrice = require("./ServicePrice.js");
 const { default: U } = require("@/U.js");
 
 class ServiceEvent {
-   static Method = {
-      Info: "info",
-      Quotation: "quotation",
-      Purchase: "purchase",
-   };
-
    static trim(data) {
       return new ServiceEvent(data);
    }

@@ -9,7 +9,7 @@ import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
 import ModuleService from "./data/Service.js";
-import ModuleEvent from "./data/ServiceEvent.js";
+import Method from "./ServiceEventMethod";
 
 import U from "@/U.js";
 
@@ -159,7 +159,7 @@ class Service {
 
    toTotalPrice() {
       return this.events.reduce((cost, event) => {
-         if (event.method === ModuleEvent.Method.Purchase) {
+         if (event.method === Method.PURCHASE.key) {
             cost = cost.plus(event.price);
          }
          return cost;
