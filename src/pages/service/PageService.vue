@@ -269,6 +269,11 @@
                this.currentServiceId,
             );
 
+            if (!service) {
+               this.clickService(null);
+               return;
+            }
+
             if (this.currentServiceId === service.id) {
                this.updateServiceUI(service);
             }
