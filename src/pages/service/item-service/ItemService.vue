@@ -8,9 +8,8 @@
    import ImageView from "@/components/ImageView.vue";
 
    import ServicePrice from "@/items/ServicePrice";
-   import ServiceStates from "@/objects/ServiceStates.js";
+   import State from "@/items/ServiceState";
 
-   import { format } from "date-fns";
    import U from "@/U";
 
    import ItemServiceCustomer from "./ItemService-Customer.vue";
@@ -55,7 +54,7 @@
          totalQuoteAmount: (c) => c.totalQuote?.amount ?? 0,
          timestamp: (c) => c.item.timestamp,
          state: (c) => c.item.state,
-         primaryColor: (c) => ServiceStates.findByKey(c.state).color,
+         primaryColor: (c) => State.findByKey(c.state).primaryColor,
 
          events: (c) => {
             return U.optArray(c.item.events)

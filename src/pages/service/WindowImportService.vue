@@ -1,7 +1,7 @@
 <script>
    import WindowAction from "@/components/window/WindowAction.vue";
    import TypeSelector from "@/components/selector/TypeSelector.vue";
-   import ServiceStates from "@/objects/ServiceStates.js";
+   import State from "@/items/ServiceState";
    import ModuleService from "@/items/data/Service.js";
    import LayoutFindCustomer from "./LayoutFindCustomer.vue";
    import BodyUser from "./WindowUpdateService-user.vue";
@@ -25,7 +25,6 @@
       props: { isShowing: { type: Boolean, default: false } },
       data: (c) => ({
          ModuleService,
-         ServiceStates,
 
          data: {
             nameOfUser: "",
@@ -40,6 +39,17 @@
             if (c.user.isTypeAdmin()) return "Admin";
             if (c.user.isTypeStaff()) return "Staff";
             return "unknowna";
+         },
+
+         stateMenus: (c) => {
+            return State.map((state) => {
+               return {
+                  key: state.key,
+                  title: state.title,
+                  icon: state.icon,
+                  color: state.primaryColor,
+               };
+            });
          },
       },
       methods: {
@@ -64,7 +74,8 @@
          trimData() {
             this.data.nameOfUser = this.data.nameOfUser.trim();
             this.data.customer.name = this.data.customer.name.trim();
-            this.data.customer.phoneNumber = this.data.customer.phoneNumber.trim();
+            this.data.customer.phoneNumber =
+               this.data.customer.phoneNumber.trim();
             this.data.description = this.data.description.trim();
             this.data.belongings = this.$refs.BelongingListEdit.getResults();
             this.data.time = Date.parse(this.$refs.DateTimeInput.value);
@@ -96,7 +107,10 @@
                   this.resetData();
                })
                .catch((error) => {
-                  this.store.dispatch("snackbarShow", "Failed to import a service");
+                  this.store.dispatch(
+                     "snackbarShow",
+                     "Failed to import a service",
+                  );
                   console.error(error);
                });
          },
@@ -146,7 +160,7 @@
             <span class="WindowService-title">States</span>
             <TypeSelector
                class="WindowEvent-type"
-               :items="ServiceStates.list.map((state) => state)"
+               :items="stateMenus"
                :defaultKey="data.state"
                @click-item-key="(key) => (data.state = key)"
             />
@@ -173,7 +187,10 @@
          />
          <BodyLine />
 
-         <BodyBelongings :belongings="data.belongings" ref="BelongingListEdit" />
+         <BodyBelongings
+            :belongings="data.belongings"
+            ref="BelongingListEdit"
+         />
       </div>
    </WindowAction>
 </template>

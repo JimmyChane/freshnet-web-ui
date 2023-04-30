@@ -6,13 +6,14 @@ const ServiceNotice = require("./ServiceNotice.js");
 const ServiceLabel = require("./ServiceLabel.js");
 const PhoneNumber = require("./PhoneNumber.js");
 const { default: U } = require("@/U.js");
+const { default: ServiceState } = require("../ServiceState.js");
 
 class Service {
    static State = {
-      Pending: "pending",
-      Waiting: "waiting",
-      Completed: "completed",
-      Rejected: "rejected",
+      Pending: ServiceState.PENDING.key,
+      Waiting: ServiceState.WAITING.key,
+      Completed: ServiceState.COMPLETED.key,
+      Rejected: ServiceState.REJECTED.key,
    };
 
    static search(item, searches) {

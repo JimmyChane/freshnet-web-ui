@@ -10,7 +10,7 @@
    import AddEvent from "./PanelService-AddEvent.vue";
    import Events from "./PanelEvents.vue";
 
-   import ServiceStates from "@/objects/ServiceStates.js";
+   import State from "@/items/ServiceState";
 
    import chroma from "chroma-js";
 
@@ -30,11 +30,7 @@
          service: { type: Object, default: () => null },
          actions: { type: Object, default: () => null },
       },
-      data: (c) => ({
-         ServiceStates,
-         nameOfUser: "",
-         bookmarkHeaderIconIsHover: false,
-      }),
+      data: (c) => ({ nameOfUser: "", bookmarkHeaderIconIsHover: false }),
       computed: {
          windowWidth: (c) => c.$root.window.innerWidth,
 
@@ -58,19 +54,11 @@
          labels: (c) => c.service.labels,
 
          primaryColor: (c) => c.stateColor,
-         stateColor() {
-            if (!this.service) {
-               return;
-            }
+         stateColor: (c) => {
+            if (!c.service) return;
 
-            const res = ServiceStates.list.find((s) => {
-               return s.key === this.service.state;
-            });
-            if (!res) {
-               return chroma("white");
-            }
-
-            return chroma(res.color);
+            const state = State.findByKey(c.service.state);
+            return chroma(state?.primaryColor ?? "white");
          },
          backgroundColor() {
             const { primaryColor } = this;
@@ -93,6 +81,17 @@
                return "none";
             }
             return actionbarColor.darken(0.8);
+         },
+
+         stateMenus: (c) => {
+            return State.map((state) => {
+               return {
+                  key: state.key,
+                  title: state.title,
+                  icon: state.icon,
+                  color: state.primaryColor,
+               };
+            });
          },
       },
       watch: {
@@ -161,7 +160,7 @@
             <div class="PanelService-body-header">
                <Selector
                   class="PanelService-actionbar-state-selector"
-                  :list="ServiceStates.list"
+                  :list="stateMenus"
                   :keySelected="service.state"
                   @callback-select="
                      (state) => {

@@ -1,23 +1,18 @@
 import ServiceTimestamp from "./ServiceTimestamp";
 import ServiceEvent from "./ServiceEvent.js";
 import ServicePrice from "./ServicePrice.js";
-import ServiceStates from "@/objects/ServiceStates.js";
 import ServiceCustomer from "./ServiceCustomer.js";
 import ServiceImage from "./ServiceImage";
-import ServiceLabel from "./ServiceLabel";
+import Label from "./ServiceLabel";
+import Method from "./ServiceEventMethod";
+import State from "./ServiceState";
+
+import U from "@/U.js";
+import ModuleService from "./data/Service.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
-import ModuleService from "./data/Service.js";
-import Method from "./ServiceEventMethod";
-
-import U from "@/U.js";
-
 class Service {
-   static #serviceStates = Object.keys(ModuleService.State).map((key) => {
-      return ModuleService.State[key];
-   });
-
    stores = null;
    userStore = null;
 
@@ -57,7 +52,7 @@ class Service {
       });
       this.labels = U.optArray(data.labels)
          .filter((subData) => subData.title !== " " || subData.title !== "")
-         .map((subData) => new ServiceLabel().fromData(subData));
+         .map((subData) => new Label().fromData(subData));
 
       return this;
    }
@@ -77,10 +72,10 @@ class Service {
       });
    }
    toCount(strs) {
-      const { customer, timestamp, state, description } = this;
+      const { customer, timestamp, state: stateKey, description } = this;
 
-      const stateRes = ServiceStates.findByKey(state);
-      const stateTitle = stateRes?.title ?? "";
+      const state = State.findByKey(stateKey);
+      const stateTitle = state?.title ?? "";
 
       let count = strs.reduce((count, str) => {
          if (textContains("service", str)) count++;
@@ -101,11 +96,11 @@ class Service {
    }
 
    isUrgent() {
-      return !!this.labels.find((label) => label.isEqual(ServiceLabel.URGENT));
+      return !!this.labels.find((label) => label.isEqual(Label.URGENT));
    }
    isWarranty() {
       return !!this.labels.find((label) => {
-         return label.isEqual(ServiceLabel.WARRANTY);
+         return label.isEqual(Label.WARRANTY);
       });
    }
 
@@ -116,10 +111,7 @@ class Service {
       return value;
    }
    compareState(item) {
-      return (
-         Service.#serviceStates.indexOf(this.state) -
-         Service.#serviceStates.indexOf(item.state)
-      );
+      return State.indexOfKey(this.state) - State.indexOfKey(item.state);
    }
    compareTimestamp(item) {
       return this.timestamp.compare(item.timestamp);
@@ -169,7 +161,7 @@ class Service {
    setLabels(labels = []) {
       this.labels = U.optArray(labels)
          .filter((label) => label.title !== " " || label.title !== "")
-         .map((label) => new ServiceLabel().fromData(label.toData()));
+         .map((label) => new Label().fromData(label.toData()));
    }
    addLabel(label = null) {
       const labels = this.labels;
@@ -190,13 +182,13 @@ class Service {
 
    setUrgent(bool = false) {
       U.optBoolean(bool)
-         ? this.addLabel(ServiceLabel.URGENT)
-         : this.removeLabel(ServiceLabel.URGENT);
+         ? this.addLabel(Label.URGENT)
+         : this.removeLabel(Label.URGENT);
    }
    setWarranty(bool = false) {
       U.optBoolean(bool)
-         ? this.addLabel(ServiceLabel.WARRANTY)
-         : this.removeLabel(ServiceLabel.WARRANTY);
+         ? this.addLabel(Label.WARRANTY)
+         : this.removeLabel(Label.WARRANTY);
    }
 }
 

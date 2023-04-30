@@ -1,16 +1,11 @@
 <script>
    import Actionbar from "./PanelServices-Actionbar.vue";
    import ListServices from "./ListServices.vue";
-
-   import ModuleService from "@/items/data/Service.js";
-   import ServiceStates from "@/objects/ServiceStates.js";
    import Empty from "@/components/Empty.vue";
-
-   import U from "@/U.js";
-
    import PageService from "@/pages/service/PageService.vue";
 
-   const { State } = ModuleService;
+   import U from "@/U.js";
+   import ServiceState from "@/items/ServiceState";
 
    export default {
       emits: [
@@ -79,10 +74,9 @@
          setPageSelected(state) {
             const menu = this.stateMenus.find((menu) => menu.key === state);
 
-            if (!menu && this.stateMenus.length && Object.keys(State).length) {
-               this.$root.replaceQuery({
-                  query: { state: State[Object.keys(State)[0]] },
-               });
+            const states = ServiceState.map((state) => state);
+            if (!menu && this.stateMenus.length && states.length) {
+               this.$root.replaceQuery({ query: { state: states[0].key } });
             }
 
             this.stateMenuIndex = this.stateMenus.indexOf(menu);
@@ -98,10 +92,9 @@
 
          invalidateList() {
             const services = Array.isArray(this.services) ? this.services : [];
-            this.filterList(services, State.Pending);
-            this.filterList(services, State.Waiting);
-            this.filterList(services, State.Completed);
-            this.filterList(services, State.Rejected);
+            ServiceState.map((state) => {
+               this.filterList(services, state.key);
+            });
 
             this.invalidateState();
 
@@ -116,27 +109,18 @@
          },
       },
       mounted() {
-         this.stateMenus = [
-            State.Pending,
-            State.Waiting,
-            State.Completed,
-            State.Rejected,
-         ].map((stateKey) => {
-            const resource = ServiceStates.findByKey(stateKey);
-            const title = resource.title;
-            const icon = resource.icon.color;
-            const iconSelected = resource.icon.white;
-            const primaryColor = resource.color;
+         this.stateMenus = ServiceState.map((state) => {
             return {
-               key: stateKey,
-               title,
-               icon,
-               iconSelected,
-               primaryColor,
+               key: state.key,
+               title: state.title,
+               icon: state.icon.color,
+               iconSelected: state.icon.white,
+               primaryColor: state.primaryColor,
                isPrimaryColorBright: true,
                list: [],
             };
          });
+
          this.layoutMenus = [
             {
                key: ListServices.LayoutMode.Grid,
