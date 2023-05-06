@@ -181,7 +181,10 @@
             />
          </div>
          <div class="ItemService-bottom">
-            <ItemServiceTimestamp :service="item" />
+            <ItemServiceTimestamp
+               class="ItemService-timestamp"
+               :service="item"
+            />
          </div>
       </div>
 
@@ -212,7 +215,10 @@
                   :count="label.count"
                />
             </div>
-            <ItemServiceTimestamp :service="item" />
+            <ItemServiceTimestamp
+               class="ItemService-timestamp"
+               :service="item"
+            />
          </div>
       </div>
 
@@ -245,7 +251,7 @@
          </ItemServiceDetailColumn>
          <ItemServiceDetailColumn :width="getPropertyByKey('timestamp').width">
             <ItemServiceTimestamp
-               class="ItemService-body-timestamp"
+               class="ItemService-timestamp"
                :service="item"
             />
          </ItemServiceDetailColumn>
@@ -330,6 +336,9 @@
             align-items: flex-end;
             justify-content: flex-start;
             gap: 1rem;
+            .ItemService-timestamp {
+               text-align: start;
+            }
          }
       }
    }
@@ -401,6 +410,9 @@
                   padding: 0.4rem;
                }
             }
+            .ItemService-timestamp {
+               text-align: end;
+            }
          }
       }
    }
@@ -424,7 +436,7 @@
          flex-direction: row;
          align-items: flex-start;
 
-         .ItemService-body-timestamp {
+         .ItemService-timestamp {
             text-align: start;
             color: inherit;
          }

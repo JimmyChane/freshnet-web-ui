@@ -53,7 +53,7 @@
             },
             onClickRemoveEvent: (event) =>
                c.windowAction("removeEvent", "start", event),
-            onClickRemoveImage: (x) =>
+            onClickRemoveImage: (image) =>
                c.windowAction("removeImage", "start", image),
             onClickUpdateCustomer: (customer) =>
                c.windowAction("customer", "start", customer),
