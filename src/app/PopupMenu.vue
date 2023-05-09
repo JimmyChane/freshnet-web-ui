@@ -67,6 +67,11 @@
          primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),
          primaryColorBackgroundSelected: (c) =>
             c.primaryColor.mix("ffffff", 0.4),
+         textAlign: (c) => {
+            if (c.menus.length > 1) return "start";
+            if (c.menus.length === 1 && c.menus[0].icon) return "start";
+            return "center";
+         },
       },
       watch: {
          isShowing() {
@@ -132,7 +137,7 @@
             "--halfWidth": `${this.halfWidth}px`,
             "--halfHeight": `${this.halfHeight}px`,
             "--primary-color-background": this.primaryColorBackground,
-            "text-align": this.menus.length <= 1 ? "center" : "start",
+            "text-align": this.textAlign,
             "pointer-events": "none",
          };
 

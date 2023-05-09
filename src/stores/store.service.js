@@ -230,15 +230,25 @@ const init = (Stores) => {
             });
          },
       )
+      .action("addImageTemp", async (context, imageFiles = []) => {
+         const formData = new FormData();
+         for (const imageFile of imageFiles) {
+            formData.append(imageFile.name, imageFile);
+         }
+
+         const api = await ServiceRequest.addImageTemp(formData);
+         return api.optArrayContent();
+      })
       .action(
          "addImageToId",
          async (context, arg = { serviceID, imageFile }) => {
             const { serviceID, imageFile } = arg;
+
             const imageFileForm = new FormData();
             imageFileForm.append(imageFile.name, imageFile);
-            const content = (
-               await ServiceRequest.addImage(serviceID, imageFileForm)
-            ).optObjectContent();
+
+            const api = await ServiceRequest.addImage(serviceID, imageFileForm);
+            const content = api.optObjectContent();
             const id = content.id;
             const dataImages = content.items;
             return context.state.list.updateItemById(id, (item) => {

@@ -13,13 +13,7 @@
                .sort((event1, event2) => event1.compare(event2));
          },
          totalCost: (c) => c.service.toTotalPrice(),
-         totalCostText: (c) => {
-            return `Total Cost: ${c.totalCost}`;
-            if (c.totalCost && c.totalCost.amount !== 0) {
-               return `Total Cost: ${c.totalCost}`;
-            }
-            return "";
-         },
+         totalCostText: (c) => `Total Cost: ${c.totalCost}`,
       },
    };
 </script>

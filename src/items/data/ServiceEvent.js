@@ -1,3 +1,4 @@
+const ServiceImageFile = require("./ServiceImageFile.js");
 const ServicePrice = require("./ServicePrice.js");
 const { default: U } = require("@/U.js");
 
@@ -11,6 +12,9 @@ class ServiceEvent {
       this.username = U.trimId(data.username);
       this.nameOfUser = U.trimText(data.nameOfUser);
       this.description = U.trimText(data.description);
+      this.images = U.optArray(data.images).map((image) => {
+         return ServiceImageFile.trim(image);
+      });
 
       this.method = U.trimId(data.method);
       // for method info

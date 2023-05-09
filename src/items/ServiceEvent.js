@@ -1,6 +1,6 @@
 import ServiceTimestamp from "./ServiceTimestamp";
 import ServicePrice from "./ServicePrice.js";
-// import ServiceImage from "./ServiceImage";
+import ServiceImage from "./ServiceImage";
 
 import ModuleEvent from "./data/ServiceEvent.js";
 import Method from "./ServiceEventMethod";
@@ -25,7 +25,7 @@ class ServiceEvent {
    description = "";
    status = "";
    price = null;
-   // images = [];
+   images = [];
 
    fromData(data) {
       data = new ModuleEvent(data);
@@ -36,9 +36,9 @@ class ServiceEvent {
       this.description = data.description;
       this.status = data.status;
       this.price = data.price ? new ServicePrice().fromData(data.price) : null;
-      // this.images = U.optArray(data.images).map((image) => {
-      //    return new ServiceImage(this.stores).fromData(image);
-      // });
+      this.images = U.optArray(data.images).map((image) => {
+         return new ServiceImage(this.stores).fromData(image);
+      });
       return this;
    }
    toData() {
@@ -50,7 +50,7 @@ class ServiceEvent {
          description: this.description,
          status: this.status,
          price: this.price?.toData() ?? null,
-         // images: this.images.map((image) => image.toData()),
+         images: this.images.map((image) => image.toData()),
       });
    }
    toCount(strs) {

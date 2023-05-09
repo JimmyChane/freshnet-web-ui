@@ -10,15 +10,14 @@
       components: { Menu, TextArea, AddImage },
       data: (c) => ({
          ModuleEvent,
+         eventImagePreviews: [],
 
          nameOfUser: "unknown",
          eventMethod: Method.QUOTATION.key,
          eventDescription: "",
          eventStatus: "",
          eventAmount: 0,
-
          eventImages: [],
-         eventImagePreviews: [],
       }),
       computed: {
          primaryColor: (c) => c.methodMenu.color,
@@ -97,26 +96,6 @@
             }
          },
 
-         toEvent() {
-            const event = {
-               timestamp: Date.now(),
-               method: this.eventMethod,
-               description: this.eventDescription,
-            };
-
-            if (this.isMethodInfo) {
-               event.status = this.eventStatus;
-               return event;
-            }
-
-            if (this.isMethodQuotation || this.isMethodPurchase) {
-               event.price = { amount: this.eventAmount, currency: "RM" };
-               return event;
-            }
-
-            return null;
-         },
-
          clear() {
             this.nameOfUser = "";
 
@@ -144,12 +123,22 @@
                return;
             }
 
-            let event = this.toEvent();
+            const event = {
+               timestamp: Date.now(),
+               method: this.eventMethod,
+               description: this.eventDescription,
+               images: this.eventImages,
+            };
+
+            if (this.isMethodInfo) {
+               event.status = this.eventStatus;
+            } else if (this.isMethodQuotation || this.isMethodPurchase) {
+               event.price = { amount: this.eventAmount, currency: "RM" };
+            }
+
             if (this.isUserDefault && this.nameOfUser.trim()) {
                event.nameOfUser = this.nameOfUser;
             }
-
-            // todo this.eventImages
 
             if (event) {
                this.$emit("click-submit", event);
@@ -163,27 +152,39 @@
             }, 100);
          },
 
-         onInputFile(event) {
+         async onInputImageFile(event) {
             const { files } = event.target;
+            const imageFiles = [];
+            for (const file of files) imageFiles.push(file);
+            const tempImageContents = await this.serviceStore.dispatch(
+               "addImageTemp",
+               imageFiles,
+            );
+            const images = imageFiles.map((imageFile, index) => {
+               const tempImageContent = tempImageContents[index];
 
-            for (const file of files) {
-               const eventImage = this.eventImages.find((eventImage) => {
-                  return eventImage.name === file.name;
-               });
+               return {
+                  name: tempImageContent.name,
+                  timeout: tempImageContent.timeout,
+                  expiry: tempImageContent.expiry,
+                  file: imageFile,
+               };
+            });
 
-               if (!eventImage) this.eventImages.push(file);
-            }
+            this.eventImages.push(...images);
 
             this.invalidateEventImages();
          },
          async invalidateEventImages() {
             const promises = this.eventImages.map((eventImage) => {
+               const { file } = eventImage;
+
                return new Promise((resolve) => {
                   const reader = new FileReader();
                   reader.onload = (event) => {
                      resolve(event.target.result);
                   };
-                  reader.readAsDataURL(eventImage);
+                  reader.readAsDataURL(file);
                });
             });
 
@@ -226,9 +227,9 @@
       </div>
 
       <div class="AddEvent-footer" :style="{ 'grid-area': 'footer' }">
-         <!-- <AddImage @change="(event) => onInputFile(event)" /> -->
+         <AddImage @change="(event) => onInputImageFile(event)" />
 
-         <!-- <div class="AddEvent-line"></div> -->
+         <div class="AddEvent-line"></div>
 
          <input
             v-if="isUserDefault"
