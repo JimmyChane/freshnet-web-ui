@@ -77,20 +77,18 @@ class Service {
       const state = State.findByKey(stateKey);
       const stateTitle = state?.title ?? "";
 
-      let count = strs.reduce((count, str) => {
-         if (textContains("service", str)) count++;
-         if (textContains(description, str)) count++;
-         if (this.isUrgent() && textContains("warranty", str)) count++;
-         if (this.isWarranty() && textContains("warranty", str)) count++;
-         if (textContains(stateTitle, str)) count++;
-         return count;
-      }, 0);
-      count += this.events.reduce(
-         (count, event) => count + event.toCount(strs),
-         0,
-      );
-      if (timestamp && timestamp.toCount(strs)) count++;
-      if (customer && customer.toCount(strs)) count++;
+      let count =
+         strs.reduce((count, str) => {
+            if (textContains("service", str)) count++;
+            if (textContains(description, str)) count++;
+            if (this.isUrgent() && textContains("urgent", str)) count++;
+            if (this.isWarranty() && textContains("warranty", str)) count++;
+            if (textContains(stateTitle, str)) count++;
+            return count;
+         }, 0) +
+         this.events.reduce((count, event) => count + event.toCount(strs), 0);
+      if (timestamp?.toCount(strs)) count++;
+      if (customer?.toCount(strs)) count += 5;
 
       return count;
    }
@@ -133,18 +131,11 @@ class Service {
    }
    async fetchName() {
       const user = await this.fetchUser();
+      const username = user?.username ?? "";
 
-      const username = user ? user.username : "";
-
-      if (username.length && this.name) {
-         return `${this.name}(${username})`;
-      }
-      if (!username.length && this.name) {
-         return this.name;
-      }
-      if (username.length && !this.name) {
-         return username;
-      }
+      if (username.length && this.name) return `${this.name}(${username})`;
+      if (!username.length && this.name) return this.name;
+      if (username.length && !this.name) return username;
 
       throw new Error("unknown");
    }

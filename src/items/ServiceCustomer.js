@@ -28,7 +28,7 @@ class ServiceCustomer {
    toCount(strs) {
       let count = strs.reduce((count, str) => {
          if (textContains("customer", str)) count++;
-         if (textContains(this.name, str)) count++;
+         if (textContains(this.name, str)) count += 4;
          return count;
       }, 0);
       if (this.phoneNumber) count += this.phoneNumber.toCount(strs);

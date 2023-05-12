@@ -24,7 +24,7 @@ class PhoneNumber {
    }
    toCount(strs) {
       return strs.reduce((count, str) => {
-         if (textContains(this.value, str)) count++;
+         if (textContains(this.value, str)) count += 4;
          return count;
       }, 0);
    }
