@@ -170,8 +170,6 @@
             const currentValue = this.getQueryValue(key);
             if (currentValue === nextValue) return;
 
-            console.log(this.hasQueryKey(""));
-
             if (
                (this.hasQueryKey("") && this.getQueryValue("") === undefined) ||
                (key === "" && nextValue === "")

@@ -20,7 +20,6 @@
          invalidateValue() {
             const setting = this.item.findValue();
             this.values = setting?.value ?? [];
-            // console.log(this.values); // todo test
          },
       },
    };

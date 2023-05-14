@@ -1,7 +1,7 @@
 <script>
    import ButtonContact from "./BottomActionbar-ButtonContact.vue";
    import ButtonTop from "./BottomActionbar-ButtonTop.vue";
-   import Setting from "@/items/data/Setting";
+   import Setting from "@/items/Setting";
 
    export default {
       components: { ButtonContact, ButtonTop },

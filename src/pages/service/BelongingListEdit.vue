@@ -77,18 +77,7 @@
             });
          },
 
-         focus() {
-            // const toFocus = () => {
-            // 	const inputs = this.$refs.input;
-            // 	console.log(inputs);
-            // 	if (inputs.length) {
-            // 		inputs[inputs.length - 1].focus();
-            // 		return;
-            // 	}
-            // 	setTimeout(toFocus, 2000);
-            // };
-            // toFocus();
-         },
+         focus() {},
       },
    };
 </script>

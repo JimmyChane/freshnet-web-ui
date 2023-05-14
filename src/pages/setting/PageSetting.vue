@@ -4,7 +4,7 @@
    import ItemSetting from "./ItemSetting.vue";
    import ItemSettingContacts from "./ItemSettingContacts.vue";
    import ItemSettingBusinessHours from "./ItemSettingBusinessHours.vue";
-   import SettingModule from "@/items/data/Setting.js";
+   import SettingModule from "@/items/Setting.js";
 
    import HostIcon from "@/host/HostIcon";
    import U from "@/U";

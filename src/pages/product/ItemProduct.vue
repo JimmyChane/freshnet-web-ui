@@ -1,7 +1,7 @@
 <script>
    const Mode = { List: 1, Grid: 2 };
 
-   import Setting from "@/items/data/Setting.js";
+   import Setting from "@/items/Setting.js";
    import ProductPrice from "@/items/ProductPrice.js";
    import ProductPreset from "@/objects/ProductPreset";
 
@@ -326,7 +326,6 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
-      aspect-ratio: 17/18;
       gap: 0.25rem;
 
       .ItemProduct-preview {

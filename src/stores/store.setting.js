@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import SettingModule from "@/items/data/Setting.js";
+import Setting from "@/items/Setting.js";
 import StoreBuilder from "./tools/StoreBuilder";
 import SettingRequest from "@/request/Setting";
 import Contact from "@/items/Contact";
@@ -7,10 +7,10 @@ import WorkingDay from "@/items/WorkingDay";
 
 const isPredefinedSetting = (key) => {
    return [
-      SettingModule.Key.Contacts,
-      SettingModule.Key.CompanyName,
-      SettingModule.Key.CompanyCategory,
-      SettingModule.Key.CompanyWorkingHours,
+      Setting.Key.Contacts,
+      Setting.Key.CompanyName,
+      Setting.Key.CompanyCategory,
+      Setting.Key.CompanyWorkingHours,
    ].includes(key);
 };
 
@@ -19,7 +19,9 @@ const init = (Stores) => {
       .onFetchItems(async () => {
          const api = await SettingRequest.list();
          const list = api.optArrayContent();
-         const items = list.map((content) => new SettingModule(content));
+         const items = list.map((content) => {
+            return new Setting(Stores).fromData(content);
+         });
 
          const contacts = [
             new Contact(Stores).fromData({
@@ -89,24 +91,24 @@ const init = (Stores) => {
 
          return [
             ...items.filter((item) => !isPredefinedSetting(item.key)),
-            new SettingModule({
-               key: SettingModule.Key.CompanyWorkingHours,
-               visibility: SettingModule.Visibility.Protected,
+            new Setting(Stores).fromData({
+               key: Setting.Key.CompanyWorkingHours,
+               visibility: Setting.Visibility.Protected,
                value: days,
             }),
-            new SettingModule({
-               key: SettingModule.Key.Contacts,
-               visibility: SettingModule.Visibility.Protected,
+            new Setting(Stores).fromData({
+               key: Setting.Key.Contacts,
+               visibility: Setting.Visibility.Protected,
                value: contacts,
             }),
-            new SettingModule({
-               key: SettingModule.Key.CompanyName,
-               visibility: SettingModule.Visibility.Protected,
+            new Setting(Stores).fromData({
+               key: Setting.Key.CompanyName,
+               visibility: Setting.Visibility.Protected,
                value: "Freshnet Enterprise",
             }),
-            new SettingModule({
-               key: SettingModule.Key.CompanyCategory,
-               visibility: SettingModule.Visibility.Protected,
+            new Setting(Stores).fromData({
+               key: Setting.Key.CompanyCategory,
+               visibility: Setting.Visibility.Protected,
                value: "Computer Store",
             }),
          ];
@@ -125,7 +127,7 @@ const init = (Stores) => {
 
          if (isPredefinedSetting(key)) throw new Error("testing");
 
-         const setting = new SettingModule({ key, value });
+         const setting = new Setting(Stores).fromData({ key, value }).toData();
          const api = await SettingRequest.update(setting);
          const content = api.getObjectContent();
 

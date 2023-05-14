@@ -14,7 +14,7 @@
    import BottomActionbar from "./ViewerProduct-BottomActionbar.vue";
 
    import ProductSpecType from "@/items/ProductSpecType.js";
-   import SettingModule from "@/items/data/Setting.js";
+   import SettingModule from "@/items/Setting.js";
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import chroma from "chroma-js";
    import U from "@/U";

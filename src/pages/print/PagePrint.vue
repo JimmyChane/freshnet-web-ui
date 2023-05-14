@@ -124,14 +124,17 @@
             ]),
             new Media("Binding", [
                new Category(null, [
-                  new Subcategory({ toString: () => "Comb", color: { icon: "" } }, [
-                     new Item({ title: "8mm" }, new Price(1.0)),
-                     new Item({ title: "10mm" }, new Price(1.0)),
-                     new Item({ title: "12mm" }, new Price(1.5)),
-                     new Item({ title: "14mm" }, new Price(2.0)),
-                     new Item({ title: "16mm" }, new Price(2.0)),
-                     new Item({ title: "25mm" }, new Price(3.0)),
-                  ]),
+                  new Subcategory(
+                     { toString: () => "Comb", color: { icon: "" } },
+                     [
+                        new Item({ title: "8mm" }, new Price(1.0)),
+                        new Item({ title: "10mm" }, new Price(1.0)),
+                        new Item({ title: "12mm" }, new Price(1.5)),
+                        new Item({ title: "14mm" }, new Price(2.0)),
+                        new Item({ title: "16mm" }, new Price(2.0)),
+                        new Item({ title: "25mm" }, new Price(3.0)),
+                     ],
+                  ),
                   new Subcategory(null, [
                      new Item({ title: "Tape & Staple" }, new Price(1.0)),
                   ]),
@@ -209,8 +212,6 @@
             if (layer1) return layer1;
             if (layer3) return layer3;
 
-            console.log(layer);
-
             return layer;
          },
       },
@@ -231,7 +232,11 @@
          <Tabs v-if="tabs1.length" :items="tabs1" />
       </div>
 
-      <div class="PagePrint-body" :style="{ 'z-index': '1' }" v-if="currentLayer">
+      <div
+         class="PagePrint-body"
+         :style="{ 'z-index': '1' }"
+         v-if="currentLayer"
+      >
          <Card
             v-for="preview of currentLayer.items"
             :key="preview.title"

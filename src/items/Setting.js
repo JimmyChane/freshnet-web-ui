@@ -1,6 +1,7 @@
 const { default: U } = require("@/U.js");
 
 class Setting {
+   static Visibility = { Protected: "protected", Private: "private" };
    static Key = {
       PublicShowPrice: "public-showPrice",
       Location: "store-location",
@@ -10,16 +11,29 @@ class Setting {
       CompanyCategory: "store-category",
       CompanyWorkingHours: "store-working-hours",
    };
-   static Visibility = { Protected: "protected", Private: "private" };
 
-   static trim(data) {
-      return new Setting(data);
+   stores = null;
+
+   key = "";
+   visibility = "";
+   value = undefined;
+
+   constructor(stores) {
+      this.stores = stores;
    }
 
-   constructor(data = null) {
+   fromData(data = null) {
       this.key = U.trimId(data.key);
       this.visibility = U.trimId(data.visibility);
       this.value = data.value;
+      return this;
+   }
+   toData() {
+      return {
+         key: U.trimId(this.key),
+         visibility: U.trimId(this.visibility),
+         value: this.value,
+      };
    }
 }
 

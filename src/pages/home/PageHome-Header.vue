@@ -1,6 +1,6 @@
 <script>
    import Section from "./PageHome-Section.vue";
-   import Setting from "@/items/data/Setting";
+   import Setting from "@/items/Setting";
 
    import { getHours } from "date-fns";
 

@@ -1,7 +1,7 @@
 <script>
    import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import GlobalSearch from "@/app/search/GlobalSearch.vue";
-   import Setting from "@/items/data/Setting";
+   import Setting from "@/items/Setting";
    import { format, differenceInMinutes } from "date-fns";
 
    export default {

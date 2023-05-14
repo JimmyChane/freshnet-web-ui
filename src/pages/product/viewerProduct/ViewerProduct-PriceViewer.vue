@@ -1,6 +1,6 @@
 <script>
    import ProductPrice from "@/items/ProductPrice.js";
-   import SettingModule from "@/items/data/Setting.js";
+   import SettingModule from "@/items/Setting.js";
 
    import Section from "./ViewerProduct-Section.vue";
 

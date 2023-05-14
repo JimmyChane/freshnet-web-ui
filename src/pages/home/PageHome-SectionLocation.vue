@@ -1,5 +1,5 @@
 <script>
-   import Setting from "@/items/data/Setting";
+   import Setting from "@/items/Setting";
 
    export default {
       props: { isThin: { type: Boolean, default: false } },

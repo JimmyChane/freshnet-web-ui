@@ -1,6 +1,6 @@
 <script>
    import U from "@/U";
-   import SettingModule from "@/items/data/Setting.js";
+   import SettingModule from "@/items/Setting.js";
    import ItemSettingHeader from "./ItemSetting-Header.vue";
    import ContactItem from "./ItemSettingContacts-Item.vue";
 

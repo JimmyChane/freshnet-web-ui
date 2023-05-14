@@ -87,13 +87,14 @@ class Product {
          }),
       );
 
-      const prices = U.optArray(data.stock?.prices ?? []).filter((price) => {
-         return price?.normal || price.promotion;
-      });
       let dataPrice = null;
       if (data.price) dataPrice = data.price;
-      else if (prices.length === 1) dataPrice = prices[0];
-      else if (prices.length > 1) dataPrice = prices[prices.length - 1];
+      else {
+         const prices = U.optArray(data.stock?.prices ?? []).filter((price) => {
+            return price?.normal || price.promotion;
+         });
+         if (prices.length > 0) dataPrice = prices[prices.length - 1];
+      }
       const price = dataPrice
          ? new ProductPrices(this.stores).fromData(dataPrice)
          : null;

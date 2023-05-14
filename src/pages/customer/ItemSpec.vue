@@ -117,16 +117,6 @@
          }
          .ItemSpec-delete {
             margin-left: 0.2rem;
-            opacity: 0;
-            pointer-events: none;
-         }
-      }
-
-      &:hover,
-      &:focus-within {
-         .ItemSpec-delete {
-            opacity: 1;
-            pointer-events: initial;
          }
       }
    }

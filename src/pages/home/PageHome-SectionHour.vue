@@ -1,7 +1,7 @@
 <script>
    import Section from "./PageHome-Section.vue";
    import Item from "./PageHome-SectionHour-Item.vue";
-   import Setting from "@/items/data/Setting";
+   import Setting from "@/items/Setting";
 
    export default {
       components: { Section, Item },
