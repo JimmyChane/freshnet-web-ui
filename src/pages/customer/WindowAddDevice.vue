@@ -1,5 +1,5 @@
 <script>
-   import CustomerModule from "@/items/data/Customer.js";
+   import Customer from "@/items/Customer";
    import WindowAction from "@/components/window/WindowAction.vue";
    import Selector3 from "@/components/selector/Selector3.vue";
    import WindowSection from "./WindowSection.vue";
@@ -19,7 +19,7 @@
          isShowing: { type: Boolean, default: false },
          item: { type: Object, default: () => null },
       },
-      data: (c) => ({ Requirement: CustomerModule.Requirement, data: {} }),
+      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,

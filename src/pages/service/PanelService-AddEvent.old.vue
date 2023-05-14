@@ -1,15 +1,12 @@
 <script>
    import chroma from "chroma-js";
    import Menu from "@/components/Menu.vue";
-   import ModuleEvent from "@/items/data/ServiceEvent.js";
    import TextArea from "@/components/InputTextArea.vue";
    import Method from "@/items/ServiceEventMethod.js";
 
    export default {
       components: { Menu, TextArea },
       data: (c) => ({
-         ModuleEvent,
-
          nameOfUser: "unknown",
          eventMethod: Method.QUOTATION.key,
          eventDescription: "",

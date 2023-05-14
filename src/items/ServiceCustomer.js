@@ -13,15 +13,17 @@ class ServiceCustomer {
    phoneNumber = null;
 
    fromData(data) {
-      this.name = U.optString(data.name);
-      this.phoneNumber = data.phoneNumber
-         ? new PhoneNumber(this.stores).fromData(data.phoneNumber)
+      this.name = U.trimText(data.name);
+
+      const phoneNumber = U.trimStringAll(data.phoneNumber, undefined);
+      this.phoneNumber = phoneNumber
+         ? new PhoneNumber(this.stores).fromData(phoneNumber)
          : null;
       return this;
    }
    toData() {
       return {
-         name: this.name,
+         name: U.trimText(this.name),
          phoneNumber: this.phoneNumber?.toData() ?? "",
       };
    }

@@ -1,7 +1,7 @@
 <script>
    import WindowAction from "@/components/window/WindowAction.vue";
    import WindowSection from "./WindowSection.vue";
-   import CustomerModule from "@/items/data/Customer.js";
+   import Customer from "@/items/Customer";
    import ItemSpecification from "./ItemSpecification.vue";
    import TextArea from "@/components/InputTextArea.vue";
 
@@ -13,7 +13,7 @@
          customer: { type: Object, default: null },
          device: { type: Object, default: () => null },
       },
-      data: (c) => ({ Requirement: CustomerModule.Requirement, data: {} }),
+      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
@@ -79,7 +79,9 @@
 <template>
    <WindowAction
       class="WindowUpdateDeviceDescription"
-      :title="`Update Device Description${customer ? ` for ${customer.name}` : ''}`"
+      :title="`Update Device Description${
+         customer ? ` for ${customer.name}` : ''
+      }`"
       :isShowing="isShowing"
       :isLoading="isLoading"
       :isClickable="isClickable"

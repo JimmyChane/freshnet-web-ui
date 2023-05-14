@@ -1,5 +1,5 @@
-import ModulePs2Disc from "./data/Ps2Disc.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
+import U from "@/U.js";
 const textContains = ItemSearcher.textContains;
 
 class Ps2Disc {
@@ -14,16 +14,17 @@ class Ps2Disc {
    title = "";
 
    fromData(data) {
-      data = ModulePs2Disc.trim(data);
-
-      this.id = data._id;
-      this.code = data.code;
-      this.title = data.title;
-
+      this.id = U.trimId(data._id);
+      this.code = U.trimId(data.code);
+      this.title = U.trimText(data.title);
       return this;
    }
    toData() {
-      return new ModulePs2Disc({ _id: this.id, code: this.code, title: this.title });
+      return {
+         _id: U.trimId(this.id),
+         code: U.trimId(this.code),
+         title: U.trimText(this.title),
+      };
    }
    toCount(strs) {
       return strs.reduce((count, str) => {

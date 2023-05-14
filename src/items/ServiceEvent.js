@@ -2,7 +2,6 @@ import ServiceTimestamp from "./ServiceTimestamp";
 import ServicePrice from "./ServicePrice.js";
 import ServiceImage from "./ServiceImage";
 
-import ModuleEvent from "./data/ServiceEvent.js";
 import Method from "./ServiceEventMethod";
 import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
@@ -28,30 +27,31 @@ class ServiceEvent {
    images = [];
 
    fromData(data) {
-      data = new ModuleEvent(data);
       this.timestamp = new ServiceTimestamp(data.time);
-      this.username = data.username;
-      this.name = data.nameOfUser;
-      this.method = data.method;
-      this.description = data.description;
-      this.status = data.status;
-      this.price = data.price ? new ServicePrice().fromData(data.price) : null;
+      this.username = U.trimId(data.username);
+      this.name = U.trimText(data.nameOfUser);
+      this.method = U.trimId(data.method);
+      this.description = U.trimText(data.description);
+      this.status = U.trimId(data.status);
+      this.price = U.isObject(data.price)
+         ? new ServicePrice().fromData(data.price)
+         : null;
       this.images = U.optArray(data.images).map((image) => {
          return new ServiceImage(this.stores).fromData(image);
       });
       return this;
    }
    toData() {
-      return new ModuleEvent({
+      return {
          time: this.timestamp.time,
-         username: this.username,
-         nameOfUser: this.name,
-         method: this.method,
-         description: this.description,
-         status: this.status,
+         username: U.trimId(this.username),
+         nameOfUser: U.trimText(this.name),
+         method: U.trimId(this.method),
+         description: U.trimText(this.description),
+         status: U.trimId(this.status),
          price: this.price?.toData() ?? null,
          images: this.images.map((image) => image.toData()),
-      });
+      };
    }
    toCount(strs) {
       let count = strs.reduce((count, str) => {

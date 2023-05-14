@@ -1,8 +1,6 @@
 import AppHost from "@/host/AppHost.js";
 
 import ModuleProduct from "./data/Product.js";
-import ModuleStock from "./data/ProductStock.js";
-import ModuleBundle from "./data/ProductBundle.js";
 
 import Image from "./Image.js";
 import ProductSpecContent from "./ProductSpecContent.js";
@@ -10,6 +8,8 @@ import ProductPrice from "./ProductPrice.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
 
 import U from "@/U.js";
+import ProductStock from "./ProductStock.js";
+import ProductBundle from "./ProductBundle.js";
 
 const textContains = ItemSearcher.textContains;
 
@@ -38,49 +38,84 @@ class Product {
    specifications = [];
    images = [];
    price = null;
-   stock = ModuleStock.trim({});
+   stock = null;
 
    fromData(data) {
+      this.id = U.trimId(data._id);
+      this.title = U.trimText(data.title);
+      this.description = U.trimText(data.description);
+      this.stock = new ProductStock(this.stores).fromData(data.stock);
+      this.setBrandId(U.trimId(data.brandId));
+      this.setCategoryId(U.trimId(data.categoryId));
+      this.setGifts(
+         U.optArray(data.gifts)
+            .map((gift) => U.trimText(gift))
+            .filter((gift) => !!gift),
+      );
+      this.setBundles(
+         U.optArray(data.bundles)
+            .map((bundle) => new ProductBundle(this.stores).fromData(bundle))
+            .map((bundle) => bundle.toData()),
+      );
+
+      const specifications = U.optArray(data.specifications).map(
+         (specification) => {
+            return {
+               type: U.trimId(specification.type),
+               content: U.trimText(specification.content),
+            };
+         },
+      );
+      if (U.isObjectOnly(data.specification)) {
+         specifications.unshift(
+            ...Object.keys(data.specification).map((type) => {
+               return {
+                  type: U.trimId(type),
+                  content: U.trimId(data.specification[type]),
+               };
+            }),
+         );
+      }
+      this.setSpecifications(specifications);
+
+      const images = U.optArray(data.images);
+      if (U.isObjectOnly(data.image)) images.unshift(data.image);
+      this.setImages(
+         images.map((image) => {
+            return {
+               method: U.trimId(image.method),
+               path: U.trimId(image.path),
+            };
+         }),
+      );
+
       data = ModuleProduct.trim(data);
-
-      if (U.isObject(data.image) && data.image) data.images.push(data.image);
-
-      this.id = data._id;
-      this.title = U.optString(data.title);
-      this.description = U.optString(data.description).trim();
-      this.setGifts(data.gifts);
-      this.setBundles(data.bundles);
-      this.setBrandId(data.brandId);
-      this.setCategoryId(data.categoryId);
-      this.setSpecifications(data.specifications);
-      this.setImages(data.images);
       this.setPrice(data.price);
-
-      this.stock = data.stock;
 
       return this;
    }
    toData() {
-      let specification = {};
-      for (let itemSpecification of this.specifications) {
-         specification[itemSpecification.type.key] = itemSpecification.content;
-      }
-
       let price = this.price ?? {};
       let pricePromotion = price.promotion;
       let priceNormal = price.normal;
 
       return {
-         _id: this.id,
-         title: this.title ?? undefined,
-         description: this.description ?? undefined,
-         brandId: U.optString(this.brandId),
-         categoryId: U.optString(this.categoryId),
-         stock: ModuleStock.trim(this.stock),
-         gifts: this.gifts.map((gift) => gift),
-         bundles: this.bundles.map((bundle) => ModuleBundle.trim(bundle)),
+         _id: U.trimId(this.id),
+         title: U.trimText(this.title),
+         description: U.trimText(this.description),
+         brandId: U.trimId(this.brandId),
+         stock: this?.stock.toData() ?? {},
+         categoryId: U.trimId(this.categoryId),
+         gifts: this.gifts
+            .map((gift) => U.trimText(gift))
+            .filter((gift) => !!gift),
+         bundles: this.bundles.map((bundle) => bundle.toData()),
+         specification: this.specifications.reduce((obj, spec) => {
+            spec[spec.type.key] = spec.content;
+            return obj;
+         }, {}),
+
          image: this.image?.toData() ?? {},
-         specification,
          price: { normal: pricePromotion, promotion: priceNormal },
       };
    }
@@ -291,7 +326,7 @@ class Product {
 
    setBundles(data = []) {
       this.bundles = U.optArray(data).map((bundle) => {
-         return ModuleBundle.trim(bundle);
+         return new ProductBundle(this.stores).fromData(bundle).toData();
       });
    }
    addBundle(bundle) {

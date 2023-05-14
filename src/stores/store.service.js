@@ -1,11 +1,10 @@
 import Service from "@/items/Service.js";
 import ServiceImage from "@/items/ServiceImage";
 import Vuex from "vuex";
-import ServiceModule from "@/items/data/Service.js";
 import ServiceCustomer from "@/items/ServiceCustomer";
 import ServiceEvent from "@/items/ServiceEvent";
 import StoreBuilder from "./tools/StoreBuilder";
-import ServiceLabel from "@/items/data/ServiceLabel";
+import ServiceLabel from "@/items/ServiceLabel";
 import ServiceRequest from "@/request/Service";
 
 const Notify = {
@@ -66,7 +65,7 @@ const init = (Stores) => {
       .action("importItem", async (context, arg = { data }) => {
          const { data } = arg;
          if (!data) throw new Error();
-         const service = ServiceModule.trim(data);
+         const service = new Service(Stores).fromData(data).toData();
          const content = (
             await ServiceRequest.import(service)
          ).optObjectContent();
@@ -172,7 +171,7 @@ const init = (Stores) => {
       .action(
          "updateUrgentOfId",
          async (context, arg = { serviceID, isUrgent }) => {
-            const label = ServiceLabel.Defaults.Urgent;
+            const label = ServiceLabel.URGENT.toData();
             if (arg.isUrgent) {
                return context.dispatch("addLabelToId", {
                   serviceID: arg.serviceID,
@@ -189,7 +188,7 @@ const init = (Stores) => {
       .action(
          "updateWarrantyOfId",
          async (context, arg = { serviceID, isWarranty }) => {
-            const label = ServiceLabel.Defaults.Warranty;
+            const label = ServiceLabel.WARRANTY.toData();
             if (arg.isWarranty) {
                return context.dispatch("addLabelToId", {
                   serviceID: arg.serviceID,

@@ -1,5 +1,5 @@
 <script>
-   import ModuleCategory from "@/items/data/Category.js";
+   import Category from "@/items/Category";
    import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
    import LabelMenus from "@/components/LabelMenus.vue";
@@ -74,7 +74,7 @@
             }
 
             const categoryOther = categories.find((category) => {
-               return category.key === ModuleCategory.Key.Other;
+               return category.key === Category.Key.Other;
             });
             if (!this.categoryMenu && categoryOther) {
                this.categoryMenu = this.categoryMenus.find((menu) => {

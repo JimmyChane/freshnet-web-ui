@@ -18,18 +18,26 @@ class ServiceImage {
    storageType = "";
 
    fromData(data) {
-      this.name = data.name;
-      this.path = data.path;
-      this.method = data.method;
-      this.storageType = data.storageType;
+      const image = new Image().fromData({
+         path: data.path,
+         method: data.method,
+      });
+
+      this.name = U.trimId(data.name);
+      this.path = image.path;
+      this.method = image.method;
+      this.storageType = U.trimId(data.storageType);
       return this;
    }
    toData() {
+      const image = new Image()
+         .fromData({ path: this.path, method: this.method })
+         .toData();
       return {
-         name: this.name,
-         path: this.path,
-         method: this.method,
-         storageType: this.storageType,
+         name: U.trimId(this.name),
+         path: image.path,
+         method: image.method,
+         storageType: U.trimId(this.storageType),
       };
    }
    toCount(strs) {

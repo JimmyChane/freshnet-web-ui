@@ -2,7 +2,7 @@
    import WindowAction from "@/components/window/WindowAction.vue";
    import WindowSection from "./WindowSection.vue";
    import TextArea from "@/components/InputTextArea.vue";
-   import CustomerModule from "@/items/data/Customer.js";
+   import Customer from "@/items/Customer";
 
    export default {
       components: { WindowAction, WindowSection, TextArea },
@@ -11,7 +11,7 @@
          isShowing: { type: Boolean, default: false },
          item: { type: Object, default: () => null },
       },
-      data: (c) => ({ Requirement: CustomerModule.Requirement, data: {} }),
+      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
@@ -56,8 +56,14 @@
          clickOk() {
             this.data.description = this.data.description.trim();
 
-            if (this.Requirement.description.isRequired && !this.data.description) {
-               this.store.dispatch("snackbarShow", 'You must specify the "Description"');
+            if (
+               this.Requirement.description.isRequired &&
+               !this.data.description
+            ) {
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify the "Description"',
+               );
             } else {
                this.customerStore
                   .dispatch("updateDescriptionOfId", {

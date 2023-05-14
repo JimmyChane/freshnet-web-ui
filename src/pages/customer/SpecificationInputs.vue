@@ -1,7 +1,7 @@
 <script>
    import ItemSpec from "./ItemSpec.vue";
    import Selector4 from "@/components/selector/Selector4.vue";
-   import SpecificationType from "@/items/ProductSpecType.js";
+   import ProductSpecType from "@/items/ProductSpecType.js";
 
    export default {
       components: { ItemSpec, Selector4 },
@@ -11,7 +11,7 @@
       data: (c) => ({ list: [] }),
       computed: {
          KeyNone: (c) => "none",
-         SpecKey: (c) => SpecificationType.Key,
+         SpecKey: (c) => ProductSpecType.Key,
          SpecKeys: (c) => [
             c.KeyNone,
             ...Object.keys(c.SpecKey).map((key) => c.SpecKey[key]),

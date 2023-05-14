@@ -1,6 +1,6 @@
 import Image from "./Image.js";
-import ModuleBrand from "./data/ProductBrand.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
+import U from "@/U.js";
 const textContains = ItemSearcher.textContains;
 
 class Brand {
@@ -15,10 +15,11 @@ class Brand {
    icon = null;
 
    fromData(data) {
-      data = ModuleBrand.trim(data);
-      this.id = data._id;
-      this.title = data.title;
-      this.icon = data.icon ? new Image().fromData(data.icon) : null;
+      this.id = U.trimId(data._id);
+      this.title = U.trimText(data.title);
+      this.icon = U.isObject(data.icon)
+         ? new Image().fromData(data.icon)
+         : undefined;
       return this;
    }
    toData() {

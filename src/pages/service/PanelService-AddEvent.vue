@@ -1,7 +1,6 @@
 <script>
    import chroma from "chroma-js";
    import Menu from "@/components/Menu.vue";
-   import ModuleEvent from "@/items/data/ServiceEvent.js";
    import TextArea from "@/components/InputTextArea.vue";
    import AddImage from "./PanelService-AddEvent-AddImage.vue";
    import Method from "@/items/ServiceEventMethod.js";
@@ -9,7 +8,6 @@
    export default {
       components: { Menu, TextArea, AddImage },
       data: (c) => ({
-         ModuleEvent,
          eventImagePreviews: [],
 
          nameOfUser: "unknown",

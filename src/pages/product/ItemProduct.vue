@@ -51,10 +51,10 @@
             return c.item.price;
          },
          productPriceNormal: (c) => {
-            return c.productPrice?.normal ?? new ProductPrice();
+            return c.productPrice?.normal ?? new ProductPrice().fromData({});
          },
          productPricePromotion: (c) => {
-            return c.productPrice?.promotion ?? new ProductPrice();
+            return c.productPrice?.promotion ?? new ProductPrice().fromData({});
          },
          price: (c) => {
             if (!c.allowEdit && !c.shouldShowPrice) return null;

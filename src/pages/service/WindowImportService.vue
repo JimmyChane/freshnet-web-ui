@@ -2,7 +2,7 @@
    import WindowAction from "@/components/window/WindowAction.vue";
    import TypeSelector from "@/components/selector/TypeSelector.vue";
    import State from "@/items/ServiceState";
-   import ModuleService from "@/items/data/Service.js";
+   import ServiceState from "@/items/ServiceState";
    import LayoutFindCustomer from "./LayoutFindCustomer.vue";
    import BodyUser from "./WindowUpdateService-user.vue";
    import BodyCustomer from "./WindowUpdateService-customer.vue";
@@ -14,7 +14,7 @@
       components: {
          WindowAction,
          TypeSelector,
-         ModuleService,
+         ServiceState,
          LayoutFindCustomer,
          BodyUser,
          BodyCustomer,
@@ -24,7 +24,7 @@
       },
       props: { isShowing: { type: Boolean, default: false } },
       data: (c) => ({
-         ModuleService,
+         ServiceState,
 
          data: {
             nameOfUser: "",
@@ -62,7 +62,7 @@
             };
 
             if (!this.state) {
-               this.data.state = ModuleService.State.Pending;
+               this.data.state = ServiceState.PENDING.key;
             }
 
             const now = new Date();

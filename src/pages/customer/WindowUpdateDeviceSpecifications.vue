@@ -2,8 +2,8 @@
    import WindowAction from "@/components/window/WindowAction.vue";
    import WindowSection from "./WindowSection.vue";
    import SpecificationInputs from "./SpecificationInputs.vue";
-   import CustomerModule from "@/items/data/Customer.js";
-   import SpecificationModule from "@/items/data/CustomerDeviceSpecification.js";
+   import Customer from "@/items/Customer";
+   import CustomerDeviceSpecification from "@/items/CustomerDeviceSpecification.js";
 
    export default {
       components: { WindowAction, WindowSection, SpecificationInputs },
@@ -12,7 +12,7 @@
          isShowing: { type: Boolean, default: false },
          param: { type: Object, default: () => null },
       },
-      data: (c) => ({ Requirement: CustomerModule.Requirement, data: {} }),
+      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
@@ -61,8 +61,12 @@
             this.invalidateData();
          },
          invalidateData() {
-            this.data.specifications = this.specifications.map((specification) =>
-               SpecificationModule.trim(specification),
+            this.data.specifications = this.specifications.map(
+               (specification) => {
+                  return new CustomerDeviceSpecification()
+                     .fromData(specification)
+                     .toData();
+               },
             );
          },
 
@@ -84,7 +88,9 @@
 <template>
    <WindowAction
       class="WindowUpdateDeviceSpecifications"
-      :title="`Update Device Specifications${customer ? ` for ${customer.name}` : ''}`"
+      :title="`Update Device Specifications${
+         customer ? ` for ${customer.name}` : ''
+      }`"
       :isShowing="isShowing"
       :isLoading="isLoading"
       :isClickable="isClickable"

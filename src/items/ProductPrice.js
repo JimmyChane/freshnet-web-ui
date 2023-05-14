@@ -11,10 +11,12 @@ class ProductPrice {
       });
    }
 
+   stores = null;
+
    #price = null;
 
-   constructor(data) {
-      this.fromData(data);
+   constructor(stores) {
+      this.stores = stores;
    }
 
    fromData(data = { currency: "", value: 0 }) {

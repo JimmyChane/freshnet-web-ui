@@ -1,7 +1,7 @@
 <script>
    import WindowAction from "@/components/window/WindowAction.vue";
    import SpecificationInputs from "@/pages/customer/SpecificationInputs.vue";
-   import SpecificationModule from "@/items/data/CustomerDeviceSpecification.js";
+   import CustomerDeviceSpecification from "@/items/CustomerDeviceSpecification.js";
    import U from "@/U";
 
    export default {
@@ -27,7 +27,11 @@
                      : "";
                   return specification;
                })
-               .map((specification) => SpecificationModule.trim(specification));
+               .map((specification) => {
+                  return new CustomerDeviceSpecification()
+                     .fromData(specification)
+                     .toData();
+               });
          },
       },
       methods: {

@@ -1,11 +1,38 @@
 import Image from "./Image";
-import SpecificationType from "./data/SpecificationType";
 import U from "@/U";
 import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
 class ProductSpecType {
-   static Key = SpecificationType.Key;
+   static Key = {
+      Processor: "processor",
+      Ram: "ram",
+      Size: "size",
+      Storage: "storage",
+      Resolution: "resolution",
+      Display: "display",
+      Monitor: "monitor",
+      Graphic: "graphic",
+
+      Keyboard: "keyboard",
+      Backlight: "backlight",
+      Stylus: "stylus",
+      Camera: "camera",
+      Battery: "battery",
+
+      Speed: "speed",
+      Wifi: "wifi",
+      Bluetooth: "bluetooth",
+
+      Print: "print",
+      Scan: "scan",
+      Paper: "paper",
+      Ink: "ink",
+      Connectivity: "connectivity",
+
+      Colour: "colour",
+      Os: "os",
+   };
 
    stores = null;
 
@@ -20,25 +47,23 @@ class ProductSpecType {
    color = "";
 
    fromData(data) {
-      data = SpecificationType.trim(data);
-
-      this.id = data._id;
-      this.key = data.key;
-      this.title = data.title;
+      this.id = U.trimId(data._id);
+      this.key = U.trimId(data.key);
+      this.title = U.trimText(data.title);
       this.icon = U.isObjectOnly(data.icon)
          ? new Image().fromData(data.icon)
          : "";
-      this.color = data.color;
+      this.color = U.trimId(data.color);
 
       return this;
    }
    toData() {
       return {
-         _id: this.id,
-         key: this.key,
-         title: this.title,
+         _id: U.trimId(this.id),
+         key: U.trimId(this.key),
+         title: U.trimText(this.title),
          icon: this.icon?.toData() ?? {},
-         color: this.color,
+         color: U.trimId(this.color),
       };
    }
    toCount(strs) {

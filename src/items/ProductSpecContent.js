@@ -1,4 +1,3 @@
-import ModuleSpecification from "./data/ProductSpecification.js";
 import U from "@/U";
 import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
@@ -17,14 +16,9 @@ class ProductSpecContent {
    typeKey = "";
 
    fromData(data) {
-      data = ModuleSpecification.trim({
-         type: data.key,
-         content: data.content,
-      });
-
-      this.content = data.content;
-      this.type = data.type;
-      this.typeKey = data.type;
+      this.type = U.trimId(data.key);
+      this.typeKey = this.type;
+      this.content = U.trimText(data.content);
       this.fetchType();
 
       return this;

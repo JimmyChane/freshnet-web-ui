@@ -2,13 +2,13 @@
    import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
    import TextArea from "@/components/InputTextArea.vue";
-   import CustomerModule from "@/items/data/Customer.js";
+   import Customer from "@/items/Customer";
 
    export default {
       components: { WindowAction, Input, TextArea },
       emits: ["click-dismiss", "click-cancel", "click-ok"],
       props: { isShowing: { type: Boolean, default: false } },
-      data: (c) => ({ Requirement: CustomerModule.Requirement, data: {} }),
+      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,

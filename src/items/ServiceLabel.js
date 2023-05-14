@@ -1,20 +1,28 @@
-import ModuleLabel from "./data/ServiceLabel.js";
+import U from "@/U.js";
 
 class Label {
-   static URGENT = new Label().fromData(ModuleLabel.Defaults.Urgent);
-   static WARRANTY = new Label().fromData(ModuleLabel.Defaults.Warranty);
+   static URGENT = new Label().fromData({
+      title: "Urgent",
+      hexColor: "d93f35",
+   });
+   static WARRANTY = new Label().fromData({
+      title: "Warranty",
+      hexColor: "db950c",
+   });
 
    title = "";
    hexColor = "";
 
    fromData(data) {
-      data = new ModuleLabel(data);
-      this.title = data.title;
-      this.hexColor = data.hexColor;
+      this.title = U.trimText(data.title);
+      this.hexColor = U.trimId(data.hexColor);
       return this;
    }
    toData() {
-      return new ModuleLabel({ title: this.title, hexColor: this.hexColor });
+      return {
+         title: U.trimText(this.title),
+         hexColor: U.trimId(this.hexColor),
+      };
    }
    toCount(strs) {
       return 0;

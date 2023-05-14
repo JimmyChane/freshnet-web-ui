@@ -16,13 +16,13 @@
             if (!this.product) return null;
             const normal = this.product.getPriceNormal();
             if (normal && normal.value >= 0) return normal;
-            new ProductPrice();
+            new ProductPrice().fromData({});
          },
          pricePromotion() {
             if (!this.product) return null;
             const promotion = this.product.getPricePromotion();
             if (promotion && promotion.value >= 0) return promotion;
-            new ProductPrice();
+            new ProductPrice().fromData({});
          },
 
          title() {
@@ -67,10 +67,13 @@
       },
       methods: {
          async invalidate() {
-            this.settingShowPrice = await this.settingStore.dispatch("findValueOfKey", {
-               key: SettingModule.Key.PublicShowPrice,
-               default: false,
-            });
+            this.settingShowPrice = await this.settingStore.dispatch(
+               "findValueOfKey",
+               {
+                  key: SettingModule.Key.PublicShowPrice,
+                  default: false,
+               },
+            );
          },
       },
    };
@@ -83,7 +86,8 @@
          :title="title"
          :primaryColor="primaryColor"
          v-if="
-            product && (title || subtitle || !isAvailable || isPromotion || isSecondHand)
+            product &&
+            (title || subtitle || !isAvailable || isPromotion || isSecondHand)
          "
       >
          <span class="ProductViewerPriceViewer-subtitle" v-if="subtitle">
@@ -91,13 +95,19 @@
          </span>
 
          <div class="ProductViewerPriceViewer-tag">
-            <span class="ProductViewerPriceViewer-tag-outOfStock" v-if="!isAvailable"
+            <span
+               class="ProductViewerPriceViewer-tag-outOfStock"
+               v-if="!isAvailable"
                >Out of Stock</span
             >
-            <span class="ProductViewerPriceViewer-tag-promotion" v-if="isPromotion"
+            <span
+               class="ProductViewerPriceViewer-tag-promotion"
+               v-if="isPromotion"
                >Promotion</span
             >
-            <span class="ProductViewerPriceViewer-tag-secondHand" v-if="isSecondHand"
+            <span
+               class="ProductViewerPriceViewer-tag-secondHand"
+               v-if="isSecondHand"
                >Second Hand</span
             >
          </div>

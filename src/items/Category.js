@@ -1,5 +1,4 @@
 import Image from "./Image";
-import ModuleCategory from "./data/Category";
 import ItemSearcher from "../objects/ItemSearcher.js";
 import U from "@/U";
 const textContains = ItemSearcher.textContains;
@@ -69,35 +68,35 @@ class CategoryBackground extends Image {
 
 const getBackground = (key) => {
    switch (key) {
-      case ModuleCategory.Key.Tablet:
+      case Category.Key.Tablet:
          return CategoryBackground.TABLET;
-      case ModuleCategory.Key.Notebook:
+      case Category.Key.Notebook:
          return CategoryBackground.NOTEBOOK;
-      case ModuleCategory.Key.Desktop:
+      case Category.Key.Desktop:
          return CategoryBackground.DESKTOP;
-      case ModuleCategory.Key.Printer:
+      case Category.Key.Printer:
          return CategoryBackground.PRINTER;
-      case ModuleCategory.Key.Cartridge:
+      case Category.Key.Cartridge:
          return CategoryBackground.CARTRIDGE;
-      case ModuleCategory.Key.Mouse:
+      case Category.Key.Mouse:
          return CategoryBackground.MOUSE;
-      case ModuleCategory.Key.Keyboard:
+      case Category.Key.Keyboard:
          return CategoryBackground.KEYBOARD;
-      case ModuleCategory.Key.Audio:
+      case Category.Key.Audio:
          return CategoryBackground.AUDIO;
-      case ModuleCategory.Key.Monitor:
+      case Category.Key.Monitor:
          return CategoryBackground.MONITOR;
-      case ModuleCategory.Key.Webcam:
+      case Category.Key.Webcam:
          return CategoryBackground.WEBCAM;
-      case ModuleCategory.Key.Cctv:
+      case Category.Key.Cctv:
          return CategoryBackground.CCTV;
-      case ModuleCategory.Key.Storage:
+      case Category.Key.Storage:
          return CategoryBackground.STORAGE;
-      case ModuleCategory.Key.Ram:
+      case Category.Key.Ram:
          return CategoryBackground.RAM;
-      case ModuleCategory.Key.Network:
+      case Category.Key.Network:
          return CategoryBackground.NETWORK;
-      case ModuleCategory.Key.Other:
+      case Category.Key.Other:
          return CategoryBackground.OTHER;
       default:
          return null;
@@ -105,7 +104,24 @@ const getBackground = (key) => {
 };
 
 class Category {
-   static Key = ModuleCategory.Key;
+   static Key = {
+      Tablet: "tablet",
+      Notebook: "laptop",
+      Desktop: "desktopComputer",
+      Printer: "printer",
+      Cartridge: "cartridge",
+      Mouse: "mouse",
+      Keyboard: "keyboard",
+      Audio: "audio",
+      Monitor: "monitor",
+      Webcam: "webcam",
+      Cctv: "cctv-camera",
+      Storage: "storage",
+      Ram: "ram",
+      Network: "network",
+      Charger: "charger",
+      Other: "other",
+   };
 
    stores = null;
 
@@ -120,14 +136,12 @@ class Category {
    background = null;
 
    fromData(data) {
-      data = ModuleCategory.trim(data);
-
-      this.id = data._id;
-      this.key = data.key;
-      this.title = data.title;
+      this.id = U.trimId(data._id);
+      this.key = U.trimId(data.key);
+      this.title = U.trimStringAll(data.title);
       this.icon = U.isObject(data.icon)
          ? new Image().fromData(data.icon)
-         : null;
+         : undefined;
       this.background = getBackground(this.key);
 
       return this;
@@ -153,8 +167,8 @@ class Category {
    }
 
    compare(item) {
-      const keyOrder = Object.keys(ModuleCategory.Key).map((key) => {
-         return ModuleCategory.Key[key];
+      const keyOrder = Object.keys(Category.Key).map((key) => {
+         return Category.Key[key];
       });
 
       let index1 = keyOrder.indexOf(this.key);

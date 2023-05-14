@@ -14,12 +14,12 @@
          priceNormal() {
             const normal = this.product?.getPriceNormal() ?? null;
             if (normal && normal.value >= 0) return normal;
-            return new ProductPrice();
+            return new ProductPrice().fromData({});
          },
          pricePromotion() {
             const promotion = this.product?.getPricePromotion() ?? null;
             if (promotion && promotion.value >= 0) return promotion;
-            return new ProductPrice();
+            return new ProductPrice().fromData({});
          },
       },
    };
