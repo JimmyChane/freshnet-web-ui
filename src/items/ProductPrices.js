@@ -1,4 +1,3 @@
-import U from "@/U.js";
 import ProductPrice from "./ProductPrice";
 
 class ProductPrices {
@@ -12,18 +11,14 @@ class ProductPrices {
    promotion = null;
 
    fromData(data = {}) {
-      this.normal = ProductPrice.parseString(
-         U.optString(U.trimText(data.normal)),
-      );
-      this.promotion = ProductPrice.parseString(
-         U.optString(U.trimText(data.promotion)),
-      );
+      this.normal = new ProductPrice(this.stores).fromString(data.normal);
+      this.promotion = new ProductPrice(this.stores).fromString(data.promotion);
       return this;
    }
    toData() {
       return {
-         normal: this.normal.toData(),
-         promotion: this.promotion.toData(),
+         normal: this.normal?.toString() ?? "",
+         promotion: this.promotion?.toString() ?? "",
       };
    }
    toCount(strs) {

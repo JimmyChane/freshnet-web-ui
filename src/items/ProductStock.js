@@ -1,5 +1,5 @@
 import U from "@/U.js";
-import ProductPrice from "./data/ProductPrice";
+import ProductPrices from "./ProductPrices";
 
 class ProductStock {
    stores = null;
@@ -11,7 +11,6 @@ class ProductStock {
    isAvailable = true;
    isSecondHand = false;
    prices = [];
-   bundles = [];
 
    fromData(data) {
       this.isAvailable = U.optBoolean(data.isAvailable, true);
@@ -19,7 +18,8 @@ class ProductStock {
 
       // deprecated on 2022_04_09
       this.prices = U.optArray(data.prices)
-         .map((price) => ProductPrice.trim(price))
+         .map((price) => new ProductPrices(this.stores).fromData(price))
+         .map((price) => price.toData())
          .filter((price) => price && Object.keys(price).length);
 
       return this;
@@ -28,7 +28,9 @@ class ProductStock {
       return {
          isAvailable: U.optBoolean(this.isAvailable),
          isSecondHand: U.optBoolean(this.isSecondHand),
-         prices: this.prices.map((price) => ProductPrice.trim(price)),
+         prices: this.prices
+            .map((price) => new ProductPrices(this.stores).fromData(price))
+            .map((price) => price.toData()),
       };
    }
    toCount(strs) {

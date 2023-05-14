@@ -1,15 +1,13 @@
 import AppHost from "@/host/AppHost.js";
 
-import ModuleProduct from "./data/Product.js";
-
 import Image from "./Image.js";
 import ProductSpecContent from "./ProductSpecContent.js";
-import ProductPrice from "./ProductPrice.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
 
 import U from "@/U.js";
 import ProductStock from "./ProductStock.js";
 import ProductBundle from "./ProductBundle.js";
+import ProductPrices from "./ProductPrices.js";
 
 const textContains = ItemSearcher.textContains;
 
@@ -89,16 +87,21 @@ class Product {
          }),
       );
 
-      data = ModuleProduct.trim(data);
-      this.setPrice(data.price);
+      const prices = U.optArray(data.stock?.prices ?? []).filter((price) => {
+         return price?.normal || price.promotion;
+      });
+      let dataPrice = null;
+      if (data.price) dataPrice = data.price;
+      else if (prices.length === 1) dataPrice = prices[0];
+      else if (prices.length > 1) dataPrice = prices[prices.length - 1];
+      const price = dataPrice
+         ? new ProductPrices(this.stores).fromData(dataPrice)
+         : null;
+      this.setPrice(price?.toData());
 
       return this;
    }
    toData() {
-      let price = this.price ?? {};
-      let pricePromotion = price.promotion;
-      let priceNormal = price.normal;
-
       return {
          _id: U.trimId(this.id),
          title: U.trimText(this.title),
@@ -114,9 +117,8 @@ class Product {
             spec[spec.type.key] = spec.content;
             return obj;
          }, {}),
-
-         image: this.image?.toData() ?? {},
-         price: { normal: pricePromotion, promotion: priceNormal },
+         images: this.images.map((image) => image.toData()),
+         price: new ProductPrices(this.stores).fromData(this.price).toData(),
       };
    }
    toCount(strs) {
@@ -271,11 +273,7 @@ class Product {
       this.fetchCategory().then((category) => (this.category = category));
    }
    setPrice(price) {
-      const { normal, promotion } = U.optObjectOnly(price);
-      this.price = {
-         normal: ProductPrice.parseString(U.optString(normal)),
-         promotion: ProductPrice.parseString(U.optString(promotion)),
-      };
+      this.price = new ProductPrices(this.stores).fromData(price ?? {});
    }
 
    setImages(images) {
@@ -340,8 +338,8 @@ class Product {
 
    setGifts(data = []) {
       this.gifts = U.optArray(data)
-         .map((gift) => (U.isString(gift) ? gift.trim() : ""))
-         .filter((gift) => gift);
+         .map((gift) => U.trimText(gift))
+         .filter((gift) => !!gift);
    }
    addGift(gift) {
       this.gifts.push(gift);

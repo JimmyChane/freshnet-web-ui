@@ -1,13 +1,12 @@
 import Product from "../items/Product.js";
 import ProductSpecContent from "../items/ProductSpecContent.js";
 import Image from "../items/Image.js";
-import ModuleBundle from "@/items/data/ProductBundle.js";
-import ModulePrice from "@/items/data/ProductPrice.js";
 import Category from "@/items/Category.js";
 import Vuex from "vuex";
 import U from "@/U.js";
 import StoreBuilder from "./tools/StoreBuilder.js";
 import ProductRequest from "@/request/Product";
+import ProductPrices from "@/items/ProductPrices.js";
 
 const init = (Stores) => {
    const categoryStore = Stores.category;
@@ -182,14 +181,14 @@ const init = (Stores) => {
          const { id, price } = arg;
          const api = await ProductRequest.updatePrice(
             id,
-            ModulePrice.trim(price),
+            new ProductPrices(Stores).fromData(price).toData(),
          );
+
          const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
-            item.setPrice({
-               normal: content.price.normal,
-               promotion: content.price.promotion,
-            });
+            item.setPrice(
+               new ProductPrices(Stores).fromData(content.price).toData(),
+            );
          });
       })
       .action("addBundleOfId", async (context, arg = { id, bundle }) => {
@@ -197,7 +196,7 @@ const init = (Stores) => {
          const api = await ProductRequest.addBundle(id, bundle);
          const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {
-            item.addBundle(ModuleBundle.trim(content.bundle));
+            item.addBundle({ title: U.trimText(content.bundle.title) });
          });
       })
       .action("removeBundleOfId", async (context, arg = { id, bundle }) => {
