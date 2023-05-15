@@ -35,12 +35,10 @@
    .ProductViewerSection {
       width: 100%;
       gap: 2px;
-      border-radius: 1rem;
 
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      overflow: hidden;
 
       .ProductViewerSection-header {
          display: flex;
@@ -48,15 +46,14 @@
          align-items: center;
          justify-content: space-between;
 
-         background: hsla(0, 0%, 100%, 0.6);
-
          gap: 0.5rem;
          padding-right: 0.6rem;
 
          .ProductViewerSection-title {
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 1.3rem;
             padding: 1.2rem;
+            padding-left: 0;
             padding-right: 1.2rem;
             color: black;
          }
@@ -64,6 +61,8 @@
       .ProductViewerSection-body {
          display: flex;
          flex-direction: column;
+         border-radius: 1rem;
+         overflow: hidden;
       }
    }
 </style>

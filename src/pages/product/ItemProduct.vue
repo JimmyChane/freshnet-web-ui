@@ -237,7 +237,7 @@
 
             width: 100%;
             max-height: 2.3rem;
-            gap: 1px;
+            gap: 3px;
             padding: 0.5rem;
 
             display: flex;
@@ -262,7 +262,6 @@
          .ItemProduct-title-text {
             min-height: 1em;
             max-height: 2em;
-            line-height: 1em;
 
             font-size: 1rem;
             font-weight: 600;
@@ -278,6 +277,7 @@
          .ItemProduct-title-specs {
             width: 100%;
             gap: 1px;
+            gap: 3px;
             margin: -0.1rem;
 
             display: flex;

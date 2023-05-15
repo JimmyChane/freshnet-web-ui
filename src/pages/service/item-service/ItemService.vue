@@ -262,6 +262,7 @@
 <style lang="scss" scoped>
    .ItemService-top {
       padding: 0.5rem;
+      padding: 0.6rem;
       margin-right: 0.6em;
       border-bottom: 0.05em solid hsla(0, 0%, 0%, 0.1);
       display: flex;
@@ -359,9 +360,9 @@
 
          .ItemService-top {
             width: 100%;
-            height: 3rem;
-            min-height: 3rem;
-            max-height: 3rem;
+            height: 4rem;
+            min-height: 4rem;
+            max-height: 4rem;
 
             display: flex;
             flex-direction: row;
@@ -386,7 +387,7 @@
             width: 100%;
             font-size: 0.8rem;
             gap: 0.1rem;
-            padding: 0.5rem;
+            padding: 0.6rem 0.8rem;
 
             display: flex;
             flex-direction: row;

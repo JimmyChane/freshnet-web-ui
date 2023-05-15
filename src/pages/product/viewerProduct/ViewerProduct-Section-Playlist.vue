@@ -74,7 +74,7 @@
          flex-direction: row;
          flex-wrap: wrap;
          justify-content: space-between;
-         gap: 1px;
+         gap: 3px;
       }
    }
 </style>

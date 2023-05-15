@@ -133,7 +133,7 @@
             flex-direction: row;
             align-items: flex-start;
             justify-content: flex-start;
-            gap: 1px;
+            gap: 3px;
             & > * {
                padding: 0.2em 0.6em;
                color: white;

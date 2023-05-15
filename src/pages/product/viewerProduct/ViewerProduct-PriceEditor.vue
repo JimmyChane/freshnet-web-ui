@@ -60,7 +60,7 @@
          align-items: stretch;
          justify-content: flex-start;
 
-         gap: 1px;
+         gap: 3px;
          overflow: hidden;
       }
    }

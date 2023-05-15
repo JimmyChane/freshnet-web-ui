@@ -212,6 +212,7 @@
          display: grid;
          grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
          grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+         grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
       }
    }
 </style>

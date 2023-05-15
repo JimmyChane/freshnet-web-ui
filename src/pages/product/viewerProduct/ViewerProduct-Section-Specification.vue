@@ -98,7 +98,7 @@
 
       .SectionSpecification-items {
          width: 100%;
-         gap: 2px;
+         gap: 3px;
          display: flex;
          flex-direction: column;
       }
