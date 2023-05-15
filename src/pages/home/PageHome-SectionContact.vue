@@ -1,45 +1,55 @@
 <script>
    import Section from "./PageHome-Section.vue";
    import Group from "./PageHome-SectionContact-Group.vue";
-   import Company from "@/host/Company";
+   import Setting from "@/items/Setting";
 
    export default {
       components: { Section, Group },
       props: { isThin: { type: Boolean, default: false } },
-      data() {
-         return {
-            items: [
-               {
-                  title: "Beh Aik Keong",
-                  callNumber: "0167959444",
-                  whatsappNumber: "0167959444",
-               },
-               {
-                  title: "Office (Mobile)",
-                  callNumber: "0146315353",
-                  whatsappNumber: "0146315353",
-                  telegramName: "FreshnetEnterprise",
-               },
-               {
-                  title: "Office",
-                  phoneNumber: "0332897297",
-                  telephoneNumber: "0332897297",
-               },
-            ],
-         };
+      data: (c) => ({ groups: [] }),
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
       },
-      computed: { groups: () => Company.Contacts.toGroupsByCategory() },
+      mounted() {
+         this.invalidate();
+      },
+      methods: {
+         async invalidate() {
+            const contacts = await this.settingStore.dispatch(
+               "findValueOfKey",
+               { key: Setting.Key.Contacts, default: [] },
+            );
+
+            this.groups = contacts.reduce((groups, contact) => {
+               const optGroup = (category) => {
+                  let group = groups.find((group) => {
+                     return group.category === category;
+                  });
+                  if (!group) groups.push((group = { category, items: [] }));
+                  return group;
+               };
+
+               for (const link of contact.links) {
+                  optGroup(link.category).items.push({
+                     title: contact.title,
+                     subtitle: link.id,
+                     href: link.toHtmlHref(),
+                     target: link.toHtmlTarget(),
+                  });
+               }
+
+               return groups;
+            }, []);
+         },
+      },
    };
 </script>
 
 <template>
-   <Section title="Contact Us">
-      <div
-         :class="[
-            'HomeSectionContact',
-            `HomeSectionContact-${isThin ? 'isThin' : 'isWide'}`,
-         ]"
-      >
+   <Section>
+      <div class="HomeSectionContact" :isThin="`${isThin}`">
          <Group
             v-for="group of groups"
             :key="group.title"
@@ -55,15 +65,11 @@
 </template>
 
 <style lang="scss" scoped>
-   .HomeSectionContact-isThin {
-      font-size: 1rem;
-   }
-   .HomeSectionContact-isWide {
-      font-size: 1.3rem;
-   }
    .HomeSectionContact {
       width: 100%;
-      gap: 0.5rem;
+      background-color: white;
+      border-radius: 1em;
+      overflow: hidden;
 
       display: grid;
       grid-auto-flow: row;

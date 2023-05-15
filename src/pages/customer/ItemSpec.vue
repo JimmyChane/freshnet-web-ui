@@ -12,16 +12,16 @@
             ].map((item) => ({
                key: item.key,
                title: item.title,
-               icon: item.icon ? item.icon.toUrl() : "",
+               icon: item.icon?.toUrl() ?? "",
             }));
          },
 
          specType: (c) =>
-            c.specifications.find(
-               (specType) => specType.key === c.item.typeKey,
-            ),
-         icon: (c) => (c.specType ? c.specType.icon : ""),
-         title: (c) => (c.specType ? c.specType.title : ""),
+            c.specifications.find((specType) => {
+               return specType.key === c.item.typeKey;
+            }),
+         icon: (c) => c.specType?.icon ?? "",
+         title: (c) => c.specType?.title ?? "",
       },
       mounted() {
          this.$refs.ItemSpecInput.focus();
@@ -36,6 +36,7 @@
          ref="ItemSpecInput"
          type="text"
          v-model="item.content"
+         autocapitalize="words"
          @input="(event) => $emit('input-content', event.target.value)"
          @change="(event) => $emit('change-content', event.target.value)"
       />
@@ -116,16 +117,6 @@
          }
          .ItemSpec-delete {
             margin-left: 0.2rem;
-            opacity: 0;
-            pointer-events: none;
-         }
-      }
-
-      &:hover,
-      &:focus-within {
-         .ItemSpec-delete {
-            opacity: 1;
-            pointer-events: initial;
          }
       }
    }

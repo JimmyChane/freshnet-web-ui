@@ -1,6 +1,4 @@
 <script>
-   import SectionBrand from "./ViewerProduct-Section-Brand.vue";
-   import SectionTitle from "./ViewerProduct-Section-Title.vue";
    import SectionSpecification from "./ViewerProduct-Section-Specification.vue";
    import SectionInclude from "./ViewerProduct-Section-Include.vue";
    import SectionDescription from "./ViewerProduct-Section-Description.vue";
@@ -10,22 +8,22 @@
    import SectionPlaylist from "./ViewerProduct-Section-Playlist.vue";
 
    import Tabs from "./ViewerProduct-Tabs.vue";
+   import Title from "./ViewerProduct-Title.vue";
    import ProductViewerImagePreview from "./ViewerProduct-ImagePreview.vue";
    import ProductViewerImages from "./ViewerProduct-Images.vue";
    import BottomActionbar from "./ViewerProduct-BottomActionbar.vue";
 
    import ProductSpecType from "@/items/ProductSpecType.js";
-   import SettingModule from "@/items/data/Setting.js";
+   import SettingModule from "@/items/Setting.js";
    import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js";
+   import U from "@/U";
 
    export default {
       components: {
          ProductViewerImagePreview,
          ProductViewerImages,
          BottomActionbar,
-         SectionBrand,
-         SectionTitle,
          SectionSpecification,
          SectionInclude,
          SectionDescription,
@@ -35,6 +33,7 @@
          SectionPlaylist,
          Actionbar,
          Tabs,
+         Title,
       },
       emits: [
          "click-product-imageRemove",
@@ -47,6 +46,7 @@
       props: {
          isWide: { type: Boolean, default: false },
          isEditable: { type: Boolean, default: false },
+         isActionbarHidden: { type: Boolean, default: false },
 
          leftMenus: { default: () => [] },
          rightMenus: { default: () => [] },
@@ -55,132 +55,128 @@
          productPrevious: { type: Object, default: () => null },
          productNext: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            colorTransitionDuration: "0",
+      data: (c) => ({
+         colorTransitionDuration: "0",
 
-            primaryColorHex: "inherit",
+         primaryColorHex: "inherit",
 
-            imagePreviewIndex: 0,
-            onKeyUp: null,
+         imagePreviewIndex: 0,
+         onKeyUp: null,
 
-            category: null,
-            fullTitle: "",
-            brand: null,
+         category: null,
+         fullTitle: "",
+         brand: null,
 
-            tabKeyNow: "",
+         tabKeyNow: "",
 
-            height: 0,
-            scrollTop: 0,
-         };
-      },
+         height: 0,
+         scrollTop: 0,
+
+         settingShowPrice: false,
+      }),
       computed: {
-         classWide() {
-            return this.isWide ? "ViewerProduct-isWide" : "ViewerProduct-isThin";
-         },
-         classes() {
-            return ["ViewerProduct", this.classWide];
-         },
-
          tabs() {
-            if (!this.product) return [];
+            if (!this.product) {
+               return [];
+            }
 
-            const tabs = [
-               !this.isWide && this.imagePreview
-                  ? { key: "image", title: "Image" }
-                  : null,
-               this.isEditable ? { key: "brand", title: "Brand" } : null,
-               this.isEditable ? { key: "title", title: "Title" } : null,
-               // { key: "capability", title: "Capability" },
-               this.isEditable || this.specifications.length
-                  ? { key: "specification", title: "Specification" }
-                  : null,
-               this.isEditable || this.whatIncludeds.length
-                  ? { key: "include", title: "What's Included" }
-                  : null,
-               this.isEditable || this.description
-                  ? { key: "description", title: "Description" }
-                  : null,
-               this.isEditable || this.settingShowPrice
-                  ? { key: "price", title: "Price" }
-                  : null,
-               this.isEditable ? { key: "stock", title: "Stock" } : null,
-               this.isEditable ? { key: "category", title: "Category" } : null,
-            ];
+            const tabs = [];
 
-            return tabs.filter((tab) => {
-               if (tab) {
-                  tab.isSelected = () => tab.key === this.tabKeyNow;
+            if (!this.isWide && this.imagePreview) {
+               tabs.push({ key: "image", title: "Image" });
+            }
+
+            tabs.push({ key: "title", title: "Title" });
+            // tabs.push({ key: "capability", title: "Capability" });
+
+            if (this.isEditable) {
+               if (this.specifications.length) {
+                  tabs.push({ key: "specification", title: "Specification" });
                }
-               return tab;
+               if (this.whatIncludeds.length) {
+                  tabs.push({ key: "include", title: "What's Included" });
+               }
+               if (this.description) {
+                  tabs.push({ key: "description", title: "Description" });
+               }
+               if (this.settingShowPrice) {
+                  tabs.push({ key: "price", title: "Price" });
+               }
+
+               tabs.push({ key: "stock", title: "Stock" });
+               tabs.push({ key: "category", title: "Category" });
+            }
+
+            tabs.forEach((tab) => {
+               tab.isSelected = () => tab.key === this.tabKeyNow;
             });
+
+            return tabs;
          },
 
-         imagePreview: (context) => {
-            if (context.imagePreviewIndex >= context.images.length)
-               context.imagePreviewIndex = 0;
-            return context.images.length
-               ? context.images[context.imagePreviewIndex]
-               : null;
+         imagePreview: (c) => {
+            if (c.imagePreviewIndex >= c.images.length) {
+               c.imagePreviewIndex = 0;
+            }
+            return c.images.length ? c.images[c.imagePreviewIndex] : null;
          },
-         images: (context) => (!context.product ? [] : context.product.images),
-         hasImagePrevious: (context) =>
-            context.images.length > 0 && context.imagePreviewIndex > 0,
-         hasImageNext: (context) => context.images.length - 1 > context.imagePreviewIndex,
+         images: (c) => c.product?.images ?? [],
+         hasImagePrevious: (c) =>
+            c.images.length > 0 && c.imagePreviewIndex > 0,
+         hasImageNext: (c) => c.images.length - 1 > c.imagePreviewIndex,
 
-         settings() {
-            let settings = this.settingStore.getters.items;
-            return Array.isArray(settings) ? settings : [];
-         },
-         settingShowPrice() {
-            let theSetting = this.settings.find((setting) => {
-               return setting.key === SettingModule.Key.PublicShowPrice;
-            });
-            return theSetting ? theSetting.value : false;
+         price: (c) => {
+            if (!c.isEditable && !c.settingShowPrice) {
+               return null;
+            }
+            return c.product?.price ?? null;
          },
 
-         price: (context) => {
-            if (!context.isEditable && !context.settingShowPrice) return null;
-            return context.product ? context.product.price : null;
-         },
-
-         description: (context) => (context.product ? context.product.description : ""),
+         description: (c) => c.product?.description ?? "",
 
          specificationKeys: () => {
             return Object.keys(ProductSpecType.Key).map((key) => {
                return ProductSpecType.Key[key];
             });
          },
-         specifications: (context) => {
-            if (!context.product) return [];
-            if (!Array.isArray(context.product.specifications)) return [];
+         specifications: (c) => {
+            if (!c.product) {
+               return [];
+            }
+            if (!Array.isArray(c.product.specifications)) {
+               return [];
+            }
 
-            return context.product.specifications
+            return c.product.specifications
                .filter((spec) => spec && spec.type && spec.content)
                .sort((spec1, spec2) => {
-                  const key1 = context.obtainKeyOfSpecificationType(spec1.type);
-                  const key2 = context.obtainKeyOfSpecificationType(spec2.type);
+                  const key1 = c.obtainKeyOfSpecificationType(spec1.type);
+                  const key2 = c.obtainKeyOfSpecificationType(spec2.type);
 
-                  let index1 = context.specificationKeys.indexOf(key1);
-                  let index2 = context.specificationKeys.indexOf(key2);
+                  let index1 = c.specificationKeys.indexOf(key1);
+                  let index2 = c.specificationKeys.indexOf(key2);
 
-                  index1 = index1 >= 0 ? index1 : context.specificationKeys.length;
-                  index2 = index2 >= 0 ? index2 : context.specificationKeys.length;
+                  index1 = index1 >= 0 ? index1 : c.specificationKeys.length;
+                  index2 = index2 >= 0 ? index2 : c.specificationKeys.length;
 
-                  return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
+                  return index1 !== index2
+                     ? index1 - index2
+                     : key1.localeCompare(key2);
                });
          },
 
-         gifts: (context) => (context.product ? context.product.gifts : []),
-         bundles: (context) => (context.product ? context.product.bundles : []),
-         whatIncludeds: (context) => {
+         gifts: (c) => c.product?.gifts ?? [],
+         bundles: (c) => c.product?.bundles ?? [],
+         whatIncludeds: (c) => {
             return [
-               ...context.gifts
+               ...c.gifts
                   .filter((gift) => typeof gift === "string")
                   .map((gift) => gift.trim())
                   .filter((gift) => gift.length),
-               ...context.bundles
-                  .filter((bundle) => typeof bundle === "object" && bundle !== null)
+               ...c.bundles
+                  .filter(
+                     (bundle) => typeof bundle === "object" && bundle !== null,
+                  )
                   .map((bundle) => bundle.title)
                   .filter((bundle) => typeof bundle === "string")
                   .map((bundle) => bundle.trim())
@@ -188,22 +184,17 @@
             ];
          },
 
-         primaryColor() {
-            return chroma.valid(this.primaryColorHex)
-               ? chroma(this.primaryColorHex)
-               : chroma("cccccc");
-         },
-         primaryColorIsDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 75,
+         primaryColor: (c) =>
+            chroma.valid(c.primaryColorHex)
+               ? chroma(c.primaryColorHex)
+               : chroma("cccccc"),
          actionbarColor: (c) => c.primaryColor.mix("ffffff", 0.6),
          backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.3),
-         headerBackgroundColor: (c) => c.primaryColor.mix("000000", 0.4),
-         titleColor() {
-            return this.primaryColorIsDark
-               ? "white"
-               : this.primaryColor.mix("000000", 0.96);
-         },
       },
       watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidateSettings();
+         },
          isWide() {
             setTimeout(() => this.invalidateBound(), 500);
          },
@@ -222,21 +213,38 @@
          },
       },
       methods: {
+         async invalidateSettings() {
+            this.settingShowPrice = await this.settingStore.dispatch(
+               "findValueOfKey",
+               {
+                  key: SettingModule.Key.PublicShowPrice,
+                  default: false,
+               },
+            );
+         },
+
          invalidateBound() {
             this.scrollTop = this._self.$el.scrollTop;
             this.height = this._self.$el.offsetHeight;
          },
          async invalidateProduct() {
-            if (this.product) this.scrollToTop(0);
+            if (this.product) {
+               this.scrollToTop(0);
+            }
             this.tabKeyNow = this.tabs.length ? this.tabs[0].key : "";
 
-            if (this.product) this.addArrowListener();
-            else this.removeArrowListener();
+            if (this.product) {
+               this.addArrowListener();
+            } else {
+               this.removeArrowListener();
+            }
 
             this.category = null;
             this.fullTitle = "";
             this.brand = null;
-            if (!this.product) return;
+            if (!this.product) {
+               return;
+            }
             this.category = await this.product.fetchCategory();
             this.fullTitle = await this.product.fetchFullTitle();
             this.brand = await this.product.fetchBrand();
@@ -246,7 +254,7 @@
                ? await this.imagePreview.fetchColor().catch(() => null)
                : null;
 
-            this.primaryColorHex = color ? color.toString() : "inherit";
+            this.primaryColorHex = color?.toString() ?? "inherit";
          },
 
          clickPreviousImage() {
@@ -255,9 +263,13 @@
                return;
             }
 
-            if (this.hasImagePrevious || !this.productPrevious) return;
+            if (this.hasImagePrevious || !this.productPrevious) {
+               return;
+            }
             const ref = this.$refs.keyplaylist;
-            if (!ref) return;
+            if (!ref) {
+               return;
+            }
 
             this.imagePreviewIndex = this.productPrevious.images.length - 1;
             ref.clickPreviousProduct();
@@ -268,27 +280,42 @@
                return;
             }
 
-            if (this.hasImageNext || !this.productNext) return;
+            if (this.hasImageNext || !this.productNext) {
+               return;
+            }
             const ref = this.$refs.keyplaylist;
-            if (!ref) return;
+            if (!ref) {
+               return;
+            }
 
             this.imagePreviewIndex = 0;
             ref.clickNextProduct();
          },
 
          obtainKeyOfSpecificationType(type) {
-            if (typeof type === "object") return type.key;
-            if (typeof type === "string") return type;
-            return "";
+            if (U.isObjectOnly(type)) {
+               return this.obtainKeyOfSpecificationType(type.key);
+            }
+            return U.optString(type);
          },
 
          addArrowListener() {
             if (this.onKeyUp === null) {
                this.onKeyUp = (event) => {
-                  if (event.shiftKey || event.altKey || event.ctrlKey || event.metaKey)
+                  if (
+                     event.shiftKey ||
+                     event.altKey ||
+                     event.ctrlKey ||
+                     event.metaKey
+                  ) {
                      return;
-                  if (event.key === "ArrowLeft") this.clickPreviousImage();
-                  if (event.key === "ArrowRight") this.clickNextImage();
+                  }
+                  if (event.key === "ArrowLeft") {
+                     this.clickPreviousImage();
+                  }
+                  if (event.key === "ArrowRight") {
+                     this.clickNextImage();
+                  }
                };
                window.addEventListener("keyup", this.onKeyUp);
             }
@@ -309,29 +336,37 @@
          },
          scrollTo(key = "") {
             const ref = this.$refs[`key${key}`];
-            if (!ref) return;
+            if (!ref) {
+               return;
+            }
             ref.$el.scrollIntoView({ behavior: "smooth", block: "start" });
          },
          scrolling(event) {
             this.invalidateBound();
 
-            const parent = event.target;
-            // const pointHeight = parent.offsetHeight / 4;
             const pointHeight = 156; // 156px
 
             this.tabKeyNow = this.tabs.reduce((tabKeyNow, tab) => {
                const ref = this.$refs[`key${tab.key}`];
-               if (!ref) return tabKeyNow;
+               if (!ref) {
+                  return tabKeyNow;
+               }
                const target = ref.$el;
-               if (!target) return tabKeyNow;
+               if (!target) {
+                  return tabKeyNow;
+               }
 
                const bound = target.getBoundingClientRect();
 
                const start = bound.y;
-               if (0 < start && start < pointHeight) return tab.key;
+               if (0 < start && start < pointHeight) {
+                  return tab.key;
+               }
 
                const end = bound.y + bound.height;
-               if (0 < end && end < pointHeight) return tab.key;
+               if (0 < end && end < pointHeight) {
+                  return tab.key;
+               }
 
                return tabKeyNow;
             }, this.tabKeyNow);
@@ -341,6 +376,7 @@
          this.invalidateBound();
          this.invalidateProduct();
          this.invalidateImagePreview();
+         this.invalidateSettings();
       },
       destroy() {
          this.removeArrowListener();
@@ -350,17 +386,23 @@
 
 <template>
    <div
-      :class="classes"
+      class="ViewerProduct"
       :style="{
          '--primary-color': primaryColor,
          'background-color': backgroundColor,
          '--color-transition-duration': colorTransitionDuration,
+         '--actionbar-toolbar': isActionbarHidden ? '1.5rem' : '5.5rem',
       }"
+      :isWide="`${isWide}`"
       @scroll="(event) => scrolling(event)"
    >
-      <div class="ViewerProduct-toolbar" :style="{ 'background-color': actionbarColor }">
+      <div
+         class="ViewerProduct-toolbar"
+         :style="{ 'background-color': actionbarColor }"
+      >
          <Actionbar
             class="ViewerProduct-actionbar"
+            v-if="!isActionbarHidden"
             :leftMenus="leftMenus"
             :rightMenus="rightMenus"
             :style="{ 'background-color': actionbarColor }"
@@ -369,7 +411,8 @@
                class="ViewerProduct-actionbar-title"
                v-if="fullTitle"
                :style="{
-                  padding: !leftMenus.length && !rightMenus.length ? '1.8rem' : '0',
+                  padding:
+                     !leftMenus.length && !rightMenus.length ? '1.8rem' : '0',
                }"
                >{{ fullTitle }}</span
             >
@@ -383,15 +426,11 @@
       </div>
 
       <div class="ViewerProduct-header">
-         <div
-            class="ViewerProduct-preview"
-            v-if="product"
-            :style="{ 'background-color': headerBackgroundColor }"
-         >
+         <div class="ViewerProduct-preview" v-if="product">
             <ProductViewerImagePreview
                class="ViewerProduct-image"
                ref="keyimage"
-               :primaryColor="primaryColor"
+               :primaryColor="backgroundColor"
                :allowEdit="isEditable"
                :product="product"
                :image="imagePreview"
@@ -401,12 +440,16 @@
                :hasProductNext="!!productNext"
                @click-image="
                   (image) =>
-                     store.dispatch('imageViewerShow', { image, thumbnails: images })
+                     store.dispatch('imageViewerShow', {
+                        image,
+                        thumbnails: images,
+                     })
                "
                @click-previous="() => clickPreviousImage()"
                @click-next="() => clickNextImage()"
                @click-remove="
-                  (image) => $emit('click-product-imageRemove', { product, image })
+                  (image) =>
+                     $emit('click-product-imageRemove', { product, image })
                "
             />
             <ProductViewerImages
@@ -416,7 +459,9 @@
                :indexAt="imagePreviewIndex"
                :isEditable="isEditable"
                :primaryColor="primaryColor"
-               @click-image="(image) => (imagePreviewIndex = images.indexOf(image))"
+               @click-image="
+                  (image) => (imagePreviewIndex = images.indexOf(image))
+               "
                @click-add-image-file="
                   (file) => {
                      productStore.dispatch('addImageOfId', {
@@ -426,27 +471,17 @@
                   }
                "
             />
-            <div class="ViewerProduct-text" :style="{ color: titleColor }">{{
-               fullTitle
-            }}</div>
+            <Title
+               ref="keytitle"
+               :primaryColor="primaryColor"
+               :allowEdit="isEditable"
+               :product="product"
+               @click-edit="(x) => $emit('click-product-titleBrandUpdate', x)"
+            />
          </div>
       </div>
 
       <div class="ViewerProduct-info">
-         <SectionBrand
-            ref="keybrand"
-            :primaryColor="primaryColor"
-            :allowEdit="isEditable"
-            :product="product"
-            @click-edit="(x) => $emit('click-product-titleBrandUpdate', x)"
-         />
-         <SectionTitle
-            ref="keytitle"
-            :primaryColor="primaryColor"
-            :allowEdit="isEditable"
-            :product="product"
-            @click-edit="(x) => $emit('click-product-titleBrandUpdate', x)"
-         />
          <SectionSpecification
             ref="keyspecification"
             :primaryColor="primaryColor"
@@ -502,29 +537,13 @@
          <span class="ViewerProduct-emtpy-title">Viewer</span>
       </div>
 
-      <button
-         :class="[
-            'ViewerProduct-backToTop',
-            scrollTop > 10 ? '' : 'ViewerProduct-backToTop-isHidden',
-            'transition',
-         ]"
-         :style="{
-            '--parent-height': `${height}px`,
-            '--parent-scrollTop': `${scrollTop}px`,
-            'background-color': actionbarColor,
-            'box-shadow': `0 0 1rem ${headerBackgroundColor}`,
-         }"
-         @click="() => scrollToTop()"
-      >
-         <img :src="host.icon('arrow-left-000000')" />
-      </button>
-
       <BottomActionbar
          class="ViewerProduct-bottomActionbar"
          v-if="product"
-         :style="{ 'background-color': actionbarColor }"
          :product="product"
          :isWide="isWide"
+         :parentScrollTop="scrollTop"
+         @click-scrollToTop="() => scrollToTop(0)"
       />
    </div>
 </template>
@@ -581,6 +600,7 @@
       }
       .ViewerProduct-header {
          --padding: 1.2rem;
+         --padding: 0;
 
          width: 100%;
          z-index: 1;
@@ -601,23 +621,9 @@
             justify-content: center;
             overflow: hidden;
             transition: background-color var(--color-transition-duration);
-            border-radius: 1.5rem;
-
-            .ViewerProduct-text {
-               width: 100%;
-               color: white;
-               font-size: 2.2rem;
-               font-weight: 600;
-               text-align: center;
-               padding: 2rem;
-               transition: color var(--color-transition-duration);
-
-               @media (max-width: 480px) {
-                  font-size: 1.6rem;
-               }
-            }
          }
       }
+
       .ViewerProduct-info {
          --padding: 1.2rem;
 
@@ -626,6 +632,7 @@
          width: 100%;
          z-index: 2;
          gap: 1.5rem;
+         gap: 1rem;
          color: black;
 
          display: flex;
@@ -634,7 +641,6 @@
          justify-content: flex-start;
          padding: var(--padding);
          padding-bottom: 10rem;
-         padding-bottom: 80vh;
       }
       .ViewerProduct-emtpy {
          z-index: 2;
@@ -665,50 +671,6 @@
             opacity: 0.4;
          }
       }
-      .ViewerProduct-backToTop {
-         --size: 3rem;
-         --margin: 0.8rem;
-         width: var(--size);
-         height: var(--size);
-
-         z-index: 3;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         border-radius: 50%;
-         position: absolute;
-         top: 0;
-         right: var(--margin);
-
-         border: none;
-         background: none;
-         cursor: pointer;
-
-         --transition-target: transform;
-         --parent-height: 0;
-         --parent-scrollTop: 0;
-
-         top: calc(
-            var(--parent-height) - var(--margin) - 3.5rem - var(--size) +
-               var(--parent-scrollTop)
-         );
-
-         &:hover {
-            transform: scale(1.1);
-         }
-
-         & > * {
-            --size: 1.2rem;
-            width: var(--size);
-            height: var(--size);
-            transform: rotate(90deg);
-         }
-      }
-      .ViewerProduct-backToTop-isHidden {
-         transform: scale(0);
-         pointer-events: none;
-         opacity: 0;
-      }
 
       .ViewerProduct-bottomActionbar {
          z-index: 3;
@@ -716,7 +678,7 @@
       }
    }
 
-   .ViewerProduct-isThin {
+   .ViewerProduct[isWide="false"] {
       grid-template-rows: 8rem max-content minmax(1fr, max-content);
       grid-template-columns: 100%;
       grid-template-areas:
@@ -727,24 +689,25 @@
 
       .ViewerProduct-header {
          max-width: 50rem;
+         margin-bottom: -0.6rem;
       }
       .ViewerProduct-info {
          max-width: 50rem;
+         margin-top: -0.6rem;
       }
    }
-   .ViewerProduct-isWide {
-      --actionbar-height: 5.5rem;
-      grid-template-rows: var(--actionbar-height) 1fr;
+   .ViewerProduct[isWide="true"] {
+      grid-template-rows: var(--actionbar-toolbar) 1fr;
       grid-template-columns: 45% 55%;
       grid-template-areas:
          "toolbar toolbar"
          "header info"
          "bottomactionbar bottomactionbar";
       .ViewerProduct-header {
-         height: calc(100vh - var(--actionbar-height) - 3.5rem);
+         height: calc(100dvh - var(--actionbar-toolbar) - 3.5rem);
          position: sticky;
          left: 0;
-         top: var(--actionbar-height);
+         top: var(--actionbar-toolbar);
       }
       .ViewerProduct-header {
          --padding: 2rem;

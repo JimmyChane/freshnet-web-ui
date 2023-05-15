@@ -1,13 +1,10 @@
-import ModuleOrder from "./data/Order.js";
 import OrderCustomer from "./OrderCustomer.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
+import U from "@/U.js";
 const textContains = ItemSearcher.textContains;
 
 class Order {
-   static Status = {
-      Pending: ModuleOrder.Status.Pending,
-      Completed: ModuleOrder.Status.Completed,
-   };
+   static Status = { Pending: 0, Completed: 1 };
 
    stores = null;
 
@@ -22,16 +19,18 @@ class Order {
    status = Order.Status.Pending;
 
    fromData(data) {
-      data = ModuleOrder.trim(data);
-
-      this.id = data._id;
+      this.id = U.trimId(data._id);
       this.customer = new OrderCustomer(this.stores).fromData({
-         name: data.customer_name,
-         phoneNumber: data.phone_number,
+         name: U.trimText(data.customer_name),
+         phoneNumber: U.trimText(data.phone_number),
       });
-      this.content = data.content;
+      this.content = U.trimText(data.content);
       this.createdAt = data.createdAt;
       this.status = data.status;
+      this.status =
+         data.status !== Order.Status.Completed
+            ? Order.Status.Pending
+            : Order.Status.Completed;
 
       return this;
    }

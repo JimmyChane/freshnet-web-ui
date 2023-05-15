@@ -17,14 +17,11 @@
       userPermissions: ["admin"],
 
       components: { Loading, PopupWindow, Empty, NavigationBar, ItemDatabase },
-      emits: ["callback-side-expand"],
-      data() {
-         return {
-            scrollTop: 0,
-            imports: { data: null },
-            addDatabase: { isShowing: false },
-         };
-      },
+      data: (c) => ({
+         scrollTop: 0,
+         imports: { data: null },
+         addDatabase: { isShowing: false },
+      }),
       computed: {
          isLoading: (c) => {
             const { loginStore, databaseStore } = c;
@@ -43,7 +40,10 @@
                this.actionRefresh();
             })
             .catch((error) => {
-               this.store.dispatch("snackbarShow","Your login credential could be invalid");
+               this.store.dispatch(
+                  "snackbarShow",
+                  "Your login credential could be invalid",
+               );
                throw error;
             });
       },
@@ -80,7 +80,10 @@
                   return this.databaseStore.dispatch("loadBaseInfo");
                })
                .catch((error) => {
-                  this.store.dispatch("snackbarShow","Error Loading Databases");
+                  this.store.dispatch(
+                     "snackbarShow",
+                     "Error Loading Databases",
+                  );
                   throw error;
                });
          },

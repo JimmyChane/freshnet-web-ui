@@ -1,22 +1,21 @@
 <script>
    const Mode = { List: 1, Grid: 2 };
 
-   import Setting from "@/items/data/Setting.js";
+   import Setting from "@/items/Setting.js";
    import ProductPrice from "@/items/ProductPrice.js";
    import ProductPreset from "@/objects/ProductPreset";
 
    import ImageView from "@/components/ImageView.vue";
    import Label from "./ItemProduct-Label.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js";
+   import U from "@/U";
 
    export default {
       Mode,
 
       emits: ["click"],
       components: { ImageView, Label },
-      data() {
-         return { primaryColorHex: "", fullTitle: "" };
-      },
+      data: (c) => ({ primaryColorHex: "", fullTitle: "" }),
       props: {
          mode: { type: Number, default: Mode.Grid },
          item: { type: Object, default: () => null },
@@ -26,11 +25,12 @@
          isList: (c) => c.mode === Mode.List,
          isGrid: (c) => c.mode === Mode.Grid,
 
-         primaryColor() {
-            return chroma.valid(this.primaryColorHex)
-               ? chroma(this.primaryColorHex)
+         primaryColor: (c) => {
+            return chroma.valid(c.primaryColorHex)
+               ? chroma(c.primaryColorHex)
                : chroma("cccccc");
          },
+         isPrimaryColorDark: (c) => U.isColorDark(c.primaryColor),
 
          user: (c) => c.loginStore.getters.user,
          allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
@@ -39,26 +39,22 @@
             let setting = c.settingStore.getters.items.find((setting) => {
                return setting.key === Setting.Key.PublicShowPrice;
             });
-            return setting ? setting.value : false;
+            return setting?.value ?? false;
          },
 
-         preview: (c) => (c.item ? c.item.toImageThumbnail() : null),
-         productBrandId: (c) => (c.item ? c.item.brandId : ""),
-         isAvailable: (c) => (c.item ? c.item.isStockAvailable() : false),
+         preview: (c) => c.item?.toImageThumbnail() ?? null,
+         productBrandId: (c) => c.item?.brandId ?? "",
+         isAvailable: (c) => c.item?.isStockAvailable() ?? false,
 
          productPrice: (c) => {
             if (!c.allowEdit && !c.shouldShowPrice) return null;
             return c.item.price;
          },
          productPriceNormal: (c) => {
-            return c.productPrice && c.productPrice.normal
-               ? c.productPrice.normal
-               : new ProductPrice();
+            return c.productPrice?.normal ?? new ProductPrice().fromData({});
          },
          productPricePromotion: (c) => {
-            return c.productPrice && c.productPrice.promotion
-               ? c.productPrice.promotion
-               : new ProductPrice();
+            return c.productPrice?.promotion ?? new ProductPrice().fromData({});
          },
          price: (c) => {
             if (!c.allowEdit && !c.shouldShowPrice) return null;
@@ -98,16 +94,24 @@
       },
       methods: {
          async invalidateFullTitle() {
+            try {
+               this.fullTitle = "";
+               if (!this.item) return;
+               this.fullTitle = await this.item.fetchFullTitle();
+            } catch (error) {
+               console.error(error);
+               this.fullTitle = "";
+            }
+
             this.fullTitle = "";
-            if (!this.item) return;
-            this.fullTitle = await this.item.fetchFullTitle();
+            if (this.item) {
+               this.fullTitle =
+                  (await this.item.fetchFullTitle()?.catch(() => null)) ?? "";
+            }
          },
          async invalidatePreview() {
-            const color = this.preview
-               ? await this.preview.fetchColor().catch(() => null)
-               : null;
-
-            this.primaryColorHex = color ? color.toString() : "inherit";
+            const color = this.preview?.fetchColor()?.catch(() => null) ?? null;
+            this.primaryColorHex = color?.toString() ?? "inherit";
          },
       },
    };
@@ -119,7 +123,6 @@
          'ItemProduct',
          isList ? 'ItemProduct-modeList' : '',
          isGrid ? 'ItemProduct-modeGrid' : '',
-         isSelected ? 'ItemProduct-isSelected' : 'ItemProduct-isDeselected',
          'transition',
       ]"
       :style="{
@@ -128,10 +131,15 @@
          '--background-color-hover': primaryColor.mix('ffffff', 0.2),
       }"
       :ref="item.id"
+      :isSelected="`${isSelected}`"
       @click="$emit('click', item)"
    >
       <div class="ItemProduct-preview transition">
-         <ImageView class="ItemProduct-preview-image" v-if="preview" :src="preview" />
+         <ImageView
+            class="ItemProduct-preview-image"
+            v-if="preview"
+            :src="preview"
+         />
          <span :class="['ItemProduct-preview-empty', 'transition']" v-else
             >No Preview</span
          >
@@ -146,12 +154,25 @@
          </div>
       </div>
 
-      <div class="ItemProduct-title">
+      <div
+         :class="[
+            'ItemProduct-title',
+            !isPrimaryColorDark
+               ? 'ItemProduct-title-isDark'
+               : 'ItemProduct-title-isWhite',
+         ]"
+      >
          <span class="ItemProduct-title-text">{{ fullTitle }}</span>
+         <span class="ItemProduct-title-price" v-if="price">{{
+            price.to
+         }}</span>
          <div class="ItemProduct-title-specs" v-if="specLabels.length">
-            <Label v-for="label in specLabels" :key="label.text" :title="label.text" />
+            <Label
+               v-for="label in specLabels"
+               :key="label.text"
+               :title="label.text"
+            />
          </div>
-         <span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
       </div>
    </div>
 </template>
@@ -199,14 +220,14 @@
             height: 100%;
             aspect-ratio: inherit;
             border-radius: var(--preview-border-radius);
-            background-color: hsl(0, 0%, 94%);
+            background: white;
          }
          .ItemProduct-preview-empty {
             width: 100%;
             height: 100%;
             aspect-ratio: inherit;
             border-radius: var(--preview-border-radius);
-            background-color: hsl(0, 0%, 94%);
+            background: white;
          }
 
          .ItemProduct-preview-labels {
@@ -216,7 +237,7 @@
 
             width: 100%;
             max-height: 2.3rem;
-            gap: 0.05rem;
+            gap: 1px;
             padding: 0.5rem;
 
             display: flex;
@@ -231,10 +252,11 @@
       .ItemProduct-title {
          display: flex;
          flex-direction: column;
+         flex-grow: 1;
          justify-content: flex-start;
          text-align: start;
 
-         gap: 0.3rem;
+         gap: 0.5rem;
          color: black;
 
          .ItemProduct-title-text {
@@ -248,26 +270,30 @@
 
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
             align-items: flex-start;
+         }
+         .ItemProduct-title-price {
+            font-size: 0.7rem;
          }
          .ItemProduct-title-specs {
             width: 100%;
-            max-height: 2.3rem;
-            gap: 0.05rem;
+            gap: 1px;
             margin: -0.1rem;
 
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
             justify-content: flex-start;
-            align-items: flex-start;
+            align-items: flex-end;
 
             overflow: hidden;
          }
-         .ItemProduct-title-price {
-            font-size: 0.7rem;
-         }
+      }
+      .ItemProduct-title-isDark {
+         --color-theme: black;
+      }
+      .ItemProduct-title-isWhite {
+         --color-theme: white;
       }
    }
 
@@ -287,7 +313,8 @@
          min-height: var(--height);
          max-height: var(--height);
          transform: scale(0.92);
-         --preview-border-radius-focus: var(--border-radius) 0 0 var(--border-radius);
+         --preview-border-radius-focus: var(--border-radius) 0 0
+            var(--border-radius);
       }
       .ItemProduct-title {
          flex-grow: 1;
@@ -299,12 +326,13 @@
       flex-direction: column;
       align-items: flex-start;
       justify-content: flex-start;
-      aspect-ratio: 17/18;
+      gap: 0.25rem;
 
       .ItemProduct-preview {
          width: 100%;
          transform: scale(0.92) translateY(1rem);
-         --preview-border-radius-focus: var(--border-radius) var(--border-radius) 0 0;
+         --preview-border-radius-focus: var(--border-radius)
+            var(--border-radius) 0 0;
       }
       .ItemProduct-title {
          width: 100%;
@@ -312,30 +340,29 @@
       }
    }
 
-   .ItemProduct-isDeselected {
+   .ItemProduct[isSelected="false"] {
       cursor: pointer;
       border: 1px solid transparent;
 
       &:hover,
       &:focus,
       &:focus-within {
-         background-color: rgba(0, 0, 0, 0.08);
+         background: hsl(0, 0%, 98%);
          .ItemProduct-preview {
             transform: scale(1);
             --preview-border-radius: var(--preview-border-radius-focus);
          }
       }
    }
-   .ItemProduct-isSelected {
-      background-color: var(--primary-color);
+   .ItemProduct[isSelected="true"] {
+      background: var(--primary-color);
       border: 1px solid rgba(0, 0, 0, 0.05);
       .ItemProduct-preview {
-         opacity: 0.5;
          transform: scale(1);
          --preview-border-radius: var(--preview-border-radius-focus);
       }
       .ItemProduct-title {
-         opacity: 0;
+         color: var(--color-theme);
       }
    }
 </style>

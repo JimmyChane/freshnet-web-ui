@@ -76,7 +76,7 @@ export default class List {
          const removedItem = removedItems.find((removedItem) => {
             return removedItem[this.#idProperty] === item[this.#idProperty];
          });
-         return removedItem ? removedItem : item;
+         return removedItem ?? item;
       });
    }
    removeItemByItem(item) {

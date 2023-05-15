@@ -5,6 +5,7 @@
    import PageManage from "@/pages/manage/PageManage.vue";
 
    import NavigationLeft from "./leftNav/NavigationLeft.vue";
+   import NavigationBottom from "./NavigationBottom.vue";
    import ViewerImage from "./ViewerImage.vue";
    import Snackbar from "./Snackbar.vue";
    import PopupMenu from "./PopupMenu.vue";
@@ -17,35 +18,31 @@
          return [PageHome, PageProduct, PagePrint, PageManage];
       },
 
-      components: { NavigationLeft, ViewerImage, Snackbar, PopupMenu, Status },
-      data: () => ({ layoutLoginIsShown: false }),
-      computed: {
-         isLogging: (c) => c.loginStore.getters.isLogging,
+      components: {
+         NavigationLeft,
+         NavigationBottom,
+         ViewerImage,
+         Snackbar,
+         PopupMenu,
+         Status,
       },
+      data: (c) => ({ layoutLoginIsShown: false }),
+      computed: { isLogging: (c) => c.loginStore.getters.isLogging },
       watch: {
          isLogging() {
-            if (!this.loginStore.getters.user && this.isLogging)
-               this.store.dispatch("snackbarShow","User Logging");
+            if (!this.loginStore.getters.user && this.isLogging) {
+               this.store.dispatch("snackbarShow", "User Logging");
+            }
          },
-      },
-      mounted() {
-         window.addEventListener("resize", () => this.invalidateHeight());
-         this.invalidateHeight();
-      },
-      unmounted() {
-         window.removeEventListener("resize", this.invalidateHeight);
       },
       methods: {
          logout() {
             this.loginStore.dispatch("logout").then((user) => {
-               this.store.dispatch("snackbarShow",`${user.name} is now logged out`);
+               this.store.dispatch(
+                  "snackbarShow",
+                  `${user.name} is now logged out`,
+               );
             });
-         },
-
-         invalidateHeight() {
-            const { innerHeight } = window;
-            const vh = innerHeight * 0.01;
-            document.body.style.setProperty("--vh", `${vh}px`);
          },
       },
    };
@@ -53,28 +50,21 @@
 
 <template>
    <div
-      :class="[
-         'App',
-         'transition',
-         $root.appLayout.isNormal() ? 'App-isNormal' : '',
-         $root.appLayout.isFull() ? 'App-isFull' : '',
-      ]"
+      class="App"
+      :isNormal="`${$root.appLayout.isNormal()}`"
+      :isFull="`${$root.appLayout.isFull()}`"
    >
-      <div class="App-background transition" :style="{ 'z-index': '1' }"></div>
+      <div class="App-background" style="z-index: 1"></div>
 
-      <div class="App-body transition" :style="{ 'z-index': '2' }">
+      <div class="App-body" style="z-index: 2">
          <div class="App-layout">
-            <Status :style="{ 'z-index': '2' }" />
+            <Status style="z-index: 2" />
 
             <div
-               :class="[
-                  'transition',
-                  'App-layout-body',
-                  $root.navigation.isDrawer()
-                     ? 'App-layout-body-isDrawer'
-                     : 'App-layout-body-isFixed',
-               ]"
-               :style="{ 'z-index': '1' }"
+               class="App-layout-body"
+               :isDrawer="`${$root.navigation.isDrawer()}`"
+               :isFixed="`${!$root.navigation.isDrawer()}`"
+               style="z-index: 1"
             >
                <NavigationLeft
                   class="App-NavigationLeft"
@@ -83,20 +73,20 @@
                />
                <router-view class="App-routerView" ref="AppRouterView" />
             </div>
+
+            <NavigationBottom v-if="$root.navigation.isDrawer()" />
          </div>
       </div>
 
-      <ViewerImage :style="{ 'z-index': 'auto' }" />
-
+      <ViewerImage style="z-index: auto" />
       <Snackbar
-         :style="{ 'z-index': '4' }"
+         style="z-index: 4"
          v-for="snackbar of store.getters.snackbars"
          :key="snackbar.key"
          :item="snackbar"
       />
-
       <PopupMenu
-         :style="{ 'z-index': '5' }"
+         style="z-index: 5"
          v-for="popupMenu of store.getters.popupMenus"
          :key="popupMenu.key"
          :popupMenu="popupMenu"
@@ -148,84 +138,40 @@
       transition-delay: var(--transition-delay);
    }
 
-   :root {
-      font-size: 16px;
-      @media (max-width: 320px) {
-         font-size: 14px;
-      }
+   // color schemas
+   .App {
+      --primary-color: #294656;
+      --accent-color: #fc8237;
+      --accent-color-hover: #c45815;
+      --statusbar-color: #384a6a;
+      --App-background-color: #f1f1f1;
    }
-
-   html {
-      // @import url("https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");
-      // @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-      // @import url("https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&display=swap");
-      @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
-
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      overscroll-behavior-x: none;
-
-      body {
-         width: 100%;
-         height: 100%;
-         overscroll-behavior-x: none;
-
-         p {
-            white-space: pre-line;
-         }
-      }
-
-      * {
-         box-sizing: border-box;
-         margin: 0;
-         padding: 0;
-
-         outline: none;
-         -webkit-tap-highlight-color: transparent;
-         font-family: "Roboto", sans-serif;
-         word-break: break-word;
-      }
-
-      // color schemas
-      .App {
-         --primary-color: #294656;
-         --accent-color: #fc8237;
-         --statusbar-color: #384a6a;
-      }
-   }
-
    .App {
       position: relative;
       color: black;
-      width: 100%;
-      height: 100%;
-      height: 100vh;
-      max-height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       background: none;
-      overflow: hidden;
+      overflow-x: hidden;
 
-      height: -webkit-fill-available; // fix for ios - test
-      height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-      height: calc(var(--vh, 1vh) * 100);
+      --navigation-bottom-height: 4rem;
 
       .App-background {
          position: absolute;
-         width: 100%;
-         height: 100%;
+         width: 100dvw;
+         height: 100dvh;
          pointer-events: none;
       }
       .App-body {
-         width: 100%;
-         height: 100%;
+         width: 100dvw;
+         height: 100dvh;
          display: flex;
          flex-direction: column;
          align-items: center;
          justify-content: center;
-         overflow: hidden;
 
          .App-layout {
             width: 100%;
@@ -237,12 +183,11 @@
 
             .App-layout-body {
                width: 100%;
-               height: 100%;
                display: flex;
                flex-direction: row;
                align-items: center;
                justify-content: stretch;
-               background-color: #e4e4e4;
+               background-color: var(--App-background-color);
 
                --background-color-light: var(--background-color);
                --background-color-dark: var(--background-color);
@@ -254,7 +199,10 @@
                   height: 100%;
                }
             }
-            .App-layout-body-isDrawer {
+            .App-layout-body[isDrawer="true"] {
+               height: calc(
+                  100% - var(--navigation-bottom-height)
+               ); // todo testing
                .App-NavigationLeft {
                   z-index: 2;
                }
@@ -263,23 +211,20 @@
                   z-index: 1;
                }
             }
-            .App-layout-body-isFixed {
+            .App-layout-body[isFixed="true"] {
+               height: 100%;
                .App-NavigationLeft {
                   z-index: 1;
                }
                .App-routerView {
                   flex-grow: 2;
                   z-index: 2;
-
-                  // border-radius: 1rem 0 0 1rem;
-                  // box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.2);
                }
             }
          }
       }
    }
-
-   .App-isNormal {
+   .App[isNormal="true"] {
       @media (min-width: 1600px) {
          .App-body {
             padding: 1vh 4vw;
@@ -300,7 +245,7 @@
          }
       }
    }
-   .App-isFull {
+   .App[isFull="true"] {
       background: none;
       .App-background {
          opacity: 0;

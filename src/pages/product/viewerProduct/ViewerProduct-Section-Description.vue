@@ -9,8 +9,7 @@
          product: { type: Object, default: () => null },
       },
       computed: {
-         description: (context) =>
-            context.product ? context.product.description : "",
+         description: (c) => c.product?.description ?? "",
 
          menu() {
             if (!this.allowEdit) return null;
@@ -32,7 +31,7 @@
    <Section
       class="SectionDescription-parent"
       v-if="allowEdit || description"
-      title="Description"
+      :title="allowEdit ? 'Description' : ''"
       :primaryColor="primaryColor"
       :menu="menu"
    >
@@ -49,8 +48,6 @@
 <style lang="scss" scoped>
    .SectionDescription-parent {
       grid-area: description;
-      align-items: flex-start;
-      justify-content: flex-start;
       .SectionDescription {
          width: 100%;
          font-size: 1rem;

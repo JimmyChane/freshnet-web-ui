@@ -1,25 +1,19 @@
 <script>
    import ListEvents from "./ListEvents.vue";
-   import ItemEvent from "./ItemEvent.vue";
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
 
    export default {
-      components: { ButtonIcon, ListEvents, ItemEvent },
+      components: { ButtonIcon, ListEvents },
       emits: ["click-add-event", "click-remove-event"],
       props: { service: { type: Object, default: () => null } },
       computed: {
-         events() {
-            return this.service.events
+         events: (c) => {
+            return c.service.events
                .map((event) => event)
                .sort((event1, event2) => event1.compare(event2));
          },
-         totalCost: (context) => context.service.toTotalPrice(),
-         totalCostText() {
-            if (this.totalCost && this.totalCost.amount !== 0) {
-               return `Total Cost: ${this.totalCost}`;
-            }
-            return "";
-         },
+         totalCost: (c) => c.service.toTotalPrice(),
+         totalCostText: (c) => `Total Cost: ${c.totalCost}`,
       },
    };
 </script>
@@ -27,10 +21,10 @@
 <template>
    <div class="PanelEvents">
       <div class="PanelEvents-header">
-         <span class="PanelEvents-totalCost" v-if="totalCostText">{{
-            totalCostText
+         <span class="PanelEvents-title">{{
+            `Events (${events.length})`
          }}</span>
-         <span class="PanelEvents-title" v-else>Events</span>
+         <span class="PanelEvents-totalCost">{{ totalCostText }}</span>
       </div>
 
       <div :class="['PanelEvents-body', 'PanelEvents-body-empty']">
@@ -59,7 +53,6 @@
       justify-content: flex-start;
 
       border: 1px solid rgba(0, 0, 0, 0.05);
-      border-radius: 1rem;
       overflow: hidden;
 
       .PanelEvents-header {
@@ -76,18 +69,13 @@
 
          .PanelEvents-title {
             text-align: start;
-            font-weight: 600;
             flex-grow: 1;
-            font-size: 1.1rem;
-            color: hsla(0, 0%, 0%, 0.4);
          }
 
          .PanelEvents-totalCost {
-            text-align: start;
+            min-width: max-content;
+            text-align: end;
             font-weight: 600;
-            flex-grow: 1;
-            font-size: 1.1rem;
-            color: hsla(0, 0%, 0%, 0.8);
          }
       }
 

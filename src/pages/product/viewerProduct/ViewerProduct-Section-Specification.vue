@@ -67,7 +67,7 @@
       v-if="allowEdit || specifications.length"
       :primaryColor="primaryColor"
       :menu="menu"
-      title="Specification"
+      :title="allowEdit ? 'Specification' : ''"
    >
       <div class="SectionSpecification">
          <div class="SectionSpecification-items" v-if="specifications.length">
@@ -75,7 +75,7 @@
                v-for="spec in specifications"
                :key="spec.name"
                :productSpecification="spec"
-               :isVertical="false"
+               :isVertical="true"
             />
          </div>
 
@@ -98,7 +98,7 @@
 
       .SectionSpecification-items {
          width: 100%;
-         gap: 1px;
+         gap: 2px;
          display: flex;
          flex-direction: column;
       }

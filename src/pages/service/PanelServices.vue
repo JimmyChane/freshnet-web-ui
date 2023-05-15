@@ -1,63 +1,66 @@
 <script>
-   import Actionbar from "./PageService-Actionbar.vue";
+   import Actionbar from "./PanelServices-Actionbar.vue";
    import ListServices from "./ListServices.vue";
-
-   import ModuleService from "@/items/data/Service.js";
-   import ServiceStates from "@/objects/ServiceStates.js";
    import Empty from "@/components/Empty.vue";
-
-   import U from "@/U.js";
-
    import PageService from "@/pages/service/PageService.vue";
 
-   const { State } = ModuleService;
+   import U from "@/U.js";
+   import ServiceState from "@/items/ServiceState";
 
    export default {
-      emits: ["click-service", "click-service-delete"],
+      emits: [
+         "click-add",
+         "click-import",
+         "click-service",
+         "click-service-delete",
+      ],
       components: { Empty, Actionbar, ListServices },
       props: {
          menus: { type: Array, default: () => [] },
          services: { type: Array, default: () => [] },
          currentItem: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            scrollTop: 0,
+      data: (c) => ({
+         scrollTop: 0,
 
-            stateMenuIndex: 0,
-            currentLayoutIndex: 1,
-            currentGroupIndex: 1,
-            currentSortIndex: 0,
+         stateMenuIndex: 0,
+         currentLayoutIndex: 1,
+         currentGroupIndex: 1,
+         currentSortIndex: 0,
 
-            stateMenus: [],
-            layoutMenus: [],
-            groupMenus: [],
-            sortMenus: [],
-         };
-      },
+         stateMenus: [],
+         layoutMenus: [],
+         groupMenus: [],
+         sortMenus: [],
+      }),
       computed: {
          iconEmpty: () => PageService.icon.dark.toUrl(),
 
-         items: (context) =>
-            context.stateMenus[context.stateMenuIndex]
-               ? context.stateMenus[context.stateMenuIndex].list
-               : [],
+         items: (c) => c.stateMenus[c.stateMenuIndex]?.list ?? [],
          state: (c) => U.optString(c.$route.query.state),
 
          layoutMode: (c) => {
             if (c.currentLayoutIndex === 0) return ListServices.LayoutMode.Grid;
             if (c.currentLayoutIndex === 1) return ListServices.LayoutMode.List;
-            if (c.currentLayoutIndex === 2) return ListServices.LayoutMode.Detail;
+            if (c.currentLayoutIndex === 2)
+               return ListServices.LayoutMode.Detail;
             return 0;
          },
          sortMode: (c) => {
             const menu = c.sortMenus.find((menu) => menu.isSelected());
-            return menu ? menu.key : ListServices.SortMode.DateCreated;
+            return menu?.key ?? ListServices.SortMode.DateCreated;
          },
          groupMode: (c) => {
             const menu = c.groupMenus.find((menu) => menu.isSelected());
-            return menu ? menu.key : ListServices.GroupMode.DateCreated;
+            return menu?.key ?? ListServices.GroupMode.DateCreated;
          },
+
+         currentUser: (c) => c.loginStore.getters.user,
+         isCurrentUserAdmin: (c) => c.currentUser.isTypeAdmin(),
+         isCurrentUserDefault: (c) => c.currentUser.isDefault(),
+
+         currentState: (c) => c.$route.query.state,
+         isCurrentStatePending: (c) => c.currentState === "pending",
       },
       watch: {
          state() {
@@ -71,26 +74,27 @@
          setPageSelected(state) {
             const menu = this.stateMenus.find((menu) => menu.key === state);
 
-            if (!menu && this.stateMenus.length && Object.keys(State).length) {
-               this.$root.replaceRoute({
-                  query: { state: State[Object.keys(State)[0]] },
-               });
+            const states = ServiceState.map((state) => state);
+            if (!menu && this.stateMenus.length && states.length) {
+               this.$root.replaceQuery({ query: { state: states[0].key } });
             }
 
             this.stateMenuIndex = this.stateMenus.indexOf(menu);
+
+            this._self.$el.scrollTop = 0;
          },
 
          filterList(services, key) {
             const tab = this.stateMenus.find((tab) => tab.key === key);
-            if (tab) tab.list = services.filter((service) => service.state === key);
+            if (tab)
+               tab.list = services.filter((service) => service.state === key);
          },
 
          invalidateList() {
             const services = Array.isArray(this.services) ? this.services : [];
-            this.filterList(services, State.Pending);
-            this.filterList(services, State.Waiting);
-            this.filterList(services, State.Completed);
-            this.filterList(services, State.Rejected);
+            ServiceState.map((state) => {
+               this.filterList(services, state.key);
+            });
 
             this.invalidateState();
 
@@ -105,27 +109,18 @@
          },
       },
       mounted() {
-         this.stateMenus = [
-            State.Pending,
-            State.Waiting,
-            State.Completed,
-            State.Rejected,
-         ].map((stateKey) => {
-            const resource = ServiceStates.findByKey(stateKey);
-            const title = resource.title;
-            const icon = resource.icon.color;
-            const iconSelected = resource.icon.white;
-            const primaryColor = resource.color;
+         this.stateMenus = ServiceState.map((state) => {
             return {
-               key: stateKey,
-               title,
-               icon,
-               iconSelected,
-               primaryColor,
+               key: state.key,
+               title: state.title,
+               icon: state.icon.color,
+               iconSelected: state.icon.white,
+               primaryColor: state.primaryColor,
                isPrimaryColorBright: true,
                list: [],
             };
          });
+
          this.layoutMenus = [
             {
                key: ListServices.LayoutMode.Grid,
@@ -161,7 +156,7 @@
             };
             menu.click = () => {
                if (this.state === menu.key) return;
-               this.$root.replaceRoute({ query: { state: menu.key } });
+               this.$root.replaceQuery({ query: { state: menu.key } });
             };
          }
          for (const menu of this.layoutMenus) {
@@ -195,11 +190,7 @@
 <template>
    <div class="PanelServices" @scroll="(e) => (scrollTop = e.target.scrollTop)">
       <Actionbar
-         :class="[
-            'PanelServices-actionbar',
-            scrollTop > 0 ? 'PanelServices-actionbar-shadow' : '',
-            'transition',
-         ]"
+         :class="['PanelServices-actionbar', 'transition']"
          :menus="menus"
          :services="services"
          :stateMenus="stateMenus"
@@ -213,8 +204,17 @@
          @click-search="() => $emit('click-search')"
       />
 
+      <div class="PanelServices-toolbar" v-if="isCurrentStatePending">
+         <button @click="() => $emit('click-add')">Add</button>
+         <button @click="() => $emit('click-import')" v-if="isCurrentUserAdmin"
+            >Import</button
+         >
+      </div>
+
       <ListServices
-         v-if="stateMenus[stateMenuIndex] && stateMenus[stateMenuIndex].list.length"
+         v-if="
+            stateMenus[stateMenuIndex] && stateMenus[stateMenuIndex].list.length
+         "
          :layoutMode="layoutMode"
          :sortMode="sortMode"
          :groupMode="groupMode"
@@ -223,7 +223,10 @@
          @click-item="(item) => $emit('click-service', item)"
       />
 
-      <Empty v-if="!items.length && !serviceStore.getters.isLoading" :icon="iconEmpty" />
+      <Empty
+         v-if="!items.length && !serviceStore.getters.isLoading"
+         :icon="iconEmpty"
+      />
    </div>
 </template>
 
@@ -233,7 +236,7 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      align-items: stretch;
+      align-items: center;
       justify-content: flex-start;
       overflow-y: auto;
       overflow-x: auto;
@@ -252,8 +255,35 @@
          z-index: 2;
          border-bottom: 1px solid #e4e4e4;
       }
-      .PanelServices-actionbar-shadow {
-         border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
+      .PanelServices-toolbar {
+         width: 100%;
+         max-width: 34rem;
+         min-height: 4.5rem;
+         padding: 1rem;
+         gap: 0.2rem;
+
+         display: flex;
+         flex-direction: row;
+         align-items: stretch;
+         justify-content: space-between;
+
+         & > * {
+            border-radius: 1rem;
+            background: none;
+            background: hsl(0, 0%, 98%);
+            border: 1px solid hsl(0, 0%, 75%);
+            font-size: 0.7rem;
+
+            cursor: pointer;
+
+            flex-grow: 1;
+
+            transition: all 0.2s;
+
+            &:hover {
+               background: white;
+            }
+         }
       }
    }
 </style>

@@ -1,29 +1,17 @@
 import ServiceTimestamp from "./ServiceTimestamp";
 import ServiceEvent from "./ServiceEvent.js";
 import ServicePrice from "./ServicePrice.js";
-import ServiceStates from "@/objects/ServiceStates.js";
 import ServiceCustomer from "./ServiceCustomer.js";
 import ServiceImage from "./ServiceImage";
-import ServiceLabel from "./ServiceLabel";
+import Label from "./ServiceLabel";
+import Method from "./ServiceEventMethod";
+import State from "./ServiceState";
+
+import U from "@/U.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
-import ModuleService from "./data/Service.js";
-import ModuleEvent from "./data/ServiceEvent.js";
-import ModuleLabel from "./data/ServiceLabel.js";
-
-import U from "@/U.js";
-
-const ServiceLabels = {
-   Urgent: new ServiceLabel().fromData(ModuleLabel.Defaults.Urgent),
-   Warranty: new ServiceLabel().fromData(ModuleLabel.Defaults.Warranty),
-};
-
 class Service {
-   static #serviceStates = Object.keys(ModuleService.State).map((key) => {
-      return ModuleService.State[key];
-   });
-
    stores = null;
    userStore = null;
 
@@ -45,62 +33,113 @@ class Service {
    labels = [];
 
    fromData(data) {
-      data = new ModuleService(data);
-
-      this.id = data._id;
+      this.id = U.trimId(data._id);
       this.timestamp = data.time ? new ServiceTimestamp(data.time) : null;
-      this.username = data.username;
-      this.name = data.nameOfUser;
-      this.state = data.state;
-      this.customer = new ServiceCustomer(this.stores).fromData(data.customer);
-      this.description = data.description;
-      this.belongings = data.belongings;
+      this.username = U.trimId(data.username);
+      this.name = U.trimText(data.nameOfUser);
+
+      switch (U.trimId(data.state)) {
+         case State.PENDING.key:
+            this.state = State.PENDING.key;
+            break;
+         case State.WAITING.key:
+            this.state = State.WAITING.key;
+            break;
+         case State.COMPLETED.key:
+            this.state = State.COMPLETED.key;
+            break;
+         case State.REJECTED.key:
+            this.state = State.REJECTED.key;
+            break;
+         default:
+            this.state = State.PENDING.key;
+      }
+
+      this.customer = U.isObject(data.customer)
+         ? new ServiceCustomer(this.stores).fromData(data.customer)
+         : undefined;
+      this.description = U.trimText(data.description, "");
+      this.belongings = U.optArray(data.belongings).map((belonging) => {
+         return {
+            title: U.trimText(belonging.title),
+            time: belonging.time,
+            quantity: Math.max(U.optNumber(belonging.quantity), 1),
+         };
+      });
       this.events = U.optArray(data.events).map((subData) => {
          return new ServiceEvent(this.stores).fromData(subData);
       });
       this.imageFiles = U.optArray(data.imageFiles).map((image) => {
          return new ServiceImage(this.stores).fromData(image);
       });
+
       this.labels = U.optArray(data.labels)
          .filter((subData) => subData.title !== " " || subData.title !== "")
-         .map((subData) => new ServiceLabel().fromData(subData));
+         .map((subData) => new Label().fromData(subData));
+      // refactoring notice to labels
+      const notice = {
+         isUrgent: !!data.notice?.isUrgent ?? false,
+         isWarranty: !!data.notice?.isWarranty ?? false,
+      };
+      const existingLabelUrgent = this.labels.find((label) => {
+         return label.title === Label.URGENT.title;
+      });
+      const existingLabelWarranty = this.labels.find((label) => {
+         return label.title === Label.WARRANTY.title;
+      });
+      if (notice.isUrgent && !existingLabelUrgent)
+         this.labels.push(Label.URGENT);
+      if (notice.isWarranty && !existingLabelWarranty)
+         this.labels.push(Label.WARRANTY);
 
       return this;
    }
    toData() {
-      return new ModuleService({
-         _id: this.id,
-         time: this.timestamp ? this.timestamp.time : null,
-         username: this.username,
-         nameOfUser: this.name,
+      return {
+         _id: U.trimId(this.id),
+         time: this.timestamp?.time ?? null,
+         username: U.trimId(this.username),
+         nameOfUser: U.trimText(this.name),
          state: this.state,
          customer: this.customer.toData(),
-         description: this.description,
+         description: U.trimText(this.description, ""),
          belongings: this.belongings.map((belonging) => belonging),
          events: this.events.map((event) => event.toData()),
          imageFiles: this.imageFiles.map((image) => image.toData()),
          labels: this.labels.map((label) => label.toData()),
-      });
+      };
    }
    toCount(strs) {
-      const { customer, timestamp, state, description } = this;
+      const { customer, timestamp, state: stateKey, description } = this;
 
-      const stateRes = ServiceStates.findByKey(state);
-      const stateTitle = stateRes ? stateRes.title : "";
+      const state = State.findByKey(stateKey);
+      const stateTitle = state?.title ?? "";
 
-      let count = strs.reduce((count, str) => {
-         if (textContains("service", str)) count++;
-         if (textContains(description, str)) count++;
-         if (this.isUrgent() && textContains("warranty", str)) count++;
-         if (this.isWarranty() && textContains("warranty", str)) count++;
-         if (textContains(stateTitle, str)) count++;
-         return count;
-      }, 0);
-      count += this.events.reduce((count, event) => count + event.toCount(strs), 0);
-      if (timestamp && timestamp.toCount(strs)) count++;
-      if (customer && customer.toCount(strs)) count++;
+      const ts = [
+         "service",
+         description,
+         stateTitle,
+         ...this.labels.map((label) => label.title),
+      ];
+      let count =
+         strs.reduce((count, str) => {
+            for (const t of ts) if (textContains(t, str)) count++;
+            return count;
+         }, 0) +
+         this.events.reduce((count, event) => count + event.toCount(strs), 0);
+      if (timestamp?.toCount(strs)) count++;
+      if (customer?.toCount(strs)) count += 5;
 
       return count;
+   }
+
+   isUrgent() {
+      return !!this.labels.find((label) => label.isEqual(Label.URGENT));
+   }
+   isWarranty() {
+      return !!this.labels.find((label) => {
+         return label.isEqual(Label.WARRANTY);
+      });
    }
 
    compare(item) {
@@ -110,10 +149,7 @@ class Service {
       return value;
    }
    compareState(item) {
-      return (
-         Service.#serviceStates.indexOf(this.state) -
-         Service.#serviceStates.indexOf(item.state)
-      );
+      return State.indexOfKey(this.state) - State.indexOfKey(item.state);
    }
    compareTimestamp(item) {
       return this.timestamp.compare(item.timestamp);
@@ -128,13 +164,14 @@ class Service {
    }
 
    async fetchUser() {
-      if (!U.isString(this.username) || this.username.trim().length === 0) return null;
+      if (!U.isString(this.username) || this.username.trim().length === 0) {
+         return null;
+      }
       return await this.userStore.dispatch("getUserByUsername", this.username);
    }
    async fetchName() {
       const user = await this.fetchUser();
-
-      const username = user ? user.username : "";
+      const username = user?.username ?? "";
 
       if (username.length && this.name) return `${this.name}(${username})`;
       if (!username.length && this.name) return this.name;
@@ -143,53 +180,46 @@ class Service {
       throw new Error("unknown");
    }
 
-   isUrgent() {
-      return !!this.labels.find((label) => label.isEqual(ServiceLabels.Urgent));
-   }
-   isWarranty() {
-      return !!this.labels.find((label) => label.isEqual(ServiceLabels.Warranty));
-   }
-
    toTotalPrice() {
       return this.events.reduce((cost, event) => {
-         if (event.method === ModuleEvent.Method.Purchase) {
+         if (event.method === Method.PURCHASE.key) {
             cost = cost.plus(event.price);
          }
          return cost;
       }, new ServicePrice().fromData({ amount: 0 }));
    }
 
-   // deprecated
-   setUrgent(bool) {
-      const labels = this.labels;
-      const existingLabel = labels.find((label) => {
-         return label.isEqual(ServiceLabels.Urgent);
-      });
-
-      if (bool && !existingLabel) {
-         this.setLabels([...labels, ServiceLabels.Urgent]);
-      } else if (!bool && existingLabel) {
-         this.setLabels(labels.filter((label) => !label.isEqual(ServiceLabels.Urgent)));
-      }
-   }
-   // deprecated
-   setWarranty(bool) {
-      const labels = this.labels;
-      const existingLabel = labels.find((label) => {
-         return label.isEqual(ServiceLabels.Warranty);
-      });
-
-      if (bool && !existingLabel) {
-         this.setLabels([...labels, ServiceLabels.Warranty]);
-      } else if (!bool && existingLabel) {
-         this.setLabels(labels.filter((label) => !label.isEqual(ServiceLabels.Warranty)));
-      }
-   }
-
-   setLabels(labels) {
-      this.labels = (Array.isArray(labels) ? labels : [])
+   setLabels(labels = []) {
+      this.labels = U.optArray(labels)
          .filter((label) => label.title !== " " || label.title !== "")
-         .map((label) => new ServiceLabel().fromData(label.toData()));
+         .map((label) => new Label().fromData(label.toData()));
+   }
+   addLabel(label = null) {
+      const labels = this.labels;
+      const existingLabel = labels.find((l) => l.isEqual(label));
+
+      if (!existingLabel) {
+         this.setLabels([...labels, label]);
+      }
+   }
+   removeLabel(label = null) {
+      const labels = this.labels;
+      const existingLabel = labels.find((l) => l.isEqual(label));
+
+      if (existingLabel) {
+         this.setLabels(labels.filter((l) => !l.isEqual(label)));
+      }
+   }
+
+   setUrgent(bool = false) {
+      U.optBoolean(bool)
+         ? this.addLabel(Label.URGENT)
+         : this.removeLabel(Label.URGENT);
+   }
+   setWarranty(bool = false) {
+      U.optBoolean(bool)
+         ? this.addLabel(Label.WARRANTY)
+         : this.removeLabel(Label.WARRANTY);
    }
 }
 

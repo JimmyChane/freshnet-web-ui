@@ -1,15 +1,13 @@
 import AppHost from "@/host/AppHost.js";
 
-import ModuleProduct from "./data/Product.js";
-import ModuleStock from "./data/ProductStock.js";
-import ModuleBundle from "./data/ProductBundle.js";
-
 import Image from "./Image.js";
 import ProductSpecContent from "./ProductSpecContent.js";
-import ProductPrice from "./ProductPrice.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
 
 import U from "@/U.js";
+import ProductStock from "./ProductStock.js";
+import ProductBundle from "./ProductBundle.js";
+import ProductPrices from "./ProductPrices.js";
 
 const textContains = ItemSearcher.textContains;
 
@@ -38,50 +36,90 @@ class Product {
    specifications = [];
    images = [];
    price = null;
-   stock = ModuleStock.trim({});
+   stock = null;
 
    fromData(data) {
-      data = ModuleProduct.trim(data);
+      this.id = U.trimId(data._id);
+      this.title = U.trimText(data.title);
+      this.description = U.trimText(data.description);
+      this.stock = new ProductStock(this.stores).fromData(data.stock);
+      this.setBrandId(U.trimId(data.brandId));
+      this.setCategoryId(U.trimId(data.categoryId));
+      this.setGifts(
+         U.optArray(data.gifts)
+            .map((gift) => U.trimText(gift))
+            .filter((gift) => !!gift),
+      );
+      this.setBundles(
+         U.optArray(data.bundles)
+            .map((bundle) => new ProductBundle(this.stores).fromData(bundle))
+            .map((bundle) => bundle.toData()),
+      );
 
-      if (U.isObject(data.image) && data.image) data.images.push(data.image);
+      const specifications = U.optArray(data.specifications).map(
+         (specification) => {
+            return {
+               type: U.trimId(specification.type),
+               content: U.trimText(specification.content),
+            };
+         },
+      );
+      if (U.isObjectOnly(data.specification)) {
+         specifications.unshift(
+            ...Object.keys(data.specification).map((type) => {
+               return {
+                  type: U.trimId(type),
+                  content: U.trimId(data.specification[type]),
+               };
+            }),
+         );
+      }
+      this.setSpecifications(specifications);
 
-      this.id = data._id;
-      this.title = U.optString(data.title);
-      this.description = U.optString(data.description).trim();
-      this.setGifts(data.gifts);
-      this.setBundles(data.bundles);
-      this.setBrandId(data.brandId);
-      this.setCategoryId(data.categoryId);
-      this.setSpecifications(data.specifications);
-      this.setImages(data.images);
-      this.setPrice(data.price);
+      const images = U.optArray(data.images);
+      if (U.isObjectOnly(data.image)) images.unshift(data.image);
+      this.setImages(
+         images.map((image) => {
+            return {
+               method: U.trimId(image.method),
+               path: U.trimId(image.path),
+            };
+         }),
+      );
 
-      this.stock = data.stock;
+      let dataPrice = null;
+      if (data.price) dataPrice = data.price;
+      else {
+         const prices = U.optArray(data.stock?.prices ?? []).filter((price) => {
+            return price?.normal || price.promotion;
+         });
+         if (prices.length > 0) dataPrice = prices[prices.length - 1];
+      }
+      const price = dataPrice
+         ? new ProductPrices(this.stores).fromData(dataPrice)
+         : null;
+      this.setPrice(price?.toData());
 
       return this;
    }
    toData() {
-      let specification = {};
-      for (let itemSpecification of this.specifications) {
-         specification[itemSpecification.type.key] = itemSpecification.content;
-      }
-
-      let price = this.price ? this.price : {};
-      let pricePromotion = price.promotion;
-      let priceNormal = price.normal;
-
       return {
-         _id: this.id,
-         title: this.title ? this.title : undefined,
-         description: this.description ? this.description : undefined,
-         brandId: U.optString(this.brandId),
-         categoryId: U.optString(this.categoryId),
-         stock: ModuleStock.trim(this.stock),
-         gifts: this.gifts.map((gift) => gift),
-         bundles: this.bundles.map((bundle) => ModuleBundle.trim(bundle)),
-         image: this.image ? this.image.toData() : {},
-         specification,
-         price: { normal: pricePromotion, promotion: priceNormal },
+         _id: U.trimId(this.id),
+         title: U.trimText(this.title),
+         description: U.trimText(this.description),
+         brandId: U.trimId(this.brandId),
+         stock: this?.stock.toData() ?? {},
+         categoryId: U.trimId(this.categoryId),
+         gifts: this.gifts
+            .map((gift) => U.trimText(gift))
+            .filter((gift) => !!gift),
+         bundles: this.bundles.map((bundle) => bundle.toData()),
+         specification: this.specifications.reduce((obj, spec) => {
+            spec[spec.type.key] = spec.content;
+            return obj;
+         }, {}),
+         images: this.images.map((image) => image.toData()),
+         price: new ProductPrices(this.stores).fromData(this.price).toData(),
       };
    }
    toCount(strs) {
@@ -95,7 +133,8 @@ class Product {
          if (category && textContains(category.title, str)) count++;
 
          count += specifications.reduce((count, specContent) => {
-            if (specContent.type && textContains(specContent.type.title, str)) count++;
+            if (specContent.type && textContains(specContent.type.title, str))
+               count++;
             if (textContains(specContent.content, str)) count++;
             return count;
          }, 0);
@@ -106,9 +145,28 @@ class Product {
       return this.images.length ? this.images[0] : null;
    }
 
+   isPricePromotion() {
+      let price = this.price;
+      if (!price) return false;
+
+      let normalValue = price.normal?.value ?? 0;
+      let promotionValue = price.promotion?.value ?? 0;
+
+      return (
+         normalValue > 0 && promotionValue > 0 && normalValue > promotionValue
+      );
+   }
+   isStockAvailable() {
+      return this.stock?.isAvailable ?? true;
+   }
+   isStockSecondHand() {
+      return this.stock?.isSecondHand ?? false;
+   }
+
    compare(item) {
       let value = 0;
       if (value === 0) value = this.compareAvailable(item);
+      if (value === 0) value = this.title.localeCompare(item.title);
       if (value === 0) value = this.comparePromotions(item);
       if (value === 0) value = this.compareSecondHand(item);
       if (value === 0) value = this.compareImage(item);
@@ -169,23 +227,6 @@ class Product {
       return 0;
    }
 
-   getPriceNormal() {
-      return this.price ? this.price.normal : null;
-   }
-   getPricePromotion() {
-      return this.price ? this.price.promotion : null;
-   }
-   getPriceNormalValue() {
-      const normal = this.getPriceNormal();
-      return normal ? normal.value : 0;
-   }
-   getPricePromotionValue() {
-      const promotion = this.getPricePromotion();
-      return promotion ? promotion.value : 0;
-   }
-   getLink() {
-      return `${AppHost.path}/item/id/${this.id}`;
-   }
    async fetchBrand() {
       if (!this.brandId) return null;
       const brands = await this.brandStore.dispatch("getItems");
@@ -208,22 +249,20 @@ class Product {
       return categories.find((category) => category.id === this.categoryId);
    }
 
-   isPricePromotion() {
-      let price = this.price;
-      if (!price) return false;
-
-      let normalValue = price.normal ? price.normal.value : 0;
-      let promotionValue = price.normal ? price.promotion.value : 0;
-
-      return normalValue > 0 && promotionValue > 0 && normalValue > promotionValue;
+   getPriceNormal() {
+      return this.price?.normal ?? null;
    }
-   isStockAvailable() {
-      let stock = this.stock;
-      return stock ? stock.isAvailable : true;
+   getPricePromotion() {
+      return this.price?.promotion ?? null;
    }
-   isStockSecondHand() {
-      let stock = this.stock;
-      return stock ? stock.isSecondHand : false;
+   getPriceNormalValue() {
+      return this.getPriceNormal()?.value ?? 0;
+   }
+   getPricePromotionValue() {
+      return this.getPricePromotion()?.value ?? 0;
+   }
+   getLink() {
+      return `${AppHost.path}/item/id/${this.id}`;
    }
 
    setBrandId(brandId) {
@@ -235,11 +274,7 @@ class Product {
       this.fetchCategory().then((category) => (this.category = category));
    }
    setPrice(price) {
-      let { normal, promotion } = price ? price : {};
-      this.price = {
-         normal: ProductPrice.parseString(U.isString(normal) ? normal : ""),
-         promotion: ProductPrice.parseString(U.isString(promotion) ? promotion : ""),
-      };
+      this.price = new ProductPrices(this.stores).fromData(price ?? {});
    }
 
    setImages(images) {
@@ -289,9 +324,9 @@ class Product {
    }
 
    setBundles(data = []) {
-      this.bundles = (Array.isArray(data) ? data : []).map((bundle) =>
-         ModuleBundle.trim(bundle),
-      );
+      this.bundles = U.optArray(data).map((bundle) => {
+         return new ProductBundle(this.stores).fromData(bundle).toData();
+      });
    }
    addBundle(bundle) {
       this.bundles.push(bundle);
@@ -303,9 +338,9 @@ class Product {
    }
 
    setGifts(data = []) {
-      this.gifts = (Array.isArray(data) ? data : [])
-         .map((gift) => (U.isString(gift) ? gift.trim() : ""))
-         .filter((gift) => gift);
+      this.gifts = U.optArray(data)
+         .map((gift) => U.trimText(gift))
+         .filter((gift) => !!gift);
    }
    addGift(gift) {
       this.gifts.push(gift);

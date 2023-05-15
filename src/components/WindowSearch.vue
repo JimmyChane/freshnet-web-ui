@@ -9,9 +9,7 @@
          isShowing: { type: Boolean, default: false },
          placeholder: { type: String, default: "Search" },
       },
-      data() {
-         return { search: "", results: [] };
-      },
+      data: (c) => ({ search: "", results: [] }),
       watch: {
          isShowing() {
             this.isShowing
@@ -26,6 +24,13 @@
          this.onInput();
       },
       methods: {
+         blur() {
+            this.$refs.inputSearch.blur();
+         },
+         focus() {
+            this.$refs.inputSearch.focus();
+         },
+
          onInput() {
             this.$emit("input-text", this.search);
          },
@@ -58,8 +63,8 @@
 
 <style lang="scss" scoped>
    .WindowSearch-body {
-      width: 100vw;
-      height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
       max-width: 100%;
       max-height: 100%;
       display: flex;

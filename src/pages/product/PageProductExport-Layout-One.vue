@@ -10,24 +10,22 @@
          height: { type: Number, default: 0 },
          product: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            previousHeight: 0,
-            initialPadding: 60,
-            initialGap: 30,
-            initialSpecificationGap: 14,
+      data: (c) => ({
+         previousHeight: 0,
+         initialPadding: 60,
+         initialGap: 30,
+         initialSpecificationGap: 14,
 
-            fullTitle: "",
-            padding: 0,
-            gap: 0,
-            specificationGap: 0,
-         };
-      },
+         fullTitle: "",
+         padding: 0,
+         gap: 0,
+         specificationGap: 0,
+      }),
       computed: {
          user: (c) => c.loginStore.getters.user,
          allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
-         brandId: (c) => (c.product ? c.product.brandId : ""),
+         brandId: (c) => c.product?.brandId ?? "",
 
          specificationKeys: () => {
             return Object.keys(ProductSpecType.Key).map((key) => {

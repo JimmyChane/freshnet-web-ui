@@ -2,9 +2,9 @@ import ProductSpecType from "@/items/ProductSpecType.js";
 import Brand from "@/items/Brand";
 
 class Brands {
-   static Intel = new Brand().fromData({ title: "Intel" });
-   static Amd = new Brand().fromData({ title: "AMD" });
-   static Nvidia = new Brand().fromData({ title: "Nvidia" });
+   static INTEL = new Brand().fromData({ title: "Intel" });
+   static AMD = new Brand().fromData({ title: "AMD" });
+   static NVIDIA = new Brand().fromData({ title: "Nvidia" });
 }
 
 class Unit {
@@ -16,12 +16,10 @@ class Unit {
 }
 
 class Memory {
-   static Unit = {
-      Kilobyte: new Unit("kb", "kilobyte", "KiloByte"),
-      Megabyte: new Unit("mb", "megabyte", "MegaByte"),
-      Gigabyte: new Unit("gb", "gigabyte", "GigaByte"),
-      Terabyte: new Unit("tb", "terabyte", "TeraByte"),
-   };
+   static KILOBYTE = new Unit("kb", "kilobyte", "KiloByte");
+   static MEGABYTE = new Unit("mb", "megabyte", "MegaByte");
+   static GIGABYTE = new Unit("gb", "gigabyte", "GigaByte");
+   static TERABYTE = new Unit("tb", "terabyte", "TeraByte");
 
    constructor(amount = 0, unit = new Unit()) {
       this.amount = amount;
@@ -33,7 +31,7 @@ class Memory {
    }
 }
 class Size {
-   static Unit = { Inch: new Unit('"', "inch", "Inch") };
+   static INCH = new Unit('"', "inch", "Inch");
 
    constructor(amount = 0, unit = new Unit()) {
       this.amount = amount;
@@ -57,33 +55,45 @@ class Resolution {
    }
 }
 
-const Labels = {
-   Promotion: { name: "promotion", text: "Promotion", color: "#FF8A00" },
-   OutOfStock: { name: "outOfStock", text: "Out of Stock", color: "#FF4B33" },
-   SecondHand: { name: "secondHand", text: "Second Hand", color: "#249696" },
-};
+class Label {
+   static PROMOTION = {
+      name: "promotion",
+      text: "Promotion",
+      color: "#FF8A00",
+   };
+   static OUT_OF_STOCK = {
+      name: "outOfStock",
+      text: "Out of Stock",
+      color: "#FF4B33",
+   };
+   static SECOND_HAND = {
+      name: "secondHand",
+      text: "Second Hand",
+      color: "#249696",
+   };
+}
 
 const ram = {
    ddr3: [16, 8, 7, 6, 5, 4, 3, 2].map((x) =>
-      new Memory(x, Memory.Unit.Gigabyte).toString(),
+      new Memory(x, Memory.GIGABYTE).toString(),
    ),
    ddr4: [16, 8, 7, 6, 5, 4, 3, 2].map((x) =>
-      new Memory(x, Memory.Unit.Gigabyte).toString(),
+      new Memory(x, Memory.GIGABYTE).toString(),
    ),
 };
 const size = [15.6, 14, 13, 13.1, 11.5].map((x) =>
-   new Size(x, Size.Unit.Inch).toString(),
+   new Size(x, Size.INCH).toString(),
 );
 const ssd = [
-   new Memory(1, Memory.Unit.Terabyte).toString(),
+   new Memory(1, Memory.TERABYTE).toString(),
    ...[1000, 512, 480, 256, 240, 128, 120].map((x) =>
-      new Memory(x, Memory.Unit.Gigabyte).toString(),
+      new Memory(x, Memory.GIGABYTE).toString(),
    ),
 ];
 const hdd = [
-   ...[4, 2, 1].map((x) => new Memory(x, Memory.Unit.Terabyte).toString()),
+   ...[4, 2, 1].map((x) => new Memory(x, Memory.TERABYTE).toString()),
    ...[4000, 2000, 1000, 640, 500, 320, 250].map((x) =>
-      new Memory(x, Memory.Unit.Gigabyte).toString(),
+      new Memory(x, Memory.GIGABYTE).toString(),
    ),
 ];
 const resolution = [
@@ -96,15 +106,15 @@ const processor = {
 };
 const storage = { ssd, hdd };
 const graphic = [
-   `${Brands.Intel.title} hd`,
-   `${Brands.Intel.title} uhd`,
-   `${Brands.Intel.title} iris xe`,
-   `${Brands.Intel.title} iris plus`,
-   `${Brands.Nvidia.title} geforce gtx`,
-   `${Brands.Nvidia.title} geforce rtx`,
-   `${Brands.Nvidia.title} gtx`,
-   `${Brands.Nvidia.title} rtx`,
-   `${Brands.Amd.title} radeon`,
+   `${Brands.INTEL.title} hd`,
+   `${Brands.INTEL.title} uhd`,
+   `${Brands.INTEL.title} iris xe`,
+   `${Brands.INTEL.title} iris plus`,
+   `${Brands.NVIDIA.title} geforce gtx`,
+   `${Brands.NVIDIA.title} geforce rtx`,
+   `${Brands.NVIDIA.title} gtx`,
+   `${Brands.NVIDIA.title} rtx`,
+   `${Brands.AMD.title} radeon`,
 ];
 
 export default class ProductPreset {
@@ -129,9 +139,9 @@ export default class ProductPreset {
    static generateStockLabels(product) {
       let labels = [];
 
-      if (product.isPricePromotion()) labels.push(Labels.Promotion);
-      if (!product.isStockAvailable()) labels.push(Labels.OutOfStock);
-      if (product.isStockSecondHand()) labels.push(Labels.SecondHand);
+      if (product.isPricePromotion()) labels.push(Label.PROMOTION);
+      if (!product.isStockAvailable()) labels.push(Label.OUT_OF_STOCK);
+      if (product.isStockSecondHand()) labels.push(Label.SECOND_HAND);
 
       return labels;
    }
@@ -140,7 +150,9 @@ export default class ProductPreset {
 
       return specifications
          .filter((itemSpec) => {
-            return Object.keys(this.Specifications).includes(itemSpec?.type?.key);
+            return Object.keys(this.Specifications).includes(
+               itemSpec?.type?.key,
+            );
          })
          .map((itemSpec) => {
             const compares = this.Specifications[itemSpec.type.key];
@@ -193,7 +205,9 @@ export default class ProductPreset {
             }
 
             if (itemSpec.type.key === ProductSpecType.Key.Graphic) {
-               for (const compare of compares.map((compare) => compare).reverse()) {
+               for (const compare of compares
+                  .map((compare) => compare)
+                  .reverse()) {
                   if (content.includes(compare)) {
                      return {
                         name: compare,

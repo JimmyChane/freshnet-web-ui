@@ -1,6 +1,7 @@
 <script>
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
    import LeftNavItem from "./NavigationLeft-Item.vue";
+   import U from "@/U";
 
    export default {
       emits: ["click", "click-expand"],
@@ -12,39 +13,32 @@
          isSelectedDark: { type: Boolean, default: true },
       },
       computed: {
-         iconArrow() {
-            if (this.isSelected && this.isSelectedDark)
-               return this.host.icon("arrowDown-FFFFFF");
-            return this.host.icon("arrowDown-2A4858");
+         iconArrow: (c) => {
+            if (c.isSelected && c.isSelectedDark)
+               return c.host.icon("arrowDown-FFFFFF");
+            return c.host.icon("arrowDown-2A4858");
          },
-         styleClass() {
-            if (this.isSelected) {
-               if (this.isSelectedDark) return "LeftNavQuery-isSelectedDark";
-               return "LeftNavQuery-isSelected";
-            }
-            return "LeftNavQuery-notSelected";
+         styleClass: (c) => {
+            if (!c.isSelected) return "LeftNavQuery-notSelected";
+            if (c.isSelectedDark) return "LeftNavQuery-isSelectedDark";
+            return "LeftNavQuery-isSelected";
          },
 
-         hasGroups() {
-            return Array.isArray(this.item.groups) && this.item.groups.length;
-         },
+         hasGroups: (c) => U.optArray(c.item.groups).length,
 
-         isWide: (context) => context.item.isWide(),
-         isSelected: (context) => context.item.isSelected(),
-         isExpanded: (context) => context.item.isExpanded(),
+         isWide: (c) => c.item.isWide(),
+         isSelected: (c) => c.item.isSelected(),
+         isExpanded: (c) => c.item.isExpanded(),
       },
    };
 </script>
 
 <template>
    <button
-      :class="[
-         'LeftNavQuery',
-         styleClass,
-         `LeftNavQuery-${isWide ? 'isWide' : 'isThin'}`,
-         isSelected && isExpanded ? 'LeftNavQuery-isExpanded' : '',
-         hasGroup2s && isSelected ? 'LeftNavQuery-hasGroup2s-isSelected' : '',
-      ]"
+      :class="['LeftNavQuery', styleClass]"
+      :isSelectedIsExpanded="`${isSelected && isExpanded}`"
+      :hasGroup2IsSelected="`${hasGroup2s && isSelected}`"
+      :isWide="`${isWide}`"
       @click="$emit('click', item)"
    >
       <div class="LeftNavQuery-body transition">
@@ -59,12 +53,7 @@
 
          <div class="LeftNavQuery-arrow" v-if="isWide && hasGroups">
             <ButtonIcon
-               :class="[
-                  'LeftNavQuery-arrow-button',
-                  `LeftNavQuery-arrow-button-${
-                     !isSelected && isExpanded ? 'isExpanded' : 'isCollapsed'
-                  }`,
-               ]"
+               class="LeftNavQuery-arrow-button"
                :src="iconArrow"
                @click="$emit('click-open', item)"
             />
@@ -125,6 +114,15 @@
          }
       }
    }
+   .LeftNavQuery-isSelectedDark {
+      cursor: default;
+      .LeftNavQuery-body {
+         background: var(--primary-color);
+         .LeftNavQuery-item-parent {
+            color: white;
+         }
+      }
+   }
    .LeftNavQuery-notSelected {
       cursor: pointer;
       &:hover,
@@ -146,17 +144,7 @@
       }
    }
 
-   .LeftNavQuery-isSelectedDark {
-      cursor: default;
-      .LeftNavQuery-body {
-         background: var(--primary-color);
-         .LeftNavQuery-item-parent {
-            color: white;
-         }
-      }
-   }
-
-   .LeftNavQuery-isWide {
+   .LeftNavQuery[isWide="true"] {
       .LeftNavQuery-body {
          width: 100%;
          border-radius: 0.5em;
@@ -165,7 +153,7 @@
          }
       }
    }
-   .LeftNavQuery-isThin {
+   .LeftNavQuery[isWide="false"] {
       .LeftNavQuery-body {
          border-radius: 50%;
          align-items: center;
@@ -179,7 +167,7 @@
       }
    }
 
-   .LeftNavQuery-isExpanded {
+   .LeftNavQuery[isSelectedIsExpanded="true"] {
       .LeftNavQuery-body {
          background: #d9dbdd;
          .LeftNavQuery-arrow {
@@ -189,8 +177,7 @@
          }
       }
    }
-
-   .LeftNavQuery-hasGroup2s-isSelected {
+   .LeftNavQuery[hasGroup2IsSelected="true"] {
       width: 100%;
       border-radius: 0;
       padding: 0;

@@ -4,9 +4,7 @@
          inputName: { type: String, default: "" },
          inputPhoneNumber: { type: String, default: "" },
       },
-      data() {
-         return { customerTemplates: [], customerSuggestions: [] };
-      },
+      data: (c) => ({ customerTemplates: [], customerSuggestions: [] }),
       watch: {
          inputName() {
             this.input();
@@ -31,10 +29,7 @@
          },
 
          async input() {
-            if (
-               this.inputName.length === 0 &&
-               this.inputPhoneNumber.length === 0
-            ) {
+            if (this.inputName.length === 0 && this.inputPhoneNumber.length === 0) {
                this.customerSuggestions = [];
                return;
             }
@@ -42,21 +37,14 @@
             const name = this.inputName.toLowerCase();
             const phoneNumber = this.inputPhoneNumber;
 
-            const templates = this.customerTemplates.reduce(
-               (templates, template) => {
-                  const isNameInclude = template.name
-                     .toLowerCase()
-                     .includes(name);
-                  const ePhoneNumber = this.customerPhoneNumberStr(template);
-                  const isPhoneNumberInclude =
-                     ePhoneNumber.includes(phoneNumber);
+            const templates = this.customerTemplates.reduce((templates, template) => {
+               const isNameInclude = template.name.toLowerCase().includes(name);
+               const ePhoneNumber = this.customerPhoneNumberStr(template);
+               const isPhoneNumberInclude = ePhoneNumber.includes(phoneNumber);
 
-                  if (isNameInclude && isPhoneNumberInclude)
-                     templates.push(template);
-                  return templates;
-               },
-               [],
-            );
+               if (isNameInclude && isPhoneNumberInclude) templates.push(template);
+               return templates;
+            }, []);
 
             if (templates.length === 0) {
                this.customerSuggestions = [];
@@ -99,10 +87,7 @@
       <div class="LayoutFindCustomer-body">
          <div class="LayoutFindCustomer-header">
             <span class="LayoutFindCustomer-title">Find Customers</span>
-            <button
-               class="LayoutFindCustomer-close"
-               @click="() => clickClose()"
-            >
+            <button class="LayoutFindCustomer-close" @click="() => clickClose()">
                <img
                   class="LayoutFindCustomer-close-img"
                   :src="host.icon('close-000000')"
@@ -126,8 +111,7 @@
                <div
                   class="LayoutFindCustomer-item-dot"
                   v-if="
-                     customerSuggestion.name &&
-                     customerPhoneNumberStr(customerSuggestion)
+                     customerSuggestion.name && customerPhoneNumberStr(customerSuggestion)
                   "
                ></div>
                <span class="LayoutFindCustomer-item-phoneNumber">{{

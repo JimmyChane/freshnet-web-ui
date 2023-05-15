@@ -1,6 +1,5 @@
 <script>
    import Loading from "@/components/Loading.vue";
-   import PopupWindow from "@/components/window/PopupWindow.vue";
    import WindowRemove from "@/components/window/WindowRemove.vue";
    import PanelServices from "./PanelServices.vue";
    import PanelService from "./PanelService.vue";
@@ -10,9 +9,12 @@
    import WindowUpdateDescription from "./WindowUpdateDescription.vue";
    import WindowUpdateBelonging from "./WindowUpdateBelonging.vue";
    import WindowUpdateCustomer from "./WindowUpdateCustomer.vue";
-   import Drawer from "@/components/Drawer.vue";
 
    import HostIcon from "@/host/HostIcon";
+
+   import PopupContext from "@/tools/PopupContext";
+
+   import PanelRight from "@/components/panel/PanelRight.vue";
 
    export default {
       key: "service",
@@ -26,7 +28,6 @@
       components: {
          PanelServices,
          Loading,
-         PopupWindow,
          PanelService,
          WindowSearch,
          WindowImportService,
@@ -35,288 +36,198 @@
          WindowUpdateDescription,
          WindowUpdateBelonging,
          WindowRemove,
-         Drawer,
+         PanelRight,
       },
-      emits: ["callback-side-expand"],
-      data() {
-         return {
-            actions: {
-               onClickClose: () => this.$root.nextRoute({ query: { service: null } }),
-               onClickRemove: (x) => this.clickDeleteService(x),
-               onClickToAddEvent: (event) => {
-                  this.serviceStore
-                     .dispatch("addEventToId", {
-                        serviceID: this.currentService.id,
-                        data: event,
-                     })
-                     .catch((error) => {
-                        this.store.dispatch("snackbarShow","Failed to create an event");
-                        throw error;
-                     });
-               },
-               onClickRemoveEvent: (x) => this.clickRemoveEvent(x),
-               onClickRemoveImage: (x) => this.clickRemoveImage(x),
-               onClickUpdateCustomer: (x) => this.clickUpdateCustomer(x),
-               onClickUpdateDescription: (x) => this.clickUpdateDescription(x),
-               onClickUpdateBelongings: (x) => this.clickUpdateBelongings(x),
+      data: (c) => ({
+         actions: {
+            onClickClose: () => c.clickService(null),
+            onClickRemove: (service) =>
+               c.windowAction("removeService", "start", service),
+            onClickToAddEvent: (event) => {
+               const arg = { serviceID: c.currentService.id, data: event };
+
+               c.serviceStore.dispatch("addEventToId", arg).catch((error) => {
+                  c.store.dispatch("snackbarShow", "Failed to create an event");
+                  throw error;
+               });
             },
-
-            popup: {
-               search: {
-                  isShowing: false,
-                  start: (context, self, data) => (self.isShowing = true),
-                  dismiss: (context, self, data) => (self.isShowing = false),
-               },
-               importService: {
-                  isShowing: false,
-                  start: (context, self, data) => (self.isShowing = true),
-                  dismiss: (context, self, data) => (self.isShowing = false),
-                  ok: (context, self, data) => {
-                     self.isShowing = false;
-                     context.clickService(data);
-                  },
-               },
-               newService: {
-                  isShowing: false,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     context.$refs.WindowAddService.focus();
-                  },
-                  dismiss: (context, self, data) => (self.isShowing = false),
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("addItem", { data })
-                        .then((result) => {
-                           self.isShowing = !result;
-                           context.clickService(result);
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Failed to create a service");
-                           throw error;
-                        });
-                  },
-               },
-               removeService: {
-                  isShowing: false,
-                  value: null,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.value = data;
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.value = null;
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("removeItemOfId", { id: data.id })
-                        .then(() => {
-                           self.dismiss(context, self);
-                           if (context.currentServiceId === data.id) {
-                              context.$root.replaceRoute({
-                                 query: { service: null },
-                              });
-                           }
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Delete Failed");
-                           throw error;
-                        });
-                  },
-               },
-               removeEvent: {
-                  isShowing: false,
-                  value: null,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.value = data;
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.value = null;
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("removeEventFromId", {
-                           serviceID: data.service.id,
-                           time: data.event.timestamp.time,
-                        })
-                        .then((result) => {
-                           self.dismiss(context, self);
-                        });
-                  },
-               },
-               customer: {
-                  isShowing: false,
-                  value: null,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.value = data;
-                     context.$refs.WindowUpdateCustomer.focus();
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.value = null;
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("updateCustomerOfId", {
-                           serviceID: context.currentService.id,
-                           customer: data,
-                        })
-                        .then((service) => {
-                           self.dismiss(context, self);
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Update Customer Failed");
-                           throw error;
-                        });
-                  },
-               },
-               removeImage: {
-                  isShowing: false,
-                  value: null,
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.value = data;
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.value = null;
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("removeImageFromId", {
-                           serviceID: context.currentService.id,
-                           image: data,
-                        })
-                        .then((service) => {
-                           context.store.dispatch("imageViewerHide");
-                           self.dismiss(context, self);
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Delete Image Failed");
-                           throw error;
-                        });
-                  },
-               },
-               editDescription: {
-                  isShowing: false,
-                  value: "",
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.value = data;
-                     context.$refs.WindowUpdateDescription.focus();
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.value = "";
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("updateDescriptionOfId", {
-                           serviceID: context.currentService.id,
-                           description: data,
-                        })
-                        .then((service) => {
-                           self.dismiss(context, self);
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Update Description Failed");
-                           throw error;
-                        });
-                  },
-               },
-               belongings: {
-                  isShowing: false,
-                  values: [],
-                  start: (context, self, data) => {
-                     self.isShowing = true;
-                     self.values = data;
-                     context.$refs.WindowUpdateBelonging.focus();
-                  },
-                  dismiss: (context, self, data) => {
-                     self.isShowing = false;
-                     self.values = [];
-                  },
-                  ok: (context, self, data) => {
-                     context.serviceStore
-                        .dispatch("updateBelongingsOfId", {
-                           serviceID: context.currentService.id,
-                           belongings: data,
-                        })
-                        .then((service) => {
-                           self.dismiss(context, self);
-                        })
-                        .catch((error) => {
-                           context.store.dispatch("snackbarShow","Update Belongings Failed");
-                           throw error;
-                        });
-                  },
-               },
-            },
-
-            items: [],
-            searchResults: [],
-
-            currentService: null,
-            drawerService: null,
-         };
-      },
-      computed: {
-         itemDrawerEdge: () => Drawer.Edge.RIGHT,
-         itemDrawerMode() {
-            if (this.isWide) {
-               return this.currentService
-                  ? Drawer.Mode.FIXED_EXPAND
-                  : Drawer.Mode.FIXED_COLLAPSE;
-            } else {
-               return this.currentService
-                  ? Drawer.Mode.DRAWER_EXPAND
-                  : Drawer.Mode.DRAWER_COLLAPSE;
-            }
+            onClickRemoveEvent: (event) =>
+               c.windowAction("removeEvent", "start", event),
+            onClickRemoveImage: (image) =>
+               c.windowAction("removeImage", "start", image),
+            onClickUpdateCustomer: (customer) =>
+               c.windowAction("customer", "start", customer),
+            onClickUpdateDescription: (description) =>
+               c.windowAction("editDescription", "start", description),
+            onClickUpdateBelongings: (belongings) =>
+               c.windowAction("belongings", "start", belongings),
          },
+         popup: {
+            search: new PopupContext(c),
+            importService: new PopupContext(c).onConfirm(
+               (accept, reject, data) => {
+                  accept();
+                  c.clickService(data);
+               },
+            ),
+            newService: new PopupContext(c)
+               .onShow((accept, reject) => {
+                  c.$refs.WindowAddService.focus();
+                  accept();
+               })
+               .onConfirm(async (accept, reject, data) => {
+                  try {
+                     const result = await c.serviceStore.dispatch("addItem", {
+                        data,
+                     });
 
-         isWide: (c) => c.$root.window.innerWidth > 1200,
+                     result ? accept() : reject();
+                     c.clickService(result);
+                  } catch (error) {
+                     c.store.dispatch(
+                        "snackbarShow",
+                        "Failed to create a service",
+                     );
+                     reject();
+                     throw error;
+                  }
+               }),
+            removeService: new PopupContext(c).onConfirm(
+               async (accept, reject, data) => {
+                  try {
+                     await c.serviceStore.dispatch("removeItemOfId", {
+                        id: data.id,
+                     });
+                     accept();
+                     if (c.currentServiceId === data.id) {
+                        c.$root.replaceQuery({ query: { service: null } });
+                     }
+                  } catch (error) {
+                     c.store.dispatch("snackbarShow", "Delete Failed");
+                     reject();
+                     throw error;
+                  }
+               },
+            ),
+            removeEvent: new PopupContext(c).onConfirm(
+               async (accept, reject, data) => {
+                  await c.serviceStore.dispatch("removeEventFromId", {
+                     serviceID: data.service.id,
+                     time: data.event.timestamp.time,
+                  });
+                  accept();
+               },
+            ),
+            customer: new PopupContext(c)
+               .onShow((accept, reject, data) => {
+                  accept();
+                  c.$refs.WindowUpdateCustomer.focus();
+               })
+               .onConfirm(async (accept, reject, data) => {
+                  try {
+                     const service = await c.serviceStore.dispatch(
+                        "updateCustomerOfId",
+                        {
+                           serviceID: c.currentService.id,
+                           customer: data,
+                        },
+                     );
+                     accept();
+                  } catch (error) {
+                     c.store.dispatch("snackbarShow", "Update Customer Failed");
+                     reject();
+                     throw error;
+                  }
+               }),
+            removeImage: new PopupContext(c).onConfirm(
+               async (accept, reject, data) => {
+                  try {
+                     const service = await c.serviceStore.dispatch(
+                        "removeImageFromId",
+                        {
+                           serviceID: c.currentService.id,
+                           image: data,
+                        },
+                     );
+                     c.store.dispatch("imageViewerHide");
+                     accept();
+                  } catch (error) {
+                     c.store.dispatch("snackbarShow", "Delete Image Failed");
+                     reject();
+                     throw error;
+                  }
+               },
+            ),
+            editDescription: new PopupContext(c)
+               .onShow((accept, reject, data) => {
+                  accept();
+                  c.$refs.WindowUpdateDescription.focus();
+               })
+               .onConfirm(async (accept, reject, data) => {
+                  try {
+                     const service = await c.serviceStore.dispatch(
+                        "updateDescriptionOfId",
+                        {
+                           serviceID: c.currentService.id,
+                           description: data,
+                        },
+                     );
+                     accept();
+                  } catch (error) {
+                     c.store.dispatch(
+                        "snackbarShow",
+                        "Update Description Failed",
+                     );
+                     reject();
+                     throw error;
+                  }
+               }),
+            belongings: new PopupContext(c)
+               .onShow((accept, reject, data) => {
+                  accept();
+                  c.$refs.WindowUpdateBelonging.focus();
+               })
+               .onConfirm(async (accept, reject, data) => {
+                  try {
+                     const service = await c.serviceStore.dispatch(
+                        "updateBelongingsOfId",
+                        {
+                           serviceID: c.currentService.id,
+                           belongings: data,
+                        },
+                     );
+                     accept();
+                  } catch (error) {
+                     c.store.dispatch(
+                        "snackbarShow",
+                        "Update Belongings Failed",
+                     );
+                     reject();
+                     throw error;
+                  }
+               }),
+         },
+         panelListened: { isWide: false },
 
-         actionMenus() {
-            let actionMenus = [];
+         items: [],
+         searchResults: [],
 
-            if (this.isCurrentStatePending) {
-               actionMenus.push({
-                  key: "add",
-                  title: "Add",
-                  icon: this.host.icon("add-000000"),
-                  click: this.clickAddService,
-               });
-            }
-
-            if (this.isCurrentStatePending && this.isCurrentUserAdmin) {
-               actionMenus.push({
-                  key: "import",
-                  title: "Import",
-                  click: this.clickImportService,
-               });
-            }
-
-            if (this.currentUser) {
-               actionMenus.push({
+         currentService: null,
+         drawerService: null,
+      }),
+      computed: {
+         actionMenus: (c) => {
+            return [
+               {
                   key: "refresh",
                   title: "Refresh",
-                  icon: this.host.icon("refresh-000000"),
-                  click: this.clickRefresh,
-               });
-            }
-
-            return actionMenus;
+                  icon: c.host.icon("refresh-000000"),
+                  click: () => c.clickRefresh(),
+               },
+            ];
          },
 
          currentUser: (c) => c.loginStore.getters.user,
-         isCurrentUserAdmin: (c) => c.currentUser.isTypeAdmin(),
-         isCurrentUserDefault: (c) => c.currentUser.isDefault(),
-
-         currentState: (c) => c.$route.query.state,
-         isCurrentStatePending: (c) => c.currentState === "pending",
 
          lastModified: (c) => c.serviceStore.getters.lastModified,
          currentServiceId: (c) => c.$route.query.service,
@@ -327,16 +238,6 @@
          },
          currentServiceId() {
             this.invalidate();
-         },
-
-         currentService() {
-            if (!this.currentService) {
-               setTimeout(() => {
-                  this.drawerService = this.currentService;
-               }, 700);
-            } else {
-               this.drawerService = this.currentService;
-            }
          },
       },
       mounted() {
@@ -359,16 +260,34 @@
          async invalidateServiceId() {
             this.currentService = null;
 
-            if (!this.currentServiceId) return;
+            if (!this.currentServiceId) {
+               return;
+            }
 
-            const currentService = await this.serviceStore.dispatch(
+            const service = await this.serviceStore.dispatch(
                "getItemOfId",
                this.currentServiceId,
             );
 
-            if (!currentService) return;
-            if (this.currentServiceId === currentService.id)
-               this.currentService = currentService;
+            if (!service) {
+               this.clickService(null);
+               return;
+            }
+
+            if (this.currentServiceId === service.id) {
+               this.updateServiceUI(service);
+            }
+         },
+
+         updateServiceUI(service) {
+            const hasNextService = !!service;
+
+            this.currentService = service ?? null;
+            if (hasNextService) {
+               this.drawerService = service;
+            } else {
+               setTimeout(() => (this.drawerService = service), 700);
+            }
          },
 
          clickRefresh() {
@@ -380,38 +299,40 @@
          clickImportService() {
             this.windowAction("importService", "start");
          },
-         clickDeleteService(service) {
-            this.windowAction("removeService", "start", service);
-         },
          clickService(service) {
-            if (this.currentService) {
-               this.$root.replaceRoute({
-                  query: { service: service ? service.id : null },
-               });
+            service = service ? service : null;
+
+            const hasPreviousSerivce = !!this.currentService;
+            const hasNextService = !!service;
+            const query = { service: service?.id ?? null };
+
+            if (hasPreviousSerivce && hasNextService) {
+               this.$root.replaceQuery({ query });
             } else {
-               this.$root.nextRoute({
-                  query: { service: service ? service.id : null },
-               });
+               this.$root.nextQuery({ query });
             }
-         },
-         clickRemoveEvent(event) {
-            this.windowAction("removeEvent", "start", event);
-         },
-         clickUpdateCustomer(customer) {
-            this.windowAction("customer", "start", customer);
-         },
-         clickUpdateDescription(description) {
-            this.windowAction("editDescription", "start", description);
-         },
-         clickUpdateBelongings(belongings) {
-            this.windowAction("belongings", "start", belongings);
-         },
-         clickRemoveImage(image) {
-            this.windowAction("removeImage", "start", image);
+
+            this.updateServiceUI(service);
          },
 
          windowAction(window, action, data) {
             const self = this.popup[window];
+
+            if (self instanceof PopupContext) {
+               switch (action) {
+                  case "start":
+                     self.show(data);
+                     break;
+                  case "dismiss":
+                     self.dismiss();
+                     break;
+                  case "ok":
+                     self.confirm(data);
+                     break;
+               }
+               return;
+            }
+
             self[action](this, self, data);
          },
       },
@@ -420,7 +341,7 @@
 
 <template>
    <div class="PageService">
-      <div :class="['PageService-panels', `PageService-${isWide ? 'isWide' : 'isThin'}`]">
+      <div class="PageService-panels" :isPanelWide="`${panelListened.isWide}`">
          <PanelServices
             class="PageService-PanelServices"
             :menus="actionMenus"
@@ -428,27 +349,25 @@
             :currentItem="currentService"
             @click-service="(item) => clickService(item)"
             @click-search="() => windowAction('search', 'start')"
+            @click-add="() => clickAddService()"
+            @click-import="() => clickImportService()"
          />
 
-         <div class="PageService-PanelRightEmpty">
-            <span class="PageService-PanelRightEmpty-text">Select to view</span>
-         </div>
-
-         <Drawer
-            class="PageService-RightDrawer"
-            :class="[isWide ? 'PageService-RightDrawer-isWide' : '']"
-            :edge="itemDrawerEdge"
-            :mode="itemDrawerMode"
-            :isExpand="!!currentService"
-            :isDrawer="!isWide || !!drawerService"
-            @click-collapse="$root.nextRoute({ query: { service: null } })"
+         <PanelRight
+            class="PageService-PanelRight"
+            titleEmpty="Select service to view"
+            :isShowing="!!currentService"
+            @click-collapse="
+               () => $root.nextQuery({ query: { service: null } })
+            "
+            @on-isWide="(isWide) => (panelListened.isWide = isWide)"
          >
             <PanelService
                class="PageService-PanelRight"
                :service="drawerService"
                :actions="actions"
             />
-         </Drawer>
+         </PanelRight>
       </div>
 
       <WindowSearch
@@ -460,136 +379,101 @@
          @click-item="(item) => clickService(item)"
       />
 
-      <!-- Import Service Window -->
-      <PopupWindow
+      <WindowImportService
          class="PageService-window"
          :isShowing="popup.importService.isShowing"
+         @click-cancel="() => windowAction('importService', 'dismiss')"
+         @click-ok="(service) => windowAction('importService', 'ok', service)"
          @click-dismiss="() => windowAction('importService', 'dismiss')"
-      >
-         <WindowImportService
-            class="PageService-window-child"
-            @click-cancel="() => windowAction('importService', 'dismiss')"
-            @click-ok="(service) => windowAction('importService', 'ok', service)"
-         />
-      </PopupWindow>
+      />
 
-      <!-- Add Service Window -->
-      <PopupWindow
+      <WindowAddService
          class="PageService-window"
+         ref="WindowAddService"
          :isShowing="popup.newService.isShowing"
-         @click-dismiss="() => windowAction('newService', 'dismiss')"
-      >
-         <WindowAddService
-            class="PageService-window-child"
-            ref="WindowAddService"
-            @callback-create="(data) => windowAction('newService', 'ok', data)"
-            @callback-cancel="() => windowAction('newService', 'dismiss')"
-         />
-      </PopupWindow>
+         @callback-create="(data) => windowAction('newService', 'ok', data)"
+         @callback-cancel="() => windowAction('newService', 'dismiss')"
+         @callback-dismiss="() => windowAction('newService', 'dismiss')"
+      />
 
-      <!-- Update Service Customer Window -->
-      <PopupWindow
+      <WindowUpdateCustomer
          class="PageService-window"
+         ref="WindowUpdateCustomer"
          v-if="drawerService"
          :isShowing="popup.customer.isShowing"
-         @click-dismiss="() => windowAction('customer', 'dismiss')"
-      >
-         <WindowUpdateCustomer
-            class="PageService-window-child"
-            ref="WindowUpdateCustomer"
-            :value="popup.customer.value"
-            @callback-change="(customer) => windowAction('customer', 'ok', customer)"
-            @callback-cancel="() => windowAction('customer', 'dismiss')"
-         />
-      </PopupWindow>
+         :value="popup.customer.input"
+         @callback-change="
+            (customer) => windowAction('customer', 'ok', customer)
+         "
+         @callback-cancel="() => windowAction('customer', 'dismiss')"
+         @callback-dismiss="() => windowAction('customer', 'dismiss')"
+      />
 
-      <!-- Update Service Description Window -->
-      <PopupWindow
+      <WindowUpdateDescription
          class="PageService-window"
+         ref="WindowUpdateDescription"
          v-if="drawerService"
          :isShowing="popup.editDescription.isShowing"
-         @click-dismiss="() => windowAction('editDescription', 'dismiss')"
-      >
-         <WindowUpdateDescription
-            class="PageService-window-child"
-            ref="WindowUpdateDescription"
-            :description="popup.editDescription.value"
-            @callback-change="
-               (description) => windowAction('editDescription', 'ok', description)
-            "
-            @callback-cancel="() => windowAction('editDescription', 'dismiss')"
-         />
-      </PopupWindow>
+         :description="popup.editDescription.input"
+         @callback-change="
+            (description) => windowAction('editDescription', 'ok', description)
+         "
+         @callback-cancel="() => windowAction('editDescription', 'dismiss')"
+         @callback-dismiss="() => windowAction('editDescription', 'dismiss')"
+      />
 
-      <!-- Update Service Belonging Window -->
-      <PopupWindow
+      <WindowUpdateBelonging
          class="PageService-window"
+         ref="WindowUpdateBelonging"
          v-if="drawerService"
          :isShowing="popup.belongings.isShowing"
-         @click-dismiss="() => windowAction('belongings', 'dismiss')"
-      >
-         <WindowUpdateBelonging
-            class="PageService-window-child"
-            ref="WindowUpdateBelonging"
-            :values="popup.belongings.values"
-            @callback-change="
-               (belongings) => windowAction('belongings', 'ok', belongings)
-            "
-            @callback-cancel="() => windowAction('belongings', 'dismiss')"
-         />
-      </PopupWindow>
+         :values="popup.belongings.input"
+         @callback-change="
+            (belongings) => windowAction('belongings', 'ok', belongings)
+         "
+         @callback-cancel="() => windowAction('belongings', 'dismiss')"
+         @callback-dismiss="() => windowAction('belongings', 'dismiss')"
+      />
 
-      <!-- Remove Service Window -->
-      <PopupWindow
+      <WindowRemove
          class="PageService-window"
          :isShowing="popup.removeService.isShowing"
+         title="Delete Service"
+         message="After deleting this service, it cannot be reverted."
+         :value="popup.removeService.input"
+         @click-cancel="() => windowAction('removeService', 'dismiss')"
+         @click-ok="(service) => windowAction('removeService', 'ok', service)"
          @click-dismiss="() => windowAction('removeService', 'dismiss')"
-      >
-         <WindowRemove
-            class="PageService-window-child"
-            title="Delete Service"
-            message="After deleting this service, it cannot be reverted."
-            :value="popup.removeService.value"
-            @click-cancel="() => windowAction('removeService', 'dismiss')"
-            @click-ok="(service) => windowAction('removeService', 'ok', service)"
-         />
-      </PopupWindow>
+      />
 
-      <!-- Remove Event Window -->
-      <PopupWindow
-         class="PageService-window"
+      <WindowRemove
+         class="PageService-window-child"
          v-if="drawerService"
          :isShowing="popup.removeEvent.isShowing"
+         title="Delete Event"
+         message="After deleting this event, it cannot be reverted."
+         :value="popup.removeEvent.input"
+         @click-cancel="() => windowAction('removeEvent', 'dismiss')"
+         @click-ok="(value) => windowAction('removeEvent', 'ok', value)"
          @click-dismiss="() => windowAction('removeEvent', 'dismiss')"
-      >
-         <WindowRemove
-            class="PageService-window-child"
-            title="Delete Event"
-            message="After deleting this event, it cannot be reverted."
-            :value="popup.removeEvent.value"
-            @click-cancel="() => windowAction('removeEvent', 'dismiss')"
-            @click-ok="(value) => windowAction('removeEvent', 'ok', value)"
-         />
-      </PopupWindow>
+      />
 
-      <!-- Remove Image Window -->
-      <PopupWindow
-         class="PageService-window"
+      <WindowRemove
+         class="PageService-window-child"
          v-if="drawerService"
          :isShowing="popup.removeImage.isShowing"
+         title="Delete Image"
+         message="After deleting this image, it cannot be reverted."
+         :value="popup.removeImage.input"
+         @click-cancel="() => windowAction('removeImage', 'dismiss')"
+         @click-ok="(image) => windowAction('removeImage', 'ok', image)"
          @click-dismiss="() => windowAction('removeImage', 'dismiss')"
-      >
-         <WindowRemove
-            class="PageService-window-child"
-            title="Delete Image"
-            message="After deleting this image, it cannot be reverted."
-            :value="popup.removeImage.value"
-            @click-cancel="() => windowAction('removeImage', 'dismiss')"
-            @click-ok="(image) => windowAction('removeImage', 'ok', image)"
-         />
-      </PopupWindow>
+      />
 
-      <Loading class="PageService-loading" :isShowing="serviceStore.getters.isLoading" />
+      <Loading
+         class="PageService-loading"
+         :isShowing="serviceStore.getters.isLoading"
+      />
    </div>
 </template>
 
@@ -622,57 +506,20 @@
          .PageService-PanelServices {
             z-index: 1;
          }
-         .PageService-PanelRightEmpty {
+         .PageService-PanelRight {
             z-index: 2;
-            background-color: hsla(0, 0%, 0%, 0.6);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            .PageService-PanelRightEmpty-text {
-               font-weight: 600;
-               font-size: 1.2rem;
-               color: hsl(0, 0%, 84%);
-               background: hsla(0, 0%, 0%, 0.04);
-               border-radius: 1rem;
-               padding: 4rem 5rem;
-            }
-         }
-
-         .PageService-RightDrawer {
-            z-index: 3;
-            .PageService-PanelRight {
-               width: 100vw;
-               max-width: 100%;
-            }
          }
       }
-      .PageService-isThin {
+      .PageService-panels[isPanelWide="false"] {
          .PageService-PanelServices {
-            width: 100vw;
-            max-width: 100%;
-         }
-         .PageService-PanelRightEmpty {
-            display: none;
-         }
-         .PageService-RightDrawer {
-            width: 100vw;
+            width: 100dvw;
             max-width: 100%;
          }
       }
-      .PageService-isWide {
+      .PageService-panels[isPanelWide="true"] {
          .PageService-PanelServices {
-            width: 100vw;
+            width: 100dvw;
             max-width: 50%;
-         }
-         .PageService-PanelRightEmpty {
-            width: 100vw;
-            max-width: 50%;
-         }
-         .PageService-RightDrawer {
-            width: 100vw;
-            max-width: 50%;
-            position: absolute;
          }
       }
 

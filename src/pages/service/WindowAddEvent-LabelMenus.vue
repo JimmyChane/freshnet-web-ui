@@ -1,7 +1,7 @@
 <script>
    const State = { Expand: 1, Collapse: 2 };
 
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js";
 
    export default {
       State,
@@ -11,9 +11,7 @@
          menu: { type: Object, default: () => null },
          menus: { default: () => [] },
       },
-      data() {
-         return { state: State.Collapse };
-      },
+      data: (c) => ({ state: State.Collapse }),
       computed: {
          parsedMenus() {
             const menus = Array.isArray(this.menus) ? this.menus : [this.menus];
@@ -23,9 +21,9 @@
          },
          isExpand: (c) => c.state === State.Expand,
 
-         menuKey: (c) => (c.menu ? c.menu.key : ""),
-         menuTitle: (c) => (c.menu ? c.menu.title : ""),
-         menuIcon: (c) => (c.menu ? c.menu.icon : ""),
+         menuKey: (c) => c.menu?.key ?? "",
+         menuTitle: (c) => c.menu?.title ?? "",
+         menuIcon: (c) => c.menu?.icon ?? "",
 
          primaryColorBackground: (c) => c.primaryColor.mix("ffffff", 0.8),
          primaryColorBackgroundHover: (c) => c.primaryColor.mix("ffffff", 0.6),

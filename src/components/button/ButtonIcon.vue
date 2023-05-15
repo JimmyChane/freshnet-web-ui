@@ -74,7 +74,7 @@
       }
 
       .ButtonIcon-icon {
-         font-size: inherit;
+         font-size: calc(var(--size) / 1.1);
       }
    }
 </style>

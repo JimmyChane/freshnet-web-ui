@@ -1,8 +1,10 @@
 <script>
    import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import ButtonIcon from "@/components/button/ButtonIcon.vue";
+   import PanelItemCustomer from "@/pages/manage/PanelItem-Customer.vue";
+   import { format, formatDistanceToNow } from "date-fns";
+
    export default {
-      components: { Actionbar, ButtonIcon },
+      components: { Actionbar, PanelItemCustomer },
       props: {
          service: { type: Object },
          actionbarColor: "",
@@ -13,8 +15,25 @@
          customer: (c) => c.service.customer,
          name: (c) => c.customer.name,
          phoneNumber: (c) => c.customer.phoneNumber,
-         phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
+         phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
          isPhoneNumber: (c) => !!c.phoneNumberStr,
+         timestamp: (c) => c.service.timestamp,
+         timestampText: (c) => {
+            const { time } = c.timestamp;
+
+            const timeText = format(time, "EEEE, dd/LL/yyyy hh:mmaaa");
+
+            const distance = formatDistanceToNow(time);
+            const distanceText = `(${distance} ago)`;
+
+            const day = c.timestamp.isToday()
+               ? "Today, "
+               : c.timestamp.isYesterday()
+               ? "Yesterday, "
+               : "";
+
+            return `${day}${timeText} ${distanceText}`;
+         },
 
          menus: (c) => {
             const menus = [];
@@ -29,7 +48,7 @@
                });
                menus.push({
                   title: "Call Customer",
-                  icon: c.host.icon("call-000000"),
+                  icon: c.host.icon("call-color"),
                   href: `tel:+6${c.phoneNumberStr}`,
                });
             }
@@ -72,28 +91,15 @@
          }"
          :rightMenus="menus"
       >
-         <div class="PanelService-actionbar-customer" v-if="customer">
-            <div class="PanelService-actionbar-customer-data">
-               <span class="PanelService-actionbar-customer-name" v-if="name.length">{{
-                  name
-               }}</span>
-               <span
-                  class="PanelService-actionbar-customer-phoneNumber"
-                  v-if="phoneNumberStr.length"
-                  >{{ phoneNumberStr }}</span
-               >
-            </div>
-
-            <ButtonIcon
-               class="PanelService-actionbar-customer-edit"
-               :src="host.icon('edit-505050')"
-               @click="() => actions.onClickUpdateCustomer(customer)"
-            />
-         </div>
+         <PanelItemCustomer
+            v-if="customer"
+            :customer="customer"
+            @click-edit="(customer) => actions.onClickUpdateCustomer(customer)"
+         />
       </Actionbar>
 
       <span class="PanelService-actionbar-timestamp" v-if="service">{{
-         service.timestamp
+         timestampText
       }}</span>
    </div>
 </template>
@@ -109,32 +115,6 @@
       .PanelService-actionbar-main {
          background-color: inherit;
          border-bottom: inherit;
-         .PanelService-actionbar-customer {
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 0.5rem;
-
-            .PanelService-actionbar-customer-data {
-               display: flex;
-               flex-direction: column;
-               align-items: flex-start;
-               justify-content: center;
-               line-height: 1rem;
-
-               .PanelService-actionbar-customer-name {
-                  font-weight: 500;
-               }
-               .PanelService-actionbar-customer-phoneNumber {
-                  font-size: 0.8em;
-               }
-            }
-            .PanelService-actionbar-customer-edit {
-               font-size: 0.8rem;
-            }
-         }
       }
 
       .PanelService-actionbar-timestamp {

@@ -1,44 +1,51 @@
 <script>
    import chroma from "chroma-js";
    import Menu from "@/components/Menu.vue";
-   import ModuleEvent from "@/items/data/ServiceEvent.js";
    import TextArea from "@/components/InputTextArea.vue";
+   import AddImage from "./PanelService-AddEvent-AddImage.vue";
+   import Method from "@/items/ServiceEventMethod.js";
 
    export default {
-      components: { Menu, TextArea },
-      data() {
-         return {
-            ModuleEvent,
+      components: { Menu, TextArea, AddImage },
+      data: (c) => ({
+         eventImagePreviews: [],
 
-            nameOfUser: "unknown",
-            eventMethod: ModuleEvent.Method.Quotation,
-            eventDescription: "",
-            eventStatus: "",
-            eventAmount: 0,
-         };
-      },
+         nameOfUser: "unknown",
+         eventMethod: Method.QUOTATION.key,
+         eventDescription: "",
+         eventStatus: "",
+         eventAmount: 0,
+         eventImages: [],
+      }),
       computed: {
          primaryColor: (c) => c.methodMenu.color,
          primaryColor1: (c) => c.primaryColor.mix("ffffff", 0.45),
          primaryColor2: (c) => c.primaryColor.mix("ffffff", 0.6),
 
-         isMethodInfo: (c) => c.eventMethod === ModuleEvent.Method.Info,
-         isMethodQuotation: (c) => c.eventMethod === ModuleEvent.Method.Quotation,
-         isMethodPurchase: (c) => c.eventMethod === ModuleEvent.Method.Purchase,
+         isMethodInfo: (c) => c.eventMethod === Method.INFO.key,
+         isMethodQuotation: (c) => c.eventMethod === Method.QUOTATION.key,
+         isMethodPurchase: (c) => c.eventMethod === Method.PURCHASE.key,
 
-         methodMenu: (c) => c.methodMenus.find((menu) => menu.key === c.eventMethod),
+         methodMenu: (c) =>
+            c.methodMenus.find((menu) => menu.key === c.eventMethod),
          methodMenus: (c) => [
             {
-               key: ModuleEvent.Method.Quotation,
+               key: Method.QUOTATION.key,
                title: "Quotation",
                color: chroma("961d96"),
-               click: (menu) => (c.eventMethod = menu.key),
+               click: (menu) => {
+                  c.eventMethod = menu.key;
+                  c.invalidateMethod();
+               },
             },
             {
-               key: ModuleEvent.Method.Purchase,
+               key: Method.PURCHASE.key,
                title: "Purchase",
                color: chroma("258915"),
-               click: (menu) => (c.eventMethod = menu.key),
+               click: (menu) => {
+                  c.eventMethod = menu.key;
+                  c.invalidateMethod();
+               },
             },
          ],
          methodMenuCorner: () => Menu.Corner.BOTTOM,
@@ -77,7 +84,8 @@
          invalidateMethod() {
             const { InputStatus, InputAmount } = this.$refs;
             if (this.isMethodInfo) InputStatus.focus();
-            if (this.isMethodQuotation || this.isMethodPurchase) InputAmount.focus();
+            if (this.isMethodQuotation || this.isMethodPurchase)
+               InputAmount.focus();
          },
          invalidateUser() {
             const user = this.user;
@@ -86,54 +94,52 @@
             }
          },
 
-         toEvent() {
-            const event = {
-               timestamp: Date.now(),
-               method: this.eventMethod,
-               description: this.eventDescription,
-            };
-
-            if (this.isMethodInfo) {
-               event.status = this.eventStatus;
-               return event;
-            }
-
-            if (this.isMethodQuotation || this.isMethodPurchase) {
-               event.price = { amount: this.eventAmount, currency: "RM" };
-               return event;
-            }
-
-            return null;
-         },
-
          clear() {
             this.nameOfUser = "";
 
             this.eventDescription = "";
             this.eventStatus = "";
             this.eventAmount = 0;
+            this.eventImages = [];
 
-            this.focus();
-            this.invalidateMethod();
+            this.invalidateEventImages();
             this.invalidateUser();
          },
          submit() {
             if (this.isUserDefault && !this.nameOfUser.trim()) {
-               this.store.dispatch("snackbarShow","You must specify your name");
+               this.store.dispatch(
+                  "snackbarShow",
+                  "You must specify your name",
+               );
                return;
             }
             if (!this.eventDescription.trim()) {
-               this.store.dispatch("snackbarShow",'You must specify "Description"');
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify "Description"',
+               );
                return;
             }
 
-            let event = this.toEvent();
+            const event = {
+               timestamp: Date.now(),
+               method: this.eventMethod,
+               description: this.eventDescription,
+               images: this.eventImages,
+            };
+
+            if (this.isMethodInfo) {
+               event.status = this.eventStatus;
+            } else if (this.isMethodQuotation || this.isMethodPurchase) {
+               event.price = { amount: this.eventAmount, currency: "RM" };
+            }
+
             if (this.isUserDefault && this.nameOfUser.trim()) {
                event.nameOfUser = this.nameOfUser;
             }
 
             if (event) {
-               this.$emit("callback-create", event);
+               this.$emit("click-submit", event);
                this.clear();
             }
          },
@@ -142,6 +148,46 @@
             setTimeout(() => {
                this.$refs.InputDescription.focus();
             }, 100);
+         },
+
+         async onInputImageFile(event) {
+            const { files } = event.target;
+            const imageFiles = [];
+            for (const file of files) imageFiles.push(file);
+            const tempImageContents = await this.serviceStore.dispatch(
+               "addImageTemp",
+               imageFiles,
+            );
+            const images = imageFiles.map((imageFile, index) => {
+               const tempImageContent = tempImageContents[index];
+
+               return {
+                  name: tempImageContent.name,
+                  timeout: tempImageContent.timeout,
+                  expiry: tempImageContent.expiry,
+                  file: imageFile,
+               };
+            });
+
+            this.eventImages.push(...images);
+
+            this.invalidateEventImages();
+         },
+         async invalidateEventImages() {
+            const promises = this.eventImages.map((eventImage) => {
+               const { file } = eventImage;
+
+               return new Promise((resolve) => {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                     resolve(event.target.result);
+                  };
+                  reader.readAsDataURL(file);
+               });
+            });
+
+            const results = await Promise.allSettled(promises);
+            this.eventImagePreviews = results.map((result) => result.value);
          },
       },
    };
@@ -156,7 +202,9 @@
          '--primary-color-2': primaryColor2,
       }"
    >
-      <span class="AddEvent-header" :style="{ 'grid-area': 'header' }">Add Event</span>
+      <span class="AddEvent-header" :style="{ 'grid-area': 'header' }"
+         >Add Event</span
+      >
 
       <textarea
          class="AddEvent-description scrollbar"
@@ -166,6 +214,50 @@
          placeholder="Description"
          v-model="eventDescription"
       />
+
+      <div class="AddEvent-images scrollbar" :style="{ 'grid-area': 'images' }">
+         <img
+            v-for="eventImagePreview of eventImagePreviews"
+            :key="eventImagePreview"
+            :src="eventImagePreview"
+            alt=""
+         />
+      </div>
+
+      <div class="AddEvent-footer" :style="{ 'grid-area': 'footer' }">
+         <AddImage @change="(event) => onInputImageFile(event)" />
+
+         <div class="AddEvent-line"></div>
+
+         <input
+            v-if="isUserDefault"
+            class="AddEvent-user"
+            :style="{ 'grid-area': 'user' }"
+            type="text"
+            placeholder="Your name here"
+            v-model="nameOfUser"
+         />
+         <span v-else class="AddEvent-user" :style="{ 'grid-area': 'user' }">{{
+            nameOfUser
+         }}</span>
+      </div>
+
+      <div class="AddEvent-confirm" :style="{ 'grid-area': 'confirm' }">
+         <button
+            class="AddEvent-enter transition"
+            :style="{ 'grid-area': 'enter' }"
+            @click="() => submit()"
+            >Enter</button
+         >
+         <button
+            class="AddEvent-clear transition"
+            :style="{ 'grid-area': 'clear' }"
+            @click="() => clear()"
+         >
+            <!-- <img :src="host.icon('trash-505050')" alt="Click to clear" /> -->
+            Discard
+         </button>
+      </div>
 
       <div class="AddEvent-status" :style="{ 'grid-area': 'status' }">
          <div class="AddEvent-status-amount">
@@ -199,41 +291,15 @@
             :corner="methodMenuCorner"
             :width="methodMenuWidth"
          >
-            <span class="AddEvent-status-header-title">{{ methodMenu.title }}</span>
+            <span class="AddEvent-status-header-title">{{
+               methodMenu.title
+            }}</span>
             <img
                class="AddEvent-status-header-arrow"
                :src="host.icon('arrowDown-FFFFFF')"
                alt="Click to select"
             />
          </Menu>
-      </div>
-
-      <div class="AddEvent-footer" :style="{ 'grid-area': 'footer' }">
-         <input
-            v-if="isUserDefault"
-            class="AddEvent-user"
-            :style="{ 'grid-area': 'user' }"
-            type="text"
-            placeholder="Your name here"
-            v-model="nameOfUser"
-         />
-         <span v-else class="AddEvent-user" :style="{ 'grid-area': 'user' }">{{
-            nameOfUser
-         }}</span>
-
-         <button
-            class="AddEvent-enter transition"
-            :style="{ 'grid-area': 'enter' }"
-            @click="() => submit()"
-            >Enter</button
-         >
-         <button
-            class="AddEvent-clear transition"
-            :style="{ 'grid-area': 'clear' }"
-            @click="() => clear()"
-         >
-            <img :src="host.icon('trash-505050')" alt="Click to clear" />
-         </button>
       </div>
    </div>
 </template>
@@ -245,13 +311,21 @@
       margin-top: 1rem;
 
       display: grid;
-      grid-template-areas: "header status" "description status" "footer status";
+      grid-template-areas:
+         "header status"
+         "description status"
+         "images status"
+         "footer confirm";
       grid-template-columns: 1fr 10rem;
 
       background-color: var(--primary-color-2);
-      border-radius: 0.5em;
       overflow: hidden;
 
+      .AddEvent-header {
+         font-size: 0.7rem;
+         margin: 1rem;
+         margin-bottom: 0;
+      }
       .AddEvent-description {
          resize: none;
          background: none;
@@ -275,23 +349,36 @@
             color: rgba(0, 0, 0, 0.4);
          }
       }
-      .AddEvent-header {
-         font-size: 0.7rem;
-         margin: 1rem;
-         margin-bottom: 0;
+      .AddEvent-images {
+         width: 100%;
+         display: flex;
+         flex-direction: row;
+         padding: 1rem;
+         gap: 2px;
+
+         overflow-x: auto;
+
+         & > * {
+            height: 3rem;
+            border-radius: 0.3rem;
+            background-color: white;
+         }
       }
       .AddEvent-footer {
+         border-top: 1px solid rgba(0, 0, 0, 0.1);
+         gap: 0.2rem;
+         margin: 0 0.5rem;
+
          display: flex;
          flex-direction: row;
          align-items: center;
 
-         border-top: 1px solid rgba(0, 0, 0, 0.1);
-         gap: 0.8rem;
-         margin: 0 0.5rem;
-
-         display: grid;
-         grid-template-areas: "user clear enter";
-         grid-template-columns: 1fr max-content max-content;
+         .AddEvent-line {
+            min-width: 1px;
+            margin: 0.5rem 0;
+            height: calc(100% - 1rem);
+            background: rgba(0, 0, 0, 0.1);
+         }
 
          .AddEvent-user {
             font-size: 0.8rem;
@@ -300,30 +387,35 @@
             background: none;
             flex-grow: 1;
          }
-         .AddEvent-clear {
+      }
+      .AddEvent-confirm {
+         display: flex;
+         flex-direction: row-reverse;
+         align-items: center;
+         justify-content: space-between;
+
+         padding: 0.5rem;
+
+         & > * {
+            font-size: 0.8rem;
             border: none;
             background: none;
             cursor: pointer;
+         }
+
+         .AddEvent-clear {
+            color: var(--primary-color);
+
             img {
                width: 1rem;
                height: 1rem;
             }
-
-            &:hover,
-            &:focus {
-               transform: scale(1.1);
-            }
          }
          .AddEvent-enter {
-            border: none;
-            background: none;
-            cursor: pointer;
-
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.8rem;
             background: var(--primary-color);
             color: white;
-            border-radius: 0.5rem;
-            padding: 0.6rem 1rem;
-            margin: 0.5rem 0;
 
             &:hover,
             &:focus {
@@ -336,6 +428,7 @@
          overflow: hidden;
          margin: 0.5rem;
          margin-left: 0;
+         margin-bottom: 0;
 
          display: flex;
          flex-direction: column-reverse;

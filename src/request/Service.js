@@ -19,7 +19,10 @@ export default class Service {
          .send();
    }
    static remove(id) {
-      return HostApi.request().DELETE().url(`service_v2/delete/item/${id}`).send();
+      return HostApi.request()
+         .DELETE()
+         .url(`service_v2/delete/item/${id}`)
+         .send();
    }
    static updateState(id, state) {
       return HostApi.request()
@@ -76,6 +79,13 @@ export default class Service {
          .url(`service_v2/item/${id}/delete/label/`)
          .body({ label: label.toData() })
          .send();
+   }
+   static addImageTemp(imageFormData) {
+      return HostApi.request()
+         .POST()
+         .url(`service_v2/add/image_files_temp/`)
+         .bodyObject(imageFormData)
+         .sendNotJson();
    }
    static addImage(id, imageForm) {
       return HostApi.request()

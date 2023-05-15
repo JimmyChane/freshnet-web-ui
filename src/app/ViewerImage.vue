@@ -5,31 +5,23 @@
 
    export default {
       components: { Bottomsheet, Actionbar, ImageView },
-      data() {
-         return {
-            containerWidth: 0,
-            containerHeight: 0,
-            containerMiddleX: 0,
-            containerMiddleY: 0,
+      data: (c) => ({
+         containerWidth: 0,
+         containerHeight: 0,
+         containerMiddleX: 0,
+         containerMiddleY: 0,
 
-            isZoomedIn: false,
-            isHovering: false,
-            minZoomScale: 1,
-            maxZoomScale: 4,
-            translateY: 0,
-            translateX: 0,
-         };
-      },
+         isZoomedIn: false,
+         isHovering: false,
+         minZoomScale: 1,
+         maxZoomScale: 4,
+         translateY: 0,
+         translateX: 0,
+      }),
       computed: {
-         isShowing() {
-            return this.store.getters.imageViewer.isShowing;
-         },
-         image() {
-            return this.store.getters.imageViewer.image;
-         },
-         thumbnails() {
-            return this.store.getters.imageViewer.thumbnails;
-         },
+         isShowing: (c) => c.store.getters.imageViewer.isShowing,
+         image: (c) => c.store.getters.imageViewer.image,
+         thumbnails: (c) => c.store.getters.imageViewer.thumbnails,
 
          style() {
             const transforms = [
@@ -55,9 +47,7 @@
       },
       watch: {
          isShowing() {
-            if (this.isShowing) {
-               this.isZoomedIn = false;
-            }
+            if (this.isShowing) this.isZoomedIn = false;
          },
          isHovering() {
             if (!this.isHovering) this.isZoomedIn = false;
@@ -71,7 +61,10 @@
             const { Container } = this.$refs;
 
             if (!Container) {
-               window.removeEventListener("resize", this.invalidateContainerSize);
+               window.removeEventListener(
+                  "resize",
+                  this.invalidateContainerSize,
+               );
                return;
             }
 
@@ -144,7 +137,8 @@
                      class="ViewerImage-image"
                      ref="image"
                      v-if="image"
-                     :src="image.toUrl()"
+                     :src="image"
+                     :resize="false"
                      :style="style"
                      @click="() => onClickImage()"
                   />
@@ -162,9 +156,14 @@
                         ]"
                         v-for="thumbnail of thumbnails"
                         :key="thumbnail.toUrl()"
-                        @click="() => store.dispatch('imageViewerSelect', thumbnail)"
+                        @click="
+                           () => store.dispatch('imageViewerSelect', thumbnail)
+                        "
                      >
-                        <ImageView class="ImageView-images-item" :src="thumbnail" />
+                        <ImageView
+                           class="ImageView-images-item"
+                           :src="thumbnail"
+                        />
                      </button>
                   </div>
                </div>
@@ -181,18 +180,15 @@
       bottom: 0;
       left: 0;
       right: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100dvw;
+      height: 100dvh;
       display: flex;
       overflow: hidden;
 
-      height: 100vh; /* Fallback for browsers that do not support Custom Properties */
-      height: calc(var(--vh, 1vh) * 100);
-
       .App-overflow-body {
          position: relative;
-         width: 100vw;
-         height: 100vh;
+         width: 100dvw;
+         height: 100dvh;
          display: flex;
          overflow: hidden;
 
@@ -206,6 +202,8 @@
          --default-size-right: 0;
          --default-size-bottom: 0;
          --default-size-left: 0;
+
+         --default-border-radius: 0;
 
          --actionbar-height: 5rem;
          --thumbnails-height: 5rem;
@@ -226,9 +224,11 @@
             }
             .ViewerImage-main {
                z-index: 2;
-               width: 100vw;
+               width: 100dvw;
                max-width: 100%;
-               max-height: calc(100% - var(--thumbnail-height) - var(--actionbar-height));
+               max-height: calc(
+                  100% - var(--thumbnail-height) - var(--actionbar-height)
+               );
                padding: 1rem;
                flex-grow: 1;
 
@@ -257,6 +257,7 @@
                   width: max-content;
                   max-width: 100%;
                   height: var(--thumbnails-height);
+                  padding: 0 1rem;
                   overflow-y: auto;
                   display: flex;
                   flex-direction: row;
@@ -266,6 +267,7 @@
                   gap: 0.5rem;
 
                   .ImageView-images-item-button {
+                     min-width: max-content;
                      height: var(--thumbnail-height);
                      background: none;
                      border: none;

@@ -1,27 +1,25 @@
 <script>
-   import ModuleCategory from "@/items/data/Category.js";
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import Category from "@/items/Category";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
    import LabelMenus from "@/components/LabelMenus.vue";
 
    export default {
-      components: { PopupWindowAction, Input, LabelMenus },
+      components: { WindowAction, Input, LabelMenus },
       emits: ["callback-cancel", "callback-confirm"],
       props: {
          isShowing: { type: Boolean, default: false },
          input: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            categoryMenus: [],
-            brandMenus: [],
-            titleError: "",
+      data: (c) => ({
+         categoryMenus: [],
+         brandMenus: [],
+         titleError: "",
 
-            brandMenu: { key: "none", title: "None" },
-            categoryMenu: null,
-            title: "",
-         };
-      },
+         brandMenu: { key: "none", title: "None" },
+         categoryMenu: null,
+         title: "",
+      }),
       watch: {
          isShowing() {
             if (this.isShowing) {
@@ -70,11 +68,13 @@
                });
 
             if (!this.brandMenu) {
-               this.brandMenu = this.brandMenus.find((menu) => menu.key === "none");
+               this.brandMenu = this.brandMenus.find(
+                  (menu) => menu.key === "none",
+               );
             }
 
             const categoryOther = categories.find((category) => {
-               return category.key === ModuleCategory.Key.Other;
+               return category.key === Category.Key.Other;
             });
             if (!this.categoryMenu && categoryOther) {
                this.categoryMenu = this.categoryMenus.find((menu) => {
@@ -90,12 +90,12 @@
          },
          clickConfirm() {
             const title = this.title.trim();
-            const brandId = this.brandMenu ? this.brandMenu.key : "";
-            const categoryId = this.categoryMenu ? this.categoryMenu.key : "";
+            const brandId = this.brandMenu?.key ?? "";
+            const categoryId = this.categoryMenu?.key ?? "";
 
             if (!title) {
                this.titleError = "Title Missing";
-               this.store.dispatch("snackbarShow","Title Missing");
+               this.store.dispatch("snackbarShow", "Title Missing");
                return;
             }
 
@@ -107,7 +107,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowAddProduct"
       title="New Product"
       :isShowing="isShowing"
@@ -118,19 +118,24 @@
       <div class="WindowAddProduct-body">
          <div class="WindowAddProduct-menus">
             <LabelMenus title="Brand" :menus="brandMenus" :menu="brandMenu" />
-            <LabelMenus title="Category" :menus="categoryMenus" :menu="categoryMenu" />
+            <LabelMenus
+               title="Category"
+               :menus="categoryMenus"
+               :menu="categoryMenu"
+            />
          </div>
 
          <Input
             class="WindowAddProduct-title"
             label="Title"
+            autocapitalize="words"
             :isRequired="true"
             :bindValue="title"
             :error="titleError"
             @input="(comp) => (title = comp.value)"
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

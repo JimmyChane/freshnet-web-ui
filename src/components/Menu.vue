@@ -12,7 +12,7 @@
          menus: { default: undefined },
          primaryColor: { default: undefined },
       },
-      data: () => ({ popupMenu: null }),
+      data: (c) => ({ popupMenu: null }),
       computed: { isShowing: (c) => c.popupMenu && c.popupMenu.isShowing },
       watch: {
          isShowing() {
@@ -28,13 +28,13 @@
             if (this.popupMenu) this.popupMenu.hide();
 
             const menus =
-               U.isObject(this.menus) && !U.isArray(this.menus)
+               U.isObjectOnly(this.menus) && !U.isArray(this.menus)
                   ? [this.menus]
                   : U.optArray(this.menus);
 
             for (const menu of menus) {
                const isLegacy =
-                  typeof menu.click !== "function" && typeof menu.interact === "function";
+                  !U.isFunction(menu.click) && U.isFunction(menu.interact);
                if (isLegacy) menu.click = () => menu.interact();
             }
 

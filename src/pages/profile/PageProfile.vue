@@ -2,7 +2,7 @@
    import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import Loading from "@/components/Loading.vue";
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
 
    import HostIcon from "@/host/HostIcon";
@@ -19,26 +19,23 @@
          NavigationBar,
          Loading,
          ButtonIcon,
-         PopupWindowAction,
+         WindowAction,
          Input,
       },
-      emits: ["callback-side-expand"],
-      data() {
-         return {
-            user: null,
-            isLoading: false,
-            scrollTop: 0,
+      data: (c) => ({
+         user: null,
+         isLoading: false,
+         scrollTop: 0,
 
-            window: {
-               changePassword: {
-                  isShowing: false,
-                  passwordVerify: "",
-                  passwordNew: "",
-                  passwordRepeat: "",
-               },
+         window: {
+            changePassword: {
+               isShowing: false,
+               passwordVerify: "",
+               passwordNew: "",
+               passwordRepeat: "",
             },
-         };
-      },
+         },
+      }),
       computed: {
          name: (c) => c.user.name,
          username: (c) => c.user.username,
@@ -72,7 +69,10 @@
                .dispatch("changePassword", { passwordVerify, passwordNew })
                .then((user) => this.onDiscardChangePassword())
                .catch((error) =>
-                  this.store.dispatch("snackbarShow", "Changing Password Error"),
+                  this.store.dispatch(
+                     "snackbarShow",
+                     "Changing Password Error",
+                  ),
                );
          },
       },
@@ -106,8 +106,12 @@
                <div class="PageProfile-introduction-body">
                   <span class="PageProfile-user-name">Hello, {{ name }}</span>
                   <div class="PageProfile-user-main">
-                     <span class="PageProfile-section-title">{{ `@${username}` }}</span>
-                     <span class="PageProfile-section-title">{{ typeDisplay }}</span>
+                     <span class="PageProfile-section-title">{{
+                        `@${username}`
+                     }}</span>
+                     <span class="PageProfile-section-title">{{
+                        typeDisplay
+                     }}</span>
                   </div>
                </div>
             </div>
@@ -120,7 +124,9 @@
             <div class="PageProfile-section">
                <div class="PageProfile-section-changePassword">
                   <div class="PageProfile-section-changePassword-body">
-                     <span class="PageProfile-section-title">Change Your Password</span>
+                     <span class="PageProfile-section-title"
+                        >Change Your Password</span
+                     >
                      <span class="PageProfile-section-main"
                         >Also signing out other session</span
                      >
@@ -135,7 +141,7 @@
          </div>
       </div>
 
-      <PopupWindowAction
+      <WindowAction
          title="Change Your Password"
          :isShowing="window.changePassword.isShowing"
          @click-dismiss="onDiscardChangePassword"
@@ -149,7 +155,9 @@
                label="Current Password"
                :bindValue="window.changePassword.passwordVerify"
                :isRequired="true"
-               @input="(comp) => (window.changePassword.passwordVerify = comp.value)"
+               @input="
+                  (comp) => (window.changePassword.passwordVerify = comp.value)
+               "
             />
 
             <Input
@@ -157,7 +165,9 @@
                label="New Password"
                :bindValue="window.changePassword.passwordNew"
                :isRequired="true"
-               @input="(comp) => (window.changePassword.passwordNew = comp.value)"
+               @input="
+                  (comp) => (window.changePassword.passwordNew = comp.value)
+               "
             />
 
             <Input
@@ -165,10 +175,12 @@
                label="Repeat Password"
                :bindValue="window.changePassword.passwordRepeat"
                :isRequired="true"
-               @input="(comp) => (window.changePassword.passwordRepeat = comp.value)"
+               @input="
+                  (comp) => (window.changePassword.passwordRepeat = comp.value)
+               "
             />
          </div>
-      </PopupWindowAction>
+      </WindowAction>
 
       <Loading class="PageProfile-loading" :isShowing="isLoading" />
    </div>

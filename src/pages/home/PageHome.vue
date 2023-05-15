@@ -46,10 +46,7 @@
          isDrawer: (c) => c.$root.navigation.isDrawer(),
          isThin: (c) => c.isWide || c.isDrawer,
 
-         classes: (c) => {
-            if (c.isWide) return "Home-isOver800";
-            return "Home-isLess";
-         },
+         classes: (c) => (c.isWide ? "Home-isOver800" : "Home-isLess"),
       },
       mounted() {
          document.title = "Freshnet Enterprise";
@@ -59,22 +56,41 @@
 
 <template>
    <div :class="['PageHome', classes]">
-      <Actionbar class="Home-actionbar" :style="{ 'z-index': '2' }" :isThin="isDrawer" />
+      <Actionbar
+         class="Home-actionbar"
+         :style="{ 'z-index': '2' }"
+         :isThin="isDrawer"
+      />
 
       <div class="Home-body">
          <Header class="Home-header" />
 
          <div class="Home-grid">
-            <SectionProduct :style="{ 'grid-area': 'product' }" :isThin="isThin" />
+            <SectionProduct
+               :style="{ 'grid-area': 'product' }"
+               :isThin="isThin"
+            />
             <SectionCategory :style="{ 'grid-area': 'category' }" />
 
-            <SectionContact :style="{ 'grid-area': 'contact' }" :isThin="isThin" />
+            <SectionContact
+               :style="{ 'grid-area': 'contact' }"
+               :isThin="isThin"
+            />
             <SectionHour :style="{ 'grid-area': 'hour' }" :isThin="isThin" />
 
-            <SectionTitle :style="{ 'grid-area': 'service-title' }" title="Services" />
+            <SectionTitle
+               :style="{ 'grid-area': 'service-title' }"
+               title="Services"
+            />
             <SectionPrint :style="{ 'grid-area': 'print' }" :isThin="isThin" />
-            <SectionLocation :style="{ 'grid-area': 'location' }" :isThin="isThin" />
-            <SectionWhatElse :style="{ 'grid-area': 'else' }" :isThin="isThin" />
+            <SectionLocation
+               :style="{ 'grid-area': 'location' }"
+               :isThin="isThin"
+            />
+            <SectionWhatElse
+               :style="{ 'grid-area': 'else' }"
+               :isThin="isThin"
+            />
          </div>
       </div>
 

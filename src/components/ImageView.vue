@@ -1,195 +1,153 @@
 <script>
    import Image from "@/items/Image";
    import ServiceImage from "@/items/ServiceImage";
+   import U from "@/U";
+
+   class Container {
+      constructor(image) {
+         this.image = image;
+      }
+
+      isString() {
+         return U.isString(this.image);
+      }
+      isImage() {
+         return this.image instanceof Image;
+      }
+      isServiceImage() {
+         return this.image instanceof ServiceImage;
+      }
+
+      getKey() {
+         if (this.isString()) {
+            return this.image;
+         }
+
+         return this.image.toUrl();
+      }
+
+      async toValue(option) {
+         if (this.isString()) return this.image;
+         if (this.isImage()) return this.image.toUrl(option);
+         if (this.isServiceImage()) return await this.image.toBlob(option);
+
+         return "";
+      }
+   }
 
    export default {
       props: {
          src: { type: [String, Image, ServiceImage], defualt: "" },
          alt: { type: String, defualt: "" },
+         resize: { type: Boolean, default: true },
+         loading: { type: String, default: "lazy" },
       },
-      data() {
-         return {
-            transitionDuration: 300,
-            distance: 100,
+      data: (c) => ({
+         approximateSize: 100,
 
-            isShowing: false,
-            isError: false,
-
-            requestUrl: "",
-            requestBlob: "",
-            requestValue: "",
-
-            isImageLoaded: false,
-            isImageError: false,
-            isImageAbort: false,
-         };
-      },
+         state: "",
+         requestValue: "",
+      }),
       computed: {
-         style() {
-            return {
-               "--transition-duration": `${this.transitionDuration}ms`,
-               opacity: this.isShowing ? "1" : "0.2",
-               // transform: this.isShowing ? "scale(1)" : "scale(0.98)",
-            };
+         style: (c) => {
+            return { opacity: c.state === "loaded" ? "1" : "0.2" };
          },
-
-         isSrcString: (c) => typeof c.src === "string",
-         isSrcItemImage: (c) => c.src instanceof Image,
-         isSrcItemServiceImage: (c) => c.src instanceof ServiceImage,
-
-         isValueEmpty: (c) =>
-            c.isSrcItemServiceImage ? c.requestBlob === "" : c.requestValue === "",
+         isValueEmpty: (c) => c.requestValue === "",
       },
       watch: {
          async src() {
-            await this.onSrc();
+            await this.invalidateSrc();
          },
       },
       async mounted() {
-         await this.onSrc();
+         await this.invalidateSrc();
       },
       methods: {
-         async onSrc() {
-            if (this.isSrcString) {
-               this.requestUrl = this.src;
-               this.requestBlob = "";
-               this.onUrl();
-               return;
-            }
+         async invalidateSrc() {
+            this.state = "";
 
-            if (this.isSrcItemImage) {
-               setTimeout(() => {
-                  const width = Math.max(this._self.$el.offsetWidth, 0);
-                  const height = Math.max(this._self.$el.offsetHeight, 0);
-                  this.requestUrl = this.src.toUrl(this.parseDimension(width, height));
-                  this.requestBlob = "";
-                  this.onUrl();
-               }, 100);
-               return;
-            }
-            if (this.isSrcItemServiceImage) {
-               setTimeout(async () => {
-                  const width = Math.max(this._self.$el.offsetWidth, 0);
-                  const height = Math.max(this._self.$el.offsetHeight, 0);
-                  this.requestUrl = "";
-                  this.requestBlob = await this.src.toBlob(
-                     this.parseDimension(width, height),
-                  );
-                  this.onUrl();
-               }, 100);
-               return;
-            }
+            const previousValue = this.requestValue;
 
-            this.requestUrl = "";
-            this.requestBlob = "";
-         },
-         async onUrl() {
-            this.isShowing = false;
-            this.isError = false;
+            const option = await this.getDimension();
+            const container = new Container(this.src);
+            const value = await container.toValue(option);
 
-            if (
-               !this.isSrcItemServiceImage &&
-               this.requestUrl === this.requestValue &&
-               this.isImageLoaded
-            ) {
-               this.isShowing = true;
-               this.invalidateImageCompletion();
-               return;
-            }
-            if (
-               this.isSrcItemServiceImage &&
-               this.requestBlob === this.requestValue &&
-               this.isImageLoaded
-            ) {
-               this.isShowing = true;
-               this.invalidateImageCompletion();
-               return;
-            }
+            if (previousValue !== this.requestValue) return;
 
-            // bind if empty, else animate then bind
-            if (this.isValueEmpty) return this.loadValue();
-
-            const previousValue = this.isSrcItemServiceImage
-               ? this.requestBlob
-               : this.requestUrl;
-            setTimeout(async () => {
-               if (!this.isSrcItemServiceImage && previousValue === this.requestUrl)
-                  return this.loadValue();
-               if (this.isSrcItemServiceImage && previousValue === this.requestBlob)
-                  return this.loadValue();
-            }, this.transitionDuration);
-         },
-         async loadValue() {
-            this.requestValue = this.isSrcItemServiceImage
-               ? this.requestBlob
-               : this.requestUrl;
-            this.invalidateImageCompletion();
-         },
-
-         parseDimension(width, height) {
-            if (width > height) return { width: this.parseSize(width) };
-            if (width < height) return { height: this.parseSize(height) };
-            return { width: this.parseSize(width), height: this.parseSize(height) };
-         },
-         parseSize(size) {
-            const divide = size / this.distance;
-            return this.distance * Math.max(Math.round(divide), 1);
-         },
-
-         invalidateImageCompletion() {
+            this.requestValue = value;
             const { img } = this.$refs;
-            if (img) this.isError = img.completed;
+            if (img && img.complete) this.state = "loaded";
          },
 
          onLoad(event) {
-            this.isImageLoaded = true;
-            this.isImageError = false;
-            this.isImageAbort = false;
-
-            this.isShowing = true;
-            this.invalidateImageCompletion();
+            this.state = "loaded";
             this.$emit("load", event);
          },
          onError(event) {
-            this.isImageLoaded = false;
-            this.isImageError = true;
-            this.isImageAbort = false;
-
-            this.isError = true;
+            this.state = "error";
             this.$emit("error", event);
          },
          onAbort(event) {
-            this.isImageLoaded = false;
-            this.isImageError = false;
-            this.isImageAbort = true;
-
-            this.isError = true;
+            this.state = "aborted";
             this.$emit("abort", event);
+         },
+         onClick(event) {
+            this.$emit("click", event);
+         },
+
+         async getDimension() {
+            if (!this.resize) return undefined;
+
+            return new Promise((resolve, reject) => {
+               setTimeout(() => {
+                  const width = Math.max(this._self.$el.offsetWidth, 0);
+                  const height = Math.max(this._self.$el.offsetHeight, 0);
+
+                  resolve(this.parseDimension(width, height));
+               }, 100);
+            });
+         },
+         parseDimension(width, height) {
+            if (width > height) {
+               return { width: this.getApproximateSize(width) };
+            }
+            if (width < height) {
+               return { height: this.getApproximateSize(height) };
+            }
+            return {
+               width: this.getApproximateSize(width),
+               height: this.getApproximateSize(height),
+            };
+         },
+
+         getApproximateSize(size) {
+            const divide = size / this.approximateSize;
+            return this.approximateSize * Math.max(Math.round(divide), 1);
          },
       },
    };
 </script>
 
 <template>
-   <span v-if="isError" class="ImageView2-error">Error</span>
-   <div class="ImageView2-empty" v-else-if="isValueEmpty"></div>
+   <span v-if="state === 'error'" class="ImageView-error">Error</span>
+   <div class="ImageView-empty" v-else-if="isValueEmpty"></div>
    <img
       v-else
-      class="ImageView2-img"
-      :style="style"
+      class="ImageView-img"
       ref="img"
+      :style="style"
       :src="requestValue"
       :alt="alt"
-      loading="lazy"
+      :loading="loading"
       @load="(event) => onLoad(event)"
       @error="(event) => onError(event)"
       @abort="(event) => onAbort(event)"
-      @click="(event) => $emit('click', event)"
+      @click="(event) => onClick(event)"
    />
 </template>
 
 <style lang="scss" scoped>
-   .ImageView2-error {
+   .ImageView-error {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -199,10 +157,10 @@
       background-color: hsla(0, 0%, 0%, 0.1);
       color: hsla(0, 0%, 0%, 0.6);
    }
-   .ImageView2-empty {
+   .ImageView-empty {
       background-color: hsla(0, 0%, 0%, 0.1);
    }
-   .ImageView2-img {
+   .ImageView-img {
       display: flex;
       transition: all var(--transition-duration);
    }

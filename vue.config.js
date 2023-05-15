@@ -6,11 +6,11 @@ const vueConfig = {
    publicPath: "./",
    productionSourceMap: false,
    devServer: {
-      disableHostCheck: true,
+      // disableHostCheck: true,
       port: freshnetConfig.devPort,
-      public: `0.0.0.0:${freshnetConfig.devPort}`,
+      // public: `0.0.0.0:${freshnetConfig.devPort}`,
       // open: process.platform === "darwin",
-      host: "0.0.0.0",
+      // host: "0.0.0.0",
       // https: false,
       // hotOnly: false,
    },
@@ -20,9 +20,20 @@ const vueConfig = {
          chunkFilename: `./css/style.${timestamp}.chunk.css`,
       },
    },
-   configureWebpack: (config) => {
-      config.output.filename = `./js/app.${timestamp}.js`;
-      config.output.chunkFilename = `./js/app.${timestamp}.chunk.js`;
+   configureWebpack: {
+      output: {
+         filename: `./js/app.${timestamp}.js`,
+         chunkFilename: `./js/app.${timestamp}.chunk.js`,
+      },
+      module: {
+         rules: [
+            {
+               test: /\.mjs$/,
+               include: /node_modules/,
+               type: "javascript/auto",
+            },
+         ],
+      },
    },
    chainWebpack: (config) => {
       config.plugin("html").tap((args) => {

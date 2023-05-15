@@ -1,15 +1,15 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
 
    export default {
-      components: { PopupWindowAction },
+      components: { WindowAction },
       props: {
          isShowing: { type: Boolean, default: false },
          input: { type: Object, default: () => null },
       },
       computed: {
-         product: (c) => (c.input ? c.input.product : null),
-         image: (c) => (c.input ? c.input.image : null),
+         product: (c) => c.input?.product ?? null,
+         image: (c) => c.input?.image ?? null,
       },
       methods: {
          clickConfirm() {
@@ -21,7 +21,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       :title="`Delete image?`"
       :isShowing="isShowing"
       @click-dismiss="$emit('click-dismiss')"
@@ -35,5 +35,5 @@
             </p>
          </div>
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>

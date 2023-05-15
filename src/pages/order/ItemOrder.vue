@@ -1,71 +1,48 @@
 <script>
-   import Button1 from "@/components/button/Button1.vue";
+   import ItemOrderAction from "@/pages/order/ItemOrder-Action.vue";
    import Order from "@/items/Order";
 
-   import { format } from "date-fns"; // https://date-fns.org/v2.29.3/docs/Getting-Started
+   import { format } from "date-fns";
 
    export default {
-      name: "Order",
-      components: { Button1 },
+      components: { ItemOrderAction },
       emits: ["onPending", "onComplete", "onRemove", "onExpand", "onCollapse"],
       props: {
          order: { type: Object, default: () => null },
-         expand: { type: Boolean, default: false },
-      },
-      data() {
-         return { Order, isExpanded: false };
+         isExpand: { type: Boolean, default: false },
       },
       computed: {
+         isStatusPending: (c) => c.order.status === Order.Status.Pending,
+         isStatusCompleted: (c) => c.order.status === Order.Status.Completed,
+
          dateCreated: (c) => {
             return format(new Date(c.order.createdAt), "hh:mmaaa dd/LL/yyyy");
          },
 
-         customer() {
-            if (!this.order.customer) return null;
-            return this.order.customer;
+         customer: (c) => {
+            return c.order.customer ?? null;
          },
 
-         name() {
-            if (!this.customer) return "";
-            return this.customer.name;
-         },
-         phoneNumber() {
-            if (!this.customer) return null;
-            return this.customer.phoneNumber;
-         },
-         phoneNumberValue() {
-            if (!this.phoneNumber) return "";
-            return this.phoneNumber.value;
-         },
-         phoneNumberStr() {
-            if (!this.phoneNumber) return "";
-            return this.phoneNumber.toString();
-         },
+         name: (c) => c.customer?.name ?? "",
+         phoneNumber: (c) => c.customer?.phoneNumber ?? null,
+         phoneNumberValue: (c) => c.phoneNumber?.value ?? "",
+         phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
          content: (c) => c.order.content,
-      },
-      watch: {
-         isExpanded() {
-            this.$emit(this.isExpanded ? "onExpanded" : "onCollapsed", this.order);
-         },
-         expand() {
-            this.isExpanded = this.expand;
-         },
       },
    };
 </script>
 
 <template>
    <div
-      :class="[
-         'ItemOrder',
-         isExpanded ? 'ItemOrder-showOption' : 'ItemOrder-hideOption',
-         'transition',
-      ]"
-      @click="$emit(isExpanded ? 'onCollapse' : 'onExpand')"
+      :class="['ItemOrder', 'transition']"
+      :isExpand="`${isExpand}`"
+      @click="$emit(isExpand ? 'onCollapse' : 'onExpand')"
    >
       <div class="ItemOrder-main">
          <div class="ItemOrder-main-left">
-            <span class="ItemOrder-date" v-if="dateCreated">{{ dateCreated }}</span>
+            <span class="ItemOrder-date" v-if="dateCreated">{{
+               dateCreated
+            }}</span>
 
             <router-link
                class="ItemOrder-customer"
@@ -87,34 +64,29 @@
          <div class="ItemOrder-main-right">
             <img
                class="ItemOrder-button transition"
-               :class="[
-                  isExpanded ? 'ItemOrder-button-expanded' : 'ItemOrder-button-collapsed',
-               ]"
-               :alt="isExpanded ? 'Expand' : 'Collapse'"
+               :isExpand="`${isExpand}`"
+               :alt="isExpand ? 'Expand' : 'Collapse'"
                :src="host.icon('down-arrow-grey')"
             />
          </div>
       </div>
 
-      <div
-         class="ItemOrder-option transition"
-         :class="[isExpanded ? 'ItemOrder-option-expand' : '']"
-      >
-         <Button1
-            v-if="order.status === Order.Status.Completed"
-            color="#25AE88"
+      <div class="ItemOrder-option transition" :isExpand="`${isExpand}`">
+         <ItemOrderAction
+            v-if="isStatusCompleted"
+            color="#f4a60d"
             text="Move to Pending"
             @button-click="$emit('onPending')"
          />
-         <Button1
-            v-if="order.status === Order.Status.Pending"
+         <ItemOrderAction
+            v-if="isStatusPending"
             :icon="host.icon('success-green')"
             :iconActive="host.icon('success-white')"
-            color="#25AE88"
+            color="#25ad86"
             text="Move to Completed"
             @button-click="$emit('onComplete')"
          />
-         <Button1
+         <ItemOrderAction
             :icon="host.icon('trash-red')"
             :iconActive="host.icon('trash-white')"
             color="#DB4A2A"
@@ -136,8 +108,9 @@
       background: none;
       text-align: start;
       cursor: pointer;
-      border: 1px solid transparent;
+      border: 1px solid;
       border-radius: 1rem;
+      transition-timing-function: cubic-bezier(1, 0, 0, 1);
 
       &:hover,
       &:focus {
@@ -199,64 +172,66 @@
          }
          .ItemOrder-main-right {
             .ItemOrder-button {
-               --size: 35px;
+               --size: 2.1875rem;
                width: var(--size);
                height: var(--size);
                background-color: transparent;
                border: none;
-               margin: 0 6px;
+               margin: 0 0.375rem;
                outline: none;
                border-radius: 50%;
-               padding: 10px;
+               padding: 0.625rem;
 
-               padding: 0px;
-               --size: 16px;
+               padding: 0;
+               --size: 1rem;
+               transition-timing-function: inherit;
             }
-            .ItemOrder-button-collapsed {
-               transform: none;
+            .ItemOrder-button[isExpand="false"] {
+               transform: rotate(0deg);
             }
-            .ItemOrder-button-expanded {
+            .ItemOrder-button[isExpand="true"] {
                transform: rotate(180deg);
             }
          }
       }
-
       .ItemOrder-option {
          width: 100%;
-         height: 0;
-         max-height: 0;
          display: flex;
          flex-direction: row;
-         gap: 16px;
+         gap: 1rem;
          padding: 0;
          margin-top: 0;
-         pointer-events: none;
-         opacity: 0;
+         transition-timing-function: inherit;
 
          & > * {
             min-height: 100%;
             height: unset;
             max-height: unset;
-            padding: 10px;
+            padding: 0.625rem;
             flex-grow: 1;
-            transition: var(--transition-duration);
+            transition-timing-function: inherit;
          }
       }
-      .ItemOrder-option-expand {
+      .ItemOrder-option[isExpand="false"] {
+         height: 0;
+         pointer-events: none;
+         opacity: 0;
+      }
+      .ItemOrder-option[isExpand="true"] {
          height: unset;
-         max-height: unset;
-         margin-top: 20px;
+         margin-top: 1.25rem;
          pointer-events: initial;
          opacity: 1;
       }
    }
-   .ItemOrder-hideOption {
+   .ItemOrder[isExpand="false"] {
       box-shadow: none;
       padding: 0.625rem;
+      border-color: transparent;
    }
-   .ItemOrder-showOption {
+   .ItemOrder[isExpand="true"] {
       padding: 1.2rem;
       font-size: 1.2rem;
-      border: 2px solid hsla(0, 0%, 0%, 0.1);
+      border-color: hsla(0, 0%, 0%, 0.1);
    }
 </style>

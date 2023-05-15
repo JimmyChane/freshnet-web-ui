@@ -1,4 +1,3 @@
-import ModuleCustomer from "./data/Customer.js";
 import PhoneNumber from "./PhoneNumber.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
@@ -6,6 +5,13 @@ const textContains = ItemSearcher.textContains;
 import U from "@/U.js";
 
 class Customer {
+   static Requirement = {
+      name: { isRequired: true },
+      phoneNumber: { isRequired: false },
+      description: { isRequired: false },
+      deviceIds: { isRequired: false },
+   };
+
    stores = null;
    customerStore = null;
 
@@ -20,23 +26,35 @@ class Customer {
    description = "";
    deviceIds = [];
 
+   cachedServices = [];
+   cachedOrders = [];
+
+   get services() {
+      return this.cachedServices;
+   }
+   get orders() {
+      return this.cachedOrders;
+   }
+
    fromData(data) {
-      data = ModuleCustomer.trim(data);
-      this.id = data._id;
-      this.name = data.name;
-      this.phoneNumber = data.phoneNumber
-         ? new PhoneNumber(this.stores).fromData(data.phoneNumber)
+      this.id = U.trimId(data._id);
+      this.name = U.trimText(data.name);
+      const phoneNumber = U.trimText(data.phoneNumber);
+      this.phoneNumber = phoneNumber
+         ? new PhoneNumber(this.stores).fromData(phoneNumber)
          : null;
-      this.description = U.optString(data.description);
-      this.deviceIds = U.optArray(data.deviceIds);
+      this.description = U.trimText(data.description);
+      this.deviceIds = U.optArray(data.deviceIds)
+         .map((deviceId) => U.trimId(deviceId))
+         .filter((deviceId) => !!deviceId);
       return this;
    }
    toData() {
       return {
-         _id: this.id,
-         name: this.name,
-         phoneNumber: this.phoneNumber ? this.phoneNumber.toData() : "",
-         description: this.description,
+         _id: U.trimId(this.id),
+         name: U.trimText(this.name),
+         phoneNumber: this.phoneNumber?.toData() ?? "",
+         description: U.trimText(this.description),
          deviceIds: this.deviceIds.map((deviceId) => deviceId),
       };
    }
@@ -50,6 +68,13 @@ class Customer {
       }, 0);
 
       return count;
+   }
+
+   isFromStoreCustomer() {
+      return !!this.id;
+   }
+   isModifiable() {
+      return this.isFromStoreCustomer();
    }
 
    compare(item) {

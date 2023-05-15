@@ -39,11 +39,11 @@ class AppLayout {
       const view = this.#getCurrentViewKey();
       const request = this.#getVisibilityRequest(page, view);
 
-      return request ? request : null;
+      return request ?? null;
    }
    getCurrentLayout() {
       const request = this.#getCurrentVisibilityRequest();
-      return request ? request.mode : AppLayout.Layout.FULL;
+      return request?.mode ?? AppLayout.Layout.FULL;
    }
 
    isNormal() {

@@ -3,10 +3,7 @@
 
    export default {
       props: {
-         icon: {
-            type: String,
-            default: Host.icon("empty-folder-505050"),
-         },
+         icon: { type: String, default: Host.icon("empty-folder-505050") },
          title: { type: String, default: "Sorry, nothing here" },
       },
    };

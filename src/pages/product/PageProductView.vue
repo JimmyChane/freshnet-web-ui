@@ -5,9 +5,7 @@
 
    export default {
       components: { ViewerProduct, LoadingDots },
-      data() {
-         return { product: null };
-      },
+      data: (c) => ({ product: null }),
       computed: {
          isLoading: (context) => context.productStore.getters.isLoading,
          isOver1200px: (context) => context.$root.window.innerWidth > 1200,
@@ -41,7 +39,12 @@
 
 <template>
    <div class="PageProductView">
-      <ViewerProduct :product="product" :isWide="isOver1200px" :isEditable="false" />
+      <ViewerProduct
+         :product="product"
+         :isWide="isOver1200px"
+         :isEditable="false"
+         :isActionbarHidden="true"
+      />
 
       <LoadingDots style="z-index: 2" :isShowing="isLoading" />
    </div>

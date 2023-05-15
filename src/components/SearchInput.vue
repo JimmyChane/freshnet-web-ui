@@ -7,9 +7,7 @@
          list: { type: Array, default: () => [] },
          placeholder: { type: String, default: "Search" },
       },
-      data() {
-         return { search: "", isExpand: false, searchLastCharTime: 0 };
-      },
+      data: (c) => ({ search: "", isExpand: false, searchLastCharTime: 0 }),
       watch: {
          search(text = "") {
             this.isExpand = text.length > 0;
@@ -22,6 +20,9 @@
 
             this.searchLastCharTime = time;
             setTimeout(() => this.$emit("callback-search", text), elapseTimeDesigned);
+         },
+         isExpand() {
+            this.isExpand ? this.$emit("expand") : this.$emit("collapse");
          },
       },
       emits: ["callback-search"],
@@ -83,15 +84,16 @@
 
 <style lang="scss" scoped>
    .SearchInput {
-      --background-color: hsla(0, 0%, 100%, 0.3);
+      --background-color: hsla(0, 0%, 100%, 0.6);
       --background-color-active: white;
       --background-color-focus: white;
 
-      --border-radius: 0.4rem;
-      --border-radius-active: 0.4rem;
+      --border-radius: 0.8rem;
+      --border-radius-active: 0.8rem;
 
       --border: 1px solid hsla(0, 0%, 0%, 0.15);
       --border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
+      --border-active: white;
 
       --dropdown-height: 80vh;
 
@@ -127,8 +129,8 @@
       }
 
       .SearchInput-background {
-         min-width: 100vw;
-         min-height: 100vh;
+         min-width: 100dvw;
+         min-height: 100dvh;
          position: fixed;
          top: 0;
          bottom: 0;
@@ -140,7 +142,7 @@
 
       .SearchInput-dropdown {
          width: 100%;
-         height: 100vh;
+         height: 100dvh;
          max-height: var(--dropdown-height);
 
          z-index: 1;
@@ -161,7 +163,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.1rem;
 
             border-radius: 0 0 var(--border-radius-active) var(--border-radius-active);
 

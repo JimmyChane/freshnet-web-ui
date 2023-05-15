@@ -22,23 +22,20 @@
       userPermissions: ["admin", "staff"],
 
       components: { PopupWindow, Loading, Actionbar, SectionOrder, Input },
-      emits: ["callback-side-expand"],
-      data() {
-         return {
-            display: { showDialogAppendOrder: false },
+      data: (c) => ({
+         display: { showDialogAppendOrder: false },
 
-            contentError: "",
+         contentError: "",
 
-            customer_name: "",
-            phone_number: "",
-            content: "",
+         customer_name: "",
+         phone_number: "",
+         content: "",
 
-            scrollTop: 0,
+         scrollTop: 0,
 
-            pendingItems: [],
-            completedItems: [],
-         };
-      },
+         pendingItems: [],
+         completedItems: [],
+      }),
       computed: {
          isLoading: (c) => c.orderStore.getters.isLoading,
          items: (c) => U.optArray(c.orderStore.getters.items),
@@ -62,15 +59,18 @@
                return group.status === Order.Status.Pending;
             });
             const groupCompleted = groups.find((group) => {
-               return group.status === Order.STATUS_COMPLETED;
+               return group.status === Order.Status.Completed;
             });
 
-            this.pendingItems = groupPending ? groupPending.items : [];
-            this.completedItems = groupCompleted ? groupCompleted.items : [];
+            this.pendingItems = groupPending?.items ?? [];
+            this.completedItems = groupCompleted?.items ?? [];
          },
-         clickRefresh() {
+         refresh() {
             this.orderStore.dispatch("refresh").catch((error) => {
-               this.store.dispatch("snackbarShow","Error While Refreshing Order");
+               this.store.dispatch(
+                  "snackbarShow",
+                  "Error While Refreshing Order",
+               );
                console.error(error);
             });
          },
@@ -100,7 +100,10 @@
                   this.display.showDialogAppendOrder = false;
                })
                .catch((error) => {
-                  this.store.dispatch("snackbarShow","Error While Creating Order");
+                  this.store.dispatch(
+                     "snackbarShow",
+                     "Error While Creating Order",
+                  );
                });
          },
       },
@@ -110,18 +113,20 @@
 <template>
    <div
       class="PageOrder transition"
-      ref="orderRoot"
       @scroll="(event) => (scrollTop = event.target.scrollTop)"
    >
       <Actionbar
          class="PageOrder-actionbar"
          :title="$options.title"
          :items="items"
-         @click-item="(item) => $root.replaceRoute({ query: { order: item.id } })"
-         @click-item-add="
-            () => (display.showDialogAppendOrder = !display.showDialogAppendOrder)
+         @click-item="
+            (item) => $root.replaceQuery({ query: { order: item.id } })
          "
-         @click-refresh="() => clickRefresh()"
+         @click-item-add="
+            () =>
+               (display.showDialogAppendOrder = !display.showDialogAppendOrder)
+         "
+         @click-refresh="() => refresh()"
       />
 
       <main>
@@ -130,8 +135,12 @@
             title="Pending"
             :items="pendingItems"
             :currentItemIdSelected="currentExpandedOrderid"
-            @click-collapse="(item) => $root.replaceRoute({ query: { order: null } })"
-            @click-expand="(item) => $root.replaceRoute({ query: { order: item.id } })"
+            @click-collapse="
+               (item) => $root.replaceQuery({ query: { order: null } })
+            "
+            @click-expand="
+               (item) => $root.replaceQuery({ query: { order: item.id } })
+            "
             @click-complete="
                (item) => orderStore.dispatch('updateToCompletedOfId', item.id)
             "
@@ -145,16 +154,25 @@
             title="Completed"
             :items="completedItems"
             :currentItemIdSelected="currentExpandedOrderid"
-            @click-collapse="(item) => $root.replaceRoute({ query: { order: null } })"
-            @click-expand="(item) => $root.replaceRoute({ query: { order: item.id } })"
-            @click-pending="(item) => orderStore.dispatch('updateToPendingOfId', item.id)"
+            @click-collapse="
+               (item) => $root.replaceQuery({ query: { order: null } })
+            "
+            @click-expand="
+               (item) => $root.replaceQuery({ query: { order: item.id } })
+            "
+            @click-pending="
+               (item) => orderStore.dispatch('updateToPendingOfId', item.id)
+            "
             @click-remove="
                (item) => orderStore.dispatch('removeOItemOfId', { id: item.id })
             "
          />
       </main>
 
-      <Loading class="viewOrder-loading" :isShowing="orderStore.getters.isLoading" />
+      <Loading
+         class="viewOrder-loading"
+         :isShowing="orderStore.getters.isLoading"
+      />
 
       <PopupWindow
          :style="{ 'z-index': '20' }"
@@ -162,11 +180,12 @@
          @click-dismiss="display.showDialogAppendOrder = false"
       >
          <div class="pageOrder-dialog-newOrder-body">
-            <h1>New Order</h1>
+            <h1 class="pageOrder-dialog-newOrder-title">New Order</h1>
 
             <Input
                class="PageOrder-input"
                label="Customer Name"
+               autocapitalize="words"
                :bindValue="customer_name"
                @input="(comp) => (customer_name = comp.value)"
             />
@@ -250,7 +269,6 @@
             margin: 4px 0;
             min-width: auto;
             min-height: 0.5px;
-            background-color: hsl(0, 0%, 84%);
             background: hsla(0, 0%, 0%, 0.1);
          }
       }
@@ -261,36 +279,35 @@
    }
 
    .pageOrder-dialog-newOrder-body {
-      --color-shadow: #000000e5;
-      --max-width: 500px;
-      --padding-horizontal: 30px;
-      --padding-vertical: 40px;
-      --gap-all: 10px;
+      width: 500px;
+      max-width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      padding: 2rem;
 
-      width: 100vw;
-      max-width: 500px;
-      height: max-content;
-      align-self: center;
       display: flex;
       flex-direction: column;
-      flex-wrap: nowrap;
-      background-color: white;
-      border-radius: 10px;
-      padding: 80px 60px;
+      align-items: center;
+
+      background: white;
+
       overflow-x: hidden;
       overflow-y: auto;
       cursor: initial;
       pointer-events: unset;
 
       .PageOrder-input {
+         width: 100%;
          margin-top: 2rem;
       }
 
-      h1 {
+      .pageOrder-dialog-newOrder-title {
+         width: 100%;
          margin-bottom: 10px;
       }
 
       .buttons {
+         width: 100%;
          display: flex;
          flex-direction: row;
          column-gap: 30px;

@@ -5,23 +5,14 @@
    export default {
       rtitle: "Page Not Found",
       components: { Actionbar, Footer },
-      data() {
-         return { drawer: { isExpand: false }, top: { shadow: false } };
-      },
+      data: (c) => ({ drawer: { isExpand: false }, top: { shadow: false } }),
    };
 </script>
 
 <template>
-   <div
-      class="Page404"
-      @scroll="(event) => (top.shadow = event.target.scrollTop > 0)"
-   >
+   <div class="Page404" @scroll="(event) => (top.shadow = event.target.scrollTop > 0)">
       <Actionbar
-         :class="[
-            'Home-top',
-            'transition',
-            top.shadow ? 'Home-top-shadow' : '',
-         ]"
+         :class="['Home-top', 'transition', top.shadow ? 'Home-top-shadow' : '']"
          v-if="$root.navigation.isDrawer()"
          :leftMenus="[
             {
@@ -42,9 +33,7 @@
          <span class="Page404-title">404</span>
          <p class="Page404-description">Oops, no page found</p>
 
-         <router-link class="Page404-goBack" :to="{ path: '/' }"
-            >Go Home</router-link
-         >
+         <router-link class="Page404-goBack" :to="{ path: '/' }">Go Home</router-link>
       </div>
 
       <Footer />

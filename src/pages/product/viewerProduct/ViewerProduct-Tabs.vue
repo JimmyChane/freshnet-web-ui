@@ -5,9 +5,7 @@
       components: { Tab },
       props: { items: { type: Array, default: () => [] } },
       computed: {
-         item() {
-            return this.items.find((item) => item.isSelected());
-         },
+         item: (c) => c.items.find((item) => item.isSelected()),
       },
       watch: {
          item() {

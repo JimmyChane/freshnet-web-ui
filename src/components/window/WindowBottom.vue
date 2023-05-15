@@ -21,7 +21,7 @@
    .WindowBottom {
       gap: 0.625rem;
       padding: 0.6rem 2rem;
-      background-color: hsl(0, 0%, 96%);
+      background-color: hsl(0, 0%, 92%);
       border-top: 1px solid hsl(0, 0%, 90%);
       position: sticky;
       bottom: 0;

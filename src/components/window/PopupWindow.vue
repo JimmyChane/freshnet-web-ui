@@ -5,9 +5,7 @@
       emits: ["click-show", "click-dismiss"],
       components: { DismissableContainer },
       props: { isShowing: { type: Boolean, default: false } },
-      data() {
-         return { isShown: false };
-      },
+      data: (c) => ({ isShown: false }),
       watch: {
          isShowing() {
             this.onCheckShowing();
@@ -35,7 +33,7 @@
 <template>
    <DismissableContainer
       class="PopupWindow transition"
-      :class="[isShown ? 'PopupWindow-shown' : '']"
+      :isShowing="`${isShown}`"
       @click-dismiss="dismiss()"
    >
       <div class="PopupWindow-body transition">
@@ -48,7 +46,7 @@
    .PopupWindow {
       width: 100%;
       height: 100%;
-      background-color: hsla(0, 0%, 0%, 0.7);
+      background-color: hsla(0, 0%, 0%, 0.8);
       --transition-timing: cubic-bezier(1, 0, 0, 1);
 
       --hitbox-size: 30px;
@@ -57,13 +55,10 @@
          --hitbox-size: 10px;
       }
 
-      --hitbox-column-size: var(--hitbox-size);
-      --hitbox-row-size: var(--hitbox-size);
-
-      --default-size-top: var(--hitbox-row-size);
-      --default-size-right: var(--hitbox-column-size);
-      --default-size-bottom: var(--hitbox-row-size);
-      --default-size-left: var(--hitbox-column-size);
+      --default-size-top: var(--hitbox-size);
+      --default-size-right: var(--hitbox-size);
+      --default-size-bottom: var(--hitbox-size);
+      --default-size-left: var(--hitbox-size);
 
       .PopupWindow-body {
          height: 100%;
@@ -72,14 +67,16 @@
          max-height: max-content;
          display: flex;
          flex-direction: column;
-         border-radius: 0.5rem;
+         border-radius: 1.5rem;
          background-color: white;
          box-shadow: 1px 2px 20px 0px hsla(0, 0%, 0%, 0.2);
          box-shadow: 1px 2px 10px 0px hsla(0, 0%, 0%, 0.8);
          overflow: hidden;
          --transition-timing: cubic-bezier(1, 0, 0, 1);
       }
+   }
 
+   .PopupWindow[isShowing="false"] {
       pointer-events: none;
       opacity: 0;
       .PopupWindow-body {
@@ -87,8 +84,7 @@
          transform: scale(0.95);
       }
    }
-
-   .PopupWindow-shown {
+   .PopupWindow[isShowing="true"] {
       pointer-events: all;
       opacity: 1;
       .PopupWindow-body {

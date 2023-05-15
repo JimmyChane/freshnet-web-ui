@@ -4,11 +4,11 @@
    import LabelMenus from "@/components/LabelMenus.vue";
    import Footer from "@/app/footer/Footer.vue";
 
-   import Actionbar from "@/components/actionbar/Actionbar.vue";
    import ActionbarProduct from "./ActionBarProduct.vue";
+   import TabLayout from "@/components/tabLayout/TabLayout.vue";
    import ItemProduct from "./ItemProduct.vue";
    import Group from "./PanelProducts-Group.vue";
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import chroma from "chroma-js";
 
    import PageProduct from "@/pages/product/PageProduct.vue";
 
@@ -33,7 +33,7 @@
                query[this.key] = menu.key;
 
                if (this.context.$route.query[this.key] !== menu.key) {
-                  this.context.$root.replaceRoute({ query });
+                  this.context.$root.replaceQuery({ query });
                }
             };
 
@@ -51,8 +51,8 @@
    export default {
       emits: ["click-productAdd"],
       components: {
-         Actionbar,
          ActionbarProduct,
+         TabLayout,
          ItemProduct,
          Group,
          LabelMenus,
@@ -61,10 +61,12 @@
          Footer,
       },
       props: { products: { type: Array, default: () => [] } },
-      data: () => ({
+      data: (c) => ({
          labelMenuPrimaryColor: chroma("000000"),
 
          currentProductId: "",
+
+         categoryFilter: null,
 
          filterMenus: [],
          productGroups: [],
@@ -72,16 +74,16 @@
       computed: {
          iconEmpty: () => PageProduct.icon.dark.toUrl(),
 
-         isLayoutThin: (context) => context.$root.window.innerWidth < 550,
+         isLayoutThin: (c) => c.$root.window.innerWidth < 550,
          layoutMode: () => ItemProduct.Mode.Grid,
 
-         queryProductId: (context) => context.$route.query.productId,
-         queryCategoryId: (context) => context.$route.query.category,
-         queryBrandId: (context) => context.$route.query.brand,
-         queryStock: (context) => context.$route.query.stock,
+         queryProductId: (c) => c.$route.query.productId,
+         queryCategoryId: (c) => c.$route.query.category,
+         queryBrandId: (c) => c.$route.query.brand,
+         queryStock: (c) => c.$route.query.stock,
 
-         isLoading: (context) => context.productStore.getters.isLoading,
-         isEmpty: (context) => !context.isLoading && !context.productGroups.length,
+         isLoading: (c) => c.productStore.getters.isLoading,
+         isEmpty: (c) => !c.isLoading && !c.productGroups.length,
          isEditable() {
             const { user } = this.loginStore.getters;
             return user.isTypeAdmin() || user.isTypeStaff();
@@ -94,16 +96,23 @@
             const click = () => this.$emit("click-productAdd");
             return { title, icon, click };
          },
+
+         tabLayoutCategories: (c) => {
+            if (!c.categoryFilter) return [];
+            return c.categoryFilter.menus.map((menu) => {
+               return {
+                  title: menu.title,
+                  primaryColor: "black",
+                  primaryColorTint: "hsla(0, 0%, 0%, 0.1)",
+                  click: () => menu.click(menu),
+                  isSelected: () => c.categoryFilter.menu === menu,
+               };
+            });
+         },
       },
       watch: {
          queryProductId() {
-            if (!this.queryProductId) {
-               setTimeout(() => {
-                  this.currentProductId = this.queryProductId;
-               }, 500);
-            } else {
-               this.currentProductId = this.queryProductId;
-            }
+            this.invalidateProductId();
          },
          queryCategoryId() {
             this.invalidate();
@@ -129,13 +138,20 @@
       },
       methods: {
          async invalidate() {
+            this.scrollToTop();
+            this.invalidateProductId();
+
             const categoryGroups = await this.productStore.dispatch(
                "getGroupsByCategory",
             );
-            const brandGroups = await this.productStore.dispatch("getGroupsByBrand");
+            const brandGroups = await this.productStore.dispatch(
+               "getGroupsByBrand",
+            );
 
             this.productGroups = categoryGroups
-               .sort((group1, group2) => group1.category.compare(group2.category))
+               .sort((group1, group2) => {
+                  return group1.category.compare(group2.category);
+               })
                .map((group) => {
                   const items = group.items
                      .filter((item) => {
@@ -150,20 +166,28 @@
                      .filter((product) => {
                         if (!this.queryBrandId) return true;
                         return product.brandId === this.queryBrandId;
+                     })
+                     .sort((product1, product2) => {
+                        return product1.compare(product2);
                      });
                   return {
                      key: group.category.id,
                      title: group.category.title,
-                     icon: group.category.icon ? group.category.icon.toUrl() : "",
+                     icon: group.category.icon
+                        ? group.category.icon.toUrl()
+                        : "",
                      items,
                   };
                })
                .filter((group) => group.items.length > 0);
 
-            const categoryMenuGroup = new MenuGroup(this, "category", "Category", [
+            this.categoryFilter = new MenuGroup(this, "category", "Category", [
                { title: "All" },
                ...categoryGroups.map((group) => {
-                  return { key: group.category.id, title: group.category.title };
+                  return {
+                     key: group.category.id,
+                     title: group.category.title,
+                  };
                }),
             ]);
             const brandMenuGroup = new MenuGroup(this, "brand", "Brand", [
@@ -176,7 +200,7 @@
                   }),
             ]);
 
-            this.filterMenus = [categoryMenuGroup, brandMenuGroup];
+            this.filterMenus = [brandMenuGroup];
             if (this.isEditable) {
                this.filterMenus.push(
                   new MenuGroup(this, "stock", "Stock", [
@@ -242,6 +266,19 @@
             //    ]),
             // );
          },
+         invalidateProductId() {
+            if (!this.queryProductId) {
+               setTimeout(() => {
+                  this.currentProductId = this.queryProductId;
+               }, 500);
+            } else {
+               this.currentProductId = this.queryProductId;
+            }
+         },
+
+         scrollToTop() {
+            this._self.$el.scrollTo({ top: 0, behavior: "smooth" });
+         },
       },
    };
 </script>
@@ -256,7 +293,16 @@
             @click-search="$emit('click-search')"
          />
 
-         <div :style="{ 'z-index': '1' }" :class="['scrollbar', 'PanelProducts-filters']">
+         <TabLayout
+            class="PanelProducts-tabLayout"
+            :isScreenWide="true"
+            :menus="tabLayoutCategories"
+         />
+
+         <div
+            :style="{ 'z-index': '1' }"
+            :class="['scrollbar', 'PanelProducts-filters']"
+         >
             <LabelMenus
                :primaryColor="labelMenuPrimaryColor"
                v-for="filterMenu of filterMenus"
@@ -279,6 +325,7 @@
                :currentProductId="currentProductId"
                :queryBrandId="queryBrandId"
                :queryStock="queryStock"
+               :queryGroupKey="queryCategoryId"
             />
          </div>
 
@@ -302,17 +349,24 @@
       align-items: flex-start;
       overflow-y: auto;
 
-      background-color: #dddddd;
-
       .PanelProducts-actionbar {
          width: 100%;
          z-index: 2;
          position: sticky;
          top: 0;
 
+         border-bottom: 1px solid hsl(0, 0%, 80%);
+         background: var(--App-background-color);
+
+         .PanelProducts-tabLayout {
+            padding: 0.4rem 1rem;
+            padding-right: 2rem;
+         }
+
          .PanelProducts-filters {
             width: 100%;
-            padding: 1rem;
+            padding: 0.4rem 1rem;
+            padding-top: 0.2rem;
             gap: 0.5rem;
 
             display: flex;
@@ -323,13 +377,6 @@
 
             overflow-x: auto;
             z-index: 3;
-            border-bottom: 1px solid hsl(0, 0%, 80%);
-            background-color: #dddddd;
-
-            --scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
-            --scrollbar-thumb-color-hover: rgba(0, 0, 0, 0.2);
-            --scrollbar-track-margin: 1rem;
-            --scrollbar-size: 0.2rem;
          }
       }
       .PanelProducts-body {
@@ -345,8 +392,8 @@
          .PanelProducts-categories {
             z-index: 2;
             width: 100%;
-            gap: 2rem;
-            padding: 2rem 0;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
             display: flex;
             flex-direction: column;
          }

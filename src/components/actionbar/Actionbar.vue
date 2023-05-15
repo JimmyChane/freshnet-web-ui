@@ -1,4 +1,5 @@
 <script>
+   import U from "@/U";
    import Menus from "./Actionbar-Menus.vue";
 
    export default {
@@ -9,15 +10,18 @@
          rightMenus: { default: () => [] },
       },
       computed: {
-         LeftMenus: (context) => context.parseMenus(context.leftMenus),
-         RightMenus: (context) => context.parseMenus(context.rightMenus),
-         hasSlot: (context) => !context.$slots.footer,
+         LeftMenus: (c) => c.parseMenus(c.leftMenus),
+         RightMenus: (c) => c.parseMenus(c.rightMenus),
+         hasSlot: (c) => !c.$slots.footer,
       },
       methods: {
          parseMenus(menus) {
-            if (Array.isArray(menus))
-               return menus.filter((menu) => typeof menu === "object" && menu);
-            if (typeof menus === "object") return [menus];
+            if (Array.isArray(menus)) {
+               return menus.filter((menu) => U.optObjectOnly(menu));
+            }
+            if (typeof menus === "object") {
+               return [menus];
+            }
             return [];
          },
       },
@@ -41,7 +45,8 @@
       --actionbar-background-color-light: var(--actionbar-color);
       --actionbar-background-color-dark: var(--actionbar-color);
       color: black;
-      background-color: #f3f3f3;
+      background: white;
+      border-bottom: 1px solid hsl(0, 0%, 90%);
 
       position: sticky;
       top: 0;
@@ -60,8 +65,7 @@
       justify-content: space-between;
 
       .Actionbar-title {
-         font-size: 1.3rem;
-         font-weight: 600;
+         font-size: 1.5rem;
          white-space: nowrap;
          text-overflow: clip;
          color: inherit;

@@ -1,10 +1,12 @@
 <script>
+   import PopupWindow from "@/components/window/PopupWindow.vue";
+   import Actionbar from "@/components/actionbar/Actionbar.vue";
    import WindowBottom from "./WindowBottom.vue";
 
    export default {
-      components: { WindowBottom },
-      emits: ["click-ok", "click-cancel"],
+      components: { PopupWindow, Actionbar, WindowBottom },
       props: {
+         isShowing: { type: Boolean, default: false },
          title: { type: String, default: "" },
          message: { type: String, default: "" },
          value: { type: Object, default: null },
@@ -13,20 +15,20 @@
 </script>
 
 <template>
-   <div class="WindowRemove">
-      <div class="WindowRemove-header transition">
-         <span class="WindowRemove-header-title">{{ title }}</span>
-      </div>
+   <PopupWindow :isShowing="isShowing" @click-dismiss="() => $emit('click-dismiss')">
+      <div class="WindowRemove">
+         <Actionbar class="WindowRemove-header" :title="title" />
 
-      <div class="WindowRemove-main">
-         <span class="WindowRemove-body">{{ message }}</span>
-      </div>
+         <div class="WindowRemove-main">
+            <span class="WindowRemove-body">{{ message }}</span>
+         </div>
 
-      <WindowBottom
-         @click-cancel="$emit('click-cancel')"
-         @click-ok="$emit('click-ok', value)"
-      />
-   </div>
+         <WindowBottom
+            @click-cancel="$emit('click-cancel')"
+            @click-ok="$emit('click-ok', value)"
+         />
+      </div>
+   </PopupWindow>
 </template>
 
 <style lang="scss" scoped>
@@ -37,26 +39,13 @@
       flex-direction: column;
 
       .WindowRemove-header {
-         padding: 1.2rem 1.8rem;
-         position: sticky;
-         top: 0;
-         left: 0;
-         right: 0;
-
          display: flex;
          flex-direction: column;
          align-items: center;
          justify-content: center;
-         text-align: start;
-         border-bottom: 1px solid transparent;
-
-         .WindowRemove-header-title {
-            font-weight: 600;
-            font-size: 1.5rem;
-            color: black;
-         }
+         text-align: center;
+         background: none;
       }
-
       .WindowRemove-main {
          width: 100%;
          display: flex;

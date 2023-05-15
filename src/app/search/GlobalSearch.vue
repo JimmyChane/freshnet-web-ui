@@ -17,9 +17,7 @@
          ItemSearchPs2Disc,
          ItemSearchService,
       },
-      data() {
-         return { searchText: "", searches: [] };
-      },
+      data: (c) => ({ searchText: "", searches: [] }),
       computed: {
          user: (c) => c.loginStore.getters.user,
 
@@ -124,6 +122,8 @@
       class="GlobalSearch"
       :list="searches"
       @callback-search="(text) => search(text)"
+      @expand="() => $emit('expand')"
+      @collapse="() => $emit('collapse')"
       v-slot="{ collapse }"
    >
       <div class="GlobalSearch-item" v-for="x in searches" :key="x.item.id">
@@ -162,7 +162,7 @@
       --border-radius: 4rem;
       --border: 1px solid transparent;
       --border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
-      --dropdown-height: calc(100vh - 10rem);
+      --dropdown-height: calc(100dvh - 10rem);
 
       .GlobalSearch-item {
          width: 100%;

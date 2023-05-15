@@ -13,8 +13,7 @@
          primaryColor: { type: Object },
       },
       computed: {
-         isPrimaryColorDark: (c) =>
-            chroma.deltaE(c.primaryColor, "000000") < 60,
+         isPrimaryColorDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 60,
       },
    };
 </script>

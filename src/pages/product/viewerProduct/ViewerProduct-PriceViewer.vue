@@ -1,6 +1,6 @@
 <script>
    import ProductPrice from "@/items/ProductPrice.js";
-   import SettingModule from "@/items/data/Setting.js";
+   import SettingModule from "@/items/Setting.js";
 
    import Section from "./ViewerProduct-Section.vue";
 
@@ -10,26 +10,19 @@
          product: { type: Object, default: () => null },
          primaryColor: { type: Object },
       },
+      data: (c) => ({ settingShowPrice: false }),
       computed: {
-         settings: (context) => context.settingStore.getters.items,
-         settingShowPrice: (c) => {
-            let theSetting = c.settings.find((setting) => {
-               return setting.key === SettingModule.Key.PublicShowPrice;
-            });
-            return theSetting ? theSetting.value : false;
-         },
-
          priceNormal() {
             if (!this.product) return null;
             const normal = this.product.getPriceNormal();
             if (normal && normal.value >= 0) return normal;
-            new ProductPrice();
+            new ProductPrice().fromData({});
          },
          pricePromotion() {
             if (!this.product) return null;
             const promotion = this.product.getPricePromotion();
             if (promotion && promotion.value >= 0) return promotion;
-            new ProductPrice();
+            new ProductPrice().fromData({});
          },
 
          title() {
@@ -63,6 +56,25 @@
          isPromotion: (context) => context.product.isPricePromotion(),
          isAvailable: (context) => context.product.isStockAvailable(),
          isSecondHand: (context) => context.product.isStockSecondHand(),
+      },
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
+      },
+      mounted() {
+         this.invalidate();
+      },
+      methods: {
+         async invalidate() {
+            this.settingShowPrice = await this.settingStore.dispatch(
+               "findValueOfKey",
+               {
+                  key: SettingModule.Key.PublicShowPrice,
+                  default: false,
+               },
+            );
+         },
       },
    };
 </script>

@@ -4,8 +4,8 @@
          item: { type: Object, default: () => null },
       },
       computed: {
-         title: (context) => context.item.title,
-         isSelected: (context) => context.item.isSelected(),
+         title: (c) => c.item.title,
+         isSelected: (c) => c.item.isSelected(),
       },
    };
 </script>

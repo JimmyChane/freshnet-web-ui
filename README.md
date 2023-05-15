@@ -25,3 +25,7 @@ npm run lint
 ### Customize configuration
 
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+### Credits
+
+chroma https://gka.github.io/chroma.js/

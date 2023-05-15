@@ -1,16 +1,12 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-Vue.use(VueRouter);
-
 import PageHome from "@/pages/home/PageHome";
 import PagePrint from "@/pages/print/PagePrint.vue";
 import PageLogin from "@/pages/login/PageLogin";
 import Page404 from "@/pages/error/Page404.vue";
-
 import PageProduct from "./pages/product/PageProduct.vue";
 import PageProductView from "./pages/product/PageProductView.vue";
 import PageProductExport from "./pages/product/PageProductExport.vue";
-
 import PageManage from "./pages/manage/PageManage";
 import PageCustomer from "./pages/customer/PageCustomer.vue";
 import PageService from "./pages/service/PageService.vue";
@@ -20,8 +16,10 @@ import PageUsers from "./pages/users/PageUsers.vue";
 import PageDatabase from "./pages/database/PageDatabase.vue";
 import PageSetting from "./pages/setting/PageSetting.vue";
 
-const productRoutes = () => [
-   // id
+Vue.use(VueRouter);
+
+const routes = [
+   // product id
    {
       path: "/item/id/:id",
       beforeEnter(to, from, next) {
@@ -35,7 +33,7 @@ const productRoutes = () => [
       },
    },
 
-   // combo
+   // product combo
    {
       path: "/product/combo",
       redirect: "/product/browse",
@@ -57,8 +55,8 @@ const productRoutes = () => [
    },
    { path: "/product/view", component: PageProductView },
    { path: "/product/export", component: PageProductExport },
-];
-const manageRoutes = () => [
+
+   // manage
    {
       path: "/manage",
       beforeEnter(to, from, next) {
@@ -107,19 +105,18 @@ const manageRoutes = () => [
          { path: "setting", component: PageSetting },
       ],
    },
-];
 
-const routes = [
-   { path: "/login", name: "login", component: PageLogin },
+   // home
    { path: "/home", name: "home", component: PageHome },
+   // login
+   { path: "/login", name: "login", component: PageLogin },
+   // print
    { path: "/print", name: "print", component: PagePrint },
-   ...productRoutes(),
-   ...manageRoutes(),
+   // error
+   { path: "/error/404", name: "error/404", component: Page404 },
 
    { path: "/", redirect: { path: "/home" } },
-
    { path: "*", redirect: { path: "/error/404" } },
-   { path: "/error/404", name: "error/404", component: Page404 },
 ];
 
 export default new VueRouter({ mode: "hash", routes });

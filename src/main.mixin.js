@@ -1,38 +1,48 @@
+import U from "./U";
+
 const Mixin = {
-	created() {
-		const onTitle = (title) => {
-			title = typeof title === "function" ? title.call(this) : title;
-			title = typeof title === "string" ? title.trim() : "";
-			return title;
-		};
-		const onColor = (color = {}) => {
-			color = typeof color === "function" ? color.call(this) : color;
-			color = typeof color === "object" ? color : {};
+   created() {
+      const getTitle = () => {
+         let title = this.$options.title;
+         if (U.isFunction(title)) {
+            title = title.call(this);
+         }
+         return U.optString(title).trim();
+      };
+      const getColors = () => {
+         let color = this.$options.color;
+         if (U.isFunction(color)) {
+            color = color.call(this);
+         }
+         color = U.isObjectOnly(color) ? color : {};
 
-			let {
-				primary = "",
-				primaryLight = "",
-				primaryDark = "",
-				accent = "",
-			} = color;
+         const {
+            primary = "",
+            primaryLight = "",
+            primaryDark = "",
+            accent = "",
+         } = color;
 
-			return { primary, primaryLight, primaryDark, accent };
-		};
-		const onIcon = (icon) => {
-			icon = typeof icon === "function" ? icon.call(this) : icon;
-			icon = typeof icon === "object" ? icon : {};
+         return { primary, primaryLight, primaryDark, accent };
+      };
+      const getIcons = () => {
+         let icon = this.$options.icon;
+         if (U.isFunction(icon)) {
+            icon = icon.call(this);
+         }
+         icon = U.isObjectOnly(icon) ? icon : {};
 
-			let { light = "", dark = "", color = "" } = icon;
+         const { light = "", dark = "", color = "" } = icon;
 
-			return { light, dark, color };
-		};
+         return { light, dark, color };
+      };
 
-		const title = onTitle(this.$options.title);
+      const title = getTitle();
 
-		if (title) {
-			document.title = title;
-		}
-	},
+      if (title) {
+         document.title = title;
+      }
+   },
 };
 
 export default Mixin;

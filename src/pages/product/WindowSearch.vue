@@ -19,9 +19,7 @@
          isShowing: { type: Boolean, default: false },
          items: { type: Array, default: () => [] },
       },
-      data() {
-         return { search: "", results: [] };
-      },
+      data: (c) => ({ search: "", results: [] }),
       watch: {
          search() {
             this.invalidate();
@@ -34,6 +32,13 @@
          async invalidate() {
             this.results = [];
             this.results = this.inputText(this.search);
+         },
+
+         blur() {
+            this.$refs.windowSearch.blur();
+         },
+         focus() {
+            this.$refs.windowSearch.focus();
          },
 
          inputText(text) {
@@ -74,6 +79,7 @@
 <template>
    <WindowSearch
       class="WindowSearch"
+      ref="windowSearch"
       :isShowing="isShowing"
       placeholder="Search products"
       @input-text="(text) => (search = text)"

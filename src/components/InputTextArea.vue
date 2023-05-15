@@ -1,43 +1,41 @@
 <script>
-	export default {
-		emits: ["focus", "blur", "input", "change"],
-		props: {
-			name: { type: String, default: "" },
-			label: { type: String, default: "" },
-			type: { type: String, default: "" },
+   export default {
+      emits: ["focus", "blur", "input", "change"],
+      props: {
+         name: { type: String, default: "" },
+         label: { type: String, default: "" },
+         type: { type: String, default: "" },
 
-			isRequired: { type: Boolean, default: false },
-			error: { type: String, default: "" },
+         isRequired: { type: Boolean, default: false },
+         error: { type: String, default: "" },
 
-			bindValue: { default: undefined },
-		},
-		data() {
-			return { input_value: "", isFocused: false };
-		},
-		watch: {
-			bindValue() {
-				this.value = this.bindValue;
-			},
-		},
-		computed: {
-			value: {
-				get() {
-					return this.input_value;
-				},
-				set(x) {
-					return (this.input_value = x);
-				},
-			},
-			isValueEmpty() {
-				return typeof this.value !== "string" || this.value.trim() === "";
-			},
-		},
-		methods: {
-			focus() {
-				this.$refs.input.focus();
-			},
-		},
-	};
+         bindValue: { default: undefined },
+      },
+      data: (c) => ({ input_value: "", isFocused: false }),
+      watch: {
+         bindValue() {
+            this.value = this.bindValue;
+         },
+      },
+      computed: {
+         value: {
+            get() {
+               return this.input_value;
+            },
+            set(x) {
+               return (this.input_value = x);
+            },
+         },
+         isValueEmpty() {
+            return typeof this.value !== "string" || this.value.trim() === "";
+         },
+      },
+      methods: {
+         focus() {
+            this.$refs.input.focus();
+         },
+      },
+   };
 </script>
 
 <template>
@@ -111,8 +109,8 @@
          v-bind:value="value"
       />
 
-		<div class="InputTextArea-dummy"></div>
-	</div>
+      <div class="InputTextArea-dummy"></div>
+   </div>
 </template>
 
 <style lang="scss" scoped>
@@ -130,34 +128,34 @@
          font-weight: 600;
       }
 
-		.InputTextArea-sign-required {
-			position: absolute;
-			left: 0;
-			top: -1.3em;
+      .InputTextArea-sign-required {
+         position: absolute;
+         left: 0;
+         top: -1.3em;
 
-			color: rgb(235, 113, 68);
-			padding-right: inherit;
-		}
-		.InputTextArea-sign-required-isHidden {
-			opacity: 0;
-			pointer-events: none;
-		}
-		.InputTextArea-sign-required-isShown {
-			opacity: 1;
-		}
-		.InputTextArea-sign-error {
-			position: absolute;
-			top: -1.3em;
-			right: 0;
-			color: red;
-		}
-		.InputTextArea-sign-error-isHidden {
-			opacity: 0;
-			pointer-events: none;
-		}
-		.InputTextArea-sign-error-isShown {
-			opacity: 1;
-		}
+         color: rgb(235, 113, 68);
+         padding-right: inherit;
+      }
+      .InputTextArea-sign-required-isHidden {
+         opacity: 0;
+         pointer-events: none;
+      }
+      .InputTextArea-sign-required-isShown {
+         opacity: 1;
+      }
+      .InputTextArea-sign-error {
+         position: absolute;
+         top: -1.3em;
+         right: 0;
+         color: red;
+      }
+      .InputTextArea-sign-error-isHidden {
+         opacity: 0;
+         pointer-events: none;
+      }
+      .InputTextArea-sign-error-isShown {
+         opacity: 1;
+      }
 
       label {
          z-index: 1;
@@ -170,30 +168,30 @@
          top: 0.6em;
          padding-left: inherit;
 
-			color: hsla(0, 0%, 20%, 0.5);
-			font-weight: 400;
-			pointer-events: none;
-		}
-		.InputTextArea-label-isShown {
-			top: -1.2em;
-			padding-left: 0;
+         color: hsla(0, 0%, 20%, 0.5);
+         font-weight: 400;
+         pointer-events: none;
+      }
+      .InputTextArea-label-isShown {
+         top: -1.2em;
+         padding-left: 0;
 
-			color: hsl(0, 0%, 20%);
-			font-weight: 600;
-		}
+         color: hsl(0, 0%, 20%);
+         font-weight: 600;
+      }
 
-		.InputTextArea-input {
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-			padding: inherit;
+      .InputTextArea-input {
+         position: absolute;
+         top: 0;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         padding: inherit;
 
-			z-index: 2;
-			width: 100%;
-			border: none;
-			background: none;
+         z-index: 2;
+         width: 100%;
+         border: none;
+         background: none;
 
          font-weight: 400;
          font-size: 1em;
@@ -201,16 +199,16 @@
          resize: inherit;
       }
 
-		.InputTextArea-dummy {
-			height: 1.1em;
-		}
-	}
+      .InputTextArea-dummy {
+         height: 1.1em;
+      }
+   }
 
-	.InputTextArea-isFocused {
-		border: 0.1em solid hsla(0, 0%, 0%, 0.05);
-		border-bottom: 0.1em solid var(--primary-color);
-	}
-	.InputTextArea-isBlurred {
-		border: 0.1em solid hsla(0, 0%, 0%, 0.05);
-	}
+   .InputTextArea-isFocused {
+      border-bottom: 0.1em solid hsl(0, 0%, 30%);
+      border-bottom: 0.1em solid var(--primary-color);
+   }
+   .InputTextArea-isBlurred {
+      border-bottom: 0.1em solid hsl(0, 0%, 70%);
+   }
 </style>

@@ -5,13 +5,9 @@
    export default {
       props: {
          title: { type: String, default: "" },
-         primaryColor: { type: chroma.Color, default: () => chroma("#f5f5f5") },
+         primaryColor: { type: chroma.Color, default: () => chroma("#ffffff") },
       },
-      computed: {
-         isPrimaryColorDark: (c) => {
-            return U.isColorDark(c.primaryColor);
-         },
-      },
+      computed: { isPrimaryColorDark: (c) => U.isColorDark(c.primaryColor) },
    };
 </script>
 
@@ -31,11 +27,11 @@
    .ItemProduct-Label {
       min-width: max-content;
       width: max-content;
-      padding: 0.15rem 0.2rem;
+      padding: 0.2rem 0.3rem;
       background-color: var(--primary-color);
-      border-radius: 0.2rem;
-      border: 1px solid hsla(0, 0%, 0%, 0.1);
+      border-radius: 1em;
       font-size: 0.6rem;
       font-weight: 400;
+      line-height: 1em;
    }
 </style>

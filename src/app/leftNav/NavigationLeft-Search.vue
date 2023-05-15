@@ -14,7 +14,7 @@
 </script>
 
 <template>
-   <div :class="['NavigationLeft-Search', isWide ? 'NavigationLeft-Search-isWide' : '']">
+   <div class="NavigationLeft-Search" :isWide="`${isWide}`">
       <ButtonIcon
          class="NavigationLeft-Search-button"
          v-if="!isWide"
@@ -28,7 +28,12 @@
          "
       />
 
-      <GlobalSearch class="NavigationLeft-Search-comp" ref="globalsearch" />
+      <GlobalSearch
+         class="NavigationLeft-Search-comp"
+         ref="globalsearch"
+         @expand="() => $emit('expand')"
+         @collapse="() => $emit('collapse')"
+      />
    </div>
 </template>
 
@@ -41,12 +46,12 @@
       .NavigationLeft-Search-comp {
          --background-color: hsl(0, 0%, 94%);
          --border-radius: 0.8rem;
-         --border: 1px solid transparent;
+         --border: 1px solid hsla(0, 0%, 0%, 0.15);
          --border-focus: 1px solid hsla(0, 0%, 0%, 0.15);
-         --dropdown-height: calc(100vh - 10rem);
+         --dropdown-height: calc(100dvh - 10rem);
       }
    }
-   .NavigationLeft-Search-isWide {
+   .NavigationLeft-Search[isWide="true"] {
       margin: 0 0.7rem;
    }
 </style>

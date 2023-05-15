@@ -1,6 +1,6 @@
 <script>
-   import CustomerModule from "@/items/data/Customer.js";
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import Customer from "@/items/Customer";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Selector3 from "@/components/selector/Selector3.vue";
    import WindowSection from "./WindowSection.vue";
    import SpecificationInputs from "./SpecificationInputs.vue";
@@ -8,7 +8,7 @@
 
    export default {
       components: {
-         PopupWindowAction,
+         WindowAction,
          WindowSection,
          Selector3,
          SpecificationInputs,
@@ -19,9 +19,7 @@
          isShowing: { type: Boolean, default: false },
          item: { type: Object, default: () => null },
       },
-      data() {
-         return { Requirement: CustomerModule.Requirement, data: {} };
-      },
+      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
@@ -32,7 +30,7 @@
             ].map((item) => ({
                key: item.key,
                title: item.title,
-               icon: item.icon ? item.icon.toUrl() : "",
+               icon: item.icon?.toUrl() ?? "",
             })),
 
          dataSpecifications: (c) => c.data.specifications,
@@ -80,7 +78,7 @@
          },
 
          clickOk() {
-            this.data.ownerCustomerId = this.item ? this.item.id : "";
+            this.data.ownerCustomerId = this.item?.id ?? "";
             this.data.description = this.data.description.trim();
             this.data.categoryKey = this.data.categoryKey.trim();
             this.data.serialNumber = this.data.serialNumber.trim();
@@ -110,7 +108,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowAddDevice"
       :title="`Add New Device${item ? ` for ${item.name}` : ''}`"
       :isShowing="isShowing"
@@ -147,7 +145,7 @@
             <SpecificationInputs :items="dataSpecifications" />
          </WindowSection>
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

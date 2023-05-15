@@ -12,32 +12,27 @@
 
 <template>
    <a class="ContactGroupItem" :href="href" :target="target">
-      <span class="ContactGroupItem-title">{{ title }}</span>
-      <span class="ContactGroupItem-subtitle">{{ subtitle }}</span>
+      <span>{{ title }}</span>
+      <span>{{ subtitle }}</span>
    </a>
 </template>
 
 <style lang="scss" scoped>
    .ContactGroupItem {
       display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: center;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
 
       text-decoration: none;
       color: black;
-      padding: 0.5em 0.7em;
       border-radius: 0.5em;
+      font-size: 0.8em;
+      column-gap: 0.5em;
 
       &:hover {
          text-decoration: underline;
-      }
-
-      .ContactGroupItem-title {
-         font-size: 0.8em;
-      }
-      .ContactGroupItem-subtitle {
-         font-size: 0.6em;
       }
    }
 </style>

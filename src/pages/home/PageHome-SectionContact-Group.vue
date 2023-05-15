@@ -13,28 +13,24 @@
          items: (c) => c.group.items,
 
          firstItem: (c) => (c.items.length > 0 ? c.items[0] : null),
-         fisrtHref: (c) => (c.firstItem ? c.firstItem.href : ""),
-         fisrtTarget: (c) => (c.firstItem ? c.firstItem.target : undefined),
+         fisrtHref: (c) => c.firstItem?.href ?? "",
+         fisrtTarget: (c) => c.firstItem?.target ?? undefined,
       },
    };
 </script>
 
 <template>
    <a
-      :class="[
-         'ContactGroup',
-         `ContactGroup-${isThin ? 'isThin' : 'isWide'}`,
-         'transition',
-      ]"
+      :class="['ContactGroup', 'transition']"
+      :isThin="`${isThin}`"
       :href="fisrtHref"
       :target="fisrtTarget"
    >
+      <img class="ContactGroup-icon" :src="icon" />
       <div class="ContactGroup-main">
          <span class="ContactGroup-title">{{ title }}</span>
          <Item v-for="item of items" :key="item.title" :item="item" />
       </div>
-
-      <img class="ContactGroup-icon" :src="icon" />
    </a>
 </template>
 
@@ -47,26 +43,24 @@
 
       width: 100%;
       height: 100%;
-      padding: 1em;
-      padding-left: 1.2em;
-      border-radius: 0.5em;
+      padding: 2em;
+      border-radius: 1em;
       gap: 1em;
 
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: flex-start;
       justify-content: center;
-      background-color: #f3f3f3;
 
       &:hover,
       &:focus {
-         box-shadow: 0px 0px 1.5rem hsla(0, 0%, 0%, 0.1);
+         background: #f8f8f8;
       }
 
       .ContactGroup-main {
          flex-grow: 1;
          height: 100%;
-         gap: 0.2em;
+         gap: 0.5em;
 
          display: flex;
          flex-direction: column;
@@ -74,8 +68,6 @@
 
          .ContactGroup-title {
             font-weight: 600;
-            font-size: 1em;
-            padding: 0.5em 0.7em;
          }
       }
       .ContactGroup-icon {
@@ -85,12 +77,9 @@
          height: var(--size);
 
          padding: 1em;
+
+         background: hsl(0, 0%, 94%);
+         border-radius: 1.2em;
       }
-   }
-   .ContactGroup-isThin {
-      font-size: 1rem;
-   }
-   .ContactGroup-isWide {
-      font-size: 1.3rem;
    }
 </style>

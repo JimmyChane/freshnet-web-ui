@@ -1,30 +1,22 @@
 <script>
-   import Button3 from "@/components/button/Button3.vue";
-   import LabelCount from "@/components/LabelCount.vue";
-   import ItemDeviceCount from "./ItemDeviceCount.vue";
+   import ItemButton from "@/pages/manage/PanelItems-ItemButton.vue";
+   import Label from "./ItemCustomer-Label.vue";
+   import LabelDevice from "./ItemCustomer-LabelDevice.vue";
 
    export default {
-      components: { Button3, LabelCount, ItemDeviceCount },
+      components: { ItemButton, Label, LabelDevice },
       emtis: ["click", "click-remove"],
       props: {
          item: { type: Object, default: null },
          selected: { type: Boolean, default: false },
       },
-      data() {
-         return { itemDeviceGroups: [] };
-      },
+      data: (c) => ({ itemDeviceGroups: [] }),
       computed: {
          name: (c) => c.item.name,
          phoneNumber: (c) => c.item.phoneNumber,
-         phoneNumberStr: (c) => (c.phoneNumber ? c.phoneNumber.toString() : ""),
-         services() {
-            if (this.item) return this.item.services;
-            return [];
-         },
-         orders() {
-            if (this.item) return this.item.orders;
-            return [];
-         },
+         phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
+         services: (c) => c.item?.services ?? [],
+         orders: (c) => c.item?.orders ?? [],
       },
       watch: {
          item() {
@@ -47,7 +39,7 @@
 </script>
 
 <template>
-   <Button3
+   <ItemButton
       class="ItemCustomer"
       :isSelected="selected"
       @focus="$emit('click', { item })"
@@ -78,26 +70,26 @@
             </div>
 
             <div class="ItemCustomer-labels">
-               <ItemDeviceCount
+               <LabelDevice
                   v-for="group of itemDeviceGroups"
                   :key="group.categoryKey"
                   :categoryKey="group.categoryKey"
                   :count="group.devices.length"
                />
-               <LabelCount
+               <Label
                   v-if="services.length"
-                  :icon="host.icon('service-FFFFFF')"
+                  :icon="host.icon('service-505050')"
                   :count="services.length"
                />
-               <LabelCount
+               <Label
                   v-if="orders.length"
-                  :icon="host.icon('order-FFFFFF')"
+                  :icon="host.icon('order-505050')"
                   :count="orders.length"
                />
             </div>
          </div>
       </div>
-   </Button3>
+   </ItemButton>
 </template>
 
 <style lang="scss" scoped>
@@ -179,6 +171,7 @@
                gap: 0.1rem;
                & > * {
                   --primary-color: #444;
+                  --primary-color: black;
                   border-radius: 0.5rem;
                   padding: 0.4rem;
                }

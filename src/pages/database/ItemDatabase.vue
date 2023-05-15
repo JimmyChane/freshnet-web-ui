@@ -7,9 +7,7 @@
       props: {
          database: { type: Object, default: null },
       },
-      data() {
-         return { isSelfExpand: false, expands: [] };
-      },
+      data: (c) => ({ isSelfExpand: false, expands: [] }),
       computed: {
          collections: (c) => c.database.collections,
          areExpanded: (c) => c.expands.length >= c.collections.length,

@@ -1,89 +1,91 @@
 <script>
-	import Window from "@/components/window/Window.vue";
-	import Input from "@/components/Input.vue";
-	import BodyCustomer from "./WindowUpdateService-customer.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
+   import Input from "@/components/Input.vue";
+   import U from "@/U.js";
 
-	import LayoutNumpad from "./LayoutNumpad.vue";
+   export default {
+      components: { WindowAction, Input },
+      emits: ["callback-cancel", "callback-change"],
+      props: {
+         value: { type: Object, default: null },
+         isShowing: { type: Boolean, default: false },
+      },
+      data: (c) => ({ customerName: "", customerPhoneNumber: "" }),
+      watch: {
+         value() {
+            this.onNewValue();
+         },
+      },
+      methods: {
+         onNewValue() {
+            const value = this.value ?? {};
+            this.customerName = U.optString(value.name);
+            this.customerPhoneNumber = value.phoneNumber?.toString() ?? "";
+         },
+         onChange() {
+            this.$emit("callback-change", {
+               name: this.customerName,
+               phoneNumber: this.customerPhoneNumber,
+            });
+         },
 
-	import U from "@/U.js";
-
-	export default {
-		components: { Window, Input, BodyCustomer, LayoutNumpad },
-		emits: ["callback-cancel", "callback-change"],
-		props: {
-			value: { type: Object, default: null },
-		},
-		data() {
-			return { customerNames: [], customerPhoneNumbers: [] };
-		},
-		watch: {
-			value() {
-				this.onNewValue();
-			},
-		},
-		methods: {
-			onNewValue() {
-				const value =
-					this.value !== null ? this.value : { names: [], phoneNumbers: [] };
-				this.customerNames = value.names.map((name) => name);
-				this.customerPhoneNumbers = value.phoneNumbers.map((phoneNumber) =>
-					phoneNumber.toString(),
-				);
-			},
-			onChange() {
-				const ref = this.$refs.bodyCustomer;
-
-				this.$emit("callback-change", {
-					names: ref.getValueNames(),
-					phoneNumbers: ref.getValuePhoneNumbers(),
-				});
-			},
-
-			focus() {
-				this.$refs.bodyCustomer.focus();
-			},
-		},
-	};
+         focus() {
+            this.$refs.InputName.focus();
+         },
+      },
+   };
 </script>
 
 <template>
-	<Window
-		class="WindowCustomer"
-		title="Edit Customer"
-		@click-cancel="$emit('callback-cancel')"
-		@click-ok="onChange"
-	>
-		<BodyCustomer
-			ref="bodyCustomer"
-			:names="customerNames"
-			:phoneNumbers="customerPhoneNumbers"
-		/>
-	</Window>
+   <WindowAction
+      title="Edit Customer"
+      :isShowing="isShowing"
+      :isLoading="serviceStore.getters.isFetching"
+      :isClickable="!serviceStore.getters.isFetching"
+      @click-ok="onChange"
+      @click-cancel="$emit('callback-cancel')"
+      @click-dismiss="() => $emit('callback-dismiss')"
+   >
+      <div class="WindowCustomer-body">
+         <Input
+            class="WindowCustomer-input"
+            label="Name"
+            ref="InputName"
+            autocapitalize="words"
+            :isRequired="true"
+            :bindValue="customerName"
+            @input="(comp) => (customerName = comp.value)"
+         />
+         <Input
+            class="WindowCustomer-input"
+            ref="WindowCustomerPhoneNumber"
+            label="Phone Number"
+            type="tel"
+            :bindValue="customerPhoneNumber"
+            @input="(comp) => (customerPhoneNumber = comp.value)"
+         />
+      </div>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>
-	.WindowCustomer {
-		max-width: 100%;
-		width: 35rem;
+   .WindowCustomer-body {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      padding: 1rem 0;
 
-		.WindowCustomer-input {
-			font-size: 1rem;
-			border: none;
-			background: hsla(0, 0%, 0%, 0.03);
-			border-bottom: 1px solid hsl(0, 0%, 70%);
-			border-radius: 0.2rem;
-			padding: 0.6rem 0.4rem;
-			margin-top: 2rem;
-		}
+      .WindowCustomer-input {
+         max-width: 100%;
+         width: 35rem;
+         padding: 0.6rem 0.4rem;
+         font-size: 1rem;
+         margin-top: 0;
 
-		.WindowCustomer-phoneNumber {
-			gap: 1rem;
-
-			display: flex;
-			flex-direction: row;
-			align-items: flex-start;
-			justify-content: center;
-			flex-wrap: wrap;
-		}
-	}
+         border: none;
+         border-bottom: 1px solid hsl(0, 0%, 70%);
+         border-radius: 0.2rem;
+         background: hsla(0, 0%, 0%, 0.03);
+      }
+   }
 </style>

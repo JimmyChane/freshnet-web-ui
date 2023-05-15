@@ -12,8 +12,8 @@
             if (c.productCount === 1) return "1 Product";
             return `${c.productCount} Products`;
          },
-         icon: (c) => (c.category.icon ? c.category.icon.toUrl() : ""),
-         background: (c) => (c.category.background ? c.category.background.toUrl() : ""),
+         icon: (c) => c.category.icon?.toUrl() ?? "",
+         background: (c) => c.category.background?.toUrl() ?? "",
 
          to: (c) => {
             return { path: "/product", query: { category: c.category.id } };
@@ -95,7 +95,11 @@
          top: 0;
          left: 0;
          pointer-events: none;
-         background-image: linear-gradient(120deg, #000000, hsla(0, 0%, 0%, 0.7));
+         background-image: linear-gradient(
+            120deg,
+            #000000,
+            hsla(0, 0%, 0%, 0.7)
+         );
          transform: translateX(-25%);
       }
    }

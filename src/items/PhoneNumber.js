@@ -1,4 +1,3 @@
-import ModulePhoneNumber from "./data/PhoneNumber.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
 import U from "@/U.js";
 const textContains = ItemSearcher.textContains;
@@ -20,21 +19,39 @@ class PhoneNumber {
       return this.value;
    }
    toString() {
-      return ModulePhoneNumber.parseToString(this.value);
+      let value = U.optString(this.value);
+
+      const spliceString = (text, index, count = 1) => {
+         if (count <= 0) return text;
+         if (index === 0) return text.slice(index + count, text.length);
+         if (text.length <= index + count) return text.slice(0, index);
+         return text.slice(0, index) + text.slice(index + count, text.length);
+      };
+
+      for (let i = 0; i < value.length; i++) {
+         let char = value.charAt(i);
+         let number = Number.parseInt(char);
+         if (Number.isNaN(number)) {
+            value = spliceString(value, i);
+            i--;
+         }
+      }
+
+      return value;
    }
    toCount(strs) {
       return strs.reduce((count, str) => {
-         if (textContains(this.value, str)) count++;
+         if (textContains(this.value, str)) count += 4;
          return count;
       }, 0);
    }
 
-   compare(item) {
-      return U.optString(this.value).localeCompare(U.optString(item.value));
-   }
-
    isEqual(item) {
       return item.value === this.value;
+   }
+
+   compare(item) {
+      return U.optString(this.value).localeCompare(U.optString(item.value));
    }
 }
 

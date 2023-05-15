@@ -1,7 +1,8 @@
 import ServiceTimestamp from "./ServiceTimestamp";
 import ServicePrice from "./ServicePrice.js";
+import ServiceImage from "./ServiceImage";
 
-import ModuleEvent from "./data/ServiceEvent.js";
+import Method from "./ServiceEventMethod";
 import ItemSearcher from "../objects/ItemSearcher.js";
 const textContains = ItemSearcher.textContains;
 
@@ -23,28 +24,34 @@ class ServiceEvent {
    description = "";
    status = "";
    price = null;
+   images = [];
 
    fromData(data) {
-      data = new ModuleEvent(data);
       this.timestamp = new ServiceTimestamp(data.time);
-      this.username = data.username;
-      this.name = data.nameOfUser;
-      this.method = data.method;
-      this.description = data.description;
-      this.status = data.status;
-      this.price = data.price ? new ServicePrice().fromData(data.price) : null;
+      this.username = U.trimId(data.username);
+      this.name = U.trimText(data.nameOfUser);
+      this.method = U.trimId(data.method);
+      this.description = U.trimText(data.description);
+      this.status = U.trimId(data.status);
+      this.price = U.isObject(data.price)
+         ? new ServicePrice().fromData(data.price)
+         : null;
+      this.images = U.optArray(data.images).map((image) => {
+         return new ServiceImage(this.stores).fromData(image);
+      });
       return this;
    }
    toData() {
-      return new ModuleEvent({
+      return {
          time: this.timestamp.time,
-         username: this.username,
-         nameOfUser: this.name,
-         method: this.method,
-         description: this.description,
-         status: this.status,
-         price: this.price ? this.price.toData() : null,
-      });
+         username: U.trimId(this.username),
+         nameOfUser: U.trimText(this.name),
+         method: U.trimId(this.method),
+         description: U.trimText(this.description),
+         status: U.trimId(this.status),
+         price: this.price?.toData() ?? null,
+         images: this.images.map((image) => image.toData()),
+      };
    }
    toCount(strs) {
       let count = strs.reduce((count, str) => {
@@ -60,13 +67,29 @@ class ServiceEvent {
 
       return count;
    }
+   toResult() {
+      if (this.isQuotation() || this.isPurchase()) return this.price;
+      if (this.isInfo()) return this.status;
+      return null;
+   }
+
+   isInfo() {
+      return this.method === Method.INFO.key;
+   }
+   isQuotation() {
+      return this.method === Method.QUOTATION.key;
+   }
+   isPurchase() {
+      return this.method === Method.PURCHASE.key;
+   }
 
    compare(item) {
       return item.timestamp.time - this.timestamp.time;
    }
 
    async fetchUser() {
-      if (!U.isString(this.username) || this.username.trim().length === 0) return null;
+      if (!U.isString(this.username) || this.username.trim().length === 0)
+         return null;
       return await this.userStore.dispatch("getUserByUsername", this.username);
    }
    async fetchName() {
@@ -78,22 +101,6 @@ class ServiceEvent {
       if (username.length && !this.name) return username;
 
       throw new Error("unknown");
-   }
-
-   isQuotation() {
-      return this.method === ModuleEvent.Method.Quotation;
-   }
-   isPurchase() {
-      return this.method === ModuleEvent.Method.Purchase;
-   }
-   isInfo() {
-      return this.method === ModuleEvent.Method.Info;
-   }
-
-   toResult() {
-      if (this.isQuotation() || this.isPurchase()) return this.price;
-      if (this.isInfo()) return this.status;
-      return null;
    }
 }
 

@@ -2,13 +2,27 @@
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import Loading from "@/components/Loading.vue";
 
-   import Section from "./PanelCustomer_Section.vue";
-   import ItemDevice from "./ItemDevice.vue";
+   import PanelItemCustomer from "@/pages/manage/PanelItem-Customer.vue";
+   import Section from "@/pages/manage/PanelItem-Section.vue";
 
-   import chroma from "chroma-js"; // https://gka.github.io/chroma.js/
+   import Item from "./PanelCustomer-Item.vue";
+   import ItemService from "@/pages/service/item-service/ItemService.vue";
+   import ItemDevice from "./ItemDevice.vue";
+   import PanelCustomerEmpty from "./PanelCustomer-Empty.vue";
+
+   import chroma from "chroma-js";
 
    export default {
-      components: { Actionbar, Loading, Section, ItemDevice },
+      components: {
+         Actionbar,
+         Loading,
+         Section,
+         Item,
+         ItemService,
+         ItemDevice,
+         PanelCustomerEmpty,
+         PanelItemCustomer,
+      },
       emits: [
          "click-item-close",
          "click-item-remove",
@@ -19,83 +33,87 @@
       props: {
          item: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            top: { showShadow: false },
+      data: (c) => ({
+         top: { showShadow: false },
 
-            devices: [],
-            isLoadingDevices: false,
-         };
-      },
+         devices: [],
+         isLoadingDevices: false,
+      }),
       computed: {
-         id() {
-            if (this.item) return this.item.id;
-            return "";
+         isWide: (c) => c.$root.window.innerWidth > 600,
+
+         menus: (c) => {
+            const menus = [];
+
+            if (c.isPhoneNumber) {
+               menus.push({
+                  title: "Chat with Customer on Whatsapp",
+                  icon: c.host.icon("whatsapp-color"),
+                  alth: "Chat on Whatsapp",
+                  href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
+                  target: "_blank",
+               });
+               menus.push({
+                  title: "Call Customer",
+                  icon: c.host.icon("call-color"),
+                  href: `tel:+6${c.phoneNumberStr}`,
+               });
+            }
+
+            if (c.isFromStoreCustomer) {
+               menus.push({
+                  title: "Delete Customer",
+                  icon: c.host.icon("trash-000000"),
+                  click: () => c.$emit("click-item-remove", { item: c.item }),
+                  isHidden: true,
+               });
+            }
+
+            return menus;
          },
-         name() {
-            if (this.item) return this.item.name;
-            return "";
-         },
-         phoneNumber() {
-            if (this.item) return this.item.phoneNumber;
-            return null;
-         },
-         phoneNumberStr() {
-            return this.phoneNumber ? this.phoneNumber.toString() : "";
-         },
-         description() {
-            if (this.item) return this.item.description;
-            return "";
-         },
-         deviceIds() {
-            if (this.item) return this.item.deviceIds;
-            return [];
-         },
-         services() {
-            if (this.item) return this.item.services;
-            return [];
-         },
-         orders() {
-            if (this.item) return this.item.orders;
-            return [];
-         },
+
+         id: (c) => c.item?.id ?? "",
+         name: (c) => c.item?.name ?? "",
+         phoneNumber: (c) => c.item?.phoneNumber ?? null,
+         phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
+         isPhoneNumber: (c) => !!c.phoneNumberStr,
+         description: (c) => c.item?.description ?? "",
+         deviceIds: (c) => c.item?.deviceIds ?? [],
+         services: (c) => c.item?.services ?? [],
+         orders: (c) => c.item?.orders ?? [],
+         isFromStoreCustomer: (c) => c.item?.isFromStoreCustomer() ?? false,
 
          primaryColor: () => chroma("294656"),
-         actionbarColor() {
-            return this.backgroundColor.brighten(0.4);
-         },
-         actionbarShadow() {
-            return this.actionbarColor.darken(0.8);
-         },
-         backgroundColor() {
-            return this.primaryColor.mix("ffffff", 0.65);
-         },
+         actionbarColor: (c) => c.backgroundColor.brighten(0.4),
+         actionbarShadow: (c) => c.actionbarColor.darken(0.8),
+         backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.65),
       },
       watch: {
          item() {
-            this.invalidate();
+            this.invalidateDevices();
          },
          "item.deviceIds"() {
             this.invalidateDevices();
          },
       },
       mounted() {
-         this.invalidate();
+         this.invalidateDevices();
       },
       methods: {
-         async invalidate() {
-            this.invalidateDevices();
-         },
          async invalidateDevices() {
             this.devices = [];
 
-            if (!this.deviceIds.length) return;
+            if (!this.deviceIds.length) {
+               return;
+            }
 
             const cacheItem = this.item;
             this.isLoadingDevices = true;
 
             const devices = await this.customerStore.dispatch("getDevices");
-            if (this.item !== cacheItem) return;
+            if (this.item !== cacheItem) {
+               return;
+            }
 
             this.isLoadingDevices = false;
             this.devices = this.item.deviceIds.map((deviceId) => {
@@ -128,140 +146,103 @@
                icon: host.icon('close-000000'),
                click: () => $emit('click-item-close', { item }),
             }"
-            :rightMenus="
-               id
-                  ? {
-                       key: 'remove',
-                       title: 'Delete',
-                       icon: host.icon('trash-000000'),
-                       click: () => $emit('click-item-remove', { item }),
-                    }
-                  : null
-            "
-         />
-
-         <div class="PanelCustomer-main">
-            <Section
-               title="Name & Phone Number"
-               :menus="
-                  id
-                     ? {
-                          icon: host.icon('edit-505050'),
-                          click: () =>
-                             $emit('click-item-customer-update', { item }),
-                       }
-                     : null
+            :rightMenus="menus"
+         >
+            <PanelItemCustomer
+               v-if="item"
+               :customer="item"
+               :isEditable="item.isModifiable()"
+               @click-edit="
+                  (item) => $emit('click-item-customer-update', { item })
                "
-            >
-               <div class="PanelCustomer-customer">
-                  <span class="PanelCustomer-customer-content" v-if="name">{{
-                     name
-                  }}</span>
-                  <span class="PanelCustomer-reuse-contentEmpty" v-else
-                     >Empty</span
-                  >
+            />
+         </Actionbar>
 
-                  <span
-                     class="PanelCustomer-customer-content"
-                     v-if="phoneNumber"
-                     >{{ phoneNumber }}</span
-                  >
-                  <span class="PanelCustomer-customer-empty" v-else>Empty</span>
-               </div>
-            </Section>
-
+         <div class="PanelCustomer-main" :isWide="`${isWide}`">
             <Section
                title="Description"
                v-if="id"
                :menus="{
-                  icon: host.icon('edit-505050'),
+                  icon: host.icon('edit-000000'),
                   click: () => $emit('click-item-description-update', { item }),
                }"
             >
-               <div class="PanelCustomer-description" v-if="description">
-                  <span>{{ description }}</span>
-               </div>
+               <span v-if="description">{{ description }}</span>
+               <PanelCustomerEmpty v-else />
             </Section>
 
             <Section
-               title="Devices"
-               v-if="id"
+               title="Owned Devices"
+               v-if="isFromStoreCustomer"
                :menus="{
-                  icon: host.icon('add-505050'),
+                  icon: host.icon('add-000000'),
                   click: () => $emit('click-item-device-add', { item }),
                }"
             >
-               <div class="PanelCustomer-devices-items" v-if="devices.length">
-                  <ItemDevice
-                     v-for="deviceContext of devices"
-                     :key="deviceContext.deviceId"
-                     :item="deviceContext.device"
-                     @click-remove="
-                        (param) =>
-                           $emit('click-item-device-remove', {
-                              item,
-                              device: param.item,
-                           })
-                     "
-                     @click-update-specifications="
-                        (param) =>
-                           $emit('click-item-device-update-specifications', {
-                              item,
-                              device: param.item,
-                              specifications: param.item.specifications,
-                           })
-                     "
-                     @click-update-description="
-                        (param) =>
-                           $emit('click-item-device-update-description', {
-                              item,
-                              device: param.item,
-                              description: param.item.description,
-                           })
-                     "
-                  />
-               </div>
+               <ItemDevice
+                  v-for="deviceContext of devices"
+                  :key="deviceContext.deviceId"
+                  :item="deviceContext.device"
+                  @click-remove="
+                     (param) =>
+                        $emit('click-item-device-remove', {
+                           item,
+                           device: param.item,
+                        })
+                  "
+                  @click-update-specifications="
+                     (param) =>
+                        $emit('click-item-device-update-specifications', {
+                           item,
+                           device: param.item,
+                           specifications: param.item.specifications,
+                        })
+                  "
+                  @click-update-description="
+                     (param) =>
+                        $emit('click-item-device-update-description', {
+                           item,
+                           device: param.item,
+                           description: param.item.description,
+                        })
+                  "
+               />
+
+               <PanelCustomerEmpty v-if="!devices.length" />
                <Loading
                   class="PanelCustomer-devices-loading"
                   :isShowing="isLoadingDevices"
                />
             </Section>
 
-            <Section title="Services" v-if="services.length">
-               <div class="PanelCustomer-service">
-                  <router-link
-                     class="PanelCustomer-service-item"
-                     v-for="service of services"
-                     :key="service.id"
-                     :to="{
-                        path: '/manage/service',
-                        query: { service: service.id },
-                     }"
-                  >
-                     <span class="PanelCustomer-service-item-title"
-                        >Problem</span
-                     >
-                     <span class="PanelCustomer-service-item-description">{{
-                        service.description
-                     }}</span>
-                  </router-link>
-               </div>
+            <Section title="Services">
+               <router-link
+                  class="PanelCustomer-SectionService-item"
+                  v-for="service of services"
+                  :key="service.id"
+                  :to="{
+                     path: '/manage/service',
+                     query: { service: service.id },
+                  }"
+               >
+                  <ItemService :headerCustomer="false" :item="service" />
+               </router-link>
+               <PanelCustomerEmpty v-if="!services.length" />
             </Section>
 
-            <Section title="Orders" v-if="orders.length">
-               <div class="PanelCustomer-order">
-                  <router-link
-                     class="PanelCustomer-order-item"
-                     v-for="order of orders"
-                     :key="order.id"
-                     :to="{ path: '/manage/order', query: { order: order.id } }"
-                  >
-                     <span class="PanelCustomer-order-item-title">Content</span>
-                     <span class="PanelCustomer-order-item-description">{{
-                        order.content
-                     }}</span>
-                  </router-link>
-               </div>
+            <Section title="Orders">
+               <Item
+                  v-for="order of orders"
+                  :key="order.id"
+                  :to="{
+                     path: '/manage/order',
+                     query: { order: order.id },
+                  }"
+                  title="Content"
+               >
+                  <span>{{ order.content }}</span>
+               </Item>
+               <PanelCustomerEmpty v-if="!orders.length" />
             </Section>
          </div>
       </div>
@@ -271,6 +252,8 @@
 <style lang="scss" scoped>
    .PanelCustomer {
       width: 100%;
+      width: 100dvw;
+      max-width: 100%;
       height: 100%;
       overflow-y: auto;
       display: flex;
@@ -281,115 +264,57 @@
       .PanelCustomer-body {
          display: flex;
          flex-direction: column;
+         align-items: center;
 
          .PanelCustomer-main {
-            padding: 1rem;
+            width: 40rem;
+            max-width: 100%;
+
             padding-bottom: 10rem;
             display: flex;
             flex-direction: column;
             gap: 2rem;
             row-gap: 0.5rem;
 
+            .PanelCustomer-customer {
+               display: flex;
+               flex-direction: column;
+               flex-wrap: wrap;
+               flex-grow: 1;
+               align-items: flex-start;
+               gap: 0.5rem;
+               overflow: hidden;
+
+               & > * {
+                  flex-grow: 1;
+                  display: flex;
+                  flex-direction: row;
+                  align-items: center;
+               }
+            }
+            .PanelCustomer-devices-loading {
+               width: 100%;
+               height: 4px;
+            }
+            .PanelCustomer-SectionService-item {
+               width: 100%;
+               border-radius: 1rem;
+               text-decoration: none;
+               display: flex;
+               flex-direction: column;
+               align-items: stretch;
+            }
+         }
+         .PanelCustomer-main[isWide="true"] {
+            padding: 1rem;
+
             & > * {
                border-radius: 1rem;
                overflow: hidden;
             }
          }
-
-         .PanelCustomer-customer {
-            display: flex;
-            flex-direction: column;
-            flex-wrap: wrap;
-            flex-grow: 1;
-            align-items: flex-start;
-            gap: 0.5rem;
-            overflow: hidden;
-
-            & > * {
-               flex-grow: 1;
-               display: flex;
-               flex-direction: row;
-               align-items: center;
-            }
-
-            .PanelCustomer-customer-content {
-               flex-grow: 1;
-               display: flex;
-               flex-direction: row;
-               align-items: center;
-            }
-            .PanelCustomer-customer-empty {
-               font-weight: 400;
-               font-size: 0.9rem;
-               color: #535353;
-            }
-         }
-         .PanelCustomer-description {
-            display: flex;
-            flex-direction: column;
-         }
-         .PanelCustomer-devices-items {
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-            align-items: stretch;
-            gap: 0.5rem;
-         }
-         .PanelCustomer-devices-loading {
-            width: 100%;
-            height: 4px;
-         }
-         .PanelCustomer-service {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-
-            .PanelCustomer-service-item {
-               width: 100%;
-               display: flex;
-               flex-direction: column;
-               gap: 0.2rem;
-               padding: 1rem;
-
-               border-radius: 1rem;
-               background: white;
-               border: 1px solid hsla(0, 0%, 0%, 0.2);
-               font-size: 1rem;
-               cursor: pointer;
-               text-align: start;
-               text-decoration: none;
-               color: inherit;
-
-               .PanelCustomer-service-item-title {
-                  font-weight: 600;
-               }
-            }
-         }
-         .PanelCustomer-order {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-
-            .PanelCustomer-order-item {
-               width: 100%;
-               display: flex;
-               flex-direction: column;
-               gap: 0.2rem;
-               padding: 1rem;
-
-               border-radius: 1rem;
-               background: white;
-               border: 1px solid hsla(0, 0%, 0%, 0.2);
-               font-size: 1rem;
-               cursor: pointer;
-               text-align: start;
-               text-decoration: none;
-               color: inherit;
-
-               .PanelCustomer-order-item-title {
-                  font-weight: 600;
-               }
-            }
+         .PanelCustomer-main[isWide="false"] {
+            padding: 1rem 0;
          }
       }
    }

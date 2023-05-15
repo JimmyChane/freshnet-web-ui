@@ -13,27 +13,41 @@ class ServiceCustomer {
    phoneNumber = null;
 
    fromData(data) {
-      this.name = U.optString(data.name);
-      this.phoneNumber = data.phoneNumber
-         ? new PhoneNumber(this.stores).fromData(data.phoneNumber)
+      this.name = U.trimText(data.name);
+
+      const phoneNumber = U.trimStringAll(data.phoneNumber, undefined);
+      this.phoneNumber = phoneNumber
+         ? new PhoneNumber(this.stores).fromData(phoneNumber)
          : null;
       return this;
    }
    toData() {
       return {
-         name: this.name,
-         phoneNumber: this.phoneNumber ? this.phoneNumber.toData() : "",
+         name: U.trimText(this.name),
+         phoneNumber: this.phoneNumber?.toData() ?? "",
       };
    }
    toCount(strs) {
       let count = strs.reduce((count, str) => {
          if (textContains("customer", str)) count++;
-         if (textContains(this.name, str)) count++;
+         if (textContains(this.name, str)) count += 4;
          return count;
       }, 0);
       if (this.phoneNumber) count += this.phoneNumber.toCount(strs);
 
       return count;
+   }
+
+   isEqual(item) {
+      const eName = U.optString(item.name);
+      const ePhoneNumber = item.phoneNumber;
+      const ePhoneNumberValue = ePhoneNumber?.value ?? "";
+
+      const name = U.optString(this.name);
+      const phoneNumber = this.phoneNumber;
+      const phoneNumberValue = phoneNumber?.value ?? "";
+
+      return eName === name && ePhoneNumberValue === phoneNumberValue;
    }
 
    compare(item) {
@@ -49,18 +63,6 @@ class ServiceCustomer {
       if (this.phoneNumber && !item.phoneNumber) return 1;
       if (!this.phoneNumber && item.phoneNumber) return -1;
       return this.phoneNumber.compare(item.phoneNumber);
-   }
-
-   isEqual(item) {
-      const eName = U.optString(item.name);
-      const ePhoneNumber = item.phoneNumber;
-      const ePhoneNumberValue = ePhoneNumber ? ePhoneNumber.value : "";
-
-      const name = U.optString(this.name);
-      const phoneNumber = this.phoneNumber;
-      const phoneNumberValue = phoneNumber ? phoneNumber.value : "";
-
-      return eName === name && ePhoneNumberValue === phoneNumberValue;
    }
 }
 

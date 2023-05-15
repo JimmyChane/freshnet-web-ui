@@ -1,16 +1,14 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
    import TextArea from "@/components/InputTextArea.vue";
-   import CustomerModule from "@/items/data/Customer.js";
+   import Customer from "@/items/Customer";
 
    export default {
-      components: { PopupWindowAction, Input, TextArea },
+      components: { WindowAction, Input, TextArea },
       emits: ["click-dismiss", "click-cancel", "click-ok"],
       props: { isShowing: { type: Boolean, default: false } },
-      data() {
-         return { Requirement: CustomerModule.Requirement, data: {} };
-      },
+      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
@@ -48,22 +46,33 @@
             this.data.description = this.data.description.trim();
 
             if (this.Requirement.name.isRequired && !this.data.name) {
-               this.store.dispatch("snackbarShow", 'You must specify the "Name"');
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify the "Name"',
+               );
             } else if (
                this.Requirement.phoneNumber.isRequired &&
                !this.data.phoneNumber
             ) {
-               this.store.dispatch("snackbarShow", 'You must specify the "Phone Number"');
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify the "Phone Number"',
+               );
             } else if (
                this.Requirement.description.isRequired &&
                !this.data.description
             ) {
-               this.store.dispatch("snackbarShow", 'You must specify the "Description"');
+               this.store.dispatch(
+                  "snackbarShow",
+                  'You must specify the "Description"',
+               );
             } else {
-               this.customerStore.dispatch("addItem", this.data).then((item) => {
-                  this.$emit("click-ok", { item });
-                  this.resetData(700);
-               });
+               this.customerStore
+                  .dispatch("addItem", this.data)
+                  .then((item) => {
+                     this.$emit("click-ok", { item });
+                     this.resetData(700);
+                  });
             }
          },
       },
@@ -71,7 +80,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowAddCustomer"
       title="Add New Customer"
       :isShowing="isShowing"
@@ -91,6 +100,7 @@
             class="WindowAddCustomer-customer-input"
             label="Name"
             type="text"
+            autocapitalize="words"
             :isRequired="true"
             :bindValue="data.name"
             @input="(comp) => (data.name = comp.value)"
@@ -110,7 +120,7 @@
             @input="(comp) => (data.description = comp.value)"
          />
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

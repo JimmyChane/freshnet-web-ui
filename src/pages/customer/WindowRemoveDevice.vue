@@ -1,20 +1,16 @@
 <script>
-   import PopupWindowAction from "@/components/window/PopupWindowAction.vue";
+   import WindowAction from "@/components/window/WindowAction.vue";
    import WindowSection from "./WindowSection.vue";
-   import CustomerModule from "@/items/data/Customer.js";
+   import Customer from "@/items/Customer";
 
    export default {
-      components: { PopupWindowAction, WindowSection },
+      components: { WindowAction, WindowSection },
       emits: ["click-dismiss", "click-cancel", "click-ok"],
       props: {
          isShowing: { type: Boolean, default: false },
          param: { type: Object, default: () => null },
       },
-      data() {
-         return {
-            Requirement: CustomerModule.Requirement,
-         };
-      },
+      data: (c) => ({ Requirement: Customer.Requirement }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
@@ -37,7 +33,7 @@
 </script>
 
 <template>
-   <PopupWindowAction
+   <WindowAction
       class="WindowRemoveDevice"
       title="Remove Device?"
       :isShowing="isShowing"
@@ -49,7 +45,9 @@
    >
       <div class="WindowRemoveDevice-body" v-if="param">
          <div class="WindowRemoveDevice-description" v-if="device.description">
-            <span class="WindowRemoveDevice-description-header">Description</span>
+            <span class="WindowRemoveDevice-description-header"
+               >Description</span
+            >
             <span class="WindowRemoveDevice-description-body">{{
                device.description
             }}</span>
@@ -62,7 +60,7 @@
             }}</span>
          </div>
       </div>
-   </PopupWindowAction>
+   </WindowAction>
 </template>
 
 <style lang="scss" scoped>

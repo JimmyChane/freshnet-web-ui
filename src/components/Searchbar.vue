@@ -8,14 +8,9 @@
          placeholder: { type: String, default: "Search" },
          model: { default: undefined },
          backIcon: { type: String, default: Host.icon("close-000000") },
-         enterIcon: {
-            type: String,
-            default: Host.icon("search-000000"),
-         },
+         enterIcon: { type: String, default: Host.icon("search-000000") },
       },
-      data() {
-         return { search: "" };
-      },
+      data: (c) => ({ search: "" }),
       computed: {
          value: {
             get() {
@@ -65,6 +60,8 @@
          class="Searchbar-input transition"
          ref="input"
          v-model="search"
+         type="search"
+         results="2"
          :placeholder="placeholder"
          @focus="(e) => $emit('focus', this._self)"
          @blur="(e) => $emit('blur', this._self)"
@@ -86,7 +83,6 @@
       height: 100%;
       padding: 0.2em;
       border-radius: 2em;
-      gap: 0.1em;
 
       color: #5c5c5c;
 
@@ -94,22 +90,30 @@
       flex-direction: row;
       align-items: center;
 
+      transition-timing-function: cubic-bezier(1, 0, 0, 1);
+
       .Searchbar-icon {
-         font-size: 0.9em;
+         font-size: 0.8em;
       }
       .Searchbar-input {
          width: 100%;
          font-size: 1em;
          flex-grow: 1;
-         border: none;
          outline: none;
          border: none;
          background: none;
          display: flex;
          flex-direction: row;
+         transition-timing-function: cubic-bezier(1, 0, 0, 1);
          &::placeholder {
             color: hsla(0, 0%, 0%, 0.4);
             font-size: 0.8em;
+         }
+         &::-webkit-search-decoration,
+         &::-webkit-search-cancel-button,
+         &::-webkit-search-results-button,
+         &::-webkit-search-results-decoration {
+            display: none;
          }
       }
 

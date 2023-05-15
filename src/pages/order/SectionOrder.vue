@@ -27,7 +27,7 @@
          <li class="viewOrder-item" v-for="item in items" :key="item.id">
             <div class="viewOrder-item-seperator"></div>
             <ItemOrder
-               :expand="currentItemIdSelected === item.id"
+               :isExpand="currentItemIdSelected === item.id"
                :order="item"
                @onCollapse="$emit('click-collapse', item)"
                @onExpand="$emit('click-expand', item)"

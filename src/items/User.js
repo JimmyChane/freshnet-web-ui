@@ -1,10 +1,10 @@
-import ModuleUser, { Type } from "./data/User.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
+import U from "@/U.js";
 const textContains = ItemSearcher.textContains;
 
 export default class User {
-   static Type = ModuleUser.Type;
-   static ReservedUsername = ModuleUser.ReservedUsername;
+   static Type = { None: -1, Admin: 0, Staff: 1, Customer: 2 };
+   static ReservedUsername = { Admin: "admin", Staff: "staff" };
 
    stores = null;
 
@@ -14,21 +14,20 @@ export default class User {
 
    username = "";
    name = "";
-   userType = Type.None;
+   userType = User.Type.None;
 
    fromData(data) {
-      data = new ModuleUser(data);
-      this.username = data.username;
-      this.name = data.name;
+      this.username = U.trimId(data.username);
+      this.name = U.trimText(data.name);
       this.userType = data.userType;
       return this;
    }
    toData() {
-      return new ModuleUser({
-         username: this.username,
-         name: this.name,
+      return {
+         username: U.trimId(this.username),
+         name: U.trimText(this.name),
          userType: this.userType,
-      });
+      };
    }
    toCount(strs) {
       return strs.reduce((count, str) => {
@@ -42,10 +41,6 @@ export default class User {
       if (this.isTypeStaff()) return "Staff";
       if (this.isTypeCustomer()) return "Customer";
       return "Other";
-   }
-
-   compare(item) {
-      return 0;
    }
 
    isTypeNone() {
@@ -68,5 +63,9 @@ export default class User {
          this.username === User.ReservedUsername.Admin ||
          this.username === User.ReservedUsername.Staff
       );
+   }
+
+   compare(item) {
+      return 0;
    }
 }

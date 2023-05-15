@@ -35,38 +35,42 @@
          actionbarRightMenus() {
             if (!this.product) return [];
             return [
-               this.isEditable
-                  ? {
-                       key: "trash",
-                       icon: this.host.icon("trash-000000"),
-                       click: () =>
-                          this.$emit("click-productRemove", {
-                             product: this.product,
-                          }),
-                    }
-                  : null,
                {
                   key: "view",
-                  title: "View",
+                  title: "View Product in Display",
                   icon: this.host.icon("view-000000"),
+                  isHidden: true,
                   click: () => this.clickView(),
                },
                {
                   key: "copy",
-                  title: "Copy Link",
+                  title: "Copy Product Link",
                   icon: this.host.icon("copy-000000"),
                   click: () => this.clickCopyLink(),
                },
                this.isEditable
                   ? {
                        key: "print",
-                       title: "Print",
+                       title: "Print Product Catalog",
                        icon: this.host.icon("printer-000000"),
-                       click: () =>
+                       isHidden: true,
+                       click: () => {
                           this.$router.push({
                              path: "/product/export",
                              query: { productId: this.product.id },
-                          }),
+                          });
+                       },
+                    }
+                  : null,
+               this.isEditable
+                  ? {
+                       key: "delete",
+                       title: "Delete Product",
+                       icon: this.host.icon("trash-000000"),
+                       isHidden: true,
+                       click: () => {
+                          this.$emit("click-productRemove", { product: this.product });
+                       },
                     }
                   : null,
             ];
@@ -134,6 +138,8 @@
    .PanelProduct {
       width: 100%;
       height: 100%;
+      width: 100dvw;
+      max-width: 100%;
 
       font-size: 1.2rem;
 

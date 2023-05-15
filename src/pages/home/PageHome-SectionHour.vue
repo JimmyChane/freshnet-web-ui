@@ -1,28 +1,34 @@
 <script>
    import Section from "./PageHome-Section.vue";
    import Item from "./PageHome-SectionHour-Item.vue";
-   import Company from "@/host/Company";
+   import Setting from "@/items/Setting";
 
    export default {
       components: { Section, Item },
       props: { isThin: { type: Boolean, default: false } },
-      data() {
-         return { items: Company.BusinessDays.toArray() };
+      data: (c) => ({ items: [] }),
+      watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
+      },
+      methods: {
+         async invalidate() {
+            this.items = await this.settingStore.dispatch("findValueOfKey", {
+               key: Setting.Key.CompanyWorkingHours,
+               default: [],
+            });
+         },
       },
       mounted() {
-         this.items.forEach((item) => {
-            if (!item.isToday()) return;
-            Company.BusinessDays.getNextWorkingDay(item);
-         });
+         this.invalidate();
       },
    };
 </script>
 
 <template>
    <Section title="Business Hours">
-      <div
-         :class="['HomeSectionHour', `HomeSectionHour-${isThin ? 'isThin' : 'isWide'}`]"
-      >
+      <div class="HomeSectionHour" :isThin="`${isThin}`">
          <div class="HomeSectionHour-body">
             <Item v-for="item of items" :key="item.title" :item="item" />
          </div>
@@ -32,7 +38,7 @@
 
 <style lang="scss" scoped>
    .HomeSectionHour {
-      background-color: #f3f3f3;
+      background-color: white;
       overflow: hidden;
       color: black;
 
@@ -53,12 +59,12 @@
          justify-content: center;
       }
    }
-   .HomeSectionHour-isThin {
+   .HomeSectionHour[isThin="true"] {
       width: 100%;
       height: 100%;
       font-size: 1rem;
    }
-   .HomeSectionHour-isWide {
+   .HomeSectionHour[isThin="false"] {
       width: 100%;
       height: 100%;
       font-size: 1.2rem;

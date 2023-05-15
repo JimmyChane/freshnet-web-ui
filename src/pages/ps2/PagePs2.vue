@@ -30,18 +30,14 @@
          WindowItemPs2Disc,
          ItemPs2Disc,
       },
-      data() {
-         return { searchKeyword: "" };
-      },
+      data: (c) => ({ searchKeyword: "" }),
       computed: {
          isLoading: (c) => c.ps2Store.getters.isLoading,
          ps2Discs: (c) => c.ps2Store.getters.items,
          ps2DiscSearches: (c) => {
             let searchKeywords = c.searchKeyword.toLowerCase().split(" ");
             if (searchKeywords.length == 0) return [];
-            return c.ps2Discs.filter(
-               (disc) => disc.toCount(searchKeywords) > 0,
-            );
+            return c.ps2Discs.filter((disc) => disc.toCount(searchKeywords) > 0);
          },
 
          currentDiscCode: (c) => {
@@ -67,7 +63,7 @@
       },
       mounted() {
          this.ps2Store.dispatch("getItems").catch((error) => {
-            this.store.dispatch("snackbarShow","Failed to load");
+            this.store.dispatch("snackbarShow", "Failed to load");
             console.error(error);
          });
       },
@@ -124,10 +120,7 @@
                      {{ `(${ps2DiscSearches.length})` }}
                   </h2>
                </div>
-               <p
-                  v-if="!ps2DiscSearches.length"
-                  class="PagePs2-section-description"
-               >
+               <p v-if="!ps2DiscSearches.length" class="PagePs2-section-description">
                   No Search Results
                </p>
                <div class="PagePs2-item-list">
@@ -181,7 +174,7 @@
          @click-dismiss="
             () => {
                if ($route.fullPath !== '/ps2') {
-                  $root.replaceRoute({ query: { discCode: null } });
+                  $root.replaceQuery({ query: { discCode: null } });
                }
             }
          "

@@ -3,20 +3,19 @@ import Price from "@/objects/Price";
 class ProductPrice {
    static Currency = Price.DefaultCurrency;
 
-   static parseString(content) {
-      const price = Price.parse(content);
-      return new ProductPrice().fromData({
-         currency: price.currency,
-         value: price.amount,
-      });
-   }
+   stores = null;
 
    #price = null;
 
-   constructor(data) {
-      this.fromData(data);
+   constructor(stores) {
+      this.stores = stores;
    }
 
+   fromString(str) {
+      const { currency, amount: value } = Price.parse(str);
+      this.fromData({ currency, value });
+      return this;
+   }
    fromData(data = { currency: "", value: 0 }) {
       this.#price = new Price(data.value, data.currency);
       return this;
@@ -56,10 +55,10 @@ class ProductPrice {
    }
 
    get value() {
-      return this.#price.amount;
+      return this.#price?.amount ?? 0;
    }
    get currency() {
-      return this.#price.currency;
+      return this.#price?.currency ?? "";
    }
 }
 

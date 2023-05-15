@@ -1,6 +1,4 @@
 <script>
-   import Drawer from "@/components/Drawer.vue";
-
    import Navigation from "@/tools/Navigation.js";
 
    import Footer from "@/app/footer/Footer.vue";
@@ -17,103 +15,11 @@
    import WindowUpdateCategory from "./WindowUpdateCategory.vue";
    import WindowUpdateSpecifications from "./WindowUpdateSpecifications.vue";
 
+   import PanelRight from "@/components/panel/PanelRight.vue";
+
    import HostIcon from "@/host/HostIcon";
 
-   class PopupContext {
-      context = null;
-      isShowing = false;
-      input = null;
-
-      onShowCallback;
-      onDismissCallback;
-      onCancelCallback;
-      onConfirmCallback;
-
-      constructor(context) {
-         this.context = context;
-      }
-      show(input) {
-         const accept = () => {
-            this.isShowing = true;
-            this.input = input;
-         };
-         if (typeof this.onShowCallback !== "function") {
-            accept();
-            return;
-         }
-         const reject = (error, reason) => {
-            if (typeof reason === "string" && reason.length)
-               this.context.store.dispatch("snackbarShow",reason);
-            if (error !== undefined) console.error(error);
-         };
-         this.onShowCallback(accept, reject, input);
-      }
-      dismiss() {
-         const accept = () => {
-            this.isShowing = false;
-            this.input = null;
-         };
-         if (typeof this.onDismissCallback !== "function") {
-            accept();
-            return;
-         }
-         const reject = (error, reason) => {
-            if (typeof reason === "string" && reason.length)
-               this.context.store.dispatch("snackbarShow",reason);
-            if (error !== undefined) console.error(error);
-         };
-         this.onDismissCallback(accept, reject);
-      }
-      cancel() {
-         const accept = () => {
-            this.isShowing = false;
-            this.input = null;
-         };
-         if (typeof this.onCancelCallback !== "function") {
-            accept();
-            return;
-         }
-         const reject = (error, reason) => {
-            if (typeof reason === "string" && reason.length)
-               this.context.store.dispatch("snackbarShow",reason);
-            if (error !== undefined) console.error(error);
-         };
-         this.onCancelCallback(accept, reject);
-      }
-      confirm(output) {
-         const accept = () => {
-            this.isShowing = false;
-            this.input = null;
-         };
-         if (typeof this.onConfirmCallback !== "function") {
-            accept();
-            return;
-         }
-         const reject = (error, reason) => {
-            if (typeof reason === "string" && reason.length)
-               this.context.store.dispatch("snackbarShow",reason);
-            if (error !== undefined) console.error(error);
-         };
-         this.onConfirmCallback(accept, reject, output);
-      }
-
-      onShow(fun) {
-         this.onShowCallback = fun;
-         return this;
-      }
-      onDismiss(fun) {
-         this.onDismissCallback = fun;
-         return this;
-      }
-      onCancel(fun) {
-         this.onCancelCallback = fun;
-         return this;
-      }
-      onConfirm(fun) {
-         this.onConfirmCallback = fun;
-         return this;
-      }
-   }
+   import PopupContext from "@/tools/PopupContext";
 
    export default {
       key: "product",
@@ -123,49 +29,10 @@
          dark: new HostIcon("products-000000.svg"),
       },
 
-      _queries_old() {
-         return [
-            { key: "", title: "", values: [{ key: "", title: "All" }] },
-            {
-               key: "category",
-               title: "Category",
-               values: [
-                  { key: "laptop", title: "Laptop" },
-                  { key: "printer", title: "Printer" },
-               ],
-            },
-            {
-               key: "brand",
-               title: "Brand",
-               values: [
-                  { key: "hp", title: "HP" },
-                  { key: "dell", title: "Dell" },
-               ],
-            },
-            {
-               key: "size",
-               title: "Size",
-               values: [
-                  { key: "14", title: '14"' },
-                  { key: "15.6", title: '15.6"' },
-               ],
-            },
-            {
-               key: "storage",
-               title: "Storage",
-               values: [
-                  { key: "ssd512gb", title: "SSD 512GB" },
-                  { key: "ssd256gb", title: "SSD 256GB" },
-                  { key: "hdd1tb", title: "HDD 1TB" },
-               ],
-            },
-         ];
-      },
-
       components: {
          Footer,
 
-         Drawer,
+         PanelRight,
          PanelProducts,
          PanelProduct,
 
@@ -179,187 +46,174 @@
          WindowUpdateCategory,
          WindowUpdateSpecifications,
       },
-      data() {
-         return {
-            scrollTop: 0,
-            popup: {
-               search: new PopupContext(this),
-               productAdd: new PopupContext(this).onConfirm(
-                  (accept, reject, output) => {
-                     this.productStore
-                        .dispatch("addItem", { data: output })
-                        .then((product) => {
-                           accept();
-                           this.setProduct(product);
-                        })
-                        .catch((error) =>
-                           reject(error, "Product Creation Failed"),
-                        );
-                  },
-               ),
-               productRemove: new PopupContext(this).onConfirm(
-                  (accept, reject, input) => {
-                     this.productStore
-                        .dispatch("removeItemOfId", { id: input.productId })
-                        .then(() => {
-                           accept();
-                           this.setProduct(null);
-                        })
-                        .catch((error) =>
-                           reject(error, "Product Deletion Failed"),
-                        );
-                  },
-               ),
-               productImageRemove: new PopupContext(this).onConfirm(
-                  (accept, reject, input) => {
-                     const { product, image } = input;
-                     this.productStore
-                        .dispatch("removeImageOfId", { id: product.id, image })
-                        .then(() => accept())
-                        .catch(() => reject());
-                  },
-               ),
-               productTitleBrandUpdate: new PopupContext(this).onConfirm(
-                  (accept, reject, input) => {
-                     const { product, title, brandId } = input;
-                     Promise.all([
-                        this.productStore.dispatch("updateTitleOfId", {
-                           id: product.id,
-                           title,
+      data: (c) => ({
+         popup: {
+            search: new PopupContext(c).onDismiss((accept, reject, input) => {
+               const { windowSearch } = c.$refs;
+               if (windowSearch) {
+                  windowSearch.blur();
+               }
+               accept();
+            }),
+            productAdd: new PopupContext(c).onConfirm(
+               (accept, reject, output) => {
+                  c.productStore
+                     .dispatch("addItem", { data: output })
+                     .then((product) => {
+                        accept();
+                        c.setProduct(product);
+                     })
+                     .catch((error) =>
+                        reject(error, "Product Creation Failed"),
+                     );
+               },
+            ),
+            productRemove: new PopupContext(c).onConfirm(
+               (accept, reject, input) => {
+                  c.productStore
+                     .dispatch("removeItemOfId", { id: input.productId })
+                     .then(() => {
+                        accept();
+                        c.setProduct(null);
+                     })
+                     .catch((error) =>
+                        reject(error, "Product Deletion Failed"),
+                     );
+               },
+            ),
+            productImageRemove: new PopupContext(c).onConfirm(
+               (accept, reject, input) => {
+                  const { product, image } = input;
+                  c.productStore
+                     .dispatch("removeImageOfId", { id: product.id, image })
+                     .then(() => accept())
+                     .catch(() => reject());
+               },
+            ),
+            productTitleBrandUpdate: new PopupContext(c).onConfirm(
+               (accept, reject, input) => {
+                  const { product, title, brandId } = input;
+                  Promise.all([
+                     c.productStore.dispatch("updateTitleOfId", {
+                        id: product.id,
+                        title,
+                     }),
+                     c.productStore.dispatch("updateBrandIdOfId", {
+                        id: product.id,
+                        brandId,
+                     }),
+                  ])
+                     .then(() => accept())
+                     .catch((error) => reject(error, "Some Cannot Update"));
+               },
+            ),
+            productPriceUpdate: new PopupContext(c).onConfirm(
+               (accept, reject, input) => {
+                  const { product, price } = input;
+                  c.productStore
+                     .dispatch("updatePriceOfId", { id: product.id, price })
+                     .then((product) => accept())
+                     .catch((error) => reject(error, "Cannot Update"));
+               },
+            ),
+            productDescriptionUpdate: new PopupContext(c).onConfirm(
+               (accept, reject, input) => {
+                  const { product, description } = input;
+                  c.productStore
+                     .dispatch("updateDescriptionOfId", {
+                        id: product.id,
+                        description,
+                     })
+                     .then((product) => accept())
+                     .catch((error) => reject(error, "Cannot Update"));
+               },
+            ),
+            productSpecificationsUpdate: new PopupContext(c).onConfirm(
+               (accept, reject, input) => {
+                  const { product, specifications } = input;
+                  c.productStore
+                     .dispatch("updateSpecificationsOfId", {
+                        id: product.id,
+                        specifications: specifications.map((specification) => {
+                           return {
+                              type: specification.typeKey,
+                              content: specification.content,
+                           };
                         }),
-                        this.productStore.dispatch("updateBrandIdOfId", {
-                           id: product.id,
-                           brandId,
-                        }),
-                     ])
-                        .then(() => accept())
-                        .catch((error) => reject(error, "Some Cannot Update"));
-                  },
-               ),
-               productPriceUpdate: new PopupContext(this).onConfirm(
-                  (accept, reject, input) => {
-                     const { product, price } = input;
-                     this.productStore
-                        .dispatch("updatePriceOfId", { id: product.id, price })
-                        .then((product) => accept())
-                        .catch((error) => reject(error, "Cannot Update"));
-                  },
-               ),
-               productDescriptionUpdate: new PopupContext(this).onConfirm(
-                  (accept, reject, input) => {
-                     const { product, description } = input;
-                     this.productStore
-                        .dispatch("updateDescriptionOfId", {
-                           id: product.id,
-                           description,
-                        })
-                        .then((product) => accept())
-                        .catch((error) => reject(error, "Cannot Update"));
-                  },
-               ),
-               productSpecificationsUpdate: new PopupContext(this).onConfirm(
-                  (accept, reject, input) => {
-                     const { product, specifications } = input;
-                     this.productStore
-                        .dispatch("updateSpecificationsOfId", {
-                           id: product.id,
-                           specifications: specifications.map(
-                              (specification) => {
-                                 return {
-                                    type: specification.typeKey,
-                                    content: specification.content,
-                                 };
-                              },
-                           ),
-                        })
-                        .then((product) => accept())
-                        .catch((error) => reject(error, "Cannot Update"));
-                  },
-               ),
-               productCategoryUpdate: new PopupContext(this).onConfirm(
-                  (accept, reject, input) => {
-                     const { product, categoryId } = input;
-                     this.productStore
-                        .dispatch("updateCategoryIdOfId", {
-                           id: product.id,
-                           categoryId,
-                        })
-                        .then((product) => accept())
-                        .catch((error) => reject(error, "Cannot Update"));
-                  },
-               ),
-            },
-
-            product: null,
-            drawerProduct: null,
-            productBrand: null,
-
-            groups: [],
-
-            stylePanelProducts: {},
-            stylePanelEmpty: {},
-         };
-      },
-      computed: {
-         isOver1200px: (c) => c.$root.window.innerWidth > 1200,
-
-         itemDrawerEdge: () => Drawer.Edge.RIGHT,
-         itemDrawerMode() {
-            if (this.isOver1200px) {
-               return this.product
-                  ? Drawer.Mode.FIXED_EXPAND
-                  : Drawer.Mode.FIXED_COLLAPSE;
-            } else {
-               return this.product
-                  ? Drawer.Mode.DRAWER_EXPAND
-                  : Drawer.Mode.DRAWER_COLLAPSE;
-            }
+                     })
+                     .then((product) => accept())
+                     .catch((error) => reject(error, "Cannot Update"));
+               },
+            ),
+            productCategoryUpdate: new PopupContext(c).onConfirm(
+               (accept, reject, input) => {
+                  const { product, categoryId } = input;
+                  c.productStore
+                     .dispatch("updateCategoryIdOfId", {
+                        id: product.id,
+                        categoryId,
+                     })
+                     .then((product) => accept())
+                     .catch((error) => reject(error, "Cannot Update"));
+               },
+            ),
          },
+         stylePanelProducts: {},
+         stylePanelEmpty: {},
+         panelListened: { isShowing: false, isWide: false },
 
-         isEditable() {
-            const { user } = this.loginStore.getters;
+         groups: [],
+
+         product: null,
+         drawerProduct: null,
+         productBrand: null,
+         scrollTop: 0,
+      }),
+      computed: {
+         isEditable: (c) => {
+            const { user } = c.loginStore.getters;
             return user.isTypeAdmin() || user.isTypeStaff();
          },
-         isLoading() {
-            return this.productStore.getters.isLoading;
-         },
+         isLoading: (c) => c.productStore.getters.isLoading,
 
-         paths() {
-            return this.$root.paths;
+         paths: (c) => {
+            return c.$root.paths;
          },
-         lastPath() {
-            let { paths } = this;
-            if (!paths.length) return "";
+         lastPath: (c) => {
+            let { paths } = c;
+            if (!paths.length) {
+               return "";
+            }
             return paths[paths.length - 1];
          },
 
-         products() {
-            return this.groups
+         products: (c) => {
+            return c.groups
                .reduce((products, group) => {
                   products.push(...group.products);
                   return products;
                }, [])
                .filter((product) => {
-                  if (!this.isEditable) {
+                  if (!c.isEditable) {
                      return product.isStockAvailable();
                   }
                   return true;
                });
          },
 
-         productId() {
-            return this.$route.query.productId;
-         },
+         productId: (c) => c.$route.query.productId,
 
-         productPrevious() {
+         productPrevious: (c) => {
             // return null;
-            const { products } = this;
+            const { products } = c;
             const categoryProducts = products.filter((product) => {
-               if (!this.product) return true;
-               return product.category === this.product.category;
+               if (!c.product) {
+                  return true;
+               }
+               return product.category === c.product.category;
             });
 
-            let productIndex = categoryProducts.indexOf(this.product);
+            let productIndex = categoryProducts.indexOf(c.product);
             let productPreviousIndex = productIndex - 1;
             if (
                0 <= productPreviousIndex &&
@@ -370,15 +224,17 @@
 
             return null;
          },
-         productNext() {
+         productNext: (c) => {
             // return null;
-            const products = this.products;
+            const products = c.products;
             const categoryProducts = products.filter((product) => {
-               if (!this.product) return true;
-               return product.category === this.product.category;
+               if (!c.product) {
+                  return true;
+               }
+               return product.category === c.product.category;
             });
 
-            let productIndex = categoryProducts.indexOf(this.product);
+            let productIndex = categoryProducts.indexOf(c.product);
             let productNextIndex = productIndex + 1;
             if (
                0 <= productNextIndex &&
@@ -440,7 +296,7 @@
                   c.popup.productBundleDelete.isShowing = true;
                },
 
-               productDescriptionUpdate: new PopupContext(this).onConfirm(
+               productDescriptionUpdate: new PopupContext(c).onConfirm(
                   (accept, reject, input) => {},
                ),
 
@@ -460,12 +316,8 @@
          },
       },
       watch: {
-         isOver1200px() {
-            this.invalidateStyle();
-         },
          product() {
             this.onProduct();
-            this.invalidateStyle();
          },
          productId() {
             this.onProductId();
@@ -486,7 +338,6 @@
          this.invalidate();
          this.onProduct();
          this.onProductId();
-         this.invalidateStyle();
          this.$root.navigation.setLayout(Navigation.Layout.THIN);
       },
       methods: {
@@ -499,63 +350,79 @@
 
             const categories = await this.categoryStore.dispatch("getItems");
             categories.forEach((category) => {
-               const group = groups.find(
-                  (group) => group.category.id === category.id,
-               );
-               if (!group) groups.push({ category, items: [] });
+               const group = groups.find((group) => {
+                  return group.category.id === category.id;
+               });
+               if (!group) {
+                  groups.push({ category, items: [] });
+               }
             });
 
-            groups = groups.map((group) => {
-               const products = !this.isEditable
-                  ? group.items.filter((product) => product.isStockAvailable())
-                  : group.items;
-               products.sort((product1, product2) =>
-                  product1.compare(product2),
-               );
-               return { category: group.category, products };
-            });
-            groups = groups.filter((group) => group.products.length > 0);
-            groups = groups.sort((group1, group2) => {
-               return group1.category.compare(group2.category);
-            });
+            this.groups = groups
+               .map((group) => {
+                  const products = !this.isEditable
+                     ? group.items.filter((product) => {
+                          return product.isStockAvailable();
+                       })
+                     : group.items;
+                  products.sort((product1, product2) => {
+                     return product1.compare(product2);
+                  });
+                  return { category: group.category, products };
+               })
+               .filter((group) => {
+                  return group.products.length > 0;
+               })
+               .sort((group1, group2) => {
+                  return group1.category.compare(group2.category);
+               });
+         },
 
-            this.groups = groups;
-         },
-         async invalidateStyle() {
-            this.invalidateStylePanelProducts();
-            this.invalidateStylePanelEmpty();
-         },
-         async invalidateStylePanelProducts() {
-            if (this.isOver1200px) {
+         invalidateStyle() {
+            if (this.panelListened.isWide || !this.panelListened.isShowing) {
                this.stylePanelProducts = {};
-               return;
-            }
-
-            if (this.product) {
-               const compare = this.product;
-               setTimeout(() => {
-                  if (compare === this.product)
+            } else {
+               this.delayOnPanelListened((isSamePreviously) => {
+                  if (isSamePreviously) {
                      this.stylePanelProducts = { display: "none" };
-               }, 700);
-               return;
-            }
-            this.stylePanelProducts = {};
-         },
-         async invalidateStylePanelEmpty() {
-            if (!this.isOver1200px) {
-               this.stylePanelEmpty = {};
-               return;
+                  }
+               });
             }
 
-            if (this.product) {
-               const compare = this.product;
-               setTimeout(() => {
-                  if (compare === this.product)
+            if (!this.panelListened.isWide || !this.panelListened.isShowing) {
+               this.stylePanelEmpty = {};
+            } else {
+               this.delayOnPanelListened((isSamePreviously) => {
+                  if (isSamePreviously) {
                      this.stylePanelEmpty = { display: "none" };
-               }, 700);
-               return;
+                  }
+               });
             }
-            this.stylePanelEmpty = {};
+         },
+
+         delayOnPanelListened(
+            callback = (isSamePreviously) => {},
+            delay = 700,
+         ) {
+            const isPreviousWide = this.panelListened.isWide;
+            const isPreviousShowing = this.panelListened.isShowing;
+
+            setTimeout(() => {
+               const isSamePreviously =
+                  this.panelListened.isWide === isPreviousWide &&
+                  this.panelListened.isShowing === isPreviousShowing;
+
+               callback(isSamePreviously);
+            }, delay);
+         },
+
+         invalidatePanelShowing(isShowing) {
+            this.panelListened.isShowing = isShowing;
+            this.invalidateStyle();
+         },
+         invalidatePanelWide(isWide) {
+            this.panelListened.isWide = isWide;
+            this.invalidateStyle();
          },
 
          async onProduct() {
@@ -581,12 +448,10 @@
          },
 
          setProduct(product) {
-            this.setProductId(product ? product.id : null);
+            this.setProductId(product?.id ?? null);
          },
          setProductId(productId) {
-            this.$root.nextRoute({
-               query: { productId: productId ? productId : null },
-            });
+            this.$root.nextQuery({ query: { productId: productId ?? null } });
          },
       },
    };
@@ -594,12 +459,7 @@
 
 <template>
    <div class="PageProduct">
-      <div
-         :class="[
-            'PageProduct-body',
-            `PageProduct-body-${isOver1200px ? 'isOver1200' : 'isLess1200'}`,
-         ]"
-      >
+      <div class="PageProduct-body" :isPanelWide="`${panelListened.isWide}`">
          <PanelProducts
             class="PageProduct-products"
             :style="stylePanelProducts"
@@ -607,16 +467,13 @@
             @click-productAdd="() => popup.productAdd.show()"
             @click-search="() => popup.search.show()"
          />
-
-         <div class="PageProduct-PanelRightEmpty" :style="stylePanelEmpty">
-            <span class="PageProduct-PanelRightEmpty-text">Select to view</span>
-         </div>
-
-         <Drawer
-            class="PageProduct-panel-PanelProduct"
-            :edge="itemDrawerEdge"
-            :mode="itemDrawerMode"
-            @click-collapse="setProduct(null)"
+         <PanelRight
+            class="PageProduct-PanelRight"
+            titleEmpty="Select product to view"
+            :isShowing="!!product"
+            @click-collapse="() => setProduct(null)"
+            @on-isShowing="(isShowing) => invalidatePanelShowing(isShowing)"
+            @on-isWide="(isWide) => invalidatePanelWide(isWide)"
          >
             <PanelProduct
                class="PageProduct-PanelProduct"
@@ -648,13 +505,14 @@
                   (output) => popup.productSpecificationsUpdate.show(output)
                "
             />
-         </Drawer>
+         </PanelRight>
       </div>
 
       <!-- Popup Product Search -->
       <WindowSearch
          class="PageService-window"
          v-if="$root.window.innerWidth <= 550"
+         ref="windowSearch"
          :isShowing="popup.search.isShowing"
          :items="products"
          @click-dismiss="() => popup.search.dismiss()"
@@ -745,17 +603,16 @@
 
 <style lang="scss" scoped>
    .PageProduct {
-      width: 100%;
-      width: 100vw;
-      max-width: 100%;
+      width: 100dvw;
       height: 100%;
+      max-width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       overflow: hidden;
 
       .PageProduct-body {
-         width: 100vw;
+         width: 100dvw;
          max-width: 100%;
          height: 100%;
          display: flex;
@@ -764,67 +621,25 @@
          justify-content: flex-start;
          overflow: hidden;
 
+         position: relative;
+
          .PageProduct-products {
             z-index: 1;
-            width: 100vw;
-            max-width: 100%;
          }
-         .PageProduct-PanelRightEmpty {
+         .PageProduct-PanelRight {
             z-index: 2;
-            background-color: #adb8bb;
-            background-color: hsla(0, 0%, 0%, 0.6);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: absolute;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            .PageProduct-PanelRightEmpty-text {
-               font-weight: 600;
-               font-size: 1.2rem;
-               color: hsl(0, 0%, 84%);
-               background: hsla(0, 0%, 0%, 0.04);
-               border-radius: 1rem;
-               padding: 4rem 5rem;
-            }
-         }
-         .PageProduct-panel-PanelProduct {
-            z-index: 3;
-            .PageProduct-PanelProduct {
-               height: 100%;
-               width: 100vw;
-               max-width: 100%;
-            }
          }
       }
-      .PageProduct-body-isLess1200 {
+      .PageProduct-body[isPanelWide="false"] {
          .PageProduct-products {
-            width: 100vw;
-            max-width: 100%;
-         }
-         .PageProduct-PanelRightEmpty {
-            display: none;
-         }
-         .PageProduct-panel-PanelProduct {
-            width: 100vw;
             max-width: 100%;
          }
       }
-      .PageProduct-body-isOver1200 {
-         position: relative;
+      .PageProduct-body[isPanelWide="true"] {
          .PageProduct-products {
-            width: 100vw;
+            width: 100dvw;
             max-width: 60%;
-         }
-         .PageProduct-PanelRightEmpty {
-            width: 100vw;
-            max-width: 40%;
-         }
-         .PageProduct-panel-PanelProduct {
-            width: 100vw;
-            max-width: 40%;
+            min-width: 60%;
          }
       }
    }

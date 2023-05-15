@@ -1,29 +1,34 @@
 <script>
-   import Company from "@/host/Company";
+   import ButtonContact from "./BottomActionbar-ButtonContact.vue";
+   import ButtonTop from "./BottomActionbar-ButtonTop.vue";
+   import Setting from "@/items/Setting";
 
    export default {
+      components: { ButtonContact, ButtonTop },
       props: {
          product: { type: Object, default: () => null },
          isWide: { type: Boolean, default: false },
+         parentScrollTop: { type: Number, default: 0 },
       },
-      data() {
-         return {
-            whatsappLink: "",
+      data: (c) => ({
+         whatsappLink: "",
 
-            callTypeTitle: "",
-            callTitle: "",
-            callHref: "",
-            callTarget: "",
-            callIcon: "",
+         callTypeTitle: "",
+         callTitle: "",
+         callHref: "",
+         callTarget: "",
+         callIcon: "",
 
-            whatsappTypeTitle: "",
-            whatsappTitle: "",
-            whatsappHref: "",
-            whatsappTarget: "",
-            whatsappIcon: "",
-         };
-      },
+         whatsappTypeTitle: "",
+         whatsappTitle: "",
+         whatsappHref: "",
+         whatsappTarget: "",
+         whatsappIcon: "",
+      }),
       watch: {
+         "settingStore.getters.lastModified"() {
+            this.invalidate();
+         },
          product() {
             this.invalidate();
          },
@@ -33,28 +38,35 @@
       },
       methods: {
          async invalidate() {
-            const contact = Company.Contacts.findByTitle("Beh Aik Keong");
-
-            const contactCall = contact.links.find(
-               (link) => link.category.title === "Call",
+            const contacts = await this.settingStore.dispatch(
+               "findValueOfKey",
+               { key: Setting.Key.Contacts, default: [] },
             );
-            this.callTypeTitle = contactCall.category.title;
-            this.callTitle = contact.title;
-            this.callHref = contactCall.toHtmlHref();
-            this.callTarget = contactCall.toHtmlTarget();
-            this.callIcon = contactCall.category.icon;
+            const contact = this.findContactByTitle(contacts, "Beh Aik Keong");
 
-            const contactWhatsapp = contact.links.find(
-               (link) => link.category.title === "Whatsapp",
-            );
-            this.whatsappTypeTitle = contactWhatsapp.category.title;
-            this.whatsappTitle = contact.title;
-            this.whatsappTarget = contactWhatsapp.toHtmlTarget();
-            this.whatsappIcon = contactWhatsapp.category.icon;
+            const contactCall =
+               contact?.links.find((link) => link.category.title === "Call") ??
+               null;
+            const contactWhatsapp =
+               contact?.links.find(
+                  (link) => link.category.title === "Whatsapp",
+               ) ?? null;
+
+            this.callTypeTitle = contactCall?.category?.title ?? "";
+            this.callTitle = contact?.title ?? "";
+            this.callHref = contactCall?.toHtmlHref() ?? "";
+            this.callTarget = contactCall?.toHtmlTarget() ?? "";
+            this.callIcon = contactCall?.category?.icon ?? "";
+            this.whatsappTypeTitle = contactWhatsapp?.category?.title ?? "";
+            this.whatsappTitle = contact?.title ?? "";
+            this.whatsappTarget = contactWhatsapp?.toHtmlTarget() ?? "";
+            this.whatsappIcon = contactWhatsapp?.category?.icon ?? "";
+
+            const whatsappHref = contactWhatsapp?.toHtmlHref() ?? "";
 
             let { product } = this;
             if (!product) {
-               this.whatsappHref = contactWhatsapp.toHtmlHref();
+               this.whatsappHref = whatsappHref;
                return;
             }
 
@@ -66,135 +78,68 @@
             if (productLink) text += `\n${productLink}`;
             const textUri = encodeURIComponent(text);
 
-            this.whatsappHref = `${contactWhatsapp.toHtmlHref()}&text=${textUri}`;
+            this.whatsappHref = `${whatsappHref}&text=${textUri}`;
+         },
+
+         findContactByTitle(contacts = [], title = "") {
+            return contacts.find((contact) => contact.title === title);
          },
       },
    };
 </script>
 
 <template>
-   <div class="ViewerProduct-BottomActionbar">
-      <div class="ViewerProduct-BottomActionbar-main">
-         <a
-            class="ViewerProduct-BottomActionbar-item transition"
-            :href="callHref"
-            :style="{
-               '--primary-color': '#2196f3',
-               '--primary-background-color': '#dff1ff',
-            }"
-         >
-            <img
-               class="ViewerProduct-BottomActionbar-item-icon"
-               :src="callIcon"
-            />
-            <div class="ViewerProduct-BottomActionbar-item-body">
-               <span class="ViewerProduct-BottomActionbar-item-title">{{
-                  callTypeTitle
-               }}</span>
-               <span class="ViewerProduct-BottomActionbar-item-content">{{
-                  callTitle
-               }}</span>
-            </div>
-         </a>
-
-         <a
-            class="ViewerProduct-BottomActionbar-item transition"
-            :target="whatsappTarget"
-            :href="whatsappHref"
-            :style="{
-               '--primary-color': '#4caf50',
-               '--primary-background-color': '#f3fff4',
-            }"
-         >
-            <img
-               class="ViewerProduct-BottomActionbar-item-icon"
-               :src="whatsappIcon"
-            />
-            <div class="ViewerProduct-BottomActionbar-item-body">
-               <span class="ViewerProduct-BottomActionbar-item-title">{{
-                  whatsappTypeTitle
-               }}</span>
-               <span class="ViewerProduct-BottomActionbar-item-content">{{
-                  whatsappTitle
-               }}</span>
-            </div>
-         </a>
-      </div>
+   <div
+      class="ViewerProduct-BottomActionbar"
+      :isButtonTopHidden="parentScrollTop <= 10"
+   >
+      <ButtonContact
+         class="ViewerProduct-BottomActionbar-whatsapp"
+         :target="whatsappTarget"
+         :href="whatsappHref"
+         :icon="whatsappIcon"
+         :titleHeader="whatsappTypeTitle"
+         :titleContent="whatsappTitle"
+         primaryColorHex="#4caf50"
+      />
+      <ButtonContact
+         class="ViewerProduct-BottomActionbar-call"
+         :target="callTarget"
+         :href="callHref"
+         :icon="callIcon"
+         :titleHeader="callTypeTitle"
+         :titleContent="callTitle"
+         primaryColorHex="#2196f3"
+         :toShrink="true"
+      />
+      <ButtonTop
+         :isHidden="parentScrollTop <= 10"
+         @click="() => $emit('click-scrollToTop')"
+      />
    </div>
 </template>
 
 <style lang="scss" scoped>
    .ViewerProduct-BottomActionbar {
+      position: sticky;
+      bottom: 0;
+      width: 100%;
+      gap: 0.3rem;
+
       display: flex;
       flex-direction: row;
       flex-wrap: nowrap;
       align-items: center;
-      justify-content: space-evenly;
-
-      position: sticky;
-      bottom: 0;
-      width: 100%;
-      gap: 2rem;
-
-      border-top: 1px solid hsla(0, 0%, 0%, 0.1);
-      box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.1);
-
-      .ViewerProduct-BottomActionbar-main {
-         width: 100%;
-         max-width: 24rem;
-         display: flex;
-         flex-direction: row;
-         flex-wrap: nowrap;
-         align-items: center;
-         justify-content: center;
-         justify-content: space-evenly;
-         padding: 0.5rem 1rem;
-
-         .ViewerProduct-BottomActionbar-item {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-start;
-
-            border: none;
-            cursor: pointer;
-            border-radius: 0.5rem;
-            overflow: hidden;
-
-            text-decoration: none;
-            color: var(--primary-color);
-            font-size: 1rem;
-            font-weight: 600;
-            line-height: 0.9rem;
-            gap: 0.5rem;
-            padding: 0.3rem 0.5rem;
-
-            &:hover {
-               background-color: hsla(0, 0%, 100%, 0.8);
-            }
-
-            .ViewerProduct-BottomActionbar-item-icon {
-               grid-area: icon;
-               width: 1.2rem;
-               height: 1.2rem;
-            }
-            .ViewerProduct-BottomActionbar-item-body {
-               display: flex;
-               flex-direction: column;
-               align-items: flex-start;
-               justify-content: center;
-               .ViewerProduct-BottomActionbar-item-title {
-                  grid-area: title;
-                  display: flex;
-                  align-items: center;
-                  font-size: 0.9rem;
-               }
-               .ViewerProduct-BottomActionbar-item-content {
-                  grid-area: content;
-                  font-size: 0.8rem;
-               }
-            }
-         }
+      justify-content: flex-end;
+      padding: 0.5rem 1rem;
+      padding: 1rem;
+   }
+   .ViewerProduct-BottomActionbar[isButtonTopHidden="true"] {
+      .ViewerProduct-BottomActionbar-whatsapp {
+         transform: translateX(4.3rem);
+      }
+      .ViewerProduct-BottomActionbar-call {
+         transform: translateX(4.3rem);
       }
    }
 </style>

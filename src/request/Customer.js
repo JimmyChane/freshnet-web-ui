@@ -18,7 +18,7 @@ export default class Customer {
       return HostApi.request()
          .PUT()
          .url("customer/update/namePhoneNumber")
-         .body({ content: { _id, name, phoneNumber } })
+         .body({ content: { _id: id, name, phoneNumber } })
          .send();
    }
    static updateDescription(id = "", description = "") {

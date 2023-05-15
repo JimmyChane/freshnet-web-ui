@@ -2,13 +2,11 @@
    export default {
       emits: ["click-logout"],
       props: { isWide: { type: Boolean, default: true } },
-      data() {
-         return { redirect: "" };
-      },
+      data: (c) => ({ redirect: "" }),
       computed: {
-         user: (context) => context.loginStore.getters.user,
-         userName: (context) => context.user.name,
-         isLoginPage: (context) => context.$root.currentPageKey === "login",
+         user: (c) => c.loginStore.getters.user,
+         userName: (c) => c.user.name,
+         isLoginPage: (c) => c.$root.currentPageKey === "login",
       },
       watch: {
          $route() {
@@ -31,10 +29,8 @@
 
 <template>
    <div
-      :class="[
-         'LeftNavigationLogin',
-         `LeftNavigationLogin-${isWide ? 'isWide' : 'isThin'}`,
-      ]"
+      class="LeftNavigationLogin"
+      :isWide="`${isWide}`"
       v-if="!isLoginPage || user.isTypeNone()"
    >
       <div class="LeftNavigationLogin-loggedIn" v-if="!user.isTypeNone()">
@@ -72,7 +68,7 @@
       flex-direction: column;
       gap: 2px;
       border-top: 1px solid hsla(0, 0%, 0%, 0.1);
-      background-color: hsl(0, 0%, 84%);
+      background: inherit;
 
       .LeftNavigationLogin-loggedIn {
          display: flex;
@@ -141,10 +137,10 @@
       }
    }
 
-   .LeftNavigationLogin-isWide {
+   .LeftNavigationLogin[isWide="true"] {
       padding: 0.5rem;
    }
-   .LeftNavigationLogin-isThin {
+   .LeftNavigationLogin[isWide="false"] {
       padding: 0.2rem;
       .LeftNavigationLogin-loggedIn {
          gap: 0;

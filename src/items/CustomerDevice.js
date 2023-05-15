@@ -1,5 +1,6 @@
-import ModuleCustomerDevice from "./data/CustomerDevice.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
+import U from "@/U.js";
+import CustomerDeviceSpecification from "./CustomerDeviceSpecification.js";
 const textContains = ItemSearcher.textContains;
 
 class CustomerDevice {
@@ -20,23 +21,31 @@ class CustomerDevice {
    specifications = [];
 
    fromData(data) {
-      data = ModuleCustomerDevice.trim(data);
-
-      this.id = data._id;
-      this.ownerCustomerId = data.ownerCustomerId;
-      this.description = data.description;
-      this.categoryKey = data.categoryKey;
-      this.specifications = data.specifications;
+      this.id = U.trimId(data._id);
+      this.ownerCustomerId = U.trimId(data.ownerCustomerId);
+      this.description = U.trimText(data.ownerCustomerId);
+      this.categoryKey = U.trimId(data.categoryKey);
+      this.specifications = U.optArray(data.specifications)
+         .map((specification) => {
+            return new CustomerDeviceSpecification(this.stores).fromData(
+               specification,
+            );
+         })
+         .filter((specification) => {
+            return specification.typeKey && specification.content;
+         });
 
       return this;
    }
    toData() {
       return {
-         _id: this.id,
-         ownerCustomerId: this.ownerCustomerId,
-         description: this.description,
-         categoryKey: this.categoryKey,
-         specifications: this.specifications.map((specification) => specification),
+         _id: U.trimId(this.id),
+         ownerCustomerId: U.trimId(data.ownerCustomerId)(this.ownerCustomerId),
+         description: U.trimId(this.description),
+         categoryKey: U.trimId(this.categoryKey),
+         specifications: this.specifications.map((specification) => {
+            return specification.toData();
+         }),
       };
    }
    toCount(strs) {
