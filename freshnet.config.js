@@ -1,11 +1,8 @@
-const host = "https://api.freshnet.app";
-
 module.exports = {
    devPort: 8080,
 
-   host,
-   hostApi: `${host}`,
-   hostRes: `${host}/res`,
+   hostApi: "https://api.freshnet.app",
+   hostRes: "https://res.freshnet.app",
 
    cloudinaryRes: "https://res.cloudinary.com/freshnet/image/upload/resource",
 

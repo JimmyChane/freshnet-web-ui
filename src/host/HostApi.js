@@ -157,9 +157,6 @@ class HostResponse {
 }
 
 class HostApi {
-   get origin() {
-      return config.host;
-   }
    get originApi() {
       return config.hostApi;
    }

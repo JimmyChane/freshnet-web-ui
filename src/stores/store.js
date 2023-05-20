@@ -16,7 +16,8 @@ const init = (Stores) => {
    // socket
    context.state.socket = null;
    context.mutations.socket = (state, socket) => (state.socket = socket);
-   context.getters.isConnected = (state) => state.socket && state.socket.connected;
+   context.getters.isConnected = (state) =>
+      state.socket && state.socket.connected;
    context.actions.socketNotify = (context, body) => {
       const { manager, key, content } = body ? body : {};
       switch (manager) {
@@ -28,8 +29,10 @@ const init = (Stores) => {
    context.actions.openSocket = (context) => {
       if (context.getters.isConnected) return;
 
-      const socket = socketIo(HostApi.origin, {
-         extraHeaders: { authorization: window.localStorage.getItem("userToken") },
+      const socket = socketIo(HostApi.originApi, {
+         extraHeaders: {
+            authorization: window.localStorage.getItem("userToken"),
+         },
       })
          // .on("connect", () => console.info("Socket", "Connected"))
          // .on("connect_error", () => console.info("Socket", "Connect Error"))
@@ -49,7 +52,11 @@ const init = (Stores) => {
    };
 
    // imageViewer
-   context.state.imageViewer = { isShowing: false, image: null, thumbnails: [] };
+   context.state.imageViewer = {
+      isShowing: false,
+      image: null,
+      thumbnails: [],
+   };
    context.mutations.imageViewer = (state, imageViewer) =>
       (state.imageViewer = imageViewer);
    context.getters.imageViewer = (state) => state.imageViewer;
@@ -78,7 +85,8 @@ const init = (Stores) => {
 
    // popupMenus
    context.state.popupMenus = [];
-   context.mutations.popupMenus = (state, popupMenus) => (state.popupMenus = popupMenus);
+   context.mutations.popupMenus = (state, popupMenus) =>
+      (state.popupMenus = popupMenus);
    context.getters.popupMenus = (state) => state.popupMenus;
    context.actions.popupMenuShow = (
       context,
@@ -125,7 +133,8 @@ const init = (Stores) => {
 
    // snackbars
    context.state.snackbars = [];
-   context.mutations.snackbars = (state, snackbars) => (state.snackbars = snackbars);
+   context.mutations.snackbars = (state, snackbars) =>
+      (state.snackbars = snackbars);
    context.getters.snackbars = (state) => state.snackbars;
    context.actions.snackbarShow = (context, arg) => {
       if (typeof arg === "string") arg = { text: arg };

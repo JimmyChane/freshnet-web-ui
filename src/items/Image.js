@@ -58,7 +58,7 @@ class Image {
             return HostApi.res(resPath);
          }
 
-         return `${HostApi.origin}/${path}`;
+         return `${HostApi.originApi}/${path}`;
       }
       if (method === Image.Method.Link) return path;
       if (method === Image.Method.StorageImage) {
