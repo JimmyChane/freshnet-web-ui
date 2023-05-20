@@ -37,7 +37,6 @@
          iconEmpty: () => PageService.icon.dark.toUrl(),
 
          items: (c) => c.stateMenus[c.stateMenuIndex]?.list ?? [],
-         state: (c) => U.optString(c.$route.query.state),
 
          layoutMode: (c) => {
             if (c.currentLayoutIndex === 0) return ListServices.LayoutMode.Grid;
@@ -59,11 +58,11 @@
          isCurrentUserAdmin: (c) => c.currentUser.isTypeAdmin(),
          isCurrentUserDefault: (c) => c.currentUser.isDefault(),
 
-         currentState: (c) => c.$route.query.state,
+         currentState: (c) => U.optString(c.$route.query.state),
          isCurrentStatePending: (c) => c.currentState === "pending",
       },
       watch: {
-         state() {
+         currentState(previous, next) {
             this.invalidateState();
          },
          services() {
@@ -72,6 +71,8 @@
       },
       methods: {
          setPageSelected(state) {
+            console.log({ thisState: this.currentState, state });
+
             const menu = this.stateMenus.find((menu) => menu.key === state);
 
             const states = ServiceState.map((state) => state);
@@ -80,6 +81,8 @@
             }
 
             this.stateMenuIndex = this.stateMenus.indexOf(menu);
+
+            if (this.currentState === state) return;
 
             this._self.$el.scrollTop = 0;
          },
@@ -105,7 +108,7 @@
             }, 2000);
          },
          invalidateState() {
-            this.setPageSelected(this.state);
+            this.setPageSelected(this.currentState);
          },
       },
       mounted() {
@@ -155,7 +158,7 @@
                return state.key === menu.key;
             };
             menu.click = () => {
-               if (this.state === menu.key) return;
+               if (this.currentState === menu.key) return;
                this.$root.replaceQuery({ query: { state: menu.key } });
             };
          }
