@@ -10,6 +10,7 @@ import Vue from "vue";
 import Router from "./main.router.js";
 import Stores from "./main.stores.js";
 import Mixin from "./main.mixin.js";
+import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 
 // app
 import App from "./app/App.vue";

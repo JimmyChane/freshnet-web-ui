@@ -30,9 +30,20 @@
          async invalidate() {
             this.itemDeviceGroups = [];
             if (!this.item) return;
-            this.itemDeviceGroups = await this.item.fetchDeviceGroups(
+
+            const previousName = this.name;
+            const previousPhoneNumberStr = this.phoneNumberStr;
+
+            const itemDeviceGroups = await this.item.fetchDeviceGroups(
                "categoryKey",
             );
+
+            if (
+               previousName === this.name &&
+               previousPhoneNumberStr === this.phoneNumberStr
+            ) {
+               this.itemDeviceGroups = itemDeviceGroups;
+            }
          },
       },
    };
@@ -46,12 +57,8 @@
    >
       <div class="ItemCustomer-body">
          <div class="ItemCustomer-header">
-            <span class="ItemCustomer-name">{{ name }}</span>
-            <div
-               class="ItemCustomer-header-dot"
-               v-if="name && phoneNumberStr"
-            />
-            <span class="ItemCustomer-phoneNumber">{{ phoneNumberStr }}</span>
+            <span>{{ name }}</span>
+            <span>{{ phoneNumberStr }}</span>
          </div>
 
          <div
@@ -63,12 +70,6 @@
                orders.length
             "
          >
-            <div class="ItemCustomer-description" v-if="item.description">
-               <span class="ItemCustomer-description-body">{{
-                  item.description
-               }}</span>
-            </div>
-
             <div class="ItemCustomer-labels">
                <LabelDevice
                   v-for="group of itemDeviceGroups"
@@ -118,20 +119,12 @@
             color: black;
 
             display: flex;
-            flex-direction: row;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
 
-            .ItemCustomer-header-dot {
-               --size: 4px;
-               width: var(--size);
-               height: var(--size);
-               min-height: var(--size);
-               max-width: var(--size);
-               min-width: var(--size);
-               max-height: var(--size);
-               display: flex;
-               background: #2a4858;
-               border-radius: 50%;
+            :nth-child(2) {
+               font-size: 0.9em;
+               color: rgba(0, 0, 0, 0.9);
             }
          }
          .ItemCustomer-main {

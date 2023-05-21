@@ -71,8 +71,6 @@
       },
       methods: {
          setPageSelected(state) {
-            console.log({ thisState: this.currentState, state });
-
             const menu = this.stateMenus.find((menu) => menu.key === state);
 
             const states = ServiceState.map((state) => state);
