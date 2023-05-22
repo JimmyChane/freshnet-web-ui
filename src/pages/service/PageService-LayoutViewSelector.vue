@@ -39,7 +39,7 @@
       position: relative;
       width: max-content;
       height: max-content;
-      background-color: #e4e4e4;
+      background: #e4e4e4;
       border: 1px solid hsla(0, 0%, 0%, 0.1);
       border-radius: 0.5rem;
 
@@ -96,7 +96,7 @@
 
          &:hover {
             .LayoutViewSelector-item-icon {
-               background-color: hsla(0, 0%, 100%, 0.4);
+               background: hsla(0, 0%, 100%, 0.4);
             }
          }
       }

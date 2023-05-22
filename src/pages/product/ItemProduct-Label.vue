@@ -28,7 +28,7 @@
       min-width: max-content;
       width: max-content;
       padding: 0.3rem 0.5rem;
-      background-color: var(--primary-color);
+      background: var(--primary-color);
       border-radius: 1em;
       font-size: 0.7rem;
       font-weight: 400;

@@ -82,6 +82,7 @@ class Customer {
    }
 
    async fetchDevices() {
+      if (!this.deviceIds.length) return [];
       const devices = await this.customerStore.dispatch("getDevices");
       return this.deviceIds.map((deviceId) => {
          return devices.find((device) => device.id === deviceId);
@@ -89,6 +90,7 @@ class Customer {
    }
    async fetchDeviceGroups(property = "") {
       const devices = await this.fetchDevices();
+
       const optGroup = (groups, key) => {
          let group = groups.find((group) => group[property] === key);
          if (!group) {

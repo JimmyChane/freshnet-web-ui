@@ -24,7 +24,7 @@
       padding: 1rem;
       padding-bottom: 2rem;
       resize: none;
-      background-color: hsla(0, 0%, 0%, 0.06);
+      background: hsla(0, 0%, 0%, 0.06);
 
       scroll-padding-bottom: 100%;
 

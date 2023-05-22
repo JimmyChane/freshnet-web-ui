@@ -358,7 +358,7 @@
       line-height: 1.2;
       position: relative;
       overflow-y: auto;
-      background-color: var(--primary-color);
+      background: var(--primary-color);
       padding-bottom: 10rem;
 
       .PanelService-body {
@@ -532,7 +532,7 @@
                      flex-grow: 1;
 
                      border-radius: 0.6rem;
-                     background-color: hsla(0, 0%, 100%, 0.3);
+                     background: hsla(0, 0%, 100%, 0.3);
                      display: flex;
                      align-items: center;
                      justify-content: center;

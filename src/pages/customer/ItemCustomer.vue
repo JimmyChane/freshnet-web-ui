@@ -62,7 +62,7 @@
          </div>
 
          <div
-            class="ItemCustomer-main"
+            class="ItemCustomer-labels"
             v-if="
                item.description ||
                itemDeviceGroups.length ||
@@ -70,24 +70,22 @@
                orders.length
             "
          >
-            <div class="ItemCustomer-labels">
-               <LabelDevice
-                  v-for="group of itemDeviceGroups"
-                  :key="group.categoryKey"
-                  :categoryKey="group.categoryKey"
-                  :count="group.devices.length"
-               />
-               <Label
-                  v-if="services.length"
-                  :icon="host.icon('service-505050')"
-                  :count="services.length"
-               />
-               <Label
-                  v-if="orders.length"
-                  :icon="host.icon('order-505050')"
-                  :count="orders.length"
-               />
-            </div>
+            <LabelDevice
+               v-for="group of itemDeviceGroups"
+               :key="group.categoryKey"
+               :categoryKey="group.categoryKey"
+               :count="group.devices.length"
+            />
+            <Label
+               v-if="services.length"
+               :icon="host.icon('service-505050')"
+               :count="services.length"
+            />
+            <Label
+               v-if="orders.length"
+               :icon="host.icon('order-505050')"
+               :count="orders.length"
+            />
          </div>
       </div>
    </ItemButton>
@@ -96,7 +94,7 @@
 <style lang="scss" scoped>
    .ItemCustomer {
       width: 100%;
-      background-color: white;
+      background: white;
 
       .ItemCustomer-body {
          width: 100%;
@@ -109,65 +107,41 @@
          padding: 0.5rem 0.3rem;
 
          display: flex;
-         flex-direction: column;
+         flex-direction: row;
          align-items: stretch;
 
          .ItemCustomer-header {
             padding: 0.3rem 0.5rem;
             width: 100%;
             column-gap: 0.5rem;
-            color: black;
 
             display: flex;
             flex-direction: column;
             align-items: flex-start;
+            justify-content: center;
 
+            :nth-child(1) {
+               font-size: 1em;
+               color: black;
+            }
             :nth-child(2) {
-               font-size: 0.9em;
-               color: rgba(0, 0, 0, 0.9);
+               font-size: 0.8em;
+               color: rgba(0, 0, 0, 0.8);
             }
          }
-         .ItemCustomer-main {
+
+         .ItemCustomer-labels {
             padding: 0.3rem 0.5rem;
-            line-height: 1.1;
-
+            font-size: 1rem;
+            gap: 0.1rem;
             display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            gap: 0.2rem;
+            flex-direction: row;
+            align-items: center;
 
-            .ItemCustomer-noContent {
-               width: 100%;
-               display: flex;
-               line-height: 1.1;
-               font-size: 0.6rem;
-               white-space: pre-line;
-            }
-
-            .ItemCustomer-description {
-               width: 100%;
-               display: flex;
-               flex-direction: column;
-               .ItemCustomer-description-body {
-                  width: 100%;
-                  display: flex;
-                  line-height: 1.1;
-                  font-size: 0.9rem;
-                  white-space: pre-line;
-               }
-            }
-            .ItemCustomer-labels {
-               display: flex;
-               flex-direction: row;
-               align-items: flex-start;
-               font-size: 1rem;
-               gap: 0.1rem;
-               & > * {
-                  --primary-color: #444;
-                  --primary-color: black;
-                  border-radius: 0.5rem;
-                  padding: 0.4rem;
-               }
+            & > * {
+               --primary-color: black;
+               border-radius: 0.5rem;
+               padding: 0.4rem;
             }
          }
       }

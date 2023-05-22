@@ -38,7 +38,7 @@
          nameUserType: (c) => {
             if (c.user.isTypeAdmin()) return "Admin";
             if (c.user.isTypeStaff()) return "Staff";
-            return "unknowna";
+            return "unknown";
          },
 
          stateMenus: (c) => {
@@ -203,7 +203,6 @@
       flex-direction: column;
       gap: 40px;
 
-      // Abstract
       .WindowService-title {
          font-size: 1.1rem;
          font-weight: 600;

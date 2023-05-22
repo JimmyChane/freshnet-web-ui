@@ -88,7 +88,7 @@
             text-align: center;
             border: 1px solid;
             border-color: transparent;
-            background-color: hsl(0, 0%, 92%);
+            background: hsl(0, 0%, 92%);
          }
          .WindowAction-header[isScrollUp="true"] {
             border-color: hsl(0, 0%, 90%);

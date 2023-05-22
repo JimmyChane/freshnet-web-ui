@@ -147,7 +147,7 @@
       cursor: default;
       .LeftNavLink-body {
          background: var(--primary-color);
-         background-color: hsla(0, 0%, 0%, 0.8);
+         background: hsla(0, 0%, 0%, 0.8);
          .LeftNavLink-item-parent {
             color: white;
          }

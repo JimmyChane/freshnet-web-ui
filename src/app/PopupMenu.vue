@@ -264,7 +264,7 @@
          justify-content: flex-start;
          align-items: stretch;
 
-         background-color: var(--primary-color-background);
+         background: var(--primary-color-background);
       }
 
       position: absolute;

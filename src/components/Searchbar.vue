@@ -117,10 +117,10 @@
          }
       }
 
-      background-color: hsla(0, 0%, 90%, 0.96);
+      background: hsla(0, 0%, 90%, 0.96);
       border: 1px solid hsla(0, 0%, 0%, 0.15);
       &:focus-within {
-         background-color: white;
+         background: white;
          border: 1px solid hsla(0, 0%, 0%, 0.15);
       }
    }

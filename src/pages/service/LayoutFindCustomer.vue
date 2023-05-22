@@ -130,7 +130,7 @@
       width: 100%;
       display: flex;
       flex-direction: column;
-      background-color: white;
+      background: white;
       border-radius: 0.6rem;
       box-shadow: 0.2rem 0.4rem 2rem hsla(0, 0%, 0%, 0.4);
       overflow: hidden;
@@ -150,7 +150,7 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
-            background-color: white;
+            background: white;
             padding: 1rem;
             border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
             .LayoutFindCustomer-title {
@@ -169,7 +169,7 @@
                cursor: pointer;
 
                &:hover {
-                  background-color: hsla(0, 0%, 0%, 0.05);
+                  background: hsla(0, 0%, 0%, 0.05);
                }
 
                .LayoutFindCustomer-close-img {
@@ -201,7 +201,7 @@
                cursor: pointer;
                border-radius: 0.2rem;
                &:hover {
-                  background-color: hsla(0, 0%, 0%, 0.05);
+                  background: hsla(0, 0%, 0%, 0.05);
                }
 
                .LayoutFindCustomer-item-dot {

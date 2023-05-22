@@ -251,7 +251,7 @@
          .main-section {
             margin-top: 10px;
             margin-bottom: 20px;
-            background-color: white;
+            background: white;
             box-shadow: 0 2px 4px #b5b5b5;
             padding: 10px;
          }
@@ -332,7 +332,7 @@
                padding: 10px 20px;
                color: white;
                font-weight: 600;
-               background-color: var(--accent-color);
+               background: var(--accent-color);
 
                cursor: pointer;
 
@@ -346,25 +346,25 @@
 
             .button-focus-none {
                border: 2px solid var(--accent-color);
-               background-color: white;
+               background: white;
                color: var(--accent-color);
 
                &:hover,
                &:focus {
-                  background-color: var(--accent-color);
+                  background: var(--accent-color);
                   color: white;
                }
             }
 
             .button-focus {
                border: 2px solid var(--accent-color);
-               background-color: var(--accent-color);
+               background: var(--accent-color);
                color: white;
 
                &:hover,
                &:focus {
                   border: 2px solid var(--accent-color);
-                  background-color: var(--accent-color);
+                  background: var(--accent-color);
                }
             }
          }

@@ -114,7 +114,7 @@
 
       &:hover,
       &:focus {
-         background-color: hsla(0, 0%, 0%, 0.05);
+         background: hsla(0, 0%, 0%, 0.05);
       }
 
       .ItemOrder-main {
@@ -151,7 +151,7 @@
 
                border: 1px solid #dddddd;
                border-radius: 1rem;
-               background-color: #f4f4f4;
+               background: #f4f4f4;
                text-decoration: none;
                text-align: start;
                color: inherit;
@@ -175,7 +175,7 @@
                --size: 2.1875rem;
                width: var(--size);
                height: var(--size);
-               background-color: transparent;
+               background: transparent;
                border: none;
                margin: 0 0.375rem;
                outline: none;

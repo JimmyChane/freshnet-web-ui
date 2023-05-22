@@ -124,7 +124,7 @@
 
       text-decoration: none;
       background: black;
-      background-color: var(--primary-color);
+      background: var(--primary-color);
       // color: #1b303d;
       color: white;
 

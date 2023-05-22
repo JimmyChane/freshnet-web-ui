@@ -93,7 +93,7 @@
       width: 100%;
       position: sticky;
       top: 0;
-      background-color: hsl(0, 0%, 89%);
+      background: hsl(0, 0%, 89%);
       border-bottom: 1px solid #0000001a;
 
       display: flex;
@@ -115,7 +115,7 @@
          width: 100%;
 
          --height: max-content;
-         background-color: inherit;
+         background: inherit;
          border-bottom: 1px solid #0000001a;
 
          .HomeActionbar-body {

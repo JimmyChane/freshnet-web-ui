@@ -116,7 +116,7 @@
       color: var(--primary-color);
 
       &:hover {
-         background-color: #e2e2e2;
+         background: #e2e2e2;
       }
    }
 </style>

@@ -22,7 +22,7 @@
    .ItemBelonging {
       gap: 1rem;
       padding: 0.5rem;
-      background-color: hsla(0, 0%, 100%, 0.9);
+      background: hsla(0, 0%, 100%, 0.9);
 
       display: flex;
       flex-direction: row;

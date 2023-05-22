@@ -59,7 +59,7 @@
 
       &:hover,
       &:focus-within {
-         background-color: hsla(0, 0%, 0%, 0.1);
+         background: hsla(0, 0%, 0%, 0.1);
       }
    }
 </style>

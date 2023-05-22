@@ -67,7 +67,7 @@
 <style lang="scss" scoped>
    .HomeSectionContact {
       width: 100%;
-      background-color: white;
+      background: white;
       border-radius: 1em;
       overflow: hidden;
 

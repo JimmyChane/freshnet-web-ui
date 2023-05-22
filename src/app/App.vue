@@ -114,16 +114,16 @@
          width: var(--scrollbar-size);
          &-thumb {
             border-radius: var(--scrollbar-thumb-radius);
-            background-color: var(--scrollbar-thumb-color);
+            background: var(--scrollbar-thumb-color);
             &:hover {
-               background-color: var(--scrollbar-thumb-color-hover);
+               background: var(--scrollbar-thumb-color-hover);
             }
          }
          &-track {
             margin: var(--scrollbar-track-margin);
-            background-color: var(--scrollbar-track-color);
+            background: var(--scrollbar-track-color);
             &:hover {
-               background-color: var(--scrollbar-track-color-hover);
+               background: var(--scrollbar-track-color-hover);
             }
          }
       }
@@ -187,7 +187,7 @@
                flex-direction: row;
                align-items: center;
                justify-content: stretch;
-               background-color: var(--App-background-color);
+               background: var(--App-background-color);
 
                --background-color-light: var(--background-color);
                --background-color-dark: var(--background-color);

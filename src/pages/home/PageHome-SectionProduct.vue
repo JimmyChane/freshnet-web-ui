@@ -202,7 +202,7 @@
       border-radius: 1em;
       overflow: hidden;
       text-decoration: none;
-      background-color: var(--color0);
+      background: var(--color0);
       color: var(--color3);
 
       width: 100%;
@@ -281,10 +281,10 @@
             transform: scale(1.5);
             margin-left: calc(var(--size) * 0.33);
             margin-right: calc(var(--size) * 0.33);
-            background-color: var(--color3);
+            background: var(--color3);
          }
          .HomeSectionProduct-footer-item-isDeselected {
-            background-color: var(--color3);
+            background: var(--color3);
             cursor: pointer;
             &:hover {
                box-shadow: 0px 0px 0.5rem var(--color3);
@@ -319,7 +319,7 @@
          }
 
          &:hover {
-            background-color: hsla(0, 0%, 0%, 0.05);
+            background: hsla(0, 0%, 0%, 0.05);
          }
          &:focus {
             transform: scale(0.9);

@@ -65,7 +65,7 @@
       position: sticky;
       top: 0;
 
-      background-color: inherit;
+      background: hsl(0, 0%, 90%);
 
       .LeftNavHeader-logo {
          gap: 0.5rem;

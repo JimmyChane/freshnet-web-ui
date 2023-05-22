@@ -43,7 +43,7 @@
       justify-content: center;
       gap: 12px;
       padding: 0.25em 1em;
-      background-color: white;
+      background: white;
       cursor: pointer;
 
       .Button2-icon {

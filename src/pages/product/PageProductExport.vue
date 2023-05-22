@@ -366,7 +366,7 @@
             }
          }
          .PageProductExport-layouts {
-            background-color: white;
+            background: white;
             gap: 0.5rem;
             padding: 1rem;
 

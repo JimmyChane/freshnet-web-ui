@@ -64,7 +64,7 @@
          justify-content: space-between;
          min-height: 1.8rem;
          padding: 0.8rem;
-         background-color: hsla(0, 0%, 100%, 0.8);
+         background: hsla(0, 0%, 100%, 0.8);
          border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
 
          .PanelEvents-title {
@@ -91,7 +91,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: hsla(0, 0%, 100%, 0.4);
+            background: hsla(0, 0%, 100%, 0.4);
 
             font-size: 0.8rem;
             color: hsla(0, 0%, 0%, 0.5);

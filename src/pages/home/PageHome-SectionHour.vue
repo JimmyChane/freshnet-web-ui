@@ -38,7 +38,7 @@
 
 <style lang="scss" scoped>
    .HomeSectionHour {
-      background-color: white;
+      background: white;
       overflow: hidden;
       color: black;
 

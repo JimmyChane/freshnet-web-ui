@@ -118,7 +118,7 @@
       color: var(--color);
       border: 1px solid hsl(0, 0%, 80%);
       border-radius: var(--border-radius);
-      background-color: var(--primary-color);
+      background: var(--primary-color);
 
       display: flex;
       flex-direction: row;
@@ -145,7 +145,7 @@
       .Selector-separator {
          min-width: 2px;
          min-height: 100%;
-         background-color: hsla(0, 0%, 0%, 0.1);
+         background: hsla(0, 0%, 0%, 0.1);
          display: flex;
          flex-direction: row;
       }
@@ -162,7 +162,7 @@
 
    .Selector-isDeselected {
       &:hover {
-         background-color: var(--primary-color);
+         background: var(--primary-color);
       }
    }
 </style>

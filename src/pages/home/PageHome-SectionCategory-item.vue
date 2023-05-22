@@ -44,7 +44,7 @@
       flex-direction: column;
       align-items: flex-start;
 
-      background-color: white;
+      background: white;
       padding: 1.5rem;
       border-radius: 0.6rem;
       text-decoration: none;

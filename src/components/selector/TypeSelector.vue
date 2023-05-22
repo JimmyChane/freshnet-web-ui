@@ -44,7 +44,7 @@
                'transition',
             ]"
             :style="{
-               '--type-color': item.color ? item.color : 'var(--primary-color)',
+               '--primary-color': item.color ? item.color : 'var(--primary-color)',
             }"
             @click="selectKey(item.key)"
          >
@@ -73,7 +73,7 @@
          min-width: 1px;
          height: 100%;
          max-height: calc(100% - 0.8rem);
-         background-color: hsl(0, 0%, 90%);
+         background: hsl(0, 0%, 90%);
          margin-left: 0.8rem;
          margin-right: 0.8rem;
       }
@@ -86,21 +86,21 @@
          min-width: max-content;
          border-width: 1px;
          border-style: solid;
-         border-color: var(--type-color);
+         border-color: var(--primary-color);
          border-radius: 2rem;
          font-weight: 600;
-         color: var(--type-color);
+         color: var(--primary-color);
          padding: 8px 24px;
-         background-color: white;
+         background: white;
          cursor: pointer;
          &:hover,
          &:focus {
-            background-color: var(--type-color);
+            background: var(--primary-color);
             color: white;
          }
       }
       .TypeSelector-item-selected {
-         background-color: var(--type-color);
+         background: var(--primary-color);
          color: white;
          cursor: initial;
       }

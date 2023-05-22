@@ -215,7 +215,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            background-color: hsla(0, 0%, 100%, 0.5);
+            background: hsla(0, 0%, 100%, 0.5);
             .ViewerImage-actionbar {
                z-index: 1;
                background: none;
@@ -242,7 +242,7 @@
                   max-height: 100%;
                   border-radius: 0.5rem;
                   object-fit: contain;
-                  background-color: rgba(255, 255, 255, 0.9);
+                  background: rgba(255, 255, 255, 0.9);
                }
             }
             .ImageView-footer {
@@ -284,12 +284,12 @@
                      }
                   }
                   .ImageView-images-item-button-isSelected {
-                     background-color: var(--accent-color);
+                     background: var(--accent-color);
                   }
                   .ImageView-images-item-button-isDeselected {
                      cursor: pointer;
                      &:hover {
-                        background-color: hsla(0, 0%, 0%, 0.1);
+                        background: hsla(0, 0%, 0%, 0.1);
                      }
                   }
                }

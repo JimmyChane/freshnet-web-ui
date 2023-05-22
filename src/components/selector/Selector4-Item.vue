@@ -46,16 +46,16 @@
       }
    }
    .Selector4-Item-isSelected {
-      background-color: var(--primary-color);
+      background: var(--primary-color);
       color: white;
    }
    .Selector4-Item-isDeselected {
-      background-color: white;
+      background: white;
       color: var(--primary-color);
       cursor: pointer;
       &:hover,
       &:focus {
-         background-color: var(--primary-color);
+         background: var(--primary-color);
          color: white;
       }
    }

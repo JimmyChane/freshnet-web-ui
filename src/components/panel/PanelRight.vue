@@ -92,7 +92,7 @@
 
       .PanelRight-empty {
          z-index: 1;
-         background-color: hsla(0, 0%, 0%, 0.6);
+         background: hsla(0, 0%, 0%, 0.6);
 
          display: flex;
          flex-direction: column;

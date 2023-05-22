@@ -166,7 +166,7 @@
          left: 0;
          right: 0;
 
-         background-color: hsla(0, 0%, 0%, 0.7);
+         background: hsla(0, 0%, 0%, 0.7);
          pointer-events: none;
 
          @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {

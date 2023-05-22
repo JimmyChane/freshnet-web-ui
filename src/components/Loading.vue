@@ -46,7 +46,7 @@
    .Loading {
       width: 100%;
       height: 10px;
-      background-color: hsla(0, 0%, 0%, 0.2);
+      background: hsla(0, 0%, 0%, 0.2);
       display: flex;
       flex-direction: row;
       align-items: stretch;
@@ -69,7 +69,7 @@
             position: absolute;
             min-width: 0%;
             min-height: 100%;
-            background-color: var(--primary-color);
+            background: var(--primary-color);
             animation: Loadingv1Animation 1.4s linear infinite;
          }
       }

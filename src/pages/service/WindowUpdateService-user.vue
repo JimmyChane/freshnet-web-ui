@@ -53,10 +53,9 @@
 <style lang="scss" scoped>
    .WindowServiceUpdate-input {
       width: 12rem;
-      font-size: 1rem;
+      padding: 0.6rem;
       background: hsla(0, 0%, 0%, 0.03);
       border-radius: 0.2rem;
-      padding: 0.6rem;
    }
    .WindowServiceUpdate-user-user {
       width: max-content;
@@ -65,6 +64,5 @@
       border: 1px solid hsla(0, 0%, 0%, 0.05);
       border-radius: 2rem;
       text-align: center;
-      font-size: 1rem;
    }
 </style>

@@ -154,11 +154,11 @@
       text-align: center;
 
       font-size: 0.8em;
-      background-color: hsla(0, 0%, 0%, 0.1);
+      background: hsla(0, 0%, 0%, 0.1);
       color: hsla(0, 0%, 0%, 0.6);
    }
    .ImageView-empty {
-      background-color: hsla(0, 0%, 0%, 0.1);
+      background: hsla(0, 0%, 0%, 0.1);
    }
    .ImageView-img {
       display: flex;

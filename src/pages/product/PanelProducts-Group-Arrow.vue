@@ -73,7 +73,7 @@
       border-radius: 0.5rem;
       overflow: hidden;
 
-      background-color: hsla(0, 0%, 100%, 0.9);
+      background: hsla(0, 0%, 100%, 0.9);
       box-shadow: 0 0 2rem hsla(0, 0%, 0%, 0.2);
       border: 1px solid hsla(0, 0%, 0%, 0.2);
       cursor: pointer;

@@ -308,8 +308,7 @@
                      .PagePs2-line-seperator-horizontal {
                         width: 100%;
                         height: 0.5px;
-                        background-color: #cecece;
-                        background-color: hsla(0, 0%, 0%, 0.1);
+                        background: hsla(0, 0%, 0%, 0.1);
                         margin: px;
                      }
                      .PagePs2-itemLink {

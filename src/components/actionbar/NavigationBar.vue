@@ -9,16 +9,16 @@
          rightMenus: { type: Array, default: () => [] },
       },
       computed: {
-         nLeftMenus() {
-            if (!this.$root.navigation.isDrawer()) return this.leftMenus;
+         moreLeftMenus: (c) => {
+            if (!c.$root.navigation.isDrawer()) return c.leftMenus;
             return [
                {
                   key: "hamburgerMenu",
                   title: "Hamburger Menu",
-                  icon: this.host.icon("hamburgerMenu-000000"),
-                  click: () => this.$root.navigation.openNavigationDrawer(),
+                  icon: c.host.icon("hamburgerMenu-000000"),
+                  click: () => c.$root.navigation.openNavigationDrawer(),
                },
-               ...this.leftMenus,
+               ...c.leftMenus,
             ];
          },
       },
@@ -26,7 +26,11 @@
 </script>
 
 <template>
-   <Actionbar :title="title" :leftMenus="nLeftMenus" :rightMenus="rightMenus">
+   <Actionbar
+      :title="title"
+      :leftMenus="moreLeftMenus"
+      :rightMenus="rightMenus"
+   >
       <slot />
    </Actionbar>
 </template>

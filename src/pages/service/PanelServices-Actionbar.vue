@@ -141,7 +141,7 @@
 <style lang="scss" scoped>
    .PanelServices-Actionbar {
       height: max-content;
-      background-color: #f3f3f3;
+      background: #f3f3f3;
       display: flex;
       flex-direction: column;
       justify-content: center;

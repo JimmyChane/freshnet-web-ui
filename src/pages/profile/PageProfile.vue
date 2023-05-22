@@ -241,7 +241,7 @@
                .PageProfile-introduction-body {
                   width: 20em;
                   max-width: 100%;
-                  background-color: hsla(0, 0%, 0%, 0.8);
+                  background: hsla(0, 0%, 0%, 0.8);
                   color: white;
                   display: flex;
                   flex-direction: column;

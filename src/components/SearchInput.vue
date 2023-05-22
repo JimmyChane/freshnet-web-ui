@@ -97,7 +97,7 @@
 
       --dropdown-height: 80vh;
 
-      background-color: #e4e4e4;
+      background: #e4e4e4;
 
       border-radius: var(--border-radius);
 
@@ -108,22 +108,22 @@
       height: 100%;
       position: relative;
 
-      background-color: #e4e4e4;
+      background: #e4e4e4;
 
       .SearchInput-body-isPassive {
          border: var(--border);
-         background-color: var(--background-color);
+         background: var(--background-color);
          border-radius: var(--border-radius);
          &:focus-within {
-            background-color: var(--background-color-focus);
+            background: var(--background-color-focus);
             border: var(--border-focus);
          }
       }
       .SearchInput-body-isActive {
-         background-color: var(--background-color-active);
+         background: var(--background-color-active);
          border-radius: var(--border-radius-active) var(--border-radius-active) 0 0;
          &:focus-within {
-            background-color: var(--background-color-active);
+            background: var(--background-color-active);
             border: var(--border-active);
          }
       }
@@ -136,7 +136,7 @@
          bottom: 0;
          left: 0;
          right: 0;
-         background-color: hsla(0, 0%, 0%, 0.6);
+         background: hsla(0, 0%, 0%, 0.6);
          display: grid;
       }
 
@@ -153,7 +153,7 @@
          box-shadow: 0 0 60px hsla(0, 0%, 0%, 0.1);
          border-radius: 0 0 var(--border-radius-active) var(--border-radius-active);
 
-         background-color: #e4e4e4;
+         background: #e4e4e4;
          overflow: hidden;
 
          .SearchInput-dropdown-body {

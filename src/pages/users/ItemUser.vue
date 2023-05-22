@@ -54,7 +54,7 @@
       align-items: stretch;
       column-gap: 2rem;
 
-      background-color: white;
+      background: white;
       padding: 1rem;
       border-radius: 1rem;
 

@@ -46,7 +46,7 @@
    .PopupWindow {
       width: 100%;
       height: 100%;
-      background-color: hsla(0, 0%, 0%, 0.8);
+      background: hsla(0, 0%, 0%, 0.8);
       --transition-timing: cubic-bezier(1, 0, 0, 1);
 
       --hitbox-size: 30px;
@@ -68,7 +68,7 @@
          display: flex;
          flex-direction: column;
          border-radius: 1.5rem;
-         background-color: white;
+         background: white;
          box-shadow: 1px 2px 20px 0px hsla(0, 0%, 0%, 0.2);
          box-shadow: 1px 2px 10px 0px hsla(0, 0%, 0%, 0.8);
          overflow: hidden;

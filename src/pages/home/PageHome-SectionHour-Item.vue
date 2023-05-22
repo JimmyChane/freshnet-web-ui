@@ -42,7 +42,7 @@
    }
    .HourItem[isToday="true"] {
       font-weight: 900;
-      background-color: black;
+      background: black;
       color: white;
       padding: 0.5em 0.5em;
       border-radius: 0.5em;

@@ -71,7 +71,7 @@
       border-radius: 0.5rem;
       overflow: hidden;
 
-      background-color: hsla(0, 0%, 100%, 0.9);
+      background: hsla(0, 0%, 100%, 0.9);
       border: none;
       cursor: pointer;
 

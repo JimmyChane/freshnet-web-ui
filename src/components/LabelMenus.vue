@@ -100,7 +100,7 @@
       border: 1px solid var(--primary-color);
       border-radius: var(--border-radius);
       --transition-duration: 100ms;
-      background-color: var(--primary-color);
+      background: var(--primary-color);
 
       &:hover,
       &:focus {
@@ -118,7 +118,7 @@
       }
       .LabelMenus-content {
          min-width: max-content;
-         background-color: white;
+         background: white;
          padding: 0.4rem 1.2rem;
          font-size: 0.8rem;
          font-weight: 600;

@@ -40,7 +40,7 @@
 			width: 100%;
 			padding: 0.6rem 1rem;
 			gap: 0.5rem;
-			background-color: var(--card-background-color);
+			background: var(--card-background-color);
 
 			display: flex;
 			flex-direction: row;
@@ -62,7 +62,7 @@
 			height: 100%;
 			gap: 6px;
 			padding: 6px;
-			background-color: var(--card-background-color);
+			background: var(--card-background-color);
 
 			display: flex;
 			flex-direction: column;

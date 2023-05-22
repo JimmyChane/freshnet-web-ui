@@ -48,7 +48,7 @@
 				max-width: var(--size);
 				max-height: var(--size);
 				border-radius: 50%;
-				background-color: hsl(0, 0%, 20%);
+				background: hsl(0, 0%, 20%);
 				display: flex;
 			}
 		}

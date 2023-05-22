@@ -44,7 +44,7 @@
    .SectionOrder {
       width: 100%;
       max-width: var(--width-max);
-      background-color: white;
+      background: white;
       box-shadow: 0 2px 4px var(--shadow-light);
       padding: 10px;
 
@@ -75,7 +75,7 @@
             max-width: var(--width);
             max-height: var(--height);
 
-            background-color: hsla(0, 0%, 0%, 0.8);
+            background: hsla(0, 0%, 0%, 0.8);
             font-size: 0.7em;
             color: white;
             border-radius: 50%;
@@ -106,7 +106,7 @@
          margin: 4px 0;
          min-width: auto;
          min-height: 0.5px;
-         background-color: hsl(0, 0%, 84%);
+         background: hsl(0, 0%, 84%);
          background: hsla(0, 0%, 0%, 0.1);
       }
    }

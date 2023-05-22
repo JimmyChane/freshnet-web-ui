@@ -88,7 +88,7 @@
          height: 6rem;
          aspect-ratio: 16/10;
          overflow: hidden;
-         background-color: white;
+         background: white;
          align-items: center;
          justify-content: center;
          object-fit: cover;

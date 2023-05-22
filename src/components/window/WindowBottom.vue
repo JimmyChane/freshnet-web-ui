@@ -21,7 +21,7 @@
    .WindowBottom {
       gap: 0.625rem;
       padding: 0.6rem 2rem;
-      background-color: hsl(0, 0%, 92%);
+      background: hsl(0, 0%, 92%);
       border-top: 1px solid hsl(0, 0%, 90%);
       position: sticky;
       bottom: 0;
@@ -39,13 +39,13 @@
          padding: 10px;
          font-weight: 600;
          font-size: 0.8rem;
-         background-color: transparent;
+         background: transparent;
          color: var(--action-color);
          cursor: pointer;
          border-radius: 6px;
          &:hover,
          &:focus {
-            background-color: var(--action-color);
+            background: var(--action-color);
             color: white;
          }
       }

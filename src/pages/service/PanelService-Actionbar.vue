@@ -106,14 +106,12 @@
 
 <style lang="scss" scoped>
    .PanelService-actionbar {
-      --actionbar-background-color-translucent: white;
-
       width: 100%;
       position: sticky;
       top: 0;
 
       .PanelService-actionbar-main {
-         background-color: inherit;
+         background: inherit;
          border-bottom: inherit;
       }
 

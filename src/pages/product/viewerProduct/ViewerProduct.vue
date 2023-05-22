@@ -648,7 +648,7 @@
          height: 100%;
          position: relative;
 
-         background-color: hsl(0, 0%, 90%);
+         background: hsl(0, 0%, 90%);
 
          display: flex;
          flex-direction: column;

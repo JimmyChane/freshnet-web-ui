@@ -85,7 +85,7 @@
             .LeftNavGroup1-sectionParent-line {
                width: calc(100% - 1.2rem);
                min-height: 1px;
-               background-color: var(--primary-color);
+               background: var(--primary-color);
                opacity: 0.2;
                margin: 0.8rem 0;
             }

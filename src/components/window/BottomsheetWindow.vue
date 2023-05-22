@@ -43,7 +43,7 @@
 
       --default-background-color: hsla(0, 0%, 0%, 0.8);
 
-      background-color: var(--default-background-color);
+      background: var(--default-background-color);
 
       .BottomsheetWindow-body {
          height: 100dvh;

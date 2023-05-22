@@ -263,7 +263,7 @@
          .ListServices-group-title {
             font-size: 0.7rem;
             font-weight: 600;
-            background-color: hsl(0, 0%, 96%);
+            background: hsl(0, 0%, 96%);
             box-shadow: 0 0 0.4rem hsl(0, 0%, 80%);
             padding: 0.4rem 0.4rem;
             border-radius: 1em;

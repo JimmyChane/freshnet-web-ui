@@ -132,7 +132,7 @@
 
          .LabelMenus-content {
             min-width: max-content;
-            background-color: var(--primary-color);
+            background: var(--primary-color);
             padding: 0.4rem 1.2rem;
             font-size: 0.8rem;
             font-weight: 600;
@@ -170,7 +170,7 @@
 
          overflow-y: auto;
          position: absolute;
-         background-color: white;
+         background: white;
          transform: translateY(-1.25rem);
          border-radius: 0.2rem;
          --transition-timing: cubic-bezier(1, 0, 0, 1);
@@ -208,13 +208,13 @@
          }
 
          .LabelMenus-menu-isSelected {
-            background-color: var(--background-color-selected);
+            background: var(--background-color-selected);
          }
          .LabelMenus-menu-isDeselected {
             cursor: pointer;
             &:hover,
             &:focus {
-               background-color: var(--background-color-hover);
+               background: var(--background-color-hover);
             }
          }
       }

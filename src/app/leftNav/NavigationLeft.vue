@@ -1,7 +1,6 @@
 <script>
    import Drawer from "@/components/Drawer.vue";
    import LeftNavHeader from "./NavigationLeft-Header.vue";
-   import Search from "./NavigationLeft-Search.vue";
    import LeftNavGroup1 from "./NavigationLeft-Group1.vue";
    import LeftNavLogin from "./NavigationLeft-Login.vue";
 
@@ -9,7 +8,6 @@
       components: {
          Drawer,
          LeftNavHeader,
-         Search,
          LeftNavGroup1,
          LeftNavLogin,
       },
@@ -19,8 +17,6 @@
          dragTrigger: 20,
          dragOpen: 80,
          dragWidth: 0,
-
-         searchIsExpand: false,
       }),
       computed: {
          isWide: (c) => c.$root.navigation.isWide(),
@@ -184,9 +180,7 @@
             this.$root.replaceQuery({ query });
          },
 
-         focus() {
-            this.$refs.search.focus();
-         },
+         focus() {},
       },
    };
 </script>
@@ -201,21 +195,7 @@
       @click-collapse="() => emitCollapse()"
    >
       <div class="NavigationLeft-body scrollbar transition" ref="Body">
-         <LeftNavHeader
-            :style="{ 'z-index': searchIsExpand ? '3' : '4' }"
-            :isWide="isWide"
-         />
-
-         <Search
-            ref="search"
-            :style="{ 'z-index': searchIsExpand ? '4' : '3' }"
-            v-if="isWide"
-            :isWide="isWide"
-            @expand="() => (searchIsExpand = true)"
-            @collapse="() => (searchIsExpand = false)"
-         />
-
-         <div class="NavigationLeft-line"></div>
+         <LeftNavHeader style="z-index: 3" :isWide="isWide" />
 
          <div
             class="NavigationLeft-navigations"

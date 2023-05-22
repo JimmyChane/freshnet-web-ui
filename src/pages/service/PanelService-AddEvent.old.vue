@@ -260,7 +260,7 @@
       grid-template-areas: "header status" "description status" "footer status";
       grid-template-columns: 1fr 10rem;
 
-      background-color: var(--primary-color-2);
+      background: var(--primary-color-2);
       overflow: hidden;
 
       .AddEvent-description {
@@ -350,7 +350,7 @@
 
          display: flex;
          flex-direction: column-reverse;
-         background-color: var(--primary-color-1);
+         background: var(--primary-color-1);
 
          .AddEvent-status-header {
             width: 100%;
@@ -361,7 +361,7 @@
             flex-wrap: nowrap;
             align-items: center;
             justify-content: space-between;
-            background-color: var(--primary-color);
+            background: var(--primary-color);
             color: white;
             padding: 0.5rem;
             font-size: 0.8rem;
