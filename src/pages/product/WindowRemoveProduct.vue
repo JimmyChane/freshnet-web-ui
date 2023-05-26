@@ -22,11 +22,9 @@
       @click-cancel="$emit('click-cancel')"
       @click-ok="$emit('click-confirm', { productId: product.id })"
    >
-      <div class="WindowRemoveProduct-window">
-         <div class="WindowRemoveProduct-window-main">
-            <p class="WindowRemoveProduct-window-text">
-               Once removed, cannot be undone
-            </p>
+      <div>
+         <div>
+            <p>Once removed, cannot be undone</p>
          </div>
       </div>
    </WindowAction>

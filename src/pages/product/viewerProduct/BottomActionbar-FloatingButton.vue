@@ -34,10 +34,8 @@
       border: none;
       cursor: pointer;
       border-radius: 1rem;
-      overflow: hidden;
 
       text-decoration: none;
-      font-size: 1rem;
       font-weight: 600;
       line-height: 0.9rem;
       padding: 0.8rem;

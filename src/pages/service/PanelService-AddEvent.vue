@@ -244,26 +244,20 @@
 
       <div class="AddEvent-confirm" :style="{ 'grid-area': 'confirm' }">
          <button
-            class="AddEvent-enter transition"
+            class="transition"
             :style="{ 'grid-area': 'enter' }"
             @click="() => submit()"
             >Enter</button
          >
-         <button
-            class="AddEvent-clear transition"
-            :style="{ 'grid-area': 'clear' }"
-            @click="() => clear()"
+         <button :style="{ 'grid-area': 'clear' }" @click="() => clear()"
+            >Discard</button
          >
-            <!-- <img :src="host.icon('trash-505050')" alt="Click to clear" /> -->
-            Discard
-         </button>
       </div>
 
       <div class="AddEvent-status" :style="{ 'grid-area': 'status' }">
          <div class="AddEvent-status-amount">
-            <span class="AddEvent-status-amount-currency">RM</span>
+            <span>RM</span>
             <input
-               class="AddEvent-status-amount-input"
                type="number"
                :value="eventAmount === 0 ? undefined : eventAmount"
                ref="InputAmount"
@@ -291,14 +285,8 @@
             :corner="methodMenuCorner"
             :width="methodMenuWidth"
          >
-            <span class="AddEvent-status-header-title">{{
-               methodMenu.title
-            }}</span>
-            <img
-               class="AddEvent-status-header-arrow"
-               :src="host.icon('arrowDown-FFFFFF')"
-               alt="Click to select"
-            />
+            <span>{{ methodMenu.title }}</span>
+            <img :src="host.icon('arrowDown-FFFFFF')" alt="Click to select" />
          </Menu>
       </div>
    </div>
@@ -403,15 +391,7 @@
             cursor: pointer;
          }
 
-         .AddEvent-clear {
-            color: var(--primary-color);
-
-            img {
-               width: 1rem;
-               height: 1rem;
-            }
-         }
-         .AddEvent-enter {
+         :nth-child(1) {
             border-radius: 0.5rem;
             padding: 0.5rem 0.8rem;
             background: var(--primary-color);
@@ -420,6 +400,14 @@
             &:hover,
             &:focus {
                transform: scale(1.1);
+            }
+         }
+         :nth-child(2) {
+            color: var(--primary-color);
+
+            img {
+               width: 1rem;
+               height: 1rem;
             }
          }
       }
@@ -448,7 +436,7 @@
             padding: 0.5rem;
             font-size: 0.8rem;
 
-            .AddEvent-status-header-arrow {
+            :nth-child(2) {
                width: 1em;
                height: 1em;
             }
@@ -461,7 +449,7 @@
             flex-wrap: nowrap;
             align-items: center;
             overflow: hidden;
-            .AddEvent-status-amount-currency {
+            :nth-child(1) {
                height: 100%;
                min-width: max-content;
                padding: 0.5rem;
@@ -474,7 +462,7 @@
                justify-content: center;
                text-align: center;
             }
-            .AddEvent-status-amount-input {
+            :nth-child(2) {
                width: 100%;
                height: 100%;
                padding: 1rem;

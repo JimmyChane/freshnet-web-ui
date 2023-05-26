@@ -371,7 +371,6 @@
       </div>
 
       <WindowSearch
-         class="PageService-window"
          v-if="$root.window.innerWidth <= 600"
          :isShowing="popup.search.isShowing"
          :items="items"
@@ -380,7 +379,6 @@
       />
 
       <WindowImportService
-         class="PageService-window"
          :isShowing="popup.importService.isShowing"
          @click-cancel="() => windowAction('importService', 'dismiss')"
          @click-ok="(service) => windowAction('importService', 'ok', service)"
@@ -388,7 +386,6 @@
       />
 
       <WindowAddService
-         class="PageService-window"
          ref="WindowAddService"
          :isShowing="popup.newService.isShowing"
          @callback-create="(data) => windowAction('newService', 'ok', data)"
@@ -397,7 +394,6 @@
       />
 
       <WindowUpdateCustomer
-         class="PageService-window"
          ref="WindowUpdateCustomer"
          v-if="drawerService"
          :isShowing="popup.customer.isShowing"
@@ -410,7 +406,6 @@
       />
 
       <WindowUpdateDescription
-         class="PageService-window"
          ref="WindowUpdateDescription"
          v-if="drawerService"
          :isShowing="popup.editDescription.isShowing"
@@ -423,7 +418,6 @@
       />
 
       <WindowUpdateBelonging
-         class="PageService-window"
          ref="WindowUpdateBelonging"
          v-if="drawerService"
          :isShowing="popup.belongings.isShowing"
@@ -436,7 +430,6 @@
       />
 
       <WindowRemove
-         class="PageService-window"
          :isShowing="popup.removeService.isShowing"
          title="Delete Service"
          message="After deleting this service, it cannot be reverted."
@@ -447,7 +440,6 @@
       />
 
       <WindowRemove
-         class="PageService-window-child"
          v-if="drawerService"
          :isShowing="popup.removeEvent.isShowing"
          title="Delete Event"
@@ -459,7 +451,6 @@
       />
 
       <WindowRemove
-         class="PageService-window-child"
          v-if="drawerService"
          :isShowing="popup.removeImage.isShowing"
          title="Delete Image"
@@ -520,16 +511,6 @@
          .PageService-PanelServices {
             width: 100dvw;
             max-width: 50%;
-         }
-      }
-
-      .PageService-window {
-         z-index: 4;
-         position: absolute;
-         .PageService-window-child {
-            max-width: 100%;
-            height: 100%;
-            overflow: auto;
          }
       }
 

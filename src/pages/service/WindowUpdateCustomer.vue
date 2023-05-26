@@ -48,7 +48,6 @@
    >
       <div class="WindowCustomer-body">
          <Input
-            class="WindowCustomer-input"
             label="Name"
             ref="InputName"
             autocapitalize="words"
@@ -57,7 +56,6 @@
             @input="(comp) => (customerName = comp.value)"
          />
          <Input
-            class="WindowCustomer-input"
             ref="WindowCustomerPhoneNumber"
             label="Phone Number"
             type="tel"
@@ -75,7 +73,7 @@
       gap: 2rem;
       padding: 1rem 0;
 
-      .WindowCustomer-input {
+      & > * {
          max-width: 100%;
          width: 35rem;
          padding: 0.6rem 0.4rem;

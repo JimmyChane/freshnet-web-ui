@@ -53,7 +53,6 @@
    >
       <div class="WindowUpdatePrice-body">
          <Input
-            class="WindowUpdatePrice-input"
             label="Normal (RM)"
             :isRequired="true"
             :bindValue="normal"
@@ -61,7 +60,6 @@
             @input="(comp) => (normal = comp.value)"
          />
          <Input
-            class="WindowUpdatePrice-input"
             label="Promotion (RM)"
             :isRequired="true"
             :bindValue="promotion"
@@ -80,7 +78,7 @@
       flex-direction: column;
       gap: 20px;
 
-      .WindowUpdatePrice-input {
+      & > * {
          padding-left: 0;
          padding-right: 0;
          background: hsla(0, 0%, 0%, 0.03);

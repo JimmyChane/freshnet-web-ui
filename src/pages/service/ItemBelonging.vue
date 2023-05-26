@@ -13,8 +13,9 @@
 <template>
    <div class="ItemBelonging">
       <span class="ItemBelonging-title">{{ title }}</span>
-
-      <span class="ItemBelonging-quantity" v-if="quantity > 1">{{ `x${quantity}` }}</span>
+      <span class="ItemBelonging-quantity" v-if="quantity > 1">{{
+         `x${quantity}`
+      }}</span>
    </div>
 </template>
 
@@ -41,9 +42,6 @@
          background: hsla(0, 0%, 0%, 0.05);
          border: 0.1rem solid hsla(0, 0%, 0%, 0.1);
          border-radius: 0.3rem;
-         display: flex;
-         align-items: center;
-         justify-content: center;
       }
    }
 </style>

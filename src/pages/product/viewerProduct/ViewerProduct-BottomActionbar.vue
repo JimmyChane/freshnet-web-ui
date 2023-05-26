@@ -131,7 +131,6 @@
       flex-wrap: nowrap;
       align-items: center;
       justify-content: flex-end;
-      padding: 0.5rem 1rem;
       padding: 1rem;
    }
    .ViewerProduct-BottomActionbar[isButtonTopHidden="true"] {

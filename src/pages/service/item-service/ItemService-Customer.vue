@@ -9,8 +9,8 @@
 
 <template>
    <div class="ItemService-customer">
-      <span class="ItemService-customer-name">{{ name }}</span>
-      <span class="ItemService-customer-phoneNumber">{{ phoneNumberStr }}</span>
+      <span>{{ name }}</span>
+      <span>{{ phoneNumberStr }}</span>
    </div>
 </template>
 

@@ -508,7 +508,6 @@
          </PanelRight>
       </div>
 
-      <!-- Popup Product Search -->
       <WindowSearch
          class="PageService-window"
          v-if="$root.window.innerWidth <= 550"
@@ -518,7 +517,6 @@
          @click-dismiss="() => popup.search.dismiss()"
          @click-item="(item) => clickProduct(item)"
       />
-      <!-- Popup Product Add -->
       <WindowAddProduct
          v-if="isEditable"
          :isShowing="popup.productAdd.isShowing"
@@ -527,7 +525,6 @@
          @click-cancel="() => popup.productAdd.cancel()"
          @click-confirm="(output) => popup.productAdd.confirm(output)"
       />
-      <!-- Popup Product Remove -->
       <WindowRemoveProduct
          v-if="isEditable"
          :isShowing="popup.productRemove.isShowing"
@@ -536,7 +533,6 @@
          @click-cancel="() => popup.productRemove.cancel()"
          @click-confirm="(output) => popup.productRemove.confirm(output)"
       />
-      <!-- Popup Product Image Remove -->
       <WindowRemoveImage
          v-if="isEditable"
          :isShowing="popup.productImageRemove.isShowing"
@@ -545,7 +541,6 @@
          @click-cancel="() => popup.productImageRemove.cancel()"
          @click-confirm="(output) => popup.productImageRemove.confirm(output)"
       />
-      <!-- Popup Product Title & Brand Update -->
       <WindowUpdateTitleBrand
          v-if="isEditable"
          :isShowing="popup.productTitleBrandUpdate.isShowing"
@@ -556,7 +551,6 @@
             (output) => popup.productTitleBrandUpdate.confirm(output)
          "
       />
-      <!-- Popup Product Price Update -->
       <WindowUpdatePrice
          v-if="isEditable"
          :isShowing="popup.productPriceUpdate.isShowing"
@@ -565,7 +559,6 @@
          @click-cancel="() => popup.productPriceUpdate.cancel()"
          @click-confirm="(output) => popup.productPriceUpdate.confirm(output)"
       />
-      <!-- Popup Product Description Update -->
       <WindowUpdateDescription
          v-if="isEditable"
          :isShowing="popup.productDescriptionUpdate.isShowing"
@@ -576,7 +569,6 @@
             (output) => popup.productDescriptionUpdate.confirm(output)
          "
       />
-      <!-- Popup Product Category Update -->
       <WindowUpdateCategory
          v-if="isEditable"
          :isShowing="popup.productCategoryUpdate.isShowing"
@@ -587,7 +579,6 @@
             (output) => popup.productCategoryUpdate.confirm(output)
          "
       />
-      <!-- Popup Product Description Update -->
       <WindowUpdateSpecifications
          v-if="isEditable"
          :isShowing="popup.productSpecificationsUpdate.isShowing"

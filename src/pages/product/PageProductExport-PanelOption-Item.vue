@@ -42,7 +42,7 @@
 
 <template>
    <div class="PanelOption-Item">
-      <span class="PanelOption-Item-title">{{ title }}</span>
+      <span>{{ title }}</span>
       <Selector
          :list="menus"
          :keySelected="selectedKey"

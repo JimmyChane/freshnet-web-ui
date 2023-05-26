@@ -87,11 +87,11 @@
 
             .ProductViewerImageSelector-icon {
                --size: 1em;
-               width: var(--size);
-               height: var(--size);
                @media (max-width: 480px) {
                   --size: 0.8em;
                }
+               width: var(--size);
+               height: var(--size);
 
                opacity: 0.6;
                margin: auto;

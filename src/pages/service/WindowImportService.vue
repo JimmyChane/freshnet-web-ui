@@ -146,20 +146,13 @@
 
          <div class="WindowService-datetime">
             <span class="WindowService-title">Creation Date & Time</span>
-            <div class="WindowService-datetime-body">
-               <input
-                  class="WindowService-datetime-input"
-                  ref="DateTimeInput"
-                  type="datetime-local"
-               />
-            </div>
+            <div><input ref="DateTimeInput" type="datetime-local" /></div>
          </div>
          <BodyLine />
 
          <div class="WindowService-state">
             <span class="WindowService-title">States</span>
             <TypeSelector
-               class="WindowEvent-type"
                :items="stateMenus"
                :defaultKey="data.state"
                @click-item-key="(key) => (data.state = key)"
@@ -214,15 +207,10 @@
          flex-direction: column;
          align-items: flex-start;
 
-         .WindowService-datetime-title {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: hsl(0, 0%, 50%);
-         }
-         .WindowService-datetime-body {
+         :nth-child(2) {
             display: flex;
             flex-direction: column;
-            .WindowService-datetime-input {
+            & > * {
                border: 1px solid hsla(0, 0%, 0%, 0.1);
             }
          }
@@ -232,15 +220,6 @@
          display: flex;
          flex-direction: column;
          align-items: flex-start;
-
-         .WindowService-state-title {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: hsl(0, 0%, 50%);
-         }
-         .WindowEvent-type {
-            width: 100%;
-         }
       }
       .WindowService-findCustomers {
          width: 100%;

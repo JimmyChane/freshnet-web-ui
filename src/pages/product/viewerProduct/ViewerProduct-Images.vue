@@ -13,7 +13,8 @@
          primaryColor: { type: Object },
       },
       computed: {
-         isPrimaryColorDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 60,
+         isPrimaryColorDark: (c) =>
+            chroma.deltaE(c.primaryColor, "000000") < 60,
       },
    };
 </script>
@@ -54,8 +55,7 @@
       overflow-x: auto;
       overflow-y: hidden;
 
-      padding-left: 1.75rem;
-      padding-right: 1.75rem;
+      padding: 0 1.75rem;
 
       --scrollbar-size: 0.3rem;
       --scrollbar-thumb-radius: 0.2rem;

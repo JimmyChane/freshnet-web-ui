@@ -36,10 +36,7 @@
       :menu="menu"
    >
       <div class="SectionDescription">
-         <p class="SectionDescription-content" v-if="description">{{
-            description
-         }}</p>
-
+         <p v-if="description">{{ description }}</p>
          <span class="SectionDescription-noContent" v-else>No Description</span>
       </div>
    </Section>

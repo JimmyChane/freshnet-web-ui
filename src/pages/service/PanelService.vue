@@ -188,13 +188,9 @@
                            }
                         "
                      >
-                        <span
-                           class="PanelService-section-labels-item-title transition"
-                        >
-                           {{ label.title }}
-                        </span>
+                        <span class="transition">{{ label.title }}</span>
                         <img
-                           class="PanelService-section-labels-item-close transition"
+                           class="transition"
                            :src="host.icon('close-FFFFFF')"
                         />
                      </button>
@@ -423,16 +419,17 @@
                         cursor: pointer;
                         padding-left: 0.5em;
                         border: none;
-                        .PanelService-section-labels-item-close {
+
+                        :nth-child(2) {
                            width: 0.8em;
                            height: 0.8em;
                            opacity: 0;
                         }
                         &:hover {
-                           .PanelService-section-labels-item-title {
+                           :nth-child(1) {
                               opacity: 0.5;
                            }
-                           .PanelService-section-labels-item-close {
+                           :nth-child(2) {
                               opacity: 1;
                            }
                         }

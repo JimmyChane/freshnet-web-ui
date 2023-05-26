@@ -27,7 +27,7 @@
          <span class="PanelEvents-totalCost">{{ totalCostText }}</span>
       </div>
 
-      <div :class="['PanelEvents-body', 'PanelEvents-body-empty']">
+      <div class="PanelEvents-body">
          <ListEvents
             v-if="events.length"
             :items="events"

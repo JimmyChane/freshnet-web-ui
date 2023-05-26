@@ -65,7 +65,7 @@
       --font-size-title: 14px;
       --font-size-content: 18px;
 
-      .ItemProductSpecification-title {
+      :nth-child(1) {
          line-height: var(--font-size-content);
          font-size: var(--font-size-title);
 
@@ -80,7 +80,7 @@
          align-items: center;
          color: hsl(0, 0%, 30%);
       }
-      .ItemProductSpecification-content {
+      :nth-child(2) {
          font-size: var(--font-size-content);
          font-weight: 600;
 

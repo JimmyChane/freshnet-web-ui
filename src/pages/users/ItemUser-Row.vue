@@ -9,8 +9,8 @@
 
 <template>
    <div class="ItemUser-Row">
-      <span class="ItemUser-Row-title">{{ title }}</span>
-      <span class="ItemUser-Row-text">{{ text }}</span>
+      <span>{{ title }}</span>
+      <span>{{ text }}</span>
    </div>
 </template>
 
@@ -19,10 +19,10 @@
       display: flex;
       flex-direction: row;
 
-      .ItemUser-Row-title {
+      :nth-child(1) {
          width: 6rem;
       }
-      .ItemUser-Row-text {
+      :nth-child(2) {
          flex-grow: 1;
       }
    }

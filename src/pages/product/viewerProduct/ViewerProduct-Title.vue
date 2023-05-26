@@ -40,7 +40,7 @@
 
 <template>
    <div class="ViewerProduct-Title">
-      <div :style="{ color: titleColor }">{{ fullTitle }}</div>
+      <span :style="{ color: titleColor }">{{ fullTitle }}</span>
       <ButtonIcon
          class="ViewerProduct-button"
          v-if="allowEdit"
@@ -55,7 +55,6 @@
 
 <style lang="scss" scoped>
    .ViewerProduct-Title {
-      // width: 100%;
       padding: 2rem;
       margin-top: -1rem;
 

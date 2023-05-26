@@ -25,8 +25,8 @@
    >
       <img class="ButtonContact-icon" :src="icon" />
       <div class="ButtonContact-body">
-         <span class="ButtonContact-title">{{ titleHeader }}</span>
-         <span class="ButtonContact-content">{{ titleContent }}</span>
+         <span>{{ titleHeader }}</span>
+         <span>{{ titleContent }}</span>
       </div>
    </FloatingButton>
 </template>
@@ -72,13 +72,13 @@
          flex-direction: column;
          align-items: flex-start;
          justify-content: center;
-         .ButtonContact-title {
+         :nth-child(1) {
             grid-area: title;
             display: flex;
             align-items: center;
             font-size: 0.9rem;
          }
-         .ButtonContact-content {
+         :nth-child(2) {
             grid-area: content;
             font-size: 0.8rem;
          }
@@ -95,7 +95,6 @@
    }
    .ButtonContact[toShrink="true"] {
       width: var(--height);
-      gap: 0;
       .ButtonContact-body {
          opacity: 0;
          pointer-events: none;

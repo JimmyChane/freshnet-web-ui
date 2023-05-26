@@ -9,12 +9,8 @@
 
 <template>
    <button class="ItemProductStockCheckbox transition" @click="$emit('click')">
-      <span class="ItemProductStockCheckbox-title">{{ title }}</span>
-      <input
-         class="ItemProductStockCheckbox-checkbox"
-         type="checkbox"
-         :checked="checked"
-      />
+      <span>{{ title }}</span>
+      <input type="checkbox" :checked="checked" />
    </button>
 </template>
 
@@ -39,11 +35,11 @@
          opacity: 0.7;
       }
 
-      .ItemProductStockCheckbox-title {
+      :nth-child(1) {
          flex-grow: 1;
          text-align: start;
       }
-      .ItemProductStockCheckbox-checkbox {
+      :nth-child(2) {
          width: 1rem;
          height: 1rem;
          border: white;

@@ -85,10 +85,8 @@
             'transition',
             'ItemSetting-TextArea-value',
             'ItemSetting-TextArea-textarea',
-            isEditing
-               ? 'ItemSetting-TextArea-textarea-isShowing'
-               : 'ItemSetting-TextArea-textarea-isHiding',
          ]"
+         :isShowing="`${isEditing}`"
          ref="textarea"
          v-model="nextValue"
       />
@@ -98,13 +96,8 @@
          >{{ value }}</p
       >
       <span
-         :class="[
-            'transition',
-            'ItemSetting-TextArea-empty',
-            !isEditing && isEmpty
-               ? 'ItemSetting-TextArea-empty-isShowing'
-               : 'ItemSetting-TextArea-empty-isHiding',
-         ]"
+         :class="['transition', 'ItemSetting-TextArea-empty']"
+         :isShowing="`${!isEditing && isEmpty}`"
          >Empty</span
       >
    </div>
@@ -144,11 +137,11 @@
          background: hsl(0, 0%, 90%);
          --transition-timing: cubic-bezier(1, 0, 0, 1);
       }
-      .ItemSetting-TextArea-textarea-isShowing {
+      .ItemSetting-TextArea-textarea[isShowing="true"] {
          height: 10rem;
          margin-bottom: 0.5rem;
       }
-      .ItemSetting-TextArea-textarea-isHiding {
+      .ItemSetting-TextArea-textarea[isShowing="false"] {
          height: 0;
          padding-top: 0;
          padding-bottom: 0;
@@ -166,10 +159,10 @@
          --transition-delay: 2s;
          overflow: hidden;
       }
-      .ItemSetting-TextArea-empty-isShowing {
+      .ItemSetting-TextArea-empty[isShowing="true"] {
          height: max-content;
       }
-      .ItemSetting-TextArea-empty-isHiding {
+      .ItemSetting-TextArea-empty[isShowing="false"] {
          height: 0;
          margin-top: -1px;
       }

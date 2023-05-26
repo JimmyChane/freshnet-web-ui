@@ -8,7 +8,13 @@
    import WindowSearch from "@/components/WindowSearch.vue";
 
    export default {
-      components: { WindowSearch, PopupWindow, Actionbar, SearchInput, ItemService },
+      components: {
+         WindowSearch,
+         PopupWindow,
+         Actionbar,
+         SearchInput,
+         ItemService,
+      },
       props: {
          isShowing: { type: Boolean, default: false },
          items: { type: Array, default: () => [] },
@@ -53,7 +59,9 @@
 
             if (filters.length > 10) {
                const valueToPass = countHighest / 2;
-               filters = filters.filter((filter) => filter.count >= valueToPass);
+               filters = filters.filter(
+                  (filter) => filter.count >= valueToPass,
+               );
             }
 
             return filters
@@ -73,7 +81,6 @@
 
 <template>
    <WindowSearch
-      class="WindowSearch"
       :isShowing="isShowing"
       placeholder="Search services"
       @input-text="(text) => (search = text)"

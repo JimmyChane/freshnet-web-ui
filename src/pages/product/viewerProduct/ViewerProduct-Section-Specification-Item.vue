@@ -48,8 +48,8 @@
          :src="icon"
       />
       <div class="ItemProductSpecification-main">
-         <span class="ItemProductSpecification-title">{{ title }}</span>
-         <span class="ItemProductSpecification-content">{{ content }}</span>
+         <span>{{ title }}</span>
+         <span>{{ content }}</span>
       </div>
    </div>
 </template>
@@ -79,7 +79,7 @@
          align-items: flex-start;
          justify-content: flex-start;
 
-         .ItemProductSpecification-title {
+         :nth-child(1) {
             height: max-content;
 
             display: flex;
@@ -90,7 +90,7 @@
 
             color: hsla(0, 0%, 0%, 0.8);
          }
-         .ItemProductSpecification-content {
+         :nth-child(2) {
             height: max-content;
             min-height: 1.6rem;
 
@@ -113,21 +113,19 @@
       }
    }
    .ItemProductSpecification[isVertical="false"] {
-      gap: 0;
-
       .ItemProductSpecification-main {
          width: 100%;
          flex-grow: 1;
          flex-direction: row;
          min-height: 1.6rem;
 
-         .ItemProductSpecification-title {
+         :nth-child(1) {
             min-height: 1.6rem;
             min-width: 5rem;
             max-width: 5rem;
             padding: 0 0.6rem;
          }
-         .ItemProductSpecification-content {
+         :nth-child(2) {
             width: 100%;
          }
       }

@@ -76,23 +76,5 @@
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      .WindowUpdateSpecifications-section {
-         width: 100%;
-         display: flex;
-         flex-direction: column;
-         gap: 20px;
-         .WindowUpdateSpecifications-inputText {
-            flex-grow: 1;
-            font-size: 1rem;
-            border: none;
-            border-bottom: 1px solid hsl(0, 0%, 70%);
-            background: none;
-            padding: 4px 0;
-         }
-         .WindowUpdateSpecifications-required {
-            color: hsl(0, 50%, 50%);
-            font-size: 0.8rem;
-         }
-      }
    }
 </style>

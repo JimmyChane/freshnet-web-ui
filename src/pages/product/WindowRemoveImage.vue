@@ -28,11 +28,9 @@
       @click-cancel="$emit('click-cancel')"
       @click-ok="clickConfirm()"
    >
-      <div class="WindowRemoveImage-window">
-         <div class="WindowRemoveImage-window-main">
-            <p class="WindowRemoveImage-window-text">
-               Once removed, cannot be undone
-            </p>
+      <div>
+         <div>
+            <p>Once removed, cannot be undone</p>
          </div>
       </div>
    </WindowAction>

@@ -12,8 +12,8 @@
 
 <template>
    <div class="ItemSettingBusinessHours-Item">
-      <span class="ItemSettingBusinessHours-Item-day">{{ title }}</span>
-      <span class="ItemSettingBusinessHours-Item-hours">{{ content }}</span>
+      <span>{{ title }}</span>
+      <span>{{ content }}</span>
    </div>
 </template>
 
@@ -22,10 +22,10 @@
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      .ItemSettingBusinessHours-Item-day {
+      :nth-child(1) {
          text-align: start;
       }
-      .ItemSettingBusinessHours-Item-hours {
+      :nth-child(2) {
          text-align: end;
       }
    }

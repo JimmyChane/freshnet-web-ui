@@ -44,7 +44,6 @@
    >
       <div class="WindowDescription-main">
          <TextArea
-            class="WindowDescription-input"
             ref="Input"
             type="text"
             label="Description"
@@ -63,7 +62,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      .WindowDescription-input {
+      & > * {
          height: 7rem;
          background: hsla(0, 0%, 0%, 0.03);
          padding: 0.6rem 0.4rem;

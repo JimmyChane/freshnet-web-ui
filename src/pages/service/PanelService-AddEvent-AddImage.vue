@@ -4,12 +4,8 @@
 
 <template>
    <button class="PanelService-AddEvent-AddImage transition">
-      <img
-         class="PanelService-AddEvent-AddImage-icon transition"
-         :src="host.icon('image-000000')"
-      />
+      <img :src="host.icon('image-000000')" />
       <input
-         class="PanelService-AddEvent-AddImage-pick"
          type="file"
          accept=".jpeg, .jpg, .png, .webp"
          @change="(event) => $emit('change', event)"
@@ -52,11 +48,11 @@
          max-height: var(--size);
       }
 
-      .PanelService-AddEvent-AddImage-icon {
+      :nth-child(1) {
          z-index: 1;
          padding: 0.7em;
       }
-      .PanelService-AddEvent-AddImage-pick {
+      :nth-child(2) {
          z-index: 2;
 
          position: absolute;
