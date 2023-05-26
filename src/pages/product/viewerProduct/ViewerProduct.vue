@@ -463,10 +463,10 @@
                   (image) => (imagePreviewIndex = images.indexOf(image))
                "
                @click-add-image-file="
-                  (file) => {
+                  (files) => {
                      productStore.dispatch('addImageOfId', {
                         id: product.id,
-                        imageFile: file,
+                        files,
                      });
                   }
                "

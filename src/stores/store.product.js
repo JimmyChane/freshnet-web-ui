@@ -280,10 +280,14 @@ const init = (Stores) => {
             );
          },
       )
-      .action("addImageOfId", async (context, arg = { id, imageFile }) => {
-         const { id, imageFile } = arg;
+      .action("addImageOfId", async (context, arg = { id, files }) => {
+         const { id, files } = arg;
+
          const imageFileForm = new FormData();
-         imageFileForm.append(imageFile.name, imageFile);
+         for (const file of files) {
+            imageFileForm.append(file.name, file);
+         }
+
          const api = await ProductRequest.addImage(id, imageFileForm);
          const content = api.optObjectContent();
          return context.state.list.updateItemById(content.productId, (item) => {

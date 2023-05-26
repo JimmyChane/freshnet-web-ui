@@ -20,12 +20,10 @@
             accept=".jpeg, .jpg, .png, .webp"
             @change="
                (event) => {
-                  const [file] = event.target.files;
-                  if (file) {
-                     $emit('click-file', file);
-                  }
+                  $emit('click-file', event.target.files);
                }
             "
+            multiple
          />
       </div>
    </dir>

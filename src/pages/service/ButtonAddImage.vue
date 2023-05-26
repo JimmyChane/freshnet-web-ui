@@ -14,12 +14,10 @@
          accept=".jpeg, .jpg, .png, .webp"
          @change="
             (event) => {
-               const [file] = event.target.files;
-               if (file) {
-                  $emit('callback-result', file);
-               }
+               $emit('callback-result', event.target.files);
             }
          "
+         multiple
       />
    </button>
 </template>

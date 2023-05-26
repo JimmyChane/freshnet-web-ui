@@ -219,9 +219,8 @@ const init = (Stores) => {
          async (context, arg = { serviceID, label }) => {
             const { serviceID, label } = arg;
 
-            const content = (
-               await ServiceRequest.removeLabel(serviceID, label)
-            ).optObjectContent();
+            const api = await ServiceRequest.removeLabel(serviceID, label);
+            const content = api.optObjectContent();
             const inputItem = new Service(Stores).fromData(content);
             return context.state.list.updateItemById(inputItem.id, (item) => {
                if (!item) return inputItem;
@@ -240,13 +239,15 @@ const init = (Stores) => {
       })
       .action(
          "addImageToId",
-         async (context, arg = { serviceID, imageFile }) => {
-            const { serviceID, imageFile } = arg;
+         async (context, arg = { serviceID, imageFiles }) => {
+            const { serviceID, imageFiles } = arg;
 
-            const imageFileForm = new FormData();
-            imageFileForm.append(imageFile.name, imageFile);
+            const formData = new FormData();
+            for (const imageFile of imageFiles) {
+               formData.append(imageFile.name, imageFile);
+            }
 
-            const api = await ServiceRequest.addImage(serviceID, imageFileForm);
+            const api = await ServiceRequest.addImage(serviceID, formData);
             const content = api.optObjectContent();
             const id = content.id;
             const dataImages = content.items;

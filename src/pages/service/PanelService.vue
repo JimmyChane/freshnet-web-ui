@@ -127,11 +127,11 @@
 
             return "unknown";
          },
-         onImageAdd(imageFile) {
+         onImageAdd(imageFiles) {
             this.serviceStore
                .dispatch("addImageToId", {
                   serviceID: this.service.id,
-                  imageFile,
+                  imageFiles,
                })
                .then((serivce) => {})
                .catch((error) => {
@@ -307,7 +307,7 @@
                      <div class="PanelService-section-image scrollbar">
                         <ButtonAddImage
                            class="PanelService-section-image-add"
-                           @callback-result="onImageAdd"
+                           @callback-result="(files) => onImageAdd(files)"
                         />
                         <ButtonImage
                            class="PanelService-section-image-item"
@@ -369,6 +369,7 @@
 
          .PanelService-body-body {
             width: 100%;
+            padding: 1rem;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -547,10 +548,6 @@
                   }
                }
             }
-         }
-
-         .PanelService-body-body[isWide="true"] {
-            padding: 1rem;
 
             .PanelService-AddEvent {
                border-radius: 1em;
@@ -560,12 +557,6 @@
             }
             .PanelService-sections {
                border-radius: 1rem;
-            }
-         }
-         .PanelService-body-body[isWide="false"] {
-            .PanelService-body-header {
-               padding: 1rem;
-               margin-bottom: -1rem;
             }
          }
       }

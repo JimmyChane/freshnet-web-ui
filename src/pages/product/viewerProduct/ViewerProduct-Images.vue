@@ -37,7 +37,7 @@
          />
          <ProductViewerImageSelector
             v-if="isEditable"
-            @click-file="(file) => $emit('click-add-image-file', file)"
+            @click-file="(files) => $emit('click-add-image-file', files)"
          />
       </div>
    </div>

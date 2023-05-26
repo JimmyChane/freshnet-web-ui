@@ -121,9 +121,9 @@
                <ButtonImageAdd
                   class="WindowProduct-image-add"
                   @callback-result="
-                     (imageFile) => {
+                     (files) => {
                         productStore
-                           .dispatch('addImageOfId', { id: item.id, imageFile })
+                           .dispatch('addImageOfId', { id: item.id, files })
                            .then((product) => {
                               item.data.images = item.data.images;
                            });
@@ -143,9 +143,11 @@
                   @click="() => $emit('request-editTitle', item.title)"
                />
             </div>
-            <span class="WindowProduct-abstract-section-main" v-if="item.title">{{
-               item.title
-            }}</span>
+            <span
+               class="WindowProduct-abstract-section-main"
+               v-if="item.title"
+               >{{ item.title }}</span
+            >
             <span class="WindowProduct-abstract-empty" v-else>Empty</span>
          </div>
 
@@ -169,7 +171,9 @@
                   class="WindowProduct-brand-main-icon"
                   :src="item.brand.icon.toUrl()"
                />
-               <span class="WindowProduct-brand-main-title">{{ item.brand.title }}</span>
+               <span class="WindowProduct-brand-main-title">{{
+                  item.brand.title
+               }}</span>
             </div>
             <span class="WindowProduct-abstract-empty" v-else>Empty</span>
          </div>
@@ -209,23 +213,32 @@
                <span class="WindowProduct-abstract-title">Description</span>
                <ButtonIcon
                   :src="host.icon('edit-505050')"
-                  @click="() => $emit('request-editDescription', item.description)"
+                  @click="
+                     () => $emit('request-editDescription', item.description)
+                  "
                />
             </div>
-            <span class="WindowProduct-abstract-section-main" v-if="item.description">{{
-               item.description
-            }}</span>
+            <span
+               class="WindowProduct-abstract-section-main"
+               v-if="item.description"
+               >{{ item.description }}</span
+            >
             <span class="WindowProduct-abstract-empty" v-else>Empty</span>
          </div>
 
          <div class="WindowProduct-abstract-section-separator"></div>
 
-         <div class="WindowProduct-abstract-section WindowProduct-specification">
+         <div
+            class="WindowProduct-abstract-section WindowProduct-specification"
+         >
             <div class="WindowProduct-abstract-section-header">
                <span class="WindowProduct-abstract-title">Specification</span>
                <ButtonIcon
                   :src="host.icon('edit-505050')"
-                  @click="() => $emit('request-addSpecification', item.specifications)"
+                  @click="
+                     () =>
+                        $emit('request-addSpecification', item.specifications)
+                  "
                />
             </div>
             <div
@@ -384,7 +397,9 @@
             </div>
             <div
                class="WindowProduct-abstract-section-main WindowProduct-price-main"
-               v-if="item.stock && item.stock.prices && item.stock.prices.length"
+               v-if="
+                  item.stock && item.stock.prices && item.stock.prices.length
+               "
             >
                <ItemPrice
                   v-for="price in item.stock.prices"
