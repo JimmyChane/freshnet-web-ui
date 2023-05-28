@@ -102,6 +102,7 @@
             return c.categoryFilter.menus.map((menu) => {
                return {
                   title: menu.title,
+                  icon: menu.icon,
                   primaryColor: "black",
                   primaryColorTint: "hsla(0, 0%, 0%, 0.1)",
                   click: () => menu.click(menu),
@@ -171,7 +172,8 @@
                         return product1.compare(product2);
                      });
                   return {
-                     key: group.category.id,
+                     id: group.category.id,
+                     key: group.category.key,
                      title: group.category.title,
                      icon: group.category.icon
                         ? group.category.icon.toUrl()
@@ -187,6 +189,7 @@
                   return {
                      key: group.category.id,
                      title: group.category.title,
+                     icon: group.category.icon?.toUrl() ?? "",
                   };
                }),
             ]);
@@ -318,7 +321,7 @@
          <div class="PanelProducts-categories">
             <Group
                v-for="group of productGroups"
-               :key="group.key"
+               :key="group.id"
                :group="group"
                :isWide="!(productGroups.length > 1 && isLayoutThin)"
                :layoutMode="layoutMode"

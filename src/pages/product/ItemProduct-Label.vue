@@ -27,10 +27,10 @@
    .ItemProduct-Label {
       min-width: max-content;
       width: max-content;
-      padding: 0.3rem 0.5rem;
+      padding: 0.45em 0.7em;
       background: var(--primary-color);
       border-radius: 1em;
-      font-size: 0.7rem;
+      font-size: 0.6rem;
       font-weight: 400;
       line-height: 1em;
    }

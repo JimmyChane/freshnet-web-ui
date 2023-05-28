@@ -17,6 +17,7 @@
       },
       data: (c) => ({ ArrowDirection: Arrow.Direction, scrollLeft: 0 }),
       computed: {
+         id: (c) => c.group.id,
          key: (c) => c.group.key,
          icon: (c) => c.group.icon,
          title: (c) => c.group.title,
@@ -43,14 +44,7 @@
 </script>
 
 <template>
-   <div
-      :class="[
-         'PanelProducts-category',
-         isWide
-            ? 'PanelProducts-category-isWide'
-            : 'PanelProducts-category-isThin',
-      ]"
-   >
+   <div class="PanelProducts-category" :isWide="`${isWide}`">
       <div class="PanelProducts-category-header">
          <img
             class="PanelProducts-category-icon"
@@ -62,8 +56,8 @@
 
          <router-link
             class="PanelProducts-category-focusGroup transition"
-            :to="{ query: { category: key } }"
-            v-if="queryGroupKey !== key"
+            :to="{ query: { category: id } }"
+            v-if="queryGroupKey !== id"
             replace
             >View All</router-link
          >
@@ -141,7 +135,7 @@
             flex-grow: 1;
          }
          .PanelProducts-category-focusGroup {
-            padding: 0.8em 1.2em;
+            padding: 0.8em 1.5em;
             line-height: 1em;
             font-size: 0.8rem;
             line-height: 1.2em;
@@ -178,7 +172,7 @@
          }
       }
    }
-   .PanelProducts-category-isThin {
+   .PanelProducts-category[isWide="false"] {
       .PanelProducts-category-items {
          width: 100%;
          padding: 0 0.7rem;
@@ -205,7 +199,7 @@
          }
       }
    }
-   .PanelProducts-category-isWide {
+   .PanelProducts-category[isWide="true"] {
       .PanelProducts-category-items {
          padding: 0 0.5rem;
 

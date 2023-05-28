@@ -1,20 +1,13 @@
 <script>
    import PopupWindow from "@/components/window/PopupWindow.vue";
    import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import SearchInput from "@/components/SearchInput.vue";
 
    import ItemService from "./item-service/ItemService.vue";
 
    import WindowSearch from "@/components/WindowSearch.vue";
 
    export default {
-      components: {
-         WindowSearch,
-         PopupWindow,
-         Actionbar,
-         SearchInput,
-         ItemService,
-      },
+      components: { WindowSearch, PopupWindow, Actionbar, ItemService },
       props: {
          isShowing: { type: Boolean, default: false },
          items: { type: Array, default: () => [] },

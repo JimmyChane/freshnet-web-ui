@@ -328,7 +328,6 @@ const init = (Stores) => {
       if (key === Notify.ItemEventAdd) {
          const { id, event } = content;
          context.state.list.updateItemById(id, (item) => {
-            if (!item) return inputItem;
             const inputEvent = new ServiceEvent(Stores).fromData(event);
             const found = item.events.find((itemEvent) => {
                return itemEvent.timestamp.time === inputEvent.timestamp.time;

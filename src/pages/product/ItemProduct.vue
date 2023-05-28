@@ -162,10 +162,6 @@
                : 'ItemProduct-title-isWhite',
          ]"
       >
-         <span class="ItemProduct-title-text">{{ fullTitle }}</span>
-         <span class="ItemProduct-title-price" v-if="price">{{
-            price.to
-         }}</span>
          <div class="ItemProduct-title-specs" v-if="specLabels.length">
             <Label
                v-for="label in specLabels"
@@ -173,6 +169,10 @@
                :title="label.text"
             />
          </div>
+         <span class="ItemProduct-title-text">{{ fullTitle }}</span>
+         <span class="ItemProduct-title-price" v-if="price">{{
+            price.to
+         }}</span>
       </div>
    </div>
 </template>
@@ -259,6 +259,18 @@
          gap: 0.5rem;
          color: black;
 
+         .ItemProduct-title-specs {
+            width: 100%;
+            gap: 2px;
+
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            align-items: flex-end;
+
+            overflow: hidden;
+         }
          .ItemProduct-title-text {
             min-height: 1em;
             max-height: 2em;
@@ -273,20 +285,6 @@
          }
          .ItemProduct-title-price {
             font-size: 0.7rem;
-         }
-         .ItemProduct-title-specs {
-            width: 100%;
-            gap: 1px;
-            gap: 3px;
-            margin: -0.1rem;
-
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            align-items: flex-end;
-
-            overflow: hidden;
          }
       }
       .ItemProduct-title-isDark {
@@ -316,9 +314,14 @@
          --preview-border-radius-focus: var(--border-radius) 0 0
             var(--border-radius);
       }
+
       .ItemProduct-title {
+         height: 100%;
          flex-grow: 1;
          padding: 1rem;
+         .ItemProduct-title-specs {
+            max-height: 1.2em;
+         }
       }
    }
    .ItemProduct-modeGrid {
@@ -337,6 +340,10 @@
       .ItemProduct-title {
          width: 100%;
          padding: 1rem 0.5rem;
+         .ItemProduct-title-specs {
+            max-height: 2.4em;
+            margin-top: -0.4em;
+         }
       }
    }
 

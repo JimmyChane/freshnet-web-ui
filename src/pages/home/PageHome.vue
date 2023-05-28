@@ -1,5 +1,4 @@
 <script>
-   import SearchInput from "@/components/SearchInput.vue";
    import Footer from "@/app/footer/Footer.vue";
 
    import Actionbar from "./PageHome-Actionbar.vue";
@@ -26,7 +25,6 @@
       },
 
       components: {
-         SearchInput,
          Footer,
          Actionbar,
          Header,
