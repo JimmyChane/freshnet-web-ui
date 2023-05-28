@@ -77,10 +77,6 @@
                return cost;
             }, new ServicePrice().fromData({ amount: 0 }));
          },
-         // timestampText: (c) => {
-         //    if (!c.timestamp) return "";
-         //    return format(c.timestamp.time, "EEE, dd/LL/yyyy hh:mmaaa");
-         // },
          labels: (c) => {
             const labels = [];
 
@@ -133,15 +129,9 @@
          },
 
          classes: (c) => {
-            if (c.isGrid) {
-               return ["ItemService-isGrid"];
-            }
-            if (c.isList) {
-               return ["ItemService-isList"];
-            }
-            if (c.isDetail) {
-               return ["ItemService-isDetail"];
-            }
+            if (c.isGrid) return ["ItemService-isGrid"];
+            if (c.isList) return ["ItemService-isList"];
+            if (c.isDetail) return ["ItemService-isDetail"];
             return [];
          },
       },
@@ -261,7 +251,6 @@
 
 <style lang="scss" scoped>
    .ItemService-top {
-      padding: 0.5rem;
       padding: 0.6rem;
       margin-right: 0.6em;
       border-bottom: 0.05em solid hsla(0, 0%, 0%, 0.1);

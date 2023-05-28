@@ -4,6 +4,7 @@ import Navigation from "./tools/Navigation.js";
 import HostApi from "./host/HostApi.js";
 import U from "@/U";
 import HostIcon from "@/host/HostIcon";
+import PHE from "print-html-element"; // https://www.npmjs.com/package/print-html-element
 
 // vue
 import Vue from "vue";
@@ -285,60 +286,11 @@ new Vue({
       this.appLayout = new AppLayout(this);
       this.navigation = new Navigation(this);
       window.addEventListener("resize", this.invalidateWindow);
-
-      // todo implement inheritable onBack functions
-      // window.addEventListener("keyup", (event) => {
-      //    console.log(event);
-      // });
-      // window.onhashchange = () => {
-      // 	console.log("onhashchange");
-      // };
-      // window.addEventListener(
-      // 	"popstate",
-      // 	(event) => {
-      // 		console.log("popstate", event);
-
-      // 		if (this.onBackPressed()) {
-      // 			// history.go(1);
-
-      // 			// return false;
-
-      // 			// history.pushState(null, document.title, location.href);
-
-      // 			event.preventDefault = true;
-      // 		} else {
-      // 			// history.back();
-      // 		}
-
-      // 		// if (!this.onBackPressed()) history.back();
-      // 		// else history.go(1);
-      // 	},
-      // 	false,
-      // );
-      // window.onpopstate = (event) => {
-      // 	console.log("onpopstate", event);
-
-      // 	return;
-
-      // 	// "event" object seems to contain value only when the back button is clicked
-      // 	// and if the pop state event fires due to clicks on a button
-      // 	// or a link it comes up as "undefined"
-
-      // 	if (event) {
-      // 		// Code to handle back button or prevent from navigation
-      // 	} else {
-      // 		// Continue user action through link or button
-      // 	}
-      // };
    },
    mounted() {
       this.invalidateWindow();
    },
    methods: {
-      onBackPressed() {
-         return true;
-      },
-
       // external interaction
       copyText(text) {
          const textarea = document.createElement("textarea");
@@ -379,56 +331,6 @@ new Vue({
          document.body.removeChild(element);
       },
       print(element) {
-         // this.printUsingNative(element);
-         this.printUsingPHE(element);
-      },
-      printUsingNative(element) {
-         const eWindow = window.open("", "PRINT", "height=400,width=600");
-
-         eWindow.document.write("<html>");
-
-         eWindow.document.write("<head>");
-         eWindow.document.write(`<title>${document.title}</title>`);
-         eWindow.document.write("</head>");
-
-         eWindow.document.write("<body>");
-         eWindow.document.write(element.innerHTML);
-         eWindow.document.write("</body>");
-
-         // console.log(element.innerHTML);
-
-         // function dumpCSSText(element) {
-         // 	let str = "";
-         // 	let obj = getComputedStyle(element);
-         // 	for (let i = 0; i < obj.length; i++) {
-         // 		str += `${obj[i]}:${obj.getPropertyValue(obj[i])};`;
-         // 	}
-         // 	return str;
-         // }
-
-         // console.log(dumpCSSText(element));
-
-         eWindow.document.write("</html>");
-
-         eWindow.document.close(); // necessary for IE >= 10
-         eWindow.focus(); // necessary for IE >= 10*/
-
-         eWindow.print();
-         eWindow.close();
-      },
-      printUsingPHE(element) {
-         let PHE = require("print-html-element"); // https://www.npmjs.com/package/print-html-element
-
-         // const options = {
-         // 	// printMode: "iframe", // 'iframe', 'popup'
-         // 	// pageTitle: "",
-         // 	// templateString: "",
-         // 	// popupProperties: "scrollbars=false",
-         // 	// stylesheets: "" | [""],
-         // 	// styles: "" | [""],
-         // };
-
-         // PHE.printElement(element, options);
          PHE.printElement(element);
       },
 

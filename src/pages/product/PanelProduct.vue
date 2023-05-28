@@ -22,6 +22,7 @@
          isWide: { type: Boolean, default: false },
          isEditable: { type: Boolean, default: false },
          isBackable: { type: Boolean, default: true },
+         openedWindowCount: { type: Number, default: 0 },
       },
       computed: {
          actionbarLeftMenus() {
@@ -69,7 +70,9 @@
                        icon: this.host.icon("trash-000000"),
                        isHidden: true,
                        click: () => {
-                          this.$emit("click-productRemove", { product: this.product });
+                          this.$emit("click-productRemove", {
+                             product: this.product,
+                          });
                        },
                     }
                   : null,
@@ -111,6 +114,7 @@
    <div class="PanelProduct">
       <ViewerProduct
          ref="Viewer"
+         :openedWindowCount="openedWindowCount"
          :isWide="isWide"
          :isEditable="isEditable"
          :leftMenus="actionbarLeftMenus"
@@ -118,15 +122,21 @@
          :product="product"
          :productPrevious="productPrevious"
          :productNext="productNext"
-         @click-product-imageRemove="(x) => $emit('click-product-imageRemove', x)"
+         @click-product-imageRemove="
+            (x) => $emit('click-product-imageRemove', x)
+         "
          @click-product-titleBrandUpdate="
             (x) => $emit('click-product-titleBrandUpdate', x)
          "
-         @click-product-priceUpdate="(x) => $emit('click-product-priceUpdate', x)"
+         @click-product-priceUpdate="
+            (x) => $emit('click-product-priceUpdate', x)
+         "
          @click-product-descriptionUpdate="
             (x) => $emit('click-product-descriptionUpdate', x)
          "
-         @click-product-categoryUpdate="(x) => $emit('click-product-categoryUpdate', x)"
+         @click-product-categoryUpdate="
+            (x) => $emit('click-product-categoryUpdate', x)
+         "
          @click-product-specificationsUpdate="
             (x) => $emit('click-product-specificationsUpdate', x)
          "

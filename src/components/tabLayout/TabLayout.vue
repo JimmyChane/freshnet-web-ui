@@ -43,8 +43,6 @@
       align-items: flex-start;
 
       & > * {
-         width: 100%;
-         max-width: max-content;
          gap: 0.1rem;
 
          display: flex;

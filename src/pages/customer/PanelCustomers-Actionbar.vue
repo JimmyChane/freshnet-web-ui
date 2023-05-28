@@ -159,7 +159,9 @@
       }
       .PanelCustomers-tabLayout {
          z-index: 1;
+         padding: 0.3rem 1rem;
          padding-top: 0;
+         padding-right: 2rem;
       }
    }
 </style>

@@ -114,7 +114,7 @@
          :menus="tabLayoutMenus"
       />
 
-      <div class="PanelServices-Actionbar-toolbar scrollbar">
+      <!-- <div class="PanelServices-Actionbar-toolbar scrollbar">
          <div>
             <LayoutViewSelector :menus="layoutMenus" :index="layoutMenuIndex" />
             <div class="PanelServices-Actionbar-toolbar-menus">
@@ -134,7 +134,7 @@
                />
             </div>
          </div>
-      </div>
+      </div> -->
    </div>
 </template>
 
@@ -160,6 +160,7 @@
       }
       .PanelServices-Actionbar-tabs {
          padding: 0.3rem 1rem;
+         padding-right: 2rem;
       }
       .PanelServices-Actionbar-toolbar {
          width: 100%;

@@ -101,6 +101,7 @@
          :titleHeader="whatsappTypeTitle"
          :titleContent="whatsappTitle"
          primaryColorHex="#4caf50"
+         :toShrink="true"
       />
       <ButtonContact
          class="ViewerProduct-BottomActionbar-call"

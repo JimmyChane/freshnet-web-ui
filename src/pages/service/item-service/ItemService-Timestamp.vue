@@ -13,25 +13,25 @@
             const time = c.timestamp.time;
 
             const distance = formatDistanceToNow(time);
-            const distanceText = `(${distance} ago)`;
+            const dateText = format(time, "EEE, dd/LL/yyyy");
+            const timeText = format(time, "hh:mmaaa");
 
-            const timeText = format(time, "EEE, dd/LL/yyyy hh:mmaaa");
-
-            return `${timeText} ${distanceText}`;
+            return `${dateText}\n${distance} ago, ${timeText}`;
          },
       },
    };
 </script>
 
 <template>
-   <span class="ItemService-timestamp">{{ timestampText }}</span>
+   <p class="ItemService-timestamp">{{ timestampText }}</p>
 </template>
 
 <style lang="scss" scoped>
    .ItemService-timestamp {
       max-width: max-content;
-      color: rgb(112, 112, 112);
       flex-grow: 1;
       text-align: center;
+      font-weight: 600;
+      font-size: 0.7rem;
    }
 </style>

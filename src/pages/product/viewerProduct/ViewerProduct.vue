@@ -47,6 +47,7 @@
          isWide: { type: Boolean, default: false },
          isEditable: { type: Boolean, default: false },
          isActionbarHidden: { type: Boolean, default: false },
+         openedWindowCount: { type: Number, default: 0 },
 
          leftMenus: { default: () => [] },
          rightMenus: { default: () => [] },
@@ -170,16 +171,11 @@
          whatIncludeds: (c) => {
             return [
                ...c.gifts
-                  .filter((gift) => typeof gift === "string")
-                  .map((gift) => gift.trim())
+                  .map((gift) => U.trimText(gift))
                   .filter((gift) => gift.length),
                ...c.bundles
-                  .filter(
-                     (bundle) => typeof bundle === "object" && bundle !== null,
-                  )
-                  .map((bundle) => bundle.title)
-                  .filter((bundle) => typeof bundle === "string")
-                  .map((bundle) => bundle.trim())
+                  .filter((bundle) => U.isObjectOnly(bundle))
+                  .map((bundle) => U.trimText(bundle.title))
                   .filter((bundle) => bundle.length),
             ];
          },
@@ -190,6 +186,10 @@
                : chroma("cccccc"),
          actionbarColor: (c) => c.primaryColor.mix("ffffff", 0.6),
          backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.3),
+
+         isImageViewerShowing() {
+            return this.$store.getters.imageViewer.isShowing;
+         },
       },
       watch: {
          "settingStore.getters.lastModified"() {
@@ -302,20 +302,17 @@
          addArrowListener() {
             if (this.onKeyUp === null) {
                this.onKeyUp = (event) => {
-                  if (
+                  const isExclude =
                      event.shiftKey ||
                      event.altKey ||
                      event.ctrlKey ||
-                     event.metaKey
-                  ) {
-                     return;
-                  }
-                  if (event.key === "ArrowLeft") {
-                     this.clickPreviousImage();
-                  }
-                  if (event.key === "ArrowRight") {
-                     this.clickNextImage();
-                  }
+                     event.metaKey ||
+                     this.openedWindowCount > 0 ||
+                     this.isImageViewerShowing;
+
+                  if (isExclude) return;
+                  if (event.key === "ArrowLeft") this.clickPreviousImage();
+                  if (event.key === "ArrowRight") this.clickNextImage();
                };
                window.addEventListener("keyup", this.onKeyUp);
             }
@@ -394,7 +391,7 @@
          '--actionbar-toolbar': isActionbarHidden ? '1.5rem' : '5.5rem',
       }"
       :isWide="`${isWide}`"
-      @scroll="(event) => scrolling(event)"
+      @scroll="(e) => scrolling(e)"
    >
       <div
          class="ViewerProduct-toolbar"

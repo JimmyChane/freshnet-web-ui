@@ -314,6 +314,20 @@
                },
             };
          },
+
+         openedWindowCount() {
+            let count = 0;
+            if (this.popup.search.isShowing) count++;
+            if (this.popup.productAdd.isShowing) count++;
+            if (this.popup.productRemove.isShowing) count++;
+            if (this.popup.productImageRemove.isShowing) count++;
+            if (this.popup.productTitleBrandUpdate.isShowing) count++;
+            if (this.popup.productPriceUpdate.isShowing) count++;
+            if (this.popup.productDescriptionUpdate.isShowing) count++;
+            if (this.popup.productCategoryUpdate.isShowing) count++;
+            if (this.popup.productSpecificationsUpdate.isShowing) count++;
+            return count;
+         },
       },
       watch: {
          product() {
@@ -482,6 +496,7 @@
                :productNext="productNext"
                :isWide="false"
                :isEditable="isEditable"
+               :openedWindowCount="openedWindowCount"
                @click-dismiss="() => setProduct(null)"
                @click-productRemove="
                   (output) => popup.productRemove.show(output)

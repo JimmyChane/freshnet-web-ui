@@ -152,9 +152,9 @@
          },
 
          getPropertyByKey(key) {
-            return this.detailProperties.find(
-               (property) => property.key === key,
-            );
+            return this.detailProperties.find((property) => {
+               return property.key === key;
+            });
          },
       },
    };
@@ -271,7 +271,7 @@
 
             position: sticky;
             z-index: 1;
-            top: 10.2rem;
+            top: 7.5rem;
          }
 
          .ListServices-items {
@@ -289,7 +289,6 @@
             max-width: var(--max-width);
             gap: 0.1rem;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
             grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
 
             .ListServices-items-header {
