@@ -4,8 +4,11 @@
    import LabelMenus from "@/components/LabelMenus.vue";
    import Footer from "@/app/footer/Footer.vue";
 
+   import TabLayout from "./PanelProducts-TabLayout.vue";
+   import CategoryTab from "./PanelProducts-CategoryTab.vue";
+   import BrandTab from "./PanelProducts-BrandTab.vue";
+
    import ActionbarProduct from "./ActionBarProduct.vue";
-   import TabLayout from "@/components/tabLayout/TabLayout.vue";
    import ItemProduct from "./ItemProduct.vue";
    import Group from "./PanelProducts-Group.vue";
    import chroma from "chroma-js";
@@ -53,6 +56,8 @@
       components: {
          ActionbarProduct,
          TabLayout,
+         CategoryTab,
+         BrandTab,
          ItemProduct,
          Group,
          LabelMenus,
@@ -66,7 +71,8 @@
 
          currentProductId: "",
 
-         categoryFilter: null,
+         categoryTabs: [],
+         brandTabs: [],
 
          filterMenus: [],
          productGroups: [],
@@ -95,20 +101,6 @@
             const icon = this.host.icon("add-000000");
             const click = () => this.$emit("click-productAdd");
             return { title, icon, click };
-         },
-
-         tabLayoutCategories: (c) => {
-            if (!c.categoryFilter) return [];
-            return c.categoryFilter.menus.map((menu) => {
-               return {
-                  title: menu.title,
-                  icon: menu.icon,
-                  primaryColor: "black",
-                  primaryColorTint: "hsla(0, 0%, 0%, 0.1)",
-                  click: () => menu.click(menu),
-                  isSelected: () => c.categoryFilter.menu === menu,
-               };
-            });
          },
       },
       watch: {
@@ -183,27 +175,54 @@
                })
                .filter((group) => group.items.length > 0);
 
-            this.categoryFilter = new MenuGroup(this, "category", "Category", [
-               { title: "All" },
-               ...categoryGroups.map((group) => {
-                  return {
-                     key: group.category.id,
-                     title: group.category.title,
-                     icon: group.category.icon?.toUrl() ?? "",
-                  };
-               }),
-            ]);
+            const categories = categoryGroups.map((group) => {
+               const { category } = group;
+               return {
+                  key: category.id,
+                  title: category.title,
+                  background: category.background?.toUrl() ?? "",
+               };
+            });
+            const brands = brandGroups
+               .filter((group) => {
+                  return group.brand && group.items.length > 0;
+               })
+               .sort((group1, group2) => {
+                  return group1.brand.compare(group2.brand);
+               })
+               .map((group) => {
+                  return { key: group.brand.id, title: group.brand.title };
+               });
+
+            const categoryMenuGroup = new MenuGroup(
+               this,
+               "category",
+               "Category",
+               [{ title: "All" }, ...categories],
+            );
             const brandMenuGroup = new MenuGroup(this, "brand", "Brand", [
                { title: "All" },
-               ...brandGroups
-                  .filter((group) => group.brand && group.items.length > 0)
-                  .sort((group1, group2) => group1.brand.compare(group2.brand))
-                  .map((group) => {
-                     return { key: group.brand.id, title: group.brand.title };
-                  }),
+               ...brands,
             ]);
 
-            this.filterMenus = [brandMenuGroup];
+            this.categoryTabs = categoryMenuGroup.menus.map((menu) => {
+               return {
+                  title: menu.title,
+                  background: menu.background,
+                  click: () => menu.click(menu),
+                  isSelected: () => categoryMenuGroup.menu === menu,
+               };
+            });
+            this.brandTabs = brandMenuGroup.menus.map((menu) => {
+               return {
+                  title: menu.title,
+                  icon: menu.icon?.toUrl() ?? "",
+                  click: () => menu.click(menu),
+                  isSelected: () => brandMenuGroup.menu === menu,
+               };
+            });
+
+            this.filterMenus = [];
             if (this.isEditable) {
                this.filterMenus.push(
                   new MenuGroup(this, "stock", "Stock", [
@@ -296,11 +315,21 @@
             @click-search="$emit('click-search')"
          />
 
-         <TabLayout
-            class="PanelProducts-tabLayout"
-            :isScreenWide="true"
-            :menus="tabLayoutCategories"
-         />
+         <TabLayout>
+            <CategoryTab
+               v-for="menu of categoryTabs"
+               :key="menu.title"
+               :menu="menu"
+            />
+         </TabLayout>
+
+         <TabLayout>
+            <BrandTab
+               v-for="menu of brandTabs"
+               :key="menu.title"
+               :menu="menu"
+            />
+         </TabLayout>
 
          <div
             :style="{ 'z-index': '1' }"
@@ -360,11 +389,6 @@
 
          border-bottom: 1px solid hsl(0, 0%, 80%);
          background: var(--App-background-color);
-
-         .PanelProducts-tabLayout {
-            padding: 0.4rem 1rem;
-            padding-right: 2rem;
-         }
 
          .PanelProducts-filters {
             width: 100%;
