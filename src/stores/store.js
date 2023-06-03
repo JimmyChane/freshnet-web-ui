@@ -29,14 +29,15 @@ const init = (Stores) => {
    context.actions.openSocket = (context) => {
       if (context.getters.isConnected) return;
 
-      const socket = socketIo(HostApi.originApi, {
+      const option = {
          extraHeaders: {
             authorization: window.localStorage.getItem("userToken"),
          },
-      })
-         // .on("connect", () => console.info("Socket", "Connected"))
-         // .on("connect_error", () => console.info("Socket", "Connect Error"))
-         // .on("disconnect", (reason) => console.info("Socket", "Disconnected"))
+      };
+      const socket = socketIo(HostApi.originApi, option)
+         .on("connect", () => console.info("Socket", "Connected"))
+         .on("connect_error", () => console.info("Socket", "Connect Error"))
+         .on("disconnect", (reason) => console.info("Socket", "Disconnected"))
          .on("notify", (body) => context.dispatch("socketNotify", body));
       context.commit("socket", socket);
    };
