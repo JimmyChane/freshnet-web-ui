@@ -61,7 +61,7 @@ const init = (Stores) => {
                      { token, user },
                      Stores,
                   );
-                  store.dispatch("restartSocket");
+                  store.dispatch("openSocket");
                   return newUser;
                } catch (error) {
                   deleteToken();
@@ -75,7 +75,7 @@ const init = (Stores) => {
             return context.state.loader.acquire("logout", async () => {
                try {
                   deleteToken();
-                  store.dispatch("restartSocket");
+                  store.dispatch("closeSocket");
                   let user = context.getters.user;
                   context.commit("user", noneUser);
                   context.commit("lastModified", Date.now());

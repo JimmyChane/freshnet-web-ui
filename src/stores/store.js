@@ -143,10 +143,7 @@ const init = (Stores) => {
       context.commit("snackbars", context.state.snackbars);
    };
 
-   const store = new Vuex.Store(context);
-   store.dispatch("openSocket");
-
-   return store;
+   return new Vuex.Store(context);
 };
 
 export default { init };

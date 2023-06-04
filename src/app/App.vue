@@ -26,7 +26,7 @@
          PopupMenu,
          Status,
       },
-      data: (c) => ({ layoutLoginIsShown: false }),
+      data: (c) => ({ layoutLoginIsShown: false, shouldShowStatus: false }),
       computed: { isLogging: (c) => c.loginStore.getters.isLogging },
       watch: {
          isLogging() {
@@ -34,8 +34,25 @@
                this.store.dispatch("snackbarShow", "User Logging");
             }
          },
+         user() {
+            this.invalidateUser();
+         },
+      },
+      async created() {
+         this.invalidateUser();
       },
       methods: {
+         async invalidateUser() {
+            const user = await this.loginStore.dispatch("getUser");
+
+            if (user.isTypeAdmin() || user.isTypeStaff()) {
+               this.shouldShowStatus = true;
+               this.store.dispatch("openSocket");
+            } else {
+               this.shouldShowStatus = false;
+               this.store.dispatch("closeSocket");
+            }
+         },
          logout() {
             this.loginStore.dispatch("logout").then((user) => {
                this.store.dispatch(
@@ -58,7 +75,7 @@
 
       <div class="App-body" style="z-index: 2">
          <div class="App-layout">
-            <Status style="z-index: 2" />
+            <Status v-if="shouldShowStatus" style="z-index: 2" />
 
             <div
                class="App-layout-body"
