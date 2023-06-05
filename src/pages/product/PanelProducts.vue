@@ -10,7 +10,7 @@
 
    import ActionbarProduct from "./ActionBarProduct.vue";
    import ItemProduct from "./ItemProduct.vue";
-   import Group from "./PanelProducts-Group.vue";
+   import ProductGroup from "./PanelProducts-Group.vue";
    import chroma from "chroma-js";
 
    import PageProduct from "@/pages/product/PageProduct.vue";
@@ -59,7 +59,7 @@
          CategoryTab,
          BrandTab,
          ItemProduct,
-         Group,
+         ProductGroup,
          LabelMenus,
          Empty,
          LoadingDots,
@@ -348,7 +348,7 @@
 
       <div class="PanelProducts-body">
          <div class="PanelProducts-categories">
-            <Group
+            <ProductGroup
                v-for="group of productGroups"
                :key="group.id"
                :group="group"

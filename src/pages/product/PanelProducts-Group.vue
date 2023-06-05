@@ -46,21 +46,13 @@
 <template>
    <div class="PanelProducts-category" :isWide="`${isWide}`">
       <div class="PanelProducts-category-header">
+         <span class="PanelProducts-category-title">{{ title }}</span>
          <img
             class="PanelProducts-category-icon"
             v-if="icon"
             :src="icon"
             :alt="`${title} Icon`"
          />
-         <span class="PanelProducts-category-title">{{ title }}</span>
-
-         <router-link
-            class="PanelProducts-category-focusGroup transition"
-            :to="{ query: { category: id } }"
-            v-if="queryGroupKey !== id"
-            replace
-            >View All</router-link
-         >
       </div>
 
       <div class="PanelProducts-category-body">

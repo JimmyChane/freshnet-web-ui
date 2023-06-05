@@ -4,6 +4,9 @@
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
    import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
+   import Section from "./PageProfile-Section.vue";
+   import SectionTitle from "./PageProfile-Section-Title.vue";
+   import SectionMain from "./PageProfile-Section-Main.vue";
 
    import HostIcon from "@/host/HostIcon";
 
@@ -21,6 +24,9 @@
          ButtonIcon,
          WindowAction,
          Input,
+         Section,
+         SectionTitle,
+         SectionMain,
       },
       data: (c) => ({
          user: null,
@@ -102,34 +108,26 @@
          <NavigationBar style="z-index: 2" :title="$options.title" />
 
          <div class="PageProfile-body" v-if="user">
-            <div class="PageProfile-section PageProfile-introduction">
+            <Section class="PageProfile-introduction">
                <div class="PageProfile-introduction-body">
                   <span class="PageProfile-user-name">Hello, {{ name }}</span>
                   <div class="PageProfile-user-main">
-                     <span class="PageProfile-section-title">{{
-                        `@${username}`
-                     }}</span>
-                     <span class="PageProfile-section-title">{{
-                        typeDisplay
-                     }}</span>
+                     <SectionTitle :title="`@${username}`" />
+                     <SectionTitle :title="typeDisplay" />
                   </div>
                </div>
-            </div>
+            </Section>
 
-            <div class="PageProfile-section">
-               <span class="PageProfile-section-title">Sessions</span>
-               <span class="PageProfile-section-main">Built in progress</span>
-            </div>
+            <Section>
+               <SectionTitle title="Sessions" />
+               <SectionMain>Built in progress</SectionMain>
+            </Section>
 
-            <div class="PageProfile-section">
+            <Section>
                <div class="PageProfile-section-changePassword">
                   <div class="PageProfile-section-changePassword-body">
-                     <span class="PageProfile-section-title"
-                        >Change Your Password</span
-                     >
-                     <span class="PageProfile-section-main"
-                        >Also signing out other session</span
-                     >
+                     <SectionTitle title="Change Your Password" />
+                     <SectionMain>Also signing out other session</SectionMain>
                   </div>
                   <ButtonIcon
                      class="PageProfile-section-changePassword-arrow"
@@ -137,7 +135,7 @@
                      @click="window.changePassword.isShowing = true"
                   />
                </div>
-            </div>
+            </Section>
          </div>
       </div>
 
@@ -218,23 +216,6 @@
                position: absolute;
                width: 100%;
                z-index: 1;
-            }
-
-            // Abstract
-            .PageProfile-section {
-               width: 100%;
-               max-width: 35rem;
-               display: flex;
-               flex-direction: column;
-               // Abstract
-               .PageProfile-section-title {
-                  font-size: 1rem;
-               }
-               // Abstract
-               .PageProfile-section-main {
-                  font-size: 0.8rem;
-                  color: hsl(0, 0%, 30%);
-               }
             }
 
             .PageProfile-introduction {
