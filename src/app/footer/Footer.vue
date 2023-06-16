@@ -1,5 +1,5 @@
 <script>
-   import Contact from "./Footer_Contact.vue";
+   import Contact from "./Footer-Contact.vue";
    import Setting from "@/items/Setting";
 
    export default {

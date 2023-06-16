@@ -134,12 +134,7 @@
       <div class="PanelCustomer-body">
          <Actionbar
             class="PanelCustomer-actionbar"
-            :style="{
-               'background-color': actionbarColor,
-               'box-shadow': top.showShadow
-                  ? `0 0 20px ${actionbarShadow}`
-                  : 'none',
-            }"
+            :style="{ 'background-color': actionbarColor }"
             :leftMenus="{
                key: 'close',
                title: 'Close',
@@ -179,34 +174,36 @@
                   click: () => $emit('click-item-device-add', { item }),
                }"
             >
-               <ItemDevice
-                  v-for="deviceContext of devices"
-                  :key="deviceContext.deviceId"
-                  :item="deviceContext.device"
-                  @click-remove="
-                     (param) =>
-                        $emit('click-item-device-remove', {
-                           item,
-                           device: param.item,
-                        })
-                  "
-                  @click-update-specifications="
-                     (param) =>
-                        $emit('click-item-device-update-specifications', {
-                           item,
-                           device: param.item,
-                           specifications: param.item.specifications,
-                        })
-                  "
-                  @click-update-description="
-                     (param) =>
-                        $emit('click-item-device-update-description', {
-                           item,
-                           device: param.item,
-                           description: param.item.description,
-                        })
-                  "
-               />
+               <div class="PanelCustomer-section-devices">
+                  <ItemDevice
+                     v-for="deviceContext of devices"
+                     :key="deviceContext.deviceId"
+                     :item="deviceContext.device"
+                     @click-remove="
+                        (param) =>
+                           $emit('click-item-device-remove', {
+                              item,
+                              device: param.item,
+                           })
+                     "
+                     @click-update-specifications="
+                        (param) =>
+                           $emit('click-item-device-update-specifications', {
+                              item,
+                              device: param.item,
+                              specifications: param.item.specifications,
+                           })
+                     "
+                     @click-update-description="
+                        (param) =>
+                           $emit('click-item-device-update-description', {
+                              item,
+                              device: param.item,
+                              description: param.item.description,
+                           })
+                     "
+                  />
+               </div>
 
                <PanelCustomerEmpty v-if="!devices.length" />
                <Loading
@@ -271,26 +268,23 @@
             max-width: 100%;
 
             padding-bottom: 10rem;
+            padding: 1rem;
             display: flex;
             flex-direction: column;
             gap: 2rem;
             row-gap: 0.5rem;
 
-            .PanelCustomer-customer {
+            & > * {
+               border-radius: 1rem;
+               overflow: hidden;
+            }
+
+            .PanelCustomer-section-devices {
                display: flex;
                flex-direction: column;
-               flex-wrap: wrap;
-               flex-grow: 1;
-               align-items: flex-start;
-               gap: 0.5rem;
+               border-radius: 1rem;
+               gap: 3px;
                overflow: hidden;
-
-               & > * {
-                  flex-grow: 1;
-                  display: flex;
-                  flex-direction: row;
-                  align-items: center;
-               }
             }
             .PanelCustomer-devices-loading {
                width: 100%;
@@ -304,17 +298,6 @@
                flex-direction: column;
                align-items: stretch;
             }
-         }
-         .PanelCustomer-main[isWide="true"] {
-            padding: 1rem;
-
-            & > * {
-               border-radius: 1rem;
-               overflow: hidden;
-            }
-         }
-         .PanelCustomer-main[isWide="false"] {
-            padding: 1rem 0;
          }
       }
    }

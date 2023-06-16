@@ -98,6 +98,7 @@
 <style lang="scss" scoped>
    .ItemDevice {
       padding-top: 0.2rem;
+      border-radius: 0.5rem;
 
       .ItemDevice-body {
          width: 100%;

@@ -107,7 +107,7 @@
                :error="passwordErrorText"
             />
 
-            <ButtonLogin class="PageLogin-button" text="Login" />
+            <ButtonLogin />
          </form>
       </div>
 
@@ -172,7 +172,7 @@
             align-items: center;
             justify-content: center;
 
-            color: rgba(0, 0, 0, 0.6);
+            color: rgba(0, 0, 0, 0.8);
 
             font-size: 4rem;
             line-height: 1.4;
@@ -194,15 +194,6 @@
 
             .PageLogin-input {
                padding: 0.8rem 1rem;
-            }
-
-            .PageLogin-button {
-               max-width: 200px;
-               margin-top: 20px;
-               padding: 10px;
-
-               --Button2-color: black;
-               --Button2-color-text: black;
             }
          }
       }

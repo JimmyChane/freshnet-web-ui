@@ -5,15 +5,7 @@ const freshnetConfig = require("./freshnet.config.js");
 const vueConfig = {
    publicPath: "./",
    productionSourceMap: false,
-   devServer: {
-      // disableHostCheck: true,
-      port: freshnetConfig.devPort,
-      // public: `0.0.0.0:${freshnetConfig.devPort}`,
-      // open: process.platform === "darwin",
-      // host: "0.0.0.0",
-      // https: false,
-      // hotOnly: false,
-   },
+   devServer: { port: freshnetConfig.devPort },
    css: {
       extract: {
          filename: `./css/style.${timestamp}.css`,

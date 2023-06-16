@@ -309,7 +309,7 @@
    <div class="PanelProducts">
       <div class="PanelProducts-actionbar">
          <ActionbarProduct
-            :style="{ 'z-index': '2' }"
+            :style="{ 'z-index': '2', 'margin-bottom': '0.5rem' }"
             :products="products"
             :rightMenus="initRightMenus"
             @click-search="$emit('click-search')"
