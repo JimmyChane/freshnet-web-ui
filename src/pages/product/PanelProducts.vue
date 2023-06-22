@@ -97,10 +97,38 @@
 
          initRightMenus() {
             if (!this.isEditable) return null;
-            const title = "Add";
-            const icon = this.host.icon("add-000000");
-            const click = () => this.$emit("click-productAdd");
-            return { title, icon, click };
+
+            const menus = [];
+            if (this.isEditable) {
+               const menuStock = this.filterMenus.find((menu) => {
+                  return menu.key === "stock";
+               });
+
+               if (menuStock) {
+                  menus.push({
+                     title:
+                        menuStock.menu.title === "All"
+                           ? "Showing All"
+                           : "Showing Available",
+                     isHidden: true,
+                     click: () => {
+                        const index =
+                           menuStock.menus.indexOf(menuStock.menu) + 1;
+                        const nextIndex =
+                           index < menuStock.menus.length ? index : 0;
+                        menuStock.menus[nextIndex].click();
+                     },
+                  });
+               }
+            }
+
+            menus.push({
+               title: "Add",
+               icon: this.host.icon("add-000000"),
+               click: () => this.$emit("click-productAdd"),
+            });
+
+            return menus;
          },
       },
       watch: {
@@ -134,9 +162,25 @@
             this.scrollToTop();
             this.invalidateProductId();
 
-            const categoryGroups = await this.productStore.dispatch(
+            let categoryGroups = await this.productStore.dispatch(
                "getGroupsByCategory",
             );
+            if (!this.isEditable) {
+               categoryGroups = categoryGroups
+                  .filter((group) => {
+                     group.items = group.items.filter((product) => {
+                        return (
+                           product.toImageThumbnail() &&
+                           product.isStockAvailable()
+                        );
+                     });
+                     return group.items.length > 0;
+                  })
+                  .sort((group1, group2) => {
+                     return group1.category.compare(group2.category);
+                  });
+            }
+
             const brandGroups = await this.productStore.dispatch(
                "getGroupsByBrand",
             );
@@ -307,15 +351,18 @@
 
 <template>
    <div class="PanelProducts">
-      <div class="PanelProducts-actionbar">
-         <ActionbarProduct
-            :style="{ 'z-index': '2', 'margin-bottom': '0.5rem' }"
-            :products="products"
-            :rightMenus="initRightMenus"
-            @click-search="$emit('click-search')"
-         />
+      <ActionbarProduct
+         :style="{ 'z-index': '2', 'margin-bottom': '0.5rem' }"
+         :products="products"
+         :rightMenus="initRightMenus"
+         @click-search="$emit('click-search')"
+      />
 
-         <TabLayout>
+      <div class="PanelProducts-body">
+         <span class="PanelProducts-body-title" v-if="categoryTabs.length > 0"
+            >Category</span
+         >
+         <TabLayout v-if="categoryTabs.length > 0">
             <CategoryTab
                v-for="menu of categoryTabs"
                :key="menu.title"
@@ -323,7 +370,10 @@
             />
          </TabLayout>
 
-         <TabLayout>
+         <span class="PanelProducts-body-title" v-if="brandTabs.length > 0"
+            >Brand</span
+         >
+         <TabLayout v-if="brandTabs.length > 0">
             <BrandTab
                v-for="menu of brandTabs"
                :key="menu.title"
@@ -331,22 +381,6 @@
             />
          </TabLayout>
 
-         <div
-            :style="{ 'z-index': '1' }"
-            :class="['scrollbar', 'PanelProducts-filters']"
-         >
-            <LabelMenus
-               :primaryColor="labelMenuPrimaryColor"
-               v-for="filterMenu of filterMenus"
-               :key="filterMenu.title"
-               :title="filterMenu.title"
-               :menu="filterMenu.menu"
-               :menus="filterMenu.menus"
-            />
-         </div>
-      </div>
-
-      <div class="PanelProducts-body">
          <div class="PanelProducts-categories">
             <ProductGroup
                v-for="group of productGroups"
@@ -389,22 +423,6 @@
 
          border-bottom: 1px solid hsl(0, 0%, 80%);
          background: var(--App-background-color);
-
-         .PanelProducts-filters {
-            width: 100%;
-            padding: 0.4rem 1rem;
-            padding-top: 0.2rem;
-            gap: 0.5rem;
-
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            align-items: center;
-            justify-content: flex-start;
-
-            overflow-x: auto;
-            z-index: 3;
-         }
       }
       .PanelProducts-body {
          z-index: 1;
@@ -415,6 +433,19 @@
          flex-direction: column;
          align-items: center;
          justify-content: flex-start;
+
+         .PanelProducts-body-title {
+            width: 100%;
+            padding: 0 1rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.2rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+
+            &:first-child {
+               margin-top: 0;
+            }
+         }
 
          .PanelProducts-categories {
             z-index: 2;

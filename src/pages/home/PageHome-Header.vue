@@ -111,7 +111,7 @@
 
          .HomeHeader-name {
             font-weight: 600;
-            font-size: 1.6em;
+            font-size: 1.5em;
             line-height: 1em;
          }
          .HomeHeader-classification {
@@ -141,12 +141,14 @@
          align-items: inherit;
          justify-content: inherit;
 
-         .HomeHeader-greetTitle {
-            font-size: 0.7em;
-         }
-         .HomeHeader-greetHelp {
-            font-size: 0.7em;
-         }
+         font-size: 0.6em;
+         font-weight: 600;
+         // .HomeHeader-greetTitle {
+         //    font-size: 0.7em;
+         // }
+         // .HomeHeader-greetHelp {
+         //    font-size: 0.7em;
+         // }
       }
 
       @media (min-width: 320px) {

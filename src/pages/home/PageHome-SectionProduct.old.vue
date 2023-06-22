@@ -153,35 +153,17 @@
       ]"
       :style="{ '--color0': color, '--color3': getColorMixed(color, 0.9) }"
    >
-      <div class="HomeSectionProduct-body">
-         <ImageView
-            class="HomeSectionProduct-img"
-            v-if="itemImage"
-            :src="itemImage"
-            @click="
-               () =>
-                  $router.push({
-                     path: '/product',
-                     query: { productId: itemId },
-                  })
-            "
-         />
+      <ImageView
+         class="HomeSectionProduct-img"
+         v-if="itemImage"
+         :src="itemImage"
+         @click="
+            () =>
+               $router.push({ path: '/product', query: { productId: itemId } })
+         "
+      />
 
-         <span class="HomeSectionProduct-title">{{ itemTitle }}</span>
-
-         <button
-            class="HomeSectionProduct-arrow HomeSectionProduct-arrow-left transition"
-            @click="() => clickPrevious()"
-         >
-            <img :src="arrowIcon" />
-         </button>
-         <button
-            class="HomeSectionProduct-arrow HomeSectionProduct-arrow-right transition"
-            @click="() => clickNext()"
-         >
-            <img :src="arrowIcon" />
-         </button>
-      </div>
+      <span class="HomeSectionProduct-header">{{ itemTitle }}</span>
 
       <div class="HomeSectionProduct-footer" v-if="products.length > 1">
          <button
@@ -199,122 +181,78 @@
             @click="() => (productIndex = products.indexOf(item))"
          />
       </div>
+
+      <button
+         class="HomeSectionProduct-arrow HomeSectionProduct-arrow-left transition"
+         @click="() => clickPrevious()"
+      >
+         <img :src="arrowIcon" />
+      </button>
+      <button
+         class="HomeSectionProduct-arrow HomeSectionProduct-arrow-right transition"
+         @click="() => clickNext()"
+      >
+         <img :src="arrowIcon" />
+      </button>
    </div>
 </template>
 
 <style lang="scss" scoped>
    .HomeSectionProduct {
+      border-radius: 1em;
+      overflow: hidden;
       text-decoration: none;
+      background: var(--color0);
+      color: var(--color3);
+
+      width: 100%;
+      height: 30rem;
+      min-height: 30rem;
+      max-height: 30rem;
+      position: relative;
 
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 0.7rem;
 
       --header-height: 2.2em;
       --footer-height: 3em;
 
-      .HomeSectionProduct-body {
-         width: 100%;
-         height: 30rem;
-         min-height: 30rem;
-         max-height: 30rem;
-
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         justify-content: center;
-
-         position: relative;
-         background: var(--color0);
-         color: var(--color3);
-         border-radius: 1.5em;
+      .HomeSectionProduct-img {
+         --height: calc(100% - var(--header-height) - var(--footer-height));
+         height: var(--height);
+         min-height: var(--height);
+         max-height: var(--height);
          overflow: hidden;
 
-         .HomeSectionProduct-img {
-            --height: calc(100% - var(--header-height) - var(--footer-height));
-            height: var(--height);
-            min-height: var(--height);
-            max-height: var(--height);
-            overflow: hidden;
+         width: 100%;
+         object-fit: contain;
+         flex-grow: 1;
+         padding: 1em;
+         padding: 3em;
+         cursor: pointer;
 
-            width: 100%;
-            object-fit: contain;
-            flex-grow: 1;
-            padding: 1em;
-            padding: 3em;
-            cursor: pointer;
+         border-radius: 1rem;
+         filter: drop-shadow(0 0 1rem hsla(0, 0%, 0%, 0.2));
+      }
 
-            border-radius: 1rem;
-            filter: drop-shadow(0 0 1rem hsla(0, 0%, 0%, 0.2));
-         }
+      .HomeSectionProduct-header {
+         width: 100%;
+         height: var(--header-height);
+         min-height: var(--header-height);
+         max-height: var(--header-height);
 
-         .HomeSectionProduct-title {
-            width: 100%;
-            height: var(--header-height);
-            min-height: var(--header-height);
-            max-height: var(--header-height);
+         font-size: 1.5em;
+         font-weight: 600;
+         text-align: center;
+         line-height: 1em;
 
-            font-size: 1.5em;
-            font-weight: 600;
-            text-align: center;
-            line-height: 1em;
-
-            display: flex;
-            flex-grow: 0;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-         }
-
-         .HomeSectionProduct-arrow {
-            --size: 3.5em;
-            --padding: 0.8em;
-            position: absolute;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: var(--padding);
-            border-radius: 50%;
-            cursor: pointer;
-            background: none;
-            border: none;
-
-            width: var(--size);
-            height: var(--size);
-            min-width: var(--size);
-            min-height: var(--size);
-            max-width: var(--size);
-            max-height: var(--size);
-
-            & > * {
-               width: calc(var(--size) - calc(var(--padding) * 2));
-               height: calc(var(--size) - calc(var(--padding) * 2));
-            }
-
-            &:hover {
-               background: hsla(0, 0%, 0%, 0.05);
-            }
-            &:focus {
-               transform: scale(0.9);
-            }
-         }
-         .HomeSectionProduct-arrow-left {
-            top: calc(50% - calc(var(--size) / 2));
-            left: 1em;
-            & > * {
-               transform: rotate(90deg) translateY(5%);
-            }
-         }
-         .HomeSectionProduct-arrow-right {
-            top: calc(50% - calc(var(--size) / 2));
-            right: 1em;
-            & > * {
-               transform: rotate(270deg) translateY(5%);
-            }
-         }
+         display: flex;
+         flex-grow: 0;
+         flex-direction: column;
+         justify-content: flex-start;
+         align-items: center;
       }
       .HomeSectionProduct-footer {
          width: 100%;
@@ -344,15 +282,61 @@
             margin-left: calc(var(--size) * 0.33);
             margin-right: calc(var(--size) * 0.33);
             background: var(--color3);
-            background: black;
          }
          .HomeSectionProduct-footer-item-isDeselected {
             background: var(--color3);
-            background: black;
             cursor: pointer;
             &:hover {
-               box-shadow: 0px 0px 0.5rem black;
+               box-shadow: 0px 0px 0.5rem var(--color3);
             }
+         }
+      }
+
+      .HomeSectionProduct-arrow {
+         --size: 3.5em;
+         --padding: 0.8em;
+         position: absolute;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+
+         padding: var(--padding);
+         border-radius: 50%;
+         cursor: pointer;
+         background: none;
+         border: none;
+
+         width: var(--size);
+         height: var(--size);
+         min-width: var(--size);
+         min-height: var(--size);
+         max-width: var(--size);
+         max-height: var(--size);
+
+         & > * {
+            width: calc(var(--size) - calc(var(--padding) * 2));
+            height: calc(var(--size) - calc(var(--padding) * 2));
+         }
+
+         &:hover {
+            background: hsla(0, 0%, 0%, 0.05);
+         }
+         &:focus {
+            transform: scale(0.9);
+         }
+      }
+      .HomeSectionProduct-arrow-left {
+         top: calc(50% - calc(var(--size) / 2));
+         left: 1em;
+         & > * {
+            transform: rotate(90deg) translateY(5%);
+         }
+      }
+      .HomeSectionProduct-arrow-right {
+         top: calc(50% - calc(var(--size) / 2));
+         right: 1em;
+         & > * {
+            transform: rotate(270deg) translateY(5%);
          }
       }
    }

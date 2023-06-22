@@ -48,7 +48,7 @@
 </script>
 
 <template>
-   <Section class="HomeSectionContact-Section">
+   <Section>
       <div class="HomeSectionContact" :isThin="`${isThin}`">
          <Group
             v-for="group of groups"
@@ -65,14 +65,11 @@
 </template>
 
 <style lang="scss" scoped>
-   .HomeSectionContact-Section {
-      width: calc(100% + 2rem);
-   }
    .HomeSectionContact {
       width: 100%;
+      background: white;
       border-radius: 1em;
       overflow: hidden;
-      gap: 0.2em;
 
       display: grid;
       grid-auto-flow: row;

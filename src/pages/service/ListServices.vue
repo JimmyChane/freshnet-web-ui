@@ -302,11 +302,13 @@
       }
       .ListServices-group[viewMode="list"] {
          .ListServices-items {
-            max-width: 32rem;
-            gap: 0.1rem;
+            gap: 0.5rem;
             display: flex;
             flex-direction: column;
             align-items: center;
+
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
 
             .ListServices-item {
                width: 100%;

@@ -43,7 +43,7 @@
 
       width: 100%;
       height: 100%;
-      padding: 2em;
+      padding: 1em;
       border-radius: 1em;
       gap: 1em;
 
@@ -54,7 +54,7 @@
 
       &:hover,
       &:focus {
-         background: #f8f8f8;
+         background: rgba(0, 0, 0, 0.1);
       }
 
       .ContactGroup-main {
@@ -70,15 +70,14 @@
             font-weight: 600;
          }
       }
-      .ContactGroup-icon {
-         --size: 2.5em;
-         --size: 4em;
+      .ContactGroup-icon { 
+         --size: 5em;
          width: var(--size);
          height: var(--size);
 
-         padding: 1em;
+         padding: 1.5em;
 
-         background: hsl(0, 0%, 94%);
+         background: white;
          border-radius: 1.2em;
       }
    }

@@ -44,6 +44,7 @@
 <style lang="scss" scoped>
    .TabLayout-Tab {
       height: 3.4em;
+      height: 3em;
       border: none;
       border-radius: 1em;
       font-size: 1em;

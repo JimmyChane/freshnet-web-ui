@@ -128,7 +128,6 @@
       :style="{
          '--available-opacity': isAvailable ? '1' : '0.1',
          '--primary-color': primaryColor,
-         '--background-color-hover': primaryColor.mix('ffffff', 0.2),
       }"
       :ref="item.id"
       :isSelected="`${isSelected}`"
@@ -297,7 +296,7 @@
 
    .ItemProduct-modeList {
       --border-radius: 0.8rem;
-      --height: 5rem;
+      --height: 6rem;
 
       min-height: var(--height);
       max-height: var(--height);
@@ -314,11 +313,10 @@
          --preview-border-radius-focus: var(--border-radius) 0 0
             var(--border-radius);
       }
-
       .ItemProduct-title {
          height: 100%;
          flex-grow: 1;
-         padding: 1rem;
+         padding: 0.3rem 0.3rem;
          .ItemProduct-title-specs {
             max-height: 1.2em;
          }
@@ -349,27 +347,14 @@
 
    .ItemProduct[isSelected="false"] {
       cursor: pointer;
-      border: 1px solid transparent;
 
       &:hover,
       &:focus,
       &:focus-within {
-         background: hsl(0, 0%, 98%);
-         .ItemProduct-preview {
-            transform: scale(1);
-            --preview-border-radius: var(--preview-border-radius-focus);
-         }
+         background: hsla(0, 0%, 0%, 0.1);
       }
    }
    .ItemProduct[isSelected="true"] {
-      background: var(--primary-color);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      .ItemProduct-preview {
-         transform: scale(1);
-         --preview-border-radius: var(--preview-border-radius-focus);
-      }
-      .ItemProduct-title {
-         color: var(--color-theme);
-      }
+      background: hsla(0, 0%, 0%, 0.2);
    }
 </style>

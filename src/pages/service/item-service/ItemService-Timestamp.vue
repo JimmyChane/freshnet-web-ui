@@ -4,6 +4,7 @@
    export default {
       props: {
          service: { type: Object },
+         line: { type: Number, default: 2 },
       },
       computed: {
          timestamp: (c) => c.service.timestamp ?? null,
@@ -16,7 +17,11 @@
             const dateText = format(time, "EEE, dd/LL/yyyy");
             const timeText = format(time, "hh:mmaaa");
 
-            return `${dateText}\n${distance} ago, ${timeText}`;
+            if (c.line === 1) {
+               return `${dateText} ${timeText} (${distance} ago)`;
+            } else {
+               return `${dateText}\n${distance} ago, ${timeText}`;
+            }
          },
       },
    };

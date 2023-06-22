@@ -38,11 +38,11 @@
 
 <style lang="scss" scoped>
    .SectionCategory-item {
-      --icon-size: 40px;
-
+      height: 6rem;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      justify-content: center;
 
       background: white;
       padding: 1.5rem;
@@ -73,10 +73,6 @@
          align-items: center;
          font-size: 0.8rem;
       }
-      .SectionCategory-item-icon {
-         width: var(--icon-size);
-         height: var(--icon-size);
-      }
       .SectionCategory-item-background {
          z-index: 0;
          height: 100%;
@@ -95,11 +91,7 @@
          top: 0;
          left: 0;
          pointer-events: none;
-         background-image: linear-gradient(
-            120deg,
-            #000000,
-            hsla(0, 0%, 0%, 0.7)
-         );
+         background-image: linear-gradient(120deg, #000000, transparent);
          transform: translateX(-25%);
       }
    }

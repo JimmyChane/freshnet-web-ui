@@ -22,9 +22,18 @@
 
             const groups = (
                await this.productStore.dispatch("getGroupsByCategory")
-            ).sort((group1, group2) => {
-               return group1.category.compare(group2.category);
-            });
+            )
+               .filter((group) => {
+                  group.items = group.items.filter((product) => {
+                     return (
+                        product.toImageThumbnail() && product.isStockAvailable()
+                     );
+                  });
+                  return group.items.length > 0;
+               })
+               .sort((group1, group2) => {
+                  return group1.category.compare(group2.category);
+               });
 
             this.groups = groups;
          },
@@ -46,7 +55,7 @@
 <style lang="scss" scoped>
    .HomeSectionCategory {
       width: 100%;
-      gap: 0.3rem;
+      gap: 0.6rem;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
    }

@@ -7,7 +7,7 @@
 </script>
 
 <template>
-   <div :class="['PageHomeSection']">
+   <div class="PageHomeSection">
       <Title :title="title" />
       <slot />
    </div>
@@ -22,12 +22,5 @@
       align-items: center;
       margin-top: 2rem;
       margin-bottom: 1rem;
-
-      .PageHomeSection-body {
-         display: flex;
-         flex-direction: column;
-         align-items: stretch;
-         overflow: hidden;
-      }
    }
 </style>

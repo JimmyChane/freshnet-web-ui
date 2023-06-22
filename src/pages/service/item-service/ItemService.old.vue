@@ -180,20 +180,20 @@
 
       <div v-if="isList" :class="['transition', 'ItemService-body']">
          <div class="ItemService-top">
-            <ItemServiceTimestamp
-               class="ItemService-timestamp"
-               :service="item"
-               :line="1"
-            />
             <ItemServiceCustomer
-               class="ItemService-customer"
                v-if="headerCustomer"
                :name="name"
                :phoneNumberStr="phoneNumberStr"
             />
+            <span class="ItemService-description">{{ description }}</span>
+            <ImageViews
+               class="ItemService-image"
+               :width="60"
+               :height="40"
+               :images="images"
+            />
          </div>
          <div class="ItemService-bottom">
-            <span class="ItemService-description">{{ description }}</span>
             <div class="ItemService-labels">
                <LabelCount
                   class="ItemService-label"
@@ -205,6 +205,10 @@
                   :count="label.count"
                />
             </div>
+            <ItemServiceTimestamp
+               class="ItemService-timestamp"
+               :service="item"
+            />
          </div>
       </div>
 
@@ -343,45 +347,18 @@
          border-radius: 0.5em;
          border: 0.1em solid transparent;
 
-         padding: 0.8rem;
-
          .ItemService-top {
             width: 100%;
-            padding: 0;
-            padding-bottom: 0.8rem;
-            padding-left: 0.3rem;
-            gap: 0.5rem;
+            height: 4rem;
+            min-height: 4rem;
+            max-height: 4rem;
 
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-
-            .ItemService-timestamp {
-               text-align: start;
-               padding: 0;
-               font-weight: 400;
-               font-size: 0.7rem;
-            }
-            .ItemService-customer {
-               padding: 0;
-            }
-         }
-         .ItemService-bottom {
-            width: 100%;
-            font-size: 0.8rem;
-            gap: 0.5rem;
-            padding: 0;
-            padding-left: 0;
-            padding-top: 0.8rem;
-
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: flex-end;
-            flex-wrap: nowrap;
+            flex-direction: row;
+            align-items: center;
 
             .ItemService-description {
-               padding: 0;
+               padding: 0 0.5rem;
 
                display: flex;
                align-items: flex-start;
@@ -393,22 +370,38 @@
                line-height: 1.1em;
                flex-grow: 1;
             }
+         }
+
+         .ItemService-bottom {
+            width: 100%;
+            font-size: 0.8rem;
+            gap: 0.1rem;
+            padding: 0.6rem 0.8rem;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: nowrap;
+
             .ItemService-labels {
                gap: 0.1rem;
-               padding: 0;
-               flex-grow: 1;
-               overflow: hidden;
 
+               flex-grow: 1;
                display: flex;
                flex-direction: row;
                align-items: center;
                justify-content: flex-start;
                flex-wrap: nowrap;
+               flex-wrap: wrap;
 
                .ItemService-label {
                   border-radius: 0.5rem;
                   padding: 0.4rem;
                }
+            }
+            .ItemService-timestamp {
+               text-align: end;
             }
          }
       }

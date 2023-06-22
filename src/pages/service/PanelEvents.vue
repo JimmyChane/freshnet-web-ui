@@ -52,7 +52,7 @@
       align-items: stretch;
       justify-content: flex-start;
 
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid #0000000d;
       overflow: hidden;
 
       .PanelEvents-header {
@@ -81,8 +81,6 @@
 
       .PanelEvents-body {
          z-index: 1;
-         max-height: 20rem;
-         overflow-y: auto;
          position: relative;
          padding-bottom: 0;
 
@@ -91,10 +89,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: hsla(0, 0%, 100%, 0.4);
+            background: #ffffff66;
 
             font-size: 0.8rem;
-            color: hsla(0, 0%, 0%, 0.5);
+            color: #00000080;
          }
       }
    }

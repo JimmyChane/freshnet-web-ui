@@ -3,10 +3,10 @@
 </script>
 
 <template>
-   <button class="ButtonImageAdd-root transition">
+   <button class="ButtonImageAdd transition">
       <img
          class="ButtonImageAdd-icon transition"
-         :src="host.icon('add-gray')"
+         :src="host.icon('image-000000')"
       />
       <input
          class="ButtonImageAdd-pick"
@@ -23,7 +23,7 @@
 </template>
 
 <style lang="scss" scoped>
-   .ButtonImageAdd-root {
+   .ButtonImageAdd {
       position: relative;
       border: none;
       background: white;
