@@ -1,6 +1,7 @@
 <script>
    import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
+   import U from "@/U";
 
    export default {
       components: { WindowAction, Input },
@@ -18,8 +19,13 @@
 
             if (!this.input) return;
 
-            this.normal = this.input.price.normal.value;
-            this.promotion = this.input.price.promotion.value;
+            const { normal, promotion } = this.input.price;
+            const { value: normalValue } = normal;
+            const { value: promotionValue } = promotion;
+
+            this.normal = normalValue === 0 ? "" : normalValue.toString();
+            this.promotion =
+               promotionValue === 0 ? "" : promotionValue.toString();
          },
       },
       methods: {
