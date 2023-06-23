@@ -10,7 +10,7 @@
          <div class="ProductViewerImageSelector-button">
             <img
                class="ProductViewerImageSelector-icon"
-               :src="host.icon('add-000000')"
+               :src="host.icon('image-000000')"
             />
          </div>
 
@@ -18,11 +18,7 @@
             class="ProductViewerImageSelector-input"
             type="file"
             accept=".jpeg, .jpg, .png, .webp"
-            @change="
-               (event) => {
-                  $emit('click-file', event.target.files);
-               }
-            "
+            @change="(event) => $emit('click-file', event.target.files)"
             multiple
          />
       </div>
@@ -31,30 +27,28 @@
 
 <style lang="scss" scoped>
    .ProductViewerImageSelector {
-      --size: 3rem;
+      --width: 5rem;
+      --height: 3rem;
       @media (max-width: 480px) {
-         --size: 2.9rem;
+         --height: 2.9rem;
       }
 
       --box-padding: 0.18rem;
 
-      --width: calc(var(--size) + var(--box-padding) + var(--box-padding));
-      --height: calc(var(--size) + var(--box-padding) + var(--box-padding));
-
-      width: var(--width);
-      height: var(--height);
-      min-width: var(--width);
-      min-height: var(--height);
+      width: calc(var(--width) + var(--box-padding) + var(--box-padding));
+      height: calc(var(--width) + var(--box-padding) + var(--box-padding));
+      min-width: calc(var(--height) + var(--box-padding) + var(--box-padding));
+      min-height: calc(var(--height) + var(--box-padding) + var(--box-padding));
 
       display: flex;
       align-items: center;
       justify-content: center;
 
       .ProductViewerImageSelector-body {
-         width: var(--size);
-         height: var(--size);
-         min-width: var(--size);
-         min-height: var(--size);
+         width: var(--width);
+         height: var(--height);
+         min-width: var(--width);
+         min-height: var(--height);
 
          position: relative;
          background: hsla(0, 0%, 100%, 0.6);
@@ -75,10 +69,10 @@
             left: 0;
             right: 0;
 
-            width: var(--size);
-            height: var(--size);
-            min-width: var(--size);
-            min-height: var(--size);
+            width: var(--width);
+            height: var(--height);
+            min-width: var(--width);
+            min-height: var(--height);
             pointer-events: none;
 
             display: flex;
@@ -110,10 +104,10 @@
             right: 0;
             opacity: 0;
 
-            width: var(--size);
-            height: var(--size);
-            min-width: var(--size);
-            min-height: var(--size);
+            width: var(--width);
+            height: var(--height);
+            min-width: var(--width);
+            min-height: var(--height);
             cursor: pointer;
             border: none;
          }

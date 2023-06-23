@@ -12,6 +12,7 @@
          collections: (c) => c.database.collections,
          areExpanded: (c) => c.expands.length >= c.collections.length,
          areCollapsed: (c) => c.expands.length === 0,
+         isWide: (c) => c.$root.window.innerWidth > 500,
       },
       methods: {
          addExpand(name) {
@@ -22,7 +23,9 @@
          },
 
          allExpand() {
-            this.expands = this.collections.map((collection) => collection.name);
+            this.expands = this.collections.map(
+               (collection) => collection.name,
+            );
          },
          allCollapse() {
             this.expands = [];
@@ -45,30 +48,30 @@
    <div class="ItemDatabase">
       <div class="ItemDatabase-header">
          <span class="ItemDatabase-title">{{ database.name }}</span>
-
-         <ButtonIconText
-            :src="host.res('page/database/download-black.svg')"
-            text="Export"
-            @click="pushDownloadDatabase()"
-         />
-
-         <ButtonIconText
-            :src="
-               isSelfExpand
-                  ? host.res('page/database/minus-black.svg')
-                  : host.res('page/database/plus-black.svg')
-            "
-            :text="isSelfExpand ? 'Collapse' : 'Expand'"
-            @click="
-               if (isSelfExpand) {
-                  isSelfExpand = false;
-                  allCollapse();
-               } else {
-                  isSelfExpand = true;
-                  allCollapse();
-               }
-            "
-         />
+         <div class="ItemDatabase-actions">
+            <ButtonIconText
+               :src="host.res('page/database/download-black.svg')"
+               :text="isWide ? 'Export' : ''"
+               @click="pushDownloadDatabase()"
+            />
+            <ButtonIconText
+               :src="
+                  isSelfExpand
+                     ? host.res('page/database/minus-black.svg')
+                     : host.res('page/database/plus-black.svg')
+               "
+               :text="isWide ? (isSelfExpand ? 'Collapse' : 'Expand') : ''"
+               @click="
+                  if (isSelfExpand) {
+                     isSelfExpand = false;
+                     allCollapse();
+                  } else {
+                     isSelfExpand = true;
+                     allCollapse();
+                  }
+               "
+            />
+         </div>
       </div>
 
       <div class="ItemDatabase-body" v-if="isSelfExpand">
@@ -78,7 +81,8 @@
             :collection="collection"
             :isExpand="expands.includes(collection.name)"
             @click-expand="
-               if (expands.includes(collection.name)) removeExpand(collection.name);
+               if (expands.includes(collection.name))
+                  removeExpand(collection.name);
                else addExpand(collection.name);
             "
          />
@@ -102,6 +106,13 @@
             flex-grow: 1;
             font-size: 1rem;
             color: black;
+         }
+         .ItemDatabase-actions {
+            width: max-content;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 0.1rem;
          }
       }
       .ItemDatabase-body {

@@ -165,14 +165,17 @@
             let categoryGroups = await this.productStore.dispatch(
                "getGroupsByCategory",
             );
+            let brandGroups = await this.productStore.dispatch(
+               "getGroupsByBrand",
+            );
+
             if (!this.isEditable) {
                categoryGroups = categoryGroups
                   .filter((group) => {
                      group.items = group.items.filter((product) => {
-                        return (
-                           product.toImageThumbnail() &&
-                           product.isStockAvailable()
-                        );
+                        if (!product.toImageThumbnail()) return false;
+                        if (!product.isStockAvailable()) return false;
+                        return true;
                      });
                      return group.items.length > 0;
                   })
@@ -180,15 +183,68 @@
                      return group1.category.compare(group2.category);
                   });
             }
-
-            const brandGroups = await this.productStore.dispatch(
-               "getGroupsByBrand",
-            );
-
-            this.productGroups = categoryGroups
-               .sort((group1, group2) => {
-                  return group1.category.compare(group2.category);
+            brandGroups = brandGroups
+               .filter((group) => {
+                  return group.brand && group.items.length > 0;
                })
+               .sort((group1, group2) => {
+                  return group1.brand.compare(group2.brand);
+               });
+            categoryGroups.sort((group1, group2) => {
+               return group1.category.compare(group2.category);
+            });
+
+            // menus
+            const categoryMenus = new MenuGroup(this, "category", "Category", [
+               { title: "All" },
+               ...categoryGroups.map((group) => {
+                  const { category } = group;
+                  return {
+                     key: category.id,
+                     title: category.title,
+                     background: category.background?.toUrl() ?? "",
+                  };
+               }),
+            ]);
+            const brandMenus = new MenuGroup(this, "brand", "Brand", [
+               { title: "All" },
+               ...brandGroups.map((group) => {
+                  const { brand } = group;
+                  return { key: brand.id, title: brand.title };
+               }),
+            ]);
+
+            // tabs
+            this.categoryTabs = categoryMenus.menus.map((menu) => {
+               return {
+                  title: menu.title,
+                  background: menu.background,
+                  click: () => menu.click(menu),
+                  isSelected: () => categoryMenus.menu === menu,
+               };
+            });
+            this.brandTabs = brandMenus.menus.map((menu) => {
+               return {
+                  title: menu.title,
+                  icon: menu.icon?.toUrl() ?? "",
+                  click: () => menu.click(menu),
+                  isSelected: () => brandMenus.menu === menu,
+               };
+            });
+
+            // filters
+            this.filterMenus = [];
+            if (this.isEditable) {
+               this.filterMenus.push(
+                  new MenuGroup(this, "stock", "Stock", [
+                     { key: "all", title: "All" },
+                     { title: "Available" },
+                  ]),
+               );
+            }
+
+            // products
+            this.productGroups = categoryGroups
                .map((group) => {
                   const items = group.items
                      .filter((item) => {
@@ -218,119 +274,69 @@
                   };
                })
                .filter((group) => group.items.length > 0);
-
-            const categories = categoryGroups.map((group) => {
-               const { category } = group;
-               return {
-                  key: category.id,
-                  title: category.title,
-                  background: category.background?.toUrl() ?? "",
-               };
-            });
-            const brands = brandGroups
-               .filter((group) => {
-                  return group.brand && group.items.length > 0;
-               })
-               .sort((group1, group2) => {
-                  return group1.brand.compare(group2.brand);
-               })
-               .map((group) => {
-                  return { key: group.brand.id, title: group.brand.title };
-               });
-
-            const categoryMenuGroup = new MenuGroup(
-               this,
-               "category",
-               "Category",
-               [{ title: "All" }, ...categories],
+            const availableProducts = this.productGroups.reduce(
+               (products, group) => {
+                  products.push(...group.items);
+                  return products;
+               },
+               [],
             );
-            const brandMenuGroup = new MenuGroup(this, "brand", "Brand", [
-               { title: "All" },
-               ...brands,
-            ]);
 
-            this.categoryTabs = categoryMenuGroup.menus.map((menu) => {
-               return {
-                  title: menu.title,
-                  background: menu.background,
-                  click: () => menu.click(menu),
-                  isSelected: () => categoryMenuGroup.menu === menu,
-               };
-            });
-            this.brandTabs = brandMenuGroup.menus.map((menu) => {
-               return {
-                  title: menu.title,
-                  icon: menu.icon?.toUrl() ?? "",
-                  click: () => menu.click(menu),
-                  isSelected: () => brandMenuGroup.menu === menu,
-               };
-            });
-
-            this.filterMenus = [];
-            if (this.isEditable) {
-               this.filterMenus.push(
-                  new MenuGroup(this, "stock", "Stock", [
-                     { key: "all", title: "All" },
-                     { title: "Available" },
-                  ]),
-               );
-            }
-
-            // this.filterMenus.push(
-            //    new MenuGroup(this, "processor", "Processor", [
-            //       { key: "Intel Celeron", title: "Intel Celeron" },
-            //       { key: "Intel Pentium", title: "Intel Pentium" },
-            //       { key: "Intel Core i3", title: "Intel Core i3" },
-            //       { key: "Intel Core i5", title: "Intel Core i5" },
-            //       { key: "Intel Core i9", title: "Intel Core i9" },
-            //       { key: "AMD Althon Silver", title: "AMD Althon Silver" },
-            //       { key: "AMD Ryzen 3", title: "AMD Ryzen 3" },
-            //       { key: "AMD Ryzen 5", title: "AMD Ryzen 5" },
-            //       { key: "AMD Ryzen 7", title: "AMD Ryzen 7" },
-            //    ]),
-            //    new MenuGroup(this, "ram", "RAM", [
-            //       { key: "16GB DDR4", title: "16GB DDR4" },
-            //       { key: "8GB DDR4", title: "8GB DDR4" },
-            //       { key: "4GB DDR4", title: "4GB DDR4" },
-            //    ]),
-            //    new MenuGroup(this, "storage", "Storage", [
-            //       { title: "All" },
-            //       { key: "120GB SSD", title: "120GB SSD" },
-            //       { key: "128GB SSD", title: "128GB SSD" },
-            //       { key: "240GB SSD", title: "240GB SSD" },
-            //       { key: "256GB SSD", title: "256GB SSD" },
-            //       { key: "480GB SSD", title: "480GB SSD" },
-            //       { key: "512GB SSD", title: "512GB SSD" },
-            //       { key: "80GB HDD", title: "80GB HDD" },
-            //       { key: "150GB HDD", title: "150GB HDD" },
-            //       { key: "320GB HDD", title: "320GB HDD" },
-            //       { key: "500GB HDD", title: "500GB HDD" },
-            //       { key: "640GB HDD", title: "640GB HDD" },
-            //       { key: "1TB HDD", title: "1TB HDD" },
-            //       { key: "2TB HDD", title: "2TB HDD" },
-            //       { key: "3TB HDD", title: "3TB HDD" },
-            //       { key: "4TB HDD", title: "4TB HDD" },
-            //    ]),
-            //    new MenuGroup(this, "size", "Size", [
-            //       { title: "All" },
-            //       { key: '12.5"', title: '12.5"' },
-            //       { key: '13.1"', title: '13.1"' },
-            //       { key: '14"', title: '14"' },
-            //       { key: '15.6"', title: '15.6"' },
-            //    ]),
-            //    new MenuGroup(this, "resdis", "Resolution & Display", [
-            //       { key: "Full HD", title: "Full HD" },
-            //       {
-            //          key: "Full HD with Touch Screen",
-            //          title: "Full HD with Touch Screen",
-            //       },
-            //       { key: "HD", title: "HD" },
-            //       { key: "HD with Touch Screen", title: "HD with Touch Screen" },
-            //    ]),
-            //    new MenuGroup(this, "graphic", "Graphic", [
-            //       { key: "RTX 3060", title: "RTX 3060" },
-            //    ]),
-            // );
+            /* this.filterMenus.push(
+               new MenuGroup(this, "processor", "Processor", [
+                  { key: "Intel Celeron", title: "Intel Celeron" },
+                  { key: "Intel Pentium", title: "Intel Pentium" },
+                  { key: "Intel Core i3", title: "Intel Core i3" },
+                  { key: "Intel Core i5", title: "Intel Core i5" },
+                  { key: "Intel Core i9", title: "Intel Core i9" },
+                  { key: "AMD Althon Silver", title: "AMD Althon Silver" },
+                  { key: "AMD Ryzen 3", title: "AMD Ryzen 3" },
+                  { key: "AMD Ryzen 5", title: "AMD Ryzen 5" },
+                  { key: "AMD Ryzen 7", title: "AMD Ryzen 7" },
+               ]),
+               new MenuGroup(this, "ram", "RAM", [
+                  { key: "16GB DDR4", title: "16GB DDR4" },
+                  { key: "8GB DDR4", title: "8GB DDR4" },
+                  { key: "4GB DDR4", title: "4GB DDR4" },
+               ]),
+               new MenuGroup(this, "storage", "Storage", [
+                  { title: "All" },
+                  { key: "120GB SSD", title: "120GB SSD" },
+                  { key: "128GB SSD", title: "128GB SSD" },
+                  { key: "240GB SSD", title: "240GB SSD" },
+                  { key: "256GB SSD", title: "256GB SSD" },
+                  { key: "480GB SSD", title: "480GB SSD" },
+                  { key: "512GB SSD", title: "512GB SSD" },
+                  { key: "80GB HDD", title: "80GB HDD" },
+                  { key: "150GB HDD", title: "150GB HDD" },
+                  { key: "320GB HDD", title: "320GB HDD" },
+                  { key: "500GB HDD", title: "500GB HDD" },
+                  { key: "640GB HDD", title: "640GB HDD" },
+                  { key: "1TB HDD", title: "1TB HDD" },
+                  { key: "2TB HDD", title: "2TB HDD" },
+                  { key: "3TB HDD", title: "3TB HDD" },
+                  { key: "4TB HDD", title: "4TB HDD" },
+               ]),
+               new MenuGroup(this, "size", "Size", [
+                  { title: "All" },
+                  { key: '12.5"', title: '12.5"' },
+                  { key: '13.1"', title: '13.1"' },
+                  { key: '14"', title: '14"' },
+                  { key: '15.6"', title: '15.6"' },
+               ]),
+               new MenuGroup(this, "resdis", "Resolution & Display", [
+                  { key: "Full HD", title: "Full HD" },
+                  {
+                     key: "Full HD with Touch Screen",
+                     title: "Full HD with Touch Screen",
+                  },
+                  { key: "HD", title: "HD" },
+                  { key: "HD with Touch Screen", title: "HD with Touch Screen" },
+               ]),
+               new MenuGroup(this, "graphic", "Graphic", [
+                  { key: "RTX 3060", title: "RTX 3060" },
+               ]),
+            ); */
          },
          invalidateProductId() {
             if (!this.queryProductId) {

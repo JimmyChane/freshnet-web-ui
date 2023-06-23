@@ -113,7 +113,7 @@
          class="PageDatabase-body"
          v-if="user && baseInfo && databases.length"
       >
-         <div class="PageDatabase-import">
+         <!-- <div class="PageDatabase-import">
             <span class="PageDatabase-title">Import</span>
             <input
                type="file"
@@ -126,15 +126,15 @@
                "
             />
             <p v-if="imports.data">{{ imports.data }}</p>
-         </div>
+         </div> -->
 
          <div class="PageDatabase-baseInfo">
-            <span class="PageDatabase-title">Current Database</span>
+            <span class="PageDatabase-title">Database Using Now</span>
             <span v-if="baseInfo">{{ baseInfo.currentDatabase }}</span>
          </div>
 
-         <div class="PageDatabase-databases">
-            <span class="PageDatabase-title">Databases</span>
+         <div>
+            <span class="PageDatabase-title">Database</span>
             <ItemDatabase
                class="PageDatabase-database"
                v-for="database in databases"
@@ -149,7 +149,7 @@
          :icon="$options.icon.dark.toUrl()"
       />
 
-      <PopupWindow
+      <!-- <PopupWindow
          class="PageDatabase-window"
          :isShowing="addDatabase.isShowing"
          @click-dismiss="addDatabase.isShowing = false"
@@ -160,7 +160,7 @@
             <label>Database Name</label>
             <input type="text" placeholder="Database Name" />
          </div>
-      </PopupWindow>
+      </PopupWindow> -->
 
       <Loading class="PageDatabase-loading" :isShowing="isLoading" />
    </div>
@@ -171,8 +171,7 @@
    .PageDatabase-title {
       font-weight: 600;
       font-size: 1.4rem;
-      color: hsla(0, 0%, 0%, 0.8);
-      letter-spacing: 0.1rem;
+      color: black;
    }
 
    .PageDatabase {
@@ -203,17 +202,14 @@
             align-items: stretch;
             gap: 0.5rem;
          }
-         .PageDatabase-import {
-            display: none;
-         }
+
          .PageDatabase-baseInfo {
-            font-size: 1.2rem;
+            font-size: 1rem;
          }
       }
 
       .PageDatabase-window {
          z-index: 3;
-         display: none;
       }
 
       .PageDatabase-loading {

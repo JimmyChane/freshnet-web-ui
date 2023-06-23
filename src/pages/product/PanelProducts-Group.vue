@@ -97,7 +97,7 @@
       .PanelProducts-category-items {
          width: 100%;
          padding: 0.5rem 0.9rem;
-         gap: 0.1rem;
+         gap: 0.5rem;
 
          display: grid;
          grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
