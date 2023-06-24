@@ -9,6 +9,7 @@ import State from "./ServiceState";
 
 import U from "@/U.js";
 import ItemSearcher from "../objects/ItemSearcher.js";
+import ServiceBelonging from "./ServiceBelonging";
 const textContains = ItemSearcher.textContains;
 
 class Service {
@@ -60,11 +61,7 @@ class Service {
          : undefined;
       this.description = U.trimText(data.description, "");
       this.belongings = U.optArray(data.belongings).map((belonging) => {
-         return {
-            title: U.trimText(belonging.title),
-            time: belonging.time,
-            quantity: Math.max(U.optNumber(belonging.quantity), 1),
-         };
+         return new ServiceBelonging(this.stores).fromData(belonging);
       });
       this.events = U.optArray(data.events).map((subData) => {
          return new ServiceEvent(this.stores).fromData(subData);
@@ -103,7 +100,7 @@ class Service {
          state: this.state,
          customer: this.customer.toData(),
          description: U.trimText(this.description, ""),
-         belongings: this.belongings.map((belonging) => belonging),
+         belongings: this.belongings.map((belonging) => belonging.toData()),
          events: this.events.map((event) => event.toData()),
          imageFiles: this.imageFiles.map((image) => image.toData()),
          labels: this.labels.map((label) => label.toData()),

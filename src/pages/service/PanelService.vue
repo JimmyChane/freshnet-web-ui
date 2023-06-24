@@ -290,7 +290,7 @@
                      >
                         <ItemBelonging
                            v-for="belonging in belongings"
-                           :key="belonging.title"
+                           :key="belonging.time"
                            :belonging="belonging"
                         />
                      </div>

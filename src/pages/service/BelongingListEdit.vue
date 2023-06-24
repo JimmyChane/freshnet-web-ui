@@ -1,4 +1,9 @@
 <script>
+   import Input from "@/components/Input.vue";
+   import U from "@/U";
+   import BelongingListEditItem from "./BelongingListEdit-Item.vue";
+   import ServiceBelonging from "@/items/ServiceBelonging.js";
+
    const TimeGetter = {
       lastNowTime: 0,
       getTimeNow() {
@@ -9,19 +14,18 @@
       },
    };
 
-   const getNewBelongingTemplate = () => ({
-      title: "",
-      quantity: 0,
-      time: TimeGetter.getTimeNow(),
-   });
+   const getNewBelongingTemplate = () => {
+      const data = new ServiceBelonging().toData();
+      data.quantity = 0;
+      data.time = TimeGetter.getTimeNow();
+
+      return data;
+   };
    const isBelongingEmpty = (data) =>
       data.title.trim() === "" && data.quantity <= 0;
 
-   import Input from "@/components/Input.vue";
-   import U from "@/U";
-
    export default {
-      components: { Input },
+      components: { Input, BelongingListEditItem },
       props: { values: { type: Array, default: () => [] } },
       data: (c) => ({ belongings: [] }),
       watch: {
@@ -35,11 +39,12 @@
       methods: {
          onReset() {
             const values = U.optArray(this.values).map((value) => {
-               return {
-                  title: value.title,
-                  quantity: value.quantity > 0 ? value.quantity : 1,
-                  time: TimeGetter.getTimeNow(),
-               };
+               const data = new ServiceBelonging(this.stores)
+                  .fromData(value)
+                  .toData();
+               data.time = TimeGetter.getTimeNow();
+
+               return data;
             });
 
             this.belongings = [...values, getNewBelongingTemplate()];
@@ -70,11 +75,14 @@
          },
 
          getResults() {
-            return this.belongings.filter((belonging) => {
+            const results = this.belongings.filter((belonging) => {
                if (belonging.time === 0)
                   belonging.time = TimeGetter.getTimeNow();
+
                return belonging.title.trim() && belonging.quantity;
             });
+
+            return results;
          },
 
          focus() {},
@@ -84,71 +92,13 @@
 
 <template>
    <div class="BelongingListEdit-list">
-      <div
-         class="BelongingListEdit-item"
+      <BelongingListEditItem
          v-for="belonging in belongings"
          :key="belonging.time"
-      >
-         <input
-            class="BelongingListEdit-item-input"
-            ref="input"
-            type="text"
-            autocapitalize="words"
-            :placeholder="`Item ${belongings.indexOf(belonging) + 1}`"
-            :value="belonging.title"
-            @input="
-               (event) => {
-                  let value = event.target.value.trim();
-                  if (value === '') belonging.quantity = 0;
-                  else
-                     belonging.quantity =
-                        belonging.quantity > 0 ? belonging.quantity : 1;
-
-                  belonging.title = value;
-
-                  onInput();
-               }
-            "
-            @change="
-               (event) => {
-                  let value = event.target.value.trim();
-                  if (value === '') belonging.quantity = 0;
-                  else
-                     belonging.quantity =
-                        belonging.quantity > 0 ? belonging.quantity : 1;
-
-                  onInput();
-               }
-            "
-         />
-         <div class="BelongingListEdit-item-line"></div>
-         <span class="BelongingListEdit-item-equation">x</span>
-         <input
-            class="BelongingListEdit-item-count"
-            type="number"
-            :value="belonging.quantity"
-            @change="
-               (event) => {
-                  let count = Number.parseInt(event.target.value);
-                  if (Number.isNaN(count)) count = 0;
-                  if (count < 0) count = 0;
-                  if (count > 999) count = 999;
-                  event.target.value = count;
-                  belonging.quantity = count;
-               }
-            "
-            @input="
-               (event) => {
-                  let count = Number.parseInt(event.target.value);
-                  if (Number.isNaN(count)) count = 0;
-                  if (count < 0) count = 0;
-                  if (count > 999) count = 999;
-                  event.target.value = count;
-                  belonging.quantity = count;
-               }
-            "
-         />
-      </div>
+         :belongings="belongings"
+         :belonging="belonging"
+         @invalidate="() => onInput()"
+      />
    </div>
 </template>
 
@@ -158,56 +108,5 @@
       flex-direction: column;
       row-gap: 0.4rem;
       gap: 0.2rem;
-
-      .BelongingListEdit-item {
-         width: 100%;
-
-         display: flex;
-         flex-direction: row;
-         align-items: center;
-
-         border: 0.1em solid rgba(0, 0, 0, 0.05);
-         border-radius: 2em;
-         background: hsla(0, 0%, 0%, 0.03);
-         font-weight: 400;
-         font-size: 1em;
-         color: black;
-
-         .BelongingListEdit-item-input {
-            width: 100%;
-            padding: 0.8em;
-            z-index: 2;
-
-            display: flex;
-            flex-grow: 1;
-
-            border: none;
-            background: none;
-            font-size: inherit;
-         }
-         .BelongingListEdit-item-line {
-            min-width: 1px;
-            min-height: calc(100% - 1em);
-            margin: 0.5em 0;
-            background: rgba(0, 0, 0, 0.1);
-         }
-         .BelongingListEdit-item-equation {
-            margin-left: 0.8em;
-         }
-         .BelongingListEdit-item-count {
-            width: 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-grow: 0;
-
-            padding: 0.8em;
-            padding-left: 0.2em;
-            border: none;
-            background: none;
-            font-size: inherit;
-            text-align: start;
-         }
-      }
    }
 </style>
