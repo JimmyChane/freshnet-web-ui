@@ -1,21 +1,21 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import WindowSection from "./WindowSection.vue";
    import Customer from "@/items/Customer";
 
    export default {
-      components: { WindowAction, WindowSection },
-      emits: ["click-dismiss", "click-cancel", "click-ok"],
+      components: { PanelAction, WindowSection },
       props: {
-         isShowing: { type: Boolean, default: false },
-         param: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
       data: (c) => ({ Requirement: Customer.Requirement }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         param: (c) => c.popupWindow.param,
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
-         customer: (c) => (c.param ? c.param.customer : null),
-         device: (c) => (c.param ? c.param.device : null),
+         customer: (c) => c.param?.customer ?? null,
+         device: (c) => c.param?.device ?? null,
       },
       methods: {
          clickOk() {
@@ -24,24 +24,22 @@
                   ownerCustomerId: this.device.ownerCustomerId,
                   id: this.device.id,
                })
-               .then((item) => {
-                  this.$emit("click-ok", item);
-               });
+               .then((item) => this.popupWindow.close());
          },
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowRemoveDevice"
       title="Remove Device?"
       :isShowing="isShowing"
       :isLoading="isLoading"
       :isClickable="isClickable"
-      @click-dismiss="$emit('click-dismiss')"
-      @click-cancel="$emit('click-cancel')"
-      @click-ok="clickOk()"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => clickOk()"
    >
       <div class="WindowRemoveDevice-body" v-if="param">
          <div class="WindowRemoveDevice-description" v-if="device.description">
@@ -60,7 +58,7 @@
             }}</span>
          </div>
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

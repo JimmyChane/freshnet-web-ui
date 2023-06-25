@@ -1,72 +1,60 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import SpecificationInputs from "@/pages/customer/SpecificationInputs.vue";
    import CustomerDeviceSpecification from "@/items/CustomerDeviceSpecification.js";
    import U from "@/U";
 
    export default {
-      components: { WindowAction, SpecificationInputs },
+      components: { PanelAction, SpecificationInputs },
       props: {
-         isShowing: { type: Boolean, default: false },
-         input: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
-      data: (c) => ({ data: null }),
+      data: (c) => ({ data: { specifications: [] } }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         input: (c) => c.popupWindow.input,
          product: (c) => c.input?.product ?? null,
          inputSpecifications: (c) => U.optArray(c.input?.specifications),
          specifications: (c) => c.data?.specifications ?? [],
       },
-      watch: {
-         input() {
-            this.clear();
-
-            this.data.specifications = this.inputSpecifications
-               .map((specification) => {
-                  specification.typeKey = specification.type
-                     ? specification.type.key
-                     : "";
-                  return specification;
-               })
-               .map((specification) => {
-                  return new CustomerDeviceSpecification()
-                     .fromData(specification)
-                     .toData();
-               });
-         },
-      },
       methods: {
-         clear() {
-            this.data = { specifications: [] };
-         },
-
          clickConfirm() {
-            let output = {
+            this.popupWindow.onConfirm({
                product: this.product,
                specifications: this.specifications,
-            };
-
-            this.$emit("click-confirm", output) && this.clear();
+            });
          },
       },
       mounted() {
-         this.clear();
+         this.data.specifications = this.inputSpecifications
+            .map((specification) => {
+               specification.typeKey = specification.type
+                  ? specification.type.key
+                  : "";
+               return specification;
+            })
+            .map((specification) => {
+               return new CustomerDeviceSpecification()
+                  .fromData(specification)
+                  .toData();
+            });
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowUpdateSpecifications"
       title="Update Specifications"
       :isShowing="isShowing"
-      @click-dismiss="$emit('click-dismiss') && clear()"
-      @click-cancel="$emit('click-cancel') && clear()"
-      @click-ok="clickConfirm()"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => clickConfirm()"
    >
       <div class="WindowUpdateSpecifications-body">
          <SpecificationInputs :items="specifications" />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

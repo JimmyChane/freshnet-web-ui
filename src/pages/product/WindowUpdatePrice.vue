@@ -1,61 +1,46 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
-   import Input from "@/components/Input.vue";
-   import U from "@/U";
+   import PanelAction from "@/components/panel/PanelAction.vue";
+   import Input from "@/components/Input.vue"; 
 
    export default {
-      components: { WindowAction, Input },
+      components: { PanelAction, Input },
       props: {
-         isShowing: { type: Boolean, default: false },
-         input: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         input: (c) => c.popupWindow.input,
          product: (c) => c.input?.product ?? null,
       },
       data: (c) => ({ normal: "", promotion: "" }),
-      watch: {
-         input() {
-            this.clear();
-
-            if (!this.input) return;
-
-            const { normal, promotion } = this.input.price;
-            const { value: normalValue } = normal;
-            const { value: promotionValue } = promotion;
-
-            this.normal = normalValue === 0 ? "" : normalValue.toString();
-            this.promotion =
-               promotionValue === 0 ? "" : promotionValue.toString();
-         },
-      },
       methods: {
-         clear() {
-            this.normal = "";
-            this.promotion = "";
-         },
-
          clickConfirm() {
             let output = {
                product: this.product,
-               price: {
-                  normal: this.normal,
-                  promotion: this.promotion,
-               },
+               price: { normal: this.normal, promotion: this.promotion },
             };
 
-            this.$emit("click-confirm", output) && this.clear();
+            this.popupWindow.onConfirm(output);
          },
+      },
+      mounted() {
+         const { normal, promotion } = this.input.price;
+         const { value: normalValue } = normal;
+         const { value: promotionValue } = promotion;
+
+         this.normal = normalValue === 0 ? "" : normalValue.toString();
+         this.promotion = promotionValue === 0 ? "" : promotionValue.toString();
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       title="Add Price"
       :isShowing="isShowing"
-      @click-dismiss="$emit('click-dismiss') && clear()"
-      @click-cancel="$emit('click-cancel') && clear()"
-      @click-ok="clickConfirm()"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => clickConfirm()"
    >
       <div class="WindowUpdatePrice-body">
          <Input
@@ -73,7 +58,7 @@
             @input="(comp) => (promotion = comp.value)"
          />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

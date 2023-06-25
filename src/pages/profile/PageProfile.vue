@@ -2,11 +2,12 @@
    import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import Loading from "@/components/Loading.vue";
    import ButtonIcon from "@/components/button/ButtonIcon.vue";
-   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
    import Section from "./PageProfile-Section.vue";
    import SectionTitle from "./PageProfile-Section-Title.vue";
    import SectionMain from "./PageProfile-Section-Main.vue";
+
+   import WindowChangePassword from "./WindowChangePassword.vue";
 
    import HostIcon from "@/host/HostIcon";
 
@@ -22,26 +23,12 @@
          NavigationBar,
          Loading,
          ButtonIcon,
-         WindowAction,
          Input,
          Section,
          SectionTitle,
          SectionMain,
       },
-      data: (c) => ({
-         user: null,
-         isLoading: false,
-         scrollTop: 0,
-
-         window: {
-            changePassword: {
-               isShowing: false,
-               passwordVerify: "",
-               passwordNew: "",
-               passwordRepeat: "",
-            },
-         },
-      }),
+      data: (c) => ({ user: null, isLoading: false, scrollTop: 0 }),
       computed: {
          name: (c) => c.user.name,
          username: (c) => c.user.username,
@@ -53,33 +40,10 @@
          },
       },
       methods: {
-         onDiscardChangePassword() {
-            this.window.changePassword.isShowing = false;
-            this.window.changePassword.passwordVerify = "";
-            this.window.changePassword.passwordNew = "";
-            this.window.changePassword.passwordRepeat = "";
-         },
-         onCommitChangePassword() {
-            const { passwordVerify, passwordNew, passwordRepeat } =
-               this.window.changePassword;
-
-            if (passwordNew !== passwordRepeat) {
-               this.store.dispatch(
-                  "snackbarShow",
-                  "Repeat Password Not Match With New Password",
-               );
-               return;
-            }
-
-            this.loginStore
-               .dispatch("changePassword", { passwordVerify, passwordNew })
-               .then((user) => this.onDiscardChangePassword())
-               .catch((error) =>
-                  this.store.dispatch(
-                     "snackbarShow",
-                     "Changing Password Error",
-                  ),
-               );
+         openWindowChangePassword() {
+            const popupWindow = this.store.dispatch("openPopupWindow", {
+               component: WindowChangePassword,
+            });
          },
       },
       async mounted() {
@@ -132,53 +96,12 @@
                   <ButtonIcon
                      class="PageProfile-section-changePassword-arrow"
                      :src="host.icon('arrowDown-000000')"
-                     @click="window.changePassword.isShowing = true"
+                     @click="() => openWindowChangePassword()"
                   />
                </div>
             </Section>
          </div>
       </div>
-
-      <WindowAction
-         title="Change Your Password"
-         :isShowing="window.changePassword.isShowing"
-         @click-dismiss="onDiscardChangePassword"
-         @click-cancel="onDiscardChangePassword"
-         @click-ok="onCommitChangePassword"
-      >
-         <div class="PageProfile-window-changePassword">
-            <Input
-               class="PageProfile-window-changePassword-first"
-               type="password"
-               label="Current Password"
-               :bindValue="window.changePassword.passwordVerify"
-               :isRequired="true"
-               @input="
-                  (comp) => (window.changePassword.passwordVerify = comp.value)
-               "
-            />
-
-            <Input
-               type="password"
-               label="New Password"
-               :bindValue="window.changePassword.passwordNew"
-               :isRequired="true"
-               @input="
-                  (comp) => (window.changePassword.passwordNew = comp.value)
-               "
-            />
-
-            <Input
-               type="password"
-               label="Repeat Password"
-               :bindValue="window.changePassword.passwordRepeat"
-               :isRequired="true"
-               @input="
-                  (comp) => (window.changePassword.passwordRepeat = comp.value)
-               "
-            />
-         </div>
-      </WindowAction>
 
       <Loading class="PageProfile-loading" :isShowing="isLoading" />
    </div>
@@ -261,21 +184,6 @@
                   transform: rotate(-90deg);
                }
             }
-         }
-      }
-
-      .PageProfile-window-changePassword {
-         z-index: 3;
-
-         display: flex;
-         flex-direction: column;
-         gap: 1rem;
-
-         & > * {
-            background: hsla(0, 0%, 0%, 0.03);
-         }
-         .PageProfile-window-changePassword-first {
-            margin-bottom: 2rem;
          }
       }
    }

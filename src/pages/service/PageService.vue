@@ -30,12 +30,6 @@
          Loading,
          PanelService,
          WindowSearch,
-         WindowImportService,
-         WindowAddService,
-         WindowUpdateCustomer,
-         WindowUpdateDescription,
-         WindowUpdateBelonging,
-         WindowRemove,
          PanelRight,
       },
       data: (c) => ({
@@ -64,148 +58,177 @@
          },
          popup: {
             search: new PopupContext(c),
-            importService: new PopupContext(c).onConfirm(
-               (accept, reject, data) => {
-                  accept();
-                  c.clickService(data);
-               },
-            ),
-            newService: new PopupContext(c)
-               .onShow((accept, reject) => {
-                  c.$refs.WindowAddService.focus();
-                  accept();
-               })
-               .onConfirm(async (accept, reject, data) => {
-                  try {
-                     const result = await c.serviceStore.dispatch("addItem", {
-                        data,
-                     });
+            newService: new PopupContext(c).onShow(() => {
+               const popupWindow = c.store.dispatch("openPopupWindow", {
+                  component: WindowAddService,
+                  onConfirm: async (accept, reject, data) => {
+                     try {
+                        const result = await c.serviceStore.dispatch(
+                           "addItem",
+                           { data },
+                        );
 
-                     result ? accept() : reject();
-                     c.clickService(result);
-                  } catch (error) {
-                     c.store.dispatch(
-                        "snackbarShow",
-                        "Failed to create a service",
-                     );
-                     reject();
-                     throw error;
-                  }
-               }),
-            removeService: new PopupContext(c).onConfirm(
-               async (accept, reject, data) => {
-                  try {
-                     await c.serviceStore.dispatch("removeItemOfId", {
-                        id: data.id,
+                        result ? accept() : reject();
+                        c.clickService(result);
+                     } catch (error) {
+                        c.store.dispatch(
+                           "snackbarShow",
+                           "Failed to create a service",
+                        );
+                        reject();
+                        throw error;
+                     }
+                  },
+               });
+            }),
+            importService: new PopupContext(c).onShow(() => {
+               const popupWindow = c.store.dispatch("openPopupWindow", {
+                  component: WindowImportService,
+                  showService: (service) => c.clickService(service),
+               });
+            }),
+            removeService: new PopupContext(c).onShow(
+               (accept, reject, data) => {
+                  const popupWindow = c.store.dispatch("openPopupWindow", {
+                     component: WindowRemove,
+                     title: "Delete Service",
+                     message:
+                        "After deleting this service, it cannot be reverted.",
+                     value: data,
+                     onConfirm: async (accept, reject) => {
+                        try {
+                           await c.serviceStore.dispatch("removeItemOfId", {
+                              id: data.id,
+                           });
+                           accept();
+                           if (c.currentServiceId === data.id) {
+                              c.$root.replaceQuery({
+                                 query: { service: null },
+                              });
+                           }
+                        } catch (error) {
+                           c.store.dispatch("snackbarShow", "Delete Failed");
+                           reject();
+                           throw error;
+                        }
+                     },
+                  });
+               },
+            ),
+            removeEvent: new PopupContext(c).onShow((accept, reject, data) => {
+               const popupWindow = c.store.dispatch("openPopupWindow", {
+                  component: WindowRemove,
+                  title: "Delete Event",
+                  message: "After deleting this event, it cannot be reverted.",
+                  value: data,
+                  onConfirm: async (accept, reject) => {
+                     await c.serviceStore.dispatch("removeEventFromId", {
+                        serviceID: data.service.id,
+                        time: data.event.timestamp.time,
                      });
                      accept();
-                     if (c.currentServiceId === data.id) {
-                        c.$root.replaceQuery({ query: { service: null } });
+                  },
+               });
+            }),
+            customer: new PopupContext(c).onShow((accept, reject, data) => {
+               const popupWindow = c.store.dispatch("openPopupWindow", {
+                  component: WindowUpdateCustomer,
+                  value: data,
+                  onConfirm: async (accept, reject, data) => {
+                     try {
+                        const service = await c.serviceStore.dispatch(
+                           "updateCustomerOfId",
+                           { serviceID: c.currentService.id, customer: data },
+                        );
+                        accept();
+                     } catch (error) {
+                        c.store.dispatch(
+                           "snackbarShow",
+                           "Update Customer Failed",
+                        );
+                        reject();
+                        throw error;
                      }
-                  } catch (error) {
-                     c.store.dispatch("snackbarShow", "Delete Failed");
-                     reject();
-                     throw error;
-                  }
-               },
-            ),
-            removeEvent: new PopupContext(c).onConfirm(
-               async (accept, reject, data) => {
-                  await c.serviceStore.dispatch("removeEventFromId", {
-                     serviceID: data.service.id,
-                     time: data.event.timestamp.time,
+                  },
+               });
+            }),
+            removeImage: new PopupContext(c).onShow((accept, reject, data) => {
+               const popupWindow = c.store.dispatch("openPopupWindow", {
+                  component: WindowRemove,
+                  title: "Delete Image",
+                  message: "After deleting this image, it cannot be reverted.",
+                  value: data,
+                  onConfirm: async (accept, reject) => {
+                     try {
+                        const service = await c.serviceStore.dispatch(
+                           "removeImageFromId",
+                           {
+                              serviceID: c.currentService.id,
+                              image: data,
+                           },
+                        );
+                        c.store.dispatch("imageViewerHide");
+                        accept();
+                     } catch (error) {
+                        c.store.dispatch("snackbarShow", "Delete Image Failed");
+                        reject();
+                        throw error;
+                     }
+                  },
+               });
+            }),
+            editDescription: new PopupContext(c).onShow(
+               (accept, reject, data) => {
+                  const popupWindow = c.store.dispatch("openPopupWindow", {
+                     component: WindowUpdateDescription,
+                     description: data,
+                     onConfirm: async (accept, reject, data) => {
+                        try {
+                           const service = await c.serviceStore.dispatch(
+                              "updateDescriptionOfId",
+                              {
+                                 serviceID: c.currentService.id,
+                                 description: data,
+                              },
+                           );
+                           accept();
+                        } catch (error) {
+                           c.store.dispatch(
+                              "snackbarShow",
+                              "Update Description Failed",
+                           );
+                           reject();
+                           throw error;
+                        }
+                     },
                   });
-                  accept();
                },
             ),
-            customer: new PopupContext(c)
-               .onShow((accept, reject, data) => {
-                  accept();
-                  c.$refs.WindowUpdateCustomer.focus();
-               })
-               .onConfirm(async (accept, reject, data) => {
-                  try {
-                     const service = await c.serviceStore.dispatch(
-                        "updateCustomerOfId",
-                        {
-                           serviceID: c.currentService.id,
-                           customer: data,
-                        },
-                     );
-                     accept();
-                  } catch (error) {
-                     c.store.dispatch("snackbarShow", "Update Customer Failed");
-                     reject();
-                     throw error;
-                  }
-               }),
-            removeImage: new PopupContext(c).onConfirm(
-               async (accept, reject, data) => {
-                  try {
-                     const service = await c.serviceStore.dispatch(
-                        "removeImageFromId",
-                        {
-                           serviceID: c.currentService.id,
-                           image: data,
-                        },
-                     );
-                     c.store.dispatch("imageViewerHide");
-                     accept();
-                  } catch (error) {
-                     c.store.dispatch("snackbarShow", "Delete Image Failed");
-                     reject();
-                     throw error;
-                  }
-               },
-            ),
-            editDescription: new PopupContext(c)
-               .onShow((accept, reject, data) => {
-                  accept();
-                  c.$refs.WindowUpdateDescription.focus();
-               })
-               .onConfirm(async (accept, reject, data) => {
-                  try {
-                     const service = await c.serviceStore.dispatch(
-                        "updateDescriptionOfId",
-                        {
-                           serviceID: c.currentService.id,
-                           description: data,
-                        },
-                     );
-                     accept();
-                  } catch (error) {
-                     c.store.dispatch(
-                        "snackbarShow",
-                        "Update Description Failed",
-                     );
-                     reject();
-                     throw error;
-                  }
-               }),
-            belongings: new PopupContext(c)
-               .onShow((accept, reject, data) => {
-                  accept();
-                  c.$refs.WindowUpdateBelonging.focus();
-               })
-               .onConfirm(async (accept, reject, data) => {
-                  try {
-                     const service = await c.serviceStore.dispatch(
-                        "updateBelongingsOfId",
-                        {
-                           serviceID: c.currentService.id,
-                           belongings: data,
-                        },
-                     );
-                     accept();
-                  } catch (error) {
-                     c.store.dispatch(
-                        "snackbarShow",
-                        "Update Belongings Failed",
-                     );
-                     reject();
-                     throw error;
-                  }
-               }),
+            belongings: new PopupContext(c).onShow((accept, reject, data) => {
+               const popupWindow = c.store.dispatch("openPopupWindow", {
+                  component: WindowUpdateBelonging,
+                  values: data,
+                  onConfirm: async (accept, reject, data) => {
+                     try {
+                        const service = await c.serviceStore.dispatch(
+                           "updateBelongingsOfId",
+                           {
+                              serviceID: c.currentService.id,
+                              belongings: data,
+                           },
+                        );
+                        accept();
+                     } catch (error) {
+                        c.store.dispatch(
+                           "snackbarShow",
+                           "Update Belongings Failed",
+                        );
+                        reject();
+                        throw error;
+                     }
+                  },
+               });
+            }),
          },
          panelListened: { isWide: false },
 
@@ -376,89 +399,6 @@
          :items="items"
          @click-dismiss="() => windowAction('search', 'dismiss')"
          @click-item="(item) => clickService(item)"
-      />
-
-      <WindowImportService
-         :isShowing="popup.importService.isShowing"
-         @click-cancel="() => windowAction('importService', 'dismiss')"
-         @click-ok="(service) => windowAction('importService', 'ok', service)"
-         @click-dismiss="() => windowAction('importService', 'dismiss')"
-      />
-
-      <WindowAddService
-         ref="WindowAddService"
-         :isShowing="popup.newService.isShowing"
-         @callback-create="(data) => windowAction('newService', 'ok', data)"
-         @callback-cancel="() => windowAction('newService', 'dismiss')"
-         @callback-dismiss="() => windowAction('newService', 'dismiss')"
-      />
-
-      <WindowUpdateCustomer
-         ref="WindowUpdateCustomer"
-         v-if="drawerService"
-         :isShowing="popup.customer.isShowing"
-         :value="popup.customer.input"
-         @callback-change="
-            (customer) => windowAction('customer', 'ok', customer)
-         "
-         @callback-cancel="() => windowAction('customer', 'dismiss')"
-         @callback-dismiss="() => windowAction('customer', 'dismiss')"
-      />
-
-      <WindowUpdateDescription
-         ref="WindowUpdateDescription"
-         v-if="drawerService"
-         :isShowing="popup.editDescription.isShowing"
-         :description="popup.editDescription.input"
-         @callback-change="
-            (description) => windowAction('editDescription', 'ok', description)
-         "
-         @callback-cancel="() => windowAction('editDescription', 'dismiss')"
-         @callback-dismiss="() => windowAction('editDescription', 'dismiss')"
-      />
-
-      <WindowUpdateBelonging
-         ref="WindowUpdateBelonging"
-         v-if="drawerService"
-         :isShowing="popup.belongings.isShowing"
-         :values="popup.belongings.input"
-         @callback-change="
-            (belongings) => windowAction('belongings', 'ok', belongings)
-         "
-         @callback-cancel="() => windowAction('belongings', 'dismiss')"
-         @callback-dismiss="() => windowAction('belongings', 'dismiss')"
-      />
-
-      <WindowRemove
-         :isShowing="popup.removeService.isShowing"
-         title="Delete Service"
-         message="After deleting this service, it cannot be reverted."
-         :value="popup.removeService.input"
-         @click-cancel="() => windowAction('removeService', 'dismiss')"
-         @click-ok="(service) => windowAction('removeService', 'ok', service)"
-         @click-dismiss="() => windowAction('removeService', 'dismiss')"
-      />
-
-      <WindowRemove
-         v-if="drawerService"
-         :isShowing="popup.removeEvent.isShowing"
-         title="Delete Event"
-         message="After deleting this event, it cannot be reverted."
-         :value="popup.removeEvent.input"
-         @click-cancel="() => windowAction('removeEvent', 'dismiss')"
-         @click-ok="(value) => windowAction('removeEvent', 'ok', value)"
-         @click-dismiss="() => windowAction('removeEvent', 'dismiss')"
-      />
-
-      <WindowRemove
-         v-if="drawerService"
-         :isShowing="popup.removeImage.isShowing"
-         title="Delete Image"
-         message="After deleting this image, it cannot be reverted."
-         :value="popup.removeImage.input"
-         @click-cancel="() => windowAction('removeImage', 'dismiss')"
-         @click-ok="(image) => windowAction('removeImage', 'ok', image)"
-         @click-dismiss="() => windowAction('removeImage', 'dismiss')"
       />
 
       <Loading

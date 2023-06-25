@@ -1,6 +1,5 @@
 <script>
    import Loading from "@/components/Loading.vue";
-   import PopupWindow from "@/components/window/PopupWindow.vue";
    import Empty from "@/components/Empty.vue";
    import NavigationBar from "@/components/actionbar/NavigationBar.vue";
    import ItemDatabase from "./ItemDatabase.vue";
@@ -16,7 +15,7 @@
       },
       userPermissions: ["admin"],
 
-      components: { Loading, PopupWindow, Empty, NavigationBar, ItemDatabase },
+      components: { Loading, Empty, NavigationBar, ItemDatabase },
       data: (c) => ({
          scrollTop: 0,
          imports: { data: null },
@@ -113,21 +112,6 @@
          class="PageDatabase-body"
          v-if="user && baseInfo && databases.length"
       >
-         <!-- <div class="PageDatabase-import">
-            <span class="PageDatabase-title">Import</span>
-            <input
-               type="file"
-               accept=".json"
-               @change="
-                  (event) => {
-                     const [file] = event.target.files;
-                     importDataFile(file);
-                  }
-               "
-            />
-            <p v-if="imports.data">{{ imports.data }}</p>
-         </div> -->
-
          <div class="PageDatabase-baseInfo">
             <span class="PageDatabase-title">Database Using Now</span>
             <span v-if="baseInfo">{{ baseInfo.currentDatabase }}</span>
@@ -148,19 +132,6 @@
          v-if="!baseInfo && !databases.length && !isLoading"
          :icon="$options.icon.dark.toUrl()"
       />
-
-      <!-- <PopupWindow
-         class="PageDatabase-window"
-         :isShowing="addDatabase.isShowing"
-         @click-dismiss="addDatabase.isShowing = false"
-      >
-         <div>
-            <span>Create Database</span>
-
-            <label>Database Name</label>
-            <input type="text" placeholder="Database Name" />
-         </div>
-      </PopupWindow> -->
 
       <Loading class="PageDatabase-loading" :isShowing="isLoading" />
    </div>

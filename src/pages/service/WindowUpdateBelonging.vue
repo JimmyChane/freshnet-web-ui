@@ -1,42 +1,50 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import BelongingListEdit from "./BelongingListEdit.vue";
 
    export default {
-      components: { WindowAction, BelongingListEdit },
-      emits: ["callback-cancel", "callback-change"],
+      components: { PanelAction, BelongingListEdit },
       props: {
-         isShowing: { type: Boolean, default: false },
-         values: { type: Array, default: () => [] },
+         popupWindow: { type: Object },
+      },
+      computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         values: (c) => c.popupWindow.values,
       },
       methods: {
          onChange() {
             const belongings = this.$refs.BelongingListEdit.getResults();
-            this.$emit("callback-change", belongings);
+
+            const accept = () => this.popupWindow.close();
+            const reject = () => {};
+            this.popupWindow.onConfirm(accept, reject, belongings);
          },
          focus() {
             this.$refs.BelongingListEdit.focus();
          },
       },
+      mounted() {
+         this.focus();
+      },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       title="Edit Belongings"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
       :isClickable="!serviceStore.getters.isFetching"
-      @click-ok="onChange"
-      @click-cancel="$emit('callback-cancel')"
-      @click-dismiss="() => $emit('callback-dismiss')"
+      @click-ok="() => onChange()"
+      @click-cancel="() => popupWindow.close()"
+      @click-dismiss="() => popupWindow.close()"
    >
       <BelongingListEdit
          class="WindowBelongings-list"
          :values="values"
          ref="BelongingListEdit"
       />
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

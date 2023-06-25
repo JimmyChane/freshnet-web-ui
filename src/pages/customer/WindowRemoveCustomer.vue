@@ -1,17 +1,18 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import WindowSection from "./WindowSection.vue";
    import Customer from "@/items/Customer";
 
    export default {
-      components: { WindowAction, WindowSection },
+      components: { PanelAction, WindowSection },
       emits: ["click-dismiss", "click-cancel", "click-ok"],
       props: {
-         isShowing: { type: Boolean, default: false },
-         item: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
       data: (c) => ({ Requirement: Customer.Requirement }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         item: (c) => c.popupWindow.item,
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
       },
@@ -19,24 +20,22 @@
          clickOk() {
             this.customerStore
                .dispatch("removeItemOfId", { _id: this.item.id })
-               .then((item) => {
-                  this.$emit("click-ok", item);
-               });
+               .then((item) => this.popupWindow.close());
          },
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowRemoveCustomer"
       title="Remove Customer?"
       :isShowing="isShowing"
       :isLoading="isLoading"
       :isClickable="isClickable"
-      @click-dismiss="$emit('click-dismiss')"
-      @click-cancel="$emit('click-cancel')"
-      @click-ok="clickOk()"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => clickOk()"
    >
       <div class="WindowRemoveCustomer-body" v-if="item">
          <p>Services and Orders might not effected</p>
@@ -78,7 +77,7 @@
             }}</span>
          </div>
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

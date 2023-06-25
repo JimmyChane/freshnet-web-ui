@@ -1,16 +1,18 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import Input from "@/components/Input.vue";
    import U from "@/U.js";
 
    export default {
-      components: { WindowAction, Input },
-      emits: ["callback-cancel", "callback-change"],
+      components: { PanelAction, Input },
       props: {
-         value: { type: Object, default: null },
-         isShowing: { type: Boolean, default: false },
+         popupWindow: { type: Object },
       },
       data: (c) => ({ customerName: "", customerPhoneNumber: "" }),
+      computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         value: (c) => c.popupWindow.value,
+      },
       watch: {
          value() {
             this.onNewValue();
@@ -23,7 +25,11 @@
             this.customerPhoneNumber = value.phoneNumber?.toString() ?? "";
          },
          onChange() {
-            this.$emit("callback-change", {
+            const accept = () => {
+               this.popupWindow.close();
+            };
+            const reject = () => {};
+            this.popupWindow.onConfirm(accept, reject, {
                name: this.customerName,
                phoneNumber: this.customerPhoneNumber,
             });
@@ -33,18 +39,22 @@
             this.$refs.InputName.focus();
          },
       },
+      mounted() {
+         this.onNewValue();
+         this.focus();
+      },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       title="Edit Customer"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
       :isClickable="!serviceStore.getters.isFetching"
       @click-ok="onChange"
-      @click-cancel="$emit('callback-cancel')"
-      @click-dismiss="() => $emit('callback-dismiss')"
+      @click-cancel="() => popupWindow.close()"
+      @click-dismiss="() => popupWindow.close()"
    >
       <div class="WindowCustomer-body">
          <Input
@@ -63,7 +73,7 @@
             @input="(comp) => (customerPhoneNumber = comp.value)"
          />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

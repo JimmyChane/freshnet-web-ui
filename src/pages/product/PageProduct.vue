@@ -31,20 +31,10 @@
 
       components: {
          Footer,
-
          PanelRight,
          PanelProducts,
          PanelProduct,
-
          WindowSearch,
-         WindowAddProduct,
-         WindowRemoveProduct,
-         WindowRemoveImage,
-         WindowUpdateTitleBrand,
-         WindowUpdatePrice,
-         WindowUpdateDescription,
-         WindowUpdateCategory,
-         WindowUpdateSpecifications,
       },
       data: (c) => ({
          popup: {
@@ -55,106 +45,213 @@
                }
                accept();
             }),
-            productAdd: new PopupContext(c).onConfirm(
-               (accept, reject, output) => {
-                  c.productStore
-                     .dispatch("addItem", { data: output })
-                     .then((product) => {
-                        accept();
-                        c.setProduct(product);
-                     })
-                     .catch((error) =>
-                        reject(error, "Product Creation Failed"),
-                     );
+            productAdd: new PopupContext(c).onShow(async () => {
+               const popupWindow = await c.store.dispatch("openPopupWindow", {
+                  component: WindowAddProduct,
+                  onConfirm: (output) => {
+                     c.productStore
+                        .dispatch("addItem", { data: output })
+                        .then((product) => {
+                           popupWindow.close();
+                           c.setProduct(product);
+                        })
+                        .catch((error) => {
+                           c.store.dispatch(
+                              "snackbarShow",
+                              "Product Creation Failed",
+                           );
+                        });
+                  },
+               });
+            }),
+            productRemove: new PopupContext(c).onShow(
+               async (accept, reject, input) => {
+                  const popupWindow = await c.store.dispatch(
+                     "openPopupWindow",
+                     {
+                        component: WindowRemoveProduct,
+                        input,
+                        onConfirm: (input) => {
+                           c.productStore
+                              .dispatch("removeItemOfId", {
+                                 id: input.productId,
+                              })
+                              .then(() => {
+                                 popupWindow.close();
+                                 c.setProduct(null);
+                              })
+                              .catch((error) => {
+                                 c.store.dispatch(
+                                    "snackbarShow",
+                                    "Product Deletion Failed",
+                                 );
+                              });
+                        },
+                     },
+                  );
                },
             ),
-            productRemove: new PopupContext(c).onConfirm(
-               (accept, reject, input) => {
-                  c.productStore
-                     .dispatch("removeItemOfId", { id: input.productId })
-                     .then(() => {
-                        accept();
-                        c.setProduct(null);
-                     })
-                     .catch((error) =>
-                        reject(error, "Product Deletion Failed"),
-                     );
+            productImageRemove: new PopupContext(c).onShow(
+               async (accept, reject, input) => {
+                  const popupWindow = await c.store.dispatch(
+                     "openPopupWindow",
+                     {
+                        component: WindowRemoveImage,
+                        input,
+                        onConfirm: (input) => {
+                           const { product, image } = input;
+                           c.productStore
+                              .dispatch("removeImageOfId", {
+                                 id: product.id,
+                                 image,
+                              })
+                              .then(() => popupWindow.close())
+                              .catch(() => {});
+                        },
+                     },
+                  );
                },
             ),
-            productImageRemove: new PopupContext(c).onConfirm(
-               (accept, reject, input) => {
-                  const { product, image } = input;
-                  c.productStore
-                     .dispatch("removeImageOfId", { id: product.id, image })
-                     .then(() => accept())
-                     .catch(() => reject());
+            productTitleBrandUpdate: new PopupContext(c).onShow(
+               async (accept, reject, input) => {
+                  const popupWindow = await c.store.dispatch(
+                     "openPopupWindow",
+                     {
+                        component: WindowUpdateTitleBrand,
+                        input,
+                        onConfirm: (input) => {
+                           const { product, title, brandId } = input;
+                           Promise.all([
+                              c.productStore.dispatch("updateTitleOfId", {
+                                 id: product.id,
+                                 title,
+                              }),
+                              c.productStore.dispatch("updateBrandIdOfId", {
+                                 id: product.id,
+                                 brandId,
+                              }),
+                           ])
+                              .then(() => popupWindow.close())
+                              .catch((error) => {
+                                 c.store.dispatch(
+                                    "snackbarShow",
+                                    "Some Cannot Update",
+                                 );
+                              });
+                        },
+                     },
+                  );
                },
             ),
-            productTitleBrandUpdate: new PopupContext(c).onConfirm(
-               (accept, reject, input) => {
-                  const { product, title, brandId } = input;
-                  Promise.all([
-                     c.productStore.dispatch("updateTitleOfId", {
-                        id: product.id,
-                        title,
-                     }),
-                     c.productStore.dispatch("updateBrandIdOfId", {
-                        id: product.id,
-                        brandId,
-                     }),
-                  ])
-                     .then(() => accept())
-                     .catch((error) => reject(error, "Some Cannot Update"));
+            productPriceUpdate: new PopupContext(c).onShow(
+               async (accept, reject, input) => {
+                  const popupWindow = await c.store.dispatch(
+                     "openPopupWindow",
+                     {
+                        component: WindowUpdatePrice,
+                        input,
+                        onConfirm: (input) => {
+                           const { product, price } = input;
+                           c.productStore
+                              .dispatch("updatePriceOfId", {
+                                 id: product.id,
+                                 price,
+                              })
+                              .then((product) => popupWindow.close())
+                              .catch((error) => {
+                                 c.store.dispatch(
+                                    "snackbarShow",
+                                    "Cannot Update",
+                                 );
+                              });
+                        },
+                     },
+                  );
                },
             ),
-            productPriceUpdate: new PopupContext(c).onConfirm(
-               (accept, reject, input) => {
-                  const { product, price } = input;
-                  c.productStore
-                     .dispatch("updatePriceOfId", { id: product.id, price })
-                     .then((product) => accept())
-                     .catch((error) => reject(error, "Cannot Update"));
+            productDescriptionUpdate: new PopupContext(c).onShow(
+               async (accept, reject, input) => {
+                  const popupWindow = await c.store.dispatch(
+                     "openPopupWindow",
+                     {
+                        component: WindowUpdateDescription,
+                        input,
+                        onConfirm: (input) => {
+                           const { product, description } = input;
+                           c.productStore
+                              .dispatch("updateDescriptionOfId", {
+                                 id: product.id,
+                                 description,
+                              })
+                              .then((product) => popupWindow.close())
+                              .catch((error) => {
+                                 c.store.dispatch(
+                                    "snackbarShow",
+                                    "Cannot Update",
+                                 );
+                              });
+                        },
+                     },
+                  );
                },
             ),
-            productDescriptionUpdate: new PopupContext(c).onConfirm(
-               (accept, reject, input) => {
-                  const { product, description } = input;
-                  c.productStore
-                     .dispatch("updateDescriptionOfId", {
-                        id: product.id,
-                        description,
-                     })
-                     .then((product) => accept())
-                     .catch((error) => reject(error, "Cannot Update"));
+            productCategoryUpdate: new PopupContext(c).onShow(
+               async (accept, reject, input) => {
+                  const popupWindow = await c.store.dispatch(
+                     "openPopupWindow",
+                     {
+                        component: WindowUpdateCategory,
+                        input,
+                        onConfirm: (input) => {
+                           const { product, categoryId } = input;
+                           c.productStore
+                              .dispatch("updateCategoryIdOfId", {
+                                 id: product.id,
+                                 categoryId,
+                              })
+                              .then((product) => popupWindow.close())
+                              .catch((error) => {
+                                 c.store.dispatch(
+                                    "snackbarShow",
+                                    "Cannot Update",
+                                 );
+                              });
+                        },
+                     },
+                  );
                },
             ),
-            productSpecificationsUpdate: new PopupContext(c).onConfirm(
-               (accept, reject, input) => {
-                  const { product, specifications } = input;
-                  c.productStore
-                     .dispatch("updateSpecificationsOfId", {
-                        id: product.id,
-                        specifications: specifications.map((specification) => {
-                           return {
-                              type: specification.typeKey,
-                              content: specification.content,
-                           };
-                        }),
-                     })
-                     .then((product) => accept())
-                     .catch((error) => reject(error, "Cannot Update"));
-               },
-            ),
-            productCategoryUpdate: new PopupContext(c).onConfirm(
-               (accept, reject, input) => {
-                  const { product, categoryId } = input;
-                  c.productStore
-                     .dispatch("updateCategoryIdOfId", {
-                        id: product.id,
-                        categoryId,
-                     })
-                     .then((product) => accept())
-                     .catch((error) => reject(error, "Cannot Update"));
+            productSpecificationsUpdate: new PopupContext(c).onShow(
+               async (accept, reject, input) => {
+                  const popupWindow = await c.store.dispatch(
+                     "openPopupWindow",
+                     {
+                        component: WindowUpdateSpecifications,
+                        input,
+                        onConfirm: (input) => {
+                           const { product, specifications } = input;
+                           c.productStore
+                              .dispatch("updateSpecificationsOfId", {
+                                 id: product.id,
+                                 specifications: specifications.map(
+                                    (specification) => {
+                                       return {
+                                          type: specification.typeKey,
+                                          content: specification.content,
+                                       };
+                                    },
+                                 ),
+                              })
+                              .then((product) => popupWindow.close())
+                              .catch((error) => {
+                                 c.store.dispatch(
+                                    "snackbarShow",
+                                    "Cannot Update",
+                                 );
+                              });
+                        },
+                     },
+                  );
                },
             ),
          },
@@ -531,78 +628,6 @@
          :items="products"
          @click-dismiss="() => popup.search.dismiss()"
          @click-item="(item) => clickProduct(item)"
-      />
-      <WindowAddProduct
-         v-if="isEditable"
-         :isShowing="popup.productAdd.isShowing"
-         :input="popup.productAdd.input"
-         @click-dismiss="() => popup.productAdd.dismiss()"
-         @click-cancel="() => popup.productAdd.cancel()"
-         @click-confirm="(output) => popup.productAdd.confirm(output)"
-      />
-      <WindowRemoveProduct
-         v-if="isEditable"
-         :isShowing="popup.productRemove.isShowing"
-         :input="popup.productRemove.input"
-         @click-dismiss="() => popup.productRemove.dismiss()"
-         @click-cancel="() => popup.productRemove.cancel()"
-         @click-confirm="(output) => popup.productRemove.confirm(output)"
-      />
-      <WindowRemoveImage
-         v-if="isEditable"
-         :isShowing="popup.productImageRemove.isShowing"
-         :input="popup.productImageRemove.input"
-         @click-dismiss="() => popup.productImageRemove.dismiss()"
-         @click-cancel="() => popup.productImageRemove.cancel()"
-         @click-confirm="(output) => popup.productImageRemove.confirm(output)"
-      />
-      <WindowUpdateTitleBrand
-         v-if="isEditable"
-         :isShowing="popup.productTitleBrandUpdate.isShowing"
-         :input="popup.productTitleBrandUpdate.input"
-         @click-dismiss="() => popup.productTitleBrandUpdate.dismiss()"
-         @click-cancel="() => popup.productTitleBrandUpdate.cancel()"
-         @click-confirm="
-            (output) => popup.productTitleBrandUpdate.confirm(output)
-         "
-      />
-      <WindowUpdatePrice
-         v-if="isEditable"
-         :isShowing="popup.productPriceUpdate.isShowing"
-         :input="popup.productPriceUpdate.input"
-         @click-dismiss="() => popup.productPriceUpdate.dismiss()"
-         @click-cancel="() => popup.productPriceUpdate.cancel()"
-         @click-confirm="(output) => popup.productPriceUpdate.confirm(output)"
-      />
-      <WindowUpdateDescription
-         v-if="isEditable"
-         :isShowing="popup.productDescriptionUpdate.isShowing"
-         :input="popup.productDescriptionUpdate.input"
-         @click-dismiss="() => popup.productDescriptionUpdate.dismiss()"
-         @click-cancel="() => popup.productDescriptionUpdate.cancel()"
-         @click-confirm="
-            (output) => popup.productDescriptionUpdate.confirm(output)
-         "
-      />
-      <WindowUpdateCategory
-         v-if="isEditable"
-         :isShowing="popup.productCategoryUpdate.isShowing"
-         :input="popup.productCategoryUpdate.input"
-         @click-dismiss="() => popup.productCategoryUpdate.dismiss()"
-         @click-cancel="() => popup.productCategoryUpdate.cancel()"
-         @click-confirm="
-            (output) => popup.productCategoryUpdate.confirm(output)
-         "
-      />
-      <WindowUpdateSpecifications
-         v-if="isEditable"
-         :isShowing="popup.productSpecificationsUpdate.isShowing"
-         :input="popup.productSpecificationsUpdate.input"
-         @click-dismiss="() => popup.productSpecificationsUpdate.dismiss()"
-         @click-cancel="() => popup.productSpecificationsUpdate.cancel()"
-         @click-confirm="
-            (output) => popup.productSpecificationsUpdate.confirm(output)
-         "
       />
    </div>
 </template>

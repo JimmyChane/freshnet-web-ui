@@ -1,25 +1,28 @@
 <script>
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import Category from "@/items/Category";
-   import WindowAction from "@/components/window/WindowAction.vue";
    import Input from "@/components/Input.vue";
    import LabelMenus from "@/components/LabelMenus.vue";
 
    export default {
-      components: { WindowAction, Input, LabelMenus },
-      emits: ["callback-cancel", "callback-confirm"],
+      components: { PanelAction, Input, LabelMenus },
       props: {
-         isShowing: { type: Boolean, default: false },
-         input: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
       data: (c) => ({
          categoryMenus: [],
          brandMenus: [],
+
          titleError: "",
 
          brandMenu: { key: "none", title: "None" },
          categoryMenu: null,
          title: "",
       }),
+      computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         input: (c) => c.popupWindow.input,
+      },
       watch: {
          isShowing() {
             if (this.isShowing) {
@@ -29,12 +32,8 @@
                this.brandMenus = [];
             }
          },
-         input() {
-            this.clear();
-         },
       },
       mounted() {
-         this.clear();
          this.invalidate();
          this.brandStore.dispatch("getItems");
          this.categoryStore.dispatch("getItems");
@@ -82,12 +81,6 @@
                });
             }
          },
-         clear() {
-            this.brandMenu = { key: "none", title: "None" };
-            this.categoryMenu = null;
-            this.title = "";
-            this.titleError = "";
-         },
          clickConfirm() {
             const title = this.title.trim();
             const brandId = this.brandMenu?.key ?? "";
@@ -100,20 +93,20 @@
             }
 
             const output = { title, brandId, categoryId };
-            this.$emit("click-confirm", output) && this.clear();
+            this.popupWindow.onConfirm(output);
          },
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowAddProduct"
       title="New Product"
       :isShowing="isShowing"
-      @click-dismiss="$emit('click-dismiss') && clear()"
-      @click-cancel="$emit('click-cancel') && clear()"
-      @click-ok="clickConfirm()"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => clickConfirm()"
    >
       <div class="WindowAddProduct-body">
          <div class="WindowAddProduct-menus">
@@ -135,7 +128,7 @@
             @input="(comp) => (title = comp.value)"
          />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

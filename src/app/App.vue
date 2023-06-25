@@ -10,6 +10,7 @@
    import Snackbar from "./Snackbar.vue";
    import PopupMenu from "./PopupMenu.vue";
    import Status from "./Status.vue";
+   import PopupWindow from "@/components/window/PopupWindow.vue";
 
    export default {
       name: "App",
@@ -25,8 +26,12 @@
          Snackbar,
          PopupMenu,
          Status,
+         PopupWindow,
       },
-      data: (c) => ({ layoutLoginIsShown: false, shouldShowStatus: false }),
+      data: (c) => ({
+         layoutLoginIsShown: false,
+         shouldShowStatus: false,
+      }),
       computed: { isLogging: (c) => c.loginStore.getters.isLogging },
       watch: {
          isLogging() {
@@ -96,18 +101,33 @@
       </div>
 
       <ViewerImage style="z-index: auto" />
-      <Snackbar
-         style="z-index: 4"
-         v-for="snackbar of store.getters.snackbars"
-         :key="snackbar.key"
-         :item="snackbar"
-      />
+      <PopupWindow
+         v-for="popupWindow of store.getters.popupWindows"
+         :style="{
+            'z-index': 6 + store.getters.popupWindows.indexOf(popupWindow),
+         }"
+         :key="popupWindow.key"
+         :isShowing="popupWindow.isShowing"
+         @click-dismiss="() => popupWindow.close()"
+      >
+         <component
+            :is="popupWindow.component"
+            :popupWindow="popupWindow"
+         ></component>
+      </PopupWindow>
+
       <PopupMenu
-         style="z-index: 5"
+         style="z-index: 98"
          v-for="popupMenu of store.getters.popupMenus"
          :key="popupMenu.key"
          :popupMenu="popupMenu"
          class="App-PopupMenu"
+      />
+      <Snackbar
+         style="z-index: 99"
+         v-for="snackbar of store.getters.snackbars"
+         :key="snackbar.key"
+         :item="snackbar"
       />
    </div>
 </template>

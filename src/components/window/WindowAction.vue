@@ -1,7 +1,7 @@
 <script>
    import PopupWindow from "./PopupWindow.vue";
    import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import Loading from "@/components/Loading";
+   import Loading from "@/components/Loading.vue";
    import WindowBottom from "./WindowBottom.vue";
 
    export default {

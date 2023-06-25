@@ -1,13 +1,14 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
 
    export default {
-      components: { WindowAction },
+      components: { PanelAction },
       props: {
-         isShowing: { type: Boolean, default: false },
-         input: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         input: (c) => c.popupWindow.input,
          product: (c) => c.input?.product ?? null,
          title: (c) => c.product?.title ?? "",
       },
@@ -15,17 +16,17 @@
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       :title="`Delete ${title}?`"
       :isShowing="isShowing"
-      @click-dismiss="$emit('click-dismiss')"
-      @click-cancel="$emit('click-cancel')"
-      @click-ok="$emit('click-confirm', { productId: product.id })"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => popupWindow.onConfirm({ productId: product.id })"
    >
       <div>
          <div>
             <p>Once removed, cannot be undone</p>
          </div>
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>

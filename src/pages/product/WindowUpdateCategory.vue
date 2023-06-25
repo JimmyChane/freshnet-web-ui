@@ -1,15 +1,16 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import Selector4 from "@/components/selector/Selector4.vue";
 
    export default {
-      components: { WindowAction, Selector4 },
+      components: { PanelAction, Selector4 },
       props: {
-         isShowing: { type: Boolean, default: false },
-         input: { type: Object, default: null },
+         popupWindow: { type: Object },
       },
       data: (c) => ({ outputCategoryId: "" }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         input: (c) => c.popupWindow.input,
          product: (c) => c.input?.product ?? null,
          categoryId: (c) => c.input?.categoryId ?? "",
          categories: (c) => c.categoryStore.getters.items,
@@ -30,41 +31,33 @@
                icon: item.icon?.toUrl() ?? "",
             })),
       },
-      watch: {
-         categoryId() {
-            this.outputCategoryId = this.categoryId;
-         },
-      },
       methods: {
-         clear() {
-            this.outputCategoryId = "";
-         },
-
          clickConfirm() {
             if (this.categoryId === this.outputCategoryId) {
                this.store.dispatch("snackbarShow", "No Changes");
                return;
             }
 
-            let output = {
+            this.popupWindow.onConfirm({
                product: this.product,
                categoryId: this.outputCategoryId,
-            };
-
-            this.$emit("click-confirm", output) && this.clear();
+            });
          },
+      },
+      mounted() {
+         this.outputCategoryId = this.categoryId;
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowUpdateCategory"
       title="Edit Category"
       :isShowing="isShowing"
-      @click-dismiss="$emit('click-dismiss') && clear()"
-      @click-cancel="$emit('click-cancel') && clear()"
-      @click-ok="clickConfirm()"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => clickConfirm()"
    >
       <div class="WindowUpdateCategory-body">
          <Selector4
@@ -80,7 +73,7 @@
             "
          />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

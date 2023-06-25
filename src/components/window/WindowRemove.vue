@@ -1,34 +1,42 @@
 <script>
-   import PopupWindow from "@/components/window/PopupWindow.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import Actionbar from "@/components/actionbar/Actionbar.vue";
    import WindowBottom from "./WindowBottom.vue";
 
    export default {
-      components: { PopupWindow, Actionbar, WindowBottom },
+      components: { PanelAction, Actionbar, WindowBottom },
       props: {
-         isShowing: { type: Boolean, default: false },
-         title: { type: String, default: "" },
-         message: { type: String, default: "" },
-         value: { type: Object, default: null },
+         popupWindow: { type: Object },
+      },
+      computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         title: (c) => c.popupWindow.title,
+         message: (c) => c.popupWindow.message,
+         value: (c) => c.popupWindow.value,
+      },
+      methods: {
+         onOK() {
+            const accept = () => this.popupWindow.close();
+            const reject = () => {};
+            this.popupWindow.onConfirm(accept, reject);
+         },
       },
    };
 </script>
 
 <template>
-   <PopupWindow :isShowing="isShowing" @click-dismiss="() => $emit('click-dismiss')">
-      <div class="WindowRemove">
-         <Actionbar class="WindowRemove-header" :title="title" />
+   <div class="WindowRemove">
+      <Actionbar class="WindowRemove-header" :title="title" />
 
-         <div class="WindowRemove-main">
-            <span class="WindowRemove-body">{{ message }}</span>
-         </div>
-
-         <WindowBottom
-            @click-cancel="$emit('click-cancel')"
-            @click-ok="$emit('click-ok', value)"
-         />
+      <div class="WindowRemove-main">
+         <span class="WindowRemove-body">{{ message }}</span>
       </div>
-   </PopupWindow>
+
+      <WindowBottom
+         @click-cancel="() => popupWindow.close()"
+         @click-ok="() => onOK()"
+      />
+   </div>
 </template>
 
 <style lang="scss" scoped>

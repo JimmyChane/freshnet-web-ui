@@ -5,6 +5,7 @@ import HostApi from "../host/HostApi.js";
 import TimeNowGetter from "@/tools/TimeNowGetter.js";
 import Notification from "@/tools/Notification.js";
 import PopupMenu from "@/app/PopupMenu.vue";
+import U from "@/U.js";
 
 const keyGetter = new TimeNowGetter();
 
@@ -141,6 +142,59 @@ const init = (Stores) => {
       if (typeof arg === "string") arg = { text: arg };
       context.state.snackbars.push(new Notification(context, arg).show());
       context.commit("snackbars", context.state.snackbars);
+   };
+
+   // popup windows
+   context.state.popupWindows = [];
+   context.mutations.popupWindows = (state, popupWindows) =>
+      (state.popupWindows = popupWindows);
+   context.getters.popupWindows = (state) => state.popupWindows;
+   context.actions.openPopupWindow = (context, arg) => {
+      const { component, onOpened, onClosed } = arg;
+
+      const popupWindow = {
+         key: keyGetter.get(),
+         isShowing: false,
+         isClosing: false,
+
+         open: () => {
+            if (popupWindow.isShowing) return;
+            if (popupWindow.isClosing) return;
+            popupWindow.isShowing = true;
+
+            if (U.isFunction(popupWindow.onOpened)) {
+               popupWindow.onOpened(popupWindow);
+            }
+         },
+         close: () => {
+            if (!popupWindow.isShowing) return;
+            if (popupWindow.isClosing) return;
+            popupWindow.isClosing = true;
+
+            setTimeout(() => {
+               popupWindow.isShowing = false;
+               if (U.isFunction(popupWindow.onClosed)) {
+                  popupWindow.onClosed(popupWindow);
+               }
+               setTimeout(() => {
+                  const index = context.state.popupWindows.indexOf(popupWindow);
+                  context.state.popupWindows.splice(index, 1);
+                  context.commit("popupWindows", context.state.popupWindows);
+               }, 300);
+            }, 300);
+         },
+      };
+
+      Object.keys(arg).forEach((key) => {
+         popupWindow[key] = arg[key];
+      });
+
+      context.state.popupWindows.push(popupWindow);
+      context.commit("popupWindows", context.state.popupWindows);
+
+      setTimeout(() => popupWindow.open(), 300);
+
+      return popupWindow;
    };
 
    return new Vuex.Store(context);

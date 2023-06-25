@@ -23,7 +23,7 @@ class CustomerDevice {
    fromData(data) {
       this.id = U.trimId(data._id);
       this.ownerCustomerId = U.trimId(data.ownerCustomerId);
-      this.description = U.trimText(data.ownerCustomerId);
+      this.description = U.trimText(data.description);
       this.categoryKey = U.trimId(data.categoryKey);
       this.specifications = U.optArray(data.specifications)
          .map((specification) => {
@@ -40,7 +40,7 @@ class CustomerDevice {
    toData() {
       return {
          _id: U.trimId(this.id),
-         ownerCustomerId: U.trimId(data.ownerCustomerId)(this.ownerCustomerId),
+         ownerCustomerId: U.trimId(this.ownerCustomerId),
          description: U.trimId(this.description),
          categoryKey: U.trimId(this.categoryKey),
          specifications: this.specifications.map((specification) => {

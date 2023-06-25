@@ -37,35 +37,85 @@
          PanelCustomers,
          PanelCustomer,
          PanelRight,
-         WindowAddCustomer,
-         WindowRemoveCustomer,
-         WindowUpdateCustomer,
-         WindowUpdateDescription,
-         WindowAddDevice,
-         WindowRemoveDevice,
-         WindowUpdateDeviceSpecifications,
-         WindowUpdateDeviceDescription,
       },
       data: (c) => ({
          panelListened: { isWide: false },
          items: [],
          drawerCustomer: null,
 
-         windowAddCustomer: new PopupContext(c),
-         windowRemoveCustomer: new PopupContext(c).onConfirm(
+         windowAddCustomer: new PopupContext(c).onShow(() => {
+            c.store.dispatch("openPopupWindow", {
+               component: WindowAddCustomer,
+            });
+         }),
+         windowRemoveCustomer: new PopupContext(c).onShow(
             (accept, reject, data) => {
-               accept();
-               if (data.id === c.queryCustomerId) {
-                  c.clickClose();
-               }
+               c.store.dispatch("openPopupWindow", {
+                  component: WindowRemoveCustomer,
+                  item: data?.item ?? null,
+                  onConfirm: () => {
+                     if (data.id === c.queryCustomerId) {
+                        c.clickClose();
+                     }
+                  },
+               });
             },
          ),
-         windowUpdateCustomer: new PopupContext(c),
-         windowUpdateDescription: new PopupContext(c),
-         windowAddDevice: new PopupContext(c),
-         windowRemoveDevice: new PopupContext(c),
-         windowUpdateDeviceSpecifications: new PopupContext(c),
-         windowUpdateDeviceDescription: new PopupContext(c),
+         windowUpdateCustomer: new PopupContext(c).onShow(
+            (accept, reject, data) => {
+               c.store.dispatch("openPopupWindow", {
+                  component: WindowUpdateCustomer,
+                  item: data?.item ?? null,
+               });
+            },
+         ),
+         windowUpdateDescription: new PopupContext(c).onShow(
+            (accept, reject, data) => {
+               c.store.dispatch("openPopupWindow", {
+                  component: WindowUpdateDescription,
+                  item: data?.item ?? null,
+               });
+            },
+         ),
+         windowAddDevice: new PopupContext(c).onShow((accept, reject, data) => {
+            c.store.dispatch("openPopupWindow", {
+               component: WindowAddDevice,
+               item: data?.item ?? null,
+            });
+         }),
+         windowRemoveDevice: new PopupContext(c).onShow(
+            (accept, reject, data) => {
+               c.store.dispatch("openPopupWindow", {
+                  component: WindowRemoveDevice,
+                  param: data
+                     ? { customer: data.item, device: data.device }
+                     : null,
+               });
+            },
+         ),
+         windowUpdateDeviceSpecifications: new PopupContext(c).onShow(
+            (accept, reject, data) => {
+               c.store.dispatch("openPopupWindow", {
+                  component: WindowUpdateDeviceSpecifications,
+                  param: data
+                     ? {
+                          customer: data.customer,
+                          device: data.device,
+                          specifications: data.specifications,
+                       }
+                     : null,
+               });
+            },
+         ),
+         windowUpdateDeviceDescription: new PopupContext(c).onShow(
+            (accept, reject, data) => {
+               c.store.dispatch("openPopupWindow", {
+                  component: WindowUpdateDeviceDescription,
+                  customer: data?.customer ?? null,
+                  device: data?.device ?? null,
+               });
+            },
+         ),
       }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
@@ -237,130 +287,6 @@
       </div>
 
       <Loading class="PageCustomer-loading" :isShowing="isLoading" />
-
-      <!-- Add Customer -->
-      <WindowAddCustomer
-         class="PageCustomer-window"
-         :isShowing="windowAddCustomer.isShowing"
-         @click-dismiss="() => windowAction('windowAddCustomer', 'dismiss')"
-         @click-cancel="() => windowAction('windowAddCustomer', 'cancel')"
-         @click-ok="(param) => windowAction('windowAddCustomer', 'ok', param)"
-      />
-
-      <!-- Remove Customer -->
-      <WindowRemoveCustomer
-         class="PageCustomer-window"
-         :isShowing="windowRemoveCustomer.isShowing"
-         :item="
-            windowRemoveCustomer.input ? windowRemoveCustomer.input.item : null
-         "
-         @click-dismiss="() => windowAction('windowRemoveCustomer', 'dismiss')"
-         @click-cancel="() => windowAction('windowRemoveCustomer', 'cancel')"
-         @click-ok="(item) => windowAction('windowRemoveCustomer', 'ok', item)"
-      />
-
-      <!-- Update Customer -->
-      <WindowUpdateCustomer
-         class="PageCustomer-window"
-         :isShowing="windowUpdateCustomer.isShowing"
-         :item="
-            windowUpdateCustomer.input ? windowUpdateCustomer.input.item : null
-         "
-         @click-dismiss="() => windowAction('windowUpdateCustomer', 'dismiss')"
-         @click-cancel="() => windowAction('windowUpdateCustomer', 'cancel')"
-         @click-ok="() => windowAction('windowUpdateCustomer', 'ok')"
-      />
-
-      <!-- Update Description -->
-      <WindowUpdateDescription
-         class="PageCustomer-window"
-         :isShowing="windowUpdateDescription.isShowing"
-         :item="
-            windowUpdateDescription.input
-               ? windowUpdateDescription.input.item
-               : null
-         "
-         @click-dismiss="
-            () => windowAction('windowUpdateDescription', 'dismiss')
-         "
-         @click-cancel="() => windowAction('windowUpdateDescription', 'cancel')"
-         @click-ok="() => windowAction('windowUpdateDescription', 'ok')"
-      />
-
-      <!-- Add Device -->
-      <WindowAddDevice
-         class="PageCustomer-window"
-         :isShowing="windowAddDevice.isShowing"
-         :item="windowAddDevice.input ? windowAddDevice.input.item : null"
-         @click-dismiss="() => windowAction('windowAddDevice', 'dismiss')"
-         @click-cancel="() => windowAction('windowAddDevice', 'cancel')"
-         @click-ok="() => windowAction('windowAddDevice', 'ok')"
-      />
-
-      <!-- Remove Device -->
-      <WindowRemoveDevice
-         class="PageCustomer-window"
-         :isShowing="windowRemoveDevice.isShowing"
-         :param="
-            windowRemoveDevice.input
-               ? {
-                    customer: windowRemoveDevice.input.item,
-                    device: windowRemoveDevice.input.device,
-                 }
-               : null
-         "
-         @click-dismiss="() => windowAction('windowRemoveDevice', 'dismiss')"
-         @click-cancel="() => windowAction('windowRemoveDevice', 'cancel')"
-         @click-ok="() => windowAction('windowRemoveDevice', 'ok')"
-      />
-
-      <!-- Update Specifications Device -->
-      <WindowUpdateDeviceSpecifications
-         class="PageCustomer-window"
-         :isShowing="windowUpdateDeviceSpecifications.isShowing"
-         :param="
-            windowUpdateDeviceSpecifications.input
-               ? {
-                    customer: windowUpdateDeviceSpecifications.input.customer,
-                    device: windowUpdateDeviceSpecifications.input.device,
-                    specifications:
-                       windowUpdateDeviceSpecifications.input.specifications,
-                 }
-               : null
-         "
-         @click-dismiss="
-            () => windowAction('windowUpdateDeviceSpecifications', 'dismiss')
-         "
-         @click-cancel="
-            () => windowAction('windowUpdateDeviceSpecifications', 'cancel')
-         "
-         @click-ok="
-            () => windowAction('windowUpdateDeviceSpecifications', 'ok')
-         "
-      />
-
-      <!-- Update Description -->
-      <WindowUpdateDeviceDescription
-         class="PageCustomer-window"
-         :isShowing="windowUpdateDeviceDescription.isShowing"
-         :customer="
-            windowUpdateDeviceDescription.input
-               ? windowUpdateDeviceDescription.input.customer
-               : null
-         "
-         :device="
-            windowUpdateDeviceDescription.input
-               ? windowUpdateDeviceDescription.input.device
-               : null
-         "
-         @click-dismiss="
-            () => windowAction('windowUpdateDeviceDescription', 'dismiss')
-         "
-         @click-cancel="
-            () => windowAction('windowUpdateDeviceDescription', 'cancel')
-         "
-         @click-ok="() => windowAction('windowUpdateDeviceDescription', 'ok')"
-      />
    </div>
 </template>
 

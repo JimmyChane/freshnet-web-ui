@@ -1,15 +1,17 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import TextArea from "@/components/InputTextArea.vue";
 
    export default {
-      components: { WindowAction, TextArea },
-      emits: ["callback-cancel", "callback-change"],
+      components: { PanelAction, TextArea },
       props: {
-         isShowing: { type: Boolean, default: false },
-         description: { type: String, default: "" },
+         popupWindow: { type: Object },
       },
       data: (c) => ({ value: "" }),
+      computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         description: (c) => c.popupWindow.description,
+      },
       watch: {
          description() {
             this.value = this.description;
@@ -22,25 +24,31 @@
                return;
             }
 
-            this.$emit("callback-change", this.value);
+            const accept = () => this.popupWindow.close();
+            const reject = () => {};
+            this.popupWindow.onConfirm(accept, reject, this.value);
          },
 
          focus() {
             this.$refs.Input.focus();
          },
       },
+      mounted() {
+         this.focus();
+         this.value = this.description;
+      },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       title="Edit Description"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
       :isClickable="!serviceStore.getters.isFetching"
-      @click-ok="onChange"
-      @click-cancel="$emit('callback-cancel')"
-      @click-dismiss="() => $emit('callback-dismiss')"
+      @click-ok="() => onChange()"
+      @click-cancel="() => popupWindow.close()"
+      @click-dismiss="() => popupWindow.close()"
    >
       <div class="WindowDescription-main">
          <TextArea
@@ -52,7 +60,7 @@
             @input="(comp) => (value = comp.value)"
          />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

@@ -1,20 +1,23 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import WindowSection from "./WindowSection.vue";
    import Customer from "@/items/Customer";
    import ItemSpecification from "./ItemSpecification.vue";
    import TextArea from "@/components/InputTextArea.vue";
 
    export default {
-      components: { WindowAction, WindowSection, ItemSpecification, TextArea },
-      emits: ["click-dismiss", "click-cancel", "click-ok"],
+      components: { PanelAction, WindowSection, ItemSpecification, TextArea },
       props: {
-         isShowing: { type: Boolean, default: false },
-         customer: { type: Object, default: null },
-         device: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
-      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
+      data: (c) => ({
+         Requirement: Customer.Requirement,
+         data: { description: "" },
+      }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         customer: (c) => c.popupWindow.customer,
+         device: (c) => c.popupWindow.device,
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
 
@@ -33,26 +36,10 @@
             this.bindData();
          },
       },
-      created() {
-         this.resetData();
-      },
       mounted() {
-         this.resetData();
+         this.bindData();
       },
       methods: {
-         resetData() {
-            this.resetDataOnDelay(0);
-         },
-         resetDataOnDelay(delay = 0) {
-            if (delay) {
-               setTimeout(() => this.resetDataOnDelay(0), delay);
-               return;
-            }
-
-            this.data = { description: "" };
-
-            this.bindData();
-         },
          bindData() {
             if (this.device) {
                const { description } = this.device;
@@ -67,17 +54,14 @@
                   _id: this.device.id,
                   description: this.data.description,
                })
-               .then((device) => {
-                  this.$emit("click-ok", { device });
-                  this.resetDataOnDelay(700);
-               });
+               .then((device) => this.popupWindow.close());
          },
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowUpdateDeviceDescription"
       :title="`Update Device Description${
          customer ? ` for ${customer.name}` : ''
@@ -85,13 +69,8 @@
       :isShowing="isShowing"
       :isLoading="isLoading"
       :isClickable="isClickable"
-      @click-dismiss="() => $emit('click-dismiss')"
-      @click-cancel="
-         () => {
-            $emit('click-cancel');
-            resetDataOnDelay(700);
-         }
-      "
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
       @click-ok="() => clickOk()"
    >
       <div class="WindowUpdateDeviceDescription-body">
@@ -115,7 +94,7 @@
             @input="(comp) => (data.description = comp.value)"
          />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

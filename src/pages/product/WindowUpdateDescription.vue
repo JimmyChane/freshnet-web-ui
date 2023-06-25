@@ -1,69 +1,51 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import TextArea from "@/components/InputTextArea.vue";
    export default {
-      components: { WindowAction, TextArea },
+      components: { PanelAction, TextArea },
       props: {
-         isShowing: { type: Boolean, default: false },
-         input: { type: Object, default: () => null },
-         action: { type: Object, default: null },
+         popupWindow: { type: Object },
       },
-      data: (c) => ({ data: null }),
+      data: (c) => ({ data: { description: "" } }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         input: (c) => c.popupWindow.input,
          product: (c) => c.input?.product ?? "",
          description: (c) => c.data?.description ?? "",
       },
-      watch: {
-         input() {
-            if (!this.input) {
-               this.data = null;
-               return;
-            }
-
-            this.data = {
-               description: this.input.description,
-            };
-         },
-      },
       methods: {
-         clear() {
-            this.data = { description: "" };
-         },
-
          clickConfirm() {
-            let output = {
+            this.popupWindow.onConfirm({
                product: this.product,
                description: this.description,
-            };
-
-            this.$emit("click-confirm", output) && this.clear();
+            });
          },
       },
       mounted() {
-         this.clear();
+         this.data = { description: this.product.description };
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowUpdateDescription"
       title="Update Description"
       :isShowing="isShowing"
-      @click-dismiss="$emit('click-dismiss') && clear()"
-      @click-cancel="$emit('click-cancel') && clear()"
-      @click-ok="clickConfirm()"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => clickConfirm()"
    >
       <div class="WindowUpdateDescription-body">
          <TextArea
             type="text"
             label="Description"
-            :bindValue="description"
+            :bindValue="data.description"
             :isRequired="true"
             @input="(comp) => (data.description = comp.value)"
          />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>
