@@ -1,28 +1,23 @@
 <script>
-   import WindowSearch from "@/components/WindowSearch.vue";
+   import PanelSearch from "@/components/panel/PanelSearch.vue";
    import ItemSearchProduct from "./ItemSearchProduct.vue";
 
    export default {
-      components: { WindowSearch, ItemSearchProduct },
+      components: { PanelSearch, ItemSearchProduct },
       props: {
-         isShowing: { type: Boolean, default: false },
-         items: { type: Array, default: () => [] },
+         popupWindow: { type: Object },
       },
       data: (c) => ({ search: "", results: [] }),
+      computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         items: (c) => c.popupWindow.items,
+      },
       watch: {
          search() {
-            this.invalidate();
-         },
-      },
-      mounted() {
-         this.invalidate();
-      },
-      methods: {
-         async invalidate() {
-            this.results = [];
             this.results = this.inputText(this.search);
          },
-
+      },
+      methods: {
          blur() {
             this.$refs.windowSearch.blur();
          },
@@ -54,22 +49,22 @@
                .sort((result1, result2) => result2.count - result1.count)
                .map((result) => result.product);
          },
-         clickItem(item) {
-            this.$emit("click-dismiss");
-            this.$emit("click-item", item);
-         },
          clickDismiss() {
-            this.$emit("click-dismiss");
+            this.blur();
+            this.popupWindow.close();
          },
+      },
+      mounted() {
+         this.results = this.inputText(this.search);
+         this.focus();
       },
    };
 </script>
 
 <template>
-   <WindowSearch
+   <PanelSearch
       class="WindowSearch"
       ref="windowSearch"
-      :isShowing="isShowing"
       placeholder="Search products"
       @input-text="(text) => (search = text)"
       @click-dismiss="() => clickDismiss()"
@@ -79,8 +74,9 @@
          v-for="item in results"
          :key="item.id"
          :item="item"
+         @click="() => clickDismiss()"
       />
-   </WindowSearch>
+   </PanelSearch>
 </template>
 
 <style lang="scss" scoped>

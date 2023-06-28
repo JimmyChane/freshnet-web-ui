@@ -9,10 +9,16 @@
 </script>
 
 <template>
-   <router-link
-      :style="{ border: 'none', background: 'none', 'text-decoration': 'none' }"
-      :to="{ path: '/product', query: { productId: item.id } }"
-   >
-      <ItemProduct :item="item" :mode="mode" />
-   </router-link>
+   <div @click="() => $emit('click')">
+      <router-link
+         :style="{
+            border: 'none',
+            background: 'none',
+            'text-decoration': 'none',
+         }"
+         :to="{ path: '/product', query: { productId: item.id } }"
+      >
+         <ItemProduct :item="item" :mode="mode" />
+      </router-link>
+   </div>
 </template>

@@ -18,8 +18,6 @@
 
    import HostIcon from "@/host/HostIcon";
 
-   import PopupContext from "@/tools/PopupContext";
-
    export default {
       key: "customer",
       title: "Customers",
@@ -42,80 +40,6 @@
          panelListened: { isWide: false },
          items: [],
          drawerCustomer: null,
-
-         windowAddCustomer: new PopupContext(c).onShow(() => {
-            c.store.dispatch("openPopupWindow", {
-               component: WindowAddCustomer,
-            });
-         }),
-         windowRemoveCustomer: new PopupContext(c).onShow(
-            (accept, reject, data) => {
-               c.store.dispatch("openPopupWindow", {
-                  component: WindowRemoveCustomer,
-                  item: data?.item ?? null,
-                  onConfirm: () => {
-                     if (data.id === c.queryCustomerId) {
-                        c.clickClose();
-                     }
-                  },
-               });
-            },
-         ),
-         windowUpdateCustomer: new PopupContext(c).onShow(
-            (accept, reject, data) => {
-               c.store.dispatch("openPopupWindow", {
-                  component: WindowUpdateCustomer,
-                  item: data?.item ?? null,
-               });
-            },
-         ),
-         windowUpdateDescription: new PopupContext(c).onShow(
-            (accept, reject, data) => {
-               c.store.dispatch("openPopupWindow", {
-                  component: WindowUpdateDescription,
-                  item: data?.item ?? null,
-               });
-            },
-         ),
-         windowAddDevice: new PopupContext(c).onShow((accept, reject, data) => {
-            c.store.dispatch("openPopupWindow", {
-               component: WindowAddDevice,
-               item: data?.item ?? null,
-            });
-         }),
-         windowRemoveDevice: new PopupContext(c).onShow(
-            (accept, reject, data) => {
-               c.store.dispatch("openPopupWindow", {
-                  component: WindowRemoveDevice,
-                  param: data
-                     ? { customer: data.item, device: data.device }
-                     : null,
-               });
-            },
-         ),
-         windowUpdateDeviceSpecifications: new PopupContext(c).onShow(
-            (accept, reject, data) => {
-               c.store.dispatch("openPopupWindow", {
-                  component: WindowUpdateDeviceSpecifications,
-                  param: data
-                     ? {
-                          customer: data.customer,
-                          device: data.device,
-                          specifications: data.specifications,
-                       }
-                     : null,
-               });
-            },
-         ),
-         windowUpdateDeviceDescription: new PopupContext(c).onShow(
-            (accept, reject, data) => {
-               c.store.dispatch("openPopupWindow", {
-                  component: WindowUpdateDeviceDescription,
-                  customer: data?.customer ?? null,
-                  device: data?.device ?? null,
-               });
-            },
-         ),
       }),
       computed: {
          isLoading: (c) => c.customerStore.getters.isLoading,
@@ -193,35 +117,71 @@
                query: { id: null, name: null, phoneNumber: null },
             });
          },
+
          clickItemAdd() {
-            this.windowAction("windowAddCustomer", "start");
+            this.store.dispatch("openPopupWindow", {
+               component: WindowAddCustomer,
+            });
          },
+         clickAddItemDevice(data) {
+            this.store.dispatch("openPopupWindow", {
+               component: WindowAddDevice,
+               item: data?.item ?? null,
+            });
+         },
+
          clickItemRemove(item) {
-            this.windowAction("windowRemoveCustomer", "start", { item });
+            const data = { item };
+
+            this.store.dispatch("openPopupWindow", {
+               component: WindowRemoveCustomer,
+               item: data?.item ?? null,
+               onConfirm: () => {
+                  if (data.id === this.queryCustomerId) {
+                     this.clickClose();
+                  }
+               },
+            });
+         },
+         clickRemoveItemDevice(data) {
+            this.store.dispatch("openPopupWindow", {
+               component: WindowRemoveDevice,
+               param: data
+                  ? { customer: data.item, device: data.device }
+                  : null,
+            });
          },
 
-         windowAction(window, action, data) {
-            const self = this[window];
-
-            if (self instanceof PopupContext) {
-               switch (action) {
-                  case "start":
-                     self.show(data);
-                     break;
-                  case "dismiss":
-                     self.dismiss();
-                     break;
-                  case "cancel":
-                     self.cancel();
-                     break;
-                  case "ok":
-                     self.confirm(data);
-                     break;
-               }
-               return;
-            }
-
-            self[action](this, self, data);
+         clickUpdateCustomer(data) {
+            this.store.dispatch("openPopupWindow", {
+               component: WindowUpdateCustomer,
+               item: data?.item ?? null,
+            });
+         },
+         clickUpdateDescription(data) {
+            this.store.dispatch("openPopupWindow", {
+               component: WindowUpdateDescription,
+               item: data?.item ?? null,
+            });
+         },
+         clickUpdateItemDeviceSpecifications(data) {
+            this.store.dispatch("openPopupWindow", {
+               component: WindowUpdateDeviceSpecifications,
+               param: data
+                  ? {
+                       customer: data.customer,
+                       device: data.device,
+                       specifications: data.specifications,
+                    }
+                  : null,
+            });
+         },
+         clickUpdateItemDeviceDescription(data) {
+            this.store.dispatch("openPopupWindow", {
+               component: WindowUpdateDeviceDescription,
+               customer: data?.customer ?? null,
+               device: data?.device ?? null,
+            });
          },
       },
    };
@@ -253,34 +213,20 @@
                @click-item-close="() => clickClose()"
                @click-item-remove="(param) => this.clickItemRemove(param.item)"
                @click-item-customer-update="
-                  (param) =>
-                     windowAction('windowUpdateCustomer', 'start', param)
+                  (param) => clickUpdateCustomer(param)
                "
                @click-item-description-update="
-                  (param) =>
-                     windowAction('windowUpdateDescription', 'start', param)
+                  (param) => clickUpdateDescription(param)
                "
-               @click-item-device-add="
-                  (param) => windowAction('windowAddDevice', 'start', param)
-               "
+               @click-item-device-add="(param) => clickAddItemDevice(param)"
                @click-item-device-remove="
-                  (param) => windowAction('windowRemoveDevice', 'start', param)
+                  (param) => clickRemoveItemDevice(param)
                "
                @click-item-device-update-specifications="
-                  (param) =>
-                     windowAction(
-                        'windowUpdateDeviceSpecifications',
-                        'start',
-                        param,
-                     )
+                  (param) => clickUpdateItemDeviceSpecifications(param)
                "
                @click-item-device-update-description="
-                  (param) =>
-                     windowAction(
-                        'windowUpdateDeviceDescription',
-                        'start',
-                        param,
-                     )
+                  (param) => clickUpdateItemDeviceDescription(param)
                "
             />
          </PanelRight>

@@ -9,12 +9,8 @@
    import WindowUpdateDescription from "./WindowUpdateDescription.vue";
    import WindowUpdateBelonging from "./WindowUpdateBelonging.vue";
    import WindowUpdateCustomer from "./WindowUpdateCustomer.vue";
-
-   import HostIcon from "@/host/HostIcon";
-
-   import PopupContext from "@/tools/PopupContext";
-
    import PanelRight from "@/components/panel/PanelRight.vue";
+   import HostIcon from "@/host/HostIcon";
 
    export default {
       key: "service",
@@ -25,13 +21,7 @@
       },
       userPermissions: ["admin", "staff"],
 
-      components: {
-         PanelServices,
-         Loading,
-         PanelService,
-         WindowSearch,
-         PanelRight,
-      },
+      components: { PanelServices, Loading, PanelService, PanelRight },
       data: (c) => ({
          actions: {
             onClickClose: () => c.clickService(null),
@@ -52,7 +42,6 @@
             onClickUpdateBelongings: (belongings) =>
                c.clickEditServiceBelongings(belongings),
          },
-         popup: { search: new PopupContext(c) },
          panelListened: { isWide: false },
 
          items: [],
@@ -183,6 +172,15 @@
 
             this.updateServiceUI(service);
          },
+         clickSearch() {
+            const popupWindow = this.store.dispatch("openPopupWindow", {
+               component: WindowSearch,
+               items: this.items,
+               clickItem: (service) => {
+                  this.clickService(service);
+               },
+            });
+         },
 
          clickRemoveService(service) {
             const popupWindow = this.store.dispatch("openPopupWindow", {
@@ -311,27 +309,6 @@
                },
             });
          },
-
-         windowAction(window, action, data) {
-            const self = this.popup[window];
-
-            if (self instanceof PopupContext) {
-               switch (action) {
-                  case "start":
-                     self.show(data);
-                     break;
-                  case "dismiss":
-                     self.dismiss();
-                     break;
-                  case "ok":
-                     self.confirm(data);
-                     break;
-               }
-               return;
-            }
-
-            self[action](this, self, data);
-         },
       },
    };
 </script>
@@ -345,11 +322,10 @@
             :services="items"
             :currentItem="currentService"
             @click-service="(item) => clickService(item)"
-            @click-search="() => windowAction('search', 'start')"
+            @click-search="() => clickSearch()"
             @click-add="() => clickAddService()"
             @click-import="() => clickImportService()"
          />
-
          <PanelRight
             class="PageService-PanelRight"
             titleEmpty="Select service to view"
@@ -366,14 +342,6 @@
             />
          </PanelRight>
       </div>
-
-      <WindowSearch
-         v-if="$root.window.innerWidth <= 600"
-         :isShowing="popup.search.isShowing"
-         :items="items"
-         @click-dismiss="() => windowAction('search', 'dismiss')"
-         @click-item="(item) => clickService(item)"
-      />
 
       <Loading
          class="PageService-loading"

@@ -6,16 +6,10 @@
    export default {
       components: { PopupWindow, Actionbar, Searchbar },
       props: {
-         isShowing: { type: Boolean, default: false },
          placeholder: { type: String, default: "Search" },
       },
       data: (c) => ({ search: "", results: [] }),
       watch: {
-         isShowing() {
-            this.isShowing
-               ? this.$refs.inputSearch.focus()
-               : this.$refs.inputSearch.blur();
-         },
          search() {
             this.onInput();
          },
@@ -39,26 +33,20 @@
 </script>
 
 <template>
-   <PopupWindow
-      class="WindowSearch"
-      :isShowing="isShowing"
-      @click-dismiss="() => $emit('click-dismiss')"
-   >
-      <div class="WindowSearch-body">
-         <Searchbar
-            class="WindowSearch-input"
-            ref="inputSearch"
-            :model="search"
-            :placeholder="placeholder"
-            :enterIcon="host.icon('arrow-left-000000')"
-            @input="(e) => (search = e.value)"
-            @clear="(e) => (search = '')"
-            @enter="() => $emit('click-dismiss')"
-         />
+   <div class="WindowSearch-body">
+      <Searchbar
+         class="WindowSearch-input"
+         ref="inputSearch"
+         :model="search"
+         :placeholder="placeholder"
+         :enterIcon="host.icon('arrow-left-000000')"
+         @input="(e) => (search = e.value)"
+         @clear="(e) => (search = '')"
+         @enter="() => $emit('click-dismiss')"
+      />
 
-         <div class="WindowSearch-items"> <slot /> </div>
-      </div>
-   </PopupWindow>
+      <div class="WindowSearch-items"> <slot /> </div>
+   </div>
 </template>
 
 <style lang="scss" scoped>

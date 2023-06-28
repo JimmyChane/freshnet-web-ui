@@ -22,9 +22,9 @@
          isWide: { type: Boolean, default: false },
          isEditable: { type: Boolean, default: false },
          isBackable: { type: Boolean, default: true },
-         openedWindowCount: { type: Number, default: 0 },
       },
       computed: {
+         openedWindowCount: (c) => c.store.getters.popupWindows.length,
          actionbarLeftMenus() {
             return {
                key: "close",

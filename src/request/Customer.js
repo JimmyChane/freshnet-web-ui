@@ -5,7 +5,11 @@ export default class Customer {
       return HostApi.request().url("customer/list").send();
    }
    static add(content = {}) {
-      return HostApi.request().POST().url("customer/add").body({ content }).send();
+      return HostApi.request()
+         .POST()
+         .url("customer/add")
+         .body({ content })
+         .send();
    }
    static remove(id = "") {
       return HostApi.request()
@@ -25,7 +29,7 @@ export default class Customer {
       return HostApi.request()
          .PUT()
          .url("customer/update/description")
-         .body({ content: { _id: id, description } })
+         .body({ content: { id, description } })
          .send();
    }
 }
