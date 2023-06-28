@@ -330,6 +330,7 @@
    }
    .ItemService-isList {
       .ItemService-body {
+         height: 100%;
          width: 100%;
 
          font-weight: 400;
@@ -339,6 +340,7 @@
 
          display: flex;
          flex-direction: column;
+         justify-content: flex-start;
          align-items: center;
          border-radius: 0.5em;
          border: 0.1em solid transparent;
@@ -367,6 +369,7 @@
             }
          }
          .ItemService-bottom {
+            height: 100%;
             width: 100%;
             font-size: 0.8rem;
             gap: 0.5rem;

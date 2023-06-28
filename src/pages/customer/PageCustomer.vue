@@ -188,49 +188,43 @@
 </script>
 
 <template>
-   <div class="PageCustomer">
-      <div class="PageCustomer-body" :isPanelWide="`${panelListened.isWide}`">
-         <PanelCustomers
-            class="PageCustomer-panelLeft transition"
-            :items="items"
-            :itemSelected="currentCustomer"
-            :title="$options.title"
-            @click-refresh="() => invalidate()"
-            @click-item-add="() => clickItemAdd()"
-            @click-item-remove="(param) => clickItemRemove(param.item)"
-         />
+   <div class="PageCustomer" :isPanelWide="`${panelListened.isWide}`">
+      <PanelCustomers
+         class="PageCustomer-panelLeft transition"
+         :items="items"
+         :itemSelected="currentCustomer"
+         :title="$options.title"
+         @click-refresh="() => invalidate()"
+         @click-item-add="() => clickItemAdd()"
+         @click-item-remove="(param) => clickItemRemove(param.item)"
+      />
 
-         <PanelRight
-            class="PageCustomer-PanelRight"
-            titleEmpty="Select customer to view"
-            :isShowing="!!currentCustomer"
-            @click-collapse="() => clickClose()"
-            @on-isWide="(isWide) => (panelListened.isWide = isWide)"
-         >
-            <PanelCustomer
-               class="PageCustomer-PanelCustomer transition"
-               :item="drawerCustomer"
-               @click-item-close="() => clickClose()"
-               @click-item-remove="(param) => this.clickItemRemove(param.item)"
-               @click-item-customer-update="
-                  (param) => clickUpdateCustomer(param)
-               "
-               @click-item-description-update="
-                  (param) => clickUpdateDescription(param)
-               "
-               @click-item-device-add="(param) => clickAddItemDevice(param)"
-               @click-item-device-remove="
-                  (param) => clickRemoveItemDevice(param)
-               "
-               @click-item-device-update-specifications="
-                  (param) => clickUpdateItemDeviceSpecifications(param)
-               "
-               @click-item-device-update-description="
-                  (param) => clickUpdateItemDeviceDescription(param)
-               "
-            />
-         </PanelRight>
-      </div>
+      <PanelRight
+         class="PageCustomer-PanelRight"
+         titleEmpty="Select customer to view"
+         :isShowing="!!currentCustomer"
+         @click-collapse="() => clickClose()"
+         @on-isWide="(isWide) => (panelListened.isWide = isWide)"
+      >
+         <PanelCustomer
+            class="PageCustomer-PanelCustomer transition"
+            :item="drawerCustomer"
+            @click-item-close="() => clickClose()"
+            @click-item-remove="(param) => this.clickItemRemove(param.item)"
+            @click-item-customer-update="(param) => clickUpdateCustomer(param)"
+            @click-item-description-update="
+               (param) => clickUpdateDescription(param)
+            "
+            @click-item-device-add="(param) => clickAddItemDevice(param)"
+            @click-item-device-remove="(param) => clickRemoveItemDevice(param)"
+            @click-item-device-update-specifications="
+               (param) => clickUpdateItemDeviceSpecifications(param)
+            "
+            @click-item-device-update-description="
+               (param) => clickUpdateItemDeviceDescription(param)
+            "
+         />
+      </PanelRight>
 
       <Loading class="PageCustomer-loading" :isShowing="isLoading" />
    </div>
@@ -242,51 +236,33 @@
       width: 100%;
       height: 100%;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      flex-grow: 1;
 
-      .PageCustomer-top {
-         flex-grow: 0;
-      }
-
-      .PageCustomer-body {
-         flex-grow: 1;
-         width: 100%;
+      .PageCustomer-panelLeft {
+         z-index: 1;
          height: 100%;
-         display: flex;
-         flex-direction: row;
-         position: relative;
-         .PageCustomer-panelLeft {
-            z-index: 1;
-            height: 100%;
-         }
-         .PageCustomer-PanelRight {
-            z-index: 2;
-         }
       }
-      .PageCustomer-body[isPanelWide="false"] {
-         .PageCustomer-panelLeft {
-            width: 100dvw;
-            max-width: 100%;
-         }
+      .PageCustomer-PanelRight {
+         z-index: 2;
       }
-      .PageCustomer-body[isPanelWide="true"] {
-         .PageCustomer-panelLeft {
-            width: 100dvw;
-            max-width: 50%;
-         }
-      }
-
       .PageCustomer-loading {
          position: absolute;
          bottom: 0;
          width: 100%;
          z-index: 1;
       }
-
-      .PageCustomer-window {
-         z-index: 4;
+   }
+   .PageCustomer[isPanelWide="false"] {
+      .PageCustomer-panelLeft {
+         width: 100dvw;
          max-width: 100%;
-         height: 100%;
+      }
+   }
+   .PageCustomer[isPanelWide="true"] {
+      .PageCustomer-panelLeft {
+         width: 100dvw;
+         max-width: 50%;
       }
    }
 </style>

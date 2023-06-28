@@ -136,7 +136,7 @@
          right: 0;
       }
       .PanelCustomers-body {
-         --gap: 2px;
+         --gap: 4px;
 
          z-index: 1;
          padding: calc(1rem - var(--gap) * 0.5) 1rem;

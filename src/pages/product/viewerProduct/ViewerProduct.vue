@@ -183,9 +183,9 @@
          primaryColor: (c) =>
             chroma.valid(c.primaryColorHex)
                ? chroma(c.primaryColorHex)
-               : chroma("cccccc"),
+               : chroma("bbbbbb"),
          actionbarColor: (c) => c.primaryColor.mix("ffffff", 0.6),
-         backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.3),
+         backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.6),
 
          isImageViewerShowing() {
             return this.$store.getters.imageViewer.isShowing;
@@ -250,6 +250,7 @@
             this.brand = await this.product.fetchBrand();
          },
          async invalidateImagePreview() {
+            return;
             const color = this.imagePreview
                ? await this.imagePreview.fetchColor().catch(() => null)
                : null;

@@ -426,53 +426,52 @@
 </script>
 
 <template>
-   <div class="PageProduct">
-      <div class="PageProduct-body" :isPanelWide="`${panelListened.isWide}`">
-         <PanelProducts
-            class="PageProduct-products"
-            :style="stylePanelProducts"
-            :products="products"
-            @click-productAdd="() => clickAddProduct()"
-            @click-search="() => clickSearch()"
+   <div class="PageProduct" :isPanelWide="`${panelListened.isWide}`">
+      <PanelProducts
+         class="PageProduct-products"
+         :style="stylePanelProducts"
+         :products="products"
+         @click-productAdd="() => clickAddProduct()"
+         @click-search="() => clickSearch()"
+      />
+
+      <PanelRight
+         class="PageProduct-PanelRight"
+         titleEmpty="Select product to view"
+         :isShowing="!!product"
+         @click-collapse="() => setProduct(null)"
+         @on-isShowing="(isShowing) => invalidatePanelShowing(isShowing)"
+         @on-isWide="(isWide) => invalidatePanelWide(isWide)"
+      >
+         <PanelProduct
+            class="PageProduct-PanelProduct"
+            :product="drawerProduct"
+            :productPrevious="productPrevious"
+            :productNext="productNext"
+            :isWide="false"
+            :isEditable="isEditable"
+            @click-dismiss="() => setProduct(null)"
+            @click-productRemove="(output) => clickRemoveProduct(output)"
+            @click-product-imageRemove="
+               (output) => clickRemoveProductImage(output)
+            "
+            @click-product-titleBrandUpdate="
+               (output) => clickUpdateProductTitleBrand(output)
+            "
+            @click-product-priceUpdate="
+               (output) => clickUpdateProductPrice(output)
+            "
+            @click-product-descriptionUpdate="
+               (output) => clickUpdateProductDescription(output)
+            "
+            @click-product-categoryUpdate="
+               (output) => clickUpdateProductCategory(output)
+            "
+            @click-product-specificationsUpdate="
+               (output) => clickUpdateProductSpecifications(output)
+            "
          />
-         <PanelRight
-            class="PageProduct-PanelRight"
-            titleEmpty="Select product to view"
-            :isShowing="!!product"
-            @click-collapse="() => setProduct(null)"
-            @on-isShowing="(isShowing) => invalidatePanelShowing(isShowing)"
-            @on-isWide="(isWide) => invalidatePanelWide(isWide)"
-         >
-            <PanelProduct
-               class="PageProduct-PanelProduct"
-               :product="drawerProduct"
-               :productPrevious="productPrevious"
-               :productNext="productNext"
-               :isWide="false"
-               :isEditable="isEditable"
-               @click-dismiss="() => setProduct(null)"
-               @click-productRemove="(output) => clickRemoveProduct(output)"
-               @click-product-imageRemove="
-                  (output) => clickRemoveProductImage(output)
-               "
-               @click-product-titleBrandUpdate="
-                  (output) => clickUpdateProductTitleBrand(output)
-               "
-               @click-product-priceUpdate="
-                  (output) => clickUpdateProductPrice(output)
-               "
-               @click-product-descriptionUpdate="
-                  (output) => clickUpdateProductDescription(output)
-               "
-               @click-product-categoryUpdate="
-                  (output) => clickUpdateProductCategory(output)
-               "
-               @click-product-specificationsUpdate="
-                  (output) => clickUpdateProductSpecifications(output)
-               "
-            />
-         </PanelRight>
-      </div>
+      </PanelRight>
    </div>
 </template>
 
@@ -482,40 +481,28 @@
       height: 100%;
       max-width: 100%;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       justify-content: flex-start;
       overflow: hidden;
+      position: relative;
 
-      .PageProduct-body {
-         width: 100dvw;
+      .PageProduct-products {
+         z-index: 1;
+      }
+      .PageProduct-PanelRight {
+         z-index: 2;
+      }
+   }
+   .PageProduct[isPanelWide="false"] {
+      .PageProduct-products {
          max-width: 100%;
-         height: 100%;
-         display: flex;
-         flex-direction: row;
-         flex-wrap: nowrap;
-         justify-content: flex-start;
-         overflow: hidden;
-
-         position: relative;
-
-         .PageProduct-products {
-            z-index: 1;
-         }
-         .PageProduct-PanelRight {
-            z-index: 2;
-         }
       }
-      .PageProduct-body[isPanelWide="false"] {
-         .PageProduct-products {
-            max-width: 100%;
-         }
-      }
-      .PageProduct-body[isPanelWide="true"] {
-         .PageProduct-products {
-            width: 100dvw;
-            max-width: 60%;
-            min-width: 60%;
-         }
+   }
+   .PageProduct[isPanelWide="true"] {
+      .PageProduct-products {
+         width: 100dvw;
+         max-width: 60%;
+         min-width: 60%;
       }
    }
 </style>

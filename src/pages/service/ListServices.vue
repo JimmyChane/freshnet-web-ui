@@ -255,7 +255,6 @@
       .ListServices-group {
          width: 100%;
          gap: 0.5rem;
-         gap: 0.2rem;
          display: flex;
          flex-direction: column;
          align-items: center;
@@ -263,9 +262,9 @@
          .ListServices-group-title {
             font-size: 0.7rem;
             font-weight: 600;
-            background: hsl(0, 0%, 96%);
+            background: white;
             box-shadow: 0 0 0.4rem hsl(0, 0%, 80%);
-            padding: 0.4rem 0.4rem;
+            padding: 0.5rem 0.7rem;
             border-radius: 1em;
             line-height: 0.6em;
 

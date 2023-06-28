@@ -76,7 +76,7 @@
 
 <template>
    <div class="PageManage">
-      <router-view class="PageManage-view" v-if="!user.isTypeNone()" />
+      <router-view v-if="!user.isTypeNone()" />
    </div>
 </template>
 
@@ -89,16 +89,5 @@
       align-items: stretch;
       justify-content: stretch;
       overflow: hidden;
-
-      .PageManage-view {
-         width: 100%;
-         height: 100%;
-         flex-grow: 1;
-         display: flex;
-         flex-direction: column;
-         align-items: stretch;
-         justify-content: stretch;
-         z-index: 1;
-      }
    }
 </style>

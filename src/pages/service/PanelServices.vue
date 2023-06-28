@@ -8,12 +8,7 @@
    import ServiceState from "@/items/ServiceState";
 
    export default {
-      emits: [
-         "click-add",
-         "click-import",
-         "click-service",
-         "click-service-delete",
-      ],
+      emits: ["click-add", "click-import", "click-service"],
       components: { Empty, Actionbar, ListServices },
       props: {
          menus: { type: Array, default: () => [] },
@@ -206,9 +201,9 @@
       />
 
       <div class="PanelServices-toolbar" v-if="isCurrentStatePending">
-         <button @click="() => $emit('click-add')">Add</button>
+         <button @click="() => $emit('click-add')">Add Service</button>
          <button @click="() => $emit('click-import')" v-if="isCurrentUserAdmin"
-            >Import</button
+            >Import Service</button
          >
       </div>
 

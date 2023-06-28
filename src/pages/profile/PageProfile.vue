@@ -110,11 +110,12 @@
 <style lang="scss" scoped>
    .PageProfile {
       position: relative;
+      flex-grow: 1;
       width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: stretch;
       justify-content: flex-start;
 
       .PageProfile-scroll {

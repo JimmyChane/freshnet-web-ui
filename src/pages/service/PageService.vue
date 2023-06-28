@@ -314,34 +314,31 @@
 </script>
 
 <template>
-   <div class="PageService">
-      <div class="PageService-panels" :isPanelWide="`${panelListened.isWide}`">
-         <PanelServices
-            class="PageService-PanelServices"
-            :menus="actionMenus"
-            :services="items"
-            :currentItem="currentService"
-            @click-service="(item) => clickService(item)"
-            @click-search="() => clickSearch()"
-            @click-add="() => clickAddService()"
-            @click-import="() => clickImportService()"
-         />
-         <PanelRight
+   <div class="PageService" :isPanelWide="`${panelListened.isWide}`">
+      <PanelServices
+         class="PageService-PanelServices"
+         :menus="actionMenus"
+         :services="items"
+         :currentItem="currentService"
+         @click-service="(item) => clickService(item)"
+         @click-search="() => clickSearch()"
+         @click-add="() => clickAddService()"
+         @click-import="() => clickImportService()"
+      />
+
+      <PanelRight
+         class="PageService-PanelRight"
+         titleEmpty="Select service to view"
+         :isShowing="!!currentService"
+         @click-collapse="() => $root.nextQuery({ query: { service: null } })"
+         @on-isWide="(isWide) => (panelListened.isWide = isWide)"
+      >
+         <PanelService
             class="PageService-PanelRight"
-            titleEmpty="Select service to view"
-            :isShowing="!!currentService"
-            @click-collapse="
-               () => $root.nextQuery({ query: { service: null } })
-            "
-            @on-isWide="(isWide) => (panelListened.isWide = isWide)"
-         >
-            <PanelService
-               class="PageService-PanelRight"
-               :service="drawerService"
-               :actions="actions"
-            />
-         </PanelRight>
-      </div>
+            :service="drawerService"
+            :actions="actions"
+         />
+      </PanelRight>
 
       <Loading
          class="PageService-loading"
@@ -353,53 +350,36 @@
 <style lang="scss" scoped>
    .PageService {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: stretch;
       justify-content: stretch;
       width: 100%;
       height: 100%;
-      max-width: 100%;
-      max-height: 100%;
       position: relative;
+      overflow: hidden;
 
-      --body-padding: 0.9rem;
-
-      .PageService-panels {
-         width: 100%;
-         height: 100%;
+      .PageService-PanelServices {
          z-index: 1;
-         overflow: hidden;
-         position: relative;
-
-         display: flex;
-         flex-direction: row;
-         flex-grow: 1;
-         align-items: stretch;
-
-         .PageService-PanelServices {
-            z-index: 1;
-         }
-         .PageService-PanelRight {
-            z-index: 2;
-         }
       }
-      .PageService-panels[isPanelWide="false"] {
-         .PageService-PanelServices {
-            width: 100dvw;
-            max-width: 100%;
-         }
+      .PageService-PanelRight {
+         z-index: 2;
       }
-      .PageService-panels[isPanelWide="true"] {
-         .PageService-PanelServices {
-            width: 100dvw;
-            max-width: 50%;
-         }
-      }
-
       .PageService-loading {
          z-index: 5;
          bottom: 0;
          position: absolute;
+      }
+   }
+   .PageService[isPanelWide="false"] {
+      .PageService-PanelServices {
+         width: 100dvw;
+         max-width: 100%;
+      }
+   }
+   .PageService[isPanelWide="true"] {
+      .PageService-PanelServices {
+         width: 100dvw;
+         max-width: 50%;
       }
    }
 </style>
