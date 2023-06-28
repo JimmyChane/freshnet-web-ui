@@ -29,6 +29,24 @@
          onDescriptionInput(event, belonging) {
             belonging.description = event.target.value.trim();
          },
+         onDescriptionKeyup(event) {
+            const { key, target } = event;
+
+            if (this.belonging.description.length !== 0) return;
+            if (key === "Enter" && !event.shiftKey) {
+               event.preventDefault();
+
+               const focusableElements = document.querySelectorAll(
+                  "input:not([disabled]), textarea:not([disabled])",
+               );
+               const currentIndex =
+                  Array.from(focusableElements).indexOf(target);
+               const nextIndex = (currentIndex + 1) % focusableElements.length;
+
+               const nextElement = focusableElements[nextIndex];
+               nextElement.focus();
+            }
+         },
          onCountChange(event, belonging) {
             let count = Number.parseInt(event.target.value);
             if (Number.isNaN(count)) count = 0;
@@ -73,6 +91,7 @@
          placeholder="Description"
          :value="belonging.description"
          @input="(event) => onDescriptionInput(event, belonging)"
+         @keyup="(event) => onDescriptionKeyup(event)"
       />
    </div>
 </template>

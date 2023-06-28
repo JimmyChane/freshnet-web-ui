@@ -3,6 +3,7 @@
    import Method from "@/items/ServiceEventMethod";
    import MenuOption from "@/components/button/MenuOption.vue";
    import ImageView from "@/components/ImageView.vue";
+   // import WindowUpdateEventDescription from "./WindowUpdateEventDescription.vue";
 
    export default {
       components: { MenuOption, ImageView },
@@ -69,6 +70,13 @@
             if (this.item.isPurchase()) return Method.PURCHASE[property];
             return null;
          },
+
+         // clickEditDescription() {
+         //    this.store.dispatch("openPopupWindow", {
+         //       component: WindowUpdateEventDescription,
+         //       serviceEvent: this.item,
+         //    });
+         // },
       },
    };
 </script>
@@ -104,11 +112,21 @@
          <div class="ItemEvent-right">
             <MenuOption
                class="ItemEvent-menu"
-               :menus="{
-                  title: 'Delete Event',
-                  icon: host.icon('trash-000000'),
-                  click: () => $emit('callback-delete', item),
-               }"
+               :menus="[
+                  // {
+                  //    title: 'Edit Description (test)',
+                  //    click: () => clickEditDescription(),
+                  // },
+                  // {
+                  //    title: 'Add Image (test)',
+                  //    click: () => {},
+                  // },
+                  {
+                     title: 'Delete Event',
+                     icon: host.icon('trash-000000'),
+                     click: () => $emit('callback-delete', item),
+                  },
+               ]"
                @show="() => (isShowingMenu = true)"
                @hide="() => (isShowingMenu = false)"
             />
