@@ -21,12 +21,15 @@
                return;
             }
 
-            console.log({ description });
-            return;
-
-            const accept = () => this.popupWindow.close();
-            const reject = () => {};
-            this.popupWindow.onConfirm(accept, reject, this.description);
+            this.serviceStore
+               .dispatch("updateEventDescription", {
+                  serviceID: this.service.id,
+                  time: this.serviceEvent.timestamp.time,
+                  description,
+               })
+               .then(() => {
+                  this.popupWindow.close();
+               });
          },
 
          focus() {
@@ -42,7 +45,7 @@
 
 <template>
    <PanelAction
-      title="Edit Description"
+      title="Edit Event Description"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
       :isClickable="!serviceStore.getters.isFetching"

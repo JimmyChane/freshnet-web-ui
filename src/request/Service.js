@@ -66,6 +66,13 @@ export default class Service {
          .body({ serviceID: id, time: eventTime })
          .send();
    }
+   static updateEventDescription(id, eventTime, description) {
+      return HostApi.request()
+         .PUT()
+         .url(`service_v2/item/${id}/update/event/description`)
+         .body({ serviceID: id, time: eventTime, description })
+         .send();
+   }
    static addLabel(id, label) {
       return HostApi.request()
          .POST()

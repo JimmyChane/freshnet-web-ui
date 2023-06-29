@@ -30,7 +30,8 @@
       <div class="PanelEvents-body">
          <ListEvents
             v-if="events.length"
-            :items="events"
+            :service="service"
+            :events="events"
             @click-item-delete="(event) => $emit('click-remove-event', event)"
          />
          <span class="PanelEvents-empty" v-if="!events.length">

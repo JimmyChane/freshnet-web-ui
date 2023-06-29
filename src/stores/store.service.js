@@ -14,6 +14,7 @@ const Notify = {
    ItemImageRemove: "item-image-remove",
    ItemEventAdd: "item-event-add",
    ItemEventRemove: "item-event-remove",
+   ItemEventDescriptionUpdate: "item-event-description-update",
    ItemLabelAdd: "item-label-add",
    ItemLabelRemove: "item-label-remove",
    ItemStateUpdate: "item-state-update",
@@ -168,6 +169,24 @@ const init = (Stores) => {
             });
          },
       )
+      .action("updateEventDescription", async (context, arg = {}) => {
+         const { serviceID, time, description } = arg;
+
+         const api = await ServiceRequest.updateEventDescription(
+            serviceID,
+            time,
+            description,
+         );
+         const content = api.getContent();
+         const { id: outputId, event } = content;
+         const outputEvent = new ServiceEvent(Stores).fromData(event);
+         return context.state.list.updateItemById(outputId, (item) => {
+            const foundEvent = item.events.find((event) => {
+               return event.timestamp.time === outputEvent.timestamp.time;
+            });
+            foundEvent.description = outputEvent.description;
+         });
+      })
       .action(
          "updateUrgentOfId",
          async (context, arg = { serviceID, isUrgent }) => {
@@ -347,6 +366,8 @@ const init = (Stores) => {
             });
             if (found) item.events.splice(item.events.indexOf(found), 1);
          });
+      }
+      if (key === Notify.ItemEventDescriptionUpdate) {
       }
       if (key === Notify.ItemLabelAdd) {
          const { id, label } = content;

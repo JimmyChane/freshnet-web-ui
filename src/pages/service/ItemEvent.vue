@@ -3,11 +3,14 @@
    import Method from "@/items/ServiceEventMethod";
    import MenuOption from "@/components/button/MenuOption.vue";
    import ImageView from "@/components/ImageView.vue";
-   // import WindowUpdateEventDescription from "./WindowUpdateEventDescription.vue";
+   import WindowUpdateEventDescription from "./WindowUpdateEventDescription.vue";
 
    export default {
       components: { MenuOption, ImageView },
-      props: { item: { type: Object, default: null } },
+      props: {
+         service: { type: Object },
+         event: { type: Object, default: null },
+      },
       emits: ["callback-delete"],
       data: (c) => ({
          nameOfUser: "loading...",
@@ -16,7 +19,7 @@
       }),
       computed: {
          timestampText: (c) => {
-            const time = c.item?.timestamp?.time ?? null;
+            const time = c.event?.timestamp?.time ?? null;
             if (!time) return "";
 
             const distance = formatDistanceToNow(time);
@@ -27,19 +30,31 @@
             return `${timeText} ${distanceText}`;
          },
 
-         description: (c) => c.item.description,
-         images: (c) => c.item.images,
+         description: (c) => c.event.description,
+         images: (c) => c.event.images,
 
          methodPrimaryColor: (c) => c.methodContext("primaryColor") ?? "",
          methodTitle: (c) => c.methodContext("title") ?? "",
-         methodResult: (c) => c.item.toResult() ?? "",
+         methodResult: (c) => c.event.toResult() ?? "",
 
          infoTexts: (c) => [c.timestampText, c.methodTitle, c.nameOfUser],
 
          shouldShowMenu: (c) => c.isShowingMenu || c.isHovered,
+
+         menus() {
+            return [
+               { title: "Edit Description", click: this.clickEditDescription },
+               // { title: "Add Image (test)", click: () => {} },
+               {
+                  title: "Delete Event",
+                  icon: this.host.icon("trash-000000"),
+                  click: () => this.clickDelete,
+               },
+            ];
+         },
       },
       watch: {
-         item() {
+         event() {
             this.invalidate();
          },
       },
@@ -48,11 +63,11 @@
       },
       methods: {
          async invalidate() {
-            const { item } = this;
+            const { event } = this;
 
-            if (!item) return (this.nameOfUser = "");
+            if (!event) return (this.nameOfUser = "");
 
-            const name = await this.item.fetchName().catch((error) => {
+            const name = await this.event.fetchName().catch((error) => {
                this.store.dispatch(
                   "snackbarShow",
                   "Error getting user for event",
@@ -60,23 +75,28 @@
                return "";
             });
 
-            if (this.item !== item) return;
+            if (this.event !== event) return;
             if (name) this.nameOfUser = name;
          },
 
          methodContext(property = "") {
-            if (this.item.isInfo()) return Method.INFO[property];
-            if (this.item.isQuotation()) return Method.QUOTATION[property];
-            if (this.item.isPurchase()) return Method.PURCHASE[property];
+            if (this.event.isInfo()) return Method.INFO[property];
+            if (this.event.isQuotation()) return Method.QUOTATION[property];
+            if (this.event.isPurchase()) return Method.PURCHASE[property];
             return null;
          },
 
-         // clickEditDescription() {
-         //    this.store.dispatch("openPopupWindow", {
-         //       component: WindowUpdateEventDescription,
-         //       serviceEvent: this.item,
-         //    });
-         // },
+         clickEditDescription() {
+            this.store.dispatch("openPopupWindow", {
+               component: WindowUpdateEventDescription,
+               service: this.service,
+               serviceEvent: this.event,
+            });
+         },
+         clickAddImage() {},
+         clickDelete() {
+            this.$emit("callback-delete", this.event);
+         },
       },
    };
 </script>
@@ -112,21 +132,7 @@
          <div class="ItemEvent-right">
             <MenuOption
                class="ItemEvent-menu"
-               :menus="[
-                  // {
-                  //    title: 'Edit Description (test)',
-                  //    click: () => clickEditDescription(),
-                  // },
-                  // {
-                  //    title: 'Add Image (test)',
-                  //    click: () => {},
-                  // },
-                  {
-                     title: 'Delete Event',
-                     icon: host.icon('trash-000000'),
-                     click: () => $emit('callback-delete', item),
-                  },
-               ]"
+               :menus="menus"
                @show="() => (isShowingMenu = true)"
                @hide="() => (isShowingMenu = false)"
             />

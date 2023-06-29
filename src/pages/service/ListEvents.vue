@@ -5,20 +5,21 @@
    export default {
       components: { ItemEvent },
       props: {
-         items: { type: Array, default: () => [] },
+         service: { type: Object },
+         events: { type: Array, default: () => [] },
       },
       computed: {
          groups() {
-            return this.items.reduce((groups, item) => {
-               const ts = item.timestamp;
+            return this.events.reduce((groups, event) => {
+               const ts = event.timestamp;
                const time = ts.time;
 
                const optGroup = (title) => {
                   let group = groups.find((group) => group.title === title);
-                  if (!group) groups.push((group = { title, items: [] }));
+                  if (!group) groups.push((group = { title, events: [] }));
                   return group;
                };
-               const putItem = (title) => optGroup(title).items.push(item);
+               const putItem = (title) => optGroup(title).events.push(event);
 
                if (ts.isToday()) {
                   putItem(`Today, ${format(time, "EEE, dd/LL/yyyy")}`);
@@ -44,10 +45,11 @@
 
          <ItemEvent
             class="ListEvents-group-item"
-            v-for="item of group.items"
-            :key="item.timestamp.time"
-            :item="item"
-            @callback-delete="(item) => $emit('click-item-delete', item)"
+            v-for="event of group.events"
+            :key="event.timestamp.time"
+            :service="service"
+            :event="event"
+            @callback-delete="(event) => $emit('click-item-delete', event)"
          />
       </div>
    </div>
