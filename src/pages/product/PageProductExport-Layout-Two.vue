@@ -194,14 +194,11 @@
 
          <div class="ExportLayoutTwo-items">
             <ItemSpecification
-               v-for="specification in specifications"
+               v-for="(specification, index) in specifications"
                :key="specification.name"
                :item="specification"
                :padding="specificationPadding"
-               :isLastItem="
-                  specifications.indexOf(specification) ===
-                  specifications.length - 1
-               "
+               :isLastItem="index === specifications.length - 1"
             />
          </div>
       </div>

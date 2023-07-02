@@ -477,9 +477,8 @@
 
 <style lang="scss" scoped>
    .PageProduct {
-      width: 100dvw;
+      width: 100%;
       height: 100%;
-      max-width: 100%;
       display: flex;
       flex-direction: row;
       justify-content: flex-start;

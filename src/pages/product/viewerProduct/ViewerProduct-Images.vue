@@ -30,10 +30,10 @@
    >
       <div class="ProductViewerImages-list">
          <ProductViewerImage
-            v-for="image of images"
+            v-for="(image, index) in images"
             :image="image"
             :key="image.toUrl()"
-            :isSelected="images.indexOf(image) === indexAt"
+            :isSelected="index === indexAt"
             @click="() => $emit('click-image', image)"
          />
          <ProductViewerImageSelector

@@ -73,9 +73,9 @@
          :style="{
             width: '100%',
             height: '100%',
-            'grid-area': `img${parsedImages.indexOf(image)}`,
+            'grid-area': `img${index}`,
          }"
-         v-for="image of parsedImages"
+         v-for="(image, index) in parsedImages"
          :key="image.toUrl()"
          :src="image"
          @load="(event) => onLoad(event.target, image)"

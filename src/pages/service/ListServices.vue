@@ -165,7 +165,7 @@
       <div
          class="ListServices-group"
          :viewMode="viewMode"
-         v-for="group of groups"
+         v-for="(group, index) in groups"
          :key="group.title"
       >
          <span class="ListServices-group-title" v-if="group.title">{{
@@ -175,7 +175,7 @@
          <div class="ListServices-items">
             <div
                class="ListServices-items-header"
-               v-if="isDetailView && groups.indexOf(group) === 0"
+               v-if="isDetailView && index === 0"
             >
                <span
                   class="Property-customerName"

@@ -18,11 +18,11 @@
          :class="[
             'LayoutViewSelector-item',
             `LayoutViewSelector-item-${
-               index === menus.indexOf(menu) ? 'isSelected' : 'isDeselected'
+               index === i ? 'isSelected' : 'isDeselected'
             }`,
             'transition',
          ]"
-         v-for="menu of menus"
+         v-for="(menu, i) in menus"
          :key="menu.title"
          @click="menu.click(menu)"
       >

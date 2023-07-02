@@ -116,9 +116,10 @@
          z-index: 1;
          width: 100%;
          max-width: 50rem;
-         height: max-content;
+         min-height: max-content;
          padding: 2rem;
 
+         flex-grow: 1;
          display: flex;
          flex-direction: column;
          align-items: stretch;

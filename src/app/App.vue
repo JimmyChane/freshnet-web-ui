@@ -71,41 +71,36 @@
 </script>
 
 <template>
-   <div
-      class="App"
-      :isNormal="`${$root.appLayout.isNormal()}`"
-      :isFull="`${$root.appLayout.isFull()}`"
-   >
-      <div class="App-background" style="z-index: 1"></div>
+   <div class="App" :isNormal="`${$root.appLayout.isNormal()}`">
+      <div class="App-background" style="z-index: 0"></div>
 
-      <div class="App-body" style="z-index: 2">
-         <div class="App-layout">
-            <Status v-if="shouldShowStatus" style="z-index: 2" />
-
-            <div
-               class="App-layout-body"
-               :isDrawer="`${$root.navigation.isDrawer()}`"
-               :isFixed="`${!$root.navigation.isDrawer()}`"
-               style="z-index: 1"
-            >
-               <NavigationLeft
-                  class="App-NavigationLeft"
-                  v-if="!$root.navigation.isNone()"
-                  @click-logout="() => logout()"
-               />
-               <router-view class="App-routerView" ref="AppRouterView" />
-            </div>
-
-            <NavigationBottom v-if="$root.navigation.isDrawer()" />
-         </div>
+      <div
+         class="App-body"
+         :style="{ 'z-index': '1' }"
+         :isDrawer="`${$root.navigation.isDrawer()}`"
+         :isFixed="`${!$root.navigation.isDrawer()}`"
+      >
+         <NavigationLeft
+            class="App-NavigationLeft"
+            :style="{ 'grid-area': 'left', 'z-index': '3' }"
+            v-if="!$root.navigation.isNone()"
+            @click-logout="() => logout()"
+         />
+         <router-view
+            class="App-routerView"
+            :style="{ 'grid-area': 'body', 'z-index': '1' }"
+            ref="AppRouterView"
+         />
+         <NavigationBottom
+            :style="{ 'grid-area': 'bottom', 'z-index': '2' }"
+            v-if="!$root.navigation.isNone() && $root.navigation.isDrawer()"
+         />
       </div>
 
       <ViewerImage style="z-index: auto" />
       <PopupWindow
-         v-for="popupWindow of store.getters.popupWindows"
-         :style="{
-            'z-index': 6 + store.getters.popupWindows.indexOf(popupWindow),
-         }"
+         v-for="(popupWindow, index) in store.getters.popupWindows"
+         :style="{ 'z-index': 6 + index }"
          :key="popupWindow.key"
          :isShowing="popupWindow.isShowing"
          @click-dismiss="() => popupWindow.close()"
@@ -117,17 +112,21 @@
       </PopupWindow>
 
       <PopupMenu
-         style="z-index: 98"
+         :style="{ 'z-index': 7 + store.getters.popupWindows.length }"
          v-for="popupMenu of store.getters.popupMenus"
          :key="popupMenu.key"
          :popupMenu="popupMenu"
          class="App-PopupMenu"
       />
       <Snackbar
-         style="z-index: 99"
+         :style="{ 'z-index': 8 + store.getters.popupWindows.length }"
          v-for="snackbar of store.getters.snackbars"
          :key="snackbar.key"
          :item="snackbar"
+      />
+      <Status
+         v-if="shouldShowStatus"
+         :style="{ 'z-index': 9 + store.getters.popupWindows.length }"
       />
    </div>
 </template>
@@ -184,7 +183,6 @@
       --App-background-color: #f1f1f1;
    }
    .App {
-      position: relative;
       color: black;
       width: 100dvw;
       height: 100dvh;
@@ -193,99 +191,61 @@
       align-items: center;
       background: none;
       overflow-x: hidden;
+      overflow: hidden;
 
       --navigation-bottom-height: 4rem;
 
       .App-background {
-         position: absolute;
+         position: fixed;
          width: 100dvw;
          height: 100dvh;
+         opacity: 0.5;
          pointer-events: none;
+         top: 0;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         background-image: linear-gradient(
+            120deg,
+            hsl(202, 61%, 33%) 4%,
+            hsl(236, 66%, 24%) 95%
+         );
+         display: none;
       }
       .App-body {
          width: 100dvw;
          height: 100dvh;
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         justify-content: center;
 
-         .App-layout {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: stretch;
+         background: var(--App-background-color);
+         --background-color-light: var(--background-color);
+         --background-color-dark: var(--background-color);
 
-            .App-layout-body {
-               width: 100%;
-               display: flex;
-               flex-direction: row;
-               align-items: center;
-               justify-content: stretch;
-               background: var(--App-background-color);
-
-               --background-color-light: var(--background-color);
-               --background-color-dark: var(--background-color);
-               .App-NavigationLeft {
-                  flex-grow: 0;
-               }
-               .App-routerView {
-                  width: 100%;
-                  height: 100%;
-               }
-            }
-            .App-layout-body[isDrawer="true"] {
-               height: calc(
-                  100% - var(--navigation-bottom-height)
-               ); // todo testing
-               .App-NavigationLeft {
-                  z-index: 2;
-               }
-               .App-routerView {
-                  flex-grow: 1;
-                  z-index: 1;
-               }
-            }
-            .App-layout-body[isFixed="true"] {
-               height: 100%;
-               .App-NavigationLeft {
-                  z-index: 1;
-               }
-               .App-routerView {
-                  flex-grow: 2;
-                  z-index: 2;
-               }
-            }
-         }
+         display: grid;
+         grid-template-areas:
+            "left body"
+            "bottom bottom";
+         grid-template-rows: minmax(
+            calc(100% - var(--navigation-bottom-height)),
+            1fr
+         );
+         grid-template-columns: max-content 1fr;
       }
    }
    .App[isNormal="true"] {
       @media (min-width: 1600px) {
          .App-body {
-            padding: 1vh 4vw;
-            .App-layout {
-               max-width: 1800px;
-               max-height: 2000px;
-               box-shadow: 1px 1px 50px 0px hsla(0, 0%, 0%, 0.3);
-               border-radius: 8px;
-            }
+            width: calc(100% - 8vw);
+            height: calc(100% - 2vh);
+            max-width: calc(1800px - 8vw);
+            max-height: calc(2000px - 2vh);
+
+            margin: auto;
+            overflow: hidden;
+            display: initial;
+
+            box-shadow: 1px 1px 50px 0px hsla(0, 0%, 0%, 0.3);
+            border-radius: 1.5rem;
          }
-         .App-background {
-            opacity: 0.5;
-            background-image: linear-gradient(
-               120deg,
-               hsl(202, 61%, 33%) 4%,
-               hsl(236, 66%, 24%) 95%
-            );
-         }
-      }
-   }
-   .App[isFull="true"] {
-      background: none;
-      .App-background {
-         opacity: 0;
       }
    }
 </style>

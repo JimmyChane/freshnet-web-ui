@@ -111,11 +111,11 @@
       <div class="ItemEvent-main">
          <div class="ItemEvent-left">
             <div class="ItemEvent-infos">
-               <span v-for="info of infoTexts" :key="info"
+               <span v-for="(info, index) in infoTexts" :key="info"
                   >{{ info }}
                   <div
                      class="ItemService-dot"
-                     v-if="infoTexts.indexOf(info) < infoTexts.length - 1"
+                     v-if="index < infoTexts.length - 1"
                   ></div
                ></span>
             </div>

@@ -52,13 +52,13 @@
       <div class="LeftNavGroup1-group2s" v-if="hasGroup2s">
          <div
             class="LeftNavGroup1-sectionParent"
-            v-for="group2 in group2s"
+            v-for="(group2, index) in group2s"
             :key="group2.key"
          >
             <LeftNavGroup2 :group2="group2" />
             <div
                class="LeftNavGroup1-sectionParent-line"
-               v-if="group2s.indexOf(group2) < group2s.length - 1"
+               v-if="index < group2s.length - 1"
             ></div>
          </div>
       </div>

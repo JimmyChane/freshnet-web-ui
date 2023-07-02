@@ -171,14 +171,12 @@
                'transition',
                'HomeSectionProduct-footer-item',
                `HomeSectionProduct-footer-item-${
-                  products.indexOf(item) === productIndex
-                     ? 'isSelected'
-                     : 'isDeselected'
+                  index === productIndex ? 'isSelected' : 'isDeselected'
                }`,
             ]"
-            v-for="item of products"
-            :key="item.id"
-            @click="() => (productIndex = products.indexOf(item))"
+            v-for="(product, index) in products"
+            :key="product.id"
+            @click="() => (productIndex = index)"
          />
       </div>
 
