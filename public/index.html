@@ -1,69 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
    <head>
       <meta charset="utf-8" />
-
       <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
       <!-- Cache Control -->
-      <meta
-         http-equiv="Cache-Control"
-         content="max-age=604800, s-maxage=604800, public"
-      />
+      <meta http-equiv="Cache-Control" content="max-age=604800, s-maxage=604800, public" />
       <meta http-equiv="Expires" content="0" />
-
       <!-- Link Previews -->
       <meta name="twitter:title" content="Freshnet Enterprise" />
-      <meta
-         name="twitter:description"
-         content="Computer Store | Kuala Selangor District"
-      />
-      <meta
-         name="twitter:image"
-         content="https://www.freshnet.app/logos-512.png"
-      />
+      <meta name="twitter:description" content="Computer Store | Kuala Selangor District" />
+      <meta name="twitter:image" content="https://www.freshnet.app/logos-512.png" />
       <meta name="title" property="og:title" content="Freshnet Enterprise" />
       <meta name="type" property="og:type" content="website" />
-      <meta
-         name="image"
-         property="og:image"
-         content="https://www.freshnet.app/logos-512.png"
-      />
+      <meta name="image" property="og:image" content="https://www.freshnet.app/logos-512.png" />
       <meta name="url" property="og:url" content="https://www.freshnet.app" />
-      <meta
-         name="description"
-         property="og:description"
-         content="Computer Store | Kuala Selangor District"
-      />
-
+      <meta name="description" property="og:description" content="Computer Store | Kuala Selangor District" />
       <!-- Viewport -->
       <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-
       <!-- Theme -->
       <meta name="theme-color" content="#2f579d" />
-
       <!-- Manifest -->
       <link rel="manifest" href="manifest.webmanifest" />
-
       <!-- Style -->
-      <link
-         rel="stylesheet"
-         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
-      />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" />
       <link href="<%= BASE_URL %>favicon.ico" rel="icon" />
-
       <!-- Title (Webpack) -->
-      <title><%= htmlWebpackPlugin.options.title %></title>
+      <title>
+         <%= htmlWebpackPlugin.options.title %>
+      </title>
    </head>
 
    <body>
       <noscript>
-         <strong>
-            We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
-            properly without JavaScript enabled. Please enable it to continue.
-         </strong>
+         <strong> We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript
+               enabled. Please enable it to continue. </strong>
       </noscript>
-
       <!-- <script>
          window.addEventListener("load", () => {
             if ("serviceWorker" in navigator) {
@@ -73,37 +45,41 @@
       </script> -->
       <div id="app"></div>
    </body>
-
    <style>
       :root {
          font-size: 16px;
       }
+
       @media (max-width: 320px) {
          :root {
             font-size: 14px;
          }
       }
+
       * {
          box-sizing: border-box;
          margin: 0;
          padding: 0;
-
          outline: none;
          -webkit-tap-highlight-color: transparent;
          font-family: "Roboto", sans-serif;
          word-break: break-word;
       }
+
       html {
          overscroll-behavior-x: none;
       }
+
       body {
          @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
          width: 100dvw;
          height: 100dvh;
          overscroll-behavior-x: none;
       }
+
       p {
          white-space: pre-line;
       }
    </style>
+
 </html>

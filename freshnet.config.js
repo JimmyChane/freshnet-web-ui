@@ -1,10 +1,10 @@
 module.exports = {
-   devPort: 8080,
+  devPort: 8080,
 
-   hostApi: "https://api.freshnet.app",
-   hostRes: "https://res.freshnet.app",
+  hostApi: "https://api.freshnet.app",
+  hostRes: "https://res.freshnet.app",
 
-   cloudinaryRes: "https://res.cloudinary.com/freshnet/image/upload/resource",
+  cloudinaryRes: "https://res.cloudinary.com/freshnet/image/upload/resource",
 
-   exportAbsolutePath: "../freshnet-frontend/public",
+  exportAbsolutePath: "../freshnet-frontend/public",
 };
