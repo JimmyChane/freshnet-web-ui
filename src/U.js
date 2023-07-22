@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const chroma_js_1 = __importDefault(require("chroma-js"));
-class U {
+import chroma from "chroma-js";
+export default class U {
     static isString(str) {
         return typeof str === "string";
     }
@@ -66,7 +61,6 @@ class U {
         return str;
     }
     static isColorDark(color, threshold = 60) {
-        return chroma_js_1.default.deltaE(color, "000000") < threshold;
+        return chroma.deltaE(color, "000000") < threshold;
     }
 }
-exports.default = U;
