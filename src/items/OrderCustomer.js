@@ -1,9 +1,6 @@
-import ServiceCustomer from "./ServiceCustomer.js";
-
-class OrderCustomer extends ServiceCustomer {
-	constructor(stores) {
-		super(stores);
-	}
+import ServiceCustomer from "./ServiceCustomer";
+export default class OrderCustomer extends ServiceCustomer {
+    constructor(stores) {
+        super(stores);
+    }
 }
-
-export default OrderCustomer;

@@ -1,7 +1,6 @@
-import HostApi from "@/host/HostApi.js";
-
+import HostApi from "@/host/HostApi";
 export default class Brand {
-   static list() {
-      return HostApi.request().url("brand/").send();
-   }
+    static list() {
+        return HostApi.request().url("brand/").send();
+    }
 }

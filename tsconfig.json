@@ -21,7 +21,9 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "freshnet.config.ts",
+    "vue.config.ts"
   ],
   "exclude": ["node_modules"]
 }
