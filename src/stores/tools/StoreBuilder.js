@@ -4,21 +4,34 @@ import Processor from "./Processor";
 export default class StoreBuilder {
     _fetchItems = () => { };
     _getStore = () => { };
-    _idProperty = "id";
-    state = {};
+    state;
     mutations = {};
     getters = {};
     actions = {};
+    constructor() {
+        this.state = {
+            dataLoader: DataLoader.withStore(() => {
+                return this._getStore();
+            }).loadData(() => {
+                return this._fetchItems();
+            }),
+            processor: new Processor(),
+            list: new List(),
+        };
+        this.getters.isLoading = (state) => {
+            return state.processor.isLoading();
+        };
+        this.getters.lastModified = (state) => {
+            return state.list.lastModified;
+        };
+        this.getters.items = (state) => state.list.items;
+    }
     onFetchItems(fetchItems = () => { }) {
         this._fetchItems = fetchItems;
         return this;
     }
     onGetStore(getStore = () => { }) {
         this._getStore = getStore;
-        return this;
-    }
-    onIdProperty(idProperty = this._idProperty) {
-        this._idProperty = idProperty;
         return this;
     }
     action(key, fun) {
@@ -28,16 +41,6 @@ export default class StoreBuilder {
         return this;
     }
     build() {
-        this.state.dataLoader = DataLoader.withStore(() => {
-            return this._getStore();
-        }).loadData(() => {
-            return this._fetchItems();
-        });
-        this.state.processor = new Processor();
-        this.state.list = new List(this._idProperty);
-        this.getters.isLoading = (state) => state.processor?.isLoading();
-        this.getters.lastModified = (state) => state.list?.lastModified;
-        this.getters.items = (state) => state.list?.items;
         return this;
     }
 }

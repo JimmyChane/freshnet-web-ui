@@ -1,4 +1,5 @@
 import U from "@/U";
+import { Item } from "@/stores/tools/List";
 
 interface SettingData {
   key: string;
@@ -6,7 +7,7 @@ interface SettingData {
   value: any;
 }
 
-export default class Setting {
+export default class Setting implements Item {
   static Visibility = { Protected: "protected", Private: "private" };
   static Key = {
     PublicShowPrice: "public-showPrice",
@@ -41,5 +42,9 @@ export default class Setting {
       visibility: U.trimId(this.visibility),
       value: this.value,
     };
+  }
+
+  getUnique(): string {
+    return this.key;
   }
 }

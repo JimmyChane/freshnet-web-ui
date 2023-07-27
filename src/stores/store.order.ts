@@ -7,7 +7,7 @@ import Customer from "@/items/Customer";
 import OrderCustomer from "@/items/OrderCustomer";
 
 const init = (Stores: any) => {
-  const context = new StoreBuilder()
+  const context = new StoreBuilder<Order>()
     .onFetchItems(async () => {
       const api = await OrderRequest.list();
       const content: any[] = api.optArrayContent();
@@ -92,7 +92,8 @@ const init = (Stores: any) => {
         const { id, status } = arg;
         const api = await OrderRequest.updateStatus(id, status);
         api.getContent();
-        return context.state.list.updateItemById(id, (item: Order) => {
+        return context.state.list.updateItemById(id, (item) => {
+          if (!item) return;
           item.status = status;
         });
       },

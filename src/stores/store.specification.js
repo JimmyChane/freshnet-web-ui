@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import ProductSpecType from "@/items/ProductSpecType";
+import { Type } from "@/items/Specification";
 import StoreBuilder from "./tools/StoreBuilder";
 import SpecificationRequest from "@/request/Specification";
 const init = (Stores) => {
@@ -8,11 +8,10 @@ const init = (Stores) => {
         const api = await SpecificationRequest.list();
         const content = api.optArrayContent();
         return content.map((content) => {
-            return new ProductSpecType(Stores).fromData(content);
+            return new Type(Stores).fromData(content);
         });
     })
         .onGetStore(() => Stores.specification)
-        .onIdProperty("key")
         .action("refresh", async (context) => {
         context.state.dataLoader.doTimeout();
         await context.dispatch("getItems");

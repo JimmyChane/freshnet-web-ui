@@ -24,7 +24,7 @@ const Notify = {
 };
 
 const init = (Stores: any) => {
-  const context = new StoreBuilder()
+  const context = new StoreBuilder<Service>()
     .onFetchItems(async () => {
       const api = await ServiceRequest.list();
       const content: any[] = api.optArrayContent();
@@ -97,7 +97,8 @@ const init = (Stores: any) => {
         const { serviceID, state } = arg;
 
         (await ServiceRequest.updateState(serviceID, state)).getContent();
-        return context.state.list.updateItemById(serviceID, (item: Service) => {
+        return context.state.list.updateItemById(serviceID, (item) => {
+          if (!item) return;
           item.state = state;
         });
       },
@@ -112,7 +113,8 @@ const init = (Stores: any) => {
           description,
         );
         api.getContent();
-        return context.state.list.updateItemById(serviceID, (item: Service) => {
+        return context.state.list.updateItemById(serviceID, (item) => {
+          if (!item) return;
           item.description = description;
         });
       },
@@ -127,13 +129,10 @@ const init = (Stores: any) => {
         );
         const content = api.optObjectContent();
         const inputItem = new Service(Stores).fromData(content);
-        return context.state.list.updateItemById(
-          inputItem.id,
-          (item: Service) => {
-            if (!item) return inputItem;
-            item.belongings = inputItem.belongings;
-          },
-        );
+        return context.state.list.updateItemById(inputItem.id, (item) => {
+          if (!item) return inputItem;
+          item.belongings = inputItem.belongings;
+        });
       },
     )
     .action(
@@ -143,13 +142,10 @@ const init = (Stores: any) => {
         const api = await ServiceRequest.updateCustomer(serviceID, customer);
         const content = api.optObjectContent();
         const inputItem = new Service(Stores).fromData(content);
-        return context.state.list.updateItemById(
-          inputItem.id,
-          (item: Service) => {
-            if (!item) return inputItem;
-            item.customer = inputItem.customer;
-          },
-        );
+        return context.state.list.updateItemById(inputItem.id, (item) => {
+          if (!item) return inputItem;
+          item.customer = inputItem.customer;
+        });
       },
     )
     .action(
@@ -161,15 +157,12 @@ const init = (Stores: any) => {
         const api = await ServiceRequest.addEvent(id, eventData);
         const content = api.optObjectContent();
         const inputItem = new Service(Stores).fromData(content);
-        return context.state.list.updateItemById(
-          inputItem.id,
-          (item: Service) => {
-            if (!item) return inputItem;
-            item.events = inputItem.events.sort((event1, event2) => {
-              return event1.compare(event2);
-            });
-          },
-        );
+        return context.state.list.updateItemById(inputItem.id, (item) => {
+          if (!item) return inputItem;
+          item.events = inputItem.events.sort((event1, event2) => {
+            return event1.compare(event2);
+          });
+        });
       },
     )
     .action(
@@ -179,7 +172,8 @@ const init = (Stores: any) => {
 
         const api = await ServiceRequest.removeEvent(serviceID, time);
         api.getContent();
-        return context.state.list.updateItemById(serviceID, (item: Service) => {
+        return context.state.list.updateItemById(serviceID, (item) => {
+          if (!item) return;
           item.events = item.events.filter((event: ServiceEvent) => {
             return event.timestamp?.time !== time;
           });
@@ -197,7 +191,8 @@ const init = (Stores: any) => {
       const content = api.getContent();
       const { id: outputId, event } = content;
       const outputEvent = new ServiceEvent(Stores).fromData(event);
-      return context.state.list.updateItemById(outputId, (item: Service) => {
+      return context.state.list.updateItemById(outputId, (item) => {
+        if (!item) return;
         const foundEvent: ServiceEvent | undefined = item.events.find(
           (event: ServiceEvent) => {
             return event.timestamp?.time === outputEvent.timestamp?.time;
@@ -249,14 +244,12 @@ const init = (Stores: any) => {
         const api = await ServiceRequest.addLabel(serviceID, label);
         const content = api.optObjectContent();
         const inputItem = new Service(Stores).fromData(content);
-        return context.state.list.updateItemById(
-          inputItem.id,
-          (item: Service) => {
-            if (label.title === "Urgent") item.setUrgent(inputItem.isUrgent());
-            if (label.title === "Warranty")
-              item.setWarranty(inputItem.isUrgent());
-          },
-        );
+        return context.state.list.updateItemById(inputItem.id, (item) => {
+          if (!item) return;
+          if (label.title === "Urgent") item.setUrgent(inputItem.isUrgent());
+          if (label.title === "Warranty")
+            item.setWarranty(inputItem.isUrgent());
+        });
       },
     )
     .action(
@@ -267,13 +260,10 @@ const init = (Stores: any) => {
         const api = await ServiceRequest.removeLabel(serviceID, label);
         const content = api.optObjectContent();
         const inputItem = new Service(Stores).fromData(content);
-        return context.state.list.updateItemById(
-          inputItem.id,
-          (item: Service) => {
-            if (!item) return inputItem;
-            item.setLabels(inputItem.labels);
-          },
-        );
+        return context.state.list.updateItemById(inputItem.id, (item) => {
+          if (!item) return inputItem;
+          item.setLabels(inputItem.labels);
+        });
       },
     )
     .action("addImageTemp", async (context, imageFiles = []) => {
@@ -299,7 +289,8 @@ const init = (Stores: any) => {
         const content = api.optObjectContent();
         const id = content.id;
         const dataImages: any[] = content.items;
-        return context.state.list.updateItemById(id, (item: Service) => {
+        return context.state.list.updateItemById(id, (item) => {
+          if (!item) return;
           dataImages
             .map((dataImage) => new ServiceImage(Stores).fromData(dataImage))
             .forEach((image) => {
@@ -318,7 +309,8 @@ const init = (Stores: any) => {
 
         const api = await ServiceRequest.removeImage(serviceID, image);
         api.getContent();
-        return context.state.list.updateItemById(serviceID, (item: Service) => {
+        return context.state.list.updateItemById(serviceID, (item) => {
+          if (!item) return;
           item.imageFiles = item.imageFiles.filter((imageFile) => {
             return imageFile.name !== image.name;
           });
@@ -331,7 +323,8 @@ const init = (Stores: any) => {
         const { serviceID, image } = arg;
 
         (await ServiceRequest.removeImage(serviceID, image)).getContent();
-        return context.state.list.updateItemById(serviceID, (item: Service) => {
+        return context.state.list.updateItemById(serviceID, (item) => {
+          if (!item) return;
           item.imageFiles = item.imageFiles.filter((imageFile) => {
             return imageFile.name !== image.name;
           });

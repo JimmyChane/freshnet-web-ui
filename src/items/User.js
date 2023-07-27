@@ -61,4 +61,7 @@ export default class User {
     compare(item) {
         return 0;
     }
+    getUnique() {
+        return this.username;
+    }
 }

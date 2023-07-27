@@ -1,4 +1,3 @@
-import U from "@/U.js";
 import Vuex from "vuex";
 import ItemUser from "../items/User.js";
 import StoreBuilder from "./tools/StoreBuilder.js";
@@ -8,7 +7,7 @@ import User from "../items/User.js";
 const init = (Stores: any) => {
   const loginStore = Stores.login;
 
-  const context = new StoreBuilder()
+  const context = new StoreBuilder<User>()
     .onFetchItems(async () => {
       const user = await loginStore.dispatch("getUser");
       if (!user.isTypeAdmin() && !user.isTypeStaff()) throw new Error();
@@ -18,7 +17,6 @@ const init = (Stores: any) => {
       return content.map((data) => new ItemUser(Stores).fromData(data));
     })
     .onGetStore(() => Stores.user)
-    .onIdProperty("username")
     .action("refresh", async (context) => {
       context.state.dataLoader.doTimeout();
       await context.dispatch("getUsers");
@@ -43,10 +41,9 @@ const init = (Stores: any) => {
           const content = api.optObjectContent();
           const userChange = new ItemUser(Stores).fromData(content);
           if (!userChange) throw new Error();
-          context.state.list.updateItemById(
-            userChange.username,
-            (item: User) => userChange,
-          );
+          context.state.list.updateItemById(userChange.username, (item) => {
+            return userChange;
+          });
 
           return userChange;
         } catch (error) {

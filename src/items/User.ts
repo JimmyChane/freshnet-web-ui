@@ -1,3 +1,4 @@
+import { Item } from "@/stores/tools/List";
 import ItemSearcher from "../objects/ItemSearcher";
 import U from "@/U";
 
@@ -7,7 +8,7 @@ interface UserData {
   userType: number;
 }
 
-export default class User {
+export default class User implements Item {
   static Type = { None: -1, Admin: 0, Staff: 1, Customer: 2 };
   static ReservedUsername = { Admin: "admin", Staff: "staff" };
 
@@ -79,5 +80,9 @@ export default class User {
 
   compare(item: User): number {
     return 0;
+  }
+
+  getUnique(): string {
+    return this.username;
   }
 }

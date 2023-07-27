@@ -4,7 +4,7 @@ import BrandRequest from "@/request/Brand";
 import StoreBuilder from "./tools/StoreBuilder";
 
 const init = (Stores: any) => {
-  const context = new StoreBuilder()
+  const context = new StoreBuilder<Brand>()
     .onFetchItems(async () => {
       const api = await BrandRequest.list();
       const content: any[] = api.optArrayContent();

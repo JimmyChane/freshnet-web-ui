@@ -1,8 +1,9 @@
 import OrderCustomer from "./OrderCustomer";
 import ItemSearcher from "../objects/ItemSearcher";
 import U from "@/U";
+import { Item } from "@/stores/tools/List";
 
-export default class Order {
+export default class Order implements Item {
   static Status = { Pending: 0, Completed: 1 };
 
   stores: any;
@@ -57,5 +58,9 @@ export default class Order {
 
   compare(item: Order): number {
     return 0;
+  }
+
+  getUnique(): string {
+    return this.id;
   }
 }

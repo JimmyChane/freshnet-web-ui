@@ -108,7 +108,6 @@ const init = (Stores) => {
         ];
     })
         .onGetStore(() => Stores.setting)
-        .onIdProperty("key")
         .action("refresh", async (context) => {
         context.state.dataLoader.doTimeout();
         await context.dispatch("getItems");
@@ -124,6 +123,8 @@ const init = (Stores) => {
         const api = await SettingRequest.update(setting);
         const content = api.getObjectContent();
         context.state.list.updateItemById(content.key, (item) => {
+            if (!item)
+                return;
             item.value = content.value;
         });
         return context.state.list.items;

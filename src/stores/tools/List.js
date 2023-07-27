@@ -3,10 +3,6 @@ const isUndefinedOrNull = (value) => value === null || value === undefined;
 export default class List {
     lastModified = 0;
     items = [];
-    idProperty = "id";
-    constructor(idProperty) {
-        this.idProperty = idProperty;
-    }
     clear() {
         this.items = [];
         this.lastModified = Date.now();
@@ -16,7 +12,7 @@ export default class List {
         const replacedItems = [];
         for (const item of items) {
             const found = this.items.find((found) => {
-                return found[this.idProperty] === item[this.idProperty];
+                return found.getUnique() === item.getUnique();
             });
             if (!found)
                 continue;
@@ -26,7 +22,7 @@ export default class List {
         }
         const filteredItems = items.filter((item) => {
             return !this.items.find((found) => {
-                return found[this.idProperty] === item[this.idProperty];
+                return found.getUnique() === item.getUnique();
             });
         });
         this.items.push(...filteredItems);
@@ -42,7 +38,7 @@ export default class List {
     removeItemsByIds(...ids) {
         const removedItems = [];
         for (const id of ids) {
-            const item = this.items.find((item) => item[this.idProperty] === id);
+            const item = this.items.find((item) => item.getUnique() === id);
             if (!item)
                 continue;
             this.items.splice(this.items.indexOf(item), 1);
@@ -58,11 +54,11 @@ export default class List {
         return removedItems.length > 0 ? removedItems[0] : null;
     }
     removeItemByItems(...items) {
-        const ids = items.map((item) => item[this.idProperty]);
+        const ids = items.map((item) => item.getUnique());
         const removedItems = this.removeItemsByIds(...ids);
         return items.map((item) => {
             const removedItem = removedItems.find((removedItem) => {
-                return removedItem[this.idProperty] === item[this.idProperty];
+                return removedItem.getUnique() === item.getUnique();
             });
             return removedItem ?? item;
         });
@@ -71,19 +67,20 @@ export default class List {
         const removedItems = this.removeItemByItems(item);
         return removedItems.length > 0 ? removedItems[0] : null;
     }
-    updateItemById(id, updater = (item) => { }) {
-        const item = this.items.find((item) => item[this.idProperty] === id);
+    updateItemById(id, updater) {
+        const item = this.items.find((item) => item.getUnique() === id);
         const inputItem = updater(item);
         const isReadableObject = !isUndefinedOrNull(inputItem) && U.isObject(inputItem);
-        const inputItemId = isReadableObject ? inputItem[this.idProperty] : "";
-        if (isReadableObject &&
-            inputItem !== item &&
-            inputItemId === item[this.idProperty]) {
-            const index = this.items.indexOf(item);
-            if (index === -1)
+        const inputItemId = isReadableObject ? inputItem.getId() : "";
+        const itemId = item === null || item === undefined ? "" : item.getUnique();
+        if (isReadableObject && inputItem !== item && inputItemId === itemId) {
+            const index = item ? this.items.indexOf(item) : -1;
+            if (index === -1) {
                 this.addItem(inputItem);
-            else
+            }
+            else {
                 this.items[index] = inputItem;
+            }
         }
         this.lastModified = Date.now();
         return inputItem;

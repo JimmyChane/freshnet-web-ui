@@ -30,4 +30,7 @@ export default class Setting {
             value: this.value,
         };
     }
+    getUnique() {
+        return this.key;
+    }
 }

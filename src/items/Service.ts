@@ -11,9 +11,10 @@ import U from "@/U";
 import ItemSearcher from "../objects/ItemSearcher";
 import ServiceBelonging from "./ServiceBelonging";
 import User from "./User";
+import { Item } from "@/stores/tools/List";
 const textContains = ItemSearcher.textContains;
 
-export default class Service {
+export default class Service implements Item {
   stores: any;
   userStore: any;
 
@@ -128,6 +129,10 @@ export default class Service {
     if (customer?.toCount(strs)) count += 5;
 
     return count;
+  }
+
+  getUnique(): string {
+    return this.id;
   }
 
   isUrgent(): boolean {

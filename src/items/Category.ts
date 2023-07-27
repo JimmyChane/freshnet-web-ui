@@ -2,6 +2,7 @@ import Image from "./Image";
 import ItemSearcher from "../objects/ItemSearcher";
 import U from "@/U";
 import HostApi from "@/host/HostApi";
+import { Item } from "@/stores/tools/List";
 
 class CategoryBackground extends Image {
   static TABLET = new Image().fromData({
@@ -137,7 +138,7 @@ interface CategoryData {
   background?: any;
 }
 
-export default class Category {
+export default class Category implements Item {
   static Key = {
     Tablet: "tablet",
     Notebook: "laptop",
@@ -210,5 +211,9 @@ export default class Category {
     index2 = index2 == -1 ? keyOrders.length : index2;
 
     return index1 > index2 ? 1 : index1 < index2 ? -1 : 0;
+  }
+
+  getUnique(): string {
+    return this.id;
   }
 }

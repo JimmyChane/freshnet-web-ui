@@ -1,6 +1,7 @@
 import Image from "./Image";
 import ItemSearcher from "../objects/ItemSearcher";
 import U from "@/U";
+import { Item } from "@/stores/tools/List";
 
 interface BrandData {
   _id: string;
@@ -8,7 +9,7 @@ interface BrandData {
   icon?: any;
 }
 
-export default class Brand {
+export default class Brand implements Item {
   stores: any;
 
   constructor(stores: any) {
@@ -50,5 +51,9 @@ export default class Brand {
 
   compare(item: Brand): number {
     return this.title.localeCompare(item.title);
+  }
+
+  getUnique(): string {
+    return this.id;
   }
 }

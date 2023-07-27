@@ -1,5 +1,5 @@
 import Product from "../items/Product.js";
-import ProductSpecContent from "../items/ProductSpecContent.js";
+import Specification from "../items/Specification.js";
 import Image from "../items/Image.js";
 import Category from "@/items/Category.js";
 import Vuex from "vuex";
@@ -13,7 +13,7 @@ import ProductBundle from "@/items/ProductBundle.js";
 const init = (Stores: any) => {
   const categoryStore = Stores.category;
 
-  const context = new StoreBuilder()
+  const context = new StoreBuilder<Product>()
     .onFetchItems(async () => {
       const api = await ProductRequest.list();
       const content: any[] = api.optArrayContent();
@@ -117,12 +117,10 @@ const init = (Stores: any) => {
         const { id, title } = arg;
         const api = await ProductRequest.updateTitle(id, title);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.title = U.optString(content.title);
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.title = U.optString(content.title);
+        });
       },
     )
     .action(
@@ -131,15 +129,11 @@ const init = (Stores: any) => {
         const { id, description } = arg;
         const api = await ProductRequest.updateDescription(id, description);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            const { description } = content;
-            item.description = U.isString(description)
-              ? description.trim()
-              : "";
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          const { description } = content;
+          item.description = U.isString(description) ? description.trim() : "";
+        });
       },
     )
     .action(
@@ -148,12 +142,10 @@ const init = (Stores: any) => {
         const { id, brandId } = arg;
         const api = await ProductRequest.updateBrand(id, brandId);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.setBrandId(content.brandId);
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.setBrandId(content.brandId);
+        });
       },
     )
     .action(
@@ -162,12 +154,10 @@ const init = (Stores: any) => {
         const { id, categoryId } = arg;
         const api = await ProductRequest.updateCategory(id, categoryId);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.setCategoryId(content.categoryId);
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.setCategoryId(content.categoryId);
+        });
       },
     )
     .action(
@@ -176,12 +166,10 @@ const init = (Stores: any) => {
         const { id, isAvailable } = arg;
         const api = await ProductRequest.updateAvailability(id, isAvailable);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            if (item.stock) item.stock.isAvailable = content.isAvailable;
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          if (item.stock) item.stock.isAvailable = content.isAvailable;
+        });
       },
     )
     .action(
@@ -190,12 +178,10 @@ const init = (Stores: any) => {
         const { id, isSecondHand } = arg;
         const api = await ProductRequest.updateSecondHand(id, isSecondHand);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            if (item.stock) item.stock.isSecondHand = content.isSecondHand;
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          if (item.stock) item.stock.isSecondHand = content.isSecondHand;
+        });
       },
     )
     .action(
@@ -208,14 +194,12 @@ const init = (Stores: any) => {
         );
 
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.setPrice(
-              new ProductPrices(Stores).fromData(content.price).toData(),
-            );
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.setPrice(
+            new ProductPrices(Stores).fromData(content.price).toData(),
+          );
+        });
       },
     )
     .action(
@@ -224,16 +208,14 @@ const init = (Stores: any) => {
         const { id, bundle } = arg;
         const api = await ProductRequest.addBundle(id, bundle);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.addBundle(
-              new ProductBundle(Stores).fromData({
-                title: U.trimText(content.bundle.title),
-              }),
-            );
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.addBundle(
+            new ProductBundle(Stores).fromData({
+              title: U.trimText(content.bundle.title),
+            }),
+          );
+        });
       },
     )
     .action(
@@ -242,24 +224,20 @@ const init = (Stores: any) => {
         const { id, bundle } = arg;
         const api = await ProductRequest.removeBundle(id, bundle);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.removeBundle(content.bundle);
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.removeBundle(content.bundle);
+        });
       },
     )
     .action("addGiftOfId", async (context, arg: { id: string; gift: any }) => {
       const { id, gift } = arg;
       const api = await ProductRequest.addGift(id, gift);
       const content = api.optObjectContent();
-      return context.state.list.updateItemById(
-        content.productId,
-        (item: Product) => {
-          item.addGift(content.gift);
-        },
-      );
+      return context.state.list.updateItemById(content.productId, (item) => {
+        if (!item) return;
+        item.addGift(content.gift);
+      });
     })
     .action(
       "removeGiftOfId",
@@ -267,12 +245,10 @@ const init = (Stores: any) => {
         const { id, gift } = arg;
         const api = await ProductRequest.removeGift(id, gift);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.removeGift(content.gift);
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.removeGift(content.gift);
+        });
       },
     )
     .action(
@@ -281,12 +257,10 @@ const init = (Stores: any) => {
         const { id, specification } = arg;
         const api = await ProductRequest.addSpecification(id, specification);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.addSpecification(content.specification);
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.addSpecification(content.specification);
+        });
       },
     )
     .action(
@@ -295,18 +269,16 @@ const init = (Stores: any) => {
         const { id } = arg;
         let { specification } = arg;
         specification =
-          specification instanceof ProductSpecContent
+          specification instanceof Specification
             ? specification.toData()
             : specification;
         specification.type = specification.key;
         const api = await ProductRequest.removeSpecification(id, specification);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.removeSpecification(content.specification);
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.removeSpecification(content.specification);
+        });
       },
     )
     .action(
@@ -318,12 +290,10 @@ const init = (Stores: any) => {
           specifications,
         );
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.setSpecifications(content.specifications);
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.setSpecifications(content.specifications);
+        });
       },
     )
     .action(
@@ -338,12 +308,10 @@ const init = (Stores: any) => {
 
         const api = await ProductRequest.addImage(id, imageFileForm);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.addImages(content.images);
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.addImages(content.images);
+        });
       },
     )
     .action(
@@ -354,12 +322,10 @@ const init = (Stores: any) => {
         image = image instanceof Image ? image.toData() : image;
         const api = await ProductRequest.removeImage(id, image);
         const content = api.optObjectContent();
-        return context.state.list.updateItemById(
-          content.productId,
-          (item: Product) => {
-            item.removeImage(content.image);
-          },
-        );
+        return context.state.list.updateItemById(content.productId, (item) => {
+          if (!item) return;
+          item.removeImage(content.image);
+        });
       },
     )
     .build();

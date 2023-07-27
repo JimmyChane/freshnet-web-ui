@@ -2,6 +2,7 @@ import PhoneNumber from "./PhoneNumber";
 import ItemSearcher from "../objects/ItemSearcher";
 import U from "@/U";
 import CustomerDevice from "./CustomerDevice";
+import { Item } from "@/stores/tools/List";
 
 const textContains = ItemSearcher.textContains;
 
@@ -13,7 +14,7 @@ interface CustomerData {
   deviceIds: string[];
 }
 
-export default class Customer {
+export default class Customer implements Item {
   static Requirement = {
     name: { isRequired: true },
     phoneNumber: { isRequired: false },
@@ -44,6 +45,10 @@ export default class Customer {
 
   get orders(): any[] {
     return this.cachedOrders;
+  }
+
+  getUnique(): string {
+    return this.id;
   }
 
   fromData(data: CustomerData): this {

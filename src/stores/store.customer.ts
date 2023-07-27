@@ -1,5 +1,4 @@
 import Vuex from "vuex";
-import ItemCustomer from "../items/Customer.js";
 import CustomerRequest from "@/request/Customer";
 import DeviceStore from "./store.device.js";
 import U from "@/U";
@@ -9,12 +8,12 @@ import Customer from "../items/Customer.js";
 const init = (Stores: any) => {
   const deviceStore = DeviceStore.init(Stores);
 
-  const context = new StoreBuilder()
+  const context = new StoreBuilder<Customer>()
     .onFetchItems(async () => {
       const api = await CustomerRequest.list();
       const content: any[] = api.optArrayContent();
       return content.map((content) => {
-        return new ItemCustomer(Stores).fromData(content);
+        return new Customer(Stores).fromData(content);
       });
     })
     .onGetStore(() => Stores.customer)
@@ -42,7 +41,7 @@ const init = (Stores: any) => {
     })
     .action("generateCustomersAcross", async (context) => {
       const cloneCustomer = (customer: Customer) => {
-        return new ItemCustomer(Stores).fromData(customer.toData());
+        return new Customer(Stores).fromData(customer.toData());
       };
 
       const customers: Customer[] = await context.dispatch("getItems");
@@ -85,18 +84,18 @@ const init = (Stores: any) => {
       return customers;
     })
     .action("addItem", async (context, arg = {}) => {
-      const data: any = new ItemCustomer(Stores).fromData(arg).toData();
+      const data: any = new Customer(Stores).fromData(arg).toData();
       delete data.id;
       const api = await CustomerRequest.add(data);
       const content = api.optObjectContent();
-      const item = new ItemCustomer(Stores).fromData(content);
+      const item = new Customer(Stores).fromData(content);
       return context.state.list.addItem(item);
     })
     .action("removeItemOfId", async (context, arg: { _id: string }) => {
       const { _id } = arg;
       const api = await CustomerRequest.remove(_id);
       const content = api.optObjectContent();
-      const item = new ItemCustomer(Stores).fromData(content);
+      const item = new Customer(Stores).fromData(content);
       return context.state.list.removeItemByItem(item);
     })
     .action(
@@ -112,14 +111,12 @@ const init = (Stores: any) => {
           phoneNumber,
         );
         const content = api.optObjectContent();
-        const inputItem = new ItemCustomer(Stores).fromData(content);
-        return context.state.list.updateItemById(
-          inputItem.id,
-          (item: Customer) => {
-            item.name = inputItem.name;
-            item.phoneNumber = inputItem.phoneNumber;
-          },
-        );
+        const inputItem = new Customer(Stores).fromData(content);
+        return context.state.list.updateItemById(inputItem.id, (item) => {
+          if (!item) return;
+          item.name = inputItem.name;
+          item.phoneNumber = inputItem.phoneNumber;
+        });
       },
     )
     .action(
@@ -128,13 +125,11 @@ const init = (Stores: any) => {
         const { _id, description } = arg;
         const api = await CustomerRequest.updateDescription(_id, description);
         const content = api.optObjectContent();
-        const inputItem = new ItemCustomer(Stores).fromData(content);
-        return context.state.list.updateItemById(
-          inputItem.id,
-          (item: Customer) => {
-            item.description = inputItem.description;
-          },
-        );
+        const inputItem = new Customer(Stores).fromData(content);
+        return context.state.list.updateItemById(inputItem.id, (item) => {
+          if (!item) return;
+          item.description = inputItem.description;
+        });
       },
     );
 

@@ -2,15 +2,13 @@ import U from "@/U";
 
 const isUndefinedOrNull = (value: any) => value === null || value === undefined;
 
-export default class List {
+export interface Item {
+  getUnique(): string;
+}
+
+export default class List<T extends Item> {
   lastModified: number = 0;
-  items: any[] = [];
-
-  private idProperty: string = "id";
-
-  constructor(idProperty: string) {
-    this.idProperty = idProperty;
-  }
+  items: T[] = [];
 
   clear(): this {
     this.items = [];
@@ -18,11 +16,11 @@ export default class List {
     return this;
   }
 
-  addItems(...items: any[]): any[] {
+  addItems(...items: T[]): T[] {
     const replacedItems: any[] = [];
     for (const item of items) {
       const found = this.items.find((found) => {
-        return found[this.idProperty] === item[this.idProperty];
+        return found.getUnique() === item.getUnique();
       });
       if (!found) continue;
 
@@ -33,7 +31,7 @@ export default class List {
 
     const filteredItems = items.filter((item) => {
       return !this.items.find((found) => {
-        return found[this.idProperty] === item[this.idProperty];
+        return found.getUnique() === item.getUnique();
       });
     });
 
@@ -44,16 +42,16 @@ export default class List {
     }
     return [...replacedItems, ...filteredItems];
   }
-  addItem(item: any): any {
+  addItem(item: T): T | null {
     const addedItems = this.addItems(item);
     return addedItems.length > 0 ? addedItems[0] : null;
   }
 
-  removeItemsByIds(...ids: any[]): any[] {
+  removeItemsByIds(...ids: string[]): T[] {
     const removedItems: any[] = [];
 
     for (const id of ids) {
-      const item = this.items.find((item) => item[this.idProperty] === id);
+      const item = this.items.find((item) => item.getUnique() === id);
       if (!item) continue;
       this.items.splice(this.items.indexOf(item), 1);
       removedItems.push(item);
@@ -64,41 +62,43 @@ export default class List {
     }
     return removedItems;
   }
-  removeItemById(id: any): any {
+  removeItemById(id: string): T | null {
     const removedItems = this.removeItemsByIds(id);
     return removedItems.length > 0 ? removedItems[0] : null;
   }
-  removeItemByItems(...items: any[]): any[] {
-    const ids = items.map((item) => item[this.idProperty]);
+  removeItemByItems(...items: T[]): T[] {
+    const ids = items.map((item) => item.getUnique());
     const removedItems = this.removeItemsByIds(...ids);
 
     return items.map((item) => {
       const removedItem = removedItems.find((removedItem) => {
-        return removedItem[this.idProperty] === item[this.idProperty];
+        return removedItem.getUnique() === item.getUnique();
       });
       return removedItem ?? item;
     });
   }
-  removeItemByItem(item: any): any {
+  removeItemByItem(item: T): T | null {
     const removedItems = this.removeItemByItems(item);
     return removedItems.length > 0 ? removedItems[0] : null;
   }
 
-  updateItemById(id: any, updater: (item: any) => any = (item) => {}): any {
-    const item = this.items.find((item) => item[this.idProperty] === id);
+  updateItemById(id: string, updater: (item: T | undefined) => T | any): T {
+    const item = this.items.find((item) => item.getUnique() === id);
 
     const inputItem = updater(item);
     const isReadableObject =
       !isUndefinedOrNull(inputItem) && U.isObject(inputItem);
-    const inputItemId = isReadableObject ? inputItem[this.idProperty] : "";
-    if (
-      isReadableObject &&
-      inputItem !== item &&
-      inputItemId === item[this.idProperty]
-    ) {
-      const index = this.items.indexOf(item);
-      if (index === -1) this.addItem(inputItem);
-      else this.items[index] = inputItem;
+    const inputItemId = isReadableObject ? inputItem.getId() : "";
+    const itemId = item === null || item === undefined ? "" : item.getUnique();
+
+    if (isReadableObject && inputItem !== item && inputItemId === itemId) {
+      const index = item ? this.items.indexOf(item) : -1;
+
+      if (index === -1) {
+        this.addItem(inputItem);
+      } else {
+        this.items[index] = inputItem;
+      }
     }
     this.lastModified = Date.now();
     return inputItem;

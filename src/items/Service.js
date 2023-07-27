@@ -120,6 +120,9 @@ export default class Service {
             count += 5;
         return count;
     }
+    getUnique() {
+        return this.id;
+    }
     isUrgent() {
         return !!this.labels.find((label) => label.isEqual(Label.URGENT));
     }

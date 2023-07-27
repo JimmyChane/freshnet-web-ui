@@ -54,4 +54,7 @@ export default class Order {
     compare(item) {
         return 0;
     }
+    getUnique() {
+        return this.id;
+    }
 }

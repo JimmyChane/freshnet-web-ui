@@ -39,4 +39,7 @@ export default class Brand {
     compare(item) {
         return this.title.localeCompare(item.title);
     }
+    getUnique() {
+        return this.id;
+    }
 }

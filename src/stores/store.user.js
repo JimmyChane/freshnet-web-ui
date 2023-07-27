@@ -14,7 +14,6 @@ const init = (Stores) => {
         return content.map((data) => new ItemUser(Stores).fromData(data));
     })
         .onGetStore(() => Stores.user)
-        .onIdProperty("username")
         .action("refresh", async (context) => {
         context.state.dataLoader.doTimeout();
         await context.dispatch("getUsers");
@@ -37,7 +36,9 @@ const init = (Stores) => {
             const userChange = new ItemUser(Stores).fromData(content);
             if (!userChange)
                 throw new Error();
-            context.state.list.updateItemById(userChange.username, (item) => userChange);
+            context.state.list.updateItemById(userChange.username, (item) => {
+                return userChange;
+            });
             return userChange;
         }
         catch (error) {

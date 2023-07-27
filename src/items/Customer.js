@@ -28,6 +28,9 @@ export default class Customer {
     get orders() {
         return this.cachedOrders;
     }
+    getUnique() {
+        return this.id;
+    }
     fromData(data) {
         this.id = U.trimId(data._id);
         this.name = U.trimText(data.name);

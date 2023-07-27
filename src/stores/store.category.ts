@@ -4,7 +4,7 @@ import CategoryRequest from "@/request/Category";
 import StoreBuilder from "./tools/StoreBuilder";
 
 const init = (Stores: any) => {
-  const context = new StoreBuilder()
+  const context = new StoreBuilder<Category>()
     .onFetchItems(async () => {
       const api = await CategoryRequest.list();
       const content: any[] = api.optArrayContent();

@@ -86,6 +86,8 @@ const init = (Stores) => {
         const { serviceID, state } = arg;
         (await ServiceRequest.updateState(serviceID, state)).getContent();
         return context.state.list.updateItemById(serviceID, (item) => {
+            if (!item)
+                return;
             item.state = state;
         });
     })
@@ -94,6 +96,8 @@ const init = (Stores) => {
         const api = await ServiceRequest.updateDescription(serviceID, description);
         api.getContent();
         return context.state.list.updateItemById(serviceID, (item) => {
+            if (!item)
+                return;
             item.description = description;
         });
     })
@@ -139,6 +143,8 @@ const init = (Stores) => {
         const api = await ServiceRequest.removeEvent(serviceID, time);
         api.getContent();
         return context.state.list.updateItemById(serviceID, (item) => {
+            if (!item)
+                return;
             item.events = item.events.filter((event) => {
                 return event.timestamp?.time !== time;
             });
@@ -151,6 +157,8 @@ const init = (Stores) => {
         const { id: outputId, event } = content;
         const outputEvent = new ServiceEvent(Stores).fromData(event);
         return context.state.list.updateItemById(outputId, (item) => {
+            if (!item)
+                return;
             const foundEvent = item.events.find((event) => {
                 return event.timestamp?.time === outputEvent.timestamp?.time;
             });
@@ -195,6 +203,8 @@ const init = (Stores) => {
         const content = api.optObjectContent();
         const inputItem = new Service(Stores).fromData(content);
         return context.state.list.updateItemById(inputItem.id, (item) => {
+            if (!item)
+                return;
             if (label.title === "Urgent")
                 item.setUrgent(inputItem.isUrgent());
             if (label.title === "Warranty")
@@ -231,6 +241,8 @@ const init = (Stores) => {
         const id = content.id;
         const dataImages = content.items;
         return context.state.list.updateItemById(id, (item) => {
+            if (!item)
+                return;
             dataImages
                 .map((dataImage) => new ServiceImage(Stores).fromData(dataImage))
                 .forEach((image) => {
@@ -247,6 +259,8 @@ const init = (Stores) => {
         const api = await ServiceRequest.removeImage(serviceID, image);
         api.getContent();
         return context.state.list.updateItemById(serviceID, (item) => {
+            if (!item)
+                return;
             item.imageFiles = item.imageFiles.filter((imageFile) => {
                 return imageFile.name !== image.name;
             });
@@ -256,6 +270,8 @@ const init = (Stores) => {
         const { serviceID, image } = arg;
         (await ServiceRequest.removeImage(serviceID, image)).getContent();
         return context.state.list.updateItemById(serviceID, (item) => {
+            if (!item)
+                return;
             item.imageFiles = item.imageFiles.filter((imageFile) => {
                 return imageFile.name !== image.name;
             });

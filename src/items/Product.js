@@ -1,6 +1,6 @@
 import AppHost from "@/host/AppHost";
 import Image from "./Image";
-import ProductSpecContent from "./ProductSpecContent";
+import Specification from "./Specification";
 import ItemSearcher from "../objects/ItemSearcher";
 import U from "@/U";
 import ProductStock from "./ProductStock";
@@ -108,6 +108,9 @@ export default class Product {
                 ? this.price.toData()
                 : new ProductPrices(this.stores).fromData(this.price ?? {}).toData(),
         };
+    }
+    getUnique() {
+        return this.id;
     }
     toCount(strs) {
         let { brand, category, specifications } = this;
@@ -290,14 +293,14 @@ export default class Product {
     }
     setSpecifications(specifications = []) {
         this.specifications = specifications.map((specification) => {
-            return new ProductSpecContent(this.stores).fromData({
+            return new Specification(this.stores).fromData({
                 key: specification.type,
                 content: specification.content,
             });
         });
     }
     addSpecification(specification) {
-        const specContent = new ProductSpecContent(this.stores).fromData({
+        const specContent = new Specification(this.stores).fromData({
             key: specification.type,
             content: specification.content,
         });

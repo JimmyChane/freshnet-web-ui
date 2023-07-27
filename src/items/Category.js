@@ -166,4 +166,7 @@ export default class Category {
         index2 = index2 == -1 ? keyOrders.length : index2;
         return index1 > index2 ? 1 : index1 < index2 ? -1 : 0;
     }
+    getUnique() {
+        return this.id;
+    }
 }

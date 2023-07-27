@@ -15,7 +15,7 @@ const isPredefinedSetting = (key: string) => {
 };
 
 const init = (Stores: any) => {
-  const context = new StoreBuilder()
+  const context = new StoreBuilder<Setting>()
     .onFetchItems(async () => {
       const api = await SettingRequest.list();
       const list: any[] = api.optArrayContent();
@@ -114,7 +114,6 @@ const init = (Stores: any) => {
       ];
     })
     .onGetStore(() => Stores.setting)
-    .onIdProperty("key")
     .action("refresh", async (context) => {
       context.state.dataLoader.doTimeout();
       await context.dispatch("getItems");
@@ -133,7 +132,8 @@ const init = (Stores: any) => {
         const api = await SettingRequest.update(setting);
         const content = api.getObjectContent();
 
-        context.state.list.updateItemById(content.key, (item: Setting) => {
+        context.state.list.updateItemById(content.key, (item) => {
+          if (!item) return;
           item.value = content.value;
         });
 

@@ -70,6 +70,8 @@ const init = (Stores) => {
         const api = await OrderRequest.updateStatus(id, status);
         api.getContent();
         return context.state.list.updateItemById(id, (item) => {
+            if (!item)
+                return;
             item.status = status;
         });
     })

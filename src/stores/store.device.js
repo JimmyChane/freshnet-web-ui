@@ -1,15 +1,15 @@
 import Vuex from "vuex";
-import ItemCustomerDevice from "../items/CustomerDevice.js";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 import DeviceRequest from "@/request/Device";
+import CustomerDevice from "../items/CustomerDevice.js";
 const init = (Stores) => {
     const context = new StoreBuilder()
         .onFetchItems(async () => {
         const api = await DeviceRequest.list();
         const content = api.optArrayContent();
         return content.map((content) => {
-            return new ItemCustomerDevice(Stores).fromData(content);
+            return new CustomerDevice(Stores).fromData(content);
         });
     })
         .action("refresh", async (context) => {
@@ -35,16 +35,19 @@ const init = (Stores) => {
         return results;
     })
         .action("addItem", async (context, arg = {}) => {
-        const data = new ItemCustomerDevice(Stores).fromData(arg).toData();
+        const data = new CustomerDevice(Stores).fromData(arg).toData();
         delete data.id;
         const api = await DeviceRequest.add({ content: data });
         const content = api.optObjectContent();
-        const item = context.state.list.addItem(new ItemCustomerDevice(Stores).fromData(content));
-        const customer = Stores.customer.getters.items.find((customer) => {
-            return customer.id === item.ownerCustomerId;
-        });
-        if (customer)
-            customer.deviceIds.push(item.id);
+        const item = context.state.list.addItem(new CustomerDevice(Stores).fromData(content));
+        if (item) {
+            const customers = Stores.customer.getters.items;
+            const customer = customers.find((customer) => {
+                return customer.id === item.ownerCustomerId;
+            });
+            if (customer)
+                customer.deviceIds.push(item.id);
+        }
         return item;
     })
         .action("removeItemOfId", async (context, arg = {}) => {
@@ -55,7 +58,7 @@ const init = (Stores) => {
             },
         });
         const content = api.optObjectContent();
-        const item = new ItemCustomerDevice(Stores).fromData(content);
+        const item = new CustomerDevice(Stores).fromData(content);
         const customer = Stores.customer.getters.items.find((customer) => {
             return customer.id === item.ownerCustomerId;
         });
@@ -70,8 +73,10 @@ const init = (Stores) => {
             content: { _id, specifications },
         });
         const content = api.optObjectContent();
-        const inputItem = new ItemCustomerDevice(Stores).fromData(content);
+        const inputItem = new CustomerDevice(Stores).fromData(content);
         return context.state.list.updateItemById(inputItem.id, (item) => {
+            if (!item)
+                return;
             item.specifications = inputItem.specifications;
         });
     })
@@ -81,8 +86,10 @@ const init = (Stores) => {
             content: { _id, description },
         });
         const content = api.optObjectContent();
-        const inputItem = new ItemCustomerDevice(Stores).fromData(content);
+        const inputItem = new CustomerDevice(Stores).fromData(content);
         return context.state.list.updateItemById(inputItem.id, (item) => {
+            if (!item)
+                return;
             item.description = inputItem.description;
         });
     });

@@ -66,5 +66,8 @@ class CustomerDevice {
         const categories = await this.categoryStore.dispatch("getItems");
         return categories.find((category) => category.key === this.categoryKey);
     }
+    getUnique() {
+        return this.id;
+    }
 }
 export default CustomerDevice;

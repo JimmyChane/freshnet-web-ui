@@ -3,6 +3,7 @@ import U from "@/U";
 import CustomerDeviceSpecification from "./CustomerDeviceSpecification";
 import Category from "./Category";
 import Customer from "./Customer";
+import { Item } from "@/stores/tools/List";
 
 interface CustomerDeviceData {
   _id: string;
@@ -12,7 +13,7 @@ interface CustomerDeviceData {
   specifications: any[];
 }
 
-class CustomerDevice {
+class CustomerDevice implements Item {
   stores: any = null;
   categoryStore: any = null;
   customerStore: any = null;
@@ -87,6 +88,10 @@ class CustomerDevice {
       "getItems",
     );
     return categories.find((category) => category.key === this.categoryKey);
+  }
+
+  getUnique(): string {
+    return this.id;
   }
 }
 

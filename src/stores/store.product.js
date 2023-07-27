@@ -1,5 +1,5 @@
 import Product from "../items/Product.js";
-import ProductSpecContent from "../items/ProductSpecContent.js";
+import Specification from "../items/Specification.js";
 import Image from "../items/Image.js";
 import Category from "@/items/Category.js";
 import Vuex from "vuex";
@@ -91,6 +91,8 @@ const init = (Stores) => {
         const api = await ProductRequest.updateTitle(id, title);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.title = U.optString(content.title);
         });
     })
@@ -99,10 +101,10 @@ const init = (Stores) => {
         const api = await ProductRequest.updateDescription(id, description);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             const { description } = content;
-            item.description = U.isString(description)
-                ? description.trim()
-                : "";
+            item.description = U.isString(description) ? description.trim() : "";
         });
     })
         .action("updateBrandIdOfId", async (context, arg) => {
@@ -110,6 +112,8 @@ const init = (Stores) => {
         const api = await ProductRequest.updateBrand(id, brandId);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.setBrandId(content.brandId);
         });
     })
@@ -118,6 +122,8 @@ const init = (Stores) => {
         const api = await ProductRequest.updateCategory(id, categoryId);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.setCategoryId(content.categoryId);
         });
     })
@@ -126,6 +132,8 @@ const init = (Stores) => {
         const api = await ProductRequest.updateAvailability(id, isAvailable);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             if (item.stock)
                 item.stock.isAvailable = content.isAvailable;
         });
@@ -135,6 +143,8 @@ const init = (Stores) => {
         const api = await ProductRequest.updateSecondHand(id, isSecondHand);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             if (item.stock)
                 item.stock.isSecondHand = content.isSecondHand;
         });
@@ -144,6 +154,8 @@ const init = (Stores) => {
         const api = await ProductRequest.updatePrice(id, new ProductPrices(Stores).fromData(price).toData());
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.setPrice(new ProductPrices(Stores).fromData(content.price).toData());
         });
     })
@@ -152,6 +164,8 @@ const init = (Stores) => {
         const api = await ProductRequest.addBundle(id, bundle);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.addBundle(new ProductBundle(Stores).fromData({
                 title: U.trimText(content.bundle.title),
             }));
@@ -162,6 +176,8 @@ const init = (Stores) => {
         const api = await ProductRequest.removeBundle(id, bundle);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.removeBundle(content.bundle);
         });
     })
@@ -170,6 +186,8 @@ const init = (Stores) => {
         const api = await ProductRequest.addGift(id, gift);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.addGift(content.gift);
         });
     })
@@ -178,6 +196,8 @@ const init = (Stores) => {
         const api = await ProductRequest.removeGift(id, gift);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.removeGift(content.gift);
         });
     })
@@ -186,6 +206,8 @@ const init = (Stores) => {
         const api = await ProductRequest.addSpecification(id, specification);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.addSpecification(content.specification);
         });
     })
@@ -193,13 +215,15 @@ const init = (Stores) => {
         const { id } = arg;
         let { specification } = arg;
         specification =
-            specification instanceof ProductSpecContent
+            specification instanceof Specification
                 ? specification.toData()
                 : specification;
         specification.type = specification.key;
         const api = await ProductRequest.removeSpecification(id, specification);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.removeSpecification(content.specification);
         });
     })
@@ -208,6 +232,8 @@ const init = (Stores) => {
         const api = await ProductRequest.updateSpecifications(id, specifications);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.setSpecifications(content.specifications);
         });
     })
@@ -220,6 +246,8 @@ const init = (Stores) => {
         const api = await ProductRequest.addImage(id, imageFileForm);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.addImages(content.images);
         });
     })
@@ -230,6 +258,8 @@ const init = (Stores) => {
         const api = await ProductRequest.removeImage(id, image);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
+            if (!item)
+                return;
             item.removeImage(content.image);
         });
     })

@@ -1,7 +1,7 @@
 import AppHost from "@/host/AppHost";
 
 import Image from "./Image";
-import ProductSpecContent from "./ProductSpecContent";
+import Specification from "./Specification";
 import ItemSearcher from "../objects/ItemSearcher";
 
 import U from "@/U";
@@ -11,10 +11,11 @@ import ProductPrices from "./ProductPrices";
 import Brand from "./Brand";
 import Category from "./Category";
 import ProductPrice from "./ProductPrice";
+import { Item } from "@/stores/tools/List";
 
 const textContains = ItemSearcher.textContains;
 
-export default class Product {
+export default class Product implements Item {
   stores: any;
   categoryStore: any;
   productStore: any;
@@ -36,7 +37,7 @@ export default class Product {
   bundles: any[] = [];
   brandId: string = "";
   categoryId: string = "";
-  specifications: ProductSpecContent[] = [];
+  specifications: Specification[] = [];
   images: Image[] = [];
   price: ProductPrices | null = null;
   stock: ProductStock | null = null;
@@ -136,6 +137,10 @@ export default class Product {
           ? this.price.toData()
           : new ProductPrices(this.stores).fromData(this.price ?? {}).toData(),
     };
+  }
+
+  getUnique(): string {
+    return this.id;
   }
 
   toCount(strs: string[]): number {
@@ -315,14 +320,14 @@ export default class Product {
 
   setSpecifications(specifications: { type: string; content: string }[] = []) {
     this.specifications = specifications.map((specification) => {
-      return new ProductSpecContent(this.stores).fromData({
+      return new Specification(this.stores).fromData({
         key: specification.type,
         content: specification.content,
       });
     });
   }
   addSpecification(specification: { type: string; content: string }) {
-    const specContent = new ProductSpecContent(this.stores).fromData({
+    const specContent = new Specification(this.stores).fromData({
       key: specification.type,
       content: specification.content,
     });

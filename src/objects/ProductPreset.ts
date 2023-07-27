@@ -1,7 +1,7 @@
-import ProductSpecType from "@/items/ProductSpecType.js";
+import { Type } from "@/items/Specification";
 import Brand from "@/items/Brand";
 import Product from "@/items/Product";
-import ProductSpecContent from "@/items/ProductSpecContent";
+import Specification from "@/items/Specification";
 
 class Brands {
   static INTEL = new Brand(null).fromData({
@@ -179,7 +179,7 @@ export default class ProductPreset {
     const { specifications } = product;
 
     return specifications
-      .filter((itemSpec: ProductSpecContent) => {
+      .filter((itemSpec: Specification) => {
         const key = itemSpec.getKey();
         return Object.keys(ProductPreset.Specifications).includes(key);
       })
@@ -189,9 +189,9 @@ export default class ProductPreset {
         const content = itemSpec.content.toLowerCase();
 
         if (
-          key === ProductSpecType.Key.Processor ||
-          key === ProductSpecType.Key.Ram ||
-          key === ProductSpecType.Key.Storage
+          key === Type.Key.Processor ||
+          key === Type.Key.Ram ||
+          key === Type.Key.Storage
         ) {
           for (const compareType of Object.keys(compares)) {
             if (!content.includes(compareType)) {
@@ -209,7 +209,7 @@ export default class ProductPreset {
           }
         }
 
-        if (key === ProductSpecType.Key.Size) {
+        if (key === Type.Key.Size) {
           for (const compare of compares) {
             if (content.includes(compare)) {
               return {
@@ -219,10 +219,7 @@ export default class ProductPreset {
               };
             }
           }
-        } else if (
-          key === ProductSpecType.Key.Resolution ||
-          key === ProductSpecType.Key.Display
-        ) {
+        } else if (key === Type.Key.Resolution || key === Type.Key.Display) {
           for (const compare of compares) {
             if (content.includes(compare)) {
               return {
@@ -234,7 +231,7 @@ export default class ProductPreset {
           }
         }
 
-        if (key === ProductSpecType.Key.Graphic) {
+        if (key === Type.Key.Graphic) {
           const reversedCompares = compares
             .map((compare: any) => compare)
             .reverse();
