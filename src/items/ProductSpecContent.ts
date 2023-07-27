@@ -1,20 +1,19 @@
 import U from "@/U";
 import ItemSearcher from "../objects/ItemSearcher";
-const textContains = ItemSearcher.textContains;
 import ProductSpecType from "@/items/ProductSpecType";
 
 export default class ProductSpecContent {
   stores: any;
   specificationStore: any;
 
+  content: string = "";
+  type: ProductSpecType | string | null = "";
+  typeKey: string | null = "";
+
   constructor(stores: any) {
     this.stores = stores;
     this.specificationStore = stores.specification;
   }
-
-  content: string = "";
-  type: ProductSpecType | string | null = "";
-  typeKey: string | null = "";
 
   fromData(data: { key?: string; content?: string }): ProductSpecContent {
     this.type = U.trimId(data.key);
@@ -37,7 +36,7 @@ export default class ProductSpecContent {
   }
   toCount(strs: string[]): number {
     return strs.reduce((count, str) => {
-      if (textContains(this.content, str)) count++;
+      if (ItemSearcher.textContains(this.content, str)) count++;
       return count;
     }, 0);
   }
@@ -56,5 +55,13 @@ export default class ProductSpecContent {
     });
     this.type = specification ?? null;
     return this.type;
+  }
+
+  getKey(): string {
+    return this.type instanceof ProductSpecType
+      ? this.type.key
+      : typeof this.type === "string"
+      ? this.type
+      : "";
   }
 }

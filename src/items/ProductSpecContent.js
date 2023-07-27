@@ -1,17 +1,16 @@
 import U from "@/U";
 import ItemSearcher from "../objects/ItemSearcher";
-const textContains = ItemSearcher.textContains;
 import ProductSpecType from "@/items/ProductSpecType";
 export default class ProductSpecContent {
     stores;
     specificationStore;
+    content = "";
+    type = "";
+    typeKey = "";
     constructor(stores) {
         this.stores = stores;
         this.specificationStore = stores.specification;
     }
-    content = "";
-    type = "";
-    typeKey = "";
     fromData(data) {
         this.type = U.trimId(data.key);
         this.typeKey = this.type;
@@ -31,7 +30,7 @@ export default class ProductSpecContent {
     }
     toCount(strs) {
         return strs.reduce((count, str) => {
-            if (textContains(this.content, str))
+            if (ItemSearcher.textContains(this.content, str))
                 count++;
             return count;
         }, 0);
@@ -48,5 +47,12 @@ export default class ProductSpecContent {
         });
         this.type = specification ?? null;
         return this.type;
+    }
+    getKey() {
+        return this.type instanceof ProductSpecType
+            ? this.type.key
+            : typeof this.type === "string"
+                ? this.type
+                : "";
     }
 }

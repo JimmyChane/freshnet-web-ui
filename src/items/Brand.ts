@@ -22,7 +22,9 @@ export default class Brand {
   fromData(data: BrandData): this {
     this.id = U.trimId(data._id);
     this.title = U.trimText(data.title);
-    this.icon = U.isObject(data.icon) ? new Image().fromData(data.icon) : null;
+    this.icon = U.isObjectOnly(data.icon)
+      ? new Image().fromData(data.icon)
+      : null;
     return this;
   }
 

@@ -313,6 +313,8 @@ const init = (Stores) => {
         if (key === Notify.ItemEventRemove) {
             const { id, event } = content;
             context.state.list.updateItemById(id, (item) => {
+                if (!item)
+                    return;
                 const inputEvent = new ServiceEvent(Stores).fromData(event);
                 const found = item.events.find((itemEvent) => {
                     if (itemEvent.timestamp && inputEvent.timestamp) {
@@ -329,6 +331,8 @@ const init = (Stores) => {
         if (key === Notify.ItemLabelAdd) {
             const { id, label } = content;
             context.state.list.updateItemById(id, (item) => {
+                if (!item)
+                    return;
                 if (label.title === "Urgent")
                     item.setUrgent(true);
                 if (label.title === "Warranty")
@@ -338,6 +342,8 @@ const init = (Stores) => {
         if (key === Notify.ItemLabelRemove) {
             const { id, label } = content;
             context.state.list.updateItemById(id, (item) => {
+                if (!item)
+                    return;
                 if (label.title === "Urgent")
                     item.setUrgent(false);
                 if (label.title === "Warranty")
@@ -347,25 +353,29 @@ const init = (Stores) => {
         if (key === Notify.ItemStateUpdate) {
             const { id, state } = content;
             context.state.list.updateItemById(id, (item) => {
-                item.state = state;
+                if (item)
+                    item.state = state;
             });
         }
         if (key === Notify.ItemDescriptionUpdate) {
             const { id, description } = content;
             context.state.list.updateItemById(id, (item) => {
-                item.description = description;
+                if (item)
+                    item.description = description;
             });
         }
         if (key === Notify.ItemBelongingsUpdate) {
             const { id, belongings } = content;
             context.state.list.updateItemById(id, (item) => {
-                item.belongings = belongings;
+                if (item)
+                    item.belongings = belongings;
             });
         }
         if (key === Notify.ItemCustomerUpdate) {
             const { id, customer } = content;
             context.state.list.updateItemById(id, (item) => {
-                item.customer = new ServiceCustomer(Stores).fromData(customer);
+                if (item)
+                    item.customer = new ServiceCustomer(Stores).fromData(customer);
             });
         }
     };

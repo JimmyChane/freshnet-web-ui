@@ -67,49 +67,7 @@
       this.halfWidth = rect.width / 2;
       this.halfHeight = rect.height / 2;
 
-      switch (this.corner) {
-        case Corner.TOP:
-          this.classDirection = "PopupMenu-Top";
-          this.x = rect.left + this.halfWidth;
-          this.y = rect.top;
-          break;
-        case Corner.RIGHT:
-          this.classDirection = "PopupMenu-Right";
-          this.x = rect.left + this.width;
-          this.y = rect.top + this.halfHeight;
-          break;
-        case Corner.BOTTOM:
-          this.classDirection = "PopupMenu-Bottom";
-          this.x = rect.left + this.halfWidth;
-          this.y = rect.top + this.height;
-          break;
-        case Corner.LEFT:
-          this.classDirection = "PopupMenu-Left";
-          this.x = rect.left;
-          this.y = rect.top + this.halfHeight;
-          break;
-        case Corner.TOP_LEFT:
-          this.classDirection = "PopupMenu-TopLeft";
-          this.x = rect.left;
-          this.y = rect.top;
-          break;
-        case Corner.TOP_RIGHT:
-          this.classDirection = "PopupMenu-TopRight";
-          this.x = rect.left + this.width;
-          this.y = rect.top;
-          break;
-        case Corner.BOTTOM_LEFT:
-          this.classDirection = "PopupMenu-BottomLeft";
-          this.x = rect.left;
-          this.y = rect.top + this.height;
-          break;
-        default:
-        case Corner.BOTTOM_RIGHT:
-          this.classDirection = "PopupMenu-BottomRight";
-          this.x = rect.left + this.width;
-          this.y = rect.top + this.height;
-          break;
-      }
+      this.calculateCorner(this.corner, rect);
 
       this.style = {
         "--x": `${this.x}px`,
@@ -142,6 +100,75 @@
       this.show();
     },
     methods: {
+      calculateCorner(corner, rect) {
+        switch (corner) {
+          case Corner.TOP:
+            this.classDirection = "PopupMenu-Top";
+            this.x = rect.left + this.halfWidth;
+            this.y = rect.top;
+            break;
+          case Corner.RIGHT:
+            this.classDirection = "PopupMenu-Right";
+            this.x = rect.left + this.width;
+            this.y = rect.top + this.halfHeight;
+            break;
+          case Corner.BOTTOM:
+            this.classDirection = "PopupMenu-Bottom";
+            this.x = rect.left + this.halfWidth;
+            this.y = rect.top + this.height;
+            break;
+          case Corner.LEFT:
+            this.classDirection = "PopupMenu-Left";
+            this.x = rect.left;
+            this.y = rect.top + this.halfHeight;
+            break;
+          case Corner.TOP_LEFT:
+            this.classDirection = "PopupMenu-TopLeft";
+            this.x = rect.left;
+            this.y = rect.top;
+            break;
+          case Corner.TOP_RIGHT:
+            this.classDirection = "PopupMenu-TopRight";
+            this.x = rect.left + this.width;
+            this.y = rect.top;
+            break;
+          case Corner.BOTTOM_LEFT:
+            this.classDirection = "PopupMenu-BottomLeft";
+            this.x = rect.left;
+            this.y = rect.top + this.height;
+            break;
+          case Corner.BOTTOM_RIGHT:
+            this.classDirection = "PopupMenu-BottomRight";
+            this.x = rect.left + this.width;
+            this.y = rect.top + this.height;
+            break;
+          default:
+          case Corner.AUTO:
+            const screenWidthHalf = window.innerWidth / 2;
+            const screenHeightHalf = window.innerHeight / 2;
+
+            const vertical =
+              rect.top > screenHeightHalf ? Corner.TOP : Corner.BOTTOM;
+            const horizontal =
+              rect.left > screenWidthHalf ? Corner.LEFT : Corner.RIGHT;
+
+            if (vertical === Corner.TOP && horizontal === Corner.LEFT) {
+              return this.calculateCorner(Corner.TOP_LEFT, rect);
+            }
+            if (vertical === Corner.TOP && horizontal === Corner.RIGHT) {
+              return this.calculateCorner(Corner.TOP_RIGHT, rect);
+            }
+            if (vertical === Corner.BOTTOM && horizontal === Corner.LEFT) {
+              return this.calculateCorner(Corner.BOTTOM_LEFT, rect);
+            }
+            if (vertical === Corner.BOTTOM && horizontal === Corner.RIGHT) {
+              return this.calculateCorner(Corner.BOTTOM_RIGHT, rect);
+            }
+
+            break;
+        }
+      },
+
       invalidateShowing() {
         this.isShowing ? this.show() : this.hide();
       },

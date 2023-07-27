@@ -11,7 +11,7 @@
       components: { Menu, Icon },
       props: {
          width: { type: Number, default: Menu.Width.AUTO },
-         corner: { type: Number, default: Menu.Corner.BOTTOM_LEFT },
+         corner: { type: Number, default: Menu.Corner.AUTO },
          menus: { default: undefined },
 
          src: { type: String, default: "" },

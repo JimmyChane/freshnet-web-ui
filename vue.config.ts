@@ -2,7 +2,7 @@ const TimeBuilder = require("./src/tools/TimeBuilder.js");
 const timestamp = TimeBuilder.getCurrent("-");
 const freshnetConfig = require("./freshnet.config.js");
 
-const vueConfig = {
+const vueConfig: Record<string, any> = {
   publicPath: "./",
   productionSourceMap: false,
   devServer: { port: freshnetConfig.devPort },
@@ -27,8 +27,8 @@ const vueConfig = {
       ],
     },
   },
-  chainWebpack: (config) => {
-    config.plugin("html").tap((args) => {
+  chainWebpack: (config: any) => {
+    config.plugin("html").tap((args: any) => {
       args[0].title = "Freshnet Enterprise";
       return args;
     });
