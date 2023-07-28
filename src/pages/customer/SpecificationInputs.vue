@@ -1,5 +1,5 @@
 <script>
-  import ItemSpec from "./ItemSpec.vue";
+  import ItemSpec from "./ItemSpecificationInput.vue";
   import Selector4 from "@/components/selector/Selector4.vue";
   import { Type } from "@/items/Specification";
 
@@ -34,10 +34,11 @@
             });
             return !dataSpecification;
           })
-          .sort(
-            (menu1, menu2) =>
-              c.SpecKeys.indexOf(menu1.key) - c.SpecKeys.indexOf(menu2.key),
-          );
+          .sort((menu1, menu2) => {
+            return (
+              c.SpecKeys.indexOf(menu1.key) - c.SpecKeys.indexOf(menu2.key)
+            );
+          });
       },
     },
     watch: {
@@ -86,7 +87,7 @@
     .SpecificationInputs-contents {
       display: flex;
       flex-direction: column;
-      gap: 0.2em;
+      gap: 0.3em;
     }
   }
 </style>

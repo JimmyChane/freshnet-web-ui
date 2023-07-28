@@ -1,6 +1,6 @@
 import AppHost from "@/host/AppHost";
 import Image from "./Image";
-import Specification from "./Specification";
+import Specification, { Type } from "./Specification";
 import ItemSearcher from "../objects/ItemSearcher";
 import U from "@/U";
 import ProductStock from "./ProductStock";
@@ -8,6 +8,27 @@ import ProductBundle from "./ProductBundle";
 import ProductPrices from "./ProductPrices";
 const textContains = ItemSearcher.textContains;
 export default class Product {
+    // private static FORMAT_SPECIFICATION_ONLY = [
+    //   Type.Key.Processor,
+    //   Type.Key.Ram,
+    //   Type.Key.Storage,
+    //   Type.Key.Display,
+    //   Type.Key.Resolution,
+    //   Type.Key.Graphic,
+    //   Type.Key.Os,
+    //   Type.Key.Battery,
+    //   Type.Key.Connectivity,
+    //   Type.Key.Monitor,
+    //   Type.Key.Colour,
+    // ];
+    static FORMAT_SPECIFICATION_ORDERS = Object.values(Type.Key);
+    static putForwardSlash(texts, separation = " / ") {
+        return texts.reduce((result, text, i) => {
+            if (i === 0)
+                return text;
+            return `${result}${separation}${text}`;
+        });
+    }
     stores;
     categoryStore;
     productStore;
@@ -133,6 +154,89 @@ export default class Product {
     }
     toImageThumbnail() {
         return this.images.length ? this.images[0] : null;
+    }
+    async toStringSpecifications() {
+        const arr1 = [
+            "Microsoft Surface Pro 9 (Platinum)",
+            "Intel 15-1235U",
+            "8GB D5",
+            "128GB SSD",
+            '13.0"Touch',
+            "Intel Iris Xe Graphics",
+            "W11 (QCB-00013)",
+            "rm4999",
+        ];
+        const arr2 = [
+            "Microsoft Surface Pro 9 (Graphite/ Sapphire/Frost)",
+            "Intel EVO Core i5-1235U",
+            "8GB D5",
+            "256GB SSD",
+            "13.0 Touch",
+            "Intel Iris Xe Graphics",
+            "W11 (QEZ-00030/ QEZ-00047/QEZ-00064)",
+            "rm5499",
+            "FREE Surface Pro Signature Keyboard",
+        ];
+        const arr3 = [
+            "Microsoft Surface GO 3 (Matte Black)",
+            "Intel Core i3-10100Y 1.30~3.90GHz",
+            "8GB",
+            "128GB SSD",
+            '10.5"Touch',
+            "Intel UHD Graphics 630",
+            "1 Year Warranty Tel: 1800-81-8798",
+            "W11 (8VC-00024)",
+            "rm3150",
+        ];
+        const arr4 = [
+            "Microsoft Surface Go Signature Type Cover",
+            "Keyboard for Surface GO 2/3",
+            "1-YR WRTY",
+            "rm499",
+        ];
+        const arr5 = [
+            "Microsoft Surface GO 3 (Platinum)",
+            "Intel Pentium Gold 6500Y 1.10~3.40GHz",
+            "8GB",
+            "128GB SSD",
+            '10.5"Touch',
+            "Intel UHD Graphics 615",
+            "1 Year Warranty Tel: 1800-81-8798",
+            "W11 (8VA-00009)",
+            "rm2560",
+        ];
+        const texts = [];
+        const specs = this.specifications
+            .filter((specification) => {
+            return Product.FORMAT_SPECIFICATION_ORDERS.includes(specification.typeKey);
+        })
+            .sort((specification1, specification2) => {
+            const index1 = Product.FORMAT_SPECIFICATION_ORDERS.indexOf(specification1.typeKey);
+            const index2 = Product.FORMAT_SPECIFICATION_ORDERS.indexOf(specification2.typeKey);
+            return index1 - index2;
+        });
+        // title
+        const title = await this.fetchFullTitle();
+        const colorSpecification = this.specifications.find((specification) => {
+            return specification.typeKey === Type.Key.Colour;
+        });
+        if (colorSpecification) {
+            specs.splice(specs.indexOf(colorSpecification), 1);
+            texts.push(`${title} (${colorSpecification.content})`);
+        }
+        else {
+            texts.push(title);
+        }
+        // specification
+        texts.push(...specs.map((specification) => {
+            return specification.content;
+        }));
+        // price
+        const price = this.price?.normal?.toString() ?? "";
+        if (price.length > 0) {
+            texts.push(price);
+        }
+        return Product.putForwardSlash(texts);
     }
     isPricePromotion() {
         let price = this.price;
@@ -307,8 +411,11 @@ export default class Product {
         this.specifications.push(specContent);
     }
     removeSpecification(specification) {
+        const typeKey = specification instanceof Specification
+            ? specification.getKey()
+            : specification.type;
         this.specifications = this.specifications.filter((thisSpecification) => {
-            return !(thisSpecification.type === specification.type &&
+            return !(thisSpecification.getKey() === typeKey &&
                 thisSpecification.content === specification.content);
         });
     }

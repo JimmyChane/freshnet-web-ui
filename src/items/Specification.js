@@ -74,27 +74,22 @@ export class Type {
 export default class Specification {
     stores;
     specificationStore;
-    content = "";
-    type = "";
     typeKey = "";
+    type = null;
+    content = "";
     constructor(stores) {
         this.stores = stores;
         this.specificationStore = stores.specification;
     }
     fromData(data) {
-        this.type = U.trimId(data.key);
-        this.typeKey = this.type;
+        this.typeKey = U.trimId(data.key);
         this.content = U.trimText(data.content);
         this.fetchType();
         return this;
     }
     toData() {
         return {
-            key: this.type instanceof Type
-                ? this.type.key
-                : typeof this.typeKey === "string"
-                    ? this.typeKey
-                    : undefined,
+            key: this.getKey(),
             content: this.content,
         };
     }
@@ -109,20 +104,22 @@ export default class Specification {
         return 0;
     }
     async fetchType() {
-        if (!U.isString(this.type))
+        if (this.type instanceof Type)
             return this.type;
         const specifications = await this.specificationStore.dispatch("getItems");
-        const specification = specifications.find((spec) => {
-            return spec.key == this.typeKey;
+        const specification = specifications.find((specification) => {
+            return specification.key == this.typeKey;
         });
         this.type = specification ?? null;
         return this.type;
     }
     getKey() {
-        return this.type instanceof Type
-            ? this.type.key
-            : typeof this.type === "string"
-                ? this.type
-                : "";
+        if (this.type instanceof Type) {
+            return this.type.key;
+        }
+        if (typeof this.type === "string") {
+            return this.typeKey;
+        }
+        return "";
     }
 }
