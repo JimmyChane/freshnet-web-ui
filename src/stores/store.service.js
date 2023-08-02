@@ -14,6 +14,8 @@ const Notify = {
     ItemImageRemove: "item-image-remove",
     ItemEventAdd: "item-event-add",
     ItemEventRemove: "item-event-remove",
+    ItemEventImageAdd: "item-event-image-add",
+    ItemEventImageRemove: "item-event-image-remove",
     ItemEventDescriptionUpdate: "item-event-description-update",
     ItemLabelAdd: "item-label-add",
     ItemLabelRemove: "item-label-remove",
@@ -136,6 +138,38 @@ const init = (Stores) => {
                 return inputItem;
             item.events = inputItem.events.sort((event1, event2) => {
                 return event2.compare(event1);
+            });
+        });
+    })
+        .action("addEventImage", async (context, arg) => {
+        const { serviceID = "", eventTime = 0, imageFiles = [] } = arg;
+        const formData = new FormData();
+        for (const imageFile of imageFiles) {
+            formData.append(imageFile.name, imageFile);
+        }
+        const api = await ServiceRequest.addEventImage(serviceID, eventTime, formData);
+        const content = api.optObjectContent();
+        const id = content.id;
+        const inputEventTime = content.eventTime;
+        const dataImages = content.items;
+        return context.state.list.updateItemById(id, (item) => {
+            if (!item)
+                return;
+            const event = item.events.find((event) => {
+                return event.timestamp?.time === inputEventTime;
+            });
+            if (!event)
+                return;
+            dataImages
+                .map((dataImage) => {
+                return new ServiceImage(Stores).fromData(dataImage);
+            })
+                .forEach((image) => {
+                const existingImage = event.images.find((eventImage) => {
+                    return image.name === eventImage.name;
+                });
+                if (!existingImage)
+                    event.images.push(image);
             });
         });
     })
@@ -278,8 +312,27 @@ const init = (Stores) => {
             });
         });
     })
-        .build();
-    context.actions.socketNotify = (context, data) => {
+        .action("removeEventImage", async (context, arg) => {
+        const { serviceID = "", eventTime = 0, image } = arg;
+        const api = await ServiceRequest.removeEventImage(serviceID, eventTime, image);
+        const content = api.getContent();
+        const id = content.id;
+        const inputEventTime = content.eventTime;
+        const inputImage = new ServiceImage(Stores).fromData(content.image);
+        return context.state.list.updateItemById(id, (item) => {
+            if (!item)
+                return;
+            const foundEvent = item.events.find((event) => {
+                return event.timestamp?.time === inputEventTime;
+            });
+            if (!foundEvent)
+                return;
+            foundEvent.images = foundEvent.images.filter((image) => {
+                return image.name !== inputImage.name;
+            });
+        });
+    })
+        .action("socketNotify", async (context, data) => {
         const { key, content } = data;
         if (key === Notify.ItemAdd) {
             const inputItem = new Service(Stores).fromData(content);
@@ -343,6 +396,46 @@ const init = (Stores) => {
                     item.events.splice(item.events.indexOf(found), 1);
             });
         }
+        if (key === Notify.ItemEventImageAdd) {
+            const { id, eventTime, items: dataImages, fail_count } = content;
+            context.state.list.updateItemById(id, (item) => {
+                if (!item)
+                    return;
+                const event = item.events.find((event) => {
+                    return event.timestamp?.time === eventTime;
+                });
+                if (!event)
+                    return;
+                dataImages
+                    .map((dataImage) => {
+                    return new ServiceImage(Stores).fromData(dataImage);
+                })
+                    .forEach((image) => {
+                    const existingImage = event.images.find((eventImage) => {
+                        return image.name === eventImage.name;
+                    });
+                    if (!existingImage)
+                        event.images.push(image);
+                });
+            });
+            return;
+        }
+        if (key === Notify.ItemEventImageRemove) {
+            const { id, eventTime, image: inputImage } = content;
+            context.state.list.updateItemById(id, (item) => {
+                if (!item)
+                    return;
+                const foundEvent = item.events.find((event) => {
+                    return event.timestamp?.time === eventTime;
+                });
+                if (!foundEvent)
+                    return;
+                foundEvent.images = foundEvent.images.filter((image) => {
+                    return image.name !== inputImage.name;
+                });
+            });
+            return;
+        }
         if (key === Notify.ItemEventDescriptionUpdate) {
         }
         if (key === Notify.ItemLabelAdd) {
@@ -398,7 +491,8 @@ const init = (Stores) => {
                     item.customer = new ServiceCustomer(Stores).fromData(customer);
             });
         }
-    };
+    })
+        .build();
     return new Vuex.Store(context);
 };
 export default { init };

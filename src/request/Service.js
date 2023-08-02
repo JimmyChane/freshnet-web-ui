@@ -100,11 +100,25 @@ export default class Service {
             .bodyObject(imageForm)
             .sendNotJson();
     }
+    static addEventImage(id, eventTime, imageForm) {
+        return HostApi.request()
+            .POST()
+            .url(`service_v2/item/${id}/add/event/${eventTime}/image_files/`)
+            .bodyObject(imageForm)
+            .sendNotJson();
+    }
     static removeImage(id, image) {
         return HostApi.request()
             .DELETE()
             .url(`service_v2/item/${id}/delete/image/`)
             .body({ content: image.toData() })
+            .send();
+    }
+    static removeEventImage(serviceId, eventTime, image) {
+        return HostApi.request()
+            .DELETE()
+            .url(`service_v2/item/${serviceId}/delete/event/${eventTime}/image/`)
+            .body({ image: image.toData() })
             .send();
     }
 }

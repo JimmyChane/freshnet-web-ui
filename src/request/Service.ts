@@ -105,11 +105,29 @@ export default class Service {
       .bodyObject(imageForm)
       .sendNotJson();
   }
+  static addEventImage(
+    id: string,
+    eventTime: number,
+    imageForm: any,
+  ): Promise<any> {
+    return HostApi.request()
+      .POST()
+      .url(`service_v2/item/${id}/add/event/${eventTime}/image_files/`)
+      .bodyObject(imageForm)
+      .sendNotJson();
+  }
   static removeImage(id: string, image: any): Promise<any> {
     return HostApi.request()
       .DELETE()
       .url(`service_v2/item/${id}/delete/image/`)
       .body({ content: image.toData() })
+      .send();
+  }
+  static removeEventImage(serviceId: string, eventTime: number, image: any) {
+    return HostApi.request()
+      .DELETE()
+      .url(`service_v2/item/${serviceId}/delete/event/${eventTime}/image/`)
+      .body({ image: image.toData() })
       .send();
   }
 }

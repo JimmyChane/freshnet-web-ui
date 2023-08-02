@@ -15,6 +15,8 @@ const Notify = {
   ItemImageRemove: "item-image-remove",
   ItemEventAdd: "item-event-add",
   ItemEventRemove: "item-event-remove",
+  ItemEventImageAdd: "item-event-image-add",
+  ItemEventImageRemove: "item-event-image-remove",
   ItemEventDescriptionUpdate: "item-event-description-update",
   ItemLabelAdd: "item-label-add",
   ItemLabelRemove: "item-label-remove",
@@ -163,6 +165,53 @@ const init = (Stores: any) => {
           item.events = inputItem.events.sort((event1, event2) => {
             return event2.compare(event1);
           });
+        });
+      },
+    )
+    .action(
+      "addEventImage",
+      async (
+        context,
+        arg: { serviceID: string; eventTime: number; imageFiles: any[] },
+      ) => {
+        const { serviceID = "", eventTime = 0, imageFiles = [] } = arg;
+
+        const formData = new FormData();
+        for (const imageFile of imageFiles) {
+          formData.append(imageFile.name, imageFile);
+        }
+
+        const api = await ServiceRequest.addEventImage(
+          serviceID,
+          eventTime,
+          formData,
+        );
+        const content = api.optObjectContent();
+
+        const id: string = content.id;
+        const inputEventTime: number = content.eventTime;
+        const dataImages: any[] = content.items;
+
+        return context.state.list.updateItemById(id, (item) => {
+          if (!item) return;
+
+          const event = item.events.find((event) => {
+            return event.timestamp?.time === inputEventTime;
+          });
+
+          if (!event) return;
+
+          dataImages
+            .map((dataImage) => {
+              return new ServiceImage(Stores).fromData(dataImage);
+            })
+            .forEach((image) => {
+              const existingImage = event.images.find((eventImage) => {
+                return image.name === eventImage.name;
+              });
+
+              if (!existingImage) event.images.push(image);
+            });
         });
       },
     )
@@ -332,118 +381,194 @@ const init = (Stores: any) => {
         });
       },
     )
-    .build();
+    .action(
+      "removeEventImage",
+      async (
+        context,
+        arg: { serviceID: string; eventTime: number; image: any },
+      ) => {
+        const { serviceID = "", eventTime = 0, image } = arg;
 
-  context.actions.socketNotify = (context: any, data: any) => {
-    const { key, content } = data;
+        const api = await ServiceRequest.removeEventImage(
+          serviceID,
+          eventTime,
+          image,
+        );
+        const content = api.getContent();
 
-    if (key === Notify.ItemAdd) {
-      const inputItem = new Service(Stores).fromData(content);
-      context.state.list.addItem(inputItem);
-    }
-    if (key === Notify.ItemRemove) {
-      const inputItem = new Service(Stores).fromData(content);
-      context.state.list.removeItemByItem(inputItem);
-    }
-    if (key === Notify.ItemImageAdd) {
-      const { id, images } = content;
-      context.state.list.updateItemById(id, (item: Service) => {
-        images
-          .map((dataImage: any) => new ServiceImage(Stores).fromData(dataImage))
-          .forEach((image: ServiceImage) => {
-            const existingImage = item.imageFiles.find((img) => {
-              return img.name === image.name;
-            });
-            if (!existingImage) item.imageFiles.push(image);
+        const id = content.id;
+        const inputEventTime = content.eventTime;
+        const inputImage = new ServiceImage(Stores).fromData(content.image);
+
+        return context.state.list.updateItemById(id, (item) => {
+          if (!item) return;
+          const foundEvent = item.events.find((event) => {
+            return event.timestamp?.time === inputEventTime;
           });
-      });
-    }
-    if (key === Notify.ItemImageRemove) {
-      const { id, image } = content;
-      context.state.list.updateItemById(id, (item: Service) => {
-        item.imageFiles = item.imageFiles.filter((imageFile) => {
-          return imageFile.name !== image.name;
-        });
-      });
-    }
-    if (key === Notify.ItemEventAdd) {
-      const { id, event } = content;
-      context.state.list.updateItemById(id, (item: Service) => {
-        const inputEvent = new ServiceEvent(Stores).fromData(event);
-        const found = item.events.find((itemEvent: ServiceEvent) => {
-          if (itemEvent.timestamp && inputEvent.timestamp) {
-            return itemEvent.timestamp.time === inputEvent.timestamp.time;
-          }
-          return itemEvent.timestamp === inputEvent.timestamp;
-        });
-        if (!found) {
-          item.events.push(inputEvent);
-          item.events.sort((event1, event2) => event1.compare(event2));
-        }
-      });
-    }
-    if (key === Notify.ItemEventRemove) {
-      const { id, event } = content;
-      context.state.list.updateItemById(id, (item: Service) => {
-        if (!item) return;
-        const inputEvent = new ServiceEvent(Stores).fromData(event);
-        const found = item.events.find((itemEvent) => {
-          if (itemEvent.timestamp && inputEvent.timestamp) {
-            return itemEvent.timestamp.time === inputEvent.timestamp.time;
-          }
-          return itemEvent.timestamp === inputEvent.timestamp;
-        });
-        if (found) item.events.splice(item.events.indexOf(found), 1);
-      });
-    }
-    if (key === Notify.ItemEventDescriptionUpdate) {
-    }
-    if (key === Notify.ItemLabelAdd) {
-      const { id, label } = content;
-      context.state.list.updateItemById(id, (item: Service) => {
-        if (!item) return;
-        if (label.title === "Urgent") item.setUrgent(true);
-        if (label.title === "Warranty") item.setWarranty(true);
-      });
-    }
-    if (key === Notify.ItemLabelRemove) {
-      const { id, label } = content;
-      context.state.list.updateItemById(id, (item: Service) => {
-        if (!item) return;
-        if (label.title === "Urgent") item.setUrgent(false);
-        if (label.title === "Warranty") item.setWarranty(false);
-      });
-    }
-    if (key === Notify.ItemStateUpdate) {
-      const { id, state } = content;
-      context.state.list.updateItemById(id, (item: Service) => {
-        if (item) item.state = state;
-      });
-    }
-    if (key === Notify.ItemDescriptionUpdate) {
-      const { id, description } = content;
-      context.state.list.updateItemById(id, (item: Service) => {
-        if (item) item.description = description;
-      });
-    }
-    if (key === Notify.ItemBelongingsUpdate) {
-      const { id, belongings: dataBelongings } = content;
 
-      const belongings = dataBelongings.map((belonging: {}) => {
-        return new ServiceBelonging(Stores).fromData(belonging);
-      });
-      context.state.list.updateItemById(id, (item: Service) => {
-        if (item) item.belongings = belongings;
-      });
-    }
-    if (key === Notify.ItemCustomerUpdate) {
-      const { id, customer } = content;
-      context.state.list.updateItemById(id, (item: Service) => {
-        if (item)
-          item.customer = new ServiceCustomer(Stores).fromData(customer);
-      });
-    }
-  };
+          if (!foundEvent) return;
+
+          foundEvent.images = foundEvent.images.filter((image) => {
+            return image.name !== inputImage.name;
+          });
+        });
+      },
+    )
+    .action("socketNotify", async (context: any, data: any) => {
+      const { key, content } = data;
+
+      if (key === Notify.ItemAdd) {
+        const inputItem = new Service(Stores).fromData(content);
+        context.state.list.addItem(inputItem);
+      }
+      if (key === Notify.ItemRemove) {
+        const inputItem = new Service(Stores).fromData(content);
+        context.state.list.removeItemByItem(inputItem);
+      }
+      if (key === Notify.ItemImageAdd) {
+        const { id, images } = content;
+        context.state.list.updateItemById(id, (item: Service) => {
+          images
+            .map((dataImage: any) =>
+              new ServiceImage(Stores).fromData(dataImage),
+            )
+            .forEach((image: ServiceImage) => {
+              const existingImage = item.imageFiles.find((img) => {
+                return img.name === image.name;
+              });
+              if (!existingImage) item.imageFiles.push(image);
+            });
+        });
+      }
+      if (key === Notify.ItemImageRemove) {
+        const { id, image } = content;
+        context.state.list.updateItemById(id, (item: Service) => {
+          item.imageFiles = item.imageFiles.filter((imageFile) => {
+            return imageFile.name !== image.name;
+          });
+        });
+      }
+      if (key === Notify.ItemEventAdd) {
+        const { id, event } = content;
+        context.state.list.updateItemById(id, (item: Service) => {
+          const inputEvent = new ServiceEvent(Stores).fromData(event);
+          const found = item.events.find((itemEvent: ServiceEvent) => {
+            if (itemEvent.timestamp && inputEvent.timestamp) {
+              return itemEvent.timestamp.time === inputEvent.timestamp.time;
+            }
+            return itemEvent.timestamp === inputEvent.timestamp;
+          });
+          if (!found) {
+            item.events.push(inputEvent);
+            item.events.sort((event1, event2) => event1.compare(event2));
+          }
+        });
+      }
+      if (key === Notify.ItemEventRemove) {
+        const { id, event } = content;
+        context.state.list.updateItemById(id, (item: Service) => {
+          if (!item) return;
+          const inputEvent = new ServiceEvent(Stores).fromData(event);
+          const found = item.events.find((itemEvent) => {
+            if (itemEvent.timestamp && inputEvent.timestamp) {
+              return itemEvent.timestamp.time === inputEvent.timestamp.time;
+            }
+            return itemEvent.timestamp === inputEvent.timestamp;
+          });
+          if (found) item.events.splice(item.events.indexOf(found), 1);
+        });
+      }
+      if (key === Notify.ItemEventImageAdd) {
+        const { id, eventTime, items: dataImages, fail_count } = content;
+        context.state.list.updateItemById(id, (item: Service) => {
+          if (!item) return;
+
+          const event = item.events.find((event) => {
+            return event.timestamp?.time === eventTime;
+          });
+
+          if (!event) return;
+
+          dataImages
+            .map((dataImage: any) => {
+              return new ServiceImage(Stores).fromData(dataImage);
+            })
+            .forEach((image: ServiceImage) => {
+              const existingImage = event.images.find((eventImage) => {
+                return image.name === eventImage.name;
+              });
+
+              if (!existingImage) event.images.push(image);
+            });
+        });
+        return;
+      }
+      if (key === Notify.ItemEventImageRemove) {
+        const { id, eventTime, image: inputImage } = content;
+
+        context.state.list.updateItemById(id, (item: Service) => {
+          if (!item) return;
+          const foundEvent = item.events.find((event) => {
+            return event.timestamp?.time === eventTime;
+          });
+
+          if (!foundEvent) return;
+
+          foundEvent.images = foundEvent.images.filter((image) => {
+            return image.name !== inputImage.name;
+          });
+        });
+        return;
+      }
+      if (key === Notify.ItemEventDescriptionUpdate) {
+      }
+      if (key === Notify.ItemLabelAdd) {
+        const { id, label } = content;
+        context.state.list.updateItemById(id, (item: Service) => {
+          if (!item) return;
+          if (label.title === "Urgent") item.setUrgent(true);
+          if (label.title === "Warranty") item.setWarranty(true);
+        });
+      }
+      if (key === Notify.ItemLabelRemove) {
+        const { id, label } = content;
+        context.state.list.updateItemById(id, (item: Service) => {
+          if (!item) return;
+          if (label.title === "Urgent") item.setUrgent(false);
+          if (label.title === "Warranty") item.setWarranty(false);
+        });
+      }
+      if (key === Notify.ItemStateUpdate) {
+        const { id, state } = content;
+        context.state.list.updateItemById(id, (item: Service) => {
+          if (item) item.state = state;
+        });
+      }
+      if (key === Notify.ItemDescriptionUpdate) {
+        const { id, description } = content;
+        context.state.list.updateItemById(id, (item: Service) => {
+          if (item) item.description = description;
+        });
+      }
+      if (key === Notify.ItemBelongingsUpdate) {
+        const { id, belongings: dataBelongings } = content;
+
+        const belongings = dataBelongings.map((belonging: {}) => {
+          return new ServiceBelonging(Stores).fromData(belonging);
+        });
+        context.state.list.updateItemById(id, (item: Service) => {
+          if (item) item.belongings = belongings;
+        });
+      }
+      if (key === Notify.ItemCustomerUpdate) {
+        const { id, customer } = content;
+        context.state.list.updateItemById(id, (item: Service) => {
+          if (item)
+            item.customer = new ServiceCustomer(Stores).fromData(customer);
+        });
+      }
+    })
+    .build();
 
   return new Vuex.Store(context);
 };

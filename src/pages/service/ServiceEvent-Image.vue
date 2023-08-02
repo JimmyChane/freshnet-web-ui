@@ -14,54 +14,53 @@
       isInitial() {
         return this.event.method === ServiceEventMethod.INITIAL.key;
       },
+      menus() {
+        return [
+          {
+            key: "delete",
+            title: "Delete Image",
+            interact: () => this.$emit("click-remove", this.src),
+          },
+        ];
+      },
     },
   };
 </script>
 
 <template>
-  <div class="ServiceEventImage" v-if="isInitial">
-    <button class="ServiceEventImage-image-button" @click="$emit('click')">
-      <ImageView class="ServiceEventImage-image" :src="src" />
+  <div class="ServiceEvent-Image">
+    <button class="ServiceEvent-Image-img-button" @click="$emit('click')">
+      <ImageView class="ServiceEvent-Image-img" :src="src" />
     </button>
 
-    <div class="ServiceEventImage-foreground transition"></div>
-    <div class="ServiceEventImage-option">
-      <MenuOption
-        :menus="[
-          {
-            key: 'delete',
-            title: 'Delete',
-            interact: () => $emit('click-remove', src),
-          },
-        ]"
-      />
+    <div class="ServiceEvent-Image-foreground transition"></div>
+    <div class="ServiceEvent-Image-option">
+      <MenuOption :menus="menus" />
     </div>
   </div>
-
-  <ImageView
-    class="ServiceEvent-Image"
-    v-else
-    :src="src"
-    @click="() => $emit('click')"
-  />
 </template>
 
 <style lang="scss" scoped>
-  .ServiceEventImage {
-    width: inherit;
+  .ServiceEvent-Image {
+    width: max-content;
+    min-width: 6rem;
     height: var(--image-height);
     position: relative;
     display: flex;
     flex-direction: row;
-    border-radius: inherit;
+    border-radius: 0.3em;
+    object-fit: cover;
+
     &:hover {
-      .ServiceEventImage-foreground {
+      .ServiceEvent-Image-foreground {
         opacity: 1;
       }
     }
-    .ServiceEventImage-image-button {
+
+    .ServiceEvent-Image-img-button {
       width: inherit;
       height: inherit;
+      min-width: inherit;
       z-index: 1;
       display: flex;
       flex-direction: row;
@@ -69,22 +68,26 @@
       border-radius: inherit;
       background: none;
       cursor: pointer;
+      object-fit: inherit;
       &:focus {
-        .ServiceEventImage-image {
+        .ServiceEvent-Image-img {
           transform: scale(0.96);
         }
       }
-      .ServiceEventImage-image {
+
+      .ServiceEvent-Image-img {
         width: inherit;
         height: inherit;
+        min-width: inherit;
         object-fit: cover;
         display: flex;
         flex-direction: row;
         border-radius: inherit;
         border: 1px solid hsl(0, 0%, 80%);
+        object-fit: inherit;
       }
     }
-    .ServiceEventImage-foreground {
+    .ServiceEvent-Image-foreground {
       z-index: 2;
       position: absolute;
       top: 0;
@@ -102,17 +105,11 @@
       background: hsla(0, 0%, 100%, 0.7);
       opacity: 0;
     }
-    .ServiceEventImage-option {
+    .ServiceEvent-Image-option {
       z-index: 3;
       position: absolute;
       top: 0.2rem;
       right: 0.2rem;
     }
-  }
-
-  .ServiceEvent-Image {
-    height: var(--image-height);
-    width: max-content;
-    border-radius: 0.3em;
   }
 </style>

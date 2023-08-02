@@ -24,9 +24,12 @@
       isHovered: false,
     }),
     computed: {
+      time() {
+        return this.event?.timestamp?.time ?? 0;
+      },
       timestampText() {
-        const time = this.event?.timestamp?.time ?? null;
-        if (!time) return "";
+        const time = this.time;
+        if (time === 0) return "";
 
         const distance = formatDistanceToNow(time);
         const distanceText = `(${distance} ago)`;
@@ -109,6 +112,34 @@
         }
         if (!this.isInitial) {
           menus.push({
+            title: "Add Image",
+            click: () => {
+              const element = document.createElement("input");
+              element.type = "file";
+              element.accept = ".jpeg, .jpg, .png, .webp";
+              element.multiple = true;
+              element.addEventListener("change", (e) => {
+                this.serviceStore
+                  .dispatch("addEventImage", {
+                    serviceID: this.service.id,
+                    eventTime: this.time,
+                    imageFiles: e.target.files,
+                  })
+                  .then((serivce) => {})
+                  .catch((error) => {
+                    this.store.dispatch("snackbarShow", "Failed to Add Image");
+                  });
+              });
+              element.dispatchEvent(
+                new MouseEvent("click", {
+                  view: window,
+                  bubbles: true,
+                  cancelable: false,
+                }),
+              );
+            },
+          });
+          menus.push({
             title: "Delete Event",
             icon: this.host.icon("trash-000000"),
             click: () => this.$emit("callback-delete", this.event),
@@ -159,12 +190,9 @@
         });
       },
       clickRemoveServiceImage(image) {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
-          component: WindowRemove,
-          title: "Delete Image",
-          message: "After deleting this image, it cannot be reverted.",
-          value: image,
-          onConfirm: async (accept, reject) => {
+        let onConfirm;
+        if (this.isInitial) {
+          onConfirm = async (accept, reject) => {
             try {
               const service = await this.serviceStore.dispatch(
                 "removeImageFromId",
@@ -177,7 +205,35 @@
               reject();
               throw error;
             }
-          },
+          };
+        } else {
+          onConfirm = async (accept, reject) => {
+            try {
+              const requestOption = {
+                serviceID: this.service.id,
+                eventTime: this.time,
+                image,
+              };
+              const service = await this.serviceStore.dispatch(
+                "removeEventImage",
+                requestOption,
+              );
+              this.store.dispatch("imageViewerHide");
+              accept();
+            } catch (error) {
+              this.store.dispatch("snackbarShow", "Delete Image Failed");
+              reject();
+              throw error;
+            }
+          };
+        }
+
+        this.store.dispatch("openPopupWindow", {
+          component: WindowRemove,
+          title: "Delete Image",
+          message: "After deleting this image, it cannot be reverted.",
+          value: image,
+          onConfirm,
         });
       },
     },
@@ -344,7 +400,7 @@
     }
     .ItemEvent-images {
       --padding: var(--body-padding);
-      --image-height: 60px;
+      --image-height: 80px;
 
       padding: var(--padding);
       padding-top: 0;
