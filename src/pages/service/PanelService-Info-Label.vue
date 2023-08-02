@@ -3,6 +3,7 @@
   export default Vue.extend({
     props: {
       label: { type: Object },
+      isClickable: { type: Boolean, default: true },
     },
     computed: {
       hexColor() {
@@ -19,6 +20,7 @@
   <button
     class="Label"
     :style="{ '--primary-color': `#${hexColor}` }"
+    :isClickable="`${isClickable}`"
     @click="$emit('click')"
   >
     <span class="transition">{{ title }}</span>
@@ -27,20 +29,32 @@
 </template>
 
 <style lang="scss" scoped>
+  .Label[isClickable="false"] {
+    pointer-events: none;
+    :nth-child(2) {
+      display: none;
+    }
+  }
+  .Label[isClickable="true"] {
+    cursor: pointer;
+  }
   .Label {
+    min-width: max-content;
+    gap: 0.3em;
+
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 0.3em;
+
     background: var(--primary-color);
     color: white;
     font-size: 0.8em;
-    padding: 0.2em 0.4em;
-    border-radius: 0.2em;
-    cursor: pointer;
+    padding: 0.4em;
     padding-left: 0.5em;
+    border-radius: 0.4em;
     border: none;
+    line-height: 0.9em;
 
     :nth-child(2) {
       width: 0.8em;

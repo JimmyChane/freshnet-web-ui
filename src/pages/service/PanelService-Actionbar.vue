@@ -180,8 +180,8 @@
         return "unknown";
       },
 
-      toggleExpand() {
-        this.$emit("toggle-expand", !this.isExpand);
+      toggleExpand(isExpand = !this.isExpand) {
+        this.$emit("toggle-expand", isExpand);
       },
     },
   };
@@ -209,12 +209,32 @@
         @click="() => toggleExpand()"
       >
         <PanelItemCustomer
-          :style="{ 'grid-area': 'customer' }"
           v-if="customer"
           :customer="customer"
           :isEditable="isExpand"
           @click-edit="(customer) => actions.onClickUpdateCustomer(customer)"
         />
+
+        <div
+          class="PanelService-actionbar-actionbar-labels"
+          :isExpand="`${isExpand}`"
+          v-if="labels.length"
+        >
+          <LabelVue
+            v-for="label in labels"
+            :key="label.title"
+            :label="label"
+            :isClickable="false"
+            @click="
+              () => {
+                serviceStore.dispatch('removeLabelFromId', {
+                  serviceID: service.id,
+                  label,
+                });
+              }
+            "
+          />
+        </div>
       </button>
     </Actionbar>
 
@@ -330,6 +350,24 @@
         border: none;
         cursor: pointer;
         font-size: 1em;
+
+        .PanelService-actionbar-actionbar-labels[isExpand="true"] {
+          opacity: 0;
+        }
+        .PanelService-actionbar-actionbar-labels {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          flex-wrap: nowrap;
+          justify-content: flex-end;
+
+          flex-grow: 1;
+          overflow: hidden;
+
+          transition: all 200ms cubic-bezier(1, 0, 0, 1);
+
+          gap: 1px;
+        }
       }
     }
 

@@ -38,12 +38,12 @@
 
 <style lang="scss" scoped>
   .PanelItem-Customer {
-    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
     padding: 0.5rem;
+    text-align: start;
 
     .PanelItem-Customer-data {
       display: flex;
