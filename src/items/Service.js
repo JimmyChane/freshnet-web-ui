@@ -9,6 +9,7 @@ import State from "./ServiceState";
 import U from "@/U";
 import ItemSearcher from "../objects/ItemSearcher";
 import ServiceBelonging from "./ServiceBelonging";
+import ServiceEventMethod from "./ServiceEventMethod";
 const textContains = ItemSearcher.textContains;
 export default class Service {
     stores;
@@ -25,7 +26,7 @@ export default class Service {
     customer = null;
     description = "";
     belongings = [];
-    events = [];
+    _events = [];
     imageFiles = [];
     labels = [];
     fromData(data) {
@@ -56,30 +57,45 @@ export default class Service {
         this.belongings = U.optArray(data.belongings).map((belonging) => {
             return new ServiceBelonging(this.stores).fromData(belonging);
         });
-        this.events = U.optArray(data.events).map((subData) => {
+        // events
+        // const serviceData = this.toData();
+        // const serviceEvent = new ServiceEvent(this.stores).fromData({
+        //   method: ServiceEventMethod.INITIAL.key,
+        //   time: serviceData.time,
+        //   username: serviceData.username,
+        //   name: serviceData.nameOfUser,
+        //   description: serviceData.description,
+        //   images: serviceData.imageFiles,
+        // });
+        this._events = U.optArray(data.events).map((subData) => {
             return new ServiceEvent(this.stores).fromData(subData);
         });
+        // this._events.push(serviceEvent);
+        // images
         this.imageFiles = U.optArray(data.imageFiles).map((image) => {
             return new ServiceImage(this.stores).fromData(image);
         });
+        // labels
         this.labels = U.optArray(data.labels)
             .map((subData) => new Label().fromData(subData))
             .filter((label) => label.title.trim().length > 0);
         // refactoring notice to labels
-        const notice = {
-            isUrgent: !!data.notice?.isUrgent ?? false,
-            isWarranty: !!data.notice?.isWarranty ?? false,
-        };
         const existingLabelUrgent = this.labels.find((label) => {
             return label.title === Label.URGENT.title;
         });
         const existingLabelWarranty = this.labels.find((label) => {
             return label.title === Label.WARRANTY.title;
         });
-        if (notice.isUrgent && !existingLabelUrgent)
+        const notice = {
+            isUrgent: !!data.notice?.isUrgent ?? false,
+            isWarranty: !!data.notice?.isWarranty ?? false,
+        };
+        if (notice.isUrgent && !existingLabelUrgent) {
             this.labels.push(Label.URGENT);
-        if (notice.isWarranty && !existingLabelWarranty)
+        }
+        if (notice.isWarranty && !existingLabelWarranty) {
             this.labels.push(Label.WARRANTY);
+        }
         return this;
     }
     toData() {
@@ -92,7 +108,7 @@ export default class Service {
             customer: this.customer?.toData(),
             description: U.trimText(this.description),
             belongings: this.belongings.map((belonging) => belonging.toData()),
-            events: this.events.map((event) => event.toData()),
+            events: this._events.map((event) => event.toData()),
             imageFiles: this.imageFiles.map((image) => image.toData()),
             labels: this.labels.map((label) => label.toData()),
         };
@@ -113,12 +129,31 @@ export default class Service {
                     count++;
             return count;
         }, 0) +
-            this.events.reduce((count, event) => count + event.toCount(strs), 0);
+            this._events.reduce((count, event) => count + event.toCount(strs), 0);
         if (timestamp?.toCount(strs))
             count++;
         if (customer?.toCount(strs))
             count += 5;
         return count;
+    }
+    get events() {
+        const serviceData = this.toData();
+        const serviceEvent = new ServiceEvent(this.stores).fromData({
+            method: ServiceEventMethod.INITIAL.key,
+            time: serviceData.time,
+            username: serviceData.username,
+            name: serviceData.nameOfUser,
+            description: serviceData.description,
+            images: serviceData.imageFiles,
+        });
+        return [serviceEvent, ...this._events].sort((event1, event2) => {
+            return event1.compare(event2);
+        });
+    }
+    set events(events) {
+        this._events = events.filter((event) => {
+            return event.timestamp?.time !== this.timestamp?.time;
+        });
     }
     getUnique() {
         return this.id;
@@ -183,7 +218,7 @@ export default class Service {
         throw new Error("unknown");
     }
     toTotalPrice() {
-        return this.events.reduce((cost, event) => {
+        return this._events.reduce((cost, event) => {
             if (event.price && event.method === Method.PURCHASE.key) {
                 cost = cost.plus(event.price);
             }

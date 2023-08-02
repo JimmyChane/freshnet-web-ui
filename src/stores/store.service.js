@@ -6,6 +6,7 @@ import ServiceEvent from "@/items/ServiceEvent";
 import StoreBuilder from "./tools/StoreBuilder";
 import ServiceLabel from "@/items/ServiceLabel";
 import ServiceRequest from "@/request/Service";
+import ServiceBelonging from "@/items/ServiceBelonging";
 const Notify = {
     ItemAdd: "item-add",
     ItemRemove: "item-remove",
@@ -134,7 +135,7 @@ const init = (Stores) => {
             if (!item)
                 return inputItem;
             item.events = inputItem.events.sort((event1, event2) => {
-                return event1.compare(event2);
+                return event2.compare(event1);
             });
         });
     })
@@ -381,7 +382,10 @@ const init = (Stores) => {
             });
         }
         if (key === Notify.ItemBelongingsUpdate) {
-            const { id, belongings } = content;
+            const { id, belongings: dataBelongings } = content;
+            const belongings = dataBelongings.map((belonging) => {
+                return new ServiceBelonging(Stores).fromData(belonging);
+            });
             context.state.list.updateItemById(id, (item) => {
                 if (item)
                     item.belongings = belongings;

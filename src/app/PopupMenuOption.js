@@ -16,4 +16,10 @@ export default class PopupMenu {
         BOTTOM_LEFT: 7,
         BOTTOM_RIGHT: 8,
     };
+    static Alignment = {
+        AUTO: 0,
+        DIANGLE: 1,
+        VERTICAL: 2,
+        HORIZONTAL: 3,
+    };
 }

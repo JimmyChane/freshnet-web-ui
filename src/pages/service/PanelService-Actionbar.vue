@@ -1,132 +1,408 @@
 <script>
-   import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import PanelItemCustomer from "@/pages/manage/PanelItem-Customer.vue";
-   import { format, formatDistanceToNow } from "date-fns";
+  import Actionbar from "@/components/actionbar/Actionbar.vue";
+  import Selector from "@/components/selector/Selector.vue";
+  import State from "@/items/ServiceState";
+  import PanelItemCustomer from "@/pages/manage/PanelItem-Customer.vue";
+  import SectionVue from "./PanelService-Info-Section.vue";
+  import LabelVue from "./PanelService-Info-Label.vue";
+  import BelongingVue from "./ItemBelonging.vue";
+  import MenuIconVue from "@/components/MenuIcon.vue";
+  import { format, formatDistanceToNow } from "date-fns";
 
-   export default {
-      components: { Actionbar, PanelItemCustomer },
-      props: {
-         service: { type: Object },
-         actionbarColor: "",
-         actionbarBorder: "",
-         actions: { type: Object },
+  import Service from "@/items/Service";
+
+  export default {
+    components: {
+      Actionbar,
+      Selector,
+      PanelItemCustomer,
+      SectionVue,
+      LabelVue,
+      BelongingVue,
+      MenuIconVue,
+    },
+    props: {
+      service: { type: Service },
+      actionbarColor: "",
+      actionbarBorder: "",
+      actions: { type: Object },
+      isExpand: { type: Boolean, default: false },
+    },
+    data: (c) => ({
+      nameOfUser: "",
+      bookmarkHeaderIconIsHover: false,
+    }),
+    computed: {
+      timestamp: (c) => c.service.timestamp,
+      timestampText: (c) => {
+        const { time } = c.timestamp;
+
+        const timeText = format(time, "EEEE, dd/LL/yyyy hh:mmaaa");
+
+        const distance = formatDistanceToNow(time);
+        const distanceText = `(${distance} ago)`;
+
+        let day;
+        if (c.timestamp.isToday()) {
+          day = "Today, ";
+        } else if (c.timestamp.isYesterday()) {
+          day = "Yesterday, ";
+        } else {
+          day = "";
+        }
+
+        return `${day}${timeText} ${distanceText}`;
       },
-      computed: {
-         customer: (c) => c.service.customer,
-         name: (c) => c.customer.name,
-         phoneNumber: (c) => c.customer.phoneNumber,
-         phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
-         isPhoneNumber: (c) => !!c.phoneNumberStr,
-         timestamp: (c) => c.service.timestamp,
-         timestampText: (c) => {
-            const { time } = c.timestamp;
 
-            const timeText = format(time, "EEEE, dd/LL/yyyy hh:mmaaa");
+      customer: (c) => c.service?.customer ?? null,
 
-            const distance = formatDistanceToNow(time);
-            const distanceText = `(${distance} ago)`;
+      labels: (c) => c.service?.labels ?? [],
+      belongings: (c) =>
+        c.service?.belongings.map((belonging) => belonging) ?? [],
+      state: (c) => c.service?.state ?? "",
 
-            const day = c.timestamp.isToday()
-               ? "Today, "
-               : c.timestamp.isYesterday()
-               ? "Yesterday, "
-               : "";
+      phoneNumber: (c) => c.customer?.phoneNumber ?? null,
+      phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
+      isPhoneNumber: (c) => !!c.phoneNumberStr,
 
-            return `${day}${timeText} ${distanceText}`;
-         },
-
-         menus: (c) => {
-            const menus = [];
-
-            if (c.isPhoneNumber) {
-               menus.push({
-                  title: "Chat with Customer on Whatsapp",
-                  icon: c.host.icon("whatsapp-color"),
-                  alth: "Chat on Whatsapp",
-                  href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
-                  target: "_blank",
-               });
-               menus.push({
-                  title: "Call Customer",
-                  icon: c.host.icon("call-color"),
-                  href: `tel:+6${c.phoneNumberStr}`,
-               });
-            }
-            menus.push({
-               title: "Find Customer",
-               to: {
-                  path: "/manage/customer",
-                  query: { name: c.name, phoneNumber: c.phoneNumberStr },
-               },
-               isHidden: true,
-            });
-
-            menus.push({
-               title: "Delete Service",
-               icon: c.host.icon("trash-000000"),
-               click: () => c.actions.onClickRemove(c.service),
-               isHidden: true,
-            });
-
-            return menus;
-         },
+      stateMenus: (c) => {
+        return State.map((state) => {
+          return {
+            key: state.key,
+            title: state.title,
+            icon: state.icon,
+            color: state.primaryColor,
+          };
+        });
       },
-   };
+
+      menus: (c) => {
+        const menus = [];
+
+        if (c.isExpand && c.isPhoneNumber) {
+          menus.push({
+            title: "Chat with Customer on Whatsapp",
+            icon: c.host.icon("whatsapp-color"),
+            alth: "Chat on Whatsapp",
+            href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
+            target: "_blank",
+          });
+          menus.push({
+            title: "Call Customer",
+            icon: c.host.icon("call-color"),
+            href: `tel:+6${c.phoneNumberStr}`,
+          });
+        }
+
+        menus.push({
+          title: "Find Customer",
+          to: {
+            path: "/manage/customer",
+            query: { name: c.name, phoneNumber: c.phoneNumberStr },
+          },
+          isHidden: true,
+        });
+        menus.push({
+          title: "Delete Service",
+          icon: c.host.icon("trash-000000"),
+          click: () => c.actions.onClickRemove(c.service),
+          isHidden: true,
+        });
+
+        return menus;
+      },
+      labelMenus() {
+        if (!this.service) return [];
+
+        const menus = [
+          {
+            key: "urgent",
+            title: "Urgent",
+            click: () => {
+              this.serviceStore.dispatch("updateUrgentOfId", {
+                serviceID: this.service.id,
+                isUrgent: !this.service.isUrgent(),
+              });
+            },
+          },
+          {
+            key: "warranty",
+            title: "Warranty",
+            click: () => {
+              this.serviceStore.dispatch("updateWarrantyOfId", {
+                serviceID: this.service.id,
+                isWarranty: !this.service.isWarranty(),
+              });
+            },
+          },
+        ];
+
+        return menus.filter((menu) => {
+          const label = this.labels.find((label) => label.title === menu.title);
+          return !label;
+        });
+      },
+
+      totalCost: (c) => c.service.toTotalPrice(),
+      totalCostText: (c) => `Total Cost: ${c.totalCost}`,
+    },
+    watch: {
+      service() {
+        this.invalidate();
+      },
+    },
+    mounted() {
+      this.invalidate();
+    },
+    methods: {
+      async invalidate() {
+        this.nameOfUser = await this.getOwnerNameFromItem();
+      },
+      async getOwnerNameFromItem() {
+        const { service } = this;
+
+        if (!service) {
+          return "";
+        }
+
+        const name = await service.fetchName().catch((error) => {
+          this.store.dispatch("snackbarShow", "Error getting user for service");
+          return "";
+        });
+
+        if (service !== this.service) {
+          return;
+        }
+        if (name.length) {
+          return name;
+        }
+
+        return "unknown";
+      },
+
+      toggleExpand() {
+        this.$emit("toggle-expand", !this.isExpand);
+      },
+    },
+  };
 </script>
 
 <template>
-   <div
-      class="PanelService-actionbar"
+  <div class="PanelService-actionbar">
+    <Actionbar
+      v-if="service"
+      class="PanelService-actionbar-actionbar"
       :style="{
-         'background-color': actionbarColor,
-         'border-bottom': `1px solid ${actionbarBorder}`,
+        'background-color': actionbarColor,
+        'border-bottom': `1px solid ${
+          isExpand ? actionbarBorder : 'transparent'
+        }`,
       }"
-   >
-      <Actionbar
-         v-if="service"
-         class="PanelService-actionbar-main"
-         :leftMenus="{
-            icon: host.icon('close-000000'),
-            click: () => actions.onClickClose(),
-         }"
-         :rightMenus="menus"
+      :leftMenus="{
+        icon: host.icon('close-000000'),
+        click: () => actions.onClickClose(),
+      }"
+      :rightMenus="menus"
+    >
+      <button
+        class="PanelService-actionbar-actionbar-clickable"
+        @click="() => toggleExpand()"
       >
-         <PanelItemCustomer
-            v-if="customer"
-            :customer="customer"
-            @click-edit="(customer) => actions.onClickUpdateCustomer(customer)"
-         />
-      </Actionbar>
+        <PanelItemCustomer
+          :style="{ 'grid-area': 'customer' }"
+          v-if="customer"
+          :customer="customer"
+          :isEditable="isExpand"
+          @click-edit="(customer) => actions.onClickUpdateCustomer(customer)"
+        />
+      </button>
+    </Actionbar>
 
-      <span class="PanelService-actionbar-timestamp" v-if="service">{{
-         timestampText
-      }}</span>
-   </div>
+    <div class="PanelService-actionbar-anchor" v-if="service">
+      <div
+        class="PanelService-actionbar-expanded transition"
+        :style="{
+          'background-color': actionbarColor,
+          'border-bottom': `1px solid ${actionbarBorder}`,
+        }"
+        :isExpand="`${isExpand}`"
+      >
+        <div class="PanelService-actionbar-expanded-body">
+          <div class="PanelService-actionbar-expanded-body-body">
+            <div class="PanelService-section-labels">
+              <LabelVue
+                v-for="label in labels"
+                :key="label.title"
+                :label="label"
+                @click="
+                  () => {
+                    serviceStore.dispatch('removeLabelFromId', {
+                      serviceID: service.id,
+                      label,
+                    });
+                  }
+                "
+              />
+              <MenuIconVue
+                :style="{ 'font-size': '0.8rem', 'grid-area': 'addLabel' }"
+                :menus="labelMenus"
+                @mouseover="bookmarkHeaderIconIsHover = true"
+                @mouseleave="bookmarkHeaderIconIsHover = false"
+                :src="
+                  bookmarkHeaderIconIsHover
+                    ? host.icon('bookmark-add-000000')
+                    : host.icon('bookmark-000000')
+                "
+              />
+            </div>
+
+            <SectionVue
+              :title="`Belongings (${belongings.length})`"
+              :menus="{
+                title: 'Update Belongings',
+                icon: host.icon('edit-505050'),
+                click: () => actions.onClickUpdateBelongings(belongings),
+              }"
+            >
+              <div
+                class="PanelService-section-belonging"
+                v-if="belongings.length"
+              >
+                <BelongingVue
+                  v-for="belonging in belongings"
+                  :key="belonging.time"
+                  :belonging="belonging"
+                />
+              </div>
+              <div class="PanelService-section-belonging-empty" v-else>
+                <span>Emtpy</span>
+              </div>
+            </SectionVue>
+
+            <SectionVue title="Collected By">
+              <span>{{ nameOfUser }}</span>
+            </SectionVue>
+
+            <div class="PanelService-action-footer">
+              <Selector
+                class="PanelService-actionbar-state-selector"
+                :list="stateMenus"
+                :keySelected="state"
+                @callback-select="
+                  (state) => {
+                    if (!service) return;
+                    serviceStore.dispatch('updateStateOfId', {
+                      serviceID: service.id,
+                      state,
+                    });
+                  }
+                "
+              />
+
+              <span class="PanelService-totalCost">{{ totalCostText }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-   .PanelService-actionbar {
+  .PanelService-actionbar {
+    --actionbar-height: 3.8rem;
+    width: 100%;
+    position: sticky;
+    top: 0;
+
+    .PanelService-actionbar-actionbar {
+      background: inherit;
+      border-bottom: inherit;
+
+      .PanelService-actionbar-actionbar-clickable {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: stretch;
+
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+      }
+    }
+
+    .PanelService-actionbar-anchor {
       width: 100%;
-      position: sticky;
-      top: 0;
+      position: relative;
+      display: flex;
 
-      .PanelService-actionbar-main {
-         background: inherit;
-         border-bottom: inherit;
+      .PanelService-actionbar-expanded[isExpand="false"] {
+        grid-template-rows: 0fr;
       }
-
-      .PanelService-actionbar-timestamp {
-         width: 100%;
-         padding: 0.2rem;
-
-         display: flex;
-         flex-direction: column;
-         align-items: center;
-         justify-content: center;
-
-         text-align: center;
-         color: black;
-         font-size: 0.8rem;
+      .PanelService-actionbar-expanded[isExpand="true"] {
+        grid-template-rows: 1fr;
       }
-   }
+      .PanelService-actionbar-expanded {
+        width: 100%;
+        height: max-content;
+        max-height: calc(100dvh - 4rem - 4rem - 0.2rem - 3rem);
+        position: absolute;
+        display: grid;
+        box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.2);
+        transition-timing-function: cubic-bezier(1, 0, 0, 1);
+        overflow-y: auto;
+
+        .PanelService-actionbar-expanded-body {
+          overflow: hidden;
+          overflow-y: auto;
+
+          .PanelService-actionbar-expanded-body-body {
+            width: 100%;
+            height: max-content;
+            padding: 1rem;
+            gap: 1rem;
+
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+
+            .PanelService-section-labels {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              gap: 0.2em;
+            }
+
+            .PanelService-section-belonging {
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              gap: 0.2rem;
+            }
+
+            .PanelService-action-footer {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: space-between;
+
+              .PanelService-actionbar-state-selector {
+                width: 100%;
+                max-width: 12rem;
+                flex-grow: 1;
+              }
+
+              .PanelService-totalCost {
+                min-width: max-content;
+                text-align: end;
+                font-weight: 600;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 </style>

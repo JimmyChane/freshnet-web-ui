@@ -12,6 +12,7 @@ import ItemSearcher from "../objects/ItemSearcher";
 import ServiceBelonging from "./ServiceBelonging";
 import User from "./User";
 import { Item } from "@/stores/tools/List";
+import ServiceEventMethod from "./ServiceEventMethod";
 const textContains = ItemSearcher.textContains;
 
 export default class Service implements Item {
@@ -31,7 +32,7 @@ export default class Service implements Item {
   customer: ServiceCustomer | null = null;
   description: string = "";
   belongings: ServiceBelonging[] = [];
-  events: ServiceEvent[] = [];
+  private _events: ServiceEvent[] = [];
   imageFiles: ServiceImage[] = [];
   labels: Label[] = [];
 
@@ -65,30 +66,49 @@ export default class Service implements Item {
     this.belongings = U.optArray(data.belongings).map((belonging) => {
       return new ServiceBelonging(this.stores).fromData(belonging);
     });
-    this.events = U.optArray(data.events).map((subData) => {
+
+    // events
+    // const serviceData = this.toData();
+    // const serviceEvent = new ServiceEvent(this.stores).fromData({
+    //   method: ServiceEventMethod.INITIAL.key,
+    //   time: serviceData.time,
+    //   username: serviceData.username,
+    //   name: serviceData.nameOfUser,
+    //   description: serviceData.description,
+    //   images: serviceData.imageFiles,
+    // });
+    this._events = U.optArray(data.events).map((subData) => {
       return new ServiceEvent(this.stores).fromData(subData);
     });
+    // this._events.push(serviceEvent);
+
+    // images
     this.imageFiles = U.optArray(data.imageFiles).map((image) => {
       return new ServiceImage(this.stores).fromData(image);
     });
 
+    // labels
     this.labels = U.optArray(data.labels)
       .map((subData) => new Label().fromData(subData))
       .filter((label) => label.title.trim().length > 0);
+
     // refactoring notice to labels
-    const notice = {
-      isUrgent: !!data.notice?.isUrgent ?? false,
-      isWarranty: !!data.notice?.isWarranty ?? false,
-    };
     const existingLabelUrgent = this.labels.find((label) => {
       return label.title === Label.URGENT.title;
     });
     const existingLabelWarranty = this.labels.find((label) => {
       return label.title === Label.WARRANTY.title;
     });
-    if (notice.isUrgent && !existingLabelUrgent) this.labels.push(Label.URGENT);
-    if (notice.isWarranty && !existingLabelWarranty)
+    const notice = {
+      isUrgent: !!data.notice?.isUrgent ?? false,
+      isWarranty: !!data.notice?.isWarranty ?? false,
+    };
+    if (notice.isUrgent && !existingLabelUrgent) {
+      this.labels.push(Label.URGENT);
+    }
+    if (notice.isWarranty && !existingLabelWarranty) {
       this.labels.push(Label.WARRANTY);
+    }
 
     return this;
   }
@@ -102,7 +122,7 @@ export default class Service implements Item {
       customer: this.customer?.toData(),
       description: U.trimText(this.description),
       belongings: this.belongings.map((belonging) => belonging.toData()),
-      events: this.events.map((event) => event.toData()),
+      events: this._events.map((event) => event.toData()),
       imageFiles: this.imageFiles.map((image) => image.toData()),
       labels: this.labels.map((label) => label.toData()),
     };
@@ -124,11 +144,32 @@ export default class Service implements Item {
         for (const t of ts) if (textContains(t, str)) count++;
         return count;
       }, 0) +
-      this.events.reduce((count, event) => count + event.toCount(strs), 0);
+      this._events.reduce((count, event) => count + event.toCount(strs), 0);
     if (timestamp?.toCount(strs)) count++;
     if (customer?.toCount(strs)) count += 5;
 
     return count;
+  }
+  get events(): ServiceEvent[] {
+    const serviceData = this.toData();
+
+    const serviceEvent = new ServiceEvent(this.stores).fromData({
+      method: ServiceEventMethod.INITIAL.key,
+      time: serviceData.time,
+      username: serviceData.username,
+      name: serviceData.nameOfUser,
+      description: serviceData.description,
+      images: serviceData.imageFiles,
+    });
+
+    return [serviceEvent, ...this._events].sort((event1, event2) => {
+      return event1.compare(event2);
+    });
+  }
+  set events(events: ServiceEvent[]) {
+    this._events = events.filter((event) => {
+      return event.timestamp?.time !== this.timestamp?.time;
+    });
   }
 
   getUnique(): string {
@@ -193,7 +234,7 @@ export default class Service implements Item {
   }
 
   toTotalPrice(): ServicePrice {
-    return this.events.reduce((cost, event) => {
+    return this._events.reduce((cost, event) => {
       if (event.price && event.method === Method.PURCHASE.key) {
         cost = cost.plus(event.price);
       }

@@ -1,100 +1,72 @@
 <script>
-   import ListEvents from "./ListEvents.vue";
-   import ButtonIcon from "@/components/button/ButtonIcon.vue";
+  import ListEvents from "./EventGroups.vue";
+  import ButtonIcon from "@/components/button/ButtonIcon.vue";
+  import Service from "@/items/Service";
 
-   export default {
-      components: { ButtonIcon, ListEvents },
-      emits: ["click-add-event", "click-remove-event"],
-      props: { service: { type: Object, default: () => null } },
-      computed: {
-         events: (c) => {
-            return c.service.events
-               .map((event) => event)
-               .sort((event1, event2) => event1.compare(event2));
-         },
-         totalCost: (c) => c.service.toTotalPrice(),
-         totalCostText: (c) => `Total Cost: ${c.totalCost}`,
+  export default {
+    components: { ButtonIcon, ListEvents },
+    emits: ["click-add-event", "click-remove-event"],
+    props: {
+      service: { type: Service },
+      actions: { type: Object },
+    },
+    computed: {
+      events: (c) => {
+        if (!c.service) return [];
+
+        const events = c.service.events
+          .map((event) => event)
+          .sort((event1, event2) => event1.compare(event2));
+
+        return events;
       },
-   };
+    },
+  };
 </script>
 
 <template>
-   <div class="PanelEvents">
-      <div class="PanelEvents-header">
-         <span class="PanelEvents-title">{{
-            `Events (${events.length})`
-         }}</span>
-         <span class="PanelEvents-totalCost">{{ totalCostText }}</span>
-      </div>
-
-      <div class="PanelEvents-body">
-         <ListEvents
-            v-if="events.length"
-            :service="service"
-            :events="events"
-            @click-item-delete="(event) => $emit('click-remove-event', event)"
-         />
-         <span class="PanelEvents-empty" v-if="!events.length">
-            Empty Events
-         </span>
-      </div>
-   </div>
+  <div class="PanelEvents">
+    <div class="PanelEvents-body">
+      <ListEvents
+        v-if="events.length"
+        :service="service"
+        :events="events"
+        :actions="actions"
+        @click-item-delete="(event) => $emit('click-remove-event', event)"
+      />
+      <span class="PanelEvents-empty" v-if="!events.length">Empty Events</span>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-   .PanelEvents {
-      width: 100%;
-      max-width: 40rem;
-      margin: 1.2rem;
+  .PanelEvents {
+    width: 100%;
+    z-index: 1;
+
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-end;
+
+    .PanelEvents-body {
       z-index: 1;
+      position: relative;
+      padding: 0.8rem;
+      padding-bottom: 1rem;
 
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
+      .PanelEvents-empty {
+        padding: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff66;
 
-      border: 1px solid #0000000d;
-      overflow: hidden;
-
-      .PanelEvents-header {
-         width: 100%;
-         display: flex;
-         flex-direction: row;
-         flex-wrap: nowrap;
-         align-items: center;
-         justify-content: space-between;
-         min-height: 1.8rem;
-         padding: 0.8rem;
-         background: hsla(0, 0%, 100%, 0.8);
-         border-bottom: 1px solid hsla(0, 0%, 0%, 0.1);
-
-         .PanelEvents-title {
-            text-align: start;
-            flex-grow: 1;
-         }
-
-         .PanelEvents-totalCost {
-            min-width: max-content;
-            text-align: end;
-            font-weight: 600;
-         }
+        font-size: 0.8rem;
+        color: #00000080;
       }
-
-      .PanelEvents-body {
-         z-index: 1;
-         position: relative;
-         padding-bottom: 0;
-
-         .PanelEvents-empty {
-            padding: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #ffffff66;
-
-            font-size: 0.8rem;
-            color: #00000080;
-         }
-      }
-   }
+    }
+  }
 </style>

@@ -422,11 +422,11 @@
       />
       <router-view
         class="App-routerView"
-        :style="{ 'grid-area': 'body', 'z-index': '1' }"
+        :style="{ 'grid-area': 'body', 'z-index': '2' }"
         ref="AppRouterView"
       />
       <NavigationBottom
-        :style="{ 'grid-area': 'bottom', 'z-index': '2' }"
+        :style="{ 'grid-area': 'bottom', 'z-index': '1' }"
         v-if="!$root.navigation.isNone() && $root.navigation.isDrawer()"
       />
     </div>

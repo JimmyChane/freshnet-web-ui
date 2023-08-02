@@ -6,10 +6,12 @@
 
   const Width = PopupMenuOption.Width;
   const Corner = PopupMenuOption.Corner;
+  const Alignment = PopupMenuOption.Alignment;
 
   export default {
     Width,
     Corner,
+    Alignment,
 
     components: { Item },
     props: { popupMenu: { default: undefined } },
@@ -36,6 +38,7 @@
 
       preferWidth: (c) => c.option.width,
       corner: (c) => c.option.corner,
+      alignment: (c) => c.option.alignment,
       primaryColor: (c) => {
         const primaryColor = c.option.primaryColor;
         if (primaryColor instanceof chroma.Color) {
@@ -147,11 +150,40 @@
             const screenWidthHalf = window.innerWidth / 2;
             const screenHeightHalf = window.innerHeight / 2;
 
-            const vertical =
-              rect.top > screenHeightHalf ? Corner.TOP : Corner.BOTTOM;
-            const horizontal =
-              rect.left > screenWidthHalf ? Corner.LEFT : Corner.RIGHT;
+            let vertical;
+            let horizontal;
 
+            switch (this.alignment) {
+              case Alignment.VERTICAL:
+                vertical =
+                  rect.top > screenHeightHalf ? Corner.TOP : Corner.BOTTOM;
+                break;
+              case Alignment.HORIZONTAL:
+                horizontal =
+                  rect.left > screenWidthHalf ? Corner.LEFT : Corner.RIGHT;
+                break;
+              default:
+              case Alignment.AUTO:
+              case Alignment.DIANGLE:
+                vertical =
+                  rect.top > screenHeightHalf ? Corner.TOP : Corner.BOTTOM;
+                horizontal =
+                  rect.left > screenWidthHalf ? Corner.LEFT : Corner.RIGHT;
+                break;
+            }
+
+            if (vertical === Corner.TOP && horizontal === undefined) {
+              return this.calculateCorner(Corner.TOP, rect);
+            }
+            if (vertical === Corner.BOTTOM && horizontal === undefined) {
+              return this.calculateCorner(Corner.BOTTOM, rect);
+            }
+            if (vertical === undefined && horizontal === Corner.LEFT) {
+              return this.calculateCorner(Corner.LEFT, rect);
+            }
+            if (vertical === undefined && horizontal === Corner.RIGHT) {
+              return this.calculateCorner(Corner.RIGHT, rect);
+            }
             if (vertical === Corner.TOP && horizontal === Corner.LEFT) {
               return this.calculateCorner(Corner.TOP_LEFT, rect);
             }
