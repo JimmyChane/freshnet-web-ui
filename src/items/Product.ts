@@ -16,19 +16,6 @@ import { Item } from "@/stores/tools/List";
 const textContains = ItemSearcher.textContains;
 
 export default class Product implements Item {
-  // private static FORMAT_SPECIFICATION_ONLY = [
-  //   Type.Key.Processor,
-  //   Type.Key.Ram,
-  //   Type.Key.Storage,
-  //   Type.Key.Display,
-  //   Type.Key.Resolution,
-  //   Type.Key.Graphic,
-  //   Type.Key.Os,
-  //   Type.Key.Battery,
-  //   Type.Key.Connectivity,
-  //   Type.Key.Monitor,
-  //   Type.Key.Colour,
-  // ];
   private static FORMAT_SPECIFICATION_ORDERS = Object.values(Type.Key);
   private static putForwardSlash(
     texts: string[],

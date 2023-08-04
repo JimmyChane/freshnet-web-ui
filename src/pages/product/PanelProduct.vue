@@ -1,5 +1,5 @@
 <script>
-   import AppHost from "@/host/AppHost.js";
+   import AppHost from "@/host/AppHost";
    import ViewerProduct from "@/pages/product/viewerProduct/ViewerProduct.vue";
 
    export default {
@@ -90,7 +90,7 @@
                this.store.dispatch("snackbarShow", "Cannot Copy");
                return;
             }
-            this.$root.copyText(link);
+            this.store.getters.copyText(link);
             this.store.dispatch("snackbarShow", {
                icon: this.host.icon("copy-FFFFFF"),
                text: "Copied to Clipboard",
@@ -101,9 +101,9 @@
             let urlView = `${AppHost.path}/product/view`;
 
             if (!this.product) {
-               this.$root.openLink(urlView);
+               this.store.getters.openLink(urlView);
             } else {
-               this.$root.openLink(`${urlView}?productId=${this.product.id}`);
+               this.store.getters.openLink(`${urlView}?productId=${this.product.id}`);
             }
          },
       },

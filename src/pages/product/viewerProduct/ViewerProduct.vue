@@ -14,7 +14,7 @@
   import BottomActionbar from "./ViewerProduct-BottomActionbar.vue";
 
   import { Type } from "@/items/Specification";
-  import SettingModule from "@/items/Setting.js";
+  import SettingModule from "@/items/Setting";
   import Actionbar from "@/components/actionbar/Actionbar.vue";
   import chroma from "chroma-js";
   import U from "@/U";
@@ -88,7 +88,6 @@
         }
 
         tabs.push({ key: "title", title: "Title" });
-        // tabs.push({ key: "capability", title: "Capability" });
 
         if (this.isEditable) {
           if (this.specifications.length) {

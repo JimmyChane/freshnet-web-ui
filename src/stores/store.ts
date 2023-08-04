@@ -1,10 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import socketIo from "socket.io-client";
-import HostApi from "../host/HostApi.js";
-import TimeNowGetter from "@/tools/TimeNowGetter.js";
-import Notification from "@/tools/Notification.js";
-import PopupMenu from "@/app/PopupMenuOption.js";
+import HostApi from "../host/HostApi";
+import TimeNowGetter from "@/tools/TimeNowGetter";
+import Notification from "@/tools/Notification";
+import PopupMenu from "@/app/PopupMenuOption";
 
 const keyGetter = new TimeNowGetter();
 
@@ -31,9 +31,32 @@ interface PopupWindow {
 
 const init = (Stores: any) => {
   const context: Context = {
-    state: {},
+    state: {
+      app: null,
+    },
     mutations: {},
-    getters: {},
+    getters: {
+      console: (c: any) => c.app.console,
+      window: (c: any) => c.app.window,
+      appLayout: (c: any) => c.app.appLayout,
+      navigation: (c: any) => c.app.navigation,
+
+      user: (c: any) => c.app.user,
+      pages: (c: any) => c.app.pages,
+      paths: (c: any) => c.app.paths,
+      currentPaths: (c: any) => c.app.currentPaths,
+      currentPageKey: (c: any) => c.app.currentPageKey,
+      currentViewKey: (c: any) => c.app.currentViewKey,
+
+      copyText: (c: any) => c.app.copyText,
+      openLink: (c: any) => c.app.openLink,
+      pushDownload: (c: any) => c.app.pushDownload,
+
+      print: (c: any) => c.app.print,
+      nextQuery: (c: any) => c.app.nextQuery,
+      replaceQuery: (c: any) => c.app.replaceQuery,
+      setQuery: (c: any) => c.app.setQuery,
+    },
     actions: {},
   };
 

@@ -21,8 +21,8 @@
          :src="host.icon('search-000000')"
          @click="
             () => {
-               if (!$root.navigation.isWide()) {
-                  $root.navigation.openNavigationDrawer();
+               if (!store.getters.navigation.isWide()) {
+                  store.getters.navigation.openNavigationDrawer();
                }
             }
          "

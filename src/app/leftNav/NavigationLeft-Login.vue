@@ -6,7 +6,7 @@
       computed: {
          user: (c) => c.loginStore.getters.user,
          userName: (c) => c.user.name,
-         isLoginPage: (c) => c.$root.currentPageKey === "login",
+         isLoginPage: (c) => c.store.getters.currentPageKey === "login",
       },
       watch: {
          $route() {

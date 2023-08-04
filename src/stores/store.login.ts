@@ -1,8 +1,8 @@
 import Vuex from "vuex";
-import ItemUser from "../items/User.js";
-import Processor from "./tools/Processor.js";
+import ItemUser from "../items/User";
+import Processor from "./tools/Processor";
 import LoginRequest from "@/request/Login";
-import User from "../items/User.js";
+import User from "../items/User";
 
 const storageTokenKey = "userToken";
 const getToken = () => {

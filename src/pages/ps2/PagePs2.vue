@@ -76,12 +76,12 @@
          <Actionbar
             class="PagePs2-header transition"
             :leftMenus="
-               $root.navigation.isDrawer()
+               store.getters.navigation.isDrawer()
                   ? [
                        {
                           title: 'Hamburger Menu',
                           icon: host.icon('hamburgerMenu-000000'),
-                          click: () => $root.navigation.openNavigationDrawer(),
+                          click: () => store.getters.navigation.openNavigationDrawer(),
                        },
                        {
                           title: 'Home',
@@ -174,7 +174,7 @@
          @click-dismiss="
             () => {
                if ($route.fullPath !== '/ps2') {
-                  $root.replaceQuery({ query: { discCode: null } });
+                  store.getters.replaceQuery({ query: { discCode: null } });
                }
             }
          "

@@ -1,54 +1,40 @@
 {
-  "name": "client",
+  "name": "freshnet-vue",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --no-clean"
+    "serve": "vue-cli-service serve --no-clean",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@types/chroma-js": "^2.4.0",
+    "@types/get-image-colors": "^4.0.2",
     "chroma-js": "^2.4.2",
-    "core-js": "^3.27.0",
-    "date-fns": "^2.29.3",
+    "core-js": "^3.8.3",
+    "date-fns": "^2.30.0",
     "get-image-colors": "^4.0.1",
+    "path-browserify": "^1.0.1",
     "print-html-element": "^0.5.1",
-    "sass": "^1.57.1",
-    "sass-loader": "^10.4.1",
-    "socket.io-client": "^4.5.4",
-    "typescript": "^5.1.6",
-    "vue": "^2.7.14",
-    "vue-router": "^3.6.5",
+    "socket.io-client": "^4.7.2",
+    "stream-browserify": "^3.0.0",
+    "vue": "^2.6.14",
+    "vue-router": "^3.5.1",
     "vue-virtual-scroller": "^1.1.2",
     "vuex": "^3.6.2"
   },
   "devDependencies": {
-    "@types/chroma-js": "^2.4.0",
-    "@vue/cli-plugin-babel": "^4.5.19",
-    "@vue/cli-service": "^3.0.5",
-    "i": "^0.3.7",
-    "npm": "^9.8.1",
-    "vue-template-compiler": "^2.7.14"
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-typescript": "~5.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0",
+    "typescript": "~4.5.5",
+    "vue-template-compiler": "^2.6.14"
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {
-      "no-unused-vars": "off",
-      "no-unused-components": "off"
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ]
+  "rules": {
+    "no-unused-vars": "off",
+    "no-unused-components": "off"
+  }
 }

@@ -3,7 +3,7 @@
    import WindowSection from "./WindowSection.vue";
    import SpecificationInputs from "./SpecificationInputs.vue";
    import Customer from "@/items/Customer";
-   import CustomerDeviceSpecification from "@/items/CustomerDeviceSpecification.js";
+   import CustomerDeviceSpecification from "@/items/CustomerDeviceSpecification";
    import U from "@/U";
 
    export default {

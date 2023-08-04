@@ -1,14 +1,14 @@
-import Product from "../items/Product.js";
-import Specification from "../items/Specification.js";
-import Image from "../items/Image.js";
-import Category from "@/items/Category.js";
+import Product from "../items/Product";
+import Specification from "../items/Specification";
+import Image from "../items/Image";
+import Category from "@/items/Category";
 import Vuex from "vuex";
-import U from "@/U.js";
-import StoreBuilder from "./tools/StoreBuilder.js";
+import U from "@/U";
+import StoreBuilder from "./tools/StoreBuilder";
 import ProductRequest from "@/request/Product";
-import ProductPrices from "@/items/ProductPrices.js";
-import Brand from "@/items/Brand.js";
-import ProductBundle from "@/items/ProductBundle.js";
+import ProductPrices from "@/items/ProductPrices";
+import Brand from "@/items/Brand";
+import ProductBundle from "@/items/ProductBundle";
 
 const init = (Stores: any) => {
   const categoryStore = Stores.category;

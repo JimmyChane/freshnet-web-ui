@@ -1,10 +1,9 @@
 export default class AppLayout {
   static Layout = { NORMAL: -1, FULL: -2 };
 
-  // for quick checking arguments
   private static LAYOUTS: number[] = Object.values(this.Layout);
 
-  context: any; // Replace 'any' with the actual type of 'context' if possible.
+  context: any;
   requests: { page: string; view: string; mode: number }[] = [];
 
   constructor(context: any) {

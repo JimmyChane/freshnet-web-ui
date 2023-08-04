@@ -25,7 +25,7 @@
          },
          print() {
             const element = this.$refs.canvas;
-            if (element) this.$root.print(element);
+            if (element) this.store.getters.print(element);
          },
          listenerResize() {
             this.invalidateCard();

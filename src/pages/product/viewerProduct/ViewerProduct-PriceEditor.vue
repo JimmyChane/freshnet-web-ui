@@ -1,7 +1,7 @@
 <script>
    import Section from "./ViewerProduct-Section.vue";
    import Item from "./ViewerProduct-PriceEditor-item.vue";
-   import ProductPrice from "@/items/ProductPrice.js";
+   import ProductPrice from "@/items/ProductPrice";
 
    export default {
       components: { Section, Item },

@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import Brand from "@/items/Brand.js";
+import Brand from "@/items/Brand";
 import BrandRequest from "@/request/Brand";
 import StoreBuilder from "./tools/StoreBuilder";
 

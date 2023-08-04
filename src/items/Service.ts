@@ -67,20 +67,9 @@ export default class Service implements Item {
       return new ServiceBelonging(this.stores).fromData(belonging);
     });
 
-    // events
-    // const serviceData = this.toData();
-    // const serviceEvent = new ServiceEvent(this.stores).fromData({
-    //   method: ServiceEventMethod.INITIAL.key,
-    //   time: serviceData.time,
-    //   username: serviceData.username,
-    //   name: serviceData.nameOfUser,
-    //   description: serviceData.description,
-    //   images: serviceData.imageFiles,
-    // });
     this._events = U.optArray(data.events).map((subData) => {
       return new ServiceEvent(this.stores).fromData(subData);
     });
-    // this._events.push(serviceEvent);
 
     // images
     this.imageFiles = U.optArray(data.imageFiles).map((image) => {

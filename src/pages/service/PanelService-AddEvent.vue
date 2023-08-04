@@ -3,7 +3,7 @@
   import Menu from "@/components/Menu.vue";
   import TextArea from "@/components/InputTextArea.vue";
   import AddImage from "./PanelService-AddEvent-AddImage.vue";
-  import Method from "@/items/ServiceEventMethod.js";
+  import Method from "@/items/ServiceEventMethod";
 
   import PopupMenuOption from "@/app/PopupMenuOption";
 

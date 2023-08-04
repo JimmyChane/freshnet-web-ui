@@ -1,8 +1,8 @@
 <script>
   const Mode = { List: 1, Grid: 2 };
 
-  import Setting from "@/items/Setting.js";
-  import ProductPrice from "@/items/ProductPrice.js";
+  import Setting from "@/items/Setting";
+  import ProductPrice from "@/items/ProductPrice";
   import ProductPreset from "@/objects/ProductPreset";
 
   import ImageView from "@/components/ImageView.vue";
@@ -92,9 +92,6 @@
       this.settingStore.dispatch("getItems");
       this.invalidateFullTitle();
       this.invalidatePreview();
-
-      // const str = await this.item.toStringSpecifications();
-      // console.log("test", str);
     },
     methods: {
       async invalidateFullTitle() {

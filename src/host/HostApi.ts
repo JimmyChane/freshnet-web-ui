@@ -22,15 +22,12 @@ class HostRequest {
   GET(): this {
     return this.method("GET");
   }
-
   POST(): this {
     return this.method("POST");
   }
-
   PUT(): this {
     return this.method("PUT");
   }
-
   DELETE(): this {
     return this.method("DELETE");
   }

@@ -111,8 +111,6 @@
 
 <style lang="scss" scoped>
    .Footer {
-      // --primary-color: #b6c4ce;
-      // --primary-color: black;
       --primary-color: hsl(0, 0%, 20%);
 
       width: 100%;
@@ -125,7 +123,6 @@
       text-decoration: none;
       background: black;
       background: var(--primary-color);
-      // color: #1b303d;
       color: white;
 
       display: flex;

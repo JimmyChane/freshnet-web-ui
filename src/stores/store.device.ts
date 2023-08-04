@@ -2,8 +2,8 @@ import Vuex from "vuex";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
 import DeviceRequest from "@/request/Device";
-import CustomerDevice from "../items/CustomerDevice.js";
-import Customer from "@/items/Customer.js";
+import CustomerDevice from "../items/CustomerDevice";
+import Customer from "@/items/Customer";
 
 const init = (Stores: any) => {
   const context = new StoreBuilder<CustomerDevice>()

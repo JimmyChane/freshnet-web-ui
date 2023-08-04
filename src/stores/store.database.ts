@@ -1,6 +1,6 @@
 import Vuex, { Store } from "vuex";
 import DataLoader from "./tools/DataLoader";
-import Processor from "./tools/Processor.js";
+import Processor from "./tools/Processor";
 import DatabaseRequest from "@/request/Database";
 
 const init = (Stores: any) => {

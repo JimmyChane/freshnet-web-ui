@@ -13,9 +13,9 @@
   import PopupWindow from "@/components/window/PopupWindow.vue";
 
   // tools
-  import AppLayout from "@/tools/AppLayout.js";
-  import Navigation from "@/tools/Navigation.js";
-  import HostApi from "@/host/HostApi.js";
+  import AppLayout from "@/tools/AppLayout";
+  import Navigation from "@/tools/Navigation";
+  import HostApi from "@/host/HostApi";
   import U from "@/U";
   import HostIcon from "@/host/HostIcon";
   import PHE from "print-html-element"; // https://www.npmjs.com/package/print-html-element
@@ -140,6 +140,9 @@
       PopupWindow,
     },
     data: (c) => ({
+      layoutLoginIsShown: false,
+      shouldShowStatus: false,
+
       console: {
         log(param1, param2) {
           param2 === undefined
@@ -156,9 +159,6 @@
 
       appLayout: null,
       navigation: null,
-
-      layoutLoginIsShown: false,
-      shouldShowStatus: false,
     }),
     computed: {
       user: (c) => c.loginStore.getters.user,
@@ -306,6 +306,7 @@
       },
     },
     async created() {
+      this.store.state.app = this;
       this.appLayout = new AppLayout(this);
       this.navigation = new Navigation(this);
       window.addEventListener("resize", this.invalidateWindow);
@@ -405,19 +406,19 @@
 </script>
 
 <template>
-  <div class="App" :isNormal="`${$root.appLayout.isNormal()}`">
+  <div class="App" :isNormal="`${appLayout.isNormal()}`">
     <div class="App-background" style="z-index: 0"></div>
 
     <div
       class="App-body"
       :style="{ 'z-index': '1' }"
-      :isDrawer="`${$root.navigation.isDrawer()}`"
-      :isFixed="`${!$root.navigation.isDrawer()}`"
+      :isDrawer="`${navigation.isDrawer()}`"
+      :isFixed="`${!navigation.isDrawer()}`"
     >
       <NavigationLeft
         class="App-NavigationLeft"
         :style="{ 'grid-area': 'left', 'z-index': '3' }"
-        v-if="!$root.navigation.isNone()"
+        v-if="!navigation.isNone()"
         @click-logout="() => logout()"
       />
       <router-view
@@ -427,7 +428,7 @@
       />
       <NavigationBottom
         :style="{ 'grid-area': 'bottom', 'z-index': '1' }"
-        v-if="!$root.navigation.isNone() && $root.navigation.isDrawer()"
+        v-if="!navigation.isNone() && navigation.isDrawer()"
       />
     </div>
 
@@ -466,6 +467,38 @@
 </template>
 
 <style lang="scss">
+  // initiate
+  :root {
+    font-size: 16px;
+  }
+  @media (max-width: 320px) {
+    :root {
+      font-size: 14px;
+    }
+  }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    font-family: "Roboto", sans-serif;
+    word-break: break-word;
+  }
+  html {
+    overscroll-behavior-x: none;
+  }
+  body {
+    @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+    width: 100dvw;
+    height: 100dvh;
+    overscroll-behavior-x: none;
+    overscroll-behavior-y: none;
+  }
+  p {
+    white-space: pre-line;
+  }
+
   .scrollbar {
     --scrollbar-size: 0;
 

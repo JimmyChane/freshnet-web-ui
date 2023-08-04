@@ -1,7 +1,7 @@
 <script>
    import PanelAction from "@/components/panel/PanelAction.vue";
    import Input from "@/components/Input.vue";
-   import U from "@/U.js";
+   import U from "@/U";
 
    export default {
       components: { PanelAction, Input },

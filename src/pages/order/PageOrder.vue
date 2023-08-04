@@ -7,7 +7,7 @@
    import SectionOrder from "./SectionOrder.vue";
    import U from "@/U";
 
-   import Order from "@/items/Order.js";
+   import Order from "@/items/Order";
 
    import HostIcon from "@/host/HostIcon";
 
@@ -85,7 +85,7 @@
          :title="$options.title"
          :items="items"
          @click-item="
-            (item) => $root.replaceQuery({ query: { order: item.id } })
+            (item) => store.getters.replaceQuery({ query: { order: item.id } })
          "
          @click-item-add="() => toAdd()"
          @click-refresh="() => refresh()"
@@ -98,10 +98,10 @@
             :items="pendingItems"
             :currentItemIdSelected="currentExpandedOrderid"
             @click-collapse="
-               (item) => $root.replaceQuery({ query: { order: null } })
+               (item) => store.getters.replaceQuery({ query: { order: null } })
             "
             @click-expand="
-               (item) => $root.replaceQuery({ query: { order: item.id } })
+               (item) => store.getters.replaceQuery({ query: { order: item.id } })
             "
             @click-complete="
                (item) => orderStore.dispatch('updateToCompletedOfId', item.id)
@@ -117,10 +117,10 @@
             :items="completedItems"
             :currentItemIdSelected="currentExpandedOrderid"
             @click-collapse="
-               (item) => $root.replaceQuery({ query: { order: null } })
+               (item) => store.getters.replaceQuery({ query: { order: null } })
             "
             @click-expand="
-               (item) => $root.replaceQuery({ query: { order: item.id } })
+               (item) => store.getters.replaceQuery({ query: { order: item.id } })
             "
             @click-pending="
                (item) => orderStore.dispatch('updateToPendingOfId', item.id)

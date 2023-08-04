@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import Category from "@/items/Category.js";
+import Category from "@/items/Category";
 import CategoryRequest from "@/request/Category";
 import StoreBuilder from "./tools/StoreBuilder";
 

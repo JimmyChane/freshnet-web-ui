@@ -1,5 +1,5 @@
 import Vuex from "vuex";
-import Setting from "@/items/Setting.js";
+import Setting from "@/items/Setting";
 import StoreBuilder from "./tools/StoreBuilder";
 import SettingRequest from "@/request/Setting";
 import Contact from "@/items/Contact";
@@ -43,10 +43,6 @@ const init = (Stores: any) => {
           title: "Office",
           links: [{ category: "telephone", id: "0332897297" }],
         }),
-        // new Contact(Stores).fromData({
-        //    title: "Office",
-        //    links: [{ category: "telephone", id: "0332811526" }],
-        // }),
       ];
       const days: WorkingDay[] = [];
       days.push(

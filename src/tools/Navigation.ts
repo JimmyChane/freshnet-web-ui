@@ -3,7 +3,6 @@ export default class Navigation {
   static Visibility = { NONE: -1, EXPANDED: -2, COLLAPSED: -3 };
   static Layout = { WIDE: -1, THIN: -2 };
 
-  // for quick checking arguments
   private static VISIBILITIES: number[] = Object.values(this.Visibility);
   private static LAYOUTS: number[] = Object.values(this.Layout);
 

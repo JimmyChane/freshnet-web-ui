@@ -165,9 +165,9 @@
             const query = { service: service?.id ?? null };
 
             if (hasPreviousSerivce && hasNextService) {
-               this.$root.replaceQuery({ query });
+               this.store.getters.replaceQuery({ query });
             } else {
-               this.$root.nextQuery({ query });
+               this.store.getters.nextQuery({ query });
             }
 
             this.updateServiceUI(service);
@@ -195,7 +195,7 @@
                      });
                      accept();
                      if (this.currentServiceId === service.id) {
-                        this.$root.replaceQuery({ query: { service: null } });
+                        this.store.getters.replaceQuery({ query: { service: null } });
                      }
                   } catch (error) {
                      this.store.dispatch("snackbarShow", "Delete Failed");
@@ -330,7 +330,7 @@
          class="PageService-PanelRight"
          titleEmpty="Select service to view"
          :isShowing="!!currentService"
-         @click-collapse="() => $root.nextQuery({ query: { service: null } })"
+         @click-collapse="() => store.getters.nextQuery({ query: { service: null } })"
          @on-isWide="(isWide) => (panelListened.isWide = isWide)"
       >
          <PanelService

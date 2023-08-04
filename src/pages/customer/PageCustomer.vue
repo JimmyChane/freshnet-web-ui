@@ -70,7 +70,7 @@
             }
 
             if (!isSearchById && (customer?.isFromStoreCustomer() ?? false)) {
-               c.$root.replaceQuery({
+               c.store.getters.replaceQuery({
                   query: {
                      id: customer.id,
                      name: null,
@@ -113,7 +113,7 @@
             this.invalidate();
          },
          clickClose() {
-            this.$root.nextQuery({
+            this.store.getters.nextQuery({
                query: { id: null, name: null, phoneNumber: null },
             });
          },

@@ -10,13 +10,13 @@
       },
       computed: {
          moreLeftMenus: (c) => {
-            if (!c.$root.navigation.isDrawer()) return c.leftMenus;
+            if (!c.store.getters.navigation.isDrawer()) return c.leftMenus;
             return [
                {
                   key: "hamburgerMenu",
                   title: "Hamburger Menu",
                   icon: c.host.icon("hamburgerMenu-000000"),
-                  click: () => c.$root.navigation.openNavigationDrawer(),
+                  click: () => c.store.getters.navigation.openNavigationDrawer(),
                },
                ...c.leftMenus,
             ];

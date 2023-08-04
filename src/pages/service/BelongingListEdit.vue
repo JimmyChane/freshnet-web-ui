@@ -2,7 +2,7 @@
    import Input from "@/components/Input.vue";
    import U from "@/U";
    import BelongingListEditItem from "./BelongingListEdit-Item.vue";
-   import ServiceBelonging from "@/items/ServiceBelonging.js";
+   import ServiceBelonging from "@/items/ServiceBelonging";
 
    const TimeGetter = {
       lastNowTime: 0,

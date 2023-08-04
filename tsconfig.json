@@ -10,7 +10,9 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "useDefineForClassFields": true,
+    "sourceMap": true,
     "baseUrl": ".",
+    "types": ["webpack-env"],
     "paths": {
       "@/*": ["src/*"]
     },
@@ -21,9 +23,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx",
-    "freshnet.config.ts",
-    "vue.config.ts"
+    "tests/**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }

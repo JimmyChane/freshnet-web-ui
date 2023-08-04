@@ -13,7 +13,7 @@
    <div class="Page404" @scroll="(event) => (top.shadow = event.target.scrollTop > 0)">
       <Actionbar
          :class="['Home-top', 'transition', top.shadow ? 'Home-top-shadow' : '']"
-         v-if="$root.navigation.isDrawer()"
+         v-if="store.getters.navigation.isDrawer()"
          :leftMenus="[
             {
                key: 'home',
@@ -24,7 +24,7 @@
             {
                title: 'Hamburger Menu',
                icon: host.icon('hamburgerMenu-000000'),
-               click: () => $root.navigation.openNavigationDrawer(),
+               click: () => store.getters.navigation.openNavigationDrawer(),
             },
          ]"
       />

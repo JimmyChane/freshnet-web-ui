@@ -185,8 +185,6 @@
 
       &-isSelected {
          width: 100%;
-         // margin-bottom: 1rem;
-         // margin-top: 1rem;
          .LeftNavGroup1-group2s {
             display: flex;
          }

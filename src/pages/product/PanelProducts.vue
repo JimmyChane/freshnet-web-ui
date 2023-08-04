@@ -36,7 +36,7 @@
                query[this.key] = menu.key;
 
                if (this.context.$route.query[this.key] !== menu.key) {
-                  this.context.$root.replaceQuery({ query });
+                  this.context.store.getters.replaceQuery({ query });
                }
             };
 
@@ -80,7 +80,7 @@
       computed: {
          iconEmpty: () => PageProduct.icon.dark.toUrl(),
 
-         isLayoutThin: (c) => c.$root.window.innerWidth < 550,
+         isLayoutThin: (c) => c.store.getters.window.innerWidth < 550,
          layoutMode: () => ItemProduct.Mode.Grid,
 
          queryProductId: (c) => c.$route.query.productId,

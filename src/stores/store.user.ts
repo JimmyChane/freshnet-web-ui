@@ -1,8 +1,8 @@
 import Vuex from "vuex";
-import ItemUser from "../items/User.js";
-import StoreBuilder from "./tools/StoreBuilder.js";
+import ItemUser from "../items/User";
+import StoreBuilder from "./tools/StoreBuilder";
 import UserRequest from "@/request/User";
-import User from "../items/User.js";
+import User from "../items/User";
 
 const init = (Stores: any) => {
   const loginStore = Stores.login;

@@ -40,7 +40,7 @@
          isLoadingDevices: false,
       }),
       computed: {
-         isWide: (c) => c.$root.window.innerWidth > 600,
+         isWide: (c) => c.store.getters.window.innerWidth > 600,
 
          menus: (c) => {
             const menus = [];

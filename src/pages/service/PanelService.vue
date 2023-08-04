@@ -32,7 +32,7 @@
     },
     data: (c) => ({ nameOfUser: "", scrollTop: 0, isActionbarExpand: false }),
     computed: {
-      windowWidth: (c) => c.$root.window.innerWidth,
+      windowWidth: (c) => c.store.getters.window.innerWidth,
 
       isWide: (c) => c.windowWidth > 600,
 

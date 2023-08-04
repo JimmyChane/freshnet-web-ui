@@ -1,7 +1,7 @@
 <script>
    import PanelAction from "@/components/panel/PanelAction.vue";
    import SpecificationInputs from "@/pages/customer/SpecificationInputs.vue";
-   import CustomerDeviceSpecification from "@/items/CustomerDeviceSpecification.js";
+   import CustomerDeviceSpecification from "@/items/CustomerDeviceSpecification";
    import U from "@/U";
 
    export default {

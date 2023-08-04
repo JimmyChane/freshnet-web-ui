@@ -1,4 +1,4 @@
-import Service from "@/items/Service.js";
+import Service from "@/items/Service";
 import ServiceImage from "@/items/ServiceImage";
 import Vuex from "vuex";
 import ServiceCustomer from "@/items/ServiceCustomer";

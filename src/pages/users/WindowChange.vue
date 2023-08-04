@@ -3,7 +3,7 @@
    import Input from "@/components/Input.vue";
    import Selector from "@/components/selector/Selector.vue";
 
-   import User from "@/items/User.js";
+   import User from "@/items/User";
 
    export default {
       components: { PanelAction, Input, Selector },

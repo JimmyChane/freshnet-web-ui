@@ -1,6 +1,6 @@
 import Vuex from "vuex";
-import ItemPs2Disc from "../items/Ps2Disc.js";
-import StoreBuilder from "./tools/StoreBuilder.js";
+import ItemPs2Disc from "../items/Ps2Disc";
+import StoreBuilder from "./tools/StoreBuilder";
 import Ps2Request from "@/request/Ps2";
 
 const init = (Stores: any) => {

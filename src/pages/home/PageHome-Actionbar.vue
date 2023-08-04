@@ -78,7 +78,7 @@
       <p
          class="HomeActionbar-description"
          :class="[
-            $root.window.innerWidth > 800
+            store.getters.window.innerWidth > 800
                ? 'HomeActionbar-description-isWide'
                : '',
          ]"

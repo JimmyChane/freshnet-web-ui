@@ -1,9 +1,9 @@
 import Vuex from "vuex";
 import CustomerRequest from "@/request/Customer";
-import DeviceStore from "./store.device.js";
+import DeviceStore from "./store.device";
 import U from "@/U";
 import StoreBuilder from "./tools/StoreBuilder";
-import Customer from "../items/Customer.js";
+import Customer from "../items/Customer";
 
 const init = (Stores: any) => {
   const deviceStore = DeviceStore.init(Stores);

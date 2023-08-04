@@ -4,7 +4,7 @@
    import Empty from "@/components/Empty.vue";
    import PageService from "@/pages/service/PageService.vue";
 
-   import U from "@/U.js";
+   import U from "@/U";
    import ServiceState from "@/items/ServiceState";
 
    export default {
@@ -70,7 +70,7 @@
 
             const states = ServiceState.map((state) => state);
             if (!menu && this.stateMenus.length && states.length) {
-               this.$root.replaceQuery({ query: { state: states[0].key } });
+               this.store.getters.replaceQuery({ query: { state: states[0].key } });
             }
 
             this.stateMenuIndex = this.stateMenus.indexOf(menu);
@@ -152,7 +152,7 @@
             };
             menu.click = () => {
                if (this.currentState === menu.key) return;
-               this.$root.replaceQuery({ query: { state: menu.key } });
+               this.store.getters.replaceQuery({ query: { state: menu.key } });
             };
          }
          for (const menu of this.layoutMenus) {
