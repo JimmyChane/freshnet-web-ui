@@ -1,16 +1,16 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class Order {
   static list(): Promise<any> {
-    return HostApi.request().url("order/").send();
+    return Server.request().path("order/").sendJson();
   }
   static add(body: any): Promise<any> {
-    return HostApi.request().POST().url("order/").body(body).send();
+    return Server.request().POST().path("order/").bodyJson(body).sendJson();
   }
   static delete(id: string): Promise<any> {
-    return HostApi.request().DELETE().url("order/").body({ id }).send();
+    return Server.request().DELETE().path("order/").bodyJson({ id }).sendJson();
   }
   static updateStatus(id: string, status: number): Promise<any> {
-    return HostApi.request().PUT().url("order/").body({ id, status }).send();
+    return Server.request().PUT().path("order/").bodyJson({ id, status }).sendJson();
   }
 }

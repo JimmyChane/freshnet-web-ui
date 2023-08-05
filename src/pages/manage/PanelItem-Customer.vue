@@ -30,7 +30,7 @@
     <ButtonIcon
       :isEditable="`${isEditable}`"
       class="PanelItem-Customer-edit transition"
-      :src="host.icon('edit-505050')"
+      :src="host.icon('edit-505050').toUrl()"
       @click="() => $emit('click-edit', customer)"
     />
   </div>

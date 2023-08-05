@@ -42,7 +42,7 @@
         if (!this.allowEdit) return null;
         return {
           title: "Edit",
-          icon: this.host.icon("edit-000000"),
+          icon: this.host.icon("edit-000000").toUrl(),
           click: () =>
             this.$emit("click-edit", {
               product: this.product,

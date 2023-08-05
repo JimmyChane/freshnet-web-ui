@@ -1,7 +1,7 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class Specification {
   static list(): Promise<any> {
-    return HostApi.request().url("spec/").send();
+    return Server.request().path("spec/").sendJson();
   }
 }

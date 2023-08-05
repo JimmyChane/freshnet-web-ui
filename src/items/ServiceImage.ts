@@ -1,4 +1,4 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 import U from "@/U";
 import Filename from "../objects/Filename";
 import Image from "./Image";
@@ -66,12 +66,12 @@ export default class ServiceImage {
       const prefix = "/api/image/name/";
       const name = path.substring(prefix.length, path.length);
       const filename = new Filename(name);
-      return `${HostApi.originApi}/image/name/${filename.toString()}${query}`;
+      return `${Server.originApi}/image/name/${filename.toString()}${query}`;
     }
 
     const filename = new Filename(this.name);
     return `${
-      HostApi.originApi
+      Server.originApi
     }/service_v2/get/image/${filename.toString()}${query}`;
   }
 

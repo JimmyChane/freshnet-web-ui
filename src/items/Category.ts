@@ -1,93 +1,93 @@
 import Image from "./Image";
 import ItemSearcher from "../objects/ItemSearcher";
 import U from "@/U";
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 import { Item } from "@/stores/tools/List";
 
 class CategoryBackground extends Image {
   static TABLET = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/daniel-romero--cCxgKIA5RA-unsplash-w300h100.webp",
     ),
   });
   static NOTEBOOK = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/andras-vas-Bd7gNnWJBkU-unsplash-w300h100.webp",
     ),
   });
   static DESKTOP = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/niclas-illg-wzVQp_NRIHg-unsplash-w300h100.webp",
     ),
   });
   static PRINTER = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/mahrous-houses-5AoOejjRUrA-unsplash-w300h100.webp",
     ),
   });
   static CARTRIDGE = new Image().fromData({
     method: "link",
-    path: HostApi.res("background/177364729-w300h100.webp"),
+    path: Server.res("background/177364729-w300h100.webp"),
   });
   static MOUSE = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/ryan-putra-j4PqlNVZ4Bc-unsplash-w300h100.webp",
     ),
   });
   static KEYBOARD = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/girl-with-red-hat-Z6SXt1v5tP8-unsplash-w300h100.webp",
     ),
   });
   static AUDIO = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/josh-sorenson-u8-QI4tRES0-unsplash-w300h100.webp",
     ),
   });
   static MONITOR = new Image().fromData({
     method: "link",
-    path: HostApi.res("background/monitor-u3223qe-gallery-3-w300h100.webp"),
+    path: Server.res("background/monitor-u3223qe-gallery-3-w300h100.webp"),
   });
   static WEBCAM = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/emiliano-cicero-lq87UxGSiEQ-unsplash-w300h100.webp",
     ),
   });
   static CCTV = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/michal-jakubowski-oQD9uq4Rd4I-unsplash-w300h100.webp",
     ),
   });
   static STORAGE = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/denny-muller-1qL31aacAPA-unsplash-w300h100.webp",
     ),
   });
   static RAM = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/harrison-broadbent-ING1Uf1Fc30-unsplash-w300h100.webp",
     ),
   });
   static NETWORK = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/jordan-harrison-40XgDxBfYXM-unsplash-w300h100.webp",
     ),
   });
   static OTHER = new Image().fromData({
     method: "link",
-    path: HostApi.res(
+    path: Server.res(
       "background/christopher-bill-3l19r5EOZaw-unsplash-w300h100.webp",
     ),
   });

@@ -1,14 +1,24 @@
 <script lang="ts">
+  import { Icon } from "@/host/ServerResource";
+
   export default {
     props: {
-      src: { type: String, default: "" },
+      src: { default: "" },
       alt: { type: String, default: "" },
+    },
+    computed: {
+      srcString() {
+        if (this.src instanceof Icon) {
+          return this.src.toUrl();
+        }
+        return this.src;
+      },
     },
   };
 </script>
 
 <template>
-  <img class="Icon" :src="src" :alt="alt" />
+  <img class="Icon" :src="srcString" :alt="alt" />
 </template>
 
 <style lang="scss" scoped>

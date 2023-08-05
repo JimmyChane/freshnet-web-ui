@@ -1,8 +1,8 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class User {
   static list(): Promise<any> {
-    return HostApi.request().url("users").send();
+    return Server.request().path("users").sendJson();
   }
   static add(
     username: string,
@@ -10,24 +10,24 @@ export default class User {
     passwordNew: string,
     passwordRepeat: string,
   ): Promise<any> {
-    return HostApi.request()
-      .url("users/user")
+    return Server.request()
+      .path("users/user")
       .POST()
-      .body({ username, name, passwordNew, passwordRepeat })
-      .send();
+      .bodyJson({ username, name, passwordNew, passwordRepeat })
+      .sendJson();
   }
   static remove(username: string): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .DELETE()
-      .url("users/user")
-      .body({ username })
-      .send();
+      .path("users/user")
+      .bodyJson({ username })
+      .sendJson();
   }
   static update(username: string, userType: string): Promise<any> {
-    return HostApi.request()
-      .url("users/user")
+    return Server.request()
+      .path("users/user")
       .PUT()
-      .body({ username, userType })
-      .send();
+      .bodyJson({ username, userType })
+      .sendJson();
   }
 }

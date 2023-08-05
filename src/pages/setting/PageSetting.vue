@@ -6,9 +6,10 @@
   import ItemSettingBusinessHours from "./ItemSettingBusinessHours.vue";
   import SettingModule from "@/items/Setting";
 
-  import HostIcon from "@/host/HostIcon";
   import U from "@/U";
   import Vue from "vue";
+  import Server from "@/host/Server";
+  import IconPack from "@/app/IconPack";
 
   class SettingBuilder {
     setKey(key = "") {
@@ -90,10 +91,10 @@
   export default {
     key: "setting",
     title: "Settings",
-    icon: {
-      light: new HostIcon("setting-FFFFFF.svg"),
-      dark: new HostIcon("setting-000000.svg"),
-    },
+    icon: new IconPack(
+      Server.resource.icon("setting-FFFFFF"),
+      Server.resource.icon("setting-000000"),
+    ),
     userPermissions: ["admin"],
 
     components: {
@@ -127,7 +128,7 @@
         {
           key: 'refresh',
           title: 'Refresh',
-          icon: host.icon('refresh-000000'),
+          icon: host.icon('refresh-000000').toUrl(),
           click: () => refresh(),
         },
       ]"

@@ -15,11 +15,11 @@
   // tools
   import AppLayout from "@/tools/AppLayout";
   import Navigation from "@/tools/Navigation";
-  import HostApi from "@/host/HostApi";
+  import HostApi from "@/host/Server";
   import U from "@/U";
-  import HostIcon from "@/host/HostIcon";
   import PHE from "print-html-element"; // https://www.npmjs.com/package/print-html-element
   import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
+  import { Icon } from "@/host/ServerResource";
 
   const objectToArray = (object = {}) => {
     return Object.keys(typeof object === "object" ? object : {}).map((key) => ({
@@ -41,13 +41,13 @@
     if (!U.isObjectOnly(icon)) return null;
 
     const light =
-      icon.light instanceof HostIcon
+      icon.light instanceof Icon
         ? icon.light.toUrl()
-        : HostApi.icon(icon.light);
+        : HostApi.icon(icon.light).toUrl();
     const dark =
-      icon.dark instanceof HostIcon
+      icon.dark instanceof Icon
         ? icon.dark.toUrl()
-        : HostApi.icon(icon.dark);
+        : HostApi.icon(icon.dark).toUrl();
 
     return { light, dark };
   };

@@ -1,136 +1,136 @@
 <script>
-   import PopupWindow from "./PopupWindow.vue";
-   import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import Loading from "@/components/Loading.vue";
-   import WindowBottom from "./WindowBottom.vue";
+  import PopupWindow from "./PopupWindow.vue";
+  import Actionbar from "@/components/actionbar/Actionbar.vue";
+  import Loading from "@/components/Loading.vue";
+  import WindowBottom from "./WindowBottom.vue";
 
-   export default {
-      emits: ["click-dismiss", "click-cancel", "click-ok"],
-      components: { PopupWindow, Loading, Actionbar, WindowBottom },
-      props: {
-         title: { type: String, default: "" },
-         isShowing: { type: Boolean, default: false },
-         isLoading: { type: Boolean, default: false },
-         isClickable: { type: Boolean, default: true },
+  export default {
+    emits: ["click-dismiss", "click-cancel", "click-ok"],
+    components: { PopupWindow, Loading, Actionbar, WindowBottom },
+    props: {
+      title: { type: String, default: "" },
+      isShowing: { type: Boolean, default: false },
+      isLoading: { type: Boolean, default: false },
+      isClickable: { type: Boolean, default: true },
+    },
+    data: (c) => ({ scrollTop: 0 }),
+    watch: {
+      isShowing() {
+        const { PopupWindowActionBody } = this.$refs;
+        if (PopupWindowActionBody && this.isShowing) {
+          PopupWindowActionBody.scrollTop = 0;
+        }
       },
-      data: (c) => ({ scrollTop: 0 }),
-      watch: {
-         isShowing() {
-            const { PopupWindowActionBody } = this.$refs;
-            if (PopupWindowActionBody && this.isShowing) {
-               PopupWindowActionBody.scrollTop = 0;
-            }
-         },
-      },
-   };
+    },
+  };
 </script>
 
 <template>
-   <PopupWindow
-      class="WindowAction"
-      :isShowing="isShowing"
-      @click-dismiss="$emit('click-dismiss')"
-   >
-      <div
-         class="WindowAction-body"
-         ref="PopupWindowActionBody"
-         :isClickable="`${isClickable}`"
-         @scroll="(event) => (scrollTop = event.target.scrollTop)"
-      >
-         <Actionbar
-            class="WindowAction-header"
-            :isScrollUp="`${scrollTop > 0}`"
-            :title="title"
-            :leftMenus="{
-               icon: host.icon('close-000000'),
-               click: () => $emit('click-dismiss'),
-            }"
-         />
+  <PopupWindow
+    class="WindowAction"
+    :isShowing="isShowing"
+    @click-dismiss="$emit('click-dismiss')"
+  >
+    <div
+      class="WindowAction-body"
+      ref="PopupWindowActionBody"
+      :isClickable="`${isClickable}`"
+      @scroll="(event) => (scrollTop = event.target.scrollTop)"
+    >
+      <Actionbar
+        class="WindowAction-header"
+        :isScrollUp="`${scrollTop > 0}`"
+        :title="title"
+        :leftMenus="{
+          icon: host.icon('close-000000').toUrl(),
+          click: () => $emit('click-dismiss'),
+        }"
+      />
 
-         <div class="WindowAction-main">
-            <slot />
-         </div>
-
-         <WindowBottom
-            class="WindowAction-bottom"
-            @click-cancel="$emit('click-cancel')"
-            @click-ok="$emit('click-ok')"
-         />
-
-         <div :class="['transition', 'WindowAction-foreground']"></div>
-
-         <Loading class="WindowAction-loading" :isShowing="isLoading" />
+      <div class="WindowAction-main">
+        <slot />
       </div>
-   </PopupWindow>
+
+      <WindowBottom
+        class="WindowAction-bottom"
+        @click-cancel="$emit('click-cancel')"
+        @click-ok="$emit('click-ok')"
+      />
+
+      <div :class="['transition', 'WindowAction-foreground']"></div>
+
+      <Loading class="WindowAction-loading" :isShowing="isLoading" />
+    </div>
+  </PopupWindow>
 </template>
 
 <style lang="scss" scoped>
-   .WindowAction {
-      z-index: 3;
+  .WindowAction {
+    z-index: 3;
 
-      .WindowAction-body {
-         width: 100%;
-         height: 100%;
+    .WindowAction-body {
+      width: 100%;
+      height: 100%;
 
-         font-size: 1rem;
-         font-weight: 400;
-         color: black;
-         position: relative;
+      font-size: 1rem;
+      font-weight: 400;
+      color: black;
+      position: relative;
 
-         display: flex;
-         flex-direction: column;
-         overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
 
-         scroll-padding-bottom: 4rem;
+      scroll-padding-bottom: 4rem;
 
-         .WindowAction-header {
-            z-index: 3;
-            text-align: center;
-            border: 1px solid;
-            border-color: transparent;
-            background: hsl(0, 0%, 92%);
-         }
-         .WindowAction-header[isScrollUp="true"] {
-            border-color: hsl(0, 0%, 90%);
-         }
-
-         .WindowAction-main {
-            z-index: 1;
-            width: 100%;
-            height: fit-content;
-            padding: 1.8rem;
-            padding-top: 1rem;
-            display: flex;
-            flex-direction: column;
-         }
-
-         .WindowAction-bottom {
-            z-index: 2;
-         }
-
-         .WindowAction-foreground {
-            z-index: 4;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            background: white;
-            opacity: 0;
-            pointer-events: none;
-         }
-
-         .WindowAction-loading {
-            z-index: 5;
-            position: absolute;
-            width: 100%;
-            pointer-events: none;
-         }
+      .WindowAction-header {
+        z-index: 3;
+        text-align: center;
+        border: 1px solid;
+        border-color: transparent;
+        background: hsl(0, 0%, 92%);
+      }
+      .WindowAction-header[isScrollUp="true"] {
+        border-color: hsl(0, 0%, 90%);
       }
 
-      .WindowAction-body[isClickable="false"] {
-         pointer-events: none;
-         .WindowAction-foreground {
-            opacity: 0.5;
-         }
+      .WindowAction-main {
+        z-index: 1;
+        width: 100%;
+        height: fit-content;
+        padding: 1.8rem;
+        padding-top: 1rem;
+        display: flex;
+        flex-direction: column;
       }
-   }
+
+      .WindowAction-bottom {
+        z-index: 2;
+      }
+
+      .WindowAction-foreground {
+        z-index: 4;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: white;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .WindowAction-loading {
+        z-index: 5;
+        position: absolute;
+        width: 100%;
+        pointer-events: none;
+      }
+    }
+
+    .WindowAction-body[isClickable="false"] {
+      pointer-events: none;
+      .WindowAction-foreground {
+        opacity: 0.5;
+      }
+    }
+  }
 </style>

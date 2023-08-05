@@ -117,7 +117,7 @@
         if (c.images.length) {
           labels.push({
             key: "images",
-            icon: c.host.icon("image-FFFFFF"),
+            icon: c.host.icon("image-FFFFFF").toUrl(),
             count: c.images.length,
             primaryColor: "#8C623A",
           });

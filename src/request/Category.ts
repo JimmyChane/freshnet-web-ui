@@ -1,7 +1,7 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class Category {
   static list(): Promise<any> {
-    return HostApi.request().url("productv2/category/list/").send();
+    return Server.request().path("productv2/category/list/").sendJson();
   }
 }

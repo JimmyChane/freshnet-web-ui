@@ -1,25 +1,25 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class Login {
   static login(body: any): Promise<any> {
-    return HostApi.request().POST().url("session/login/").body(body).send();
+    return Server.request().POST().path("session/login/").bodyJson(body).sendJson();
   }
   static user(token: string): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url("session/verifyToken/")
-      .body({ token })
-      .send();
+      .path("session/verifyToken/")
+      .bodyJson({ token })
+      .sendJson();
   }
   static updatePassword(
     username: string,
     passwordVerify: string,
     passwordNew: string,
   ): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url(`session/user/${username}/changePassword`)
-      .body({ passwordVerify, passwordNew })
-      .send();
+      .path(`session/user/${username}/changePassword`)
+      .bodyJson({ passwordVerify, passwordNew })
+      .sendJson();
   }
 }

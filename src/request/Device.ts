@@ -1,35 +1,35 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class Device {
   static list(): Promise<any> {
-    return HostApi.request().url("customer/device/list").send();
+    return Server.request().path("customer/device/list").sendJson();
   }
   static add(body: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url("customer/device/add")
-      .body(body)
-      .send();
+      .path("customer/device/add")
+      .bodyJson(body)
+      .sendJson();
   }
   static remove(body: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .DELETE()
-      .url("customer/device/remove")
-      .body(body)
-      .send();
+      .path("customer/device/remove")
+      .bodyJson(body)
+      .sendJson();
   }
   static updateSpecification(body: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("customer/device/update/specifications")
-      .body(body)
-      .send();
+      .path("customer/device/update/specifications")
+      .bodyJson(body)
+      .sendJson();
   }
   static updateDescription(body: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("customer/device/update/description")
-      .body(body)
-      .send();
+      .path("customer/device/update/description")
+      .bodyJson(body)
+      .sendJson();
   }
 }

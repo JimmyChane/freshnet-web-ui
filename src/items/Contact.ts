@@ -1,5 +1,5 @@
 import U from "@/U";
-import Host from "@/host/HostApi";
+import Host from "@/host/Server";
 
 interface ContactLinkData {
   id: string;
@@ -15,22 +15,22 @@ class ContactCategory {
   static Call: ContactCategory = new ContactCategory(
     "call",
     "Call",
-    Host.icon("call-color"),
+    Host.icon("call-color").toUrl(),
   );
   static Whatsapp: ContactCategory = new ContactCategory(
     "whatsapp",
     "Whatsapp",
-    Host.icon("whatsapp-color"),
+    Host.icon("whatsapp-color").toUrl(),
   );
   static Telegram: ContactCategory = new ContactCategory(
     "telegram",
     "Telegram",
-    Host.icon("telegram-color"),
+    Host.icon("telegram-color").toUrl(),
   );
   static Telephone: ContactCategory = new ContactCategory(
     "telephone",
     "Telephone",
-    Host.icon("telephone-color"),
+    Host.icon("telephone-color").toUrl(),
   );
 
   key: string = "";

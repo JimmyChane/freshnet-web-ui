@@ -141,7 +141,7 @@
           });
           menus.push({
             title: "Delete Event",
-            icon: this.host.icon("trash-000000"),
+            icon: this.host.icon("trash-000000").toUrl(),
             click: () => this.$emit("callback-delete", this.event),
           });
         }

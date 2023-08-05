@@ -1,134 +1,134 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class Product {
   static list(): Promise<any> {
-    return HostApi.request().url("productv2/list/").send();
+    return Server.request().path("productv2/list/").sendJson();
   }
   static addItem(data: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url("productv2/")
-      .body({ content: data })
-      .send();
+      .path("productv2/")
+      .bodyJson({ content: data })
+      .sendJson();
   }
   static removeItem(id: string): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .DELETE()
-      .url(`productv2/id/${id}`)
-      .body({ id })
-      .send();
+      .path(`productv2/id/${id}`)
+      .bodyJson({ id })
+      .sendJson();
   }
   static updateTitle(id: string, title: string): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("productv2/title/")
-      .body({ content: { productId: id, title } })
-      .send();
+      .path("productv2/title/")
+      .bodyJson({ content: { productId: id, title } })
+      .sendJson();
   }
   static updateDescription(id: string, description: string): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("productv2/description/")
-      .body({ content: { productId: id, description } })
-      .send();
+      .path("productv2/description/")
+      .bodyJson({ content: { productId: id, description } })
+      .sendJson();
   }
   static updateBrand(id: string, brandId: string): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("productv2/brandId/")
-      .body({ content: { productId: id, brandId } })
-      .send();
+      .path("productv2/brandId/")
+      .bodyJson({ content: { productId: id, brandId } })
+      .sendJson();
   }
   static updateCategory(id: string, categoryId: string): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("productv2/categoryId/")
-      .body({ content: { productId: id, categoryId } })
-      .send();
+      .path("productv2/categoryId/")
+      .bodyJson({ content: { productId: id, categoryId } })
+      .sendJson();
   }
   static updateAvailability(id: string, isAvailable: boolean): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("productv2/isAvailable/")
-      .body({ content: { productId: id, isAvailable } })
-      .send();
+      .path("productv2/isAvailable/")
+      .bodyJson({ content: { productId: id, isAvailable } })
+      .sendJson();
   }
   static updateSecondHand(id: string, isSecondHand: boolean): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("productv2/isSecondHand/")
-      .body({ content: { productId: id, isSecondHand } })
-      .send();
+      .path("productv2/isSecondHand/")
+      .bodyJson({ content: { productId: id, isSecondHand } })
+      .sendJson();
   }
   static updatePrice(id: string, price: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("productv2/price/")
-      .body({ content: { productId: id, price } })
-      .send();
+      .path("productv2/price/")
+      .bodyJson({ content: { productId: id, price } })
+      .sendJson();
   }
   static addBundle(id: string, bundle: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url("productv2/bundle/")
-      .body({ content: { productId: id, bundle } })
-      .send();
+      .path("productv2/bundle/")
+      .bodyJson({ content: { productId: id, bundle } })
+      .sendJson();
   }
   static removeBundle(id: string, bundle: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .DELETE()
-      .url("productv2/bundle/")
-      .body({ content: { productId: id, bundle: bundle } })
-      .send();
+      .path("productv2/bundle/")
+      .bodyJson({ content: { productId: id, bundle: bundle } })
+      .sendJson();
   }
   static addGift(id: string, gift: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url("productv2/gift/")
-      .body({ content: { productId: id, gift } })
-      .send();
+      .path("productv2/gift/")
+      .bodyJson({ content: { productId: id, gift } })
+      .sendJson();
   }
   static removeGift(id: string, gift: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .DELETE()
-      .url("productv2/gift/")
-      .body({ content: { productId: id, gift } })
-      .send();
+      .path("productv2/gift/")
+      .bodyJson({ content: { productId: id, gift } })
+      .sendJson();
   }
 
   static addSpecification(id: string, specification: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url("productv2/specification/")
-      .body({ content: { productId: id, specification } })
-      .send();
+      .path("productv2/specification/")
+      .bodyJson({ content: { productId: id, specification } })
+      .sendJson();
   }
   static removeSpecification(id: string, specification: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .DELETE()
-      .url("productv2/specification/")
-      .body({ content: { productId: id, specification } })
-      .send();
+      .path("productv2/specification/")
+      .bodyJson({ content: { productId: id, specification } })
+      .sendJson();
   }
   static updateSpecifications(id: string, specifications: any[]): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("productv2/specification/list")
-      .body({ content: { productId: id, specifications } })
-      .send();
+      .path("productv2/specification/list")
+      .bodyJson({ content: { productId: id, specifications } })
+      .sendJson();
   }
   static addImage(id: string, imageForm: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url(`productv2/id/${id}/image/`)
-      .bodyObject(imageForm)
-      .sendNotJson();
+      .path(`productv2/id/${id}/image/`)
+      .body(imageForm)
+      .send();
   }
   static removeImage(id: string, image: any): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .DELETE()
-      .url(`productv2/id/${id}/image/`)
-      .body({ content: { image } })
-      .send();
+      .path(`productv2/id/${id}/image/`)
+      .bodyJson({ content: { image } })
+      .sendJson();
   }
 }

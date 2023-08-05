@@ -33,12 +33,12 @@
         return [
           {
             title: "Add",
-            icon: c.host.icon("add-000000"),
+            icon: c.host.icon("add-000000").toUrl(),
             click: () => c.$emit("click-item-add"),
           },
           {
             title: "Refresh",
-            icon: c.host.icon("refresh-000000"),
+            icon: c.host.icon("refresh-000000").toUrl(),
             click: () => c.$emit("click-refresh"),
           },
         ];

@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import socketIo from "socket.io-client";
-import HostApi from "../host/HostApi";
+import Server from "../host/Server";
 import TimeNowGetter from "@/tools/TimeNowGetter";
 import Notification from "@/tools/Notification";
 import PopupMenu from "@/app/PopupMenuOption";
@@ -91,7 +91,7 @@ const init = (Stores: any) => {
         authorization: window.localStorage.getItem("userToken"),
       },
     };
-    const socket = socketIo(HostApi.originApi, option)
+    const socket = socketIo(Server.originApi, option)
       .on("connect", () => console.info("Socket", "Connected"))
       .on("connect_error", () => console.info("Socket", "Connect Error"))
       .on("disconnect", (reason) => console.info("Socket", "Disconnected"))

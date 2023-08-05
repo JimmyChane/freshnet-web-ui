@@ -1,7 +1,7 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class Ps2 {
   static listDisc(): Promise<any> {
-    return HostApi.request().url("ps2/disc/").send();
+    return Server.request().path("ps2/disc/").sendJson();
   }
 }

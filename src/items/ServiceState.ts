@@ -1,12 +1,12 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class ServiceState {
   static PENDING = new ServiceState(
     "pending",
     "Working",
     {
-      white: HostApi.icon("page/service/pending-white"),
-      color: HostApi.icon("page/service/pending-color"),
+      white: Server.icon("page/service/pending-white").toUrl(),
+      color: Server.icon("page/service/pending-color").toUrl(),
     },
     "#f4a60d",
   );
@@ -14,8 +14,8 @@ export default class ServiceState {
     "waiting",
     "Waiting for Pickup",
     {
-      white: HostApi.icon("page/service/waiting-white"),
-      color: HostApi.icon("page/service/waiting-color"),
+      white: Server.icon("page/service/waiting-white").toUrl(),
+      color: Server.icon("page/service/waiting-color").toUrl(),
     },
     "#c336d9",
   );
@@ -23,8 +23,8 @@ export default class ServiceState {
     "completed",
     "Finished & Pickup",
     {
-      white: HostApi.icon("page/service/completed-white"),
-      color: HostApi.icon("page/service/completed-color"),
+      white: Server.icon("page/service/completed-white").toUrl(),
+      color: Server.icon("page/service/completed-color").toUrl(),
     },
     "#25ad86",
   );
@@ -32,8 +32,8 @@ export default class ServiceState {
     "rejected",
     "Rejected & Pickup",
     {
-      white: HostApi.icon("page/service/rejected-white"),
-      color: HostApi.icon("page/service/rejected-color"),
+      white: Server.icon("page/service/rejected-white").toUrl(),
+      color: Server.icon("page/service/rejected-color").toUrl(),
     },
     "#d94136",
   );

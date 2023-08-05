@@ -66,7 +66,7 @@
       >
       <img
         class="LabelMenus-arrow transition"
-        :src="host.icon('arrowDown-FFFFFF')"
+        :src="host.icon('arrowDown-FFFFFF').toUrl()"
       />
     </button>
 

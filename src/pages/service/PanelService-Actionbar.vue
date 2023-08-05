@@ -82,14 +82,14 @@
         if (c.isExpand && c.isPhoneNumber) {
           menus.push({
             title: "Chat with Customer on Whatsapp",
-            icon: c.host.icon("whatsapp-color"),
+            icon: c.host.icon("whatsapp-color").toUrl(),
             alth: "Chat on Whatsapp",
             href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
             target: "_blank",
           });
           menus.push({
             title: "Call Customer",
-            icon: c.host.icon("call-color"),
+            icon: c.host.icon("call-color").toUrl(),
             href: `tel:+6${c.phoneNumberStr}`,
           });
         }
@@ -104,7 +104,7 @@
         });
         menus.push({
           title: "Delete Service",
-          icon: c.host.icon("trash-000000"),
+          icon: c.host.icon("trash-000000").toUrl(),
           click: () => c.actions.onClickRemove(c.service),
           isHidden: true,
         });
@@ -199,7 +199,7 @@
         }`,
       }"
       :leftMenus="{
-        icon: host.icon('close-000000'),
+        icon: host.icon('close-000000').toUrl(),
         click: () => actions.onClickClose(),
       }"
       :rightMenus="menus"
@@ -270,8 +270,8 @@
                 @mouseleave="bookmarkHeaderIconIsHover = false"
                 :src="
                   bookmarkHeaderIconIsHover
-                    ? host.icon('bookmark-add-000000')
-                    : host.icon('bookmark-000000')
+                    ? host.icon('bookmark-add-000000').toUrl()
+                    : host.icon('bookmark-000000').toUrl()
                 "
               />
             </div>
@@ -280,7 +280,7 @@
               :title="`Belongings (${belongings.length})`"
               :menus="{
                 title: 'Update Belongings',
-                icon: host.icon('edit-505050'),
+                icon: host.icon('edit-505050').toUrl(),
                 click: () => actions.onClickUpdateBelongings(belongings),
               }"
             >

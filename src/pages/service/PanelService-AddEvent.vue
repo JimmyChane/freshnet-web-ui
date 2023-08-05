@@ -279,7 +279,10 @@
         :width="methodMenuWidth"
       >
         <span>{{ methodMenu.title }}</span>
-        <img :src="host.icon('arrowDown-FFFFFF')" alt="Click to select" />
+        <img
+          :src="host.icon('arrowDown-FFFFFF').toUrl()"
+          alt="Click to select"
+        />
       </Menu>
     </div>
   </div>

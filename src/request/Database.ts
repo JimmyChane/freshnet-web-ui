@@ -1,35 +1,35 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class Database {
   static info(): Promise<any> {
-    return HostApi.request().POST().url("database/info").send();
+    return Server.request().POST().path("database/info").sendJson();
   }
 
   static databases(): Promise<any> {
-    return HostApi.request().POST().url("database/databases").send();
+    return Server.request().POST().path("database/databases").sendJson();
   }
 
   static collections(database: string): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url(`database/database/${database}/collections`)
-      .send();
+      .path(`database/database/${database}/collections`)
+      .sendJson();
   }
 
   static documents(database: string, collection: string): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url(`database/database/${database}/collection/${collection}/documents`)
-      .send();
+      .path(`database/database/${database}/collection/${collection}/documents`)
+      .sendJson();
   }
 
   static import(body: any): Promise<any> {
-    return HostApi.request().POST().url("database/imports").body(body).send();
+    return Server.request().POST().path("database/imports").bodyJson(body).sendJson();
   }
 
   static export(database: string): Promise<any> {
-    return HostApi.request()
-      .url(`database/database/${database}/exportv2`)
-      .send();
+    return Server.request()
+      .path(`database/database/${database}/exportv2`)
+      .sendJson();
   }
 }

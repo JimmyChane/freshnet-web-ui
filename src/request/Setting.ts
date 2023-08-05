@@ -1,10 +1,10 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 export default class Setting {
   static list(): Promise<any> {
-    return HostApi.request().url("settingv3").send();
+    return Server.request().path("settingv3").sendJson();
   }
   static update(setting: any): Promise<any> {
-    return HostApi.request().PUT().url("settingv3/system").body(setting).send();
+    return Server.request().PUT().path("settingv3/system").bodyJson(setting).sendJson();
   }
 }

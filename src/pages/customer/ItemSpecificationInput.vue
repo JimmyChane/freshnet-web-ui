@@ -57,7 +57,7 @@
     <ButtonIcon
       class="ItemSpec-remove"
       :style="{ 'grid-area': 'remove' }"
-      :src="host.icon('close-000000')"
+      :src="host.icon('close-000000').toUrl()"
       @click="$emit('click-remove', item)"
     />
   </div>

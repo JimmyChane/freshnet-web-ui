@@ -1,35 +1,44 @@
 <script>
-   export default { emits: ["callback-result"] };
+  export default { emits: ["callback-result"] };
 </script>
 
 <template>
-   <button class="PanelService-AddEvent-AddImage transition">
-      <img :src="host.icon('image-000000')" />
-      <input
-         type="file"
-         accept=".jpeg, .jpg, .png, .webp"
-         @change="(event) => $emit('change', event)"
-         multiple
-      />
-   </button>
+  <button class="PanelService-AddEvent-AddImage transition">
+    <img :src="host.icon('image-000000').toUrl()" />
+    <input
+      type="file"
+      accept=".jpeg, .jpg, .png, .webp"
+      @change="(event) => $emit('change', event)"
+      multiple
+    />
+  </button>
 </template>
 
 <style lang="scss" scoped>
-   .PanelService-AddEvent-AddImage {
-      position: relative;
-      border: none;
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      background: none;
-      border-radius: 50%;
-      cursor: pointer;
+  .PanelService-AddEvent-AddImage {
+    position: relative;
+    border: none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border-radius: 50%;
+    cursor: pointer;
 
-      &:hover {
-         background: hsla(0, 0%, 0%, 0.05);
-      }
+    &:hover {
+      background: hsla(0, 0%, 0%, 0.05);
+    }
 
+    --size: 2.8em;
+    width: var(--size);
+    height: var(--size);
+    min-width: var(--size);
+    min-height: var(--size);
+    max-width: var(--size);
+    max-height: var(--size);
+
+    & > * {
       --size: 2.8em;
       width: var(--size);
       height: var(--size);
@@ -37,34 +46,25 @@
       min-height: var(--size);
       max-width: var(--size);
       max-height: var(--size);
+    }
 
-      & > * {
-         --size: 2.8em;
-         width: var(--size);
-         height: var(--size);
-         min-width: var(--size);
-         min-height: var(--size);
-         max-width: var(--size);
-         max-height: var(--size);
-      }
+    :nth-child(1) {
+      z-index: 1;
+      padding: 0.7em;
+    }
+    :nth-child(2) {
+      z-index: 2;
 
-      :nth-child(1) {
-         z-index: 1;
-         padding: 0.7em;
-      }
-      :nth-child(2) {
-         z-index: 2;
+      position: absolute;
+      display: flex;
 
-         position: absolute;
-         display: flex;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
 
-         top: 0;
-         bottom: 0;
-         left: 0;
-         right: 0;
-
-         opacity: 0;
-         cursor: pointer;
-      }
-   }
+      opacity: 0;
+      cursor: pointer;
+    }
+  }
 </style>

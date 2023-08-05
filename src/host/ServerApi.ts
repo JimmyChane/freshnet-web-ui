@@ -1,23 +1,26 @@
-const config = require("@/../freshnet.config");
 import U from "@/U";
-import HostIcon from "./HostIcon";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
-interface RequestOptions {
+export interface RequestOptions {
   url: string;
   method: HttpMethod;
   headers: Record<string, any>;
   body?: BodyInit | null;
 }
-
-class HostRequest {
+export class Request {
   private bind: RequestOptions = {
     url: "",
     method: "GET",
     headers: {},
     body: undefined,
   };
+
+  serverUrl: string;
+
+  constructor(serverUrl: string) {
+    this.serverUrl = serverUrl;
+  }
 
   GET(): this {
     return this.method("GET");
@@ -32,7 +35,7 @@ class HostRequest {
     return this.method("DELETE");
   }
 
-  method(method: HttpMethod): this {
+  private method(method: HttpMethod): this {
     this.bind.method = method;
     return this;
   }
@@ -42,7 +45,7 @@ class HostRequest {
     return this;
   }
 
-  contentTypeJson(): this {
+  private contentTypeJson(): this {
     if (!U.isObject(this.bind.headers) || U.isArray(this.bind.headers)) {
       this.bind.headers = {};
     }
@@ -50,55 +53,42 @@ class HostRequest {
     return this;
   }
 
-  url(url: string): this {
-    this.bind.url = url;
+  path(path: string): this {
+    this.bind.url = `${this.serverUrl}/${path}`;
+    return this;
+  }
+
+  bodyJson(body: any): this {
+    this.bind.body = JSON.stringify(body);
     return this;
   }
 
   body(body: any): this {
-    this.bind.body = body ? JSON.stringify(body) : undefined;
-    return this;
-  }
-
-  bodyObject(body: any): this {
     this.bind.body = body;
     return this;
   }
 
-  async send(): Promise<HostResponse> {
+  async sendJson(): Promise<Response> {
     this.contentTypeJson();
-
-    let { method, url, headers, body } = this.bind;
-
-    if (url) url = `${config.hostApi}/${url}`;
-    if (window.localStorage.getItem("userToken")) {
-      headers.authorization = window.localStorage.getItem("userToken");
-    }
-
-    const response = await fetch(url, { method, headers, body });
-    const json = await response.json();
-    const hostResponse: HostResponse = new HostResponse(json);
-
-    const hostError = hostResponse.getError();
-    if (hostError) {
-      throw new Error(hostError);
-    }
-    return hostResponse;
+    return this.send();
   }
 
-  async sendNotJson(): Promise<HostResponse> {
-    let { method, url, headers, body } = this.bind;
+  async send(): Promise<Response> {
+    const url = this.bind.url;
+    const method = this.bind.method;
+    const headers = this.bind.headers;
+    const body = this.bind.body;
 
-    if (url) url = `${config.hostApi}/${url}`;
-    if (window.localStorage.getItem("userToken")) {
+    const token = window.localStorage.getItem("userToken");
+    if (token !== null) {
       headers.authorization = window.localStorage.getItem("userToken");
     }
 
     const response = await fetch(url, { method, headers, body });
     const json = await response.json();
-    const hostResponse: HostResponse = new HostResponse(json);
-
+    const hostResponse: Response = new Response(json);
     const hostError = hostResponse.getError();
+
     if (hostError) {
       throw new Error(hostError);
     }
@@ -106,7 +96,7 @@ class HostRequest {
   }
 }
 
-class HostResponse {
+export class Response {
   private apiJson: any = null;
 
   constructor(apiJson: any) {
@@ -182,29 +172,14 @@ class HostResponse {
   }
 }
 
-class HostApi {
-  get originApi(): string {
-    return config.hostApi;
+export default class ServerApi {
+  private serverUrl: string;
+
+  constructor(serverUrl: string) {
+    this.serverUrl = serverUrl;
   }
 
-  icon(name: string = "", ext: string = "svg"): string {
-    return HostIcon.url(name, ext);
-  }
-
-  res(url: string): string {
-    return `${config.hostRes}/${url}`;
-  }
-
-  cloudinary(param: { url: string } = { url: "" }): string {
-    let { url } = param;
-    url = U.trimId(url);
-    if (url === "") return "";
-    return `${config.cloudinaryRes}/${url}`;
-  }
-
-  request(): HostRequest {
-    return new HostRequest();
+  request(): Request {
+    return new Request(this.serverUrl);
   }
 }
-
-export default new HostApi();

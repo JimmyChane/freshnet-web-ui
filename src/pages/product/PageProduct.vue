@@ -16,16 +16,16 @@
   import WindowUpdateSpecifications from "./WindowUpdateSpecifications.vue";
 
   import PanelRight from "@/components/panel/PanelRight.vue";
-
-  import HostIcon from "@/host/HostIcon";
+  import Server from "@/host/Server";
+  import IconPack from "@/app/IconPack";
 
   export default {
     key: "product",
     title: "Products",
-    icon: {
-      light: new HostIcon("products-FFFFFF.svg"),
-      dark: new HostIcon("products-000000.svg"),
-    },
+    icon: new IconPack(
+      Server.resource.icon("products-FFFFFF"),
+      Server.resource.icon("products-000000"),
+    ),
 
     components: {
       Footer,

@@ -1,4 +1,4 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 
 interface CustomerContent {
   _id?: string;
@@ -9,23 +9,23 @@ interface CustomerContent {
 
 export default class Customer {
   static list(): Promise<any> {
-    return HostApi.request().url("customer/list").send();
+    return Server.request().path("customer/list").sendJson();
   }
 
   static add(content: CustomerContent = {}): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .POST()
-      .url("customer/add")
-      .body({ content })
-      .send();
+      .path("customer/add")
+      .bodyJson({ content })
+      .sendJson();
   }
 
   static remove(id: string = ""): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .DELETE()
-      .url("customer/remove")
-      .body({ content: { _id: id } })
-      .send();
+      .path("customer/remove")
+      .bodyJson({ content: { _id: id } })
+      .sendJson();
   }
 
   static updateNamePhoneNumber(
@@ -33,21 +33,21 @@ export default class Customer {
     name: string = "",
     phoneNumber: string = "",
   ): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("customer/update/namePhoneNumber")
-      .body({ content: { _id: id, name, phoneNumber } })
-      .send();
+      .path("customer/update/namePhoneNumber")
+      .bodyJson({ content: { _id: id, name, phoneNumber } })
+      .sendJson();
   }
 
   static updateDescription(
     id: string = "",
     description: string = "",
   ): Promise<any> {
-    return HostApi.request()
+    return Server.request()
       .PUT()
-      .url("customer/update/description")
-      .body({ content: { id, description } })
-      .send();
+      .path("customer/update/description")
+      .bodyJson({ content: { id, description } })
+      .sendJson();
   }
 }

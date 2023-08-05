@@ -24,7 +24,7 @@
     @click="$emit('click')"
   >
     <span class="transition">{{ title }}</span>
-    <img class="transition" :src="host.icon('close-FFFFFF')" />
+    <img class="transition" :src="host.icon('close-FFFFFF').toUrl()" />
   </button>
 </template>
 

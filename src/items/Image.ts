@@ -1,4 +1,4 @@
-import HostApi from "@/host/HostApi";
+import Server from "@/host/Server";
 import U from "@/U";
 import Filename from "../objects/Filename";
 
@@ -65,10 +65,10 @@ export default class Image {
         resPath = resPath.substring(1, resPath.length);
       if (resPath.startsWith("resource/")) {
         resPath = resPath.substring("resource/".length, resPath.length);
-        return HostApi.res(resPath);
+        return Server.res(resPath);
       }
 
-      return `${HostApi.originApi}/${path}`;
+      return `${Server.originApi}/${path}`;
     }
     if (method === Image.Method.Link) return path;
     if (method === Image.Method.StorageImage) {
@@ -77,7 +77,7 @@ export default class Image {
       const filename = new Filename(name);
       const dimensionQuery = Image.dimensionToQuery(width, height);
       const query = dimensionQuery.length ? `?${dimensionQuery}` : "";
-      return `${HostApi.originApi}/image/name/${filename.toString()}${query}`;
+      return `${Server.originApi}/image/name/${filename.toString()}${query}`;
     }
 
     return "";
