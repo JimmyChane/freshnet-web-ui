@@ -1,5 +1,8 @@
+import AppHost from "@/host/AppHost";
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
+
+import PageLogin from "@/pages/login/PageLogin.vue";
 
 Vue.use(VueRouter);
 
@@ -98,8 +101,14 @@ const routes: Array<RouteConfig> = [
         path: "service",
         component: () => import("@/pages/service/PageService.vue"),
       },
-      { path: "order", component: () => import("@/pages/order/PageOrder.vue") },
-      { path: "users", component: () => import("@/pages/users/PageUsers.vue") },
+      {
+        path: "order",
+        component: () => import("@/pages/order/PageOrder.vue"),
+      },
+      {
+        path: "users",
+        component: () => import("@/pages/users/PageUsers.vue"),
+      },
       {
         path: "database",
         component: () => import("@/pages/database/PageDatabase.vue"),
@@ -121,7 +130,7 @@ const routes: Array<RouteConfig> = [
   {
     path: "/login",
     name: "login",
-    component: () => import("@/pages/login/PageLogin.vue"),
+    component: PageLogin,
   },
   // print
   {
@@ -141,7 +150,7 @@ const routes: Array<RouteConfig> = [
 ];
 
 const router = new VueRouter({
-  mode: "hash",
+  mode: AppHost.ROUTER_MODE,
   routes,
 });
 
