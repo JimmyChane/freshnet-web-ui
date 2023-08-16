@@ -1,10 +1,33 @@
 import AppHost from "@/host/AppHost";
 import Vue from "vue";
-import VueRouter, { RouteConfig } from "vue-router";
+import VueRouter, { RouteConfig, NavigationGuard } from "vue-router";
 
 import PageLogin from "@/pages/login/PageLogin.vue";
 
 Vue.use(VueRouter);
+
+const beforeEnter: NavigationGuard = (to, from, next) => {
+  console.log({ to, from });
+
+  const { hash } = to;
+
+  let legacyPath = to.redirectedFrom ?? "";
+  if (legacyPath.startsWith("/#")) {
+    legacyPath = hash.substring(2);
+
+    if (!hash.startsWith("/")) {
+      legacyPath = `/${legacyPath}`;
+    }
+    if (legacyPath.length) {
+      next({ path: legacyPath, query: to.query });
+    }
+
+    return true;
+  }
+
+  next();
+  return false;
+};
 
 const routes: Array<RouteConfig> = [
   {
@@ -125,6 +148,26 @@ const routes: Array<RouteConfig> = [
     path: "/home",
     name: "home",
     component: () => import("@/pages/home/PageHome.vue"),
+    beforeEnter(to, from, next) {
+      if (AppHost.ROUTER_MODE === "history") {
+        const { hash } = to;
+
+        let legacyPath = to.redirectedFrom ?? "";
+        if (legacyPath.startsWith("/#")) {
+          legacyPath = hash.substring(2);
+
+          if (!hash.startsWith("/")) {
+            legacyPath = `/${legacyPath}`;
+          }
+          if (legacyPath.length) {
+            next({ path: legacyPath, query: to.query });
+          }
+          return;
+        }
+      }
+
+      next();
+    },
   },
   // login
   {
@@ -149,9 +192,6 @@ const routes: Array<RouteConfig> = [
   { path: "*", redirect: { path: "/error/404" } },
 ];
 
-const router = new VueRouter({
-  mode: AppHost.ROUTER_MODE,
-  routes,
-});
+const router = new VueRouter({ mode: AppHost.ROUTER_MODE, routes });
 
 export default router;

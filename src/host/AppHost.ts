@@ -2,8 +2,6 @@ import U from "@/U";
 import { RouterMode } from "vue-router";
 
 class AppHost {
-  private static readonly dev_port: string | number = 8080;
-
   private static parseOrigin(protocol: string, hostname: string, port: string) {
     port = this.parsePort(port);
     return port === "80"
@@ -26,7 +24,7 @@ class AppHost {
     return `${port}`;
   }
 
-  public readonly ROUTER_MODE: RouterMode = "hash";
+  public readonly ROUTER_MODE: RouterMode = "history";
 
   get origin() {
     return AppHost.parseOrigin(

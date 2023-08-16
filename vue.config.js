@@ -30,8 +30,6 @@ const AppendIdentifierPlugin = {
 
 const vueConfig = {
   transpileDependencies: true,
-  publicPath: "./",
-  productionSourceMap: false,
   devServer: { port: freshnetConfig.devPort },
   configureWebpack: {
     module: {
