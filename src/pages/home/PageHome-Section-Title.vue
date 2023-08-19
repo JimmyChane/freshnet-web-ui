@@ -1,25 +1,19 @@
-<script>
-   export default {
-      props: { title: { type: String, default: "" } },
-   };
-</script>
-
 <template>
-   <span class="PageHomeSection-title" v-if="title.length">{{ title }}</span>
+  <h4 class="PageHomeSection-title">
+    <slot />
+  </h4>
 </template>
 
 <style lang="scss" scoped>
-   .PageHomeSection-title {
-      font-weight: 500;
+  .PageHomeSection-title {
+    font-size: 2rem;
+    font-weight: 500;
 
-      font-size: 2rem;
-      color: black;
+    color: black;
 
-      margin-bottom: 1rem;
-
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-   }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 </style>

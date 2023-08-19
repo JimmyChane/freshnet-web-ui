@@ -57,22 +57,6 @@
 <template>
   <Section>
     <div class="HomeHeader">
-      <span class="HomeHeader-title">
-        <span class="HomeHeader-name">{{ companyTitle }}</span>
-        <a
-          :class="['HomeHeader-classification', 'HomeHeader-classification-a']"
-          v-if="addressHref.length"
-          :href="addressHref"
-          target="_blank"
-          >{{ companyCategory }}<br />Kuala Selangor District</a
-        >
-        <p class="HomeHeader-classification" v-else
-          >{{ companyCategory }}<br />Kuala Selangor District</p
-        >
-      </span>
-      <!-- <span class="HomeHeader-description"
-            >We sell notebooks, printers, repairs, and more</span
-         > -->
       <div class="HomeHeader-greet">
         <span class="HomeHeader-greetTitle">{{ greetTitle }}</span>
         <span class="HomeHeader-greetHelp">How can we help you?</span>
@@ -85,7 +69,7 @@
   .HomeHeader {
     column-gap: 1em;
     row-gap: 0.4em;
-    color: black;
+    color: white;
     text-align: center;
 
     z-index: 2;

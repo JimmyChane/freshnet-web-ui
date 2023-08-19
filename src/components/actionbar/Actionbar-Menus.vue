@@ -81,7 +81,7 @@
     flex-wrap: nowrap;
     flex-grow: 0;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
 
     .ActionBar2Menus-menu {
       display: flex;

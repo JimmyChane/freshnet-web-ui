@@ -5,6 +5,7 @@ import Server from "../host/Server";
 import TimeNowGetter from "@/tools/TimeNowGetter";
 import Notification from "@/tools/Notification";
 import PopupMenu from "@/app/PopupMenuOption";
+import U from "@/U";
 
 const keyGetter = new TimeNowGetter();
 
@@ -123,7 +124,7 @@ const init = (Stores: any) => {
     option = { image: null, thumbnails: [] },
   ) => {
     context.state.imageViewer.image = option.image;
-    context.state.imageViewer.thumbnails = option.thumbnails;
+    context.state.imageViewer.thumbnails = U.optArray(option.thumbnails);
     context.state.imageViewer.isShowing = true;
     context.commit("imageViewer", context.state.imageViewer);
   };

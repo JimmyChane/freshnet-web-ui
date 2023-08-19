@@ -52,9 +52,16 @@ class WorkingHours {
     return this.dateEnd;
   }
 
+  toStringTimeStart(): string {
+    return format(this.dateStart, this.formatString);
+  }
+  toStringTimeEnd(): string {
+    return format(this.dateEnd, this.formatString);
+  }
+
   toString(): string {
-    const timeStart = format(this.dateStart, this.formatString);
-    const timeEnd = format(this.dateEnd, this.formatString);
+    const timeStart = this.toStringTimeStart();
+    const timeEnd = this.toStringTimeEnd();
     return `${timeStart} - ${timeEnd}`;
   }
   isSameDay(date: Date): boolean {

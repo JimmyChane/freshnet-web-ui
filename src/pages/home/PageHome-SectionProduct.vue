@@ -145,55 +145,62 @@
     ]"
     :style="{ '--color0': color, '--color3': getColorMixed(color, 0.9) }"
   >
-    <div class="HomeSectionProduct-body">
+    <div class="HomeSectionProduct-card">
       <ImageView
         class="HomeSectionProduct-img"
         v-if="itemImage"
         :src="itemImage"
-        @click="
-          () =>
-            $router.push({
+        @click="() => $store.dispatch('imageViewerShow', { image: itemImage })"
+      />
+
+      <div class="HomeSectionProduct-content">
+        <div class="HomeSectionProduct-content-left">
+          <span
+            class="HomeSectionProduct-title"
+            :style="{ 'grid-area': 'title' }"
+            >{{ itemTitle }}</span
+          >
+          <div
+            class="HomeSectionProduct-footer"
+            :style="{ 'grid-area': 'footer' }"
+            v-if="products.length > 1"
+          >
+            <button
+              :class="[
+                'transition',
+                'HomeSectionProduct-footer-item',
+                `HomeSectionProduct-footer-item-${
+                  index === productIndex ? 'isSelected' : 'isDeselected'
+                }`,
+              ]"
+              v-for="(product, index) in products"
+              :key="product.id"
+              @click="() => (productIndex = index)"
+            />
+          </div>
+        </div>
+
+        <div class="HomeSectionProduct-content-right">
+          <router-link
+            class="HomeSectionProduct-view"
+            :style="{ 'grid-area': 'view' }"
+            :to="{
               path: '/product',
               query: { productId: itemId },
-            })
-        "
-      />
-
-      <span class="HomeSectionProduct-title">{{ itemTitle }}</span>
-
-      <button
-        class="HomeSectionProduct-arrow HomeSectionProduct-arrow-left transition"
-        @click="() => clickPrevious()"
-      >
-        <img :src="arrowIcon" />
-      </button>
-      <button
-        class="HomeSectionProduct-arrow HomeSectionProduct-arrow-right transition"
-        @click="() => clickNext()"
-      >
-        <img :src="arrowIcon" />
-      </button>
-    </div>
-
-    <div class="HomeSectionProduct-footer" v-if="products.length > 1">
-      <button
-        :class="[
-          'transition',
-          'HomeSectionProduct-footer-item',
-          `HomeSectionProduct-footer-item-${
-            index === productIndex ? 'isSelected' : 'isDeselected'
-          }`,
-        ]"
-        v-for="(product, index) in products"
-        :key="product.id"
-        @click="() => (productIndex = index)"
-      />
+            }"
+            >Detail</router-link
+          >
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
   .HomeSectionProduct {
+    width: 100%;
+    max-width: 30em;
+    height: 100%;
     text-decoration: none;
 
     display: flex;
@@ -202,169 +209,135 @@
     justify-content: center;
     gap: 0.7rem;
 
-    --header-height: 2.2em;
-    --footer-height: 3em;
+    .HomeSectionProduct-card {
+      --image-height: 16rem;
+      --image-inset-height: 8rem;
+      --content-height: 6rem;
+      --card-height: calc(var(--image-inset-height) + var(--content-height));
 
-    .HomeSectionProduct-body {
       width: 100%;
-      height: 30rem;
-      min-height: 30rem;
-      max-height: 30rem;
+      height: var(--card-height);
+      min-height: var(--card-height);
+      max-height: var(--card-height);
 
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
 
       position: relative;
-      background: var(--color0);
-      color: var(--color3);
+      color: black;
+
+      margin-top: calc(var(--card-height) / 2);
+      background: white;
       border-radius: 1.5em;
-      overflow: hidden;
+
+      box-shadow: 0 0 2em hsla(0, 0%, 0%, 0.2);
 
       .HomeSectionProduct-img {
-        --height: calc(100% - var(--header-height) - var(--footer-height));
+        --height: var(--image-height);
+
         height: var(--height);
         min-height: var(--height);
         max-height: var(--height);
-        overflow: hidden;
 
         width: 100%;
         object-fit: contain;
         flex-grow: 1;
-        padding: 1em;
-        padding: 3em;
         cursor: pointer;
 
-        border-radius: 1rem;
         filter: drop-shadow(0 0 1rem hsla(0, 0%, 0%, 0.2));
-      }
 
-      .HomeSectionProduct-title {
-        width: 100%;
-        height: var(--header-height);
-        min-height: var(--header-height);
-        max-height: var(--header-height);
-
-        font-size: 1.5em;
-        font-weight: 600;
-        text-align: center;
-        line-height: 1em;
-
-        display: flex;
-        flex-grow: 0;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-      }
-
-      .HomeSectionProduct-arrow {
-        --size: 3.5em;
-        --padding: 0.8em;
         position: absolute;
+        bottom: calc(var(--content-height) * 0.9);
+      }
+      .HomeSectionProduct-content {
+        width: 100%;
+        height: var(--content-height);
+        min-height: var(--content-height);
+        max-height: var(--content-height);
+
+        overflow: hidden;
+
+        padding: 1.5rem;
+        padding-top: 0;
+
         display: flex;
-        align-items: center;
-        justify-content: center;
+        flex-direction: row;
+        align-items: flex-end;
+        justify-content: space-between;
 
-        padding: var(--padding);
-        border-radius: 50%;
-        cursor: pointer;
-        background: none;
-        border: none;
+        .HomeSectionProduct-content-left {
+          width: 100%;
+          gap: 0.5rem;
+          flex-grow: 1;
 
-        width: var(--size);
-        height: var(--size);
-        min-width: var(--size);
-        min-height: var(--size);
-        max-width: var(--size);
-        max-height: var(--size);
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          justify-content: flex-end;
 
-        & > * {
-          width: calc(var(--size) - calc(var(--padding) * 2));
-          height: calc(var(--size) - calc(var(--padding) * 2));
+          .HomeSectionProduct-title {
+            font-size: 1.5em;
+            font-weight: 600;
+            text-align: start;
+            line-height: 1em;
+
+            display: flex;
+            flex-grow: 0;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+          }
+          .HomeSectionProduct-footer {
+            gap: 0.3em;
+            display: flex;
+            flex-grow: 0;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: center;
+
+            .HomeSectionProduct-footer-item {
+              --width: 1em;
+              --height: 1em;
+              width: var(--width);
+              min-width: var(--width);
+              max-width: var(--width);
+              height: var(--height);
+              min-height: var(--height);
+              max-height: var(--height);
+
+              border-radius: var(--width);
+              border: none;
+              transition-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+            }
+            .HomeSectionProduct-footer-item-isSelected {
+              --width: 1.8em;
+              background: var(--color3);
+              background: black;
+            }
+            .HomeSectionProduct-footer-item-isDeselected {
+              background: var(--color3);
+              background: black;
+              cursor: pointer;
+            }
+          }
         }
-
-        &:hover {
-          background: hsla(0, 0%, 0%, 0.05);
+        .HomeSectionProduct-content-right {
+          display: grid;
+          place-items: center;
+          .HomeSectionProduct-view {
+            min-width: 6.5rem;
+            padding: 0.8rem;
+            border-radius: 5rem;
+            background: var(--primary-color);
+            border: none;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+          }
         }
-        &:focus {
-          transform: scale(0.9);
-        }
-      }
-      .HomeSectionProduct-arrow-left {
-        top: calc(50% - calc(var(--size) / 2));
-        left: 1em;
-        & > * {
-          transform: rotate(90deg) translateY(5%);
-        }
-      }
-      .HomeSectionProduct-arrow-right {
-        top: calc(50% - calc(var(--size) / 2));
-        right: 1em;
-        & > * {
-          transform: rotate(270deg) translateY(5%);
-        }
-      }
-    }
-    .HomeSectionProduct-footer {
-      width: 100%;
-      height: var(--footer-height);
-      min-height: var(--footer-height);
-      max-height: var(--footer-height);
-
-      display: flex;
-      flex-grow: 0;
-      flex-direction: row;
-      align-items: flex-start;
-      justify-content: center;
-
-      .HomeSectionProduct-footer-item {
-        width: var(--size);
-        height: var(--size);
-        min-width: var(--size);
-        min-height: var(--size);
-        max-width: var(--size);
-        max-height: var(--size);
-
-        border-radius: 50%;
-        border: none;
-      }
-      .HomeSectionProduct-footer-item-isSelected {
-        transform: scale(1.5);
-        margin-left: calc(var(--size) * 0.33);
-        margin-right: calc(var(--size) * 0.33);
-        background: var(--color3);
-        background: black;
-      }
-      .HomeSectionProduct-footer-item-isDeselected {
-        background: var(--color3);
-        background: black;
-        cursor: pointer;
-        &:hover {
-          box-shadow: 0px 0px 0.5rem black;
-        }
-      }
-    }
-  }
-  .HomeSectionProduct-isThin {
-    width: 100%;
-    height: 100%;
-    font-size: 0.9rem;
-    .HomeSectionProduct-footer {
-      gap: 0.3em;
-      .HomeSectionProduct-footer-item {
-        --size: 14px;
-      }
-    }
-  }
-  .HomeSectionProduct-isWide {
-    width: 100%;
-    height: 100%;
-    font-size: 1.2rem;
-    .HomeSectionProduct-footer {
-      gap: 0.5em;
-      .HomeSectionProduct-footer-item {
-        --size: 16px;
       }
     }
   }
