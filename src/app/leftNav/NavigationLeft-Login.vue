@@ -6,7 +6,7 @@
       computed: {
          user: (c) => c.loginStore.getters.user,
          userName: (c) => c.user.name,
-         isLoginPage: (c) => c.$root.currentPageKey === "login",
+         isLoginPage: (c) => c.store.getters.currentPageKey === "login",
       },
       watch: {
          $route() {
@@ -79,7 +79,7 @@
          }
          .LeftNavigationLogin-loggedIn-body {
             border-radius: 6px;
-            background-color: white;
+            background: white;
             display: flex;
             flex-direction: row;
             align-items: center;
@@ -95,11 +95,10 @@
 
                --accent-color: #ca4242;
 
-               background-color: var(--primary-color);
-               background-color: hsla(0, 0%, 0%, 0.8);
+               background: hsla(0, 0%, 0%, 0.8);
 
                &:hover {
-                  background-color: var(--accent-color);
+                  background: var(--accent-color);
                }
             }
          }

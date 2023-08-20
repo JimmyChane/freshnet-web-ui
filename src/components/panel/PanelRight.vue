@@ -11,7 +11,7 @@
          titleEmpty: { type: String, default: "Select to view" },
       },
       computed: {
-         isWide: (c) => c.$root.window.innerWidth > c.wideWidthThreshold,
+         isWide: (c) => c.store.getters.window.innerWidth > c.wideWidthThreshold,
 
          drawerEdge: (c) => Drawer.Edge.RIGHT,
          drawerMode: (c) => {
@@ -92,7 +92,7 @@
 
       .PanelRight-empty {
          z-index: 1;
-         background-color: hsla(0, 0%, 0%, 0.6);
+         background: hsla(0, 0%, 0%, 0.6);
 
          display: flex;
          flex-direction: column;

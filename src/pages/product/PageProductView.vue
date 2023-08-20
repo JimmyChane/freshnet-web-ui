@@ -1,14 +1,14 @@
 <script>
    import ViewerProduct from "@/pages/product/viewerProduct/ViewerProduct.vue";
    import LoadingDots from "@/components/LoadingDots.vue";
-   import AppLayout from "@/tools/AppLayout.js";
+   import AppLayout from "@/tools/AppLayout";
 
    export default {
       components: { ViewerProduct, LoadingDots },
       data: (c) => ({ product: null }),
       computed: {
          isLoading: (context) => context.productStore.getters.isLoading,
-         isOver1200px: (context) => context.$root.window.innerWidth > 1200,
+         isOver1200px: (context) => context.store.getters.window.innerWidth > 1200,
          productId: (context) => context.$route.query.productId,
       },
       watch: {
@@ -17,8 +17,8 @@
          },
       },
       mounted() {
-         this.$root.appLayout.setLayout(AppLayout.Layout.FULL);
-         this.$root.navigation.disableNavigationDrawer();
+         this.store.getters.appLayout.setLayout(AppLayout.Layout.FULL);
+         this.store.getters.navigation.disableNavigationDrawer();
 
          this.invalidate();
       },

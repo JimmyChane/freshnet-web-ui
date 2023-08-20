@@ -30,7 +30,7 @@
 		width: 100%;
 		padding: 1rem;
 		gap: 1.2rem;
-		background-color: var(--card-background-color);
+		background: var(--card-background-color);
 
 		display: flex;
 		flex-direction: column;

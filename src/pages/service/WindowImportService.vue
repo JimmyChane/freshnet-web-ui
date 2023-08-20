@@ -1,5 +1,5 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import TypeSelector from "@/components/selector/TypeSelector.vue";
    import State from "@/items/ServiceState";
    import ServiceState from "@/items/ServiceState";
@@ -12,7 +12,7 @@
 
    export default {
       components: {
-         WindowAction,
+         PanelAction,
          TypeSelector,
          ServiceState,
          LayoutFindCustomer,
@@ -22,7 +22,9 @@
          BodyBelongings,
          BodyLine,
       },
-      props: { isShowing: { type: Boolean, default: false } },
+      props: {
+         popupWindow: { type: Object },
+      },
       data: (c) => ({
          ServiceState,
 
@@ -34,11 +36,13 @@
          },
       }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+
          user: (c) => c.loginStore.getters.user,
          nameUserType: (c) => {
             if (c.user.isTypeAdmin()) return "Admin";
             if (c.user.isTypeStaff()) return "Staff";
-            return "unknowna";
+            return "unknown";
          },
 
          stateMenus: (c) => {
@@ -83,10 +87,6 @@
             return this.data;
          },
 
-         onCancel() {
-            this.$emit("click-cancel");
-            this.resetData();
-         },
          onOk() {
             this.data = this.trimData();
 
@@ -94,7 +94,6 @@
                this.store.dispatch("snackbarShow", "Date & Time Not Set");
                return;
             }
-
             if (!this.data.state) {
                this.store.dispatch("snackbarShow", "State Not Set");
                return;
@@ -103,8 +102,8 @@
             this.serviceStore
                .dispatch("importItem", { data: this.data })
                .then((service) => {
-                  this.$emit("click-ok", service);
-                  this.resetData();
+                  this.popupWindow.showService(service);
+                  this.popupWindow.close();
                })
                .catch((error) => {
                   this.store.dispatch(
@@ -129,14 +128,14 @@
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       title="Import Service"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
       :isClickable="!serviceStore.getters.isFetching"
       @click-ok="onOk()"
-      @click-cancel="onCancel()"
-      @click-dismiss="() => $emit('click-dismiss')"
+      @click-cancel="() => popupWindow.close()"
+      @click-dismiss="() => popupWindow.close()"
    >
       <div class="WindowService-body">
          <BodyUser
@@ -146,20 +145,13 @@
 
          <div class="WindowService-datetime">
             <span class="WindowService-title">Creation Date & Time</span>
-            <div class="WindowService-datetime-body">
-               <input
-                  class="WindowService-datetime-input"
-                  ref="DateTimeInput"
-                  type="datetime-local"
-               />
-            </div>
+            <div><input ref="DateTimeInput" type="datetime-local" /></div>
          </div>
          <BodyLine />
 
          <div class="WindowService-state">
             <span class="WindowService-title">States</span>
             <TypeSelector
-               class="WindowEvent-type"
                :items="stateMenus"
                :defaultKey="data.state"
                @click-item-key="(key) => (data.state = key)"
@@ -192,7 +184,7 @@
             ref="BelongingListEdit"
          />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>
@@ -203,7 +195,6 @@
       flex-direction: column;
       gap: 40px;
 
-      // Abstract
       .WindowService-title {
          font-size: 1.1rem;
          font-weight: 600;
@@ -215,15 +206,10 @@
          flex-direction: column;
          align-items: flex-start;
 
-         .WindowService-datetime-title {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: hsl(0, 0%, 50%);
-         }
-         .WindowService-datetime-body {
+         :nth-child(2) {
             display: flex;
             flex-direction: column;
-            .WindowService-datetime-input {
+            & > * {
                border: 1px solid hsla(0, 0%, 0%, 0.1);
             }
          }
@@ -233,15 +219,6 @@
          display: flex;
          flex-direction: column;
          align-items: flex-start;
-
-         .WindowService-state-title {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: hsl(0, 0%, 50%);
-         }
-         .WindowEvent-type {
-            width: 100%;
-         }
       }
       .WindowService-findCustomers {
          width: 100%;

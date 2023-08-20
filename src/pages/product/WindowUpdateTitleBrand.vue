@@ -1,16 +1,17 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import Selector3 from "@/components/selector/Selector3.vue";
    import Input from "@/components/Input.vue";
 
    export default {
-      components: { WindowAction, Selector3, Input },
+      components: { PanelAction, Selector3, Input },
       props: {
-         isShowing: { type: Boolean, default: false },
-         input: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
-      data: (c) => ({ data: null }),
+      data: (c) => ({ data: { title: "", brandId: "" } }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         input: (c) => c.popupWindow.input,
          product: (c) => c.input?.product ?? "",
          title: (c) => c.data?.title ?? "",
          brandId: (c) => c.data?.brandId ?? "",
@@ -37,26 +38,9 @@
             });
          },
       },
-      watch: {
-         input() {
-            this.clear();
-            if (!this.input) {
-               this.data = null;
-               return;
-            }
-
-            this.data = {
-               title: this.input.title,
-               brandId: this.input.brandId,
-            };
-         },
-      },
       methods: {
-         clear() {
-            this.data = { title: "", brandId: "" };
-         },
          clickConfirm() {
-            let output = {
+            const output = {
                product: this.product,
                title: this.title,
                brandId: this.brandId,
@@ -67,23 +51,26 @@
                return;
             }
 
-            this.$emit("click-confirm", output) && this.clear();
+            this.popupWindow.onConfirm(output);
          },
       },
       mounted() {
-         this.clear();
+         this.data = {
+            title: this.input.title,
+            brandId: this.input.brandId,
+         };
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowUpdateTitleBrand"
       title="Update Title &amp; Brand"
       :isShowing="isShowing"
-      @click-dismiss="$emit('click-dismiss') && clear()"
-      @click-cancel="$emit('click-cancel') && clear()"
-      @click-ok="clickConfirm()"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => clickConfirm()"
    >
       <div class="WindowUpdateTitleBrand-body">
          <Input
@@ -104,7 +91,7 @@
             "
          />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

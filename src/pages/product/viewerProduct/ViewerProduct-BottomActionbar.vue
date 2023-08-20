@@ -101,6 +101,7 @@
          :titleHeader="whatsappTypeTitle"
          :titleContent="whatsappTitle"
          primaryColorHex="#4caf50"
+         :toShrink="true"
       />
       <ButtonContact
          class="ViewerProduct-BottomActionbar-call"
@@ -131,7 +132,6 @@
       flex-wrap: nowrap;
       align-items: center;
       justify-content: flex-end;
-      padding: 0.5rem 1rem;
       padding: 1rem;
    }
    .ViewerProduct-BottomActionbar[isButtonTopHidden="true"] {

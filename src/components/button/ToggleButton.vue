@@ -55,30 +55,30 @@
       --color-unselected-hover: hsl(0, 40%, 40%);
 
       border: 2px solid var(--color-unselected);
-      background-color: var(--color-unselected-background);
+      background: var(--color-unselected-background);
       .ToggleButton-object {
-         background-color: var(--color-unselected);
+         background: var(--color-unselected);
          transform: translateX(0%);
       }
       &:hover {
          border: 2px solid var(--color-unselected-hover);
          .ToggleButton-object {
-            background-color: var(--color-unselected-hover);
+            background: var(--color-unselected-hover);
          }
       }
    }
 
    .ToggleButton-isToggled {
       border: 2px solid var(--color-selected);
-      background-color: var(--color-selected-background);
+      background: var(--color-selected-background);
       .ToggleButton-object {
-         background-color: var(--color-selected);
+         background: var(--color-selected);
          transform: translateX(20px);
       }
       &:hover {
          border: 2px solid var(--color-selected-hover);
          .ToggleButton-object {
-            background-color: var(--color-selected-hover);
+            background: var(--color-selected-hover);
          }
       }
    }

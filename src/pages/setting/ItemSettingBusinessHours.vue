@@ -1,6 +1,6 @@
 <script>
    import U from "@/U";
-   import SettingModule from "@/items/Setting.js";
+   import SettingModule from "@/items/Setting";
    import ItemSettingHeader from "./ItemSetting-Header.vue";
    import BusinessHoursItem from "./ItemSettingBusinessHours-Item.vue";
 

@@ -1,19 +1,17 @@
 <script>
-   import PopupWindow from "@/components/window/PopupWindow.vue";
-   import Actionbar from "@/components/actionbar/Actionbar.vue";
-   import SearchInput from "@/components/SearchInput.vue";
-
+   import PanelSearch from "@/components/panel/PanelSearch.vue";
    import ItemService from "./item-service/ItemService.vue";
 
-   import WindowSearch from "@/components/WindowSearch.vue";
-
    export default {
-      components: { WindowSearch, PopupWindow, Actionbar, SearchInput, ItemService },
+      components: { PanelSearch, ItemService },
       props: {
-         isShowing: { type: Boolean, default: false },
-         items: { type: Array, default: () => [] },
+         popupWindow: { type: Object },
       },
       data: (c) => ({ search: "", results: [] }),
+      computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         items: (c) => c.popupWindow.items,
+      },
       watch: {
          search() {
             this.invalidate();
@@ -53,7 +51,9 @@
 
             if (filters.length > 10) {
                const valueToPass = countHighest / 2;
-               filters = filters.filter((filter) => filter.count >= valueToPass);
+               filters = filters.filter(
+                  (filter) => filter.count >= valueToPass,
+               );
             }
 
             return filters
@@ -61,23 +61,22 @@
                .map((filter) => filter.item);
          },
          clickItem(item) {
-            this.$emit("click-dismiss");
-            this.$emit("click-item", item);
+            this.popupWindow.close();
+            this.popupWindow.clickItem(item);
          },
          clickDismiss() {
-            this.$emit("click-dismiss");
+            this.popupWindow.close();
          },
       },
    };
 </script>
 
 <template>
-   <WindowSearch
-      class="WindowSearch"
+   <PanelSearch
       :isShowing="isShowing"
       placeholder="Search services"
       @input-text="(text) => (search = text)"
-      @click-dismiss="() => clickDismiss()"
+      @click-dismiss="() => popupWindow.close()"
    >
       <ItemService
          v-for="item in results"
@@ -85,5 +84,5 @@
          :item="item"
          @click="() => clickItem(item)"
       />
-   </WindowSearch>
+   </PanelSearch>
 </template>

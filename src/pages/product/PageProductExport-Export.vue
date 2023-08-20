@@ -6,7 +6,7 @@
 
 <style lang="scss" scoped>
    .ExportExport {
-      background-color: #3e99cd;
+      background: #3e99cd;
       padding: 0.6rem 1.8rem;
       border-radius: 0.5rem;
       color: white;
@@ -16,7 +16,7 @@
       cursor: pointer;
 
       &:hover {
-         background-color: #257bad;
+         background: #257bad;
       }
    }
 </style>

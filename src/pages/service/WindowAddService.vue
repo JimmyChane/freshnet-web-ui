@@ -1,5 +1,5 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import LayoutFindCustomer from "./LayoutFindCustomer.vue";
    import BodyUser from "./WindowUpdateService-user.vue";
    import BodyCustomer from "./WindowUpdateService-customer.vue";
@@ -9,7 +9,7 @@
 
    export default {
       components: {
-         WindowAction,
+         PanelAction,
          LayoutFindCustomer,
          BodyUser,
          BodyCustomer,
@@ -17,7 +17,9 @@
          BodyBelongings,
          BodyLine,
       },
-      props: { isShowing: { type: Boolean, default: false } },
+      props: {
+         popupWindow: { type: Object },
+      },
       data: (c) => ({
          nameOfUser: "unknown",
          data: {
@@ -28,6 +30,8 @@
          },
       }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+
          user: (c) => c.loginStore.getters.user,
          userIsDefault: (c) => c.user.isDefault() || c.user.isDefault(),
       },
@@ -38,10 +42,6 @@
                this.nameOfUser = this.userIsDefault ? "" : user.name;
             }
          },
-      },
-      mounted() {
-         this.onReset();
-         this.onUser();
       },
       methods: {
          clickCustomerSuggestion(customer) {
@@ -73,47 +73,72 @@
             };
 
             if (this.userIsDefault && !this.nameOfUser.trim()) {
-               this.store.dispatch("snackbarShow", "You must specify your name");
-            } else if (!data.customer.name) {
-               this.store.dispatch("snackbarShow", "You must specify customer name");
-            } else if (!data.description) {
-               this.store.dispatch("snackbarShow", "You must specify description");
-            } else {
-               if (this.userIsDefault && this.nameOfUser.trim()) {
-                  data.nameOfUser = this.nameOfUser;
-               }
+               this.store.dispatch(
+                  "snackbarShow",
+                  "You must specify your name",
+               );
+               return;
+            }
+            if (!data.customer.name) {
+               this.store.dispatch(
+                  "snackbarShow",
+                  "You must specify customer name",
+               );
+               return;
+            }
+            if (!data.description) {
+               this.store.dispatch(
+                  "snackbarShow",
+                  "You must specify description",
+               );
+               return;
+            }
+            if (this.userIsDefault && this.nameOfUser.trim()) {
+               data.nameOfUser = this.nameOfUser;
+            }
 
-               this.$emit("callback-create", data);
+            const accept = () => {
                this.onReset();
                this.onUser();
-            }
+               this.popupWindow.close();
+            };
+            const reject = () => {};
+            this.popupWindow.onConfirm(accept, reject, data);
          },
 
          focus() {
             this.$refs.bodyCustomer.focus();
          },
       },
+      mounted() {
+         this.onReset();
+         this.onUser();
+         this.focus();
+      },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       title="Add Service"
       :isShowing="isShowing"
       :isLoading="serviceStore.getters.isFetching"
       :isClickable="!serviceStore.getters.isFetching"
-      @click-ok="onCreate()"
+      @click-ok="() => onCreate()"
       @click-cancel="
          () => {
-            $emit('callback-cancel');
+            popupWindow.close();
             onUser();
             onReset();
          }
       "
-      @click-dismiss="() => $emit('callback-dismiss')"
+      @click-dismiss="() => popupWindow.close()"
    >
       <div class="WindowService-body">
-         <BodyUser :name="nameOfUser" @input-name="(value) => (nameOfUser = value)" />
+         <BodyUser
+            :name="nameOfUser"
+            @input-name="(value) => (nameOfUser = value)"
+         />
 
          <BodyCustomer
             ref="bodyCustomer"
@@ -136,9 +161,12 @@
          />
          <BodyLine />
 
-         <BodyBelongings :belongings="data.belongings" ref="BelongingListEdit" />
+         <BodyBelongings
+            :belongings="data.belongings"
+            ref="BelongingListEdit"
+         />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

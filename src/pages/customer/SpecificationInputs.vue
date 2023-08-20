@@ -1,93 +1,93 @@
 <script>
-   import ItemSpec from "./ItemSpec.vue";
-   import Selector4 from "@/components/selector/Selector4.vue";
-   import ProductSpecType from "@/items/ProductSpecType.js";
+  import ItemSpec from "./ItemSpecificationInput.vue";
+  import Selector4 from "@/components/selector/Selector4.vue";
+  import { Type } from "@/items/Specification";
 
-   export default {
-      components: { ItemSpec, Selector4 },
-      props: {
-         items: { type: Array, default: () => [] },
-      },
-      data: (c) => ({ list: [] }),
-      computed: {
-         KeyNone: (c) => "none",
-         SpecKey: (c) => ProductSpecType.Key,
-         SpecKeys: (c) => [
-            c.KeyNone,
-            ...Object.keys(c.SpecKey).map((key) => c.SpecKey[key]),
-         ],
-         SpecificationMenus: (c) => {
-            return [
-               { key: c.KeyNone, title: "None" },
-               ...c.specificationStore.getters.items.map((item) => item),
-            ]
-               .map((item) => ({
-                  key: item.key,
-                  title: item.title,
-                  icon: item.icon?.toUrl() ?? "",
-               }))
-               .filter((menu) => {
-                  if (menu.key === "none") return true;
+  export default {
+    components: { ItemSpec, Selector4 },
+    props: {
+      items: { type: Array, default: () => [] },
+    },
+    data: (c) => ({ list: [] }),
+    computed: {
+      KeyNone: (c) => "none",
+      SpecKey: (c) => Type.Key,
+      SpecKeys: (c) => [
+        c.KeyNone,
+        ...Object.keys(c.SpecKey).map((key) => c.SpecKey[key]),
+      ],
+      SpecificationMenus: (c) => {
+        return [
+          { key: c.KeyNone, title: "None" },
+          ...c.specificationStore.getters.items.map((item) => item),
+        ]
+          .map((item) => ({
+            key: item.key,
+            title: item.title,
+            icon: item.icon?.toUrl() ?? "",
+          }))
+          .filter((menu) => {
+            if (menu.key === "none") return true;
 
-                  const dataSpecification = c.list.find((dataSpec) => {
-                     return dataSpec.typeKey === menu.key;
-                  });
-                  return !dataSpecification;
-               })
-               .sort(
-                  (menu1, menu2) =>
-                     c.SpecKeys.indexOf(menu1.key) -
-                     c.SpecKeys.indexOf(menu2.key),
-               );
-         },
+            const dataSpecification = c.list.find((dataSpec) => {
+              return dataSpec.typeKey === menu.key;
+            });
+            return !dataSpecification;
+          })
+          .sort((menu1, menu2) => {
+            return (
+              c.SpecKeys.indexOf(menu1.key) - c.SpecKeys.indexOf(menu2.key)
+            );
+          });
       },
-      watch: {
-         items() {
-            this.list = this.items;
-         },
+    },
+    watch: {
+      items() {
+        this.list = this.items;
       },
-      methods: {
-         addItem(item) {
-            this.list.push(item);
-         },
-         removeItem(item) {
-            this.list.splice(this.list.indexOf(item), 1);
-         },
+    },
+    methods: {
+      addItem(item) {
+        this.list.push(item);
       },
-      mounted() {
-         this.specificationStore.dispatch("refresh");
+      removeItem(item) {
+        this.list.splice(this.list.indexOf(item), 1);
       },
-   };
+    },
+    mounted() {
+      this.specificationStore.dispatch("refresh");
+    },
+  };
 </script>
 
 <template>
-   <div class="SpecificationInputs">
-      <div class="SpecificationInputs-contents">
-         <ItemSpec
-            v-for="item in list"
-            :key="item.key"
-            :item="item"
-            @input-content="(value) => (item.content = value)"
-            @click-remove="(item) => removeItem(item)"
-         />
-      </div>
-      <Selector4
-         :menus="SpecificationMenus"
-         @click-menu="(menu) => addItem({ content: '', typeKey: menu.key })"
+  <div class="SpecificationInputs">
+    <div class="SpecificationInputs-contents">
+      <ItemSpec
+        v-for="item in list"
+        :key="item.key"
+        :item="item"
+        @input-content="(value) => (item.content = value)"
+        @click-remove="(item) => removeItem(item)"
       />
-   </div>
+    </div>
+    <Selector4
+      :menus="SpecificationMenus"
+      @click-menu="(menu) => addItem({ content: '', typeKey: menu.key })"
+    />
+  </div>
 </template>
 
 <style lang="scss" scoped>
-   .SpecificationInputs {
+  .SpecificationInputs {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    --primary-color: hsl(0, 0%, 30%);
+    .SpecificationInputs-contents {
       display: flex;
       flex-direction: column;
-      gap: 1em;
-      --primary-color: hsl(0, 0%, 30%);
-      .SpecificationInputs-contents {
-         display: flex;
-         flex-direction: column;
-         gap: 0.2em;
-      }
-   }
+      gap: 0.3em;
+    }
+  }
 </style>

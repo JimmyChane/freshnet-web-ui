@@ -52,13 +52,13 @@
       <div class="LeftNavGroup1-group2s" v-if="hasGroup2s">
          <div
             class="LeftNavGroup1-sectionParent"
-            v-for="group2 in group2s"
+            v-for="(group2, index) in group2s"
             :key="group2.key"
          >
             <LeftNavGroup2 :group2="group2" />
             <div
                class="LeftNavGroup1-sectionParent-line"
-               v-if="group2s.indexOf(group2) < group2s.length - 1"
+               v-if="index < group2s.length - 1"
             ></div>
          </div>
       </div>
@@ -85,7 +85,7 @@
             .LeftNavGroup1-sectionParent-line {
                width: calc(100% - 1.2rem);
                min-height: 1px;
-               background-color: var(--primary-color);
+               background: var(--primary-color);
                opacity: 0.2;
                margin: 0.8rem 0;
             }
@@ -185,8 +185,6 @@
 
       &-isSelected {
          width: 100%;
-         // margin-bottom: 1rem;
-         // margin-top: 1rem;
          .LeftNavGroup1-group2s {
             display: flex;
          }

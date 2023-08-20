@@ -33,8 +33,8 @@
       @mouseover="(x) => $emit('mouseover', x)"
       @mouseleave="(x) => $emit('mouseleave', x)"
    >
-      <Icon class="ButtonIcon-icon" :src="src" :alt="alt"
-   /></router-link>
+      <Icon class="ButtonIcon-icon" :src="src" :alt="alt" />
+   </router-link>
 
    <button
       class="ButtonIcon transition"

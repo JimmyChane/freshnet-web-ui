@@ -8,7 +8,7 @@
 
 <template>
    <div class="ExportLayoutOption">
-      <span class="ExportLayoutOption-title">{{ title }}</span>
+      <span>{{ title }}</span>
    </div>
 </template>
 

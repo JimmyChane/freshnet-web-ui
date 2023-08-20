@@ -31,7 +31,7 @@
       padding: 0.15em 0.3em;
       border-radius: 0.15em;
       line-height: 1;
-      background-color: var(--primary-color);
+      background: var(--primary-color);
 
       .LabelCount-icon {
          width: 1em;
@@ -55,7 +55,7 @@
          margin: 0 0.45em;
          min-width: 1px;
          min-height: 0.8em;
-         background-color: hsla(0, 0%, 100%, 0.3);
+         background: hsla(0, 0%, 100%, 0.3);
       }
    }
 </style>

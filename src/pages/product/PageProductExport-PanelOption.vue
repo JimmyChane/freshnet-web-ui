@@ -16,7 +16,7 @@
    .PanelOption {
       width: 100%;
       height: 100%;
-      background-color: white;
+      background: white;
       gap: 1rem;
       padding: 1rem;
       padding-bottom: 4rem;

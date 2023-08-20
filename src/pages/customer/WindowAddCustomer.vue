@@ -1,15 +1,20 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import Input from "@/components/Input.vue";
    import TextArea from "@/components/InputTextArea.vue";
    import Customer from "@/items/Customer";
 
    export default {
-      components: { WindowAction, Input, TextArea },
-      emits: ["click-dismiss", "click-cancel", "click-ok"],
-      props: { isShowing: { type: Boolean, default: false } },
-      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
+      components: { PanelAction, Input, TextArea },
+      props: {
+         popupWindow: { type: Object },
+      },
+      data: (c) => ({
+         Requirement: Customer.Requirement,
+         data: { name: "", phoneNumber: "", description: "" },
+      }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
       },
@@ -20,26 +25,7 @@
             if (CustomerName) CustomerName.focus();
          },
       },
-      created() {
-         this.resetData();
-      },
-      mounted() {
-         this.resetData();
-      },
       methods: {
-         resetData(delay = 0) {
-            if (delay) {
-               setTimeout(() => this.resetData(0), delay);
-               return;
-            }
-
-            this.data = {
-               name: "",
-               phoneNumber: "",
-               description: "",
-            };
-         },
-
          clickOk() {
             this.data.name = this.data.name.trim();
             this.data.phoneNumber = this.data.phoneNumber.trim();
@@ -50,7 +36,9 @@
                   "snackbarShow",
                   'You must specify the "Name"',
                );
-            } else if (
+               return;
+            }
+            if (
                this.Requirement.phoneNumber.isRequired &&
                !this.data.phoneNumber
             ) {
@@ -58,7 +46,9 @@
                   "snackbarShow",
                   'You must specify the "Phone Number"',
                );
-            } else if (
+               return;
+            }
+            if (
                this.Requirement.description.isRequired &&
                !this.data.description
             ) {
@@ -66,33 +56,26 @@
                   "snackbarShow",
                   'You must specify the "Description"',
                );
-            } else {
-               this.customerStore
-                  .dispatch("addItem", this.data)
-                  .then((item) => {
-                     this.$emit("click-ok", { item });
-                     this.resetData(700);
-                  });
+               return;
             }
+
+            this.customerStore
+               .dispatch("addItem", this.data)
+               .then((item) => this.popupWindow.close());
          },
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowAddCustomer"
       title="Add New Customer"
       :isShowing="isShowing"
       :isLoading="isLoading"
       :isClickable="isClickable"
-      @click-dismiss="$emit('click-dismiss')"
-      @click-cancel="
-         () => {
-            $emit('click-cancel');
-            resetData(700);
-         }
-      "
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
       @click-ok="clickOk()"
    >
       <div class="WindowAddCustomer-body">
@@ -120,7 +103,7 @@
             @input="(comp) => (data.description = comp.value)"
          />
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

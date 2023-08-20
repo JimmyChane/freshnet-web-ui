@@ -1,5 +1,5 @@
 <script>
-   import Contact from "./Footer_Contact.vue";
+   import Contact from "./Footer-Contact.vue";
    import Setting from "@/items/Setting";
 
    export default {
@@ -111,8 +111,6 @@
 
 <style lang="scss" scoped>
    .Footer {
-      // --primary-color: #b6c4ce;
-      // --primary-color: black;
       --primary-color: hsl(0, 0%, 20%);
 
       width: 100%;
@@ -124,8 +122,7 @@
 
       text-decoration: none;
       background: black;
-      background-color: var(--primary-color);
-      // color: #1b303d;
+      background: var(--primary-color);
       color: white;
 
       display: flex;

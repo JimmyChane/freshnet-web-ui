@@ -1,37 +1,30 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import WindowSection from "./WindowSection.vue";
    import SpecificationInputs from "./SpecificationInputs.vue";
    import Customer from "@/items/Customer";
-   import CustomerDeviceSpecification from "@/items/CustomerDeviceSpecification.js";
+   import CustomerDeviceSpecification from "@/items/CustomerDeviceSpecification";
+   import U from "@/U";
 
    export default {
-      components: { WindowAction, WindowSection, SpecificationInputs },
-      emits: ["click-dismiss", "click-cancel", "click-ok"],
+      components: { PanelAction, WindowSection, SpecificationInputs },
       props: {
-         isShowing: { type: Boolean, default: false },
-         param: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
-      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
+      data: (c) => ({
+         Requirement: Customer.Requirement,
+         data: { specifications: [] },
+      }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         param: (c) => c.popupWindow.param,
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
-
-         customer: (c) => {
-            if (!c.param) return;
-            const { customer } = c.param;
-            return customer;
-         },
-         device: (c) => {
-            if (!c.param) return;
-            const { device } = c.param;
-            return device;
-         },
+         customer: (c) => c.param?.customer ?? undefined,
+         device: (c) => c.param?.device ?? undefined,
          specifications: (c) => {
-            if (!c.param) return [];
-            const { specifications } = c.param;
-            if (!Array.isArray(specifications)) return [];
-            return [...specifications];
+            const specifications = c.param?.specifications;
+            return U.isArray(specifications) ? [...specifications] : [];
          },
       },
       watch: {
@@ -39,27 +32,10 @@
             this.invalidateData();
          },
       },
-      created() {
-         this.clearData();
-         this.invalidateData();
-      },
       mounted() {
-         this.clearData();
          this.invalidateData();
       },
       methods: {
-         clearData() {
-            this.clearDataOnDelay(0);
-         },
-         clearDataOnDelay(delay = 0) {
-            if (delay) {
-               setTimeout(() => this.clearDataOnDelay(0), delay);
-               return;
-            }
-
-            this.data = {};
-            this.invalidateData();
-         },
          invalidateData() {
             this.data.specifications = this.specifications.map(
                (specification) => {
@@ -76,17 +52,14 @@
                   _id: this.device.id,
                   specifications: this.data.specifications,
                })
-               .then((item) => {
-                  this.$emit("click-ok", { item });
-                  this.clearDataOnDelay(700);
-               });
+               .then((item) => this.popupWindow.close());
          },
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowUpdateDeviceSpecifications"
       :title="`Update Device Specifications${
          customer ? ` for ${customer.name}` : ''
@@ -94,19 +67,16 @@
       :isShowing="isShowing"
       :isLoading="isLoading"
       :isClickable="isClickable"
-      @click-dismiss="$emit('click-dismiss')"
-      @click-cancel="
-         $emit('click-cancel');
-         clearDataOnDelay(700);
-      "
-      @click-ok="clickOk()"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => clickOk()"
    >
       <div class="WindowUpdateDeviceSpecifications-body">
          <WindowSection class="WindowUpdateDeviceSpecifications-description">
             <SpecificationInputs :items="data.specifications" />
          </WindowSection>
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

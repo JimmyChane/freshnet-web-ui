@@ -19,7 +19,6 @@
       width: 100%;
       gap: 0.5em;
       padding: 0.5em;
-      // font-size: 1.1em;
       cursor: pointer;
 
       display: flex;

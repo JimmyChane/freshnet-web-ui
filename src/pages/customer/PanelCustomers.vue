@@ -7,8 +7,16 @@
    import PageCustomer from "@/pages/customer/PageCustomer.vue";
    import U from "@/U";
 
+   import { DynamicScroller, DynamicScrollerItem } from "vue-virtual-scroller";
+
    export default {
-      components: { Actionbar, ItemCustomer, Empty },
+      components: {
+         Actionbar,
+         DynamicScroller,
+         DynamicScrollerItem,
+         ItemCustomer,
+         Empty,
+      },
       emits: ["click-refresh", "click-item-add", "click-item-remove"],
       props: {
          title: { type: String, default: "" },
@@ -20,6 +28,9 @@
          iconEmpty: () => PageCustomer.icon.dark.toUrl(),
 
          filter: (c) => U.optString(c.$route.query.filter),
+
+         listService: (c) => c.items.filter((item) => item.services.length),
+         listOrder: (c) => c.items.filter((item) => item.orders.length),
          list: (c) => {
             switch (c.filter) {
                case "service":
@@ -30,9 +41,11 @@
                   return c.items;
             }
          },
-
-         listService: (c) => c.items.filter((item) => item.services.length),
-         listOrder: (c) => c.items.filter((item) => item.orders.length),
+         myList: (c) => {
+            return c.list.map((item) => {
+               return { id: c.itemKey(item), item };
+            });
+         },
       },
       methods: {
          itemKey(item) {
@@ -64,25 +77,40 @@
          @click-refresh="() => $emit('click-refresh')"
       />
 
-      <div class="PanelCustomers-body" v-if="list.length">
-         <router-link
-            class="PanelCustomers-item"
-            v-for="item of list"
-            :key="itemKey(item)"
-            :to="{
-               query: {
-                  name: itemName(item),
-                  phoneNumber: itemPhoneNumberValue(item),
-               },
-            }"
-         >
-            <ItemCustomer
+      <DynamicScroller
+         class="PanelCustomers-body"
+         :items="myList"
+         :min-item-size="90"
+      >
+         <template v-slot="{ item, index, active }">
+            <DynamicScrollerItem
                :item="item"
-               :selected="item === itemSelected"
-               @click-remove="(param) => $emit('click-item-remove', { item })"
-            />
-         </router-link>
-      </div>
+               :data-index="index"
+               :active="active"
+            >
+               <div class="PanelCustomers-item-div">
+                  <router-link
+                     class="PanelCustomers-item"
+                     :to="{
+                        query: {
+                           name: itemName(item.item),
+                           phoneNumber: itemPhoneNumberValue(item.item),
+                        },
+                     }"
+                  >
+                     <ItemCustomer
+                        :item="item.item"
+                        :selected="item.item === itemSelected"
+                        @click-remove="
+                           (param) =>
+                              $emit('click-item-remove', { item: item.item })
+                        "
+                     />
+                  </router-link>
+               </div>
+            </DynamicScrollerItem>
+         </template>
+      </DynamicScroller>
 
       <Empty
          v-if="!list.length && !customerStore.getters.isLoading"
@@ -95,11 +123,11 @@
    .PanelCustomers {
       width: 100%;
       height: 100%;
-      overflow-y: auto;
       display: flex;
       flex-direction: column;
       align-items: stretch;
       justify-content: stretch;
+
       .PanelCustomers-top {
          z-index: 2;
          position: sticky;
@@ -108,21 +136,29 @@
          right: 0;
       }
       .PanelCustomers-body {
+         --gap: 4px;
+
          z-index: 1;
-         padding: 1rem;
+         padding: calc(1rem - var(--gap) * 0.5) 1rem;
          padding-bottom: 10rem;
          display: flex;
          flex-direction: column;
          align-items: center;
-         gap: 0.1rem;
 
+         .PanelCustomers-item-div {
+            display: flex;
+            padding: calc(var(--gap) * 0.5) 0;
+         }
          .PanelCustomers-item {
+            margin: 0 auto;
             width: 100%;
             max-width: 35rem;
             max-width: 25rem;
+
             text-decoration: none;
             font-size: 1rem;
             color: inherit;
+            overflow: hidden;
          }
       }
    }

@@ -39,11 +39,6 @@
 
 <style lang="scss" scoped>
    .Actionbar {
-      --actionbar-background-color-translucent: var(
-         --actionbar-background-color
-      );
-      --actionbar-background-color-light: var(--actionbar-color);
-      --actionbar-background-color-dark: var(--actionbar-color);
       color: black;
       background: white;
       border-bottom: 1px solid hsl(0, 0%, 90%);
@@ -54,6 +49,7 @@
       --height: 3.8rem;
 
       width: 100%;
+      height: var(--height);
       min-height: var(--height);
       max-height: var(--height);
       padding: 0.4rem;

@@ -9,8 +9,13 @@
 
 <template>
    <button class="ButtonIconText transition" @click="$emit('click')">
-      <img class="ButtonIconText-icon" :src="src" :alt="text" />
-      <span>{{ text }}</span>
+      <img
+         class="ButtonIconText-icon"
+         v-if="src.length > 0"
+         :src="src"
+         :alt="text"
+      />
+      <span v-if="text.length > 0">{{ text }}</span>
    </button>
 </template>
 

@@ -55,7 +55,7 @@
       padding: 0.25rem 1rem;
       border-radius: 0.5rem;
       border: 1px var(--primary-color) solid;
-      background-color: transparent;
+      background: transparent;
       display: flex;
       flex-direction: row;
       align-items: center;

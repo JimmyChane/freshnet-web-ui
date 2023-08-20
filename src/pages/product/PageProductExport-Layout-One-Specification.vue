@@ -39,13 +39,9 @@
 
 <template>
    <div class="ItemProductSpecification">
-      <img
-         class="ItemProductSpecification-icon"
-         :style="{ opacity: icon ? '1' : '0' }"
-         :src="icon"
-      />
-      <span class="ItemProductSpecification-title">{{ title }}</span>
-      <span class="ItemProductSpecification-content">{{ content }}</span>
+      <img :style="{ opacity: icon ? '1' : '0' }" :src="icon" />
+      <span>{{ title }}</span>
+      <span>{{ content }}</span>
    </div>
 </template>
 
@@ -61,7 +57,7 @@
 
       --min-height: 24px;
 
-      .ItemProductSpecification-icon {
+      :nth-child(1) {
          object-fit: contain;
          font-size: 20px;
 
@@ -72,9 +68,8 @@
          flex-direction: row;
          align-items: flex-start;
       }
-      .ItemProductSpecification-title {
+      :nth-child(2) {
          line-height: 20px;
-         font-size: 20px;
          font-size: 16px;
 
          --width: 120px;
@@ -87,9 +82,8 @@
          flex-direction: row;
          align-items: center;
       }
-      .ItemProductSpecification-content {
+      :nth-child(3) {
          font-size: 20px;
-         // font-weight: 600;
 
          min-height: var(--min-height);
 

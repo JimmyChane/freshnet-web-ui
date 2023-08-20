@@ -13,7 +13,8 @@
          primaryColor: { type: Object },
       },
       computed: {
-         isPrimaryColorDark: (c) => chroma.deltaE(c.primaryColor, "000000") < 60,
+         isPrimaryColorDark: (c) =>
+            chroma.deltaE(c.primaryColor, "000000") < 60,
       },
    };
 </script>
@@ -29,15 +30,15 @@
    >
       <div class="ProductViewerImages-list">
          <ProductViewerImage
-            v-for="image of images"
+            v-for="(image, index) in images"
             :image="image"
             :key="image.toUrl()"
-            :isSelected="images.indexOf(image) === indexAt"
+            :isSelected="index === indexAt"
             @click="() => $emit('click-image', image)"
          />
          <ProductViewerImageSelector
             v-if="isEditable"
-            @click-file="(file) => $emit('click-add-image-file', file)"
+            @click-file="(files) => $emit('click-add-image-file', files)"
          />
       </div>
    </div>
@@ -54,8 +55,7 @@
       overflow-x: auto;
       overflow-y: hidden;
 
-      padding-left: 1.75rem;
-      padding-right: 1.75rem;
+      padding: 0 1.75rem;
 
       --scrollbar-size: 0.3rem;
       --scrollbar-thumb-radius: 0.2rem;

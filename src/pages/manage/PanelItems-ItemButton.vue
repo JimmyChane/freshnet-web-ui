@@ -53,7 +53,7 @@
          background: none;
          opacity: 0;
          pointer-events: none;
-         background-color: var(--primary-color);
+         background: var(--primary-color);
          border-top-left-radius: 0.3rem;
          border-bottom-left-radius: 0.3rem;
       }
@@ -65,7 +65,7 @@
          border-radius: inherit;
          opacity: 0;
          pointer-events: none;
-         background-color: var(--primary-color);
+         background: var(--primary-color);
       }
    }
 

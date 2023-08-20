@@ -20,9 +20,7 @@
             :src="categoryIcon"
             alt=""
          />
-         <span class="ItemSettingContacts-Item-Link-title">{{
-            categoryTitle
-         }}</span>
+         <span>{{ categoryTitle }}</span>
       </div>
       <span>{{ id }}</span>
    </div>
@@ -39,7 +37,7 @@
          flex-direction: row;
          gap: 0.2em;
 
-         .ItemSettingContacts-Item-Link-icon {
+         :nth-child(1) {
             --size: 0.8rem;
             width: var(--size);
             height: var(--size);

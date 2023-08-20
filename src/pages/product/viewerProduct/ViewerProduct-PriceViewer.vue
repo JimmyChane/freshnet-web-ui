@@ -1,6 +1,6 @@
 <script>
-   import ProductPrice from "@/items/ProductPrice.js";
-   import SettingModule from "@/items/Setting.js";
+   import ProductPrice from "@/items/ProductPrice";
+   import SettingModule from "@/items/Setting";
 
    import Section from "./ViewerProduct-Section.vue";
 
@@ -133,7 +133,7 @@
             flex-direction: row;
             align-items: flex-start;
             justify-content: flex-start;
-            gap: 1px;
+            gap: 3px;
             & > * {
                padding: 0.2em 0.6em;
                color: white;

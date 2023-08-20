@@ -1,83 +1,135 @@
 <script>
-   import Section from "./PageHome-Section.vue";
-   import Group from "./PageHome-SectionContact-Group.vue";
-   import Setting from "@/items/Setting";
+  import Section from "./PageHome-Section.vue";
+  import Setting from "@/items/Setting";
+  import Link from "./PageHome-Link.vue";
 
-   export default {
-      components: { Section, Group },
-      props: { isThin: { type: Boolean, default: false } },
-      data: (c) => ({ groups: [] }),
-      watch: {
-         "settingStore.getters.lastModified"() {
-            this.invalidate();
-         },
+  export default {
+    components: { Section, Link },
+    props: { isThin: { type: Boolean, default: false } },
+    data: (c) => ({ callContacts: [], chatContacts: [] }),
+    watch: {
+      "settingStore.getters.lastModified"() {
+        this.invalidate();
       },
-      mounted() {
-         this.invalidate();
+    },
+    mounted() {
+      this.invalidate();
+    },
+    methods: {
+      async invalidate() {
+        const contacts = await this.settingStore.dispatch("findValueOfKey", {
+          key: Setting.Key.Contacts,
+          default: [],
+        });
+
+        this.callContacts = [];
+        this.chatContacts = [];
+        for (const contact of contacts) {
+          for (const link of contact.links) {
+            const categoryKey = link.category?.key ?? "";
+            const categoryIcon = link.category?.icon ?? "";
+            if (categoryKey === "call" || categoryKey === "telephone") {
+              this.callContacts.push({
+                title: contact.title,
+                href: link.toHtmlHref(),
+                target: link.toHtmlTarget(),
+                icon: categoryIcon,
+              });
+            } else {
+              const categoryTitle = link.category?.title ?? "";
+              this.chatContacts.push({
+                title: contact.title,
+                title1: categoryTitle,
+                href: link.toHtmlHref(),
+                target: link.toHtmlTarget(),
+                icon: categoryIcon,
+              });
+            }
+          }
+        }
       },
-      methods: {
-         async invalidate() {
-            const contacts = await this.settingStore.dispatch(
-               "findValueOfKey",
-               { key: Setting.Key.Contacts, default: [] },
-            );
-
-            this.groups = contacts.reduce((groups, contact) => {
-               const optGroup = (category) => {
-                  let group = groups.find((group) => {
-                     return group.category === category;
-                  });
-                  if (!group) groups.push((group = { category, items: [] }));
-                  return group;
-               };
-
-               for (const link of contact.links) {
-                  optGroup(link.category).items.push({
-                     title: contact.title,
-                     subtitle: link.id,
-                     href: link.toHtmlHref(),
-                     target: link.toHtmlTarget(),
-                  });
-               }
-
-               return groups;
-            }, []);
-         },
-      },
-   };
+    },
+  };
 </script>
 
 <template>
-   <Section>
-      <div class="HomeSectionContact" :isThin="`${isThin}`">
-         <Group
-            v-for="group of groups"
-            :key="group.title"
-            :style="{
-               'grid-column': 'auto / span 1',
-               'grid-row': 'auto / span 2',
-            }"
-            :isThin="isThin"
-            :group="group"
-         />
+  <Section class="HomeSectionContact-Section">
+    <div class="HomeSectionContact" :isThin="`${isThin}`">
+      <div>
+        <span>Call us</span>
+        <div>
+          <Link
+            v-for="contact of callContacts"
+            :key="`${contact.title}${contact.href}`"
+            :target="contact.target"
+            :href="contact.href"
+            :icon="contact.icon"
+          >
+            <span v-if="contact.title">{{ contact.title }}</span>
+            <span v-if="contact.title1">{{ contact.title1 }}</span>
+          </Link>
+        </div>
       </div>
-   </Section>
+
+      <div>
+        <span>Start a chat with us</span>
+        <div>
+          <Link
+            v-for="contact of chatContacts"
+            :key="`${contact.title}${contact.href}`"
+            :target="contact.target"
+            :href="contact.href"
+            :icon="contact.icon"
+          >
+            <span v-if="contact.title">{{ contact.title }}</span>
+            <span v-if="contact.title1">{{ contact.title1 }}</span>
+          </Link>
+        </div>
+      </div>
+    </div>
+  </Section>
 </template>
 
 <style lang="scss" scoped>
-   .HomeSectionContact {
+  .HomeSectionContact {
+    width: 100%;
+    border-radius: 1em;
+    overflow: hidden;
+    gap: 1.5em 0.8em;
+
+    display: grid;
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    align-content: center;
+
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    & > * {
+      gap: 1.5em;
       width: 100%;
-      background-color: white;
-      border-radius: 1em;
-      overflow: hidden;
-
-      display: grid;
-      grid-auto-flow: row;
-      grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-
-      justify-content: center;
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-items: center;
-      align-content: center;
-   }
+
+      span {
+        text-align: center;
+      }
+
+      & > * {
+        width: 100%;
+        gap: 0.5em;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
+
+        & > * {
+          flex-direction: column;
+        }
+      }
+    }
+  }
 </style>

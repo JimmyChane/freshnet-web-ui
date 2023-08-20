@@ -29,10 +29,6 @@
 </script>
 
 <template>
-   <!-- <Section 
-      :title="allowEdit ? `What's Included` : ''" 
-   > -->
-
    <Section
       v-if="allowEdit || items.length"
       :title="`What's Included`"

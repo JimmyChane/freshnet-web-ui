@@ -1,13 +1,15 @@
 <script>
-   import Section from "./PageHome-Section.vue";
-   export default { components: { Section } };
+  import Section from "./PageHome-Section.vue";
+  import SectionTitle from "./PageHome-Section-Title.vue";
+  export default { components: { Section, SectionTitle } };
 </script>
 
 <template>
-   <Section class="HomeSectionAboutUs" title="About Us">
-      <p
-         >Since 2009, from teaching computer class to repair computer, printers,
-         networking, cctv services.</p
-      >
-   </Section>
+  <Section class="HomeSectionAboutUs">
+    <SectionTitle>About Us</SectionTitle>
+    <p
+      >Since 2009, from teaching computer class to repair computer, printers,
+      networking, cctv services.</p
+    >
+  </Section>
 </template>

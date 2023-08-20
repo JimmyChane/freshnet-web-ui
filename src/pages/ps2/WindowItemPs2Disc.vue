@@ -19,8 +19,8 @@
       />
 
       <div class="WindowItemPs2Disc-text">
-         <span class="WindowItemPs2Disc-title">{{ title }}</span>
-         <span class="WindowItemPs2Disc-code">{{ code }}</span>
+         <span>{{ title }}</span>
+         <span>{{ code }}</span>
       </div>
    </div>
 </template>
@@ -41,10 +41,10 @@
          flex-direction: column;
          padding: 2em;
          gap: 0.4em;
-         .WindowItemPs2Disc-title {
+         :nth-child(1) {
             font-size: 3em;
          }
-         .WindowItemPs2Disc-code {
+         :nth-child(2) {
             width: fit-content;
             background: rgba(255, 255, 255, 0.5);
             padding: 0.2em 1em;

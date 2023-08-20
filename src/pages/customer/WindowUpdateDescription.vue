@@ -1,18 +1,18 @@
 <script>
-   import WindowAction from "@/components/window/WindowAction.vue";
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import WindowSection from "./WindowSection.vue";
    import TextArea from "@/components/InputTextArea.vue";
    import Customer from "@/items/Customer";
 
    export default {
-      components: { WindowAction, WindowSection, TextArea },
-      emits: ["click-dismiss", "click-cancel", "click-ok"],
+      components: { PanelAction, WindowSection, TextArea },
       props: {
-         isShowing: { type: Boolean, default: false },
-         item: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
       data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         item: (c) => c.popupWindow.item,
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
       },
@@ -26,26 +26,10 @@
             this.bindData();
          },
       },
-      created() {
-         this.resetData();
-      },
       mounted() {
-         this.resetData();
+         this.bindData();
       },
       methods: {
-         resetData() {
-            this.resetDataOnDelay(0);
-         },
-         resetDataOnDelay(delay = 0) {
-            if (delay) {
-               setTimeout(() => this.resetDataOnDelay(0), delay);
-               return;
-            }
-
-            this.data = { description: "" };
-
-            this.bindData();
-         },
          bindData() {
             if (this.item) {
                const { description } = this.item;
@@ -64,35 +48,29 @@
                   "snackbarShow",
                   'You must specify the "Description"',
                );
-            } else {
-               this.customerStore
-                  .dispatch("updateDescriptionOfId", {
-                     _id: this.item.id,
-                     description: this.data.description,
-                  })
-                  .then((item) => {
-                     this.$emit("click-ok", { item });
-                     this.resetDataOnDelay(700);
-                  });
+               return;
             }
+            this.customerStore
+               .dispatch("updateDescriptionOfId", {
+                  _id: this.item.id,
+                  description: this.data.description,
+               })
+               .then((item) => this.popupWindow.close());
          },
       },
    };
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowUpdateDescription"
       :title="`Update Description${item ? ` for ${item.name}` : ''}`"
       :isShowing="isShowing"
       :isLoading="isLoading"
       :isClickable="isClickable"
-      @click-dismiss="$emit('click-dismiss')"
-      @click-cancel="
-         $emit('click-cancel');
-         resetDataOnDelay(700);
-      "
-      @click-ok="clickOk()"
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
+      @click-ok="() => clickOk()"
    >
       <TextArea
          class="WindowUpdateDescription-description"
@@ -102,7 +80,7 @@
          :bindValue="data.description"
          @input="(comp) => (data.description = comp.value)"
       />
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

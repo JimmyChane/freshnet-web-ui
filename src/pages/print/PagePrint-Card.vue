@@ -28,7 +28,7 @@
 
 <style lang="scss" scoped>
    .PagePrint-card {
-      background-color: white;
+      background: white;
 
       padding: 1rem;
       gap: 1rem;

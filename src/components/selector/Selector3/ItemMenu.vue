@@ -25,7 +25,6 @@
 <style lang="scss" scoped>
    .ItemMenu {
       border: 1px solid var(--primary-color);
-      border-radius: 0.8rem;
       border-radius: 0.4rem;
       box-shadow: 0 0 4px hsl(0, 0%, 90%);
       font-size: 0.8em;

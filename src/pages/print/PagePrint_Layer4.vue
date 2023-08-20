@@ -41,7 +41,7 @@
 				width: var(--size);
 				height: var(--size);
 				padding: 0.2rem;
-				background-color: hsl(197, 23%, 40%);
+				background: hsl(197, 23%, 40%);
 				border-radius: 4px;
 			}
 		}

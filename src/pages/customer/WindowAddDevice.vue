@@ -1,6 +1,6 @@
 <script>
+   import PanelAction from "@/components/panel/PanelAction.vue";
    import Customer from "@/items/Customer";
-   import WindowAction from "@/components/window/WindowAction.vue";
    import Selector3 from "@/components/selector/Selector3.vue";
    import WindowSection from "./WindowSection.vue";
    import SpecificationInputs from "./SpecificationInputs.vue";
@@ -8,19 +8,27 @@
 
    export default {
       components: {
-         WindowAction,
+         PanelAction,
          WindowSection,
          Selector3,
          SpecificationInputs,
          TextArea,
       },
-      emits: ["click-dismiss", "click-cancel", "click-ok"],
       props: {
-         isShowing: { type: Boolean, default: false },
-         item: { type: Object, default: () => null },
+         popupWindow: { type: Object },
       },
-      data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
+      data: (c) => ({
+         Requirement: Customer.Requirement,
+         data: {
+            description: "",
+            categoryKey: "none",
+            serialNumber: "",
+            specifications: [],
+         },
+      }),
       computed: {
+         isShowing: (c) => c.popupWindow.isShowing,
+         item: (c) => c.popupWindow.item,
          isLoading: (c) => c.customerStore.getters.isLoading,
          isClickable: (c) => !c.customerStore.getters.isLoading,
          categoryMenus: (c) =>
@@ -47,31 +55,10 @@
             this.bindData();
          },
       },
-      created() {
-         this.resetData();
-      },
       mounted() {
-         this.resetData();
+         this.bindData();
       },
       methods: {
-         resetData() {
-            this.resetDataOnDelay(0);
-         },
-         resetDataOnDelay(delay = 0) {
-            if (delay) {
-               setTimeout(() => this.resetDataOnDelay(0), delay);
-               return;
-            }
-
-            this.data = {
-               description: "",
-               categoryKey: "none",
-               serialNumber: "",
-               specifications: [],
-            };
-
-            this.bindData();
-         },
          bindData() {
             this.categoryStore.dispatch("getItems");
             this.specificationStore.dispatch("getItems");
@@ -93,10 +80,7 @@
             } else {
                this.customerStore
                   .dispatch("addDevice", this.data)
-                  .then((item) => {
-                     this.$emit("click-ok", { item });
-                     this.resetDataOnDelay(700);
-                  })
+                  .then((item) => this.popupWindow.close())
                   .catch((error) => {
                      console.error(error);
                      this.store.dispatch("snackbarShow", "Error Adding Device");
@@ -108,19 +92,14 @@
 </script>
 
 <template>
-   <WindowAction
+   <PanelAction
       class="WindowAddDevice"
       :title="`Add New Device${item ? ` for ${item.name}` : ''}`"
       :isShowing="isShowing"
       :isLoading="isLoading"
       :isClickable="isClickable"
-      @click-dismiss="() => $emit('click-dismiss')"
-      @click-cancel="
-         () => {
-            $emit('click-cancel');
-            resetDataOnDelay(700);
-         }
-      "
+      @click-dismiss="() => popupWindow.close()"
+      @click-cancel="() => popupWindow.close()"
       @click-ok="() => clickOk()"
    >
       <div class="WindowAddDevice-body">
@@ -136,8 +115,8 @@
          <WindowSection title="Category" :isRequired="true">
             <Selector3
                :menus="categoryMenus"
-               :selectedKey="this.data.categoryKey"
-               @click-menu="(menu) => (this.data.categoryKey = menu.key)"
+               :selectedKey="data.categoryKey"
+               @click-menu="(menu) => (data.categoryKey = menu.key)"
             />
          </WindowSection>
 
@@ -145,7 +124,7 @@
             <SpecificationInputs :items="dataSpecifications" />
          </WindowSection>
       </div>
-   </WindowAction>
+   </PanelAction>
 </template>
 
 <style lang="scss" scoped>

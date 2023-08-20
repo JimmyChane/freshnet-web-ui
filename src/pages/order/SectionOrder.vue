@@ -19,10 +19,7 @@
 
 <template>
    <div class="SectionOrder transition">
-      <div class="SectionOrder-header">
-         <span class="SectionOrder-title">{{ title }}</span>
-         <span class="SectionOrder-count">{{ items.length }}</span>
-      </div>
+      <span class="SectionOrder-title">{{ `${title} (${items.length})` }}</span>
       <ul class="SectionOrder-list">
          <li class="viewOrder-item" v-for="item in items" :key="item.id">
             <div class="viewOrder-item-seperator"></div>
@@ -44,7 +41,7 @@
    .SectionOrder {
       width: 100%;
       max-width: var(--width-max);
-      background-color: white;
+      background: white;
       box-shadow: 0 2px 4px var(--shadow-light);
       padding: 10px;
 
@@ -53,7 +50,7 @@
       align-items: stretch;
       justify-content: flex-start;
 
-      .SectionOrder-header {
+      .SectionOrder-title {
          margin: 0.5rem 0 0.5rem 0;
          padding: 0.625rem;
          font-weight: 600;
@@ -62,31 +59,7 @@
          flex-direction: row;
          align-items: center;
          justify-content: flex-start;
-         line-height: 1rem;
          gap: 0.4rem;
-
-         .SectionOrder-count {
-            --width: 1.6em;
-            --height: 1.6em;
-            width: var(--width);
-            height: var(--height);
-            min-width: var(--width);
-            min-height: var(--height);
-            max-width: var(--width);
-            max-height: var(--height);
-
-            background-color: hsla(0, 0%, 0%, 0.8);
-            font-size: 0.7em;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            word-break: keep-all;
-            line-height: 1em;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-         }
       }
 
       .SectionOrder-list {
@@ -106,7 +79,7 @@
          margin: 4px 0;
          min-width: auto;
          min-height: 0.5px;
-         background-color: hsl(0, 0%, 84%);
+         background: hsl(0, 0%, 84%);
          background: hsla(0, 0%, 0%, 0.1);
       }
    }

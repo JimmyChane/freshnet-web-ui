@@ -1,8 +1,10 @@
 <script>
+   import U from "@/U";
    export default {
       props: { item: { type: Object } },
       computed: {
-         isSelected: (c) => c.item.isSelected(),
+         isSelected: (c) =>
+            U.isFunction(c.item.isSelected) ? c.item.isSelected() : false,
       },
    };
 </script>
@@ -18,7 +20,9 @@
          :src="isSelected ? item.icon.light : item.icon.dark"
          :alt="`Go to ${item.title}`"
       />
-      <span :class="['NavigationBottom-Item-title', 'transition']">{{ item.title }}</span>
+      <span :class="['NavigationBottom-Item-title', 'transition']">{{
+         item.title
+      }}</span>
    </router-link>
 </template>
 
