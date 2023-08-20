@@ -1,97 +1,107 @@
 <script>
-   import ButtonIcon from "@/components/button/ButtonIcon.vue";
+  import ButtonIcon from "@/components/button/ButtonIcon.vue";
 
-   export default {
-      components: { ButtonIcon },
-      props: {
-         item: { type: Object, default: () => null },
-         isSelectedDark: { type: Boolean, default: true },
-         isWide: { type: Boolean, default: true },
+  export default {
+    components: { ButtonIcon },
+    props: {
+      item: { type: Object, default: () => null },
+      isWide: { type: Boolean, default: true },
+    },
+    computed: {
+      icon() {
+        return this.item?.icon ?? null;
       },
-      computed: {
-         icon: (c) => {
-            if (!c.item || !c.item.icon) return null;
-            return c.item.icon;
-         },
-         iconLight: (c) => (c.icon ? c.icon.light : ""),
-         iconDark: (c) => (c.icon ? c.icon.dark : ""),
-         iconUrl: (c) => {
-            if (!c.isSelected) return c.iconDark;
-            if (c.isSelectedDark) return c.iconLight;
-            return c.iconDark;
-         },
-         title: (c) => {
-            const title = c.item.title;
-            if (c.isWide) return title;
-            return title.substring(0, 1);
-         },
+      iconLight() {
+        return this.icon?.light ?? "";
+      },
+      iconDark() {
+        return this.icon?.dark ?? "";
+      },
+      iconUrl() {
+        return this.isSelected ? this.iconLight : this.iconDark;
+      },
+      title() {
+        const { title } = this.item;
+        return this.isWide ? title : title.substring(0, 1);
+      },
 
-         isSelected: (c) => c.item.isSelected(),
+      isSelected() {
+        return this.item.isSelected();
       },
-   };
+    },
+  };
 </script>
 
 <template>
-   <div class="LeftNavItem" :isWide="`${isWide}`">
-      <img class="LeftNavItem-icon" v-if="iconUrl" :src="iconUrl" />
-      <span class="LeftNavItem-title" v-if="iconUrl ? isWide && title : true">{{
-         title
-      }}</span>
-   </div>
+  <div class="LeftNavItem" :isSelected="`${isSelected}`" :isWide="`${isWide}`">
+    <img class="LeftNavItem-icon" v-if="iconUrl" :src="iconUrl" />
+    <span
+      class="LeftNavItem-title"
+      v-if="iconUrl ? isWide && title.length : true"
+      >{{ title }}</span
+    >
+  </div>
 </template>
 
 <style lang="scss" scoped>
-   .LeftNavItem {
-      border: none;
-      text-align: center;
+  .LeftNavItem {
+    border: none;
+    text-align: center;
+    font-size: 1em;
+    background: none;
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+
+    .LeftNavItem-icon {
+      --size: 1.2em;
+      width: var(--size);
+      height: var(--size);
+      min-width: var(--size);
+      min-height: var(--size);
+      max-width: var(--size);
+      max-height: var(--size);
+      object-fit: scale-down;
+    }
+    .LeftNavItem-title {
+      --size: 1.2em;
+      flex-grow: 1;
+      min-height: var(--size);
+      text-align: start;
       font-size: 1em;
-      background: none;
+      font-weight: 600;
+      line-height: 1.2;
+      color: inherit;
+
       display: flex;
       flex-direction: row;
-      gap: 1em;
+      align-items: center;
+    }
+  }
 
-      .LeftNavItem-icon {
-         --size: 1.2em;
-         width: var(--size);
-         height: var(--size);
-         min-width: var(--size);
-         min-height: var(--size);
-         max-width: var(--size);
-         max-height: var(--size);
-         object-fit: scale-down;
-      }
-      .LeftNavItem-title {
-         --size: 1.2em;
-         flex-grow: 1;
-         min-height: var(--size);
-         text-align: start;
-         font-size: 1em;
-         font-weight: 600;
-         line-height: 1.2;
-         color: inherit;
+  .LeftNavItem[isSelected="true"] {
+    color: white;
+  }
+  .LeftNavItem[isSelected="false"] {
+    color: black;
+  }
 
-         display: flex;
-         flex-direction: row;
-         align-items: center;
-      }
-   }
-
-   .LeftNavItem[isWide="true"] {
-      width: 100%;
-      justify-content: space-between;
-   }
-   .LeftNavItem[isWide="false"] {
+  .LeftNavItem[isWide="true"] {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .LeftNavItem[isWide="false"] {
+    align-items: center;
+    justify-content: center;
+    .LeftNavItem-title {
+      width: var(--size);
+      height: var(--size);
+      min-width: var(--size);
+      min-height: var(--size);
+      max-width: var(--size);
+      max-height: var(--size);
       align-items: center;
       justify-content: center;
-      .LeftNavItem-title {
-         width: var(--size);
-         height: var(--size);
-         min-width: var(--size);
-         min-height: var(--size);
-         max-width: var(--size);
-         max-height: var(--size);
-         align-items: center;
-         justify-content: center;
-      }
-   }
+    }
+  }
 </style>
