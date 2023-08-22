@@ -1,5 +1,5 @@
 <script>
-  import Item from "./NavigationBottom-Item.vue";
+  import Item from "./BottomNavigationBar-Item.vue";
   export default {
     components: { Item },
     computed: {
@@ -12,8 +12,8 @@
 </script>
 
 <template>
-  <div class="NavigationBottom">
-    <div class="NavigationBottom-body transition">
+  <div class="BottomNavigationBar">
+    <div class="BottomNavigationBar-body transition">
       <Item
         v-for="navigation of navigations"
         :key="navigation.key"
@@ -24,7 +24,7 @@
 </template>
 
 <style lang="scss" scoped>
-  .NavigationBottom {
+  .BottomNavigationBar {
     width: 100%;
     height: var(--navigation-bottom-height);
     min-height: var(--navigation-bottom-height);
@@ -41,7 +41,7 @@
     position: sticky;
     bottom: 0;
 
-    .NavigationBottom-body {
+    .BottomNavigationBar-body {
       width: 100%;
       max-width: 25rem;
       height: 100%;

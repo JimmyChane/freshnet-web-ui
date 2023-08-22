@@ -4,7 +4,7 @@ import socketIo from "socket.io-client";
 import Server from "../host/Server";
 import TimeNowGetter from "@/tools/TimeNowGetter";
 import Notification from "@/tools/Notification";
-import PopupMenu from "@/app/PopupMenuOption";
+import PopupMenu from "@/app/popupMenu/PopupMenuOption";
 import U from "@/U";
 
 const keyGetter = new TimeNowGetter();

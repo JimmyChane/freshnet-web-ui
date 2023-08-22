@@ -5,7 +5,7 @@
   import AddImage from "./PanelService-AddEvent-AddImage.vue";
   import Method from "@/items/ServiceEventMethod";
 
-  import PopupMenuOption from "@/app/PopupMenuOption";
+  import PopupMenuOption from "@/app/popupMenu/PopupMenuOption";
 
   export default {
     components: { Menu, TextArea, AddImage },

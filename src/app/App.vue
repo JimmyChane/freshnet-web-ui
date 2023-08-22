@@ -5,10 +5,10 @@
   import PageManage from "@/pages/manage/PageManage.vue";
 
   import NavigationDrawer from "./leftNav/NavigationDrawer.vue";
-  import NavigationBottom from "./NavigationBottom.vue";
+  import NavigationBottom from "./bottomNavigationBar/BottomNavigationBar.vue";
   import ViewerImage from "./ViewerImage.vue";
   import Snackbar from "./Snackbar.vue";
-  import PopupMenu from "./PopupMenu.vue";
+  import PopupMenu from "./popupMenu/PopupMenu.vue";
   import Status from "./Status.vue";
   import PopupWindow from "@/components/window/PopupWindow.vue";
 

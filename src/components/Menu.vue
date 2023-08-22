@@ -1,5 +1,5 @@
 <script>
-  import PopupMenuOption from "@/app/PopupMenuOption";
+  import PopupMenuOption from "@/app/popupMenu/PopupMenuOption";
   import U from "@/U";
 
   export default {
