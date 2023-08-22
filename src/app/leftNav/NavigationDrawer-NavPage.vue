@@ -1,10 +1,10 @@
 <script>
   import U from "@/U";
-  import LeftNavGroup2 from "./NavigationLeft-Group2.vue";
-  import NavigationLeftClickable from "./NavigationLeft-Clickable.vue";
+  import NavViewGroup from "./NavigationDrawer-NavViewGroup.vue";
+  import NavigationLeftClickable from "./NavigationDrawer-Clickable.vue";
 
   export default {
-    components: { LeftNavGroup2, NavigationLeftClickable },
+    components: { NavViewGroup, NavigationLeftClickable },
     props: {
       group1: { type: Object, default: () => null },
     },
@@ -91,9 +91,9 @@
 </script>
 
 <template>
-  <div :class="['LeftNavGroup1', 'transition']" :style="style">
+  <div :class="['NavPage', 'transition']" :style="style">
     <NavigationLeftClickable
-      class="LeftNavGroup1-header"
+      class="NavPage-header"
       :style="styleHeader"
       :item="group1"
       :href="`/${group1.key}`"
@@ -103,19 +103,15 @@
       @click-open="() => group1.clickExpand()"
     />
 
-    <div
-      class="LeftNavGroup1-children"
-      v-if="hasChildren"
-      :style="styleChildren"
-    >
+    <div class="NavPage-children" v-if="hasChildren" :style="styleChildren">
       <div
-        class="LeftNavGroup1-sectionParent"
+        class="NavPage-sectionParent"
         v-for="(group2, index) in group2s"
         :key="group2.key"
       >
-        <LeftNavGroup2 :group2="group2" />
+        <NavViewGroup :group2="group2" />
         <div
-          class="LeftNavGroup1-sectionParent-line"
+          class="NavPage-sectionParent-line"
           v-if="index < group2s.length - 1"
         ></div>
       </div>
@@ -124,12 +120,12 @@
 </template>
 
 <style lang="scss" scoped>
-  .LeftNavGroup1 {
+  .NavPage {
     display: flex;
     flex-direction: column;
     overflow: hidden;
 
-    .LeftNavGroup1-children {
+    .NavPage-children {
       display: flex;
       flex-direction: column;
       align-items: stretch;
@@ -139,11 +135,11 @@
       margin-inline: 0.4em;
       width: calc(100% - 0.8em);
 
-      .LeftNavGroup1-sectionParent {
+      .NavPage-sectionParent {
         display: flex;
         flex-direction: column;
         align-items: center;
-        .LeftNavGroup1-sectionParent-line {
+        .NavPage-sectionParent-line {
           width: calc(100% - 1.2rem);
           min-height: 1px;
           background: var(--primary-color);

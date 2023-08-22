@@ -1,6 +1,6 @@
 <script>
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
-  import LeftNavClickableBody from "./NavigationLeft-Clickable-Body.vue";
+  import LeftNavClickableBody from "./NavigationDrawer-Clickable-Body.vue";
   import U from "@/U";
 
   export default {
@@ -14,8 +14,8 @@
     computed: {
       styleClass() {
         return this.isSelected
-          ? "NavigationLeft-Clickable-isSlected"
-          : "NavigationLeft-Clickable-notSelected";
+          ? "NavigationDrawer-Clickable-isSlected"
+          : "NavigationDrawer-Clickable-notSelected";
       },
       hasChildren() {
         return U.optArray(this.item.groups).length > 0;
@@ -37,7 +37,7 @@
 <template>
   <router-link
     v-if="href"
-    :class="['NavigationLeft-Clickable', styleClass]"
+    :class="['NavigationDrawer-Clickable', styleClass]"
     :isWide="`${isWide}`"
     :isExpand="`${isSelected && isExpand}`"
     :hasGroup2IsSelected="`${hasGroup2s && isSelected}`"
@@ -74,7 +74,7 @@
 </template>
 
 <style lang="scss" scoped>
-  .NavigationLeft-Clickable {
+  .NavigationDrawer-Clickable {
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -87,10 +87,10 @@
     padding: 0.1em 0.4em;
   }
 
-  .NavigationLeft-Clickable-isSelected {
+  .NavigationDrawer-Clickable-isSelected {
     cursor: default;
   }
-  .NavigationLeft-Clickable-notSelected {
+  .NavigationDrawer-Clickable-notSelected {
     cursor: pointer;
   }
 </style>

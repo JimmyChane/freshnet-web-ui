@@ -4,7 +4,7 @@
   import PagePrint from "@/pages/print/PagePrint.vue";
   import PageManage from "@/pages/manage/PageManage.vue";
 
-  import NavigationLeft from "./leftNav/NavigationLeft.vue";
+  import NavigationDrawer from "./leftNav/NavigationDrawer.vue";
   import NavigationBottom from "./NavigationBottom.vue";
   import ViewerImage from "./ViewerImage.vue";
   import Snackbar from "./Snackbar.vue";
@@ -23,13 +23,7 @@
   import NavGroup from "./NavViewGroup";
   import NavView from "./NavView";
 
-  import {
-    objectToArray,
-    isPassed,
-    parseIcon,
-    parseKey,
-    parseGroup2s,
-  } from "./AppTool";
+  import { isPassed, parseGroup2s } from "./AppTool";
   import RouteQuery from "./RouteQuery";
 
   const _children = [PageHome, PageProduct, PagePrint, PageManage];
@@ -42,7 +36,7 @@
     },
 
     components: {
-      NavigationLeft,
+      NavigationDrawer,
       NavigationBottom,
       ViewerImage,
       Snackbar,
@@ -288,8 +282,8 @@
       :isDrawer="`${navigation.isDrawer()}`"
       :isFixed="`${!navigation.isDrawer()}`"
     >
-      <NavigationLeft
-        class="App-NavigationLeft"
+      <NavigationDrawer
+        class="App-NavigationDrawer"
         :style="{ 'grid-area': 'left', 'z-index': '3' }"
         v-if="!navigation.isNone()"
         @click-logout="() => logout()"

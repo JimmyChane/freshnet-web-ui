@@ -1,14 +1,14 @@
 <script>
   import Drawer from "@/components/Drawer.vue";
-  import LeftNavHeader from "./NavigationLeft-Header.vue";
-  import LeftNavGroup1 from "./NavigationLeft-Group1.vue";
-  import LeftNavLogin from "./NavigationLeft-Login.vue";
+  import LeftNavHeader from "./NavigationDrawer-Header.vue";
+  import NavPage from "./NavigationDrawer-NavPage.vue";
+  import LeftNavLogin from "./NavigationDrawer-Login.vue";
 
   export default {
     components: {
       Drawer,
       LeftNavHeader,
-      LeftNavGroup1,
+      NavPage,
       LeftNavLogin,
     },
     emits: ["click-logout"],
@@ -186,21 +186,21 @@
 <template>
   <Drawer
     ref="Drawer"
-    class="NavigationLeft"
+    class="NavigationDrawer"
     :isWide="`${isWide}`"
     :mode="drawerMode"
     :edge="drawerEdge"
     @click-collapse="() => emitCollapse()"
   >
-    <div class="NavigationLeft-body scrollbar transition" ref="Body">
+    <div class="NavigationDrawer-body scrollbar transition" ref="Body">
       <LeftNavHeader style="z-index: 3" :isWide="isWide" />
 
       <div
-        class="NavigationLeft-navigations"
+        class="NavigationDrawer-navigations"
         style="z-index: 1"
         v-if="navigations.length"
       >
-        <LeftNavGroup1
+        <NavPage
           v-for="group1 of navigations"
           :key="group1.key"
           :group1="group1"
@@ -219,8 +219,8 @@
 </template>
 
 <style lang="scss" scoped>
-  .NavigationLeft {
-    .NavigationLeft-body {
+  .NavigationDrawer {
+    .NavigationDrawer-body {
       width: 18rem;
       height: 100%;
       max-width: 100%;
@@ -232,13 +232,13 @@
       background: hsl(0, 0%, 90%);
       position: relative;
 
-      .NavigationLeft-line {
+      .NavigationDrawer-line {
         background: hsl(0, 0%, 70%);
         min-height: 1px;
         margin: 1.2rem 0.8rem;
       }
 
-      .NavigationLeft-navigations {
+      .NavigationDrawer-navigations {
         flex-grow: 1;
         width: 100%;
         display: flex;
@@ -247,7 +247,7 @@
         padding: 0 0.2em;
         padding-bottom: 4em;
       }
-      .NavigationLeft-login {
+      .NavigationDrawer-login {
         position: sticky;
         bottom: 0;
         width: 100%;
@@ -255,7 +255,7 @@
       }
     }
 
-    .NavigationLeft-body {
+    .NavigationDrawer-body {
       --scrollbar-size: 0.2rem;
       --scrollbar-thumb-color: hsla(0, 0%, 0%, 0.1);
       --scrollbar-thumb-color-hover: hsla(0, 0%, 0%, 0.3);
@@ -263,17 +263,17 @@
       --scrollbar-track-color-hover: hsla(0, 0%, 0%, 0.2);
     }
   }
-  .NavigationLeft[isWide="true"] {
-    .NavigationLeft-body {
-      .NavigationLeft-navigations {
+  .NavigationDrawer[isWide="true"] {
+    .NavigationDrawer-body {
+      .NavigationDrawer-navigations {
         align-items: flex-start;
       }
     }
   }
-  .NavigationLeft[isWide="false"] {
-    .NavigationLeft-body {
+  .NavigationDrawer[isWide="false"] {
+    .NavigationDrawer-body {
       width: fit-content;
-      .NavigationLeft-navigations {
+      .NavigationDrawer-navigations {
         align-items: center;
       }
     }

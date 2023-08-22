@@ -1,5 +1,5 @@
 <script>
-  import NavigationLeftClickable from "./NavigationLeft-Clickable.vue";
+  import NavigationLeftClickable from "./NavigationDrawer-Clickable.vue";
 
   export default {
     components: { NavigationLeftClickable },
@@ -15,10 +15,10 @@
 </script>
 
 <template>
-  <div class="LeftNavGroup2" :isWide="`${isWide}`">
-    <span class="LeftNavGroup2-title" v-if="isWide && title">{{ title }}</span>
+  <div class="NavViewGroup" :isWide="`${isWide}`">
+    <span class="NavViewGroup-title" v-if="isWide && title">{{ title }}</span>
 
-    <div class="LeftNavGroup2-groups" v-if="group3s">
+    <div class="NavViewGroup-groups" v-if="group3s">
       <div v-for="group3 of group3s" :key="group3.key">
         <NavigationLeftClickable
           v-if="!group3.getParent().isQuery"
@@ -37,11 +37,11 @@
 </template>
 
 <style lang="scss" scoped>
-  .LeftNavGroup2 {
+  .NavViewGroup {
     display: flex;
     flex-direction: column;
 
-    .LeftNavGroup2-title {
+    .NavViewGroup-title {
       width: fit-content;
       margin-left: 0.4em;
       padding: 0.6rem 1rem;
@@ -54,7 +54,7 @@
       color: hsla(0, 0%, 0%, 0.7);
     }
 
-    .LeftNavGroup2-groups {
+    .NavViewGroup-groups {
       display: flex;
       flex-direction: column;
       align-items: stretch;
@@ -65,9 +65,9 @@
     }
   }
 
-  .LeftNavGroup2[isWide="true"] {
+  .NavViewGroup[isWide="true"] {
     width: 100%;
-    .LeftNavGroup2-group3s {
+    .NavViewGroup-group3s {
       width: 100%;
     }
   }

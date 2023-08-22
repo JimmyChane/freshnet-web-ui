@@ -1,5 +1,5 @@
 <script>
-  import LeftNavItem from "./NavigationLeft-Item.vue";
+  import LeftNavItem from "./NavigationDrawer-Item.vue";
 
   export default {
     props: {
@@ -11,13 +11,13 @@
 </script>
 
 <template>
-  <div class="NavigationLeft-Clickable-List" :isWide="`${isWide}`">
+  <div class="NavigationDrawer-Clickable-List" :isWide="`${isWide}`">
     <LeftNavItem :item="item" :isWide="isWide" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-  .NavigationLeft-Clickable-List {
+  .NavigationDrawer-Clickable-List {
     height: fit-content;
     width: 100%;
     display: flex;
@@ -28,10 +28,10 @@
     padding: 0.7rem 1rem;
   }
 
-  .NavigationLeft-Clickable-List[isWide="true"] {
+  .NavigationDrawer-Clickable-List[isWide="true"] {
     padding-right: 3rem;
   }
-  .NavigationLeft-Clickable-List[isWide="false"] {
+  .NavigationDrawer-Clickable-List[isWide="false"] {
     width: min-content;
     align-items: center;
     justify-content: center;

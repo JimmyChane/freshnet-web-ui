@@ -1,8 +1,8 @@
 <script>
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
-  import LeftNavItem from "./NavigationLeft-Item.vue";
-  import LeftNavClickableList from "./NavigationLeft-Clickable-List.vue";
-  import LeftNavClickableArrow from "./NavigationLeft-Clickable-Arrow.vue";
+  import LeftNavItem from "./NavigationDrawer-Item.vue";
+  import LeftNavClickableList from "./NavigationDrawer-Clickable-List.vue";
+  import LeftNavClickableArrow from "./NavigationDrawer-Clickable-Arrow.vue";
   export default {
     emits: ["click-open"],
     components: {
@@ -23,7 +23,7 @@
 
 <template>
   <div
-    class="NavigationLeft-Click-Body transition"
+    class="NavigationDrawer-Click-Body transition"
     :isSelected="`${isSelected}`"
     :isWide="`${isWide}`"
     :isExpand="`${isExpand}`"
@@ -42,7 +42,7 @@
 </template>
 
 <style lang="scss" scoped>
-  .NavigationLeft-Click-Body {
+  .NavigationDrawer-Click-Body {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -53,10 +53,10 @@
     position: relative;
   }
 
-  .NavigationLeft-Click-Body[isSelected="true"] {
+  .NavigationDrawer-Click-Body[isSelected="true"] {
     background: hsla(0, 0%, 0%, 0.8);
   }
-  .NavigationLeft-Click-Body[isSelected="false"] {
+  .NavigationDrawer-Click-Body[isSelected="false"] {
     &:hover,
     &:focus {
       box-shadow: var(--default-box-shadow);
@@ -64,17 +64,17 @@
     }
   }
 
-  .NavigationLeft-Click-Body[isWide="true"] {
+  .NavigationDrawer-Click-Body[isWide="true"] {
     width: 100%;
     border-radius: 0.5em;
   }
-  .NavigationLeft-Click-Body[isWide="false"] {
+  .NavigationDrawer-Click-Body[isWide="false"] {
     border-radius: 0.5rem;
     align-items: center;
     justify-content: center;
   }
 
-  .NavigationLeft-Click-Body[isExpand="true"] {
+  .NavigationDrawer-Click-Body[isExpand="true"] {
     background: #d9dbdd;
     width: 100%;
     border-radius: 0;

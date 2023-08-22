@@ -14,9 +14,9 @@
 </script>
 
 <template>
-  <div class="NavigationLeft-Search" :isWide="`${isWide}`">
+  <div class="NavigationDrawer-Search" :isWide="`${isWide}`">
     <ButtonIcon
-      class="NavigationLeft-Search-button"
+      class="NavigationDrawer-Search-button"
       v-if="!isWide"
       :src="host.icon('search-000000').toUrl()"
       @click="
@@ -29,7 +29,7 @@
     />
 
     <GlobalSearch
-      class="NavigationLeft-Search-comp"
+      class="NavigationDrawer-Search-comp"
       ref="globalsearch"
       @expand="() => $emit('expand')"
       @collapse="() => $emit('collapse')"
@@ -38,12 +38,12 @@
 </template>
 
 <style lang="scss" scoped>
-  .NavigationLeft-Search {
+  .NavigationDrawer-Search {
     display: flex;
     flex-direction: row;
     align-items: center;
     margin: auto;
-    .NavigationLeft-Search-comp {
+    .NavigationDrawer-Search-comp {
       --background-color: hsl(0, 0%, 94%);
       --border-radius: 0.8rem;
       --border: 1px solid hsla(0, 0%, 0%, 0.15);
@@ -51,7 +51,7 @@
       --dropdown-height: calc(100dvh - 10rem);
     }
   }
-  .NavigationLeft-Search[isWide="true"] {
+  .NavigationDrawer-Search[isWide="true"] {
     margin: 0 0.7rem;
   }
 </style>

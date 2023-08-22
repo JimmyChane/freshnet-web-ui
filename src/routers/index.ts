@@ -6,29 +6,6 @@ import PageLogin from "@/pages/login/PageLogin.vue";
 
 Vue.use(VueRouter);
 
-const beforeEnter: NavigationGuard = (to, from, next) => {
-  console.log({ to, from });
-
-  const { hash } = to;
-
-  let legacyPath = to.redirectedFrom ?? "";
-  if (legacyPath.startsWith("/#")) {
-    legacyPath = hash.substring(2);
-
-    if (!hash.startsWith("/")) {
-      legacyPath = `/${legacyPath}`;
-    }
-    if (legacyPath.length) {
-      next({ path: legacyPath, query: to.query });
-    }
-
-    return true;
-  }
-
-  next();
-  return false;
-};
-
 const routes: Array<RouteConfig> = [
   {
     path: "/item/id/:id",
