@@ -15,111 +15,22 @@
   // tools
   import AppLayout from "@/tools/AppLayout";
   import Navigation from "@/tools/Navigation";
-  import HostApi from "@/host/Server";
   import U from "@/U";
   import PHE from "print-html-element"; // https://www.npmjs.com/package/print-html-element
   import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
-  import { Icon } from "@/host/ServerResource";
 
-  const objectToArray = (object = {}) => {
-    return Object.keys(typeof object === "object" ? object : {}).map((key) => ({
-      key,
-      value: object[key],
-    }));
-  };
-  const isPassed = (user, permissions) => {
-    permissions = Array.isArray(permissions) ? permissions : [];
+  import NavPage from "./NavPage";
+  import NavGroup from "./NavViewGroup";
+  import NavView from "./NavView";
 
-    if (permissions.length > 0) {
-      if (user.isTypeAdmin() && !permissions.includes("admin")) return false;
-      if (user.isTypeStaff() && !permissions.includes("staff")) return false;
-    }
-
-    return true;
-  };
-  const parseIcon = (icon) => {
-    if (!U.isObjectOnly(icon)) return null;
-
-    const light =
-      icon.light instanceof Icon
-        ? icon.light.toUrl()
-        : HostApi.icon(icon.light).toUrl();
-    const dark =
-      icon.dark instanceof Icon
-        ? icon.dark.toUrl()
-        : HostApi.icon(icon.dark).toUrl();
-
-    return { light, dark };
-  };
-  const parseKey = (str) => U.optString(str).trim().replace(" ", "");
-  const parseGroup2s = (array) => {
-    return U.optArray(array).map((obj) => {
-      return {
-        key: obj.key,
-        title: obj.title,
-        icon: obj.icon,
-        values: obj.values,
-        children: obj.children,
-        userPermissions: obj.userPermissions,
-      };
-    });
-  };
-
-  class RouteQuery {
-    static isValidKey(key) {
-      return U.isString(key) && !key.includes(" ");
-    }
-    static isValidValue(value) {
-      return value !== null && value !== undefined && value !== "";
-    }
-    static replace(currentQuery, pendingQuery) {
-      const nextQueries = objectToArray(currentQuery);
-      const pendingQueries = objectToArray(pendingQuery);
-      let isChanged = false;
-
-      for (const pendingQuery of pendingQueries) {
-        if (!U.isObjectOnly(pendingQuery)) continue;
-
-        const { key, value } = pendingQuery;
-        if (!this.isValidKey(key)) continue;
-
-        const nextQuery = nextQueries.find((nextQuery) => {
-          return nextQuery.key === key;
-        });
-
-        if (!U.isObjectOnly(nextQuery)) {
-          nextQueries.push({ key, value });
-          isChanged = true;
-          continue;
-        }
-
-        if (nextQuery.value !== pendingQuery.value) {
-          nextQuery.value = pendingQuery.value;
-          isChanged = true;
-          continue;
-        }
-
-        if (!this.isValidValue(nextQuery.value)) {
-          nextQueries.splice(nextQueries.indexOf(nextQuery), 1);
-          isChanged = true;
-          continue;
-        }
-      }
-
-      if (!isChanged) return;
-
-      return nextQueries
-        .filter((nextQuery) => {
-          return (
-            this.isValidKey(nextQuery.key) && this.isValidValue(nextQuery.value)
-          );
-        })
-        .reduce((query, nextQuery) => {
-          query[nextQuery.key] = nextQuery.value;
-          return query;
-        }, {});
-    }
-  }
+  import {
+    objectToArray,
+    isPassed,
+    parseIcon,
+    parseKey,
+    parseGroup2s,
+  } from "./AppTool";
+  import RouteQuery from "./RouteQuery";
 
   const _children = [PageHome, PageProduct, PagePrint, PageManage];
 
@@ -169,93 +80,55 @@
         if (pages.length < 1) return [];
 
         const listGroup1 = pages.map((page) => {
-          // get property
-          let { key, title, icon, userPermissions } = page;
-          const { _children, _groups, _queries } = page;
+          const navPage = new NavPage()
+            .setKey(page.key)
+            .setTitle(page.title)
+            .setIcon(page.icon)
+            .setUserPermissions(page.userPermissions);
 
-          // get ready
-          key = parseKey(page.key);
-          title = U.optString(page.title).trim();
-          icon = parseIcon(page.icon);
-          const children = U.isFunction(_children) ? _children() : [];
-          const groups = U.isFunction(_groups) ? _groups() : [];
-          const queries = U.isFunction(_queries) ? _queries() : [];
-
-          // parsing
-          const parsedChildren = parseGroup2s([{ values: children }]).map(
-            (obj) => {
-              obj.isLink = true;
-              obj.isQuery = false;
-              return obj;
-            },
-          );
-          const parsedGroups = parseGroup2s(groups).map((obj) => {
-            obj.isLink = true;
-            obj.isQuery = false;
-            return obj;
-          });
-          const parsedQueries = parseGroup2s(queries).map((obj) => {
-            obj.isLink = true;
-            obj.isQuery = true;
-            return obj;
-          });
+          const children = U.isFunction(page._children) ? page._children() : [];
+          const groups = U.isFunction(page._groups) ? page._groups() : [];
+          const queries = U.isFunction(page._queries) ? page._queries() : [];
 
           const returnParsedGroups = [
-            ...parsedChildren,
-            ...parsedGroups,
-            ...parsedQueries,
+            ...parseGroup2s([{ values: children }, ...groups]).map((obj) => {
+              return obj.setIsLink(true).setIsQuery(false);
+            }),
+            ...parseGroup2s(queries).map((obj) => {
+              return obj.setIsLink(true).setIsQuery(true);
+            }),
           ]
-            .map((group) => {
-              if (!isPassed(this.user, group.userPermissions)) return group;
-
-              group.key = parseKey(group.key);
-              group.title = U.optString(group.title);
-              group.values = U.optArray(group.values);
-              if (Array.isArray(group.children)) {
-                group.values.unshift(...group.children);
-              }
-
-              return group;
+            .filter((group) => {
+              return isPassed(this.user, group.userPermissions);
             })
             .reduce((groups, group) => {
-              if (!isPassed(this.user, group.userPermissions)) {
-                return groups;
-              }
-
-              // get property
-              let { key, title } = group;
-              const { isLink, isQuery } = group;
-
               const views = U.optArray(group.values)
-                .map((value) => {
-                  if (!isPassed(this.user, value.userPermissions)) {
-                    return null;
-                  }
-                  const key = parseKey(value.key);
-                  const title = U.optString(value.title);
-                  const icon = parseIcon(value.icon);
-                  return { key, icon, title };
+                .filter((value) => {
+                  return isPassed(this.user, value.userPermissions);
                 })
-                .filter((view) => view !== null);
+                .map((value) => {
+                  return new NavView()
+                    .setKey(value.key)
+                    .setTitle(value.title)
+                    .setIcon(value.icon);
+                });
 
-              let found = groups.find((group) => group.key === key);
+              let found = groups.find((group) => group.key === navPage.key);
               if (!found) {
-                groups.push(
-                  (found = { key, title, isLink, isQuery, groups: [] }),
-                );
+                found = new NavGroup()
+                  .setKey(group.key)
+                  .setTitle(group.title)
+                  .setIsLink(group.isLink)
+                  .setIsQuery(group.isQuery);
+
+                groups.push(found);
               }
               found.groups.push(...views);
 
               return groups;
             }, []);
 
-          return {
-            key,
-            title,
-            icon,
-            userPermissions,
-            groups: returnParsedGroups,
-          };
+          return navPage.setGroups(returnParsedGroups);
         });
 
         listGroup1.forEach((group1) => {
