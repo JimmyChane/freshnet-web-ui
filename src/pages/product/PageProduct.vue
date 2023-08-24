@@ -21,10 +21,10 @@
 
   export default {
     key: "product",
-    title: "Products",
+    title: "Search",
     icon: new IconPack(
-      Server.resource.icon("products-FFFFFF"),
-      Server.resource.icon("products-000000"),
+      Server.resource.icon("magnifying-glass"),
+      Server.resource.icon("magnifying-glass"),
     ),
 
     components: {

@@ -4,7 +4,7 @@
   import PagePrint from "@/pages/print/PagePrint.vue";
   import PageManage from "@/pages/manage/PageManage.vue";
 
-  import NavigationDrawer from "./leftNav/NavigationDrawer.vue";
+  import NavigationDrawer from "./navigationDrawer/NavigationDrawer.vue";
   import NavigationBottom from "./bottomNavigationBar/BottomNavigationBar.vue";
   import ViewerImage from "./ViewerImage.vue";
   import Snackbar from "./Snackbar.vue";

@@ -1,13 +1,20 @@
 <script>
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
+  import IconHome from "@/icon/IconHome.vue";
+  import IconProducts from "@/icon/IconMagnifyingGlass.vue";
+  import IconPaper from "@/icon/IconPaper.vue";
+  import IconManage from "@/icon/IconManage.vue";
 
   export default {
-    components: { ButtonIcon },
+    components: { ButtonIcon, IconHome, IconProducts, IconPaper, IconManage },
     props: {
       item: { type: Object, default: () => null },
       isWide: { type: Boolean, default: true },
     },
     computed: {
+      key() {
+        return this.item?.key ?? "";
+      },
       icon() {
         return this.item?.icon ?? null;
       },
@@ -34,7 +41,27 @@
 
 <template>
   <div class="LeftNavItem" :isSelected="`${isSelected}`" :isWide="`${isWide}`">
-    <img class="LeftNavItem-icon" v-if="iconUrl" :src="iconUrl" />
+    <IconHome
+      class="LeftNavItem-icon"
+      v-if="key === 'home'"
+      :isSelected="isSelected"
+    />
+    <IconProducts
+      class="LeftNavItem-icon"
+      v-else-if="key === 'product'"
+      :isSelected="isSelected"
+    />
+    <IconPaper
+      class="LeftNavItem-icon"
+      v-else-if="key === 'print'"
+      :isSelected="isSelected"
+    />
+    <IconManage
+      class="LeftNavItem-icon"
+      v-else-if="key === 'manage'"
+      :isSelected="isSelected"
+    />
+    <img class="LeftNavItem-icon" v-else-if="iconUrl" :src="iconUrl" />
     <span
       class="LeftNavItem-title"
       v-if="iconUrl ? isWide && title.length : true"
@@ -62,6 +89,9 @@
       max-width: var(--size);
       max-height: var(--size);
       object-fit: scale-down;
+      
+      --primary-color: white;
+      --secondary-color: black;
     }
     .LeftNavItem-title {
       --size: 1.2em;

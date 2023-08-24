@@ -43,10 +43,10 @@
 
     .BottomNavigationBar-body {
       width: 100%;
-      max-width: 25rem;
+      max-width: 22rem;
       height: 100%;
 
-      --gap: 0.3rem;
+      --gap: 0.1rem;
 
       padding: var(--gap) calc(var(--gap) * 3);
       gap: var(--gap);

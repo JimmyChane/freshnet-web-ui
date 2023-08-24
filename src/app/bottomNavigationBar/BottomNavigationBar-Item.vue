@@ -1,10 +1,22 @@
 <script>
   import U from "@/U";
+  import IconHome from "@/icon/IconHome.vue";
+  import IconProducts from "@/icon/IconMagnifyingGlass.vue";
+  import IconPaper from "@/icon/IconPaper.vue";
+  import IconManage from "@/icon/IconManage.vue";
+
   export default {
+    components: { IconHome, IconProducts, IconPaper, IconManage },
     props: { item: { type: Object } },
     computed: {
-      isSelected: (c) =>
-        U.isFunction(c.item.isSelected) ? c.item.isSelected() : false,
+      key() {
+        return this.item.key;
+      },
+      isSelected() {
+        return U.isFunction(this.item.isSelected)
+          ? this.item.isSelected()
+          : false;
+      },
     },
   };
 </script>
@@ -15,7 +27,28 @@
     :to="`/${item.key}`"
     :isSelected="`${isSelected}`"
   >
+    <IconHome
+      class="BottomNavigationBar-Item-icon"
+      v-if="key === 'home'"
+      :isSelected="isSelected"
+    />
+    <IconProducts
+      class="BottomNavigationBar-Item-icon"
+      v-else-if="key === 'product'"
+      :isSelected="isSelected"
+    />
+    <IconPaper
+      class="BottomNavigationBar-Item-icon"
+      v-else-if="key === 'print'"
+      :isSelected="isSelected"
+    />
+    <IconManage
+      class="BottomNavigationBar-Item-icon"
+      v-else-if="key === 'manage'"
+      :isSelected="isSelected"
+    />
     <img
+      v-else
       :class="['BottomNavigationBar-Item-icon', 'transition']"
       :src="isSelected ? item.icon.light : item.icon.dark"
       :alt="`Go to ${item.title}`"
@@ -28,56 +61,78 @@
 
 <style lang="scss" scoped>
   .BottomNavigationBar-Item {
-    height: 100%;
-    width: 100%;
+    --primary-color: #1673e1;
+    --secondary-color: hsla(213, 82%, 48%, 0.2);
+    --third-color: hsla(213, 82%, 48%, 0.1);
+    --icon-size: 1.8em;
+    --padding: 0.4em;
+    --padding-inline: 1em;
+    --gap: 0.7em;
 
     background: none;
     border: none;
     color: inherit;
     text-decoration: inherit;
+    padding: var(--padding);
+    padding-inline: var(--padding-inline);
 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    font-size: 0.8rem;
+    justify-content: flex-start;
+    font-size: 1rem;
+    border-radius: 2em;
+    font-weight: 600;
+    transition: all 200ms cubic-bezier(1, 0, 0, 1);
+    position: relative;
+    overflow: hidden;
 
     .BottomNavigationBar-Item-icon {
-      width: 3.2rem;
-      height: 3rem;
-      padding: 0.5rem;
-      padding: 0.8rem;
-      border-radius: 0.8rem;
+      width: var(--icon-size);
+      height: var(--icon-size);
+      padding: 0.2em;
       transition-timing-function: cubic-bezier(1, 0, 0, 1);
     }
+    .BottomNavigationBar-Item-title {
+      min-width: max-content;
+      position: absolute;
+      left: calc(var(--padding-inline) + var(--icon-size) + var(--gap));
+      font-size: 0.9em;
+      color: var(--primary-color);
+    }
   }
-  .BottomNavigationBar-Item[isSelected="false"] {
-    cursor: pointer;
+
+  .BottomNavigationBar-Item[isSelected="true"] {
+    cursor: initial;
+    flex-grow: 1;
+    background: var(--secondary-color);
+
     .BottomNavigationBar-Item-icon {
-      margin-top: -0.8em;
-      margin-bottom: -0.5em;
-      transition-delay: 0.2s;
+      --color: var(--primary-color);
     }
 
-    &:hover,
-    &:focus {
-      .BottomNavigationBar-Item-icon {
-        margin-top: 0;
-        margin-bottom: -1.2em;
-      }
+    @media (max-width: 350px) {
+      flex-grow: 0;
       .BottomNavigationBar-Item-title {
         opacity: 0;
       }
     }
   }
-  .BottomNavigationBar-Item[isSelected="true"] {
-    cursor: initial;
+  .BottomNavigationBar-Item[isSelected="false"] {
+    cursor: pointer;
+    flex-grow: 0;
+
     .BottomNavigationBar-Item-icon {
-      background: hsla(0, 0%, 0%, 0.8);
-      margin-bottom: -1.2em;
+      --primary-color: #1673e1;
+      --secondary-color: #00000080;
     }
     .BottomNavigationBar-Item-title {
       opacity: 0;
+    }
+
+    &:hover,
+    &:focus {
+      background: var(--third-color);
     }
   }
 </style>
