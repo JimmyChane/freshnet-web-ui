@@ -84,7 +84,6 @@
     background: none;
     border: none;
     text-align: start;
-    padding: 0.1em 0.4em;
   }
 
   .NavigationDrawer-Clickable-isSelected {

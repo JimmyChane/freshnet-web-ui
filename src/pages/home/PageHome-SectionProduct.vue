@@ -112,9 +112,7 @@
         }
 
         this.itemTitle = await this.item.fetchFullTitle();
-        this.primaryColor = this.itemImage
-          ? await this.itemImage.fetchColor().catch(() => chroma("cccccc"))
-          : chroma("cccccc");
+        this.primaryColor = chroma("cccccc");
       },
 
       getColorMixed(color, value) {

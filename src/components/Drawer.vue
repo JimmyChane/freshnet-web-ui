@@ -89,8 +89,8 @@
          },
          styleBody() {
             if (!this.isDragging && this.isDrawer) return "none";
-            if (this.isLeft) return { "border-right": "1px solid hsl(0, 0%, 80%)" };
-            if (this.isRight) return { "border-left": "1px solid hsl(0, 0%, 80%)" };
+            // if (this.isLeft) return { "border-right": "1px solid hsl(0, 0%, 80%)" };
+            // if (this.isRight) return { "border-left": "1px solid hsl(0, 0%, 80%)" };
             return "none";
          },
       },

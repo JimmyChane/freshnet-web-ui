@@ -229,7 +229,7 @@
       align-items: stretch;
       overflow-y: auto;
       overflow-x: hidden;
-      background: hsl(0, 0%, 90%);
+      background: white;
       position: relative;
 
       .NavigationDrawer-line {
@@ -246,6 +246,7 @@
         justify-content: flex-start;
         padding: 0 0.2em;
         padding-bottom: 4em;
+        gap: 0.2em;
       }
       .NavigationDrawer-login {
         position: sticky;

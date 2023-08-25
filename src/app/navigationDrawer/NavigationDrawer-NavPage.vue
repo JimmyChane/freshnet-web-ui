@@ -43,7 +43,7 @@
         }
 
         if (this.isSelected && this.hasChildren) {
-          style["background"] = "white";
+          style["background"] = "var(--third-color)";
         }
 
         return style;
@@ -62,7 +62,7 @@
           }
         }
         if (this.hasChildren) {
-          style["--primary-color"] = "#abbec9";
+          style["--primary-color"] = "#1673e1";
         }
 
         return style;
@@ -121,6 +121,10 @@
 
 <style lang="scss" scoped>
   .NavPage {
+    --primary-color: #1673e1;
+    --secondary-color: rgba(22, 112, 223, 0.2);
+    --third-color: hsla(213, 82%, 48%, 0.1);
+
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -130,19 +134,18 @@
       flex-direction: column;
       align-items: stretch;
       justify-content: flex-start;
-      padding-top: 0.4em;
-      padding-bottom: 0.4em;
-      margin-inline: 0.4em;
+      margin: 0.4em;
       width: calc(100% - 0.8em);
 
       .NavPage-sectionParent {
         display: flex;
         flex-direction: column;
         align-items: center;
+
         .NavPage-sectionParent-line {
           width: calc(100% - 1.2rem);
           min-height: 1px;
-          background: var(--primary-color);
+          background: hsla(0, 0%, 0%, 0.7);
           opacity: 0.2;
           margin: 0.8rem 0;
         }

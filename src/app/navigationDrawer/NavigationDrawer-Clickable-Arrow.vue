@@ -1,9 +1,9 @@
 <script>
-  import ButtonIcon from "@/components/button/ButtonIcon.vue";
+  import IconArrowDown from "@/icon/IconArrowDown.vue";
 
   export default {
     emits: ["click"],
-    components: { ButtonIcon },
+    components: { IconArrowDown },
     props: {
       isExpand: { type: Boolean },
     },
@@ -19,11 +19,12 @@
 
 <template>
   <div class="Navigationleft-Clickable-Body" :isExpand="`${isExpand}`">
-    <ButtonIcon
-      class="Navigationleft-Clickable-Body-button"
-      :src="icon.toUrl()"
-      @click="() => $emit('click')"
-    />
+    <button
+      class="Navigationleft-Clickable-Body-button transition"
+      @click="$emit('click')"
+    >
+      <IconArrowDown class="Navigationleft-Clickable-Body-button-icon" />
+    </button>
   </div>
 </template>
 
@@ -37,6 +38,33 @@
 
     .Navigationleft-Clickable-Body-button {
       transition-timing-function: cubic-bezier(1, 0, 0, 1);
+      font-size: 1rem;
+
+      --size: 2.4em;
+      width: var(--size);
+      height: var(--size);
+      min-width: var(--size);
+      min-height: var(--size);
+      max-width: var(--size);
+      max-height: var(--size);
+      border-radius: 50%;
+      padding: 0.7em;
+      background: none;
+      border: none;
+      cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover,
+      &:focus {
+        background: rgba(0, 0, 0, 0.1);
+      }
+
+      .Navigationleft-Clickable-Body-button-icon {
+        font-size: calc(var(--size) / 1.1);
+      }
     }
   }
 

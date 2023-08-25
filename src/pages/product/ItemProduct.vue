@@ -111,8 +111,7 @@
         }
       },
       async invalidatePreview() {
-        const color = this.preview?.fetchColor()?.catch(() => null) ?? null;
-        this.primaryColorHex = color?.toString() ?? "inherit";
+        this.primaryColorHex = "inherit";
       },
     },
   };

@@ -50,14 +50,13 @@
       font-weight: 600;
       opacity: 1;
       letter-spacing: 0.3em;
-      color: var(--primary-color);
-      color: hsla(0, 0%, 0%, 0.7);
     }
 
     .NavViewGroup-groups {
       display: flex;
       flex-direction: column;
       align-items: stretch;
+      gap: 0.2em;
 
       & > * {
         width: 100%;

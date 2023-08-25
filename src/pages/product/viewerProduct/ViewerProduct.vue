@@ -247,14 +247,7 @@
         this.fullTitle = await this.product.fetchFullTitle();
         this.brand = await this.product.fetchBrand();
       },
-      async invalidateImagePreview() {
-        return;
-        const color = this.imagePreview
-          ? await this.imagePreview.fetchColor().catch(() => null)
-          : null;
-
-        this.primaryColorHex = color?.toString() ?? "inherit";
-      },
+      async invalidateImagePreview() {},
 
       clickPreviousImage() {
         if (this.hasImagePrevious) {

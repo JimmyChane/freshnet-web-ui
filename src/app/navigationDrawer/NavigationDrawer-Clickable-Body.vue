@@ -18,6 +18,37 @@
       hasChildren: { type: Boolean },
       isExpand: { type: Boolean },
     },
+    computed: {
+      style() {
+        const style = {};
+
+        if (this.isWide) {
+          style["width"] = "100%";
+          style["border-radius"] = "0.5em";
+        } else {
+          style["margin-inline"] = "0.2em";
+          style["align-items"] = "center";
+          style["justify-content"] = "center";
+          style["border-radius"] = "0.5rem";
+        }
+
+        if (this.isWide && !this.hasChildren) {
+          style["margin-inline"] = "0.4em";
+        }
+
+        if (!this.isWide && this.hasChildren) {
+          style["margin-inline"] = "0";
+        }
+        if (this.isSelected && this.hasChildren) {
+          style["width"] = "100%";
+        }
+        if (!this.isSelected && this.hasChildren) {
+          style["width"] = "100%";
+        }
+
+        return style;
+      },
+    },
   };
 </script>
 
@@ -25,8 +56,7 @@
   <div
     class="NavigationDrawer-Click-Body transition"
     :isSelected="`${isSelected}`"
-    :isWide="`${isWide}`"
-    :isExpand="`${isExpand}`"
+    :style="style"
   >
     <LeftNavClickableList
       :item="item"
@@ -54,29 +84,22 @@
   }
 
   .NavigationDrawer-Click-Body[isSelected="true"] {
-    background: hsla(0, 0%, 0%, 0.8);
+    --primary-color: #1673e1;
+    --secondary-color: rgba(22, 112, 223, 0.2);
+    --third-color: hsla(213, 82%, 48%, 0.1);
+
+    background: var(--secondary-color);
   }
   .NavigationDrawer-Click-Body[isSelected="false"] {
+    --primary-color: rgba(0, 0, 0, 0.7);
+    --secondary-color: rgba(22, 112, 223, 0.2);
+    --third-color: hsla(213, 82%, 48%, 0.1);
+
+    color: var(--primary-color);
     &:hover,
     &:focus {
       box-shadow: var(--default-box-shadow);
-      background: hsla(0, 0%, 0%, 0.1);
+      background: var(--third-color);
     }
-  }
-
-  .NavigationDrawer-Click-Body[isWide="true"] {
-    width: 100%;
-    border-radius: 0.5em;
-  }
-  .NavigationDrawer-Click-Body[isWide="false"] {
-    border-radius: 0.5rem;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .NavigationDrawer-Click-Body[isExpand="true"] {
-    background: #d9dbdd;
-    width: 100%;
-    border-radius: 0;
   }
 </style>

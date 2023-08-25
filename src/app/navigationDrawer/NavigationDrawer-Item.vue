@@ -4,9 +4,29 @@
   import IconProducts from "@/icon/IconMagnifyingGlass.vue";
   import IconPaper from "@/icon/IconPaper.vue";
   import IconManage from "@/icon/IconManage.vue";
+  import IconProfile from "@/icon/IconProfile.vue";
+  import IconCustomers from "@/icon/IconCustomers.vue";
+  import IconService from "@/icon/IconService.vue";
+  import IconOrder from "@/icon/IconOrder.vue";
+  import IconUsers from "@/icon/IconUsers.vue";
+  import IconDatabase from "@/icon/IconDatabase.vue";
+  import IconSetting from "@/icon/IconSetting.vue";
 
   export default {
-    components: { ButtonIcon, IconHome, IconProducts, IconPaper, IconManage },
+    components: {
+      ButtonIcon,
+      IconHome,
+      IconProducts,
+      IconPaper,
+      IconManage,
+      IconProfile,
+      IconCustomers,
+      IconService,
+      IconOrder,
+      IconUsers,
+      IconDatabase,
+      IconSetting,
+    },
     props: {
       item: { type: Object, default: () => null },
       isWide: { type: Boolean, default: true },
@@ -25,6 +45,7 @@
         return this.icon?.dark ?? "";
       },
       iconUrl() {
+        return this.iconDark;
         return this.isSelected ? this.iconLight : this.iconDark;
       },
       title() {
@@ -61,6 +82,41 @@
       v-else-if="key === 'manage'"
       :isSelected="isSelected"
     />
+    <IconProfile
+      class="LeftNavItem-icon"
+      v-else-if="key === 'profile'"
+      :isSelected="isSelected"
+    />
+    <IconCustomers
+      class="LeftNavItem-icon"
+      v-else-if="key === 'customer'"
+      :isSelected="isSelected"
+    />
+    <IconService
+      class="LeftNavItem-icon"
+      v-else-if="key === 'service'"
+      :isSelected="isSelected"
+    />
+    <IconOrder
+      class="LeftNavItem-icon"
+      v-else-if="key === 'order'"
+      :isSelected="isSelected"
+    />
+    <IconUsers
+      class="LeftNavItem-icon"
+      v-else-if="key === 'users'"
+      :isSelected="isSelected"
+    />
+    <IconDatabase
+      class="LeftNavItem-icon"
+      v-else-if="key === 'database'"
+      :isSelected="isSelected"
+    />
+    <IconSetting
+      class="LeftNavItem-icon"
+      v-else-if="key === 'setting'"
+      :isSelected="isSelected"
+    />
     <img class="LeftNavItem-icon" v-else-if="iconUrl" :src="iconUrl" />
     <span
       class="LeftNavItem-title"
@@ -79,6 +135,7 @@
     display: flex;
     flex-direction: row;
     gap: 1em;
+    color: var(--primary-color);
 
     .LeftNavItem-icon {
       --size: 1.2em;
@@ -89,9 +146,8 @@
       max-width: var(--size);
       max-height: var(--size);
       object-fit: scale-down;
-      
-      --primary-color: white;
-      --secondary-color: black;
+
+      --secondary-color: rgba(0, 0, 0, 0.7);
     }
     .LeftNavItem-title {
       --size: 1.2em;
@@ -101,19 +157,11 @@
       font-size: 1em;
       font-weight: 600;
       line-height: 1.2;
-      color: inherit;
 
       display: flex;
       flex-direction: row;
       align-items: center;
     }
-  }
-
-  .LeftNavItem[isSelected="true"] {
-    color: white;
-  }
-  .LeftNavItem[isSelected="false"] {
-    color: black;
   }
 
   .LeftNavItem[isWide="true"] {

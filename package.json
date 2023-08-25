@@ -8,12 +8,10 @@
   },
   "dependencies": {
     "@types/chroma-js": "^2.4.0",
-    "@types/get-image-colors": "^4.0.2",
     "@vue/cli-plugin-pwa": "^5.0.8",
     "chroma-js": "^2.4.2",
     "core-js": "^3.8.3",
     "date-fns": "^2.30.0",
-    "get-image-colors": "^4.0.1",
     "path-browserify": "^1.0.1",
     "print-html-element": "^0.5.1",
     "socket.io-client": "^4.7.2",

@@ -284,13 +284,13 @@
     >
       <NavigationDrawer
         class="App-NavigationDrawer"
-        :style="{ 'grid-area': 'left', 'z-index': '3' }"
+        :style="{ 'grid-area': 'left' }"
         v-if="!navigation.isNone()"
         @click-logout="() => logout()"
       />
       <router-view
         class="App-routerView"
-        :style="{ 'grid-area': 'body', 'z-index': '2' }"
+        :style="{ 'grid-area': 'body' }"
         ref="AppRouterView"
       />
       <NavigationBottom
@@ -415,6 +415,7 @@
     --accent-color-hover: #c45815;
     --statusbar-color: #384a6a;
     --App-background-color: #f1f1f1;
+    --App-background-color: white;
   }
   .App {
     color: black;
@@ -463,6 +464,25 @@
         1fr
       );
       grid-template-columns: max-content 1fr;
+    }
+    .App-body[isDrawer="true"] {
+      .App-NavigationDrawer {
+        z-index: 3;
+      }
+      .App-routerView {
+        z-index: 2;
+      }
+    }
+    .App-body[isDrawer="false"] {
+      .App-NavigationDrawer {
+        z-index: 2;
+      }
+      .App-routerView {
+        z-index: 3;
+        border-radius: 1.2rem 0 0 1.2rem;
+        background: #f1f1f1;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
+      }
     }
   }
   .App[isNormal="true"] {

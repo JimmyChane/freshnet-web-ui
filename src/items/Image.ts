@@ -2,8 +2,6 @@ import Server from "@/host/Server";
 import U from "@/U";
 import Filename from "../objects/Filename";
 
-const getColors = require("get-image-colors"); // https://www.npmjs.com/package/get-image-colors
-
 interface ImageData {
   method: string;
   path: string;
@@ -84,7 +82,6 @@ export default class Image {
   }
 
   async fetchColor(): Promise<any> {
-    const palettes = await getColors(this.toUrl({ width: 20 }), { count: 1 });
-    return palettes[0];
+    return null;
   }
 }
