@@ -33,5 +33,6 @@
       font-size: 0.6rem;
       font-weight: 400;
       line-height: 1em;
+      border: 1px solid rgba(0, 0, 0, 0.1);
    }
 </style>

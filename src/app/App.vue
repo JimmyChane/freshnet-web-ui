@@ -414,7 +414,6 @@
     --accent-color: #fc8237;
     --accent-color-hover: #c45815;
     --statusbar-color: #384a6a;
-    --App-background-color: #f1f1f1;
     --App-background-color: white;
   }
   .App {
@@ -464,6 +463,10 @@
         1fr
       );
       grid-template-columns: max-content 1fr;
+
+      .App-routerView {
+        background: #f1f1f1;
+      }
     }
     .App-body[isDrawer="true"] {
       .App-NavigationDrawer {
@@ -480,7 +483,6 @@
       .App-routerView {
         z-index: 3;
         border-radius: 1.2rem 0 0 1.2rem;
-        background: #f1f1f1;
         box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
       }
     }

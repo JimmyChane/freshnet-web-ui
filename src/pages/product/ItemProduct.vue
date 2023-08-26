@@ -161,15 +161,17 @@
           : 'ItemProduct-title-isWhite',
       ]"
     >
-      <div class="ItemProduct-title-specs" v-if="specLabels.length">
-        <Label
-          v-for="label in specLabels"
-          :key="label.text"
-          :title="label.text"
-        />
-      </div>
       <span class="ItemProduct-title-text">{{ fullTitle }}</span>
       <span class="ItemProduct-title-price" v-if="price">{{ price.to }}</span>
+      <div class="ItemProduct-title-bodySpecs">
+        <div class="ItemProduct-title-specs" v-if="specLabels.length">
+          <Label
+            v-for="label in specLabels"
+            :key="label.text"
+            :title="label.text"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -247,27 +249,16 @@
     }
 
     .ItemProduct-title {
+      height: 100%;
       display: flex;
       flex-direction: column;
       flex-grow: 1;
-      justify-content: flex-start;
+      justify-content: stretch;
       text-align: start;
 
       gap: 0.5rem;
       color: black;
 
-      .ItemProduct-title-specs {
-        width: 100%;
-        gap: 2px;
-
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: flex-end;
-
-        overflow: hidden;
-      }
       .ItemProduct-title-text {
         min-height: 1em;
         max-height: 2em;
@@ -282,6 +273,25 @@
       }
       .ItemProduct-title-price {
         font-size: 0.7rem;
+      }
+      .ItemProduct-title-bodySpecs {
+        flex-grow: 1;
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+
+        .ItemProduct-title-specs {
+          width: 100%;
+          gap: 2px;
+
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: flex-start;
+          align-items: flex-end;
+
+          overflow: hidden;
+        }
       }
     }
     .ItemProduct-title-isDark {

@@ -61,6 +61,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.4rem;
+    padding-right: 0;
 
     position: sticky;
     top: 0;
