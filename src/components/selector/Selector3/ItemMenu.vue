@@ -5,6 +5,9 @@
          item: { type: Object, default: () => null },
          isSelected: { type: Boolean, default: false },
       },
+      mounted(){
+         console.log(this.item);
+      }
    };
 </script>
 

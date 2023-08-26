@@ -2,11 +2,12 @@
   import U from "@/U";
   import NavViewGroup from "./NavigationDrawer-NavViewGroup.vue";
   import NavigationLeftClickable from "./NavigationDrawer-Clickable.vue";
+  import NavPage from "@/app/NavPage";
 
   export default {
     components: { NavViewGroup, NavigationLeftClickable },
     props: {
-      group1: { type: Object, default: () => null },
+      group1: { type: NavPage, default: () => null },
     },
     computed: {
       group2s: (c) => U.optArray(c.group1.groups),

@@ -1,10 +1,11 @@
 <script>
+  import NavViewGroup from "../NavViewGroup";
   import NavigationLeftClickable from "./NavigationDrawer-Clickable.vue";
 
   export default {
     components: { NavigationLeftClickable },
     props: {
-      group2: { type: Object, default: () => null },
+      group2: { type: NavViewGroup, default: () => null },
     },
     computed: {
       title: (c) => c.group2.title,

@@ -2,12 +2,13 @@
   import ItemButton from "@/pages/manage/PanelItems-ItemButton.vue";
   import Label from "./ItemCustomer-Label.vue";
   import LabelDevice from "./ItemCustomer-LabelDevice.vue";
+  import Customer from "@/items/Customer";
 
   export default {
     components: { ItemButton, Label, LabelDevice },
     emtis: ["click", "click-remove"],
     props: {
-      item: { type: Object, default: null },
+      item: { type: Customer, default: null },
       selected: { type: Boolean, default: false },
     },
     data: (c) => ({ itemDeviceGroups: [] }),

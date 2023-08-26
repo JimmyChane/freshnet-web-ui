@@ -2,12 +2,13 @@
   import MenuOption from "@/components/button/MenuOption.vue";
   import ItemSpecification from "./ItemSpecification.vue";
   import Item from "./PanelCustomer-Item.vue";
+  import CustomerDevice from "@/items/CustomerDevice";
 
   export default {
     components: { MenuOption, ItemSpecification, Item },
     emtis: ["click", "click-remove"],
     props: {
-      item: { type: Object, default: null },
+      item: { type: CustomerDevice, default: null },
       selected: { type: Boolean, default: false },
     },
     computed: {

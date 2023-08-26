@@ -3,6 +3,7 @@
   import LeftNavHeader from "./NavigationDrawer-Header.vue";
   import NavPage from "./NavigationDrawer-NavPage.vue";
   import LeftNavLogin from "./NavigationDrawer-Login.vue";
+  import { Edge, Mode } from "@/components/DrawerOption";
 
   export default {
     components: {
@@ -26,12 +27,10 @@
       selectedViewKey: (c) => c.store.getters.currentViewKey,
 
       drawerMode() {
-        if (!this.isDrawer) return Drawer.Mode.FIXED;
-        return this.isExpand
-          ? Drawer.Mode.DRAWER_EXPAND
-          : Drawer.Mode.DRAWER_COLLAPSE;
+        if (!this.isDrawer) return Mode.FIXED;
+        return this.isExpand ? Mode.DRAWER_EXPAND : Mode.DRAWER_COLLAPSE;
       },
-      drawerEdge: () => Drawer.Edge.LEFT,
+      drawerEdge: () => Edge.LEFT,
 
       navigations() {
         const navigations = this.store.getters.pages;

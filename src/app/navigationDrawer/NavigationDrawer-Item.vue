@@ -11,6 +11,8 @@
   import IconUsers from "@/icon/IconUsers.vue";
   import IconDatabase from "@/icon/IconDatabase.vue";
   import IconSetting from "@/icon/IconSetting.vue";
+  import NavPage from "@/app/NavPage";
+  import NavView from "@/app/NavView";
 
   export default {
     components: {
@@ -28,7 +30,7 @@
       IconSetting,
     },
     props: {
-      item: { type: Object, default: () => null },
+      item: { type: [NavPage, NavView], default: () => null },
       isWide: { type: Boolean, default: true },
     },
     computed: {

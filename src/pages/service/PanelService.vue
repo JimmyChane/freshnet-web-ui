@@ -1,6 +1,5 @@
 <script>
   import Actionbar from "./PanelService-Actionbar.vue";
-  import MenuIcon from "@/components/MenuIcon.vue";
   import Selector from "@/components/selector/Selector.vue";
 
   import ButtonAddImage from "./ButtonAddImage.vue";
@@ -19,7 +18,6 @@
     components: {
       Actionbar,
       Selector,
-      MenuIcon,
       ButtonAddImage,
       ButtonImage,
       AddEvent,

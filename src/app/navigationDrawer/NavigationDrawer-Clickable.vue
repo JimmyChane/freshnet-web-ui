@@ -2,12 +2,14 @@
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
   import LeftNavClickableBody from "./NavigationDrawer-Clickable-Body.vue";
   import U from "@/U";
+  import NavPage from "@/app/NavPage";
+  import NavView from "@/app/NavView";
 
   export default {
     emits: ["click", "click-expand"],
     components: { ButtonIcon, LeftNavClickableBody },
     props: {
-      item: { type: Object, default: () => null },
+      item: { type: [NavPage, NavView], default: () => null },
       href: { type: String, default: "" },
       hasGroup2s: { type: Boolean, default: false },
     },

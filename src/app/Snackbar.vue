@@ -1,8 +1,10 @@
 <script>
   import U from "@/U";
+  import Notification from "@/tools/Notification";
+
   export default {
     props: {
-      item: { type: Object, default: () => {} },
+      item: { type: Notification, default: () => {} },
     },
     computed: {
       actions: (c) => U.optArray(c.item.actions),

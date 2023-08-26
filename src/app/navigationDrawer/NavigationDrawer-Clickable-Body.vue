@@ -3,6 +3,8 @@
   import LeftNavItem from "./NavigationDrawer-Item.vue";
   import LeftNavClickableList from "./NavigationDrawer-Clickable-List.vue";
   import LeftNavClickableArrow from "./NavigationDrawer-Clickable-Arrow.vue";
+  import NavView from "@/app/NavView";
+  import NavPage from "@/app/NavPage";
   export default {
     emits: ["click-open"],
     components: {
@@ -12,7 +14,7 @@
       LeftNavClickableArrow,
     },
     props: {
-      item: { type: Object },
+      item: { type: [NavPage, NavView] },
       isSelected: { type: Boolean },
       isWide: { type: Boolean },
       hasChildren: { type: Boolean },

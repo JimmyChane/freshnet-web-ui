@@ -25,6 +25,7 @@
       title: (c) => c.specType?.title ?? "",
     },
     mounted() {
+      console.log(this.item);
       this.$refs.ItemSpecInput.focus();
     },
   };

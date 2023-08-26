@@ -11,6 +11,7 @@
   import PanelCustomerEmpty from "./PanelCustomer-Empty.vue";
 
   import chroma from "chroma-js";
+  import Customer from "@/items/Customer";
 
   export default {
     components: {
@@ -31,7 +32,7 @@
       "click-item-device-update-description",
     ],
     props: {
-      item: { type: Object, default: () => null },
+      item: { type: Customer, default: () => null },
     },
     data: (c) => ({
       top: { showShadow: false },
@@ -97,6 +98,7 @@
       },
     },
     mounted() {
+      console.log(this.item);
       this.invalidateDevices();
     },
     methods: {

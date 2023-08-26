@@ -1,5 +1,6 @@
 <script>
   import U from "@/U";
+  import NavPage from "@/app/NavPage";
   import IconHome from "@/icon/IconHome.vue";
   import IconProducts from "@/icon/IconMagnifyingGlass.vue";
   import IconPaper from "@/icon/IconPaper.vue";
@@ -7,7 +8,7 @@
 
   export default {
     components: { IconHome, IconProducts, IconPaper, IconManage },
-    props: { item: { type: Object } },
+    props: { item: { type: NavPage } },
     computed: {
       key() {
         return this.item.key;
