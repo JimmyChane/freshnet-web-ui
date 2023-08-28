@@ -50,8 +50,8 @@
    <PanelAction
       title="Edit Customer"
       :isShowing="isShowing"
-      :isLoading="serviceStore.getters.isFetching"
-      :isClickable="!serviceStore.getters.isFetching"
+      :isLoading="$store.state.stores.service.getters.isFetching"
+      :isClickable="!$store.state.stores.service.getters.isFetching"
       @click-ok="onChange"
       @click-cancel="() => popupWindow.close()"
       @click-dismiss="() => popupWindow.close()"

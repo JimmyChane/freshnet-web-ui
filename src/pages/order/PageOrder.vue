@@ -32,12 +32,12 @@
       completedItems: [],
     }),
     computed: {
-      isLoading: (c) => c.orderStore.getters.isLoading,
-      items: (c) => U.optArray(c.orderStore.getters.items),
+      isLoading: (c) => c.$store.state.stores.order.getters.isLoading,
+      items: (c) => U.optArray(c.$store.state.stores.order.getters.items),
       currentExpandedOrderid: (c) => c.$route.query.order,
     },
     watch: {
-      "orderStore.getters.lastModified"() {
+      "$store.state.stores.order.getters.lastModified"() {
         this.invalidate();
       },
     },
@@ -49,7 +49,7 @@
         this.pendingItems = [];
         this.completedItems = [];
 
-        const groups = await this.orderStore.dispatch("getGroupsByStatus");
+        const groups = await this.$store.state.stores.order.dispatch("getGroupsByStatus");
         const groupPending = groups.find((group) => {
           return group.status === Order.Status.Pending;
         });
@@ -61,7 +61,7 @@
         this.completedItems = groupCompleted?.items ?? [];
       },
       refresh() {
-        this.orderStore.dispatch("refresh").catch((error) => {
+        this.$store.state.stores.order.dispatch("refresh").catch((error) => {
           this.$store.dispatch("snackbarShow", "Error While Refreshing Order");
           console.error(error);
         });
@@ -102,10 +102,10 @@
           (item) => $store.getters.replaceQuery({ query: { order: item.id } })
         "
         @click-complete="
-          (item) => orderStore.dispatch('updateToCompletedOfId', item.id)
+          (item) => $store.state.stores.order.dispatch('updateToCompletedOfId', item.id)
         "
         @click-remove="
-          (item) => orderStore.dispatch('removeOItemOfId', { id: item.id })
+          (item) => $store.state.stores.order.dispatch('removeOItemOfId', { id: item.id })
         "
       />
 
@@ -121,17 +121,17 @@
           (item) => $store.getters.replaceQuery({ query: { order: item.id } })
         "
         @click-pending="
-          (item) => orderStore.dispatch('updateToPendingOfId', item.id)
+          (item) => $store.state.stores.order.dispatch('updateToPendingOfId', item.id)
         "
         @click-remove="
-          (item) => orderStore.dispatch('removeOItemOfId', { id: item.id })
+          (item) => $store.state.stores.order.dispatch('removeOItemOfId', { id: item.id })
         "
       />
     </main>
 
     <Loading
       class="viewOrder-loading"
-      :isShowing="orderStore.getters.isLoading"
+      :isShowing="$store.state.stores.order.getters.isLoading"
     />
   </div>
 </template>

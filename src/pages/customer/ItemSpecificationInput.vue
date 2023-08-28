@@ -8,7 +8,7 @@
       specifications: (c) => {
         return [
           { key: "none", title: "None" },
-          ...c.specificationStore.getters.items.map((item) => item),
+          ...c.$store.state.stores.specification.getters.items.map((item) => item),
         ].map((item) => ({
           key: item.key,
           title: item.title,

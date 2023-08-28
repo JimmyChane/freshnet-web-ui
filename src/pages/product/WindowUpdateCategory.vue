@@ -13,7 +13,7 @@
          input: (c) => c.popupWindow.input,
          product: (c) => c.input?.product ?? null,
          categoryId: (c) => c.input?.categoryId ?? "",
-         categories: (c) => c.categoryStore.getters.items,
+         categories: (c) => c.$store.state.stores.category.getters.items,
          items: (c) => [
             { key: "", title: "None" },
             ...c.categories.map((category) => {

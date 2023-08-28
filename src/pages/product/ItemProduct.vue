@@ -33,11 +33,11 @@
       },
       isPrimaryColorDark: (c) => U.isColorDark(c.primaryColor),
 
-      user: (c) => c.loginStore.getters.user,
+      user: (c) => c.$store.state.stores.login.getters.user,
       allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
       shouldShowPrice: (c) => {
-        let setting = c.settingStore.getters.items.find((setting) => {
+        let setting = c.$store.state.stores.setting.getters.items.find((setting) => {
           return setting.key === Setting.Key.PublicShowPrice;
         });
         return setting?.value ?? false;
@@ -89,7 +89,7 @@
       },
     },
     async mounted() {
-      this.settingStore.dispatch("getItems");
+      this.$store.state.stores.setting.dispatch("getItems");
       this.invalidateFullTitle();
       this.invalidatePreview();
     },

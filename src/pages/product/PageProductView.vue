@@ -7,7 +7,7 @@
       components: { ViewerProduct, LoadingDots },
       data: (c) => ({ product: null }),
       computed: {
-         isLoading: (context) => context.productStore.getters.isLoading,
+         isLoading: (context) => context.$store.state.stores.product.getters.isLoading,
          isOver1200px: (context) => context.$store.getters.window.innerWidth > 1200,
          productId: (context) => context.$route.query.productId,
       },
@@ -24,7 +24,7 @@
       },
       methods: {
          async invalidate() {
-            const products = await this.productStore.dispatch("getItems");
+            const products = await this.$store.state.stores.product.dispatch("getItems");
             this.product = products.find((product) => {
                return product.id === this.productId;
             });

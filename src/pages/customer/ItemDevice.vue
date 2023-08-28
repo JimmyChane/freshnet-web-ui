@@ -15,13 +15,13 @@
       category: (c) => {
         const { categoryKey } = c.item;
 
-        return c.categoryStore.getters.items.find((category) => {
+        return c.$store.state.stores.category.getters.items.find((category) => {
           return category.key === categoryKey;
         });
       },
     },
     mounted() {
-      this.categoryStore.dispatch("getItems");
+      this.$store.state.stores.category.dispatch("getItems");
     },
   };
 </script>

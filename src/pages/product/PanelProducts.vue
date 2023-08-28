@@ -88,10 +88,10 @@
       queryBrandId: (c) => c.$route.query.brand,
       queryStock: (c) => c.$route.query.stock,
 
-      isLoading: (c) => c.productStore.getters.isLoading,
+      isLoading: (c) => c.$store.state.stores.product.getters.isLoading,
       isEmpty: (c) => !c.isLoading && !c.productGroups.length,
       isEditable() {
-        const { user } = this.loginStore.getters;
+        const { user } = this.$store.state.stores.login.getters;
         return user.isTypeAdmin() || user.isTypeStaff();
       },
 
@@ -145,10 +145,10 @@
       isEditable() {
         this.invalidate();
       },
-      "productStore.getters.lastModified"() {
+      "$store.state.stores.product.getters.lastModified"() {
         this.invalidate();
       },
-      "categoryStore.getters.lastModified"() {
+      "$store.state.stores.category.getters.lastModified"() {
         this.invalidate();
       },
     },
@@ -160,10 +160,10 @@
         this.scrollToTop();
         this.invalidateProductId();
 
-        let categoryGroups = await this.productStore.dispatch(
+        let categoryGroups = await this.$store.state.stores.product.dispatch(
           "getGroupsByCategory",
         );
-        let brandGroups = await this.productStore.dispatch("getGroupsByBrand");
+        let brandGroups = await this.$store.state.stores.product.dispatch("getGroupsByBrand");
 
         if (!this.isEditable) {
           categoryGroups = categoryGroups

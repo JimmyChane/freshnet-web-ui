@@ -21,7 +21,7 @@
                return;
             }
 
-            this.serviceStore
+            this.$store.state.stores.service
                .dispatch("updateEventDescription", {
                   serviceID: this.service.id,
                   time: this.serviceEvent.timestamp.time,
@@ -47,8 +47,8 @@
    <PanelAction
       title="Edit Event Description"
       :isShowing="isShowing"
-      :isLoading="serviceStore.getters.isFetching"
-      :isClickable="!serviceStore.getters.isFetching"
+      :isLoading="$store.state.stores.service.getters.isFetching"
+      :isClickable="!$store.state.stores.service.getters.isFetching"
       @click-ok="() => onChange()"
       @click-cancel="() => popupWindow.close()"
       @click-dismiss="() => popupWindow.close()"

@@ -23,15 +23,16 @@
     }),
     computed: {
       isLoading: (c) => {
-        const { loginStore, databaseStore } = c;
+        const loginStore = c.$store.state.stores.login;
+        const databaseStore = c.$store.state.stores.database;
         return loginStore.getters.isLoading || databaseStore.getters.isLoading;
       },
-      user: (c) => c.loginStore.getters.user,
-      baseInfo: (c) => c.databaseStore.getters.baseInfo,
-      databases: (c) => c.databaseStore.getters.items,
+      user: (c) => c.$store.state.stores.login.getters.user,
+      baseInfo: (c) => c.$store.state.stores.database.getters.baseInfo,
+      databases: (c) => c.$store.state.stores.database.getters.items,
     },
     mounted() {
-      this.loginStore
+      this.$store.state.stores.login
         .dispatch("refresh")
         .then(() => {
           this.actionRefresh();
@@ -59,7 +60,9 @@
         reader.onload = (event) => {
           this.imports.data = reader.result;
 
-          this.databaseStore.dispatch("imports", { json: reader.result });
+          this.$store.state.stores.database.dispatch("imports", {
+            json: reader.result,
+          });
         };
         reader.readAsText(file);
       },
@@ -74,7 +77,7 @@
             if (this.user === null || !this.user.isTypeAdmin()) {
               throw new Error();
             }
-            return this.databaseStore.dispatch("loadBaseInfo");
+            return this.$store.state.stores.database.dispatch("loadBaseInfo");
           })
           .catch((error) => {
             this.$store.dispatch("snackbarShow", "Error Loading Databases");

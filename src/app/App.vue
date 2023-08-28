@@ -66,7 +66,7 @@
       navigation: null,
     }),
     computed: {
-      user: (c) => c.loginStore.getters.user,
+      user: (c) => c.$store.state.stores.login.getters.user,
 
       // pages
       pages() {
@@ -157,14 +157,14 @@
         return paths.length > 1 ? paths[1] : "";
       },
 
-      isLogging: (c) => c.loginStore.getters.isLogging,
+      isLogging: (c) => c.$store.state.stores.login.getters.isLogging,
     },
     watch: {
       currentPaths() {
         this.navigation.closeNavigationDrawer();
       },
       isLogging() {
-        if (!this.loginStore.getters.user && this.isLogging) {
+        if (!this.$store.state.stores.login.getters.user && this.isLogging) {
           this.$store.dispatch("snackbarShow", "User Logging");
         }
       },
@@ -253,7 +253,7 @@
       },
 
       async invalidateUser() {
-        const user = await this.loginStore.dispatch("getUser");
+        const user = await this.$store.state.stores.login.dispatch("getUser");
 
         if (user.isTypeAdmin() || user.isTypeStaff()) {
           this.shouldShowStatus = true;
@@ -264,7 +264,7 @@
         }
       },
       logout() {
-        this.loginStore.dispatch("logout").then((user) => {
+        this.$store.state.stores.login.dispatch("logout").then((user) => {
           this.$store.dispatch("snackbarShow", `${user.name} is now logged out`);
         });
       },

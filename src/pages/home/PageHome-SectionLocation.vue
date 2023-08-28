@@ -5,7 +5,7 @@
     props: { isThin: { type: Boolean, default: false } },
     data: (c) => ({ address: "", link: "" }),
     watch: {
-      "settingStore.getters.lastModified"() {
+      "$store.state.stores.setting.getters.lastModified"() {
         this.invalidate();
       },
     },
@@ -14,10 +14,10 @@
     },
     methods: {
       async invalidate() {
-        this.address = await this.settingStore.dispatch("findValueOfKey", {
+        this.address = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
           key: Setting.Key.Location,
         });
-        this.link = await this.settingStore.dispatch("findValueOfKey", {
+        this.link = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
           key: Setting.Key.LocationLink,
         });
       },

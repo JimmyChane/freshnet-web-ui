@@ -16,8 +16,8 @@
       computed: {
          isShowing: (c) => c.popupWindow.isShowing,
          item: (c) => c.popupWindow.item,
-         isLoading: (c) => c.customerStore.getters.isLoading,
-         isClickable: (c) => !c.customerStore.getters.isLoading,
+         isLoading: (c) => c.$store.state.stores.customer.getters.isLoading,
+         isClickable: (c) => !c.$store.state.stores.customer.getters.isLoading,
       },
       watch: {
          isShowing() {
@@ -65,7 +65,7 @@
                return;
             }
 
-            this.customerStore
+            this.$store.state.stores.customer
                .dispatch("updateNamePhoneNumberOfItemId", {
                   _id: this.item.id,
                   name: this.data.name,

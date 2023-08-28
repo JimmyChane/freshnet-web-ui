@@ -119,7 +119,7 @@
             key: "urgent",
             title: "Urgent",
             click: () => {
-              this.serviceStore.dispatch("updateUrgentOfId", {
+              this.$store.state.stores.service.dispatch("updateUrgentOfId", {
                 serviceID: this.service.id,
                 isUrgent: !this.service.isUrgent(),
               });
@@ -129,7 +129,7 @@
             key: "warranty",
             title: "Warranty",
             click: () => {
-              this.serviceStore.dispatch("updateWarrantyOfId", {
+              this.$store.state.stores.service.dispatch("updateWarrantyOfId", {
                 serviceID: this.service.id,
                 isWarranty: !this.service.isWarranty(),
               });
@@ -227,7 +227,7 @@
             :isClickable="false"
             @click="
               () => {
-                serviceStore.dispatch('removeLabelFromId', {
+                $store.state.stores.service.dispatch('removeLabelFromId', {
                   serviceID: service.id,
                   label,
                 });
@@ -256,7 +256,7 @@
                 :label="label"
                 @click="
                   () => {
-                    serviceStore.dispatch('removeLabelFromId', {
+                    $store.state.stores.service.dispatch('removeLabelFromId', {
                       serviceID: service.id,
                       label,
                     });
@@ -311,7 +311,7 @@
                 @callback-select="
                   (state) => {
                     if (!service) return;
-                    serviceStore.dispatch('updateStateOfId', {
+                    $store.state.stores.service.dispatch('updateStateOfId', {
                       serviceID: service.id,
                       state,
                     });

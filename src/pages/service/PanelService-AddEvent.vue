@@ -54,7 +54,7 @@
         },
       ],
 
-      user: (c) => c.loginStore.getters.user,
+      user: (c) => c.$store.state.stores.login.getters.user,
       isUserDefault: (c) => {
         if (c.user.isTypeNone()) return false;
         const isUserAdmin = c.user.isTypeAdmin() && c.user.isDefault();
@@ -151,7 +151,7 @@
         const { files } = event.target;
         const imageFiles = [];
         for (const file of files) imageFiles.push(file);
-        const tempImageContents = await this.serviceStore.dispatch(
+        const tempImageContents = await this.$store.state.stores.service.dispatch(
           "addImageTemp",
           imageFiles,
         );

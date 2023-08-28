@@ -4,9 +4,9 @@
    export default {
       props: { item: { type: Object, default: () => null } },
       data: (c) => ({ U, values: [] }),
-      computed: { isLoading: (c) => c.settingStore.getters.isLoading },
+      computed: { isLoading: (c) => c.$store.state.stores.user.getters.isLoading },
       watch: {
-         "settingStore.getters.lastModified"() {
+         "$store.state.stores.setting.getters.lastModified"() {
             this.invalidateValue();
          },
          item() {

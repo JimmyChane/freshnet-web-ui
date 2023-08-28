@@ -12,14 +12,14 @@
       computed: {
          isShowing: (c) => c.popupWindow.isShowing,
          param: (c) => c.popupWindow.param,
-         isLoading: (c) => c.customerStore.getters.isLoading,
-         isClickable: (c) => !c.customerStore.getters.isLoading,
+         isLoading: (c) => c.$store.state.stores.customer.getters.isLoading,
+         isClickable: (c) => !c.$store.state.stores.customer.getters.isLoading,
          customer: (c) => c.param?.customer ?? null,
          device: (c) => c.param?.device ?? null,
       },
       methods: {
          clickOk() {
-            this.customerStore
+            this.$store.state.stores.customer
                .dispatch("removeDevice", {
                   ownerCustomerId: this.device.ownerCustomerId,
                   id: this.device.id,

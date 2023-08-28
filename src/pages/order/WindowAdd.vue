@@ -31,7 +31,7 @@
             if (order.customer_name === "") delete order.customer_name;
             if (order.phone_number === "") delete order.phone_number;
 
-            this.orderStore
+            this.$store.state.stores.order
                .dispatch("addItem", { data: order })
                .then((order) => this.popupWindow.close())
                .catch((error) => {

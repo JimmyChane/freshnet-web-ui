@@ -40,7 +40,7 @@
     userPermissions: ["admin", "staff"],
 
     computed: {
-      user: (c) => c.loginStore.getters.user,
+      user: (c) => c.$store.state.stores.login.getters.user,
     },
     watch: {
       user(userNow, userWas) {
@@ -52,7 +52,7 @@
     methods: {
       clickLogout() {
         if (!this.user.isTypeNone()) {
-          this.loginStore.dispatch("logout").then(() => this.redirectToLogin());
+          this.$store.state.stores.login.dispatch("logout").then(() => this.redirectToLogin());
         }
       },
       redirectToLogin() {
@@ -64,7 +64,7 @@
     },
     async mounted() {
       try {
-        const user = await this.loginStore.dispatch("getUser");
+        const user = await this.$store.state.stores.login.dispatch("getUser");
         if (user.isTypeNone()) this.redirectToLogin();
       } catch (error) {
         this.redirectToLogin();

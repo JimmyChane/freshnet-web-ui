@@ -90,7 +90,7 @@
               element.addEventListener("change", (event) => {
                 const imageFiles = event.target.files;
 
-                this.serviceStore
+                this.$store.state.stores.service
                   .dispatch("addImageToId", {
                     serviceID: this.service.id,
                     imageFiles,
@@ -119,7 +119,7 @@
               element.accept = ".jpeg, .jpg, .png, .webp";
               element.multiple = true;
               element.addEventListener("change", (e) => {
-                this.serviceStore
+                this.$store.state.stores.service
                   .dispatch("addEventImage", {
                     serviceID: this.service.id,
                     eventTime: this.time,
@@ -194,7 +194,7 @@
         if (this.isInitial) {
           onConfirm = async (accept, reject) => {
             try {
-              const service = await this.serviceStore.dispatch(
+              const service = await this.$store.state.stores.service.dispatch(
                 "removeImageFromId",
                 { serviceID: this.service.id, image },
               );
@@ -214,7 +214,7 @@
                 eventTime: this.time,
                 image,
               };
-              const service = await this.serviceStore.dispatch(
+              const service = await this.$store.state.stores.service.dispatch(
                 "removeEventImage",
                 requestOption,
               );

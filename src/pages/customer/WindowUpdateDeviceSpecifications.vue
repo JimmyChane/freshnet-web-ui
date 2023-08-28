@@ -18,8 +18,8 @@
       computed: {
          isShowing: (c) => c.popupWindow.isShowing,
          param: (c) => c.popupWindow.param,
-         isLoading: (c) => c.customerStore.getters.isLoading,
-         isClickable: (c) => !c.customerStore.getters.isLoading,
+         isLoading: (c) => c.$store.state.stores.customer.getters.isLoading,
+         isClickable: (c) => !c.$store.state.stores.customer.getters.isLoading,
          customer: (c) => c.param?.customer ?? undefined,
          device: (c) => c.param?.device ?? undefined,
          specifications: (c) => {
@@ -47,7 +47,7 @@
          },
 
          clickOk() {
-            this.customerStore
+            this.$store.state.stores.customer
                .dispatch("updateDeviceSpecifications", {
                   _id: this.device.id,
                   specifications: this.data.specifications,

@@ -43,7 +43,7 @@
       drawerCustomer: null,
     }),
     computed: {
-      isLoading: (c) => c.customerStore.getters.isLoading,
+      isLoading: (c) => c.$store.state.stores.customer.getters.isLoading,
 
       queryId: (c) => c.$route.query.id,
       queryName: (c) => c.$route.query.name,
@@ -84,7 +84,7 @@
       },
     },
     watch: {
-      "customerStore.getters.items"() {
+      "$store.state.stores.customer.getters.items"() {
         this.invalidate();
       },
       currentCustomer() {
@@ -101,13 +101,13 @@
     methods: {
       async invalidate() {
         this.items = [];
-        this.items = await this.customerStore.dispatch(
+        this.items = await this.$store.state.stores.customer.dispatch(
           "generateCustomersAcross",
         );
       },
 
       clickRefresh() {
-        this.customerStore.dispatch("refresh");
+        this.$store.state.stores.customer.dispatch("refresh");
         this.invalidate();
       },
       clickClose() {

@@ -19,7 +19,7 @@
       SpecificationMenus: (c) => {
         return [
           { key: c.KeyNone, title: "None" },
-          ...c.specificationStore.getters.items.map((item) => item),
+          ...c.$store.state.stores.specification.getters.items.map((item) => item),
         ]
           .map((item) => ({
             key: item.key,
@@ -55,7 +55,7 @@
       },
     },
     mounted() {
-      this.specificationStore.dispatch("refresh");
+      this.$store.state.stores.specification.dispatch("refresh");
     },
   };
 </script>

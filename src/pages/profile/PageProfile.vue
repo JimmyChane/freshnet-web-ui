@@ -49,7 +49,7 @@
     },
     async mounted() {
       this.isLoading = true;
-      await this.loginStore
+      await this.$store.state.stores.login
         .dispatch("getUser")
         .then((user) => {
           this.isLoading = false;

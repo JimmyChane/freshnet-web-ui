@@ -7,7 +7,7 @@
   export default {
     components: { NavigationBar, PrintContent, Layout },
     computed: {
-      user: (c) => c.loginStore.getters.user,
+      user: (c) => c.$store.state.stores.login.getters.user,
       allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
       width: () => Pixel.cm(210),
@@ -16,9 +16,9 @@
     data: () => ({ products: [] }),
     methods: {
       async invalidate() {
-        const { productStore } = this;
+        const productStore = this.$store.state.stores.product;
         const { id } = this.$route.query;
-        const groups = await productStore.dispatch("getGroupsByCategory");
+        const groups = await $store.state.stores.product.dispatch("getGroupsByCategory");
         const group = groups.find((group) => group.category.id === id);
         this.products = group?.items ?? [];
       },

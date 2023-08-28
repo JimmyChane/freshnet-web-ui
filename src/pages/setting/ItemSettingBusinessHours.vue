@@ -14,13 +14,13 @@
          values: [],
       }),
       watch: {
-         "settingStore.getters.lastModified"() {
+         "$store.state.stores.setting.getters.lastModified"() {
             this.invalidate();
          },
       },
       methods: {
          async invalidate() {
-            this.values = await this.settingStore.dispatch("findValueOfKey", {
+            this.values = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
                key: this.key,
                default: [],
             });

@@ -4,7 +4,7 @@
     props: { isWide: { type: Boolean, default: true } },
     data: (c) => ({ redirect: "" }),
     computed: {
-      user: (c) => c.loginStore.getters.user,
+      user: (c) => c.$store.state.stores.login.getters.user,
       userName: (c) => c.user.name,
       isLoginPage: (c) => c.$store.getters.currentPageKey === "login",
     },
@@ -22,7 +22,7 @@
     },
     mounted() {
       this.invalidateRedirection();
-      this.loginStore.dispatch("refresh");
+      this.$store.state.stores.login.dispatch("refresh");
     },
   };
 </script>

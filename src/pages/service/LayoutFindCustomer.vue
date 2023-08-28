@@ -20,7 +20,7 @@
       async invalidate() {
         this.customerTemplates = [];
         this.customerSuggestions = [];
-        const customers = await this.customerStore.dispatch(
+        const customers = await this.$store.state.stores.customer.dispatch(
           "generateCustomersAcross",
         );
 

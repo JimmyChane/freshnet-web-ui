@@ -98,7 +98,6 @@
       },
     },
     mounted() {
-      console.log(this.item);
       this.invalidateDevices();
     },
     methods: {
@@ -112,7 +111,7 @@
         const cacheItem = this.item;
         this.isLoadingDevices = true;
 
-        const devices = await this.customerStore.dispatch("getDevices");
+        const devices = await this.$store.state.stores.customer.dispatch("getDevices");
         if (this.item !== cacheItem) {
           return;
         }

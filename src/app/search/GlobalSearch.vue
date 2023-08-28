@@ -22,35 +22,35 @@
     },
     data: (c) => ({ searchText: "", searches: [] }),
     computed: {
-      user: (c) => c.loginStore.getters.user,
+      user: (c) => c.$store.state.stores.login.getters.user,
 
-      categories: (c) => c.categoryStore.getters.items,
+      categories: (c) => c.$store.state.stores.category.getters.items,
       products: (c) => {
-        return c.productStore.getters.items.filter((product) => {
+        return c.$store.state.stores.product.getters.items.filter((product) => {
           return product.isStockAvailable();
         });
       },
-      brands: (c) => c.brandStore.getters.items,
-      ps2Discs: (c) => c.ps2Store.getters.items,
+      brands: (c) => c.$store.state.stores.brand.getters.items,
+      ps2Discs: (c) => c.$store.state.stores.ps2.getters.items,
       services: (c) => {
         if (c.user.isTypeNone()) return [];
-        return c.serviceStore.getters.items;
+        return c.$store.state.stores.service.getters.items;
       },
     },
     watch: {
       user() {
-        if (!this.user.isTypeNone()) this.serviceStore.dispatch("getItems");
+        if (!this.user.isTypeNone()) this.$store.state.stores.service.dispatch("getItems");
         this.search(this.searchText);
       },
     },
     mounted() {
-      this.ps2Store.dispatch("getItems");
-      this.brandStore.dispatch("getItems");
-      this.categoryStore.dispatch("getItems");
-      this.categoryStore.dispatch("refresh");
-      this.productStore.dispatch("refresh");
+      this.$store.state.stores.ps2.dispatch("getItems");
+      this.$store.state.stores.brand.dispatch("getItems");
+      this.$store.state.stores.category.dispatch("getItems");
+      this.$store.state.stores.category.dispatch("refresh");
+      this.$store.state.stores.product.dispatch("refresh");
       if (this.user.isTypeAdmin() || this.user.isTypeStaff())
-        this.serviceStore.dispatch("getItems");
+        this.$store.state.stores.service.dispatch("getItems");
     },
     methods: {
       search(text) {

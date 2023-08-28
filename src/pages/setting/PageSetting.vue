@@ -76,7 +76,7 @@
     }
 
     findValue() {
-      return Vue.prototype.settingStore.getters.items.find((setting) => {
+      return Vue.prototype.$store.state.stores.user.getters.items.find((setting) => {
         return setting.key === this.key;
       });
     }
@@ -84,7 +84,7 @@
       if (!this.getKey().length) return;
 
       const data = { key: this.getKey(), value };
-      await Vue.prototype.settingStore.dispatch("updateItem", data);
+      await Vue.prototype.$store.state.stores.user.dispatch("updateItem", data);
     }
   }
 
@@ -106,12 +106,12 @@
     },
     data: (c) => ({ SettingModule, SettingBuilder }),
     computed: {
-      isLoading: (c) => c.settingStore.getters.isLoading,
-      isEmpty: (c) => !c.settingStore.getters.items.length,
+      isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
+      isEmpty: (c) => !c.$store.state.stores.user.getters.items.length,
     },
     methods: {
       refresh() {
-        this.settingStore.dispatch("refresh");
+        this.$store.state.stores.user.dispatch("refresh");
       },
     },
     mounted() {

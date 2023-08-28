@@ -7,7 +7,7 @@
     data: (c) => ({ U, isEditing: false, value: undefined, nextValue: "" }),
     props: { item: { type: Object, default: () => null } },
     computed: {
-      isLoading: (c) => c.settingStore.getters.isLoading,
+      isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
       isEmpty: (c) => !U.optString(c.value).length,
       title: (c) => c.item.getTitle(),
       actions: (c) => {
@@ -44,7 +44,7 @@
       },
     },
     watch: {
-      "settingStore.getters.lastModified"() {
+      "$store.state.stores.setting.getters.lastModified"() {
         this.invalidateValue();
       },
       item() {

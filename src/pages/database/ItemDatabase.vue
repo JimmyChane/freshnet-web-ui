@@ -32,7 +32,7 @@
          },
 
          pushDownloadDatabase() {
-            this.databaseStore
+            this.$store.state.stores.database
                .dispatch("exportDatabase", { database: this.database.name })
                .then((databaseContext) => {
                   let { filename, data } = databaseContext;

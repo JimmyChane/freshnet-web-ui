@@ -6,11 +6,11 @@
       props: { item: { type: Object, default: () => null } },
       data: (c) => ({ value: undefined }),
       computed: {
-         isLoading: (c) => c.settingStore.getters.isLoading,
+         isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
          title: (c) => c.item.getTitle(),
       },
       watch: {
-         "settingStore.getters.lastModified"() {
+         "$store.state.stores.setting.getters.lastModified"() {
             this.invalidateValue();
          },
          item() {

@@ -105,7 +105,7 @@
       bodyHeight: 0,
     }),
     computed: {
-      user: (c) => c.loginStore.getters.user,
+      user: (c) => c.$store.state.stores.login.getters.user,
       allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
       productId: (context) => context.$route.query.productId,
@@ -150,7 +150,7 @@
       async invalidateProduct() {
         this.product = null;
 
-        const product = await this.productStore.dispatch(
+        const product = await this.$store.state.stores.product.dispatch(
           "getItemOfId",
           this.productId,
         );
@@ -177,7 +177,7 @@
     },
     async mounted() {
       try {
-        const user = await this.loginStore.dispatch("getUser");
+        const user = await this.$store.state.stores.login.dispatch("getUser");
         if (user.isTypeNone()) this.redirectToLogin();
       } catch (error) {
         this.redirectToLogin();

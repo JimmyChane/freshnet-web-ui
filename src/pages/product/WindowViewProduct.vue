@@ -122,7 +122,7 @@
             class="WindowProduct-image-add"
             @callback-result="
               (files) => {
-                productStore
+                $store.state.stores.product
                   .dispatch('addImageOfId', { id: item.id, files })
                   .then((product) => {
                     item.data.images = item.data.images;
@@ -257,7 +257,7 @@
           :isToggled="item.stock.isAvailable"
           @click-toggle="
             (toggle) => {
-              productStore.dispatch('updateAvailabilityOfId', {
+              $store.state.stores.product.dispatch('updateAvailabilityOfId', {
                 id: item.id,
                 isAvailable: toggle,
               });
@@ -273,7 +273,7 @@
           :isToggled="item.stock.isSecondHand"
           @click-toggle="
             (toggle) => {
-              productStore.dispatch('updateSecondHandOfId', {
+              $store.state.stores.product.dispatch('updateSecondHandOfId', {
                 id: item.id,
                 isSecondHand: toggle,
               });
@@ -314,7 +314,7 @@
                   key: 'delete',
                   title: 'Delete',
                   interact: () => {
-                    productStore
+                    $store.state.stores.product
                       .dispatch('removeBundleOfId', {
                         id: item.id,
                         bundle,
@@ -362,7 +362,7 @@
                   key: 'delete',
                   title: 'Delete',
                   interact: () => {
-                    productStore
+                    $store.state.stores.product
                       .dispatch('removeGiftOfId', {
                         id: item.id,
                         gift,
@@ -397,7 +397,7 @@
             :key="JSON.stringify(price)"
             :price="price"
             @request-delete="
-              productStore
+              $store.state.stores.product
                 .dispatch('deletePriceOfProductId', {
                   productId: item.id,
                   price,

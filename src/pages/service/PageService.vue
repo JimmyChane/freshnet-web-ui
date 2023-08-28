@@ -29,7 +29,7 @@
         onClickRemove: (service) => c.clickRemoveService(service),
         onClickToAddEvent: (event) => {
           const arg = { serviceID: c.currentService.id, data: event };
-          c.serviceStore.dispatch("addEventToId", arg).catch((error) => {
+          c.$store.state.stores.service.dispatch("addEventToId", arg).catch((error) => {
             c.$store.dispatch("snackbarShow", "Failed to create an event");
             throw error;
           });
@@ -63,9 +63,9 @@
         ];
       },
 
-      currentUser: (c) => c.loginStore.getters.user,
+      currentUser: (c) => c.$store.state.stores.login.getters.user,
 
-      lastModified: (c) => c.serviceStore.getters.lastModified,
+      lastModified: (c) => c.$store.state.stores.service.getters.lastModified,
       currentServiceId: (c) => c.$route.query.service,
     },
     watch: {
@@ -78,11 +78,11 @@
     },
     mounted() {
       this.invalidate();
-      this.serviceStore.dispatch("refresh");
+      this.$store.state.stores.service.dispatch("refresh");
     },
     methods: {
       async invalidate() {
-        const items = await this.serviceStore.dispatch("getItems");
+        const items = await this.$store.state.stores.service.dispatch("getItems");
         for (const item of items) {
           item.events.sort((event1, event2) => event1.compare(event2));
         }
@@ -90,7 +90,7 @@
 
         this.items = items;
 
-        await this.loginStore.dispatch("refresh");
+        await this.$store.state.stores.login.dispatch("refresh");
         await this.invalidateServiceId();
       },
       async invalidateServiceId() {
@@ -100,7 +100,7 @@
           return;
         }
 
-        const service = await this.serviceStore.dispatch(
+        const service = await this.$store.state.stores.service.dispatch(
           "getItemOfId",
           this.currentServiceId,
         );
@@ -127,14 +127,14 @@
       },
 
       clickRefresh() {
-        this.serviceStore.dispatch("refresh");
+        this.$store.state.stores.service.dispatch("refresh");
       },
       clickAddService() {
         const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowAddService,
           onConfirm: async (accept, reject, data) => {
             try {
-              const result = await this.serviceStore.dispatch("addItem", {
+              const result = await this.$store.state.stores.service.dispatch("addItem", {
                 data,
               });
 
@@ -187,7 +187,7 @@
           value: service,
           onConfirm: async (accept, reject) => {
             try {
-              await this.serviceStore.dispatch("removeItemOfId", {
+              await this.$store.state.stores.service.dispatch("removeItemOfId", {
                 id: service.id,
               });
               accept();
@@ -209,7 +209,7 @@
           message: "After deleting this event, it cannot be reverted.",
           value: data,
           onConfirm: async (accept, reject) => {
-            await this.serviceStore.dispatch("removeEventFromId", {
+            await this.$store.state.stores.service.dispatch("removeEventFromId", {
               serviceID: data.service.id,
               time: data.event.timestamp.time,
             });
@@ -225,7 +225,7 @@
           value: image,
           onConfirm: async (accept, reject) => {
             try {
-              const service = await this.serviceStore.dispatch(
+              const service = await this.$store.state.stores.service.dispatch(
                 "removeImageFromId",
                 { serviceID: this.currentService.id, image },
               );
@@ -246,7 +246,7 @@
           description,
           onConfirm: async (accept, reject, description) => {
             try {
-              const service = await this.serviceStore.dispatch(
+              const service = await this.$store.state.stores.service.dispatch(
                 "updateDescriptionOfId",
                 { serviceID: this.currentService.id, description },
               );
@@ -265,7 +265,7 @@
           values: belongings,
           onConfirm: async (accept, reject, belongings) => {
             try {
-              const service = await this.serviceStore.dispatch(
+              const service = await this.$store.state.stores.service.dispatch(
                 "updateBelongingsOfId",
                 { serviceID: this.currentService.id, belongings },
               );
@@ -284,7 +284,7 @@
           value: customer,
           onConfirm: async (accept, reject, customer) => {
             try {
-              const service = await this.serviceStore.dispatch(
+              const service = await this.$store.state.stores.service.dispatch(
                 "updateCustomerOfId",
                 { serviceID: this.currentService.id, customer },
               );
@@ -332,7 +332,7 @@
 
     <Loading
       class="PageService-loading"
-      :isShowing="serviceStore.getters.isLoading"
+      :isShowing="$store.state.stores.service.getters.isLoading"
     />
   </div>
 </template>

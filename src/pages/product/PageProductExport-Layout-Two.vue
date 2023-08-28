@@ -24,7 +24,7 @@
       specificationPadding: 0,
     }),
     computed: {
-      user: (c) => c.loginStore.getters.user,
+      user: (c) => c.$store.state.stores.login.getters.user,
       allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
       brandId: (c) => c.product?.brandId ?? "",

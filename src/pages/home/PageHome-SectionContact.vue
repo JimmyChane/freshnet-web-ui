@@ -8,7 +8,7 @@
     props: { isThin: { type: Boolean, default: false } },
     data: (c) => ({ callContacts: [], chatContacts: [] }),
     watch: {
-      "settingStore.getters.lastModified"() {
+      "$store.state.stores.setting.getters.lastModified"() {
         this.invalidate();
       },
     },
@@ -17,7 +17,7 @@
     },
     methods: {
       async invalidate() {
-        const contacts = await this.settingStore.dispatch("findValueOfKey", {
+        const contacts = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
           key: Setting.Key.Contacts,
           default: [],
         });

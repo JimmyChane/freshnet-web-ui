@@ -113,7 +113,7 @@
       </DynamicScroller>
 
       <Empty
-         v-if="!list.length && !customerStore.getters.isLoading"
+         v-if="!list.length && !$store.state.stores.customer.getters.isLoading"
          :icon="iconEmpty"
       />
    </div>

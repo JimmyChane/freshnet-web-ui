@@ -25,7 +25,7 @@
             :checked="!productIsAvailable"
             @click="
                () => {
-                  productStore.dispatch('updateAvailabilityOfId', {
+                  $store.state.stores.product.dispatch('updateAvailabilityOfId', {
                      id: product.id,
                      isAvailable: !productIsAvailable,
                   });
@@ -38,7 +38,7 @@
             :checked="productIsSecondHand"
             @click="
                () => {
-                  productStore.dispatch('updateSecondHandOfId', {
+                  $store.state.stores.product.dispatch('updateSecondHandOfId', {
                      id: product.id,
                      isSecondHand: !productIsSecondHand,
                   });

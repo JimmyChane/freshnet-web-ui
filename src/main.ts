@@ -11,6 +11,6 @@ Vue.mixin(Mixin);
 
 new Vue({
   router,
-  store: store.store,
+  store,
   render: (h) => h(App),
 }).$mount("#app");

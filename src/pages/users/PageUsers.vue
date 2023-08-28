@@ -23,12 +23,12 @@
 
     components: { NavigationBar, Loading, Empty, ItemUser },
     computed: {
-      isLoading: (c) => c.userStore.getters.isLoading,
+      isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
       isCurrentUserAdmin: (c) => (c.user ? c.user.isTypeAdmin() : false),
 
-      user: (c) => c.loginStore.getters.user,
+      user: (c) => c.$store.state.stores.login.getters.user,
       users: (c) => {
-        return (!c.user.isTypeNone() ? c.userStore.getters.items : []).sort(
+        return (!c.user.isTypeNone() ? c.$store.state.stores.user.getters.items : []).sort(
           (user1, user2) => {
             if (user1.username === c.user.username) return -1;
             if (user2.username === c.user.username) return 1;
@@ -47,7 +47,7 @@
       },
 
       onIntentRefresh() {
-        this.userStore.dispatch("refresh").catch((error) => {
+        this.$store.state.stores.user.dispatch("refresh").catch((error) => {
           this.$store.dispatch("snackbarShow", "Failed to validate user");
         });
       },
@@ -57,7 +57,7 @@
           component: WindowAdd,
           onConfirm: async (data) => {
             try {
-              const user = await this.userStore.dispatch("addUser", {
+              const user = await this.$store.state.stores.user.dispatch("addUser", {
                 username: data.username,
                 name: data.name,
                 passwordNew: data.passwordNew,
@@ -81,7 +81,7 @@
           component: WindowRemove,
           onConfirm: async () => {
             try {
-              const result = await this.userStore.dispatch(
+              const result = await this.$store.state.stores.user.dispatch(
                 "removeUserByUsername",
                 { username: user.username },
               );
@@ -110,7 +110,7 @@
                 0,
               );
 
-              const userChange = await this.userStore.dispatch(
+              const userChange = await this.$store.state.stores.user.dispatch(
                 "updateTypeOfUserByUsername",
                 {
                   username: data.user.username,

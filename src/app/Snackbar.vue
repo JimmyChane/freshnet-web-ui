@@ -1,18 +1,23 @@
-<script>
+<script lang="ts">
   import U from "@/U";
   import Notification from "@/tools/Notification";
+  import Vue from "vue";
 
-  export default {
+  export default Vue.extend({
     props: {
-      item: { type: Notification, default: () => {} },
+      item: { type: Notification },
     },
     computed: {
-      actions: (c) => U.optArray(c.item.actions),
-      parsed_actions: (c) => {
-        return c.actions.filter((action) => c.actions.indexOf(action) < 2);
+      actions(): any[] {
+        return U.optArray(this.item.actions);
+      },
+      parsed_actions(): any[] {
+        return this.actions.filter((action) => {
+          return this.actions.indexOf(action) < 2;
+        });
       },
     },
-  };
+  });
 </script>
 
 <template>

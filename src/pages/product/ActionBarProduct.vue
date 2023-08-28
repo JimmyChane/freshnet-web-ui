@@ -50,8 +50,8 @@
           title: "Refresh",
           icon: this.host.icon("refresh-000000").toUrl(),
           click: () => {
-            this.categoryStore.dispatch("refresh");
-            this.productStore.dispatch("refresh");
+            this.$store.state.stores.category.dispatch("refresh");
+            this.$store.state.stores.product.dispatch("refresh");
           },
         });
 

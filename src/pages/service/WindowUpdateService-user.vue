@@ -5,7 +5,7 @@
       props: { name: { type: String, default: "" } },
       data: (c) => ({ nameOfUser: "" }),
       computed: {
-         user: (c) => c.loginStore.getters.user,
+         user: (c) => c.$store.state.stores.login.getters.user,
          isUserDefault: (c) => c.user.isDefault(),
          nameUserType: (c) => {
             if (c.user.isTypeAdmin()) return "Admin";

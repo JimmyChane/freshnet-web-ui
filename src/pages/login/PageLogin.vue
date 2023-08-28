@@ -16,7 +16,7 @@
       passwordErrorText: "",
     }),
     computed: {
-      isLoading: (c) => c.loginStore.getters.isLoading,
+      isLoading: (c) => c.$store.state.stores.login.getters.isLoading,
     },
     methods: {
       clickLogin() {
@@ -31,7 +31,7 @@
         if (password === "") this.passwordErrorText = "Missing Field";
         if (username === "" || password == "") return;
 
-        this.loginStore
+        this.$store.state.stores.login
           .dispatch("login", { username, password })
           .then((user) => setTimeout(() => this.$router.push(redirect), 200))
           .catch(() => {
@@ -42,7 +42,7 @@
       },
     },
     async mounted() {
-      let user = await this.loginStore.dispatch("getUser");
+      let user = await this.$store.state.stores.login.dispatch("getUser");
       if (user.isTypeNone()) return;
       if (!this.$route.query.redirect) return;
       this.$router.replace({ path: this.$route.query.redirect });

@@ -17,7 +17,7 @@
     data: (c) => ({ data: { key: "", content: "" } }),
     computed: {
       typeSelections: (c) => {
-        return c.specificationStore.getters.items
+        return c.$store.state.stores.specification.getters.items
           .map((item) => ({
             key: item.key,
             title: item.title,

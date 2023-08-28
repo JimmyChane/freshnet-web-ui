@@ -9,13 +9,13 @@
     props: { isThin: { type: Boolean, default: false } },
     data: (c) => ({ items: [], todayWorkingDay: null }),
     watch: {
-      "settingStore.getters.lastModified"() {
+      "$store.state.stores.setting.getters.lastModified"() {
         this.invalidate();
       },
     },
     methods: {
       async invalidate() {
-        const workingDays = await this.settingStore.dispatch("findValueOfKey", {
+        const workingDays = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
           key: Setting.Key.CompanyWorkingHours,
           default: [],
         });

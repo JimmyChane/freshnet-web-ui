@@ -127,7 +127,7 @@
         return "unknown";
       },
       onImageAdd(imageFiles) {
-        this.serviceStore
+        this.$store.state.stores.service
           .dispatch("addImageToId", {
             serviceID: this.service.id,
             imageFiles,

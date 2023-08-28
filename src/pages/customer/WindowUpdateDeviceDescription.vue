@@ -18,8 +18,8 @@
          isShowing: (c) => c.popupWindow.isShowing,
          customer: (c) => c.popupWindow.customer,
          device: (c) => c.popupWindow.device,
-         isLoading: (c) => c.customerStore.getters.isLoading,
-         isClickable: (c) => !c.customerStore.getters.isLoading,
+         isLoading: (c) => c.$store.state.stores.customer.getters.isLoading,
+         isClickable: (c) => !c.$store.state.stores.customer.getters.isLoading,
 
          specifications: (c) => {
             const specifications = c.device ? c.device.specifications : [];
@@ -49,7 +49,7 @@
 
          clickOk() {
             this.data.description = this.data.description.trim();
-            this.customerStore
+            this.$store.state.stores.customer
                .dispatch("updateDeviceDescription", {
                   _id: this.device.id,
                   description: this.data.description,

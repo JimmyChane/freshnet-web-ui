@@ -35,14 +35,14 @@
       },
       mounted() {
          this.invalidate();
-         this.brandStore.dispatch("getItems");
-         this.categoryStore.dispatch("getItems");
-         this.productStore.dispatch("getItems");
+         this.$store.state.stores.brand.dispatch("getItems");
+         this.$store.state.stores.category.dispatch("getItems");
+         this.$store.state.stores.product.dispatch("getItems");
       },
       methods: {
          async invalidate() {
-            const brands = await this.brandStore.dispatch("getItems");
-            const categories = await this.categoryStore.dispatch("getItems");
+            const brands = await this.$store.state.stores.brand.dispatch("getItems");
+            const categories = await this.$store.state.stores.category.dispatch("getItems");
 
             this.brandMenus = [
                { key: "none", title: "None" },

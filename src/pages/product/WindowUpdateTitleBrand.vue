@@ -16,7 +16,7 @@
          title: (c) => c.data?.title ?? "",
          brandId: (c) => c.data?.brandId ?? "",
          brand: (c) =>
-            c.brandStore.getters.items.find((brand) => brand.id === c.brandId),
+            c.$store.state.stores.brand.getters.items.find((brand) => brand.id === c.brandId),
          brandTitle: (c) => c.brand?.title ?? "",
          parsedTitleBrand: (c) => {
             if (c.title && c.brandTitle) return `${c.brandTitle} ${c.title}`;
@@ -28,7 +28,7 @@
          brandMenus: (c) => {
             return [
                { _id: "", title: "None" },
-               ...c.brandStore.getters.items,
+               ...c.$store.state.stores.brand.getters.items,
             ].map((item) => {
                return {
                   key: item.id,

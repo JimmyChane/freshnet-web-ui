@@ -59,29 +59,38 @@
       },
     },
     watch: {
-      "settingStore.getters.lastModified"() {
+      "$store.state.stores.setting.getters.lastModified"() {
         this.invalidate();
       },
     },
     methods: {
       async invalidate() {
-        this.companyTitle = await this.settingStore.dispatch("findValueOfKey", {
-          key: Setting.Key.CompanyName,
-          default: "",
-        });
-        this.companyCategory = await this.settingStore.dispatch(
+        this.companyTitle = await this.$store.state.stores.setting.dispatch(
+          "findValueOfKey",
+          {
+            key: Setting.Key.CompanyName,
+            default: "",
+          },
+        );
+        this.companyCategory = await this.$store.state.stores.setting.dispatch(
           "findValueOfKey",
           { key: Setting.Key.CompanyCategory, default: "" },
         );
-        this.addressHref = await this.settingStore.dispatch("findValueOfKey", {
-          key: Setting.Key.LocationLink,
-          default: "",
-        });
+        this.addressHref = await this.$store.state.stores.setting.dispatch(
+          "findValueOfKey",
+          {
+            key: Setting.Key.LocationLink,
+            default: "",
+          },
+        );
 
-        this.days = await this.settingStore.dispatch("findValueOfKey", {
-          key: Setting.Key.CompanyWorkingHours,
-          default: [],
-        });
+        this.days = await this.$store.state.stores.setting.dispatch(
+          "findValueOfKey",
+          {
+            key: Setting.Key.CompanyWorkingHours,
+            default: [],
+          },
+        );
       },
     },
     mounted() {

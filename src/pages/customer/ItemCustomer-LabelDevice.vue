@@ -22,7 +22,7 @@
       methods: {
          async invalidate() {
             this.category = null;
-            this.category = await this.categoryStore.dispatch(
+            this.category = await this.$store.state.stores.category.dispatch(
                "getItemOfKey",
                this.categoryKey,
             );

@@ -6,10 +6,10 @@
       props: { isThin: { type: Boolean, default: false } },
       data: (c) => ({ groups: [] }),
       watch: {
-         "categoryStore.getters.lastModified"() {
+         "$store.state.stores.category.getters.lastModified"() {
             this.invalidate();
          },
-         "productStore.getters.lastModified"() {
+         "$store.state.stores.product.getters.lastModified"() {
             this.invalidate();
          },
       },
@@ -21,7 +21,7 @@
             this.groups = [];
 
             const groups = (
-               await this.productStore.dispatch("getGroupsByCategory")
+               await this.$store.state.stores.product.dispatch("getGroupsByCategory")
             )
                .filter((group) => {
                   group.items = group.items.filter((product) => {

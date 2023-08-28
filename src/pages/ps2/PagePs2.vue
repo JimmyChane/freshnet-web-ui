@@ -32,8 +32,8 @@
     },
     data: (c) => ({ searchKeyword: "" }),
     computed: {
-      isLoading: (c) => c.ps2Store.getters.isLoading,
-      ps2Discs: (c) => c.ps2Store.getters.items,
+      isLoading: (c) => c.$store.state.stores.ps2.getters.isLoading,
+      ps2Discs: (c) => c.$store.state.stores.ps2.getters.items,
       ps2DiscSearches: (c) => {
         let searchKeywords = c.searchKeyword.toLowerCase().split(" ");
         if (searchKeywords.length == 0) return [];
@@ -62,7 +62,7 @@
       },
     },
     mounted() {
-      this.ps2Store.dispatch("getItems").catch((error) => {
+      this.$store.state.stores.ps2.dispatch("getItems").catch((error) => {
         this.$store.dispatch("snackbarShow", "Failed to load");
         console.error(error);
       });

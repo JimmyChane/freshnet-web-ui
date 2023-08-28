@@ -25,7 +25,7 @@
                return;
             }
 
-            this.loginStore
+            this.$store.state.stores.login
                .dispatch("changePassword", { passwordVerify, passwordNew })
                .then((user) => this.popupWindow.close())
                .catch((error) =>

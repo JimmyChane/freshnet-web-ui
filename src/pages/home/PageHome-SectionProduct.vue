@@ -22,7 +22,7 @@
       isDestroyed: false,
     }),
     computed: {
-      "categoryStore.getters.lastModified"() {
+      "$store.state.stores.category.getters.lastModified"() {
         this.invalidate();
       },
       item() {
@@ -75,7 +75,7 @@
 
       async invalidate() {
         this.products = [];
-        const groups = await this.productStore.dispatch("getGroupsByCategory");
+        const groups = await this.$store.state.stores.product.dispatch("getGroupsByCategory");
         if (!groups.length) return;
 
         this.itemTitle = "";

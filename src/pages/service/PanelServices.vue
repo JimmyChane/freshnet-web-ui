@@ -48,7 +48,7 @@
         return menu?.key ?? ListServices.GroupMode.DateCreated;
       },
 
-      currentUser: (c) => c.loginStore.getters.user,
+      currentUser: (c) => c.$store.state.stores.login.getters.user,
       isCurrentUserAdmin: (c) => c.currentUser.isTypeAdmin(),
       isCurrentUserDefault: (c) => c.currentUser.isDefault(),
 
@@ -218,7 +218,7 @@
     />
 
     <Empty
-      v-if="!items.length && !serviceStore.getters.isLoading"
+      v-if="!items.length && !$store.state.stores.service.getters.isLoading"
       :icon="iconEmpty"
     />
   </div>

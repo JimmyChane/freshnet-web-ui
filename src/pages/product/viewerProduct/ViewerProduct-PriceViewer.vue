@@ -58,7 +58,7 @@
          isSecondHand: (context) => context.product.isStockSecondHand(),
       },
       watch: {
-         "settingStore.getters.lastModified"() {
+         "$store.state.stores.setting.getters.lastModified"() {
             this.invalidate();
          },
       },
@@ -67,7 +67,7 @@
       },
       methods: {
          async invalidate() {
-            this.settingShowPrice = await this.settingStore.dispatch(
+            this.settingShowPrice = await this.$store.state.stores.setting.dispatch(
                "findValueOfKey",
                {
                   key: SettingModule.Key.PublicShowPrice,

@@ -190,7 +190,7 @@
       },
     },
     watch: {
-      "settingStore.getters.lastModified"() {
+      "$store.state.stores.setting.getters.lastModified"() {
         this.invalidateSettings();
       },
       isWide() {
@@ -212,7 +212,7 @@
     },
     methods: {
       async invalidateSettings() {
-        this.settingShowPrice = await this.settingStore.dispatch(
+        this.settingShowPrice = await this.$store.state.stores.setting.dispatch(
           "findValueOfKey",
           {
             key: SettingModule.Key.PublicShowPrice,
@@ -449,7 +449,7 @@
           @click-image="(image) => (imagePreviewIndex = images.indexOf(image))"
           @click-add-image-file="
             (files) => {
-              productStore.dispatch('addImageOfId', {
+              $store.state.stores.product.dispatch('addImageOfId', {
                 id: product.id,
                 files,
               });

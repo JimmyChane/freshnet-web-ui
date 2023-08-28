@@ -38,7 +38,7 @@
       computed: {
          isShowing: (c) => c.popupWindow.isShowing,
 
-         user: (c) => c.loginStore.getters.user,
+         user: (c) => c.$store.state.stores.login.getters.user,
          nameUserType: (c) => {
             if (c.user.isTypeAdmin()) return "Admin";
             if (c.user.isTypeStaff()) return "Staff";
@@ -99,7 +99,7 @@
                return;
             }
 
-            this.serviceStore
+            this.$store.state.stores.service
                .dispatch("importItem", { data: this.data })
                .then((service) => {
                   this.popupWindow.showService(service);
@@ -131,8 +131,8 @@
    <PanelAction
       title="Import Service"
       :isShowing="isShowing"
-      :isLoading="serviceStore.getters.isFetching"
-      :isClickable="!serviceStore.getters.isFetching"
+      :isLoading="$store.state.stores.service.getters.isFetching"
+      :isClickable="!$store.state.stores.service.getters.isFetching"
       @click-ok="onOk()"
       @click-cancel="() => popupWindow.close()"
       @click-dismiss="() => popupWindow.close()"

@@ -32,7 +32,7 @@
       computed: {
          isShowing: (c) => c.popupWindow.isShowing,
 
-         user: (c) => c.loginStore.getters.user,
+         user: (c) => c.$store.state.stores.login.getters.user,
          userIsDefault: (c) => c.user.isDefault() || c.user.isDefault(),
       },
       watch: {
@@ -52,7 +52,7 @@
          },
 
          onUser() {
-            this.loginStore.dispatch("refresh");
+            this.$store.state.stores.login.dispatch("refresh");
          },
          onReset() {
             this.data = {
@@ -122,8 +122,8 @@
    <PanelAction
       title="Add Service"
       :isShowing="isShowing"
-      :isLoading="serviceStore.getters.isFetching"
-      :isClickable="!serviceStore.getters.isFetching"
+      :isLoading="$store.state.stores.service.getters.isFetching"
+      :isClickable="!$store.state.stores.service.getters.isFetching"
       @click-ok="() => onCreate()"
       @click-cancel="
          () => {

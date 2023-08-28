@@ -29,12 +29,12 @@
       computed: {
          isShowing: (c) => c.popupWindow.isShowing,
          item: (c) => c.popupWindow.item,
-         isLoading: (c) => c.customerStore.getters.isLoading,
-         isClickable: (c) => !c.customerStore.getters.isLoading,
+         isLoading: (c) => c.$store.state.stores.customer.getters.isLoading,
+         isClickable: (c) => !c.$store.state.stores.customer.getters.isLoading,
          categoryMenus: (c) =>
             [
                { key: "none", title: "None" },
-               ...c.categoryStore.getters.items.map((item) => item),
+               ...c.$store.state.stores.category.getters.items.map((item) => item),
             ].map((item) => ({
                key: item.key,
                title: item.title,
@@ -60,8 +60,8 @@
       },
       methods: {
          bindData() {
-            this.categoryStore.dispatch("getItems");
-            this.specificationStore.dispatch("getItems");
+            this.$store.state.stores.category.dispatch("getItems");
+            this.$store.state.stores.specification.dispatch("getItems");
          },
 
          clickOk() {
@@ -78,7 +78,7 @@
             if (this.data.categoryKey === "none") {
                this.$store.dispatch("snackbarShow", "Category is Required");
             } else {
-               this.customerStore
+               this.$store.state.stores.customer
                   .dispatch("addDevice", this.data)
                   .then((item) => this.popupWindow.close())
                   .catch((error) => {
