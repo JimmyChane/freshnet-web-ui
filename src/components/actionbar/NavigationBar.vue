@@ -11,7 +11,7 @@
     },
     computed: {
       moreLeftMenus: (c) => {
-        if (!c.store.getters.navigation.isDrawer()) return c.leftMenus;
+        if (!c.$store.getters.navigation.isDrawer()) return c.leftMenus;
 
         const hamburgerMenuIcon =
           c.iconTheme === "white"
@@ -22,7 +22,7 @@
             key: "hamburgerMenu",
             title: "Hamburger Menu",
             icon: hamburgerMenuIcon.toUrl(),
-            click: () => c.store.getters.navigation.openNavigationDrawer(),
+            click: () => c.$store.getters.navigation.openNavigationDrawer(),
           },
           ...c.leftMenus,
         ];

@@ -12,7 +12,7 @@
          collections: (c) => c.database.collections,
          areExpanded: (c) => c.expands.length >= c.collections.length,
          areCollapsed: (c) => c.expands.length === 0,
-         isWide: (c) => c.store.getters.window.innerWidth > 500,
+         isWide: (c) => c.$store.getters.window.innerWidth > 500,
       },
       methods: {
          addExpand(name) {
@@ -37,7 +37,7 @@
                .then((databaseContext) => {
                   let { filename, data } = databaseContext;
                   let dataString = JSON.stringify(data, null, 0);
-                  this.store.getters.pushDownload(filename, dataString);
+                  this.$store.getters.pushDownload(filename, dataString);
                });
          },
       },

@@ -40,7 +40,7 @@
           if (isLegacy) menu.click = () => menu.interact();
         }
 
-        this.popupMenu = await this.store.dispatch("popupMenuShow", {
+        this.popupMenu = await this.$store.dispatch("popupMenuShow", {
           anchor: this._self.$el,
           menus,
           option: {

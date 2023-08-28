@@ -428,7 +428,7 @@
           :hasProductNext="!!productNext"
           @click-image="
             (image) =>
-              store.dispatch('imageViewerShow', {
+              $store.dispatch('imageViewerShow', {
                 image,
                 thumbnails: images,
               })

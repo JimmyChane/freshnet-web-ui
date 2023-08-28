@@ -39,8 +39,8 @@
     },
     data: (c) => ({ results: [], primaryColorLabel: chroma("black") }),
     computed: {
-      isOver350: (c) => c.store.getters.window.innerWidth > 350,
-      isOver550: (c) => c.store.getters.window.innerWidth > 550,
+      isOver350: (c) => c.$store.getters.window.innerWidth > 350,
+      isOver550: (c) => c.$store.getters.window.innerWidth > 550,
       currentGroupMenu: (c) => c.groupMenus[c.groupMenuIndex],
       currentSortMenu: (c) => c.sortMenus[c.sortMenuIndex],
 

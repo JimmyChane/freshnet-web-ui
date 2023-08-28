@@ -54,7 +54,7 @@
       isLoading: (c) => c.productStore.getters.isLoading,
 
       paths: (c) => {
-        return c.store.getters.paths;
+        return c.$store.getters.paths;
       },
       lastPath: (c) => {
         let { paths } = c;
@@ -139,7 +139,7 @@
       this.invalidate();
       this.onProduct();
       this.onProductId();
-      this.store.getters.navigation.setLayout(Navigation.Layout.THIN);
+      this.$store.getters.navigation.setLayout(Navigation.Layout.THIN);
     },
     methods: {
       async invalidate() {
@@ -247,20 +247,20 @@
         this.setProductId(product?.id ?? null);
       },
       setProductId(productId) {
-        this.store.getters.nextQuery({
+        this.$store.getters.nextQuery({
           query: { productId: productId ?? null },
         });
       },
 
       async clickSearch() {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowSearch,
           items: this.products,
         });
       },
 
       async clickAddProduct() {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowAddProduct,
           onConfirm: (output) => {
             this.productStore
@@ -270,14 +270,14 @@
                 this.setProduct(product);
               })
               .catch((error) => {
-                this.store.dispatch("snackbarShow", "Product Creation Failed");
+                this.$store.dispatch("snackbarShow", "Product Creation Failed");
               });
           },
         });
       },
 
       async clickRemoveProduct(input) {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowRemoveProduct,
           input,
           onConfirm: (input) => {
@@ -288,13 +288,13 @@
                 this.setProduct(null);
               })
               .catch((error) => {
-                this.store.dispatch("snackbarShow", "Product Deletion Failed");
+                this.$store.dispatch("snackbarShow", "Product Deletion Failed");
               });
           },
         });
       },
       async clickRemoveProductImage(input) {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowRemoveImage,
           input,
           onConfirm: (input) => {
@@ -311,7 +311,7 @@
       },
 
       async clickUpdateProductTitleBrand(input) {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateTitleBrand,
           input,
           onConfirm: (input) => {
@@ -328,13 +328,13 @@
             Promise.all([promiseTitle, promiseBrand])
               .then(() => popupWindow.close())
               .catch((error) => {
-                this.store.dispatch("snackbarShow", "Some Cannot Update");
+                this.$store.dispatch("snackbarShow", "Some Cannot Update");
               });
           },
         });
       },
       async clickUpdateProductPrice(input) {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowUpdatePrice,
           input,
           onConfirm: (input) => {
@@ -343,13 +343,13 @@
               .dispatch("updatePriceOfId", { id: product.id, price })
               .then((product) => popupWindow.close())
               .catch((error) => {
-                this.store.dispatch("snackbarShow", "Cannot Update");
+                this.$store.dispatch("snackbarShow", "Cannot Update");
               });
           },
         });
       },
       async clickUpdateProductDescription(input) {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateDescription,
           input,
           onConfirm: (input) => {
@@ -361,13 +361,13 @@
               })
               .then((product) => popupWindow.close())
               .catch((error) => {
-                this.store.dispatch("snackbarShow", "Cannot Update");
+                this.$store.dispatch("snackbarShow", "Cannot Update");
               });
           },
         });
       },
       async clickUpdateProductCategory(input) {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateCategory,
           input,
           onConfirm: (input) => {
@@ -379,13 +379,13 @@
               })
               .then((product) => popupWindow.close())
               .catch((error) => {
-                this.store.dispatch("snackbarShow", "Cannot Update");
+                this.$store.dispatch("snackbarShow", "Cannot Update");
               });
           },
         });
       },
       async clickUpdateProductSpecifications(input) {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateSpecifications,
           input,
           onConfirm: (input) => {
@@ -402,7 +402,7 @@
               })
               .then((product) => popupWindow.close())
               .catch((error) => {
-                this.store.dispatch("snackbarShow", "Cannot Update");
+                this.$store.dispatch("snackbarShow", "Cannot Update");
               });
           },
         });

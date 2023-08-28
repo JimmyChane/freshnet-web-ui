@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Vuex from "vuex";
+import Vuex, { StoreOptions } from "vuex";
 import socketIo from "socket.io-client";
 import Server from "../host/Server";
 import TimeNowGetter from "@/tools/TimeNowGetter";
@@ -11,12 +11,6 @@ const keyGetter = new TimeNowGetter();
 
 Vue.use(Vuex);
 
-interface Context {
-  state: Record<string, any>;
-  mutations: Record<string, any>;
-  getters: Record<string, any>;
-  actions: Record<string, any>;
-}
 interface PopupWindow {
   key: number;
   isShowing: boolean;
@@ -29,40 +23,56 @@ interface PopupWindow {
   onOpened?: ((popupWindow: PopupWindow) => void) | undefined;
   onClosed?: ((popupWindow: PopupWindow) => void) | undefined;
 }
+interface State {
+  app: any;
+  socket: any;
+  imageViewer: ImageViewerContext;
+  popupMenus: any[];
+  snackbars: any[];
+  popupWindows: any[];
+}
+interface ImageViewerContext {
+  isShowing: boolean;
+  image: any;
+  thumbnails: any[];
+}
 
 const init = (Stores: any) => {
-  const context: Context = {
-    state: {
-      app: null,
-    },
-    mutations: {},
-    getters: {
-      console: (c: any) => c.app.console,
-      window: (c: any) => c.app.window,
-      appLayout: (c: any) => c.app.appLayout,
-      navigation: (c: any) => c.app.navigation,
-
-      user: (c: any) => c.app.user,
-      pages: (c: any) => c.app.pages,
-      paths: (c: any) => c.app.paths,
-      currentPaths: (c: any) => c.app.currentPaths,
-      currentPageKey: (c: any) => c.app.currentPageKey,
-      currentViewKey: (c: any) => c.app.currentViewKey,
-
-      copyText: (c: any) => c.app.copyText,
-      openLink: (c: any) => c.app.openLink,
-      pushDownload: (c: any) => c.app.pushDownload,
-
-      print: (c: any) => c.app.print,
-      nextQuery: (c: any) => c.app.nextQuery,
-      replaceQuery: (c: any) => c.app.replaceQuery,
-      setQuery: (c: any) => c.app.setQuery,
-    },
-    actions: {},
+  const context: StoreOptions<State> = {};
+  context.state = {
+    app: null,
+    socket: null,
+    imageViewer: { isShowing: false, image: null, thumbnails: [] },
+    popupMenus: [],
+    snackbars: [],
+    popupWindows: [],
   };
+  context.mutations = {};
+  context.getters = {
+    console: (c: any) => c.app.console,
+    window: (c: any) => c.app.window,
+    appLayout: (c: any) => c.app.appLayout,
+    navigation: (c: any) => c.app.navigation,
+
+    user: (c: any) => c.app.user,
+    pages: (c: any) => c.app.pages,
+    paths: (c: any) => c.app.paths,
+    currentPaths: (c: any) => c.app.currentPaths,
+    currentPageKey: (c: any) => c.app.currentPageKey,
+    currentViewKey: (c: any) => c.app.currentViewKey,
+
+    copyText: (c: any) => c.app.copyText,
+    openLink: (c: any) => c.app.openLink,
+    pushDownload: (c: any) => c.app.pushDownload,
+
+    print: (c: any) => c.app.print,
+    nextQuery: (c: any) => c.app.nextQuery,
+    replaceQuery: (c: any) => c.app.replaceQuery,
+    setQuery: (c: any) => c.app.setQuery,
+  };
+  context.actions = {};
 
   // socket
-  context.state.socket = null;
   context.mutations.socket = (state: any, socket: any) => {
     return (state.socket = socket);
   };
@@ -111,11 +121,6 @@ const init = (Stores: any) => {
   };
 
   // imageViewer
-  context.state.imageViewer = {
-    isShowing: false,
-    image: null,
-    thumbnails: [],
-  };
   context.mutations.imageViewer = (state: any, imageViewer: any) =>
     (state.imageViewer = imageViewer);
   context.getters.imageViewer = (state: any) => state.imageViewer;
@@ -143,7 +148,6 @@ const init = (Stores: any) => {
   };
 
   // popupMenus
-  context.state.popupMenus = [];
   context.mutations.popupMenus = (state: any, popupMenus: any[]) =>
     (state.popupMenus = popupMenus);
   context.getters.popupMenus = (state: any) => state.popupMenus;
@@ -199,7 +203,6 @@ const init = (Stores: any) => {
   };
 
   // snackbars
-  context.state.snackbars = [];
   context.mutations.snackbars = (state: any, snackbars: any) =>
     (state.snackbars = snackbars);
   context.getters.snackbars = (state: any) => state.snackbars;
@@ -210,7 +213,6 @@ const init = (Stores: any) => {
   };
 
   // popup windows
-  context.state.popupWindows = [];
   context.mutations.popupWindows = (state: any, popupWindows: PopupWindow) => {
     state.popupWindows = popupWindows;
   };

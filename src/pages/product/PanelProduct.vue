@@ -24,7 +24,7 @@
       isBackable: { type: Boolean, default: true },
     },
     computed: {
-      openedWindowCount: (c) => c.store.getters.popupWindows.length,
+      openedWindowCount: (c) => c.$store.getters.popupWindows.length,
       actionbarLeftMenus() {
         return {
           key: "close",
@@ -82,16 +82,16 @@
     methods: {
       clickCopyLink() {
         if (!this.product) {
-          this.store.dispatch("snackbarShow", "Cannot Copy");
+          this.$store.dispatch("snackbarShow", "Cannot Copy");
           return;
         }
         const link = this.product.getLink();
         if (!link) {
-          this.store.dispatch("snackbarShow", "Cannot Copy");
+          this.$store.dispatch("snackbarShow", "Cannot Copy");
           return;
         }
-        this.store.getters.copyText(link);
-        this.store.dispatch("snackbarShow", {
+        this.$store.getters.copyText(link);
+        this.$store.dispatch("snackbarShow", {
           icon: this.host.icon("copy-FFFFFF").toUrl(),
           text: "Copied to Clipboard",
           actions: [{ title: "Open", click: () => this.clickView() }],
@@ -101,9 +101,9 @@
         let urlView = `${AppHost.path}/product/view`;
 
         if (!this.product) {
-          this.store.getters.openLink(urlView);
+          this.$store.getters.openLink(urlView);
         } else {
-          this.store.getters.openLink(
+          this.$store.getters.openLink(
             `${urlView}?productId=${this.product.id}`,
           );
         }

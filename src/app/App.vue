@@ -165,7 +165,7 @@
       },
       isLogging() {
         if (!this.loginStore.getters.user && this.isLogging) {
-          this.store.dispatch("snackbarShow", "User Logging");
+          this.$store.dispatch("snackbarShow", "User Logging");
         }
       },
       user() {
@@ -173,7 +173,7 @@
       },
     },
     async created() {
-      this.store.state.app = this;
+      this.$store.state.app = this;
       this.appLayout = new AppLayout(this);
       this.navigation = new Navigation(this);
       window.addEventListener("resize", this.invalidateWindow);
@@ -257,15 +257,15 @@
 
         if (user.isTypeAdmin() || user.isTypeStaff()) {
           this.shouldShowStatus = true;
-          this.store.dispatch("openSocket");
+          this.$store.dispatch("openSocket");
         } else {
           this.shouldShowStatus = false;
-          this.store.dispatch("closeSocket");
+          this.$store.dispatch("closeSocket");
         }
       },
       logout() {
         this.loginStore.dispatch("logout").then((user) => {
-          this.store.dispatch("snackbarShow", `${user.name} is now logged out`);
+          this.$store.dispatch("snackbarShow", `${user.name} is now logged out`);
         });
       },
     },
@@ -301,7 +301,7 @@
 
     <ViewerImage style="z-index: auto" />
     <PopupWindow
-      v-for="(popupWindow, index) in store.getters.popupWindows"
+      v-for="(popupWindow, index) in $store.getters.popupWindows"
       :style="{ 'z-index': 6 + index }"
       :key="popupWindow.key"
       :isShowing="popupWindow.isShowing"
@@ -314,21 +314,21 @@
     </PopupWindow>
 
     <PopupMenu
-      :style="{ 'z-index': 7 + store.getters.popupWindows.length }"
-      v-for="popupMenu of store.getters.popupMenus"
+      :style="{ 'z-index': 7 + $store.getters.popupWindows.length }"
+      v-for="popupMenu of $store.getters.popupMenus"
       :key="popupMenu.key"
       :popupMenu="popupMenu"
       class="App-PopupMenu"
     />
     <Snackbar
-      :style="{ 'z-index': 8 + store.getters.popupWindows.length }"
-      v-for="snackbar of store.getters.snackbars"
+      :style="{ 'z-index': 8 + $store.getters.popupWindows.length }"
+      v-for="snackbar of $store.getters.snackbars"
       :key="snackbar.key"
       :item="snackbar"
     />
     <Status
       v-if="shouldShowStatus"
-      :style="{ 'z-index': 9 + store.getters.popupWindows.length }"
+      :style="{ 'z-index': 9 + $store.getters.popupWindows.length }"
     />
   </div>
 </template>

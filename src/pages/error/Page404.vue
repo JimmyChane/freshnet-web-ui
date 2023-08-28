@@ -16,7 +16,7 @@
   >
     <Actionbar
       :class="['Home-top', 'transition', top.shadow ? 'Home-top-shadow' : '']"
-      v-if="store.getters.navigation.isDrawer()"
+      v-if="$store.getters.navigation.isDrawer()"
       :leftMenus="[
         {
           key: 'home',
@@ -27,7 +27,7 @@
         {
           title: 'Hamburger Menu',
           icon: host.icon('hamburgerMenu-000000').toUrl(),
-          click: () => store.getters.navigation.openNavigationDrawer(),
+          click: () => $store.getters.navigation.openNavigationDrawer(),
         },
       ]"
     />

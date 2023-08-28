@@ -2,7 +2,7 @@
   export default {
     data: (c) => ({ isShowing: false }),
     computed: {
-      isConnected: (c) => c.store.getters.isConnected,
+      isConnected: (c) => c.$store.getters.isConnected,
     },
     watch: {
       isConnected() {

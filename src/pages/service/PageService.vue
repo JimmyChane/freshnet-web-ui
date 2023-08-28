@@ -30,7 +30,7 @@
         onClickToAddEvent: (event) => {
           const arg = { serviceID: c.currentService.id, data: event };
           c.serviceStore.dispatch("addEventToId", arg).catch((error) => {
-            c.store.dispatch("snackbarShow", "Failed to create an event");
+            c.$store.dispatch("snackbarShow", "Failed to create an event");
             throw error;
           });
         },
@@ -130,7 +130,7 @@
         this.serviceStore.dispatch("refresh");
       },
       clickAddService() {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
+        const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowAddService,
           onConfirm: async (accept, reject, data) => {
             try {
@@ -141,7 +141,7 @@
               result ? accept() : reject();
               this.clickService(result);
             } catch (error) {
-              this.store.dispatch("snackbarShow", "Failed to create a service");
+              this.$store.dispatch("snackbarShow", "Failed to create a service");
               reject();
               throw error;
             }
@@ -149,7 +149,7 @@
         });
       },
       clickImportService() {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
+        const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowImportService,
           showService: (service) => this.clickService(service),
         });
@@ -162,15 +162,15 @@
         const query = { service: service?.id ?? null };
 
         if (hasPreviousSerivce && hasNextService) {
-          this.store.getters.replaceQuery({ query });
+          this.$store.getters.replaceQuery({ query });
         } else {
-          this.store.getters.nextQuery({ query });
+          this.$store.getters.nextQuery({ query });
         }
 
         this.updateServiceUI(service);
       },
       clickSearch() {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
+        const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowSearch,
           items: this.items,
           clickItem: (service) => {
@@ -180,7 +180,7 @@
       },
 
       clickRemoveService(service) {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
+        const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowRemove,
           title: "Delete Service",
           message: "After deleting this service, it cannot be reverted.",
@@ -192,10 +192,10 @@
               });
               accept();
               if (this.currentServiceId === service.id) {
-                this.store.getters.replaceQuery({ query: { service: null } });
+                this.$store.getters.replaceQuery({ query: { service: null } });
               }
             } catch (error) {
-              this.store.dispatch("snackbarShow", "Delete Failed");
+              this.$store.dispatch("snackbarShow", "Delete Failed");
               reject();
               throw error;
             }
@@ -203,7 +203,7 @@
         });
       },
       cllickRemoveServiceEvent(data) {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
+        const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowRemove,
           title: "Delete Event",
           message: "After deleting this event, it cannot be reverted.",
@@ -218,7 +218,7 @@
         });
       },
       clickRemoveServiceImage(image) {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
+        const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowRemove,
           title: "Delete Image",
           message: "After deleting this image, it cannot be reverted.",
@@ -229,10 +229,10 @@
                 "removeImageFromId",
                 { serviceID: this.currentService.id, image },
               );
-              this.store.dispatch("imageViewerHide");
+              this.$store.dispatch("imageViewerHide");
               accept();
             } catch (error) {
-              this.store.dispatch("snackbarShow", "Delete Image Failed");
+              this.$store.dispatch("snackbarShow", "Delete Image Failed");
               reject();
               throw error;
             }
@@ -241,7 +241,7 @@
       },
 
       clickEditServiceDescritpion(description) {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
+        const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateDescription,
           description,
           onConfirm: async (accept, reject, description) => {
@@ -252,7 +252,7 @@
               );
               accept();
             } catch (error) {
-              this.store.dispatch("snackbarShow", "Update Description Failed");
+              this.$store.dispatch("snackbarShow", "Update Description Failed");
               reject();
               throw error;
             }
@@ -260,7 +260,7 @@
         });
       },
       clickEditServiceBelongings(belongings) {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
+        const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateBelonging,
           values: belongings,
           onConfirm: async (accept, reject, belongings) => {
@@ -271,7 +271,7 @@
               );
               accept();
             } catch (error) {
-              this.store.dispatch("snackbarShow", "Update Belongings Failed");
+              this.$store.dispatch("snackbarShow", "Update Belongings Failed");
               reject();
               throw error;
             }
@@ -279,7 +279,7 @@
         });
       },
       clickEditServiceCustomer(customer) {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
+        const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateCustomer,
           value: customer,
           onConfirm: async (accept, reject, customer) => {
@@ -290,7 +290,7 @@
               );
               accept();
             } catch (error) {
-              this.store.dispatch("snackbarShow", "Update Customer Failed");
+              this.$store.dispatch("snackbarShow", "Update Customer Failed");
               reject();
               throw error;
             }
@@ -319,7 +319,7 @@
       titleEmpty="Select service to view"
       :isShowing="!!currentService"
       @click-collapse="
-        () => store.getters.nextQuery({ query: { service: null } })
+        () => $store.getters.nextQuery({ query: { service: null } })
       "
       @on-isWide="(isWide) => (panelListened.isWide = isWide)"
     >

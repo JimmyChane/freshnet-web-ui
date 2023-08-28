@@ -42,7 +42,7 @@
     },
     methods: {
       openWindowChangePassword() {
-        const popupWindow = this.store.dispatch("openPopupWindow", {
+        const popupWindow = this.$store.dispatch("openPopupWindow", {
           component: WindowChangePassword,
         });
       },
@@ -56,7 +56,7 @@
           this.user = user;
         })
         .catch((error) => {
-          this.store.dispatch("snackbarShow", "Failed to validate");
+          this.$store.dispatch("snackbarShow", "Failed to validate");
           this.isLoading = false;
           this.user = null;
         });

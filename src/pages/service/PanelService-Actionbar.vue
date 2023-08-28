@@ -166,7 +166,7 @@
         }
 
         const name = await service.fetchName().catch((error) => {
-          this.store.dispatch("snackbarShow", "Error getting user for service");
+          this.$store.dispatch("snackbarShow", "Error getting user for service");
           return "";
         });
 

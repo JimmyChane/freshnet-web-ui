@@ -91,11 +91,11 @@
             this.data = this.trimData();
 
             if (Number.isNaN(this.data.time)) {
-               this.store.dispatch("snackbarShow", "Date & Time Not Set");
+               this.$store.dispatch("snackbarShow", "Date & Time Not Set");
                return;
             }
             if (!this.data.state) {
-               this.store.dispatch("snackbarShow", "State Not Set");
+               this.$store.dispatch("snackbarShow", "State Not Set");
                return;
             }
 
@@ -106,7 +106,7 @@
                   this.popupWindow.close();
                })
                .catch((error) => {
-                  this.store.dispatch(
+                  this.$store.dispatch(
                      "snackbarShow",
                      "Failed to import a service",
                   );

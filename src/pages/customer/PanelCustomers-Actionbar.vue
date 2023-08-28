@@ -59,7 +59,7 @@
         ].map((menu) => {
           menu.isSelected = (menu) => c.filter === menu.key;
           menu.click = (menu) => {
-            c.store.getters.replaceQuery({ query: { filter: menu.key } });
+            c.$store.getters.replaceQuery({ query: { filter: menu.key } });
           };
           return menu;
         });

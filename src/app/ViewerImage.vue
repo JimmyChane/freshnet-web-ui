@@ -19,9 +19,9 @@
       translateX: 0,
     }),
     computed: {
-      isShowing: (c) => c.store.getters.imageViewer.isShowing,
-      image: (c) => c.store.getters.imageViewer.image,
-      thumbnails: (c) => c.store.getters.imageViewer.thumbnails,
+      isShowing: (c) => c.$store.getters.imageViewer.isShowing,
+      image: (c) => c.$store.getters.imageViewer.image,
+      thumbnails: (c) => c.$store.getters.imageViewer.thumbnails,
 
       style() {
         const transforms = [
@@ -55,7 +55,7 @@
     },
     methods: {
       clickDismiss() {
-        this.store.dispatch("imageViewerHide");
+        this.$store.dispatch("imageViewerHide");
       },
       invalidateContainerSize() {
         const { Container } = this.$refs;
@@ -153,7 +153,7 @@
                 ]"
                 v-for="thumbnail of thumbnails"
                 :key="thumbnail.toUrl()"
-                @click="() => store.dispatch('imageViewerSelect', thumbnail)"
+                @click="() => $store.dispatch('imageViewerSelect', thumbnail)"
               >
                 <ImageView class="ImageView-images-item" :src="thumbnail" />
               </button>

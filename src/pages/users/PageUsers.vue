@@ -48,12 +48,12 @@
 
       onIntentRefresh() {
         this.userStore.dispatch("refresh").catch((error) => {
-          this.store.dispatch("snackbarShow", "Failed to validate user");
+          this.$store.dispatch("snackbarShow", "Failed to validate user");
         });
       },
 
       async openWindowAdd() {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowAdd,
           onConfirm: async (data) => {
             try {
@@ -68,16 +68,16 @@
                 popupWindow.close();
                 return;
               }
-              this.store.dispatch("snackbarShow", "Failed to add user");
+              this.$store.dispatch("snackbarShow", "Failed to add user");
               throw new Error();
             } catch (error) {
-              this.store.dispatch("snackbarShow", "Error to add user");
+              this.$store.dispatch("snackbarShow", "Error to add user");
             }
           },
         });
       },
       async openWindowRemove(user) {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowRemove,
           onConfirm: async () => {
             try {
@@ -90,16 +90,16 @@
                 popupWindow.close();
                 return;
               }
-              this.store.dispatch("snackbarShow", "Failed to remove user");
+              this.$store.dispatch("snackbarShow", "Failed to remove user");
               throw new Error();
             } catch (error) {
-              this.store.dispatch("snackbarShow", "Error to remove user");
+              this.$store.dispatch("snackbarShow", "Error to remove user");
             }
           },
         });
       },
       async openWindowChange(user) {
-        const popupWindow = await this.store.dispatch("openPopupWindow", {
+        const popupWindow = await this.$store.dispatch("openPopupWindow", {
           component: WindowChange,
           user,
           userType: user.userType,
@@ -121,13 +121,13 @@
                 popupWindow.close();
                 return;
               }
-              this.store.dispatch(
+              this.$store.dispatch(
                 "snackbarShow",
                 "Failed to change user priviledge",
               );
               throw new Error();
             } catch (error) {
-              this.store.dispatch(
+              this.$store.dispatch(
                 "snackbarShow",
                 "Error to change user priviledge",
               );

@@ -3,10 +3,10 @@
   export default {
     components: { Item },
     computed: {
-      selectedPageKey: (c) => c.store.getters.currentPageKey,
-      selectedViewKey: (c) => c.store.getters.currentViewKey,
+      selectedPageKey: (c) => c.$store.getters.currentPageKey,
+      selectedViewKey: (c) => c.$store.getters.currentViewKey,
 
-      navigations: (c) => c.store.getters.pages,
+      navigations: (c) => c.$store.getters.pages,
     },
   };
 </script>

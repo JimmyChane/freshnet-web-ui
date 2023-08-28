@@ -63,7 +63,7 @@
     },
     mounted() {
       this.ps2Store.dispatch("getItems").catch((error) => {
-        this.store.dispatch("snackbarShow", "Failed to load");
+        this.$store.dispatch("snackbarShow", "Failed to load");
         console.error(error);
       });
     },
@@ -76,12 +76,12 @@
       <Actionbar
         class="PagePs2-header transition"
         :leftMenus="
-          store.getters.navigation.isDrawer()
+          $store.getters.navigation.isDrawer()
             ? [
                 {
                   title: 'Hamburger Menu',
                   icon: host.icon('hamburgerMenu-000000').toUrl(),
-                  click: () => store.getters.navigation.openNavigationDrawer(),
+                  click: () => $store.getters.navigation.openNavigationDrawer(),
                 },
                 {
                   title: 'Home',
@@ -177,7 +177,7 @@
       @click-dismiss="
         () => {
           if ($route.fullPath !== '/ps2') {
-            store.getters.replaceQuery({ query: { discCode: null } });
+            $store.getters.replaceQuery({ query: { discCode: null } });
           }
         }
       "

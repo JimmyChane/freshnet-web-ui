@@ -97,7 +97,7 @@
                   })
                   .then((serivce) => {})
                   .catch((error) => {
-                    this.store.dispatch("snackbarShow", "Failed to Add Image");
+                    this.$store.dispatch("snackbarShow", "Failed to Add Image");
                   });
               });
 
@@ -127,7 +127,7 @@
                   })
                   .then((serivce) => {})
                   .catch((error) => {
-                    this.store.dispatch("snackbarShow", "Failed to Add Image");
+                    this.$store.dispatch("snackbarShow", "Failed to Add Image");
                   });
               });
               element.dispatchEvent(
@@ -164,7 +164,7 @@
         if (!event) return (this.nameOfUser = "");
 
         const name = await this.event.fetchName().catch((error) => {
-          this.store.dispatch("snackbarShow", "Error getting user for event");
+          this.$store.dispatch("snackbarShow", "Error getting user for event");
           return "";
         });
 
@@ -183,7 +183,7 @@
         this.actions.onClickUpdateDescription(this.service.description);
       },
       clickEditDescription() {
-        this.store.dispatch("openPopupWindow", {
+        this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateEventDescription,
           service: this.service,
           serviceEvent: this.event,
@@ -198,10 +198,10 @@
                 "removeImageFromId",
                 { serviceID: this.service.id, image },
               );
-              this.store.dispatch("imageViewerHide");
+              this.$store.dispatch("imageViewerHide");
               accept();
             } catch (error) {
-              this.store.dispatch("snackbarShow", "Delete Image Failed");
+              this.$store.dispatch("snackbarShow", "Delete Image Failed");
               reject();
               throw error;
             }
@@ -218,17 +218,17 @@
                 "removeEventImage",
                 requestOption,
               );
-              this.store.dispatch("imageViewerHide");
+              this.$store.dispatch("imageViewerHide");
               accept();
             } catch (error) {
-              this.store.dispatch("snackbarShow", "Delete Image Failed");
+              this.$store.dispatch("snackbarShow", "Delete Image Failed");
               reject();
               throw error;
             }
           };
         }
 
-        this.store.dispatch("openPopupWindow", {
+        this.$store.dispatch("openPopupWindow", {
           component: WindowRemove,
           title: "Delete Image",
           message: "After deleting this image, it cannot be reverted.",
@@ -285,7 +285,7 @@
         @click="
           () => {
             const option = { image, thumbnails: images };
-            store.dispatch('imageViewerShow', option);
+            $store.dispatch('imageViewerShow', option);
           }
         "
         @click-remove="() => clickRemoveServiceImage(image)"

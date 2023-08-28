@@ -110,11 +110,11 @@
       },
       submit() {
         if (this.isUserDefault && !this.nameOfUser.trim()) {
-          this.store.dispatch("snackbarShow", "You must specify your name");
+          this.$store.dispatch("snackbarShow", "You must specify your name");
           return;
         }
         if (!this.eventDescription.trim()) {
-          this.store.dispatch("snackbarShow", 'You must specify "Description"');
+          this.$store.dispatch("snackbarShow", 'You must specify "Description"');
           return;
         }
 

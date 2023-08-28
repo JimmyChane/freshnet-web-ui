@@ -4,18 +4,18 @@
   export default {
     props: { isWide: { type: Boolean, default: false } },
     computed: {
-      isDrawer: (c) => c.store.getters.navigation.isDrawer(),
-      isExpanded: (c) => c.store.getters.navigation.isExpanded(),
+      isDrawer: (c) => c.$store.getters.navigation.isDrawer(),
+      isExpanded: (c) => c.$store.getters.navigation.isExpanded(),
       toggleButtonVisible: (c) =>
-        !c.store.getters.navigation.isThin() ||
-        c.store.getters.window.innerWidth > Navigation.MIN_WIDTH,
+        !c.$store.getters.navigation.isThin() ||
+        c.$store.getters.window.innerWidth > Navigation.MIN_WIDTH,
     },
     methods: {
       toggleCollapse() {
         if (this.isDrawer) {
           this.isExpanded
-            ? this.store.getters.navigation.closeNavigationDrawer()
-            : this.store.getters.navigation.openNavigationDrawer();
+            ? this.$store.getters.navigation.closeNavigationDrawer()
+            : this.$store.getters.navigation.openNavigationDrawer();
           return;
         }
 
@@ -23,9 +23,9 @@
           ? Navigation.Layout.THIN
           : Navigation.Layout.WIDE;
 
-        this.store.getters.navigation.getCurrentLayoutRequest() === null
-          ? this.store.getters.navigation.setDefaultLayout(nextLayout)
-          : this.store.getters.navigation.setLayout(nextLayout);
+        this.$store.getters.navigation.getCurrentLayoutRequest() === null
+          ? this.$store.getters.navigation.setDefaultLayout(nextLayout)
+          : this.$store.getters.navigation.setLayout(nextLayout);
       },
     },
   };

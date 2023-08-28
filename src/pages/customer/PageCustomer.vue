@@ -71,7 +71,7 @@
         }
 
         if (!isSearchById && (customer?.isFromStoreCustomer() ?? false)) {
-          c.store.getters.replaceQuery({
+          c.$store.getters.replaceQuery({
             query: {
               id: customer.id,
               name: null,
@@ -111,18 +111,18 @@
         this.invalidate();
       },
       clickClose() {
-        this.store.getters.nextQuery({
+        this.$store.getters.nextQuery({
           query: { id: null, name: null, phoneNumber: null },
         });
       },
 
       clickItemAdd() {
-        this.store.dispatch("openPopupWindow", {
+        this.$store.dispatch("openPopupWindow", {
           component: WindowAddCustomer,
         });
       },
       clickAddItemDevice(data) {
-        this.store.dispatch("openPopupWindow", {
+        this.$store.dispatch("openPopupWindow", {
           component: WindowAddDevice,
           item: data?.item ?? null,
         });
@@ -131,7 +131,7 @@
       clickItemRemove(item) {
         const data = { item };
 
-        this.store.dispatch("openPopupWindow", {
+        this.$store.dispatch("openPopupWindow", {
           component: WindowRemoveCustomer,
           item: data?.item ?? null,
           onConfirm: () => {
@@ -142,26 +142,26 @@
         });
       },
       clickRemoveItemDevice(data) {
-        this.store.dispatch("openPopupWindow", {
+        this.$store.dispatch("openPopupWindow", {
           component: WindowRemoveDevice,
           param: data ? { customer: data.item, device: data.device } : null,
         });
       },
 
       clickUpdateCustomer(data) {
-        this.store.dispatch("openPopupWindow", {
+        this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateCustomer,
           item: data?.item ?? null,
         });
       },
       clickUpdateDescription(data) {
-        this.store.dispatch("openPopupWindow", {
+        this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateDescription,
           item: data?.item ?? null,
         });
       },
       clickUpdateItemDeviceSpecifications(data) {
-        this.store.dispatch("openPopupWindow", {
+        this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateDeviceSpecifications,
           param: data
             ? {
@@ -173,7 +173,7 @@
         });
       },
       clickUpdateItemDeviceDescription(data) {
-        this.store.dispatch("openPopupWindow", {
+        this.$store.dispatch("openPopupWindow", {
           component: WindowUpdateDeviceDescription,
           customer: data?.customer ?? null,
           device: data?.device ?? null,

@@ -32,7 +32,7 @@
             this.data.description = this.data.description.trim();
 
             if (this.Requirement.name.isRequired && !this.data.name) {
-               this.store.dispatch(
+               this.$store.dispatch(
                   "snackbarShow",
                   'You must specify the "Name"',
                );
@@ -42,7 +42,7 @@
                this.Requirement.phoneNumber.isRequired &&
                !this.data.phoneNumber
             ) {
-               this.store.dispatch(
+               this.$store.dispatch(
                   "snackbarShow",
                   'You must specify the "Phone Number"',
                );
@@ -52,7 +52,7 @@
                this.Requirement.description.isRequired &&
                !this.data.description
             ) {
-               this.store.dispatch(
+               this.$store.dispatch(
                   "snackbarShow",
                   'You must specify the "Description"',
                );

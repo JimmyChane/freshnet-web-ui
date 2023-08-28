@@ -17,7 +17,7 @@
          onChange() {
             const { description } = this;
             if (description === this.serviceEvent.description) {
-               this.store.dispatch("snackbarShow", "No changes were made");
+               this.$store.dispatch("snackbarShow", "No changes were made");
                return;
             }
 

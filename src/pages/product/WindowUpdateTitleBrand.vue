@@ -47,7 +47,7 @@
             };
 
             if (!output.title) {
-               this.store.dispatch("snackbarShow", "You must specify title");
+               this.$store.dispatch("snackbarShow", "You must specify title");
                return;
             }
 

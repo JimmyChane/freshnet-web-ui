@@ -12,7 +12,7 @@
       titleEmpty: { type: String, default: "Select to view" },
     },
     computed: {
-      isWide: (c) => c.store.getters.window.innerWidth > c.wideWidthThreshold,
+      isWide: (c) => c.$store.getters.window.innerWidth > c.wideWidthThreshold,
 
       drawerEdge: (c) => Edge.RIGHT,
       drawerMode: (c) => {

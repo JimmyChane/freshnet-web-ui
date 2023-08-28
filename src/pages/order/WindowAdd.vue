@@ -35,7 +35,7 @@
                .dispatch("addItem", { data: order })
                .then((order) => this.popupWindow.close())
                .catch((error) => {
-                  this.store.dispatch(
+                  this.$store.dispatch(
                      "snackbarShow",
                      "Error While Creating Order",
                   );

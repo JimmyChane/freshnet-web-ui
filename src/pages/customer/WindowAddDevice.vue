@@ -76,14 +76,14 @@
             });
 
             if (this.data.categoryKey === "none") {
-               this.store.dispatch("snackbarShow", "Category is Required");
+               this.$store.dispatch("snackbarShow", "Category is Required");
             } else {
                this.customerStore
                   .dispatch("addDevice", this.data)
                   .then((item) => this.popupWindow.close())
                   .catch((error) => {
                      console.error(error);
-                     this.store.dispatch("snackbarShow", "Error Adding Device");
+                     this.$store.dispatch("snackbarShow", "Error Adding Device");
                   });
             }
          },

@@ -30,7 +30,7 @@
     },
     data: (c) => ({ nameOfUser: "", scrollTop: 0, isActionbarExpand: false }),
     computed: {
-      windowWidth: (c) => c.store.getters.window.innerWidth,
+      windowWidth: (c) => c.$store.getters.window.innerWidth,
 
       isWide: (c) => c.windowWidth > 600,
 
@@ -113,7 +113,7 @@
         }
 
         const name = await service.fetchName().catch((error) => {
-          this.store.dispatch("snackbarShow", "Error getting user for service");
+          this.$store.dispatch("snackbarShow", "Error getting user for service");
           return "";
         });
 
@@ -134,7 +134,7 @@
           })
           .then((serivce) => {})
           .catch((error) => {
-            this.store.dispatch("snackbarShow", "Failed to Add Image");
+            this.$store.dispatch("snackbarShow", "Failed to Add Image");
           });
       },
 

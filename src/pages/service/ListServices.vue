@@ -33,7 +33,7 @@
       itemSelected: null,
     }),
     computed: {
-      isOver460px: (c) => c.store.getters.window.innerWidth > 460,
+      isOver460px: (c) => c.$store.getters.window.innerWidth > 460,
 
       isGridView: (c) => c.layoutMode === ItemService.Mode.Grid,
       isListView: (c) => c.layoutMode === ItemService.Mode.List,

@@ -35,7 +35,7 @@
           .dispatch("login", { username, password })
           .then((user) => setTimeout(() => this.$router.push(redirect), 200))
           .catch(() => {
-            this.store.dispatch("snackbarShow", "Login failed");
+            this.$store.dispatch("snackbarShow", "Login failed");
             this.usernameErrorText = "Check your username";
             this.passwordErrorText = "Check your password";
           });
@@ -59,12 +59,12 @@
 
     <Actionbar
       class="PageLogin-top transition"
-      v-if="store.getters.navigation.isDrawer()"
+      v-if="$store.getters.navigation.isDrawer()"
       :leftMenus="[
         {
           title: 'Hamburger Menu',
           icon: host.icon('hamburgerMenu-000000').toUrl(),
-          click: () => store.getters.navigation.openNavigationDrawer(),
+          click: () => $store.getters.navigation.openNavigationDrawer(),
         },
         {
           key: 'home',

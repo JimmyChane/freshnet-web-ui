@@ -31,7 +31,7 @@ Stores.service = fileServiceStore.init(Stores);
 Stores.product = fileProductStore.init(Stores);
 Stores.ps2 = filePs2Store.init(Stores);
 
-Vue.prototype.store = Stores.store;
+// Vue.prototype.store = Stores.store;
 Vue.prototype.loginStore = Stores.login;
 Vue.prototype.userStore = Stores.user;
 Vue.prototype.categoryStore = Stores.category;

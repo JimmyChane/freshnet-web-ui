@@ -56,7 +56,7 @@
               (typeSelection) => typeSelection.key === this.data.key,
             );
             if (!selection) {
-              this.store.dispatch(
+              this.$store.dispatch(
                 "snackbarShow",
                 "Cannot find the matching type",
               );
@@ -72,7 +72,7 @@
             this.action.onConfirm(specification);
           })
           .catch((error) => {
-            this.store.dispatch(
+            this.$store.dispatch(
               "snackbarShow",
               "Error While Loading Specification",
             );

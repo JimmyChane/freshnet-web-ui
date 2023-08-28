@@ -62,12 +62,12 @@
       },
       refresh() {
         this.orderStore.dispatch("refresh").catch((error) => {
-          this.store.dispatch("snackbarShow", "Error While Refreshing Order");
+          this.$store.dispatch("snackbarShow", "Error While Refreshing Order");
           console.error(error);
         });
       },
       toAdd() {
-        this.store.dispatch("openPopupWindow", { component: WindowAdd });
+        this.$store.dispatch("openPopupWindow", { component: WindowAdd });
       },
     },
   };
@@ -83,7 +83,7 @@
       :title="$options.title"
       :items="items"
       @click-item="
-        (item) => store.getters.replaceQuery({ query: { order: item.id } })
+        (item) => $store.getters.replaceQuery({ query: { order: item.id } })
       "
       @click-item-add="() => toAdd()"
       @click-refresh="() => refresh()"
@@ -96,10 +96,10 @@
         :items="pendingItems"
         :currentItemIdSelected="currentExpandedOrderid"
         @click-collapse="
-          (item) => store.getters.replaceQuery({ query: { order: null } })
+          (item) => $store.getters.replaceQuery({ query: { order: null } })
         "
         @click-expand="
-          (item) => store.getters.replaceQuery({ query: { order: item.id } })
+          (item) => $store.getters.replaceQuery({ query: { order: item.id } })
         "
         @click-complete="
           (item) => orderStore.dispatch('updateToCompletedOfId', item.id)
@@ -115,10 +115,10 @@
         :items="completedItems"
         :currentItemIdSelected="currentExpandedOrderid"
         @click-collapse="
-          (item) => store.getters.replaceQuery({ query: { order: null } })
+          (item) => $store.getters.replaceQuery({ query: { order: null } })
         "
         @click-expand="
-          (item) => store.getters.replaceQuery({ query: { order: item.id } })
+          (item) => $store.getters.replaceQuery({ query: { order: item.id } })
         "
         @click-pending="
           (item) => orderStore.dispatch('updateToPendingOfId', item.id)

@@ -8,7 +8,7 @@
       data: (c) => ({ product: null }),
       computed: {
          isLoading: (context) => context.productStore.getters.isLoading,
-         isOver1200px: (context) => context.store.getters.window.innerWidth > 1200,
+         isOver1200px: (context) => context.$store.getters.window.innerWidth > 1200,
          productId: (context) => context.$route.query.productId,
       },
       watch: {
@@ -17,8 +17,8 @@
          },
       },
       mounted() {
-         this.store.getters.appLayout.setLayout(AppLayout.Layout.FULL);
-         this.store.getters.navigation.disableNavigationDrawer();
+         this.$store.getters.appLayout.setLayout(AppLayout.Layout.FULL);
+         this.$store.getters.navigation.disableNavigationDrawer();
 
          this.invalidate();
       },

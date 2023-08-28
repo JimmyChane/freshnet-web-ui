@@ -27,7 +27,7 @@
          ArrowDirection: Arrow.Direction,
       }),
       computed: {
-         isThin: (c) => c.store.getters.window.innerWidth < 550,
+         isThin: (c) => c.$store.getters.window.innerWidth < 550,
          imageIsShowing: (c) => (c.imageIsFetching ? !!c.imageUrl : true),
       },
       watch: {

@@ -40,10 +40,10 @@
     },
     data: () => ({ scrollTop: 0 }),
     computed: {
-      innerWidth: (c) => c.store.getters.window.innerWidth,
+      innerWidth: (c) => c.$store.getters.window.innerWidth,
 
       isWide: (c) => c.innerWidth > 800,
-      isDrawer: (c) => c.store.getters.navigation.isDrawer(),
+      isDrawer: (c) => c.$store.getters.navigation.isDrawer(),
       isThin: (c) => c.isWide || c.isDrawer,
 
       classes: (c) => (c.isWide ? "Home-isOver800" : "Home-isLess"),

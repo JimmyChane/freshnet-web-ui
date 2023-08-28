@@ -44,7 +44,7 @@
                this.Requirement.description.isRequired &&
                !this.data.description
             ) {
-               this.store.dispatch(
+               this.$store.dispatch(
                   "snackbarShow",
                   'You must specify the "Description"',
                );

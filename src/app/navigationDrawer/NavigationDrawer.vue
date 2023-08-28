@@ -20,11 +20,11 @@
       dragWidth: 0,
     }),
     computed: {
-      isWide: (c) => c.store.getters.navigation.isWide(),
-      isDrawer: (c) => c.store.getters.navigation.isDrawer(),
-      isExpand: (c) => c.store.getters.navigation.isExpanded(),
-      selectedPageKey: (c) => c.store.getters.currentPageKey,
-      selectedViewKey: (c) => c.store.getters.currentViewKey,
+      isWide: (c) => c.$store.getters.navigation.isWide(),
+      isDrawer: (c) => c.$store.getters.navigation.isDrawer(),
+      isExpand: (c) => c.$store.getters.navigation.isExpanded(),
+      selectedPageKey: (c) => c.$store.getters.currentPageKey,
+      selectedViewKey: (c) => c.$store.getters.currentViewKey,
 
       drawerMode() {
         if (!this.isDrawer) return Mode.FIXED;
@@ -33,7 +33,7 @@
       drawerEdge: () => Edge.LEFT,
 
       navigations() {
-        const navigations = this.store.getters.pages;
+        const navigations = this.$store.getters.pages;
 
         navigations.forEach((nav) => {
           nav.isExpanded = () => this.expandedPageKey === nav.key;
@@ -137,14 +137,14 @@
         const y = touch.pageY;
         this.refDrawer.onDragEnd(x, y);
         if (x > this.dragOpen) {
-          this.store.getters.navigation.openNavigationDrawer();
+          this.$store.getters.navigation.openNavigationDrawer();
           this.focus();
         }
         this.isDragging = false;
       },
 
       emitCollapse() {
-        this.store.getters.navigation.closeNavigationDrawer();
+        this.$store.getters.navigation.closeNavigationDrawer();
         this.expandedPageKey = "";
       },
 
@@ -167,14 +167,14 @@
           (this.hasQueryKey("") && this.getQueryValue("") === undefined) ||
           (key === "" && nextValue === "")
         ) {
-          this.store.getters.replaceQuery({});
+          this.$store.getters.replaceQuery({});
           return;
         }
 
         const query = {};
         query[key] = nextValue;
 
-        this.store.getters.replaceQuery({ query });
+        this.$store.getters.replaceQuery({ query });
       },
 
       focus() {},
@@ -209,7 +209,7 @@
 
       <LeftNavLogin
         style="z-index: 2"
-        v-if="store.getters.currentPageKey !== 'login'"
+        v-if="$store.getters.currentPageKey !== 'login'"
         @click-logout="$emit('click-logout')"
         :isWide="isWide"
       />

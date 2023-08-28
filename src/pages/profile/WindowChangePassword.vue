@@ -18,7 +18,7 @@
             const { passwordVerify, passwordNew, passwordRepeat } = this;
 
             if (passwordNew !== passwordRepeat) {
-               this.store.dispatch(
+               this.$store.dispatch(
                   "snackbarShow",
                   "Repeat Password Not Match With New Password",
                );
@@ -29,7 +29,7 @@
                .dispatch("changePassword", { passwordVerify, passwordNew })
                .then((user) => this.popupWindow.close())
                .catch((error) =>
-                  this.store.dispatch(
+                  this.$store.dispatch(
                      "snackbarShow",
                      "Changing Password Error",
                   ),

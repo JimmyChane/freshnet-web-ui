@@ -73,21 +73,21 @@
             };
 
             if (this.userIsDefault && !this.nameOfUser.trim()) {
-               this.store.dispatch(
+               this.$store.dispatch(
                   "snackbarShow",
                   "You must specify your name",
                );
                return;
             }
             if (!data.customer.name) {
-               this.store.dispatch(
+               this.$store.dispatch(
                   "snackbarShow",
                   "You must specify customer name",
                );
                return;
             }
             if (!data.description) {
-               this.store.dispatch(
+               this.$store.dispatch(
                   "snackbarShow",
                   "You must specify description",
                );

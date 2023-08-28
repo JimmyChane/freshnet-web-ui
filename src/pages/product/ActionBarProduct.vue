@@ -14,9 +14,9 @@
     },
     data: (c) => ({ searchText: "" }),
     computed: {
-      isOver550px: (c) => c.store.getters.window.innerWidth > 550,
+      isOver550px: (c) => c.$store.getters.window.innerWidth > 550,
 
-      paths: (c) => c.store.getters.paths,
+      paths: (c) => c.$store.getters.paths,
       lastPath: (c) => {
         let { paths } = c;
         if (!Array.isArray(paths)) return "";
