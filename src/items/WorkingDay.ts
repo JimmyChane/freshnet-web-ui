@@ -1,6 +1,6 @@
 import { isAfter, isBefore, format, parse, isSameDay } from "date-fns";
 
-class WorkingHours {
+export class WorkingHours {
   stores: any;
   parentDay: string = "";
 
@@ -91,7 +91,7 @@ class WorkingHours {
   }
 }
 
-class WorkingDay {
+export default class WorkingDay {
   stores: any;
   parentDays: WorkingDay[] = [];
 
@@ -155,5 +155,3 @@ class WorkingDay {
     return this.parentDays[nextIndex];
   }
 }
-
-export default WorkingDay;

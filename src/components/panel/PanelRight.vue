@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import Drawer from "@/components/Drawer.vue";
   import BottomsheetWindow from "@/components/window/BottomsheetWindow.vue";
+  import Vue from "vue";
   import { Edge, Mode } from "../DrawerOption";
 
-  export default {
-    emits: ["click-collapse", "on-showing"],
+  export default Vue.extend({
     components: { Drawer, BottomsheetWindow },
     props: {
       wideWidthThreshold: { type: Number, default: 1200 },
@@ -12,14 +12,18 @@
       titleEmpty: { type: String, default: "Select to view" },
     },
     computed: {
-      isWide: (c) => c.$store.getters.window.innerWidth > c.wideWidthThreshold,
+      isWide(): boolean {
+        return this.$store.getters.window.innerWidth > this.wideWidthThreshold;
+      },
 
-      drawerEdge: (c) => Edge.RIGHT,
-      drawerMode: (c) => {
-        if (c.isWide) {
-          return c.isShowing ? Mode.FIXED_EXPAND : Mode.FIXED_COLLAPSE;
+      drawerEdge(): number {
+        return Edge.RIGHT;
+      },
+      drawerMode(): number {
+        if (this.isWide) {
+          return this.isShowing ? Mode.FIXED_EXPAND : Mode.FIXED_COLLAPSE;
         } else {
-          return c.isShowing ? Mode.DRAWER_EXPAND : Mode.DRAWER_COLLAPSE;
+          return this.isShowing ? Mode.DRAWER_EXPAND : Mode.DRAWER_COLLAPSE;
         }
       },
     },
@@ -43,7 +47,7 @@
       this.emitShowing();
       this.emitWide();
     },
-  };
+  });
 </script>
 
 <template>

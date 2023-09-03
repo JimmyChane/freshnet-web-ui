@@ -1,31 +1,53 @@
-<script>
-  import U from "@/U";
-  export default {
+<script lang="ts">
+  import Vue from "vue";
+
+  interface Menu {
+    title: string;
+    icon: string;
+    count: number;
+    primaryColor?: string;
+    primaryColorTint?: string;
+
+    isSelected: ((menu: Menu) => boolean) | boolean;
+    click?: (menu: Menu) => void;
+  }
+
+  export default Vue.extend({
     props: {
-      menu: { type: Object },
+      menu: { type: Object as () => Menu },
       isScreenWide: { type: Boolean, default: true },
     },
     computed: {
-      title: (c) => c.menu.title,
-      icon: (c) => c.menu.icon,
-      count: (c) => c.menu.count,
-      primaryColor: (c) => c.menu.primaryColor ?? "black",
-      primaryColorTint: (c) => c.menu.primaryColorTint ?? "transparent",
+      title(): string {
+        return this.menu.title;
+      },
+      icon(): string {
+        return this.menu.icon;
+      },
+      count(): number {
+        return this.menu.count;
+      },
+      primaryColor(): string {
+        return this.menu.primaryColor ?? "black";
+      },
+      primaryColorTint(): string {
+        return this.menu.primaryColorTint ?? "transparent";
+      },
     },
     methods: {
-      isSelected() {
-        const { menu } = this;
-
-        if (!U.isFunction(menu.isSelected)) return false;
-
-        return menu.isSelected(menu);
+      isSelected(): boolean {
+        if (typeof this.menu.isSelected === "function") {
+          return this.menu.isSelected(this.menu);
+        }
+        return false;
       },
-      click() {
-        if (!U.isFunction(this.menu.click)) return;
-        this.menu.click(this.menu);
+      click(): void {
+        if (typeof this.menu.click === "function") {
+          this.menu.click(this.menu);
+        }
       },
     },
-  };
+  });
 </script>
 
 <template>

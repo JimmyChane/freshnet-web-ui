@@ -1,13 +1,22 @@
-<script>
+<script lang="ts">
   import Section from "./PageHome-Section.vue";
   import SectionTitle from "./PageHome-Section-Title.vue";
   import Item from "./PageHome-SectionHour-Item.vue";
   import Setting from "@/items/Setting";
+  import Vue from "vue";
+  import WorkingDay from "@/items/WorkingDay";
 
-  export default {
+  interface Data {
+    items: WorkingDay[];
+    todayWorkingDay: WorkingDay | undefined;
+  }
+
+  export default Vue.extend({
     components: { Section, SectionTitle, Item },
     props: { isThin: { type: Boolean, default: false } },
-    data: (c) => ({ items: [], todayWorkingDay: null }),
+    data(): Data {
+      return { items: [], todayWorkingDay: undefined };
+    },
     watch: {
       "$store.state.stores.setting.getters.lastModified"() {
         this.invalidate();
@@ -15,17 +24,20 @@
     },
     methods: {
       async invalidate() {
-        const workingDays = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
-          key: Setting.Key.CompanyWorkingHours,
-          default: [],
-        });
+        const workingDays: WorkingDay[] =
+          await this.$store.state.stores.setting.dispatch("findValueOfKey", {
+            key: Setting.Key.CompanyWorkingHours,
+            default: [],
+          });
 
         this.todayWorkingDay = workingDays.find((workingDay) => {
           return workingDay.isToday();
         });
 
         this.items = [];
-        const index = workingDays.indexOf(this.todayWorkingDay);
+        const index = this.todayWorkingDay
+          ? workingDays.indexOf(this.todayWorkingDay)
+          : -1;
         const indexBefore = index - 1;
         const indexAfter = index + 1;
         for (let i = indexAfter; i < workingDays.length; i++) {
@@ -41,7 +53,7 @@
     mounted() {
       this.invalidate();
     },
-  };
+  });
 </script>
 
 <template>

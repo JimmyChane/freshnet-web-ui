@@ -1,10 +1,20 @@
-<script>
-  import Contact from "./Footer-Contact.vue";
+<script lang="ts">
+  import ContactVue from "./Footer-Contact.vue";
   import Setting from "@/items/Setting";
+  import Vue from "vue";
+  import Contact from "@/items/Contact";
 
-  export default {
-    components: { Contact },
-    data: (c) => ({ contacts: [], address: "", addressHref: "" }),
+  interface Data {
+    contacts: any[];
+    address: string;
+    addressHref: string;
+  }
+
+  export default Vue.extend({
+    components: { ContactVue },
+    data(): Data {
+      return { contacts: [], address: "", addressHref: "" };
+    },
     watch: {
       "$store.state.stores.setting.getters.lastModified"() {
         this.invalidate();
@@ -17,23 +27,21 @@
       async invalidate() {
         this.address = await this.$store.state.stores.setting.dispatch(
           "findValueOfKey",
-          {
-            key: Setting.Key.Location,
-          },
+          { key: Setting.Key.Location },
         );
         this.addressHref = await this.$store.state.stores.setting.dispatch(
           "findValueOfKey",
           { key: Setting.Key.LocationLink },
         );
 
-        const contacts = await this.$store.state.stores.setting.dispatch(
+        const contacts: any[] = await this.$store.state.stores.setting.dispatch(
           "findValueOfKey",
           { key: Setting.Key.Contacts, default: [] },
         );
-        this.contacts = contacts.map((contact) => {
+        this.contacts = contacts.map((contact: Contact) => {
           const links = contact.links.map((link) => {
             return {
-              icon: link.category.icon,
+              icon: link.category?.icon ?? "",
               href: link.toHtmlHref(),
               target: link.toHtmlTarget(),
             };
@@ -47,7 +55,7 @@
         });
       },
     },
-  };
+  });
 </script>
 
 <template>
@@ -70,7 +78,7 @@
         <div class="Footer-columns">
           <div class="Footer-section">
             <span class="Footer-section-title">Contacts</span>
-            <Contact
+            <ContactVue
               v-for="contact of contacts"
               :key="contact.subtitle"
               :title="contact.title"

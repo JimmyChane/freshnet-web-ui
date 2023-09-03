@@ -1,85 +1,94 @@
-<script>
-   export default {
-      props: {
-         width: { type: Number, default: 0 },
-         height: { type: Number, default: 0 },
-      },
-      data: () => ({ parentWidth: 0, parentHeight: 0 }),
-      computed: {
-         scaleWidth: (c) => c.parentWidth / c.width,
-         scaleHeight: (c) => c.parentHeight / c.height,
-         scale: (c) =>
-            c.scaleWidth > c.scaleHeight ? c.scaleHeight : c.scaleWidth,
-      },
-      methods: {
-         invalidateCard(repeatTimeout = 300) {
-            const { parent } = this.$refs;
-            if (!parent) return;
+<script lang="ts">
+  import Vue from "vue";
 
-            this.parentWidth = parent.offsetWidth;
-            this.parentHeight = parent.offsetHeight;
+  export default Vue.extend({
+    props: {
+      width: { type: Number, default: 0 },
+      height: { type: Number, default: 0 },
+    },
+    data() {
+      return { parentWidth: 0, parentHeight: 0 };
+    },
+    computed: {
+      scaleWidth(): number {
+        return this.parentWidth / this.width;
+      },
+      scaleHeight(): number {
+        return this.parentHeight / this.height;
+      },
+      scale(): number {
+        return Math.min(this.scaleWidth, this.scaleHeight);
+      },
+    },
+    methods: {
+      invalidateCard(repeatTimeout = 300) {
+        const parent = this.$refs.parent as HTMLElement;
+        if (!parent) return;
 
-            if (repeatTimeout) {
-               setTimeout(() => this.invalidateCard(0), repeatTimeout);
-            }
-         },
-         print() {
-            const element = this.$refs.canvas;
-            if (element) this.$store.getters.print(element);
-         },
-         listenerResize() {
-            this.invalidateCard();
-         },
+        this.parentWidth = parent.offsetWidth;
+        this.parentHeight = parent.offsetHeight;
+
+        if (repeatTimeout) {
+          setTimeout(() => this.invalidateCard(0), repeatTimeout);
+        }
       },
-      beforeMount() {
-         window.addEventListener("resize", this.listenerResize);
+      print() {
+        const element = this.$refs.canvas;
+        if (element) this.$store.getters.print(element);
       },
-      mounted() {
-         this.invalidateCard();
+      listenerResize() {
+        this.invalidateCard();
       },
-      beforeDestroy() {
-         window.removeEventListener("resize", this.listenerResize);
-      },
-   };
+    },
+    beforeMount() {
+      window.addEventListener("resize", this.listenerResize);
+    },
+    mounted() {
+      this.invalidateCard();
+    },
+    beforeDestroy() {
+      window.removeEventListener("resize", this.listenerResize);
+    },
+  });
 </script>
 
 <template>
-   <div class="PrintContent" ref="parent">
-      <div
-         class="PrintContent-canvas"
-         ref="canvas"
-         :style="{
-            '--width': `${width}px`,
-            '--height': `${height}px`,
-            '--scale': `${scale}`,
-         }"
-      >
-         <slot :scale="scale" :width="width" :height="height" />
-      </div>
-   </div>
+  <div class="PrintContent" ref="parent">
+    <div
+      class="PrintContent-canvas"
+      ref="canvas"
+      :style="{
+        '--width': `${width}px`,
+        '--height': `${height}px`,
+        '--scale': `${scale}`,
+      }"
+    >
+      <slot :scale="scale" :width="width" :height="height" />
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
-   .PrintContent {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      .PrintContent-canvas {
-         width: var(--width);
-         height: var(--height);
-         min-width: var(--width);
-         min-height: var(--height);
-         max-width: var(--width);
-         max-height: var(--height);
+  .PrintContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    .PrintContent-canvas {
+      width: var(--width);
+      height: var(--height);
+      min-width: var(--width);
+      min-height: var(--height);
+      max-width: var(--width);
+      max-height: var(--height);
 
-         background: white;
-         box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.2);
-         transform: scale(var(--scale));
-         position: absolute;
-         top: calc(0 - var(--height) * var(--scale));
-         left: calc(0 - var(--width) * var(--scale));
-         overflow: hidden;
-      }
-   }
+      background: white;
+      box-shadow: 0 0 1rem hsla(0, 0%, 0%, 0.2);
+      transform: scale(var(--scale));
+      position: absolute;
+      top: calc(0 - var(--height) * var(--scale));
+      left: calc(0 - var(--width) * var(--scale));
+      overflow: hidden;
+    }
+  }
 </style>

@@ -1,52 +1,64 @@
-<script>
-  import { Type } from "@/items/Specification";
+<script lang="ts">
+  import Specification, { Type } from "@/items/Specification";
   import Item from "./PageProductExport-Layout-One-Specification.vue";
   import ProductPrice from "@/items/ProductPrice";
+  import Vue from "vue";
+  import User from "@/items/User";
+  import ProductPrices from "@/items/ProductPrices";
+  import Product from "@/items/Product";
 
-  export default {
+  export default Vue.extend({
     components: { Item },
     props: {
       width: { type: Number, default: 0 },
       height: { type: Number, default: 0 },
-      product: { type: Object, default: () => null },
+      product: { type: Product },
     },
-    data: (c) => ({
-      previousHeight: 0,
-      initialPadding: 60,
-      initialGap: 30,
-      initialSpecificationGap: 14,
+    data() {
+      return {
+        previousHeight: 0,
+        initialPadding: 60,
+        initialGap: 30,
+        initialSpecificationGap: 14,
 
-      fullTitle: "",
-      padding: 0,
-      gap: 0,
-      specificationGap: 0,
-    }),
+        fullTitle: "",
+        padding: 0,
+        gap: 0,
+        specificationGap: 0,
+      };
+    },
     computed: {
-      user: (c) => c.$store.state.stores.login.getters.user,
-      allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
+      user(): User {
+        return this.$store.state.stores.login.getters.user;
+      },
+      allowEdit(): boolean {
+        return this.user.isTypeAdmin() || this.user.isTypeStaff();
+      },
 
-      brandId: (c) => c.product?.brandId ?? "",
+      brandId(): string {
+        return this.product?.brandId ?? "";
+      },
 
-      specificationKeys: () => {
+      specificationKeys(): string[] {
         return Object.keys(Type.Key).map((key) => {
-          return Type.Key[key];
+          return (Type.Key as Record<string, any>)[key];
         });
       },
-      specifications: (c) => {
-        if (!c.product) return [];
-        if (!Array.isArray(c.product.specifications)) return [];
+      specifications(): Specification[] {
+        if (!this.product) return [];
+        if (!Array.isArray(this.product.specifications)) return [];
 
-        return c.product.specifications
+        return this.product.specifications
           .filter((spec) => spec && spec.type && spec.content)
           .sort((spec1, spec2) => {
-            const key1 = c.obtainKeyOfSpecificationType(spec1.type);
-            const key2 = c.obtainKeyOfSpecificationType(spec2.type);
+            const key1 = this.obtainKeyOfSpecificationType(spec1.type);
+            const key2 = this.obtainKeyOfSpecificationType(spec2.type);
 
-            let index1 = c.specificationKeys.indexOf(key1);
-            let index2 = c.specificationKeys.indexOf(key2);
+            let index1 = this.specificationKeys.indexOf(key1);
+            let index2 = this.specificationKeys.indexOf(key2);
 
-            index1 = index1 >= 0 ? index1 : c.specificationKeys.length;
-            index2 = index2 >= 0 ? index2 : c.specificationKeys.length;
+            index1 = index1 >= 0 ? index1 : this.specificationKeys.length;
+            index2 = index2 >= 0 ? index2 : this.specificationKeys.length;
 
             return index1 !== index2
               ? index1 - index2
@@ -54,22 +66,22 @@
           });
       },
 
-      productPrice() {
+      productPrice(): ProductPrices | null {
         if (!this.allowEdit) return null;
         if (!this.product) return null;
         return this.product.price;
       },
-      productPriceNormal() {
-        if (!this.productPrice) return new ProductPrice();
-        if (!this.productPrice.normal) return new ProductPrice();
+      productPriceNormal(): ProductPrice {
+        if (!this.productPrice) return new ProductPrice(undefined);
+        if (!this.productPrice.normal) return new ProductPrice(undefined);
         return this.productPrice.normal;
       },
-      productPricePromotion() {
-        if (!this.productPrice) return new ProductPrice();
-        if (!this.productPrice.promotion) return new ProductPrice();
+      productPricePromotion(): ProductPrice {
+        if (!this.productPrice) return new ProductPrice(undefined);
+        if (!this.productPrice.promotion) return new ProductPrice(undefined);
         return this.productPrice.promotion;
       },
-      price() {
+      price(): { from?: ProductPrice; to?: ProductPrice } | null {
         if (!this.allowEdit) return null;
 
         let normal = this.productPriceNormal;
@@ -108,8 +120,10 @@
         this.invalidateHeight();
       },
       invalidateHeight() {
-        const parentHeight = this.$el.offsetHeight;
-        const height = this.$refs.body.offsetHeight;
+        const selfElement = this.$el as HTMLElement;
+        const bodyElement = this.$refs.body as HTMLElement;
+        const parentHeight = selfElement.offsetHeight;
+        const height = bodyElement.offsetHeight;
 
         if (height > parentHeight && this.previousHeight !== height) {
           this.previousHeight = height;
@@ -121,13 +135,13 @@
         }
       },
 
-      obtainKeyOfSpecificationType(type) {
+      obtainKeyOfSpecificationType(type: Object | string | any) {
         if (typeof type === "object") return type.key;
         if (typeof type === "string") return type;
         return "";
       },
     },
-  };
+  });
 </script>
 
 <template>
@@ -139,15 +153,15 @@
       class="ExportLayoutOne-body"
       ref="body"
       :style="{
-        'padding': `${padding}px ${initialPadding}px`,
-        'gap': `${gap}px`,
+        padding: `${padding}px ${initialPadding}px`,
+        gap: `${gap}px`,
       }"
     >
       <span class="ExportLayoutOne-title">{{ fullTitle }}</span>
 
       <div
         class="ExportLayoutOne-items"
-        :style="{ 'gap': `${specificationGap}px` }"
+        :style="{ gap: `${specificationGap}px` }"
       >
         <Item
           v-for="specification in specifications"

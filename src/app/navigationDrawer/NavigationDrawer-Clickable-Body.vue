@@ -1,12 +1,13 @@
-<script>
+<script lang="ts">
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
   import LeftNavItem from "./NavigationDrawer-Item.vue";
   import LeftNavClickableList from "./NavigationDrawer-Clickable-List.vue";
   import LeftNavClickableArrow from "./NavigationDrawer-Clickable-Arrow.vue";
   import NavView from "@/app/NavView";
   import NavPage from "@/app/NavPage";
-  export default {
-    emits: ["click-open"],
+  import Vue from "vue";
+
+  export default Vue.extend({
     components: {
       LeftNavItem,
       ButtonIcon,
@@ -22,7 +23,7 @@
     },
     computed: {
       style() {
-        const style = {};
+        const style: Record<string, string> = {};
 
         if (this.isWide) {
           style["width"] = "100%";
@@ -51,7 +52,7 @@
         return style;
       },
     },
-  };
+  });
 </script>
 
 <template>

@@ -1,7 +1,3 @@
-<script>
-  export default { emits: ["click"] };
-</script>
-
 <template>
   <button class="ButtonAddEvent transition" @click="$emit('click')">
     <img

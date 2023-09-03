@@ -1,14 +1,23 @@
-<script>
-  export default {
+<script lang="ts">
+  import WorkingDay from "@/items/WorkingDay";
+  import Vue from "vue";
+
+  export default Vue.extend({
     props: {
-      item: { type: Object },
+      item: { type: WorkingDay },
     },
     computed: {
-      isToday: (c) => c.item.isToday(),
-      title: (c) => c.item.title,
-      content: (c) => c.item.hours.toString(),
+      isToday(): boolean {
+        return this.item.isToday();
+      },
+      title(): string {
+        return this.item.title;
+      },
+      content(): string {
+        return this.item.hours.toString();
+      },
     },
-  };
+  });
 </script>
 
 <template>

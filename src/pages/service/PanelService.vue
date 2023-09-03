@@ -69,14 +69,14 @@
         if (!backgroundColor) {
           return "inherit";
         }
-        return backgroundColor.brighten(0.4);
+        return backgroundColor.brighten(0.4).toString();
       },
       actionbarBorder() {
         const { actionbarColor } = this;
-        if (!actionbarColor) {
+        if (!actionbarColor || !chroma.valid(actionbarColor)) {
           return "none";
         }
-        return actionbarColor.darken(0.8);
+        return chroma(actionbarColor).darken(0.8).toString();
       },
     },
     watch: {
@@ -113,7 +113,10 @@
         }
 
         const name = await service.fetchName().catch((error) => {
-          this.$store.dispatch("snackbarShow", "Error getting user for service");
+          this.$store.dispatch(
+            "snackbarShow",
+            "Error getting user for service",
+          );
           return "";
         });
 

@@ -1,42 +1,63 @@
-<script>
+<script lang="ts">
   import ItemSpec from "./ItemSpecificationInput.vue";
   import Selector4 from "@/components/selector/Selector4.vue";
-  import { Type } from "@/items/Specification";
+  import Specification, { Type } from "@/items/Specification";
+  import Vue from "vue";
 
-  export default {
+  interface Menu {
+    key: string;
+    title: string;
+    icon: string;
+  }
+
+  interface Data {
+    list: { content: string; typeKey: string }[];
+  }
+
+  export default Vue.extend({
     components: { ItemSpec, Selector4 },
     props: {
-      items: { type: Array, default: () => [] },
+      items: { type: Array as () => Specification[], default: () => [] },
     },
-    data: (c) => ({ list: [] }),
+    data(): Data {
+      return { list: [] };
+    },
     computed: {
-      KeyNone: (c) => "none",
-      SpecKey: (c) => Type.Key,
-      SpecKeys: (c) => [
-        c.KeyNone,
-        ...Object.keys(c.SpecKey).map((key) => c.SpecKey[key]),
-      ],
-      SpecificationMenus: (c) => {
+      KeyNone(): string {
+        return "none";
+      },
+      SpecKeys(): string[] {
         return [
-          { key: c.KeyNone, title: "None" },
-          ...c.$store.state.stores.specification.getters.items.map((item) => item),
+          this.KeyNone,
+          ...Object.keys(Type.Key).map((key) => {
+            return (Type.Key as Record<string, string>)[key];
+          }),
+        ];
+      },
+      SpecificationMenus(): Menu[] {
+        return [
+          { key: this.KeyNone, title: "None" },
+          ...this.$store.state.stores.specification.getters.items,
         ]
-          .map((item) => ({
-            key: item.key,
-            title: item.title,
-            icon: item.icon?.toUrl() ?? "",
-          }))
+          .map((item) => {
+            return {
+              key: item.key,
+              title: item.title,
+              icon: item.icon?.toUrl() ?? "",
+            };
+          })
           .filter((menu) => {
             if (menu.key === "none") return true;
 
-            const dataSpecification = c.list.find((dataSpec) => {
+            const dataSpecification = this.list.find((dataSpec) => {
               return dataSpec.typeKey === menu.key;
             });
             return !dataSpecification;
           })
           .sort((menu1, menu2) => {
             return (
-              c.SpecKeys.indexOf(menu1.key) - c.SpecKeys.indexOf(menu2.key)
+              this.SpecKeys.indexOf(menu1.key) -
+              this.SpecKeys.indexOf(menu2.key)
             );
           });
       },
@@ -47,17 +68,17 @@
       },
     },
     methods: {
-      addItem(item) {
+      addItem(item: { content: string; typeKey: string }) {
         this.list.push(item);
       },
-      removeItem(item) {
+      removeItem(item: { content: string; typeKey: string }) {
         this.list.splice(this.list.indexOf(item), 1);
       },
     },
     mounted() {
       this.$store.state.stores.specification.dispatch("refresh");
     },
-  };
+  });
 </script>
 
 <template>

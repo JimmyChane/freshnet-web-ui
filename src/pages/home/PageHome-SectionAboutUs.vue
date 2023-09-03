@@ -1,7 +1,11 @@
-<script>
+<script lang="ts">
   import Section from "./PageHome-Section.vue";
   import SectionTitle from "./PageHome-Section-Title.vue";
-  export default { components: { Section, SectionTitle } };
+  import Vue from "vue";
+
+  export default Vue.extend({
+    components: { Section, SectionTitle },
+  });
 </script>
 
 <template>

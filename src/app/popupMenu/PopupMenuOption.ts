@@ -1,4 +1,4 @@
-export default class PopupMenu {
+export default class PopupMenuOption {
   static readonly Width = {
     AUTO: 0,
 

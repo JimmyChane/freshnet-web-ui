@@ -1,6 +1,7 @@
-<script>
-  export default {
-    emits: ["focus", "blur", "input", "change"],
+<script lang="ts">
+  import Vue from "vue";
+
+  export default Vue.extend({
     props: {
       name: { type: String, default: "" },
       label: { type: String, default: "" },
@@ -13,34 +14,41 @@
 
       bindValue: { default: undefined },
     },
-    data: (c) => ({ input_value: "", isFocused: false }),
+    data() {
+      return { input_value: "", isFocused: false };
+    },
     watch: {
       bindValue() {
-        this.value = this.bindValue;
+        this.input_value = this.bindValue ?? "";
       },
     },
     computed: {
       value: {
-        get() {
+        get(): string {
           return this.input_value;
         },
-        set(x) {
-          return (this.input_value = x);
+        set(x: string) {
+          this.input_value = x;
         },
       },
-      isValueEmpty() {
+      isValueEmpty(): boolean {
         if (this.type === "number") {
           return false;
         }
-        return typeof this.value !== "string" || this.value.trim() === "";
+        if (typeof this.value === "string") {
+          return this.value.trim() === "";
+        }
+
+        return true;
       },
     },
     methods: {
       focus() {
-        this.$refs.input.focus();
+        const input = this.$refs.input as HTMLInputElement;
+        input.focus();
       },
     },
-  };
+  });
 </script>
 
 <template>

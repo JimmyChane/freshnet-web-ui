@@ -1,11 +1,17 @@
-<script>
-  export default {
-    data: (c) => ({ isShowing: false }),
+<script lang="ts">
+  import Vue from "vue";
+
+  export default Vue.extend({
+    data() {
+      return { isShowing: false };
+    },
     computed: {
-      isConnected: (c) => c.$store.getters.isConnected,
+      isConnected(): boolean {
+        return this.$store.getters.isConnected;
+      },
     },
     watch: {
-      isConnected() {
+      isConnected(): void {
         this.onConnectionChange();
       },
     },
@@ -28,7 +34,7 @@
         setTimeout(() => (this.isShowing = false), 3000);
       },
     },
-  };
+  });
 </script>
 
 <template>

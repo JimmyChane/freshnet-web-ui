@@ -1,44 +1,49 @@
-<script>
-  export default {
+<script lang="ts">
+  import Vue from "vue";
+
+  export default Vue.extend({
     name: "ItemObject",
     props: {
-      item: { default: () => null },
+      item: {},
     },
     computed: {
-      itemKeys: (c) => c.keys(c.item),
+      itemKeys(): string[] {
+        return this.keys(this.item);
+      },
     },
     methods: {
-      shouldIncludeNextLine(item, key) {
-        return (
-          (this.isArray(item) && key < this.itemKeys.length - 1) ||
-          (this.isObject(item) &&
-            this.itemKeys.indexOf(key) !== this.itemKeys.length - 1)
-        );
+      shouldIncludeNextLine(item: Object, key: string): boolean {
+        const x =
+          this.isArray(item) &&
+          this.itemKeys.indexOf(key) < this.itemKeys.length - 1;
+        const y =
+          this.isObject(item) &&
+          this.itemKeys.indexOf(key) !== this.itemKeys.length - 1;
+        return x || y;
       },
-
-      keys(value) {
+      keys(value: any): string[] {
         return value !== undefined && value !== null ? Object.keys(value) : [];
       },
-      isNull(value) {
+      isNull(value: any): boolean {
         return value === null;
       },
-      isArray(value) {
+      isArray(value: any): boolean {
         return Array.isArray(value);
       },
-      isObject(value) {
+      isObject(value: any): boolean {
         return typeof value === "object";
       },
-      isBoolean(value) {
+      isBoolean(value: any): boolean {
         return typeof value === "boolean";
       },
-      isNumber(value) {
+      isNumber(value: any): boolean {
         return typeof value === "number";
       },
-      isString(value) {
+      isString(value: any): boolean {
         return typeof value === "string";
       },
     },
-  };
+  });
 </script>
 
 <template>

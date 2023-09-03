@@ -67,6 +67,7 @@ export default class U {
   }
 
   static isColorDark(color: any, threshold = 60): boolean {
+    if (!chroma.valid(color)) return false;
     return chroma.deltaE(color, "000000") < threshold;
   }
 }

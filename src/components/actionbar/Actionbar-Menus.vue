@@ -1,30 +1,33 @@
-<script>
+<script lang="ts">
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
   import ButtonText from "@/components/button/ButtonText.vue";
   import MenuOption from "@/components/button/MenuOption.vue";
   import U from "@/U";
+  import Vue from "vue";
 
-  export default {
+  export default Vue.extend({
     components: { ButtonIcon, ButtonText, MenuOption },
-    props: { menus: { type: Array, default: () => [] } },
+    props: {
+      menus: { type: Array as () => any[], default: () => [] },
+    },
     computed: {
-      Menus: (c) => {
-        return U.optArray(c.menus).filter((menu) => U.isObjectOnly(menu));
+      Menus(): any[] {
+        return U.optArray(this.menus).filter((menu) => U.isObjectOnly(menu));
       },
-      visibleMenus: (c) => {
-        return c.Menus.filter((menu) => {
+      visibleMenus(): any[] {
+        return this.Menus.filter((menu) => {
           if (!U.isBoolean(menu.isHidden)) return true;
           return !menu.isHidden;
         });
       },
-      hiddenMenus: (c) => {
-        return c.Menus.filter((menu) => {
+      hiddenMenus(): any[] {
+        return this.Menus.filter((menu) => {
           if (!U.isBoolean(menu.isHidden)) return false;
           return menu.isHidden;
         });
       },
     },
-  };
+  });
 </script>
 
 <template>

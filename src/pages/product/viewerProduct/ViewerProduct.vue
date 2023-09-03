@@ -18,6 +18,20 @@
   import Actionbar from "@/components/actionbar/Actionbar.vue";
   import chroma from "chroma-js";
   import U from "@/U";
+  import Tab from "./TabOption";
+
+  class ScrollTab extends Tab {
+    context;
+
+    constructor(context, key, title) {
+      super(key, title);
+      this.context = context;
+    }
+
+    isSelected() {
+      return this.key === this.context.tabKeyNow;
+    }
+  }
 
   export default {
     components: {
@@ -84,27 +98,27 @@
         const tabs = [];
 
         if (!this.isWide && this.imagePreview) {
-          tabs.push({ key: "image", title: "Image" });
+          tabs.push(new ScrollTab(this, "image", "Image"));
         }
 
-        tabs.push({ key: "title", title: "Title" });
+        tabs.push(new ScrollTab(this, "title", "Title"));
 
         if (this.isEditable) {
           if (this.specifications.length) {
-            tabs.push({ key: "specification", title: "Specification" });
+            tabs.push(new ScrollTab(this, "specification", "Specification"));
           }
           if (this.whatIncludeds.length) {
-            tabs.push({ key: "include", title: "What's Included" });
+            tabs.push(new ScrollTab(this, "include", "What's Included"));
           }
           if (this.description) {
-            tabs.push({ key: "description", title: "Description" });
+            tabs.push(new ScrollTab(this, "description", "Description"));
           }
           if (this.settingShowPrice) {
-            tabs.push({ key: "price", title: "Price" });
+            tabs.push(new ScrollTab(this, "price", "Price"));
           }
 
-          tabs.push({ key: "stock", title: "Stock" });
-          tabs.push({ key: "category", title: "Category" });
+          tabs.push(new ScrollTab(this, "stock", "Stock"));
+          tabs.push(new ScrollTab(this, "category", "Category"));
         }
 
         tabs.forEach((tab) => {

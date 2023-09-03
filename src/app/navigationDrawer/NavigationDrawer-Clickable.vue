@@ -1,39 +1,43 @@
-<script>
+<script lang="ts">
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
   import LeftNavClickableBody from "./NavigationDrawer-Clickable-Body.vue";
   import U from "@/U";
   import NavPage from "@/app/NavPage";
   import NavView from "@/app/NavView";
+  import Vue from "vue";
 
-  export default {
-    emits: ["click", "click-expand"],
+  export default Vue.extend({
     components: { ButtonIcon, LeftNavClickableBody },
     props: {
-      item: { type: [NavPage, NavView], default: () => null },
+      item: { type: [NavPage, NavView] },
       href: { type: String, default: "" },
       hasGroup2s: { type: Boolean, default: false },
     },
     computed: {
-      styleClass() {
+      styleClass(): string {
         return this.isSelected
           ? "NavigationDrawer-Clickable-isSlected"
           : "NavigationDrawer-Clickable-notSelected";
       },
-      hasChildren() {
-        return U.optArray(this.item.groups).length > 0;
+      hasChildren(): boolean {
+        if (this.item instanceof NavPage) {
+          return U.optArray(this.item.groups).length > 0;
+        }
+
+        return false;
       },
 
-      isWide() {
+      isWide(): boolean {
         return this.item.isWide();
       },
-      isSelected() {
+      isSelected(): boolean {
         return this.item.isSelected();
       },
-      isExpand() {
+      isExpand(): boolean {
         return this.item.isExpanded();
       },
     },
-  };
+  });
 </script>
 
 <template>

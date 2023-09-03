@@ -1,6 +1,7 @@
-<script>
-  export default {
-    emits: ["click-dismiss"],
+<script lang="ts">
+  import Vue from "vue";
+
+  export default Vue.extend({
     mounted() {
       const elements = [];
       for (const child of this.$el.children) {
@@ -14,7 +15,7 @@
         });
       });
     },
-  };
+  });
 </script>
 
 <template>

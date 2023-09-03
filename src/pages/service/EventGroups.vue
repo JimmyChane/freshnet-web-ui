@@ -1,10 +1,17 @@
-<script>
+<script lang="ts">
   import ItemEvent from "./ServiceEvent.vue";
   import FloatingTimestampVue from "./FloatingTimestamp.vue";
   import Service from "@/items/Service";
   import { format } from "date-fns";
+  import Vue from "vue";
+  import ServiceEvent from "@/items/ServiceEvent";
 
-  export default {
+  interface Group {
+    title: string;
+    events: ServiceEvent[];
+  }
+
+  export default Vue.extend({
     components: { ItemEvent, FloatingTimestampVue },
     props: {
       service: { type: Service },
@@ -12,27 +19,32 @@
       actions: { type: Object },
     },
     computed: {
-      moreEvents() {
+      moreEvents(): ServiceEvent[] {
         if (!this.service) return [];
 
         return [...this.service.events].reverse();
       },
 
-      groups() {
-        return this.moreEvents.reduce((groups, event) => {
+      groups(): Group[] {
+        return this.moreEvents.reduce((groups: Group[], event) => {
           const ts = event.timestamp;
-          const time = ts.time;
+          const time = ts?.time ?? 0;
 
-          const optGroup = (title) => {
+          const optGroup = (title: string) => {
             let group = groups.find((group) => group.title === title);
-            if (!group) groups.push((group = { title, events: [] }));
+            if (!group) {
+              group = { title, events: [] };
+              groups.push(group);
+            }
             return group;
           };
-          const putItem = (title) => optGroup(title).events.push(event);
+          const putItem = (title: string) => {
+            optGroup(title).events.push(event);
+          };
 
-          if (ts.isToday()) {
+          if (ts?.isToday()) {
             putItem(`Today, ${format(time, "EEE, dd/LL/yyyy")}`);
-          } else if (ts.isYesterday()) {
+          } else if (ts?.isYesterday()) {
             putItem(`Yesterday, ${format(time, "EEE, dd/LL/yyyy")}`);
           } else {
             putItem(format(time, "EEE, dd/LL/yyyy"));
@@ -42,7 +54,7 @@
         }, []);
       },
     },
-  };
+  });
 </script>
 
 <template>

@@ -1,32 +1,40 @@
-<script>
+<script lang="ts">
   import State from "@/items/ServiceState";
   import ImageViews from "@/components/ImageViews.vue";
   import ItemSearch from "./GlobalSearch-Item.vue";
   import Labels from "./GlobalSearch-Item-Labels.vue";
   import Service from "@/items/Service";
+  import Vue from "vue";
+  import ServiceImage from "@/items/ServiceImage";
 
-  export default {
+  export default Vue.extend({
     components: { ImageViews, ItemSearch, Labels },
-    props: { item: { type: Service, default: null } },
+    props: {
+      item: { type: Service },
+    },
     computed: {
-      images: (c) => c.item?.imageFiles ?? [],
-      stateTitle: (c) => {
-        const key = c.item?.state ?? "";
+      images(): ServiceImage[] {
+        return this.item.imageFiles ?? [];
+      },
+      stateTitle(): string {
+        const key = this.item?.state ?? "";
         const state = State.findByKey(key);
         return state?.title ?? "";
       },
-      title: (c) => {
-        const customer = c.item?.customer ?? null;
+      title(): string {
+        const customer = this.item?.customer ?? null;
         const name = customer?.name ?? "";
         const phoneNumber = customer?.phoneNumber ?? "";
         return `${name} ${phoneNumber}`;
       },
-      description: (c) => c.item?.description ?? "",
+      description(): string {
+        return this.item?.description ?? "";
+      },
     },
     mounted() {
       console.log(this.item);
     },
-  };
+  });
 </script>
 
 <template>

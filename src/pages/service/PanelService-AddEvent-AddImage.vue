@@ -1,7 +1,3 @@
-<script>
-  export default { emits: ["callback-result"] };
-</script>
-
 <template>
   <button class="PanelService-AddEvent-AddImage transition">
     <img src="@/assets/icon/image-000000.svg" />

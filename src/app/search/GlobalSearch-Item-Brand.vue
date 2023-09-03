@@ -1,17 +1,27 @@
-<script>
+<script lang="ts">
   import ItemSearch from "./GlobalSearch-Item.vue";
   import Labels from "./GlobalSearch-Item-Labels.vue";
   import Brand from "@/items/Brand";
+  import Image from "@/items/Image";
+  import Vue from "vue";
 
-  export default {
+  export default Vue.extend({
     components: { ItemSearch, Labels },
-    props: { item: { type: Brand, default: null } },
-    computed: {
-      icon: (c) => c.item.icon,
-      thumbnail: (c) => c.icon?.toUrl() ?? "",
-      title: (c) => c.item?.title ?? "",
+    props: {
+      item: { type: Brand },
     },
-  };
+    computed: {
+      icon(): Image | null {
+        return this.item.icon;
+      },
+      thumbnail(): string {
+        return this.icon?.toUrl() ?? "";
+      },
+      title(): string {
+        return this.item?.title ?? "";
+      },
+    },
+  });
 </script>
 
 <template>

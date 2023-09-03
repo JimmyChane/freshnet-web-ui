@@ -1,15 +1,24 @@
-<script>
+<script lang="ts">
   import Customer from "@/items/Customer";
-  export default {
+  import PhoneNumber from "@/items/PhoneNumber";
+  import Vue from "vue";
+
+  export default Vue.extend({
     props: {
-      item: { type: Customer, default: () => null },
+      item: { type: Customer },
     },
     computed: {
-      name: (c) => c.item.name,
-      phoneNumber: (c) => c.item.phoneNumber,
-      description: (c) => c.item.description,
+      name(): string {
+        return this.item.name;
+      },
+      phoneNumber(): PhoneNumber | null {
+        return this.item.phoneNumber;
+      },
+      description(): string {
+        return this.item.description;
+      },
     },
-  };
+  });
 </script>
 
 <template>

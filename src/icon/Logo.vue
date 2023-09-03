@@ -1,9 +1,11 @@
-<script>
-  export default {
+<script lang="ts">
+  import Vue from "vue";
+
+  export default Vue.extend({
     props: {
       tintColor: { type: String },
     },
-  };
+  });
 </script>
 
 <template>

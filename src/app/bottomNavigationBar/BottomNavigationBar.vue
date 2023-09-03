@@ -1,14 +1,22 @@
-<script>
+<script lang="ts">
+  import Vue from "vue";
+  import NavPage from "../NavPage";
   import Item from "./BottomNavigationBar-Item.vue";
-  export default {
+
+  export default Vue.extend({
     components: { Item },
     computed: {
-      selectedPageKey: (c) => c.$store.getters.currentPageKey,
-      selectedViewKey: (c) => c.$store.getters.currentViewKey,
-
-      navigations: (c) => c.$store.getters.pages,
+      selectedPageKey(): string {
+        return this.$store.getters.currentPageKey;
+      },
+      selectedViewKey(): string {
+        return this.$store.getters.currentViewKey;
+      },
+      navigations(): NavPage[] {
+        return this.$store.getters.pages;
+      },
     },
-  };
+  });
 </script>
 
 <template>

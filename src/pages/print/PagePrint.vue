@@ -12,33 +12,7 @@
   import Server from "@/host/Server";
   import IconPack from "@/app/IconPack";
 
-  class Media {
-    constructor(title = "", items = []) {
-      this.title = title;
-      this.items = items;
-    }
-  }
-  class Category {
-    constructor(res, items) {
-      this.title = res ? res.toString() : "";
-      this.icon = res ? res.paperType.icon : "";
-      this.items = items;
-    }
-  }
-  class Subcategory {
-    constructor(res, items) {
-      this.title = res ? res.toString() : "";
-      this.icon = res ? res.color.icon : "";
-      this.items = items;
-    }
-  }
-  class Item {
-    constructor(res, price) {
-      this.title = res ? res.title : "";
-      this.icon = res ? res.icon : "";
-      this.price = price;
-    }
-  }
+  import { Media, Category, SubCategory, Item } from "./PagePrintOption";
 
   export default {
     key: "print",
@@ -53,23 +27,23 @@
       items: [
         new Media("Photostat", [
           new Category(Paper.PlainA4, [
-            new Subcategory(Output.BlackWhite, [
+            new SubCategory(Output.BlackWhite, [
               new Item(PaperSide.Front, new Price(0.1)),
               new Item(PaperSide.FrontBack, new Price(0.2)),
               new Item(PaperSide.FrontIc, new Price(0.2)),
             ]),
-            new Subcategory(Output.Colorful, [
+            new SubCategory(Output.Colorful, [
               new Item(PaperSide.Front, new Price(1)),
               new Item(PaperSide.FrontBack, new Price(2)),
               new Item(PaperSide.FrontIc, new Price(2)),
             ]),
           ]),
           new Category(Paper.PlainA3, [
-            new Subcategory(Output.BlackWhite, [
+            new SubCategory(Output.BlackWhite, [
               new Item(PaperSide.Front, new Price(0.2)),
               new Item(PaperSide.FrontBack, new Price(0.4)),
             ]),
-            new Subcategory(Output.Colorful, [
+            new SubCategory(Output.Colorful, [
               new Item(PaperSide.Front, new Price(2)),
               new Item(PaperSide.FrontBack, new Price(4)),
             ]),
@@ -77,39 +51,39 @@
         ]),
         new Media("Computer Print", [
           new Category(Paper.PlainA4, [
-            new Subcategory(Output.BlackWhite, [
+            new SubCategory(Output.BlackWhite, [
               new Item(PaperSide.Front, new Price(0.5)),
               new Item(PaperSide.FrontBack, new Price(1.0)),
             ]),
-            new Subcategory(Output.Colorful, [
+            new SubCategory(Output.Colorful, [
               new Item(PaperSide.Front, new Price(1.0)),
               new Item(PaperSide.FrontBack, new Price(2.0)),
             ]),
           ]),
           new Category(Paper.PlainA3, [
-            new Subcategory(Output.BlackWhite, [
+            new SubCategory(Output.BlackWhite, [
               new Item(PaperSide.Front, new Price(1.0)),
               new Item(PaperSide.FrontBack, new Price(2.0)),
             ]),
-            new Subcategory(Output.Colorful, [
+            new SubCategory(Output.Colorful, [
               new Item(PaperSide.Front, new Price(2.0)),
               new Item(PaperSide.FrontBack, new Price(4.0)),
             ]),
           ]),
           new Category(Paper.Photo4R, [
-            new Subcategory(Output.BorderlessColorful, [
+            new SubCategory(Output.BorderlessColorful, [
               new Item(PaperSide.Front, new Price(1.5)),
             ]),
           ]),
           new Category(Paper.PhotoA4, [
-            new Subcategory(Output.BorderlessColorful, [
+            new SubCategory(Output.BorderlessColorful, [
               new Item(PaperSide.Front, new Price(4.0)),
             ]),
           ]),
         ]),
         new Media("Laminate Document", [
           new Category(null, [
-            new Subcategory(null, [
+            new SubCategory(null, [
               new Item(PaperSize.A4, new Price(2.0)),
               new Item(PaperSize.A3, new Price(4.0)),
             ]),
@@ -117,7 +91,7 @@
         ]),
         new Media("Scan Document", [
           new Category(null, [
-            new Subcategory(null, [
+            new SubCategory(null, [
               new Item(PaperSize.A4, new Price(0.5)),
               new Item(PaperSize.A3, new Price(0.5)),
             ]),
@@ -125,7 +99,7 @@
         ]),
         new Media("Binding", [
           new Category(null, [
-            new Subcategory({ toString: () => "Comb", color: { icon: "" } }, [
+            new SubCategory({ toString: () => "Comb", color: { icon: "" } }, [
               new Item({ title: "8mm" }, new Price(1.0)),
               new Item({ title: "10mm" }, new Price(1.0)),
               new Item({ title: "12mm" }, new Price(1.5)),
@@ -133,7 +107,7 @@
               new Item({ title: "16mm" }, new Price(2.0)),
               new Item({ title: "25mm" }, new Price(3.0)),
             ]),
-            new Subcategory(null, [
+            new SubCategory(null, [
               new Item({ title: "Tape & Staple" }, new Price(1.0)),
             ]),
           ]),

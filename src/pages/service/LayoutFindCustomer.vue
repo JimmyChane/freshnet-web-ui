@@ -1,10 +1,20 @@
-<script>
-  export default {
+<script lang="ts">
+  import Customer from "@/items/Customer";
+  import Vue from "vue";
+
+  interface Data {
+    customerTemplates: Customer[];
+    customerSuggestions: Customer[];
+  }
+
+  export default Vue.extend({
     props: {
       inputName: { type: String, default: "" },
       inputPhoneNumber: { type: String, default: "" },
     },
-    data: (c) => ({ customerTemplates: [], customerSuggestions: [] }),
+    data(): Data {
+      return { customerTemplates: [], customerSuggestions: [] };
+    },
     watch: {
       inputName() {
         this.input();
@@ -20,9 +30,10 @@
       async invalidate() {
         this.customerTemplates = [];
         this.customerSuggestions = [];
-        const customers = await this.$store.state.stores.customer.dispatch(
-          "generateCustomersAcross",
-        );
+        const customers: Customer[] =
+          await this.$store.state.stores.customer.dispatch(
+            "generateCustomersAcross",
+          );
 
         this.customerTemplates = customers;
         this.input();
@@ -38,12 +49,14 @@
         const phoneNumber = this.inputPhoneNumber;
 
         const templates = this.customerTemplates.reduce(
-          (templates, template) => {
+          (templates: Customer[], template) => {
             const isNameInclude = template.name.toLowerCase().includes(name);
             const ePhoneNumber = this.customerPhoneNumberStr(template);
             const isPhoneNumberInclude = ePhoneNumber.includes(phoneNumber);
 
-            if (isNameInclude && isPhoneNumberInclude) templates.push(template);
+            if (isNameInclude && isPhoneNumberInclude) {
+              templates.push(template);
+            }
             return templates;
           },
           [],
@@ -65,24 +78,26 @@
         this.customerSuggestions = templates;
       },
 
-      clickItem(customer) {
+      clickItem(customer: Customer): void {
         this.$emit("click-item", customer);
-        setTimeout(() => (this.customerSuggestions = []), 200);
+        setTimeout(() => {
+          this.customerSuggestions = [];
+        }, 200);
       },
-      clickClose() {
+      clickClose(): void {
         this.customerSuggestions = [];
         this.$emit("click-close");
       },
 
-      customerName(customer) {
+      customerName(customer: Customer): string {
         return customer.name;
       },
-      customerPhoneNumberStr(customer) {
+      customerPhoneNumberStr(customer: Customer): string {
         const { phoneNumber } = customer;
         return phoneNumber ? phoneNumber.toString() : "";
       },
     },
-  };
+  });
 </script>
 
 <template>

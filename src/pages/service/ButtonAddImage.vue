@@ -1,7 +1,3 @@
-<script>
-  export default { emits: ["callback-result"] };
-</script>
-
 <template>
   <button class="ButtonImageAdd transition">
     <img

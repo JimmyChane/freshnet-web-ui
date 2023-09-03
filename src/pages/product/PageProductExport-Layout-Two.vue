@@ -1,44 +1,56 @@
-<script>
-  import { Type } from "@/items/Specification";
+<script lang="ts">
+  import Specification, { Type } from "@/items/Specification";
   import ItemSpecification from "./PageProductExport-Layout-Two-Specification.vue";
   import ProductPrice from "@/items/ProductPrice";
   import U from "@/U";
+  import User from "@/items/User";
+  import Product from "@/items/Product";
+  import Vue from "vue";
+  import ProductPrices from "@/items/ProductPrices";
 
-  export default {
+  export default Vue.extend({
     components: { ItemSpecification },
     props: {
       width: { type: Number, default: 0 },
       height: { type: Number, default: 0 },
-      product: { type: Object, default: () => null },
+      product: { type: Product },
     },
-    data: (c) => ({
-      previousHeight: 0,
-      initialPadding: 60,
-      initialGap: 30,
-      initialSpecificationPadding: 14,
+    data() {
+      return {
+        previousHeight: 0,
+        initialPadding: 60,
+        initialGap: 30,
+        initialSpecificationPadding: 14,
 
-      fullTitle: "",
-      paddingVertical: 40,
-      paddingHorizontal: 0,
-      gap: 0,
-      specificationPadding: 0,
-    }),
+        fullTitle: "",
+        paddingVertical: 40,
+        paddingHorizontal: 0,
+        gap: 0,
+        specificationPadding: 0,
+      };
+    },
     computed: {
-      user: (c) => c.$store.state.stores.login.getters.user,
-      allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
+      user(): User {
+        return this.$store.state.stores.login.getters.user;
+      },
+      allowEdit(): boolean {
+        return this.user.isTypeAdmin() || this.user.isTypeStaff();
+      },
 
-      brandId: (c) => c.product?.brandId ?? "",
+      brandId(): string {
+        return this.product?.brandId ?? "";
+      },
 
-      specificationKeys: () => {
+      specificationKeys(): string[] {
         return Object.keys(Type.Key).map((key) => {
-          return Type.Key[key];
+          return (Type.Key as Record<string, any>)[key];
         });
       },
-      specifications: (c) => {
-        if (!c.product) return [];
-        if (!U.isArray(c.product.specifications)) return [];
+      specifications(): Specification[] {
+        if (!this.product) return [];
+        if (!U.isArray(this.product.specifications)) return [];
 
-        return c.product.specifications
+        return this.product.specifications
           .filter((spec) => spec && spec.type && spec.content)
           .filter((spec) => {
             return [
@@ -51,14 +63,14 @@
             ].includes(spec.typeKey);
           })
           .sort((spec1, spec2) => {
-            const key1 = c.obtainKeyOfSpecificationType(spec1.type);
-            const key2 = c.obtainKeyOfSpecificationType(spec2.type);
+            const key1 = this.obtainKeyOfSpecificationType(spec1.type);
+            const key2 = this.obtainKeyOfSpecificationType(spec2.type);
 
-            let index1 = c.specificationKeys.indexOf(key1);
-            let index2 = c.specificationKeys.indexOf(key2);
+            let index1 = this.specificationKeys.indexOf(key1);
+            let index2 = this.specificationKeys.indexOf(key2);
 
-            index1 = index1 >= 0 ? index1 : c.specificationKeys.length;
-            index2 = index2 >= 0 ? index2 : c.specificationKeys.length;
+            index1 = index1 >= 0 ? index1 : this.specificationKeys.length;
+            index2 = index2 >= 0 ? index2 : this.specificationKeys.length;
 
             return index1 !== index2
               ? index1 - index2
@@ -66,22 +78,22 @@
           });
       },
 
-      productPrice: (c) => {
-        if (!c.allowEdit) return null;
-        if (!c.product) return null;
-        return c.product.price;
+      productPrice(): ProductPrices | null {
+        if (!this.allowEdit) return null;
+        if (!this.product) return null;
+        return this.product.price;
       },
-      productPriceNormal: (c) => {
-        return c.productPrice?.normal ?? new ProductPrice();
+      productPriceNormal(): ProductPrice {
+        return this.productPrice?.normal ?? new ProductPrice(undefined);
       },
-      productPricePromotion: (c) => {
-        return c.productPrice?.promotion ?? new ProductPrice();
+      productPricePromotion(): ProductPrice {
+        return this.productPrice?.promotion ?? new ProductPrice(undefined);
       },
-      price: (c) => {
-        if (!c.allowEdit) return null;
+      price(): { from?: ProductPrice; to?: ProductPrice } | null {
+        if (!this.allowEdit) return null;
 
-        let normal = c.productPriceNormal;
-        let promotion = c.productPricePromotion;
+        let normal = this.productPriceNormal;
+        let promotion = this.productPricePromotion;
 
         if (normal.value > 0 && promotion.value <= 0) return { to: normal };
         if (normal.value > 0 && promotion.value > 0)
@@ -91,14 +103,14 @@
         return null;
       },
 
-      gifts: (c) => {
-        const gifts = c.product?.gifts ?? [];
+      gifts(): string[] {
+        const gifts = this.product?.gifts ?? [];
         return gifts
           .map((gift) => U.optString(gift).trim())
           .filter((gift) => gift.length);
       },
-      bundles: (c) => {
-        const bundles = c.product?.bundles ?? [];
+      bundles(): string[] {
+        const bundles = this.product?.bundles ?? [];
         return bundles
           .filter((bundle) => U.isObjectOnly(bundle))
           .map((bundle) => U.optString(bundle.title).trim())
@@ -130,8 +142,10 @@
         this.invalidateHeight();
       },
       invalidateHeight() {
-        const parentHeight = this.$el.offsetHeight;
-        const height = this.$refs.body.offsetHeight;
+        const selfElement = this.$el as HTMLElement;
+        const bodyElement = this.$refs.body as HTMLElement;
+        const parentHeight = selfElement.offsetHeight;
+        const height = bodyElement.offsetHeight;
 
         if (height > parentHeight && this.previousHeight !== height) {
           this.previousHeight = height;
@@ -144,13 +158,13 @@
         }
       },
 
-      obtainKeyOfSpecificationType(type) {
+      obtainKeyOfSpecificationType(type: Object | string | any) {
         if (typeof type === "object") return type.key;
         if (typeof type === "string") return type;
         return "";
       },
     },
-  };
+  });
 </script>
 
 <template>
@@ -162,8 +176,8 @@
       class="ExportLayoutTwo-body"
       ref="body"
       :style="{
-        'padding': `${paddingHorizontal}px ${paddingVertical}px`,
-        'gap': `${gap}px`,
+        padding: `${paddingHorizontal}px ${paddingVertical}px`,
+        gap: `${gap}px`,
       }"
     >
       <div

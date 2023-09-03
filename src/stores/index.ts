@@ -4,6 +4,7 @@ import socketIo, { Socket } from "socket.io-client";
 import Server from "../host/Server";
 import TimeNowGetter from "@/tools/TimeNowGetter";
 import Notification from "@/tools/Notification";
+import PopupMenu from "./tools/PopupMenu";
 import PopupMenuOption from "@/app/popupMenu/PopupMenuOption";
 import U from "@/U";
 
@@ -24,16 +25,6 @@ const keyGetter = new TimeNowGetter();
 
 Vue.use(Vuex);
 
-interface PopupMenu {
-  key: number;
-  anchor: HTMLElement;
-  menus: any[];
-  option: any;
-  isShowing: boolean;
-  isClosing: boolean;
-
-  hide: () => void;
-}
 interface PopupWindow {
   key: number;
   isShowing: boolean;

@@ -1,12 +1,15 @@
-<script>
+<script lang="ts">
   import Section from "./PageHome-Section.vue";
   import Setting from "@/items/Setting";
 
   import { getHours } from "date-fns";
+  import Vue from "vue";
 
-  export default {
+  export default Vue.extend({
     components: { Section },
-    data: (c) => ({ companyTitle: "", companyCategory: "", addressHref: "" }),
+    data() {
+      return { companyTitle: "", companyCategory: "", addressHref: "" };
+    },
     computed: {
       greetTitle() {
         const periods = [
@@ -37,21 +40,21 @@
     },
     methods: {
       async invalidate() {
-        this.companyTitle = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
-          key: Setting.Key.CompanyName,
-          default: "",
-        });
+        this.companyTitle = await this.$store.state.stores.setting.dispatch(
+          "findValueOfKey",
+          { key: Setting.Key.CompanyName, default: "" },
+        );
         this.companyCategory = await this.$store.state.stores.setting.dispatch(
           "findValueOfKey",
           { key: Setting.Key.CompanyCategory, default: "" },
         );
-        this.addressHref = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
-          key: Setting.Key.LocationLink,
-          default: "",
-        });
+        this.addressHref = await this.$store.state.stores.setting.dispatch(
+          "findValueOfKey",
+          { key: Setting.Key.LocationLink, default: "" },
+        );
       },
     },
-  };
+  });
 </script>
 
 <template>

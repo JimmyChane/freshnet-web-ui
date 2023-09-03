@@ -1,21 +1,23 @@
-<script>
+<script lang="ts">
   import ImageViews from "@/components/ImageViews.vue";
   import ItemSearch from "./GlobalSearch-Item.vue";
   import Labels from "./GlobalSearch-Item-Labels.vue";
   import Product from "@/items/Product";
+  import Vue from "vue";
+  import Image from "@/items/Image";
 
-  export default {
-    emtis: ["callback-click"],
+  export default Vue.extend({
     components: { ImageViews, ItemSearch, Labels },
     props: {
-      item: { type: Product, default: null },
+      item: { type: Product },
     },
-    data: (c) => ({
-      categoryTitle: "",
-      title: "",
-    }),
+    data() {
+      return { categoryTitle: "", title: "" };
+    },
     computed: {
-      images: (c) => c.item.images,
+      images(): Image[] {
+        return this.item.images;
+      },
     },
     watch: {
       item() {
@@ -26,7 +28,7 @@
       this.invalidate();
     },
     methods: {
-      async invalidate() {
+      async invalidate(): Promise<string | undefined> {
         this.categoryTitle = "";
         this.title = "";
 
@@ -39,7 +41,7 @@
         this.title = await this.item.fetchFullTitle().catch((error) => "");
       },
     },
-  };
+  });
 </script>
 
 <template>

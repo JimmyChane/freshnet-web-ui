@@ -1,10 +1,11 @@
-<script>
+<script lang="ts">
+  import Vue from "vue";
   import Link from "./PageHome-Link.vue";
 
-  export default {
+  export default Vue.extend({
     components: { Link },
     props: { isThin: { type: Boolean, default: false } },
-  };
+  });
 </script>
 
 <template>

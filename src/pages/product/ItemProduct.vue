@@ -1,11 +1,10 @@
 <script>
-  const Mode = { List: 1, Grid: 2 };
-
   import Setting from "@/items/Setting";
   import ProductPrice from "@/items/ProductPrice";
   import ProductPreset from "@/objects/ProductPreset";
 
   import ImageView from "@/components/ImageView.vue";
+  import { Mode } from "./ItemProductOption";
   import Label from "./ItemProduct-Label.vue";
   import chroma from "chroma-js";
   import U from "@/U";
@@ -37,9 +36,11 @@
       allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
       shouldShowPrice: (c) => {
-        let setting = c.$store.state.stores.setting.getters.items.find((setting) => {
-          return setting.key === Setting.Key.PublicShowPrice;
-        });
+        let setting = c.$store.state.stores.setting.getters.items.find(
+          (setting) => {
+            return setting.key === Setting.Key.PublicShowPrice;
+          },
+        );
         return setting?.value ?? false;
       },
 
