@@ -4,12 +4,25 @@
 
   import { format } from "date-fns";
 
+  import IconSuccessGreen from "@/assets/icon/success-green.svg";
+  import IconSuccessWhite from "@/assets/icon/success-white.svg";
+  import IconTrashRed from "@/assets/icon/trash-red.svg";
+  import IconTrashWhite from "@/assets/icon/trash-white.svg";
+
   export default {
     components: { ItemOrderAction },
     emits: ["onPending", "onComplete", "onRemove", "onExpand", "onCollapse"],
     props: {
       order: { type: Object, default: () => null },
       isExpand: { type: Boolean, default: false },
+    },
+    data() {
+      return {
+        IconSuccessGreen,
+        IconSuccessWhite,
+        IconTrashRed,
+        IconTrashWhite,
+      };
     },
     computed: {
       isStatusPending: (c) => c.order.status === Order.Status.Pending,
@@ -64,7 +77,7 @@
           class="ItemOrder-button transition"
           :isExpand="`${isExpand}`"
           :alt="isExpand ? 'Expand' : 'Collapse'"
-          :src="host.icon('down-arrow-grey').toUrl()"
+          src="@/assets/icon/down-arrow-grey.svg"
         />
       </div>
     </div>
@@ -78,15 +91,15 @@
       />
       <ItemOrderAction
         v-if="isStatusPending"
-        :icon="host.icon('success-green').toUrl()"
-        :iconActive="host.icon('success-white').toUrl()"
+        :icon="IconSuccessGreen"
+        :iconActive="IconSuccessWhite"
         color="#25ad86"
         text="Move to Completed"
         @button-click="$emit('onComplete')"
       />
       <ItemOrderAction
-        :icon="host.icon('trash-red').toUrl()"
-        :iconActive="host.icon('trash-white').toUrl()"
+        :icon="IconTrashRed"
+        :iconActive="IconTrashWhite"
         color="#DB4A2A"
         text=""
         @button-click="$emit('onRemove')"

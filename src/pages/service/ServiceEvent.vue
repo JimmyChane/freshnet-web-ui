@@ -10,6 +10,8 @@
   import ServiceEvent from "@/items/ServiceEvent";
   import ServiceEventMethod from "@/items/ServiceEventMethod";
 
+  import IconTrash from "@/assets/icon/trash-000000.svg";
+
   export default {
     components: { MenuOption, ImageView },
     props: {
@@ -141,7 +143,7 @@
           });
           menus.push({
             title: "Delete Event",
-            icon: this.host.icon("trash-000000").toUrl(),
+            icon: IconTrash,
             click: () => this.$emit("callback-delete", this.event),
           });
         }

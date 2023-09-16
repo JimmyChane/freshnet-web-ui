@@ -2,6 +2,13 @@
   import AppHost from "@/host/AppHost";
   import ViewerProduct from "@/pages/product/viewerProduct/ViewerProduct.vue";
 
+  import IconClose from "@/assets/icon/close-000000.svg";
+  import IconView from "@/assets/icon/view-000000.svg";
+  import IconCopyLight from "@/assets/icon/copy-FFFFFF.svg";
+  import IconCopyDark from "@/assets/icon/copy-000000.svg";
+  import IconPrinter from "@/assets/icon/printer-000000.svg";
+  import IconTrash from "@/assets/icon/trash-000000.svg";
+
   export default {
     components: { ViewerProduct },
     emits: [
@@ -29,7 +36,7 @@
         return {
           key: "close",
           title: "Close",
-          icon: this.host.icon("close-000000").toUrl(),
+          icon: IconClose,
           click: () => this.$emit("click-dismiss"),
         };
       },
@@ -39,21 +46,21 @@
           {
             key: "view",
             title: "View Product in Display",
-            icon: this.host.icon("view-000000").toUrl(),
+            icon: IconView,
             isHidden: true,
             click: () => this.clickView(),
           },
           {
             key: "copy",
             title: "Copy Product Link",
-            icon: this.host.icon("copy-000000").toUrl(),
+            icon: IconCopyDark,
             click: () => this.clickCopyLink(),
           },
           this.isEditable
             ? {
                 key: "print",
                 title: "Print Product Catalog",
-                icon: this.host.icon("printer-000000").toUrl(),
+                icon: IconPrinter,
                 isHidden: true,
                 click: () => {
                   this.$router.push({
@@ -67,7 +74,7 @@
             ? {
                 key: "delete",
                 title: "Delete Product",
-                icon: this.host.icon("trash-000000").toUrl(),
+                icon: IconTrash,
                 isHidden: true,
                 click: () => {
                   this.$emit("click-productRemove", {
@@ -92,7 +99,7 @@
         }
         this.$store.getters.copyText(link);
         this.$store.dispatch("snackbarShow", {
-          icon: this.host.icon("copy-FFFFFF").toUrl(),
+          icon: IconCopyLight,
           text: "Copied to Clipboard",
           actions: [{ title: "Open", click: () => this.clickView() }],
         });

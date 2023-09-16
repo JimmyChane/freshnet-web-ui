@@ -6,13 +6,16 @@
   import TabLayout from "@/components/tabLayout/TabLayout.vue";
   import U from "@/U";
 
+  import IconAdd from "@/assets/icon/add-000000.svg";
+  import IconRefresh from "@/assets/icon/refresh-000000.svg";
+
   export default {
     components: { NavigationBar, SearchInput, ItemCustomerSearch, TabLayout },
     props: {
       title: { type: String, default: "" },
       items: { type: Array, default: () => [] },
     },
-    data: (c) => ({ results: [] }),
+    data: (c) => ({ IconAdd, IconRefresh, results: [] }),
     computed: {
       filter: (c) => U.optString(c.$route.query.filter),
       list: (c) => {
@@ -33,12 +36,12 @@
         return [
           {
             title: "Add",
-            icon: c.host.icon("add-000000").toUrl(),
+            icon: IconAdd,
             click: () => c.$emit("click-item-add"),
           },
           {
             title: "Refresh",
-            icon: c.host.icon("refresh-000000").toUrl(),
+            icon: IconRefresh,
             click: () => c.$emit("click-refresh"),
           },
         ];

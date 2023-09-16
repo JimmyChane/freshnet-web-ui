@@ -42,7 +42,7 @@
         <img
           class="Snackbar-loading"
           v-if="item.isLoading"
-          :src="host.icon('loading-circular-FFFFFF').toUrl()"
+          src="@/assets/icon/loading-circular-FFFFFF.svg"
         />
       </div>
 

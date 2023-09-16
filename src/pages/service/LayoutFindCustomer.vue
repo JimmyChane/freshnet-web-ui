@@ -93,7 +93,7 @@
         <button class="LayoutFindCustomer-close" @click="() => clickClose()">
           <img
             class="LayoutFindCustomer-close-img"
-            :src="host.icon('close-000000').toUrl()"
+            src="@/assets/icon/close-000000.svg"
           />
         </button>
       </div>

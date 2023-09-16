@@ -2,6 +2,10 @@
   import ItemSettingHeader from "./ItemSetting-Header.vue";
   import U from "@/U";
 
+  import IconClose from "@/assets/icon/close-000000.svg";
+  import IconSave from "@/assets/icon/save-000000.svg";
+  import IconEdit from "@/assets/icon/edit-000000.svg";
+
   export default {
     components: { ItemSettingHeader },
     data: (c) => ({ U, isEditing: false, value: undefined, nextValue: "" }),
@@ -19,12 +23,12 @@
           return [
             {
               title: "Discard",
-              icon: c.host.icon("close-000000").toUrl(),
+              icon: IconClose,
               click: () => (c.isEditing = false),
             },
             {
               title: "Save",
-              icon: c.host.icon("save-000000").toUrl(),
+              icon: IconSave,
               click: async () => {
                 if (!c.isEditing) return;
                 await c.item.updateValue(c.nextValue);
@@ -37,7 +41,7 @@
         return [
           {
             title: "Edit",
-            icon: c.host.icon("edit-000000").toUrl(),
+            icon: IconEdit,
             click: () => (c.isEditing = true),
           },
         ];

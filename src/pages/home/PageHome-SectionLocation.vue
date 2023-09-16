@@ -14,12 +14,18 @@
     },
     methods: {
       async invalidate() {
-        this.address = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
-          key: Setting.Key.Location,
-        });
-        this.link = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
-          key: Setting.Key.LocationLink,
-        });
+        this.address = await this.$store.state.stores.setting.dispatch(
+          "findValueOfKey",
+          {
+            key: Setting.Key.Location,
+          },
+        );
+        this.link = await this.$store.state.stores.setting.dispatch(
+          "findValueOfKey",
+          {
+            key: Setting.Key.LocationLink,
+          },
+        );
       },
     },
   };
@@ -49,7 +55,7 @@
     <img
       class="HomeSectionLocation-img transition"
       :style="{ 'grid-area': 'img' }"
-      :src="host.res('background/store_front.webp')"
+      src="@/assets/bg/store_front.webp"
     />
   </a>
 </template>

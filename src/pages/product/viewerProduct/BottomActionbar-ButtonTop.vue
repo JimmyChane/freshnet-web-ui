@@ -12,7 +12,7 @@
     :isHidden="`${isHidden}`"
     @click="() => $emit('click')"
   >
-    <img class="ButtonTop-icon" :src="host.icon('arrow-left-000000').toUrl()" />
+    <img class="ButtonTop-icon" src="@/assets/icon/arrow-left-000000.svg" />
   </FloatingButton>
 </template>
 

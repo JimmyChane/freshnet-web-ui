@@ -4,6 +4,9 @@
   import LabelDevice from "./ItemCustomer-LabelDevice.vue";
   import Customer from "@/items/Customer";
 
+  import IconService from "@/assets/icon/service-505050.svg";
+  import IconOrder from "@/assets/icon/order-505050.svg";
+
   export default {
     components: { ItemButton, Label, LabelDevice },
     emtis: ["click", "click-remove"],
@@ -11,7 +14,7 @@
       item: { type: Customer, default: null },
       selected: { type: Boolean, default: false },
     },
-    data: (c) => ({ itemDeviceGroups: [] }),
+    data: (c) => ({ itemDeviceGroups: [], IconService, IconOrder }),
     computed: {
       name: (c) => c.item.name,
       phoneNumber: (c) => c.item.phoneNumber,
@@ -79,14 +82,10 @@
         />
         <Label
           v-if="services.length"
-          :icon="host.icon('service-505050').toUrl()"
+          :icon="IconService"
           :count="services.length"
         />
-        <Label
-          v-if="orders.length"
-          :icon="host.icon('order-505050').toUrl()"
-          :count="orders.length"
-        />
+        <Label v-if="orders.length" :icon="IconOrder" :count="orders.length" />
       </div>
     </div>
   </ItemButton>

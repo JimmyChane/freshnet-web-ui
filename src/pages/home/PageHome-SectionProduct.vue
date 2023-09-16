@@ -3,6 +3,8 @@
   import ImageView from "@/components/ImageView.vue";
   import chroma from "chroma-js";
   import U from "@/U";
+  import IconArrowDownLight from "@/assets/icon/arrowDown-FFFFFF.svg";
+  import IconArrowDownDark from "@/assets/icon/arrowDown-000000.svg";
 
   export default {
     components: { ImageView },
@@ -41,9 +43,7 @@
       color3: (c) => c.getColorMixed(c.color, 0.9),
 
       arrowIcon: (c) => {
-        return U.isColorDark(c.color)
-          ? c.host.icon("arrowDown-ffffff").toUrl()
-          : c.host.icon("arrowDown-000000").toUrl();
+        return U.isColorDark(c.color) ? IconArrowDownLight : IconArrowDownDark;
       },
     },
     watch: {
@@ -75,7 +75,9 @@
 
       async invalidate() {
         this.products = [];
-        const groups = await this.$store.state.stores.product.dispatch("getGroupsByCategory");
+        const groups = await this.$store.state.stores.product.dispatch(
+          "getGroupsByCategory",
+        );
         if (!groups.length) return;
 
         this.itemTitle = "";

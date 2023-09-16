@@ -3,9 +3,13 @@
   import Actionbar from "@/components/actionbar/Actionbar.vue";
   import ImageView from "@/components/ImageView.vue";
 
+  import IconClose from "@/assets/icon/close-000000.svg";
+
   export default {
     components: { Bottomsheet, Actionbar, ImageView },
     data: (c) => ({
+      IconClose,
+
       containerWidth: 0,
       containerHeight: 0,
       containerMiddleX: 0,
@@ -111,10 +115,7 @@
         <div class="ViewerImage-body">
           <Actionbar
             class="ViewerImage-actionbar"
-            :leftMenus="{
-              icon: host.icon('close-000000').toUrl(),
-              click: () => clickDismiss(),
-            }"
+            :leftMenus="{ icon: IconClose, click: () => clickDismiss() }"
           />
 
           <div

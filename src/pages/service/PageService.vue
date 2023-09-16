@@ -13,6 +13,8 @@
   import Server from "@/host/Server";
   import IconPack from "@/app/IconPack";
 
+  import IconRefresh from "@/assets/icon/refresh-000000.svg";
+
   export default {
     key: "service",
     title: "Services",
@@ -29,10 +31,12 @@
         onClickRemove: (service) => c.clickRemoveService(service),
         onClickToAddEvent: (event) => {
           const arg = { serviceID: c.currentService.id, data: event };
-          c.$store.state.stores.service.dispatch("addEventToId", arg).catch((error) => {
-            c.$store.dispatch("snackbarShow", "Failed to create an event");
-            throw error;
-          });
+          c.$store.state.stores.service
+            .dispatch("addEventToId", arg)
+            .catch((error) => {
+              c.$store.dispatch("snackbarShow", "Failed to create an event");
+              throw error;
+            });
         },
         onClickRemoveEvent: (event) => c.cllickRemoveServiceEvent(event),
         onClickRemoveImage: (image) => c.clickRemoveServiceImage(image),
@@ -57,7 +61,7 @@
           {
             key: "refresh",
             title: "Refresh",
-            icon: c.host.icon("refresh-000000").toUrl(),
+            icon: IconRefresh,
             click: () => c.clickRefresh(),
           },
         ];
@@ -82,7 +86,9 @@
     },
     methods: {
       async invalidate() {
-        const items = await this.$store.state.stores.service.dispatch("getItems");
+        const items = await this.$store.state.stores.service.dispatch(
+          "getItems",
+        );
         for (const item of items) {
           item.events.sort((event1, event2) => event1.compare(event2));
         }
@@ -134,14 +140,20 @@
           component: WindowAddService,
           onConfirm: async (accept, reject, data) => {
             try {
-              const result = await this.$store.state.stores.service.dispatch("addItem", {
-                data,
-              });
+              const result = await this.$store.state.stores.service.dispatch(
+                "addItem",
+                {
+                  data,
+                },
+              );
 
               result ? accept() : reject();
               this.clickService(result);
             } catch (error) {
-              this.$store.dispatch("snackbarShow", "Failed to create a service");
+              this.$store.dispatch(
+                "snackbarShow",
+                "Failed to create a service",
+              );
               reject();
               throw error;
             }
@@ -187,9 +199,12 @@
           value: service,
           onConfirm: async (accept, reject) => {
             try {
-              await this.$store.state.stores.service.dispatch("removeItemOfId", {
-                id: service.id,
-              });
+              await this.$store.state.stores.service.dispatch(
+                "removeItemOfId",
+                {
+                  id: service.id,
+                },
+              );
               accept();
               if (this.currentServiceId === service.id) {
                 this.$store.getters.replaceQuery({ query: { service: null } });
@@ -209,10 +224,13 @@
           message: "After deleting this event, it cannot be reverted.",
           value: data,
           onConfirm: async (accept, reject) => {
-            await this.$store.state.stores.service.dispatch("removeEventFromId", {
-              serviceID: data.service.id,
-              time: data.event.timestamp.time,
-            });
+            await this.$store.state.stores.service.dispatch(
+              "removeEventFromId",
+              {
+                serviceID: data.service.id,
+                time: data.event.timestamp.time,
+              },
+            );
             accept();
           },
         });

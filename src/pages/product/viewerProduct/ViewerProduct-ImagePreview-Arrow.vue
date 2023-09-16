@@ -4,6 +4,9 @@
   import chroma from "chroma-js";
   import U from "@/U";
 
+  import IconArrowDownWhite from "@/assets/icon/arrowDown-white.svg";
+  import IconArrowDownDark from "@/assets/icon/arrowDown-black.svg";
+
   const Direction = { Left: 1, Right: 2 };
 
   export default {
@@ -14,6 +17,9 @@
       primaryColor: { type: Object },
       direction: { type: Number, default: Direction.Left },
       isShowing: { type: Boolean, default: false },
+    },
+    data() {
+      return { IconArrowDownWhite, IconArrowDownDark };
     },
     computed: {
       isLeft: (c) => c.direction === Direction.Left,
@@ -56,8 +62,8 @@
     <IconDynamic
       class="ImagePreviewArrow-arrow transition"
       :primaryColor="primaryColor"
-      :srcLight="host.icon('arrowDown-white').toUrl()"
-      :srcDark="host.icon('arrowDown-black').toUrl()"
+      :srcLight="IconArrowDownWhite"
+      :srcDark="IconArrowDownDark"
     />
   </button>
 </template>

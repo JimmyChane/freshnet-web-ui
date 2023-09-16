@@ -4,12 +4,18 @@
   import Item from "./PanelCustomer-Item.vue";
   import CustomerDevice from "@/items/CustomerDevice";
 
+  import IconTrash from "@/assets/icon/trash-DB4A2A.svg";
+  import IconOption from "@/assets/icon/option-000000.svg";
+
   export default {
     components: { MenuOption, ItemSpecification, Item },
     emtis: ["click", "click-remove"],
     props: {
       item: { type: CustomerDevice, default: null },
       selected: { type: Boolean, default: false },
+    },
+    data() {
+      return { IconTrash, IconOption };
     },
     computed: {
       category: (c) => {
@@ -59,11 +65,11 @@
                 key: 'delete',
                 title: 'Delete',
                 color: '#DB4A2A',
-                icon: host.icon('trash-DB4A2A').toUrl(),
+                icon: IconTrash,
                 interact: () => $emit('click-remove', { item }),
               },
             ]"
-            :icon="host.icon('option-000000').toUrl()"
+            :icon="IconOption"
           />
         </div>
       </div>

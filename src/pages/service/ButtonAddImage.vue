@@ -6,7 +6,7 @@
   <button class="ButtonImageAdd transition">
     <img
       class="ButtonImageAdd-icon transition"
-      :src="host.icon('image-000000').toUrl()"
+      src="@/assets/icon/image-000000.svg"
     />
     <input
       class="ButtonImageAdd-pick"

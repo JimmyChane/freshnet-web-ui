@@ -15,6 +15,8 @@
   import ItemServiceTimestamp from "./ItemService-Timestamp.vue";
   import ItemServiceDetailColumn from "./ItemService-DetailColumn.vue";
 
+  import IconImage from "@/assets/icon/image-FFFFFF.svg";
+
   export default {
     Mode,
 
@@ -117,7 +119,7 @@
         if (c.images.length) {
           labels.push({
             key: "images",
-            icon: c.host.icon("image-FFFFFF").toUrl(),
+            icon: IconImage,
             count: c.images.length,
             primaryColor: "#8C623A",
           });

@@ -1,21 +1,22 @@
-import Host from "@/host/Server";
 import Size from "./Size";
-import { Icon } from "@/host/ServerResource";
+
+import IconPaperA4 from "@/assets/icon/paper-a4.svg";
+import IconPaperA3 from "@/assets/icon/paper-a3.svg";
 
 export default class PaperSize {
   static readonly _4R = new PaperSize(
     "4R",
-    Host.icon("paper-a4").toUrl(),
+    IconPaperA4,
     new Size("10.2cm", "15.2cm"),
   );
   static readonly A4 = new PaperSize(
     "A4",
-    Host.icon("paper-a4").toUrl(),
+    IconPaperA4,
     new Size("210mm", "297mm"),
   );
   static readonly A3 = new PaperSize(
     "A3",
-    Host.icon("paper-a3").toUrl(),
+    IconPaperA3,
     new Size("297mm", "420mm"),
   );
 

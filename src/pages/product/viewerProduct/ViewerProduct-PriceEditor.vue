@@ -3,11 +3,16 @@
   import Item from "./ViewerProduct-PriceEditor-item.vue";
   import ProductPrice from "@/items/ProductPrice";
 
+  import IconEdit from "@/assets/icon/edit-000000.svg";
+
   export default {
     components: { Section, Item },
     props: {
       product: { type: Object, default: () => null },
       primaryColor: { type: Object },
+    },
+    data() {
+      return { IconEdit };
     },
     computed: {
       price: (context) => context.product?.price ?? null,
@@ -32,7 +37,7 @@
     :primaryColor="primaryColor"
     :menu="{
       title: 'Edit',
-      icon: host.icon('edit-000000').toUrl(),
+      icon: IconEdit,
       click: () => {
         $emit('click-product-priceUpdate', {
           product: product,

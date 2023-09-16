@@ -4,6 +4,8 @@
   import Loading from "@/components/Loading.vue";
   import WindowBottom from "./WindowBottom.vue";
 
+  import IconClose from "@/assets/icon/close-000000.svg";
+
   export default {
     emits: ["click-dismiss", "click-cancel", "click-ok"],
     components: { PopupWindow, Loading, Actionbar, WindowBottom },
@@ -13,7 +15,7 @@
       isLoading: { type: Boolean, default: false },
       isClickable: { type: Boolean, default: true },
     },
-    data: (c) => ({ scrollTop: 0 }),
+    data: (c) => ({ scrollTop: 0, IconClose }),
     watch: {
       isShowing() {
         const { PopupWindowActionBody } = this.$refs;
@@ -41,10 +43,7 @@
         class="WindowAction-header"
         :isScrollUp="`${scrollTop > 0}`"
         :title="title"
-        :leftMenus="{
-          icon: host.icon('close-000000').toUrl(),
-          click: () => $emit('click-dismiss'),
-        }"
+        :leftMenus="{ icon: IconClose, click: () => $emit('click-dismiss') }"
       />
 
       <div class="WindowAction-main">

@@ -11,6 +11,11 @@
   import Server from "@/host/Server";
   import IconPack from "@/app/IconPack";
 
+  import IconHamburgerMenu from "@/assets/icon/hamburgerMenu-000000.svg";
+  import IconClose from "@/assets/icon/close-2A4858.svg";
+  import IconSearch from "@/assets/icon/search-2A4858.svg";
+  import Logo from "@/assets/logo/freshnet-enterprise-logo.svg";
+
   export default {
     key: "ps2",
     name: "PagePs2",
@@ -30,7 +35,13 @@
       WindowItemPs2Disc,
       ItemPs2Disc,
     },
-    data: (c) => ({ searchKeyword: "" }),
+    data: (c) => ({
+      IconHamburgerMenu,
+      IconClose,
+      IconSearch,
+      Logo,
+      searchKeyword: "",
+    }),
     computed: {
       isLoading: (c) => c.$store.state.stores.ps2.getters.isLoading,
       ps2Discs: (c) => c.$store.state.stores.ps2.getters.items,
@@ -80,12 +91,12 @@
             ? [
                 {
                   title: 'Hamburger Menu',
-                  icon: host.icon('hamburgerMenu-000000').toUrl(),
+                  icon: IconHamburgerMenu,
                   click: () => $store.getters.navigation.openNavigationDrawer(),
                 },
                 {
                   title: 'Home',
-                  icon: host.res('img/freshnet-enterprise-logo'),
+                  icon: Logo,
                   click: () => $router.push({ name: 'home' }),
                 },
               ]
@@ -103,14 +114,11 @@
 
             <ButtonIcon
               v-if="searchKeyword"
-              :src="host.icon('close-2A4858').toUrl()"
+              :src="IconClose"
               alt="Clear"
               @click="searchKeyword = ''"
             />
-            <ButtonIcon
-              :src="host.icon('search-2A4858').toUrl()"
-              alt="Search"
-            />
+            <ButtonIcon :src="IconSearch" alt="Search" />
           </div>
         </div>
       </Actionbar>

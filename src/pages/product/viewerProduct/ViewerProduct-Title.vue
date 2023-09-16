@@ -1,6 +1,7 @@
 <script>
   import U from "@/U";
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
+  import IconEdit from "@/assets/icon/edit-000000.svg";
 
   export default {
     components: { ButtonIcon },
@@ -9,7 +10,7 @@
       allowEdit: { type: Boolean, default: false },
       product: { type: Object, default: () => null },
     },
-    data: (c) => ({ fullTitle: "" }),
+    data: (c) => ({ IconEdit, fullTitle: "" }),
     computed: {
       titleColor: (c) =>
         U.isColorDark(c.primaryColor)
@@ -44,7 +45,7 @@
     <ButtonIcon
       class="ViewerProduct-button"
       v-if="allowEdit"
-      :src="host.icon('edit-000000').toUrl()"
+      :src="IconEdit"
       @click="
         () => $emit('click-edit', { product, title: title, brandId: brandId })
       "

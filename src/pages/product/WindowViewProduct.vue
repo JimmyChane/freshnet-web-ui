@@ -7,6 +7,8 @@
   import MenuOption from "@/components/button/MenuOption.vue";
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
 
+  import IconEdit from "@/assets/icon/edit-505050.svg";
+
   export default {
     emits: [
       "request-viewImage",
@@ -36,6 +38,8 @@
       product: { type: Object, default: null },
     },
     data: (c) => ({
+      IconEdit,
+
       item: undefined,
 
       title: "",
@@ -139,7 +143,7 @@
         <div class="WindowProduct-abstract-section-header">
           <span class="WindowProduct-abstract-title">Title</span>
           <ButtonIcon
-            :src="host.icon('edit-505050').toUrl()"
+            :src="IconEdit"
             @click="() => $emit('request-editTitle', item.title)"
           />
         </div>
@@ -155,7 +159,7 @@
         <div class="WindowProduct-abstract-section-header">
           <span class="WindowProduct-abstract-title">Brand</span>
           <ButtonIcon
-            :src="host.icon('edit-505050').toUrl()"
+            :src="IconEdit"
             @click="() => $emit('request-editBrand', item.brand)"
           />
         </div>
@@ -182,7 +186,7 @@
         <div class="WindowProduct-abstract-section-header">
           <span class="WindowProduct-abstract-title">Category</span>
           <ButtonIcon
-            :src="host.icon('edit-505050').toUrl()"
+            :src="IconEdit"
             @click="() => $emit('request-editCategory', item.category)"
           />
         </div>
@@ -210,7 +214,7 @@
         <div class="WindowProduct-abstract-section-header">
           <span class="WindowProduct-abstract-title">Description</span>
           <ButtonIcon
-            :src="host.icon('edit-505050').toUrl()"
+            :src="IconEdit"
             @click="() => $emit('request-editDescription', item.description)"
           />
         </div>
@@ -228,7 +232,7 @@
         <div class="WindowProduct-abstract-section-header">
           <span class="WindowProduct-abstract-title">Specification</span>
           <ButtonIcon
-            :src="host.icon('edit-505050').toUrl()"
+            :src="IconEdit"
             @click="
               () => $emit('request-addSpecification', item.specifications)
             "
@@ -288,7 +292,7 @@
         <div class="WindowProduct-abstract-section-header">
           <span class="WindowProduct-abstract-title">Bundle</span>
           <ButtonIcon
-            :src="host.icon('add-505050').toUrl()"
+            :src="IconEdit"
             @click="() => $emit('request-addBundle')"
           />
         </div>
@@ -335,10 +339,7 @@
       <div class="WindowProduct-abstract-section WindowProduct-gift">
         <div class="WindowProduct-abstract-section-header">
           <span class="WindowProduct-abstract-title">Gift</span>
-          <ButtonIcon
-            :src="host.icon('add-505050').toUrl()"
-            @click="() => $emit('request-addGift')"
-          />
+          <ButtonIcon :src="IconEdit" @click="() => $emit('request-addGift')" />
         </div>
 
         <div
@@ -384,7 +385,7 @@
         <div class="WindowProduct-abstract-section-header">
           <span class="WindowProduct-abstract-title">Price</span>
           <ButtonIcon
-            :src="host.icon('add-505050').toUrl()"
+            :src="IconEdit"
             @click="() => $emit('request-addPrice')"
           />
         </div>

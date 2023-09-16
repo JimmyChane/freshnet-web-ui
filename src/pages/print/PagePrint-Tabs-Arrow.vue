@@ -2,6 +2,9 @@
   import ImageView from "@/components/ImageView.vue";
   import chroma from "chroma-js";
 
+  import IconArrowDownLight from "@/assets/icon/arrowDown-white.svg";
+  import IconArrowDownDark from "@/assets/icon/arrowDown-black.svg";
+
   const Direction = { Left: 1, Right: 2 };
 
   export default {
@@ -30,9 +33,7 @@
         return "unset";
       },
       arrowIcon: (c) =>
-        c.primaryColorIsDark
-          ? c.host.icon("arrowDown-white").toUrl()
-          : c.host.icon("arrowDown-black").toUrl(),
+        c.primaryColorIsDark ? IconArrowDownLight : IconArrowDownDark,
     },
   };
 </script>

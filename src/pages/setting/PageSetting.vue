@@ -11,6 +11,8 @@
   import Server from "@/host/Server";
   import IconPack from "@/app/IconPack";
 
+  import IconRefresh from "@/assets/icon/refresh-000000.svg";
+
   class SettingBuilder {
     setKey(key = "") {
       this.key = key;
@@ -76,9 +78,11 @@
     }
 
     findValue() {
-      return Vue.prototype.$store.state.stores.user.getters.items.find((setting) => {
-        return setting.key === this.key;
-      });
+      return Vue.prototype.$store.state.stores.user.getters.items.find(
+        (setting) => {
+          return setting.key === this.key;
+        },
+      );
     }
     async updateValue(value) {
       if (!this.getKey().length) return;
@@ -104,7 +108,7 @@
       ItemSettingContacts,
       ItemSettingBusinessHours,
     },
-    data: (c) => ({ SettingModule, SettingBuilder }),
+    data: (c) => ({ IconRefresh, SettingModule, SettingBuilder }),
     computed: {
       isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
       isEmpty: (c) => !c.$store.state.stores.user.getters.items.length,
@@ -128,7 +132,7 @@
         {
           key: 'refresh',
           title: 'Refresh',
-          icon: host.icon('refresh-000000').toUrl(),
+          icon: IconRefresh,
           click: () => refresh(),
         },
       ]"

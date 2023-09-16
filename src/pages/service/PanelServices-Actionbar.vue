@@ -9,6 +9,7 @@
   import Searcher from "@/tools/Searcher";
 
   import TabLayout from "@/components/tabLayout/TabLayout.vue";
+  import IconSearch from "@/assets/icon/search-000000.svg";
 
   export default {
     components: {
@@ -37,7 +38,11 @@
       sortMenus: { type: Array, default: () => [] },
       sortMenuIndex: { type: Number, default: -1 },
     },
-    data: (c) => ({ results: [], primaryColorLabel: chroma("black") }),
+    data: (c) => ({
+      IconSearch,
+      results: [],
+      primaryColorLabel: chroma("black"),
+    }),
     computed: {
       isOver350: (c) => c.$store.getters.window.innerWidth > 350,
       isOver550: (c) => c.$store.getters.window.innerWidth > 550,
@@ -80,7 +85,7 @@
           ? null
           : {
               title: 'Search',
-              icon: host.icon('search-000000').toUrl(),
+              icon: IconSearch,
               click: () => $emit('click-search'),
             },
         ...menus,

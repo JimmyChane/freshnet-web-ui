@@ -1,6 +1,12 @@
 import U from "@/U";
 import Host from "@/host/Server";
 
+// icon
+import IconCall from "@/assets/icon/call-color.svg";
+import IconWhatsapp from "@/assets/icon/whatsapp-color.svg";
+import IconTelegram from "@/assets/icon/telegram-color.svg";
+import IconTelephone from "@/assets/icon/telephone-color.svg";
+
 interface ContactLinkData {
   id: string;
   category?: string;
@@ -12,25 +18,21 @@ interface ContactData {
 }
 
 class ContactCategory {
-  static Call: ContactCategory = new ContactCategory(
-    "call",
-    "Call",
-    Host.icon("call-color").toUrl(),
-  );
+  static Call: ContactCategory = new ContactCategory("call", "Call", IconCall);
   static Whatsapp: ContactCategory = new ContactCategory(
     "whatsapp",
     "Whatsapp",
-    Host.icon("whatsapp-color").toUrl(),
+    IconWhatsapp,
   );
   static Telegram: ContactCategory = new ContactCategory(
     "telegram",
     "Telegram",
-    Host.icon("telegram-color").toUrl(),
+    IconTelegram,
   );
   static Telephone: ContactCategory = new ContactCategory(
     "telephone",
     "Telephone",
-    Host.icon("telephone-color").toUrl(),
+    IconTelephone,
   );
 
   key: string = "";

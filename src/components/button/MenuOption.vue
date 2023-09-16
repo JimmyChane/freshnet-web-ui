@@ -1,22 +1,24 @@
-<script>
+<script setup lang="ts">
+  import { computed } from "vue";
   import MenuIcon from "@/components/MenuIcon.vue";
   import U from "@/U";
   import chroma from "chroma-js";
 
-  export default {
-    components: { MenuIcon },
-    props: {
-      menus: { default: undefined },
-      primaryColor: { default: () => chroma("ffffff") },
-    },
-    computed: { isDark: (c) => U.isColorDark(c.primaryColor, 60) },
-  };
+  import IconOptionLight from "@/assets/icon/option-FFFFFF.svg";
+  import IconOptionDark from "@/assets/icon/option-000000.svg";
+
+  const props = defineProps({
+    menus: { default: undefined },
+    primaryColor: { default: () => chroma("ffffff") },
+  });
+
+  const isDark = computed(() => U.isColorDark(props.primaryColor, 60));
 </script>
 
 <template>
   <MenuIcon
     :menus="menus"
-    :src="host.icon(isDark ? 'option-ffffff' : 'option-000000').toUrl()"
+    :src="isDark ? IconOptionLight : IconOptionDark"
     @show="() => $emit('show')"
     @hide="() => $emit('hide')"
   />

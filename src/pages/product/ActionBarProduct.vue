@@ -5,6 +5,9 @@
   import ItemSearchProduct from "./ItemSearchProduct.vue";
   import Searcher from "@/tools/Searcher";
 
+  import IconSearch from "@/assets/icon/search-000000.svg";
+  import IconRefresh from "@/assets/icon/refresh-000000.svg";
+
   export default {
     components: { Actionbar, NavigationBar, SearchInput, ItemSearchProduct },
     props: {
@@ -32,7 +35,7 @@
         if (!this.isOver550px) {
           menus.push({
             title: "Search",
-            icon: this.host.icon("search-000000").toUrl(),
+            icon: IconSearch,
             click: () => this.$emit("click-search"),
           });
         }
@@ -48,7 +51,7 @@
         menus.push({
           key: "refresh",
           title: "Refresh",
-          icon: this.host.icon("refresh-000000").toUrl(),
+          icon: IconRefresh,
           click: () => {
             this.$store.state.stores.category.dispatch("refresh");
             this.$store.state.stores.product.dispatch("refresh");

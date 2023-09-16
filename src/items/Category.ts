@@ -4,93 +4,41 @@ import U from "@/U";
 import Server from "@/host/Server";
 import { Item } from "@/stores/tools/List";
 
+import BgTablet from "@/assets/bg/daniel-romero--cCxgKIA5RA-unsplash-w300h100.webp";
+import BgNotebook from "@/assets/bg/andras-vas-Bd7gNnWJBkU-unsplash-w300h100.webp";
+import BgDesktop from "@/assets/bg/niclas-illg-wzVQp_NRIHg-unsplash-w300h100.webp";
+import BgPrinter from "@/assets/bg/mahrous-houses-5AoOejjRUrA-unsplash-w300h100.webp";
+import BgCartridge from "@/assets/bg/177364729-w300h100.webp";
+import BgMouse from "@/assets/bg/ryan-putra-j4PqlNVZ4Bc-unsplash-w300h100.webp";
+import BgKeyboard from "@/assets/bg/girl-with-red-hat-Z6SXt1v5tP8-unsplash-w300h100.webp";
+import BgAudio from "@/assets/bg/josh-sorenson-u8-QI4tRES0-unsplash-w300h100.webp";
+import BgMonitor from "@/assets/bg/monitor-u3223qe-gallery-3-w300h100.webp";
+import BgWebcam from "@/assets/bg/emiliano-cicero-lq87UxGSiEQ-unsplash-w300h100.webp";
+import BgCctv from "@/assets/bg/michal-jakubowski-oQD9uq4Rd4I-unsplash-w300h100.webp";
+import BgStorage from "@/assets/bg/denny-muller-1qL31aacAPA-unsplash-w300h100.webp";
+import BgRam from "@/assets/bg/harrison-broadbent-ING1Uf1Fc30-unsplash-w300h100.webp";
+import BgNetwork from "@/assets/bg/jordan-harrison-40XgDxBfYXM-unsplash-w300h100.webp";
+import BgOther from "@/assets/bg/christopher-bill-3l19r5EOZaw-unsplash-w300h100.webp";
+
 class CategoryBackground extends Image {
-  static TABLET = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/daniel-romero--cCxgKIA5RA-unsplash-w300h100.webp",
-    ),
-  });
-  static NOTEBOOK = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/andras-vas-Bd7gNnWJBkU-unsplash-w300h100.webp",
-    ),
-  });
-  static DESKTOP = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/niclas-illg-wzVQp_NRIHg-unsplash-w300h100.webp",
-    ),
-  });
-  static PRINTER = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/mahrous-houses-5AoOejjRUrA-unsplash-w300h100.webp",
-    ),
-  });
+  static TABLET = new Image().fromData({ method: "link", path: BgTablet });
+  static NOTEBOOK = new Image().fromData({ method: "link", path: BgNotebook });
+  static DESKTOP = new Image().fromData({ method: "link", path: BgDesktop });
+  static PRINTER = new Image().fromData({ method: "link", path: BgPrinter });
   static CARTRIDGE = new Image().fromData({
     method: "link",
-    path: Server.res("background/177364729-w300h100.webp"),
+    path: BgCartridge,
   });
-  static MOUSE = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/ryan-putra-j4PqlNVZ4Bc-unsplash-w300h100.webp",
-    ),
-  });
-  static KEYBOARD = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/girl-with-red-hat-Z6SXt1v5tP8-unsplash-w300h100.webp",
-    ),
-  });
-  static AUDIO = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/josh-sorenson-u8-QI4tRES0-unsplash-w300h100.webp",
-    ),
-  });
-  static MONITOR = new Image().fromData({
-    method: "link",
-    path: Server.res("background/monitor-u3223qe-gallery-3-w300h100.webp"),
-  });
-  static WEBCAM = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/emiliano-cicero-lq87UxGSiEQ-unsplash-w300h100.webp",
-    ),
-  });
-  static CCTV = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/michal-jakubowski-oQD9uq4Rd4I-unsplash-w300h100.webp",
-    ),
-  });
-  static STORAGE = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/denny-muller-1qL31aacAPA-unsplash-w300h100.webp",
-    ),
-  });
-  static RAM = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/harrison-broadbent-ING1Uf1Fc30-unsplash-w300h100.webp",
-    ),
-  });
-  static NETWORK = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/jordan-harrison-40XgDxBfYXM-unsplash-w300h100.webp",
-    ),
-  });
-  static OTHER = new Image().fromData({
-    method: "link",
-    path: Server.res(
-      "background/christopher-bill-3l19r5EOZaw-unsplash-w300h100.webp",
-    ),
-  });
+  static MOUSE = new Image().fromData({ method: "link", path: BgMouse });
+  static KEYBOARD = new Image().fromData({ method: "link", path: BgKeyboard });
+  static AUDIO = new Image().fromData({ method: "link", path: BgAudio });
+  static MONITOR = new Image().fromData({ method: "link", path: BgMonitor });
+  static WEBCAM = new Image().fromData({ method: "link", path: BgWebcam });
+  static CCTV = new Image().fromData({ method: "link", path: BgCctv });
+  static STORAGE = new Image().fromData({ method: "link", path: BgStorage });
+  static RAM = new Image().fromData({ method: "link", path: BgRam });
+  static NETWORK = new Image().fromData({ method: "link", path: BgNetwork });
+  static OTHER = new Image().fromData({ method: "link", path: BgOther });
 
   static getBackground(key: string): Image | null {
     switch (key) {

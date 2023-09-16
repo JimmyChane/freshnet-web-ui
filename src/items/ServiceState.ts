@@ -1,40 +1,35 @@
-import Server from "@/host/Server";
+import IconPendingWhite from "@/assets/icon/pending-white.svg";
+import IconPendingColor from "@/assets/icon/pending-color.svg";
+import IconWaitingWhite from "@/assets/icon/waiting-white.svg";
+import IconWaitingColor from "@/assets/icon/waiting-color.svg";
+import IconCompletedWhite from "@/assets/icon/completed-white.svg";
+import IconCompletedColor from "@/assets/icon/completed-color.svg";
+import IconRejectedWhite from "@/assets/icon/rejected-white.svg";
+import IconRejectedColor from "@/assets/icon/rejected-color.svg";
 
 export default class ServiceState {
   static PENDING = new ServiceState(
     "pending",
     "Working",
-    {
-      white: Server.icon("page/service/pending-white").toUrl(),
-      color: Server.icon("page/service/pending-color").toUrl(),
-    },
+    { white: IconPendingWhite, color: IconPendingColor },
     "#f4a60d",
   );
   static WAITING = new ServiceState(
     "waiting",
     "Waiting for Pickup",
-    {
-      white: Server.icon("page/service/waiting-white").toUrl(),
-      color: Server.icon("page/service/waiting-color").toUrl(),
-    },
+    { white: IconWaitingWhite, color: IconWaitingColor },
     "#c336d9",
   );
   static COMPLETED = new ServiceState(
     "completed",
     "Finished & Pickup",
-    {
-      white: Server.icon("page/service/completed-white").toUrl(),
-      color: Server.icon("page/service/completed-color").toUrl(),
-    },
+    { white: IconCompletedWhite, color: IconCompletedColor },
     "#25ad86",
   );
   static REJECTED = new ServiceState(
     "rejected",
     "Rejected & Pickup",
-    {
-      white: Server.icon("page/service/rejected-white").toUrl(),
-      color: Server.icon("page/service/rejected-color").toUrl(),
-    },
+    { white: IconRejectedWhite, color: IconRejectedColor },
     "#d94136",
   );
 

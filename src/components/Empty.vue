@@ -1,9 +1,9 @@
 <script>
-  import Host from "@/host/Server";
+  import IconEmptyFolder from "@/assets/icon/empty-folder-505050.svg";
 
   export default {
     props: {
-      icon: { type: String, default: Host.icon("empty-folder-505050").toUrl() },
+      icon: { type: String, default: IconEmptyFolder },
       title: { type: String, default: "Sorry, nothing here" },
     },
   };

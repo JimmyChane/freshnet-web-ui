@@ -1,14 +1,16 @@
 <script>
-  import Host from "@/host/Server";
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
+
+  import IconClose from "@/assets/icon/close-000000.svg";
+  import IconSearch from "@/assets/icon/search-000000.svg";
 
   export default {
     components: { ButtonIcon },
     props: {
       placeholder: { type: String, default: "Search" },
       model: { default: undefined },
-      backIcon: { type: String, default: Host.icon("close-000000").toUrl() },
-      enterIcon: { type: String, default: Host.icon("search-000000").toUrl() },
+      backIcon: { type: String, default: IconClose },
+      enterIcon: { type: String, default: IconSearch },
     },
     data: (c) => ({ search: "" }),
     computed: {

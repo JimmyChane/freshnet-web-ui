@@ -3,12 +3,14 @@
   import Actionbar from "@/components/actionbar/Actionbar.vue";
   import Searchbar from "@/components/Searchbar.vue";
 
+  import IconArrowLeft from "@/assets/icon/arrow-left-000000.svg";
+
   export default {
     components: { PopupWindow, Actionbar, Searchbar },
     props: {
       placeholder: { type: String, default: "Search" },
     },
-    data: (c) => ({ search: "", results: [] }),
+    data: (c) => ({ search: "", results: [], IconArrowLeft }),
     watch: {
       search() {
         this.onInput();
@@ -39,7 +41,7 @@
       ref="inputSearch"
       :model="search"
       :placeholder="placeholder"
-      :enterIcon="host.icon('arrow-left-000000').toUrl()"
+      :enterIcon="IconArrowLeft"
       @input="(e) => (search = e.value)"
       @clear="(e) => (search = '')"
       @enter="() => $emit('click-dismiss')"

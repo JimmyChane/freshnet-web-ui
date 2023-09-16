@@ -6,6 +6,8 @@
   import Server from "@/host/Server";
   import IconPack from "@/app/IconPack";
 
+  import IconRefresh from "@/assets/icon/refresh-000000.svg";
+
   export default {
     key: "database",
     title: "Database",
@@ -17,6 +19,7 @@
 
     components: { Loading, Empty, NavigationBar, ItemDatabase },
     data: (c) => ({
+      IconRefresh,
       scrollTop: 0,
       imports: { data: null },
       addDatabase: { isShowing: false },
@@ -100,7 +103,7 @@
         {
           key: 'refresh',
           title: 'Refresh',
-          icon: host.icon('refresh-000000').toUrl(),
+          icon: IconRefresh,
           click: () => actionRefresh(),
         },
       ]"

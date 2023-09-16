@@ -1,5 +1,6 @@
 <script>
   import Section from "./ViewerProduct-Section.vue";
+  import IconEdit from "@/assets/icon/edit-000000.svg";
 
   export default {
     components: { Section },
@@ -15,7 +16,7 @@
         if (!this.allowEdit) return null;
         return {
           title: "Edit",
-          icon: this.host.icon("edit-000000").toUrl(),
+          icon: IconEdit,
           click: () =>
             this.$emit("click-edit", {
               product: this.product,

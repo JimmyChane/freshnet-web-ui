@@ -11,6 +11,7 @@
 
   import Server from "@/host/Server";
   import IconPack from "@/app/IconPack";
+  import IconArrowDown from "@/assets/icon/arrowDown-000000.svg";
 
   export default {
     key: "profile",
@@ -29,7 +30,12 @@
       SectionTitle,
       SectionMain,
     },
-    data: (c) => ({ user: null, isLoading: false, scrollTop: 0 }),
+    data: (c) => ({
+      IconArrowDown,
+      user: null,
+      isLoading: false,
+      scrollTop: 0,
+    }),
     computed: {
       name: (c) => c.user.name,
       username: (c) => c.user.username,
@@ -96,7 +102,7 @@
             </div>
             <ButtonIcon
               class="PageProfile-section-changePassword-arrow"
-              :src="host.icon('arrowDown-000000').toUrl()"
+              :src="IconArrowDown"
               @click="() => openWindowChangePassword()"
             />
           </div>

@@ -4,13 +4,16 @@
   import ItemSearch from "./ItemOrderSearch.vue";
   import Searcher from "@/tools/Searcher";
 
+  import IconAdd from "@/assets/icon/add-000000.svg";
+  import IconRefresh from "@/assets/icon/refresh-000000.svg";
+
   export default {
     components: { NavigationBar, SearchInput, ItemSearch },
     props: {
       title: { type: String, default: "" },
       items: { type: Array, default: () => [] },
     },
-    data: (c) => ({ results: [] }),
+    data: (c) => ({ IconAdd, IconRefresh, results: [] }),
     methods: {
       searchResults(str) {
         return Searcher.withItems(this.items).search(str);
@@ -26,13 +29,13 @@
       {
         key: 'appendOrder',
         title: 'Append Order',
-        icon: host.icon('add-000000').toUrl(),
+        icon: IconAdd,
         click: () => $emit('click-item-add'),
       },
       {
         key: 'refresh',
         title: 'Refresh',
-        icon: host.icon('refresh-000000').toUrl(),
+        icon: IconRefresh,
         click: () => $emit('click-refresh'),
       },
     ]"

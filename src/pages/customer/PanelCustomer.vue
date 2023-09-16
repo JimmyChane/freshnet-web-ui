@@ -13,6 +13,13 @@
   import chroma from "chroma-js";
   import Customer from "@/items/Customer";
 
+  import IconClose from "@/assets/icon/close-000000.svg";
+  import IconEdit from "@/assets/icon/edit-000000.svg";
+  import IconAdd from "@/assets/icon/add-000000.svg";
+  import IconTrash from "@/assets/icon/trash-000000.svg";
+  import IconWhatsapp from "@/assets/icon/whatsapp-color.svg";
+  import IconCall from "@/assets/icon/call-color.svg";
+
   export default {
     components: {
       Actionbar,
@@ -35,6 +42,9 @@
       item: { type: Customer, default: () => null },
     },
     data: (c) => ({
+      IconClose,
+      IconEdit,
+      IconAdd,
       top: { showShadow: false },
 
       devices: [],
@@ -49,14 +59,14 @@
         if (c.isPhoneNumber) {
           menus.push({
             title: "Chat with Customer on Whatsapp",
-            icon: c.host.icon("whatsapp-color").toUrl(),
+            icon: IconWhatsapp,
             alth: "Chat on Whatsapp",
             href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
             target: "_blank",
           });
           menus.push({
             title: "Call Customer",
-            icon: c.host.icon("call-color").toUrl(),
+            icon: IconCall,
             href: `tel:+6${c.phoneNumberStr}`,
           });
         }
@@ -64,7 +74,7 @@
         if (c.isFromStoreCustomer) {
           menus.push({
             title: "Delete Customer",
-            icon: c.host.icon("trash-000000").toUrl(),
+            icon: IconTrash,
             click: () => c.$emit("click-item-remove", { item: c.item }),
             isHidden: true,
           });
@@ -111,7 +121,9 @@
         const cacheItem = this.item;
         this.isLoadingDevices = true;
 
-        const devices = await this.$store.state.stores.customer.dispatch("getDevices");
+        const devices = await this.$store.state.stores.customer.dispatch(
+          "getDevices",
+        );
         if (this.item !== cacheItem) {
           return;
         }
@@ -139,7 +151,7 @@
         :leftMenus="{
           key: 'close',
           title: 'Close',
-          icon: host.icon('close-000000').toUrl(),
+          icon: IconClose,
           click: () => $emit('click-item-close', { item }),
         }"
         :rightMenus="menus"
@@ -157,7 +169,7 @@
           title="Description"
           v-if="id"
           :menus="{
-            icon: host.icon('edit-000000').toUrl(),
+            icon: IconEdit,
             click: () => $emit('click-item-description-update', { item }),
           }"
         >
@@ -169,7 +181,7 @@
           title="Owned Devices"
           v-if="isFromStoreCustomer"
           :menus="{
-            icon: host.icon('add-000000').toUrl(),
+            icon: IconAdd,
             click: () => $emit('click-item-device-add', { item }),
           }"
         >

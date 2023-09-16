@@ -4,6 +4,8 @@
   import Pixel from "@/objects/Pixel";
   import Layout from "./PageCategoryExport-Layout.vue";
 
+  import IconPrinter from "@/assets/icon/printer-000000.svg";
+
   export default {
     components: { NavigationBar, PrintContent, Layout },
     computed: {
@@ -13,12 +15,14 @@
       width: () => Pixel.cm(210),
       height: () => Pixel.cm(297),
     },
-    data: () => ({ products: [] }),
+    data: () => ({ IconPrinter, products: [] }),
     methods: {
       async invalidate() {
         const productStore = this.$store.state.stores.product;
         const { id } = this.$route.query;
-        const groups = await $store.state.stores.product.dispatch("getGroupsByCategory");
+        const groups = await $store.state.stores.product.dispatch(
+          "getGroupsByCategory",
+        );
         const group = groups.find((group) => group.category.id === id);
         this.products = group?.items ?? [];
       },
@@ -35,7 +39,7 @@
       :rightMenus="[
         {
           title: 'Print',
-          icon: host.icon('printer-000000').toUrl(),
+          icon: IconPrinter,
           click: () => $refs.print.print(),
         },
       ]"

@@ -114,7 +114,10 @@
           return;
         }
         if (!this.eventDescription.trim()) {
-          this.$store.dispatch("snackbarShow", 'You must specify "Description"');
+          this.$store.dispatch(
+            "snackbarShow",
+            'You must specify "Description"',
+          );
           return;
         }
 
@@ -151,10 +154,11 @@
         const { files } = event.target;
         const imageFiles = [];
         for (const file of files) imageFiles.push(file);
-        const tempImageContents = await this.$store.state.stores.service.dispatch(
-          "addImageTemp",
-          imageFiles,
-        );
+        const tempImageContents =
+          await this.$store.state.stores.service.dispatch(
+            "addImageTemp",
+            imageFiles,
+          );
         const images = imageFiles.map((imageFile, index) => {
           const tempImageContent = tempImageContents[index];
 
@@ -279,10 +283,7 @@
         :width="methodMenuWidth"
       >
         <span>{{ methodMenu.title }}</span>
-        <img
-          :src="host.icon('arrowDown-FFFFFF').toUrl()"
-          alt="Click to select"
-        />
+        <img src="@/assets/icon/arrowDown-FFFFFF.svg" alt="Click to select" />
       </Menu>
     </div>
   </div>

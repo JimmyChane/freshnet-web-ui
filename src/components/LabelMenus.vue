@@ -5,6 +5,8 @@
   import Menu from "@/components/Menu.vue";
   import U from "@/U";
 
+  import IconArrowDown from "@/assets/icon/arrowDown-505050.svg";
+
   export default {
     State,
 
@@ -15,7 +17,7 @@
       menu: { type: Object, default: () => null },
       menus: { default: () => [] },
     },
-    data: (c) => ({ isExpand: false }),
+    data: (c) => ({ isExpand: false, IconArrowDown }),
     computed: {
       menuCorner: () => Menu.Corner.BOTTOM,
       menuWidth: () => Menu.Width.SAME,
@@ -63,10 +65,7 @@
         <img class="LabelMenus-content-icon" v-if="menuIcon" :src="menuIcon" />
         {{ menuTitle }}</span
       >
-      <img
-        class="LabelMenus-arrow transition"
-        :src="host.icon('arrowDown-505050').toUrl()"
-      />
+      <img class="LabelMenus-arrow transition" :src="IconArrowDown" />
     </Menu>
   </div>
 </template>

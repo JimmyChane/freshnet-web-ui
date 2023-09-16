@@ -1,14 +1,21 @@
 <script>
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
+  import IconClose from "@/assets/icon/close-000000.svg";
+
   export default {
     components: { ButtonIcon },
     emits: ["input-content", "change-content", "click-remove"],
     props: { item: { type: Object, default: () => null } },
+    data() {
+      return { IconClose };
+    },
     computed: {
       specifications: (c) => {
         return [
           { key: "none", title: "None" },
-          ...c.$store.state.stores.specification.getters.items.map((item) => item),
+          ...c.$store.state.stores.specification.getters.items.map(
+            (item) => item,
+          ),
         ].map((item) => ({
           key: item.key,
           title: item.title,
@@ -25,7 +32,6 @@
       title: (c) => c.specType?.title ?? "",
     },
     mounted() {
-      console.log(this.item);
       this.$refs.ItemSpecInput.focus();
     },
   };
@@ -58,7 +64,7 @@
     <ButtonIcon
       class="ItemSpec-remove"
       :style="{ 'grid-area': 'remove' }"
-      :src="host.icon('close-000000').toUrl()"
+      :src="IconClose"
       @click="$emit('click-remove', item)"
     />
   </div>

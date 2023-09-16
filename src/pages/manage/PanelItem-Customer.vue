@@ -1,11 +1,16 @@
 <script>
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
+  import IconHamburgerMenu from "@/assets/icon/hamburgerMenu-000000.svg";
+
   export default {
     components: { ButtonIcon },
     emits: ["click-edit"],
     props: {
       customer: { type: Object },
       isEditable: { type: Boolean, default: true },
+    },
+    data() {
+      return { IconHamburgerMenu };
     },
     computed: {
       name: (c) => c.customer.name,
@@ -30,7 +35,7 @@
     <ButtonIcon
       :isEditable="`${isEditable}`"
       class="PanelItem-Customer-edit transition"
-      :src="host.icon('edit-505050').toUrl()"
+      :src="IconHamburgerMenu"
       @click="() => $emit('click-edit', customer)"
     />
   </div>

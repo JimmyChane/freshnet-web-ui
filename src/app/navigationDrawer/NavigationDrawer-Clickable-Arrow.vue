@@ -1,20 +1,9 @@
-<script>
+<script setup lang="ts">
   import IconArrowDown from "@/icon/IconArrowDown.vue";
 
-  export default {
-    emits: ["click"],
-    components: { IconArrowDown },
-    props: {
-      isExpand: { type: Boolean },
-    },
-    computed: {
-      icon() {
-        return this.isExpand
-          ? this.host.icon("arrowDown-FFFFFF")
-          : this.host.icon("arrowDown-000000");
-      },
-    },
-  };
+  defineProps({
+    isExpand: { type: Boolean },
+  });
 </script>
 
 <template>

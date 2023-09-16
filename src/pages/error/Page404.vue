@@ -1,11 +1,18 @@
 <script>
   import Actionbar from "@/components/actionbar/Actionbar.vue";
   import Footer from "@/app/footer/Footer.vue";
+  import IconHamburgerMenu from "@/assets/icon/hamburgerMenu-000000.svg";
+  import Logo from "@/assets/logo/freshnet-enterprise-logo.svg";
 
   export default {
     rtitle: "Page Not Found",
     components: { Actionbar, Footer },
-    data: (c) => ({ drawer: { isExpand: false }, top: { shadow: false } }),
+    data: (c) => ({
+      Logo,
+      IconHamburgerMenu,
+      drawer: { isExpand: false },
+      top: { shadow: false },
+    }),
   };
 </script>
 
@@ -21,12 +28,12 @@
         {
           key: 'home',
           title: 'Home',
-          icon: this.host.res('img/freshnet-enterprise-logo.svg'),
+          icon: Logo,
           click: () => this.$router.push('/home'),
         },
         {
           title: 'Hamburger Menu',
-          icon: host.icon('hamburgerMenu-000000').toUrl(),
+          icon: IconHamburgerMenu,
           click: () => $store.getters.navigation.openNavigationDrawer(),
         },
       ]"

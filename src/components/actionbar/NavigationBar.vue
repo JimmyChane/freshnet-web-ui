@@ -1,5 +1,7 @@
 <script>
   import Actionbar from "./Actionbar.vue";
+  import IconHamburgerMenuLight from "@/assets/icon/hamburgerMenu-FFFFFF.svg";
+  import IconHamburgerMenuDark from "@/assets/icon/hamburgerMenu-000000.svg";
 
   export default {
     components: { Actionbar },
@@ -15,13 +17,13 @@
 
         const hamburgerMenuIcon =
           c.iconTheme === "white"
-            ? c.host.icon("hamburgerMenu-FFFFFF")
-            : c.host.icon("hamburgerMenu-000000");
+            ? IconHamburgerMenuLight
+            : IconHamburgerMenuDark;
         return [
           {
             key: "hamburgerMenu",
             title: "Hamburger Menu",
-            icon: hamburgerMenuIcon.toUrl(),
+            icon: hamburgerMenuIcon,
             click: () => c.$store.getters.navigation.openNavigationDrawer(),
           },
           ...c.leftMenus,

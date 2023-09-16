@@ -1,8 +1,8 @@
 <script>
-  import IconLinkWhite from "@/assets/link-FFFFFF.svg";
-  import IconLinkColor from "@/assets/link-1673E1.svg";
-  import IconExternalColor from "@/assets/external-1673E1.svg";
-  import IconExternalWhite from "@/assets/external-FFFFFF.svg";
+  import IconLinkWhite from "@/assets/icon/link-FFFFFF.svg";
+  import IconLinkColor from "@/assets/icon/link-1673E1.svg";
+  import IconExternalColor from "@/assets/icon/external-1673E1.svg";
+  import IconExternalWhite from "@/assets/icon/external-FFFFFF.svg";
   export default {
     props: {
       to: { default: "" },

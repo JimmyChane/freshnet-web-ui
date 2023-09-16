@@ -5,12 +5,16 @@
   import Footer from "@/app/footer/Footer.vue";
 
   import ButtonLogin from "./ButtonLogin.vue";
+  import Logo from "@/assets/logo/freshnet-enterprise-logo.svg";
+  import IconHamburgerMenu from "@/assets/icon/hamburgerMenu-000000.svg";
 
   export default {
     title: "Staff Login",
 
     components: { Loading, Input, ButtonLogin, Actionbar, Footer },
     data: (c) => ({
+      Logo,
+      IconHamburgerMenu,
       top: { shadow: false },
       usernameErrorText: "",
       passwordErrorText: "",
@@ -63,13 +67,13 @@
       :leftMenus="[
         {
           title: 'Hamburger Menu',
-          icon: host.icon('hamburgerMenu-000000').toUrl(),
+          icon: IconHamburgerMenu,
           click: () => $store.getters.navigation.openNavigationDrawer(),
         },
         {
           key: 'home',
           title: 'Home',
-          icon: this.host.res('img/freshnet-enterprise-logo.svg'),
+          icon: Logo,
           click: () => this.$router.push('/home'),
         },
       ]"

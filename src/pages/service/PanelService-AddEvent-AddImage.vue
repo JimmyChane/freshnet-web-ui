@@ -4,7 +4,7 @@
 
 <template>
   <button class="PanelService-AddEvent-AddImage transition">
-    <img :src="host.icon('image-000000').toUrl()" />
+    <img src="@/assets/icon/image-000000.svg" />
     <input
       type="file"
       accept=".jpeg, .jpg, .png, .webp"

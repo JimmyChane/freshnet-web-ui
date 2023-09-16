@@ -12,6 +12,9 @@
   import Server from "@/host/Server";
   import IconPack from "@/app/IconPack";
 
+  import IconAdd from "@/assets/icon/add-000000.svg";
+  import IconRefresh from "@/assets/icon/refresh-000000.svg";
+
   export default {
     key: "users",
     title: "Other Users",
@@ -22,19 +25,22 @@
     userPermissions: ["admin"],
 
     components: { NavigationBar, Loading, Empty, ItemUser },
+    data() {
+      return { IconAdd, IconRefresh };
+    },
     computed: {
       isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
       isCurrentUserAdmin: (c) => (c.user ? c.user.isTypeAdmin() : false),
 
       user: (c) => c.$store.state.stores.login.getters.user,
       users: (c) => {
-        return (!c.user.isTypeNone() ? c.$store.state.stores.user.getters.items : []).sort(
-          (user1, user2) => {
-            if (user1.username === c.user.username) return -1;
-            if (user2.username === c.user.username) return 1;
-            return 0;
-          },
-        );
+        return (
+          !c.user.isTypeNone() ? c.$store.state.stores.user.getters.items : []
+        ).sort((user1, user2) => {
+          if (user1.username === c.user.username) return -1;
+          if (user2.username === c.user.username) return 1;
+          return 0;
+        });
       },
     },
     mounted() {
@@ -57,12 +63,15 @@
           component: WindowAdd,
           onConfirm: async (data) => {
             try {
-              const user = await this.$store.state.stores.user.dispatch("addUser", {
-                username: data.username,
-                name: data.name,
-                passwordNew: data.passwordNew,
-                passwordRepeat: data.passwordRepeat,
-              });
+              const user = await this.$store.state.stores.user.dispatch(
+                "addUser",
+                {
+                  username: data.username,
+                  name: data.name,
+                  passwordNew: data.passwordNew,
+                  passwordRepeat: data.passwordRepeat,
+                },
+              );
 
               if (user) {
                 popupWindow.close();
@@ -148,14 +157,14 @@
           ? {
               key: 'addUser',
               title: 'Add User',
-              icon: host.icon('add-000000').toUrl(),
+              icon: IconAdd,
               click: () => openWindowAdd(),
             }
           : null,
         {
           key: 'refresh',
           title: 'Refresh',
-          icon: host.icon('refresh-000000').toUrl(),
+          icon: IconRefresh,
           click: () => onIntentRefresh(),
         },
       ]"

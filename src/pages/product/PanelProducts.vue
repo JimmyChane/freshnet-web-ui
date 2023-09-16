@@ -14,6 +14,7 @@
   import chroma from "chroma-js";
 
   import PageProduct from "@/pages/product/PageProduct.vue";
+  import IconAdd from "@/assets/icon/add-000000.svg";
 
   class MenuGroup {
     context = null;
@@ -122,7 +123,7 @@
 
         menus.push({
           title: "Add",
-          icon: this.host.icon("add-000000").toUrl(),
+          icon: IconAdd,
           click: () => this.$emit("click-productAdd"),
         });
 
@@ -163,7 +164,9 @@
         let categoryGroups = await this.$store.state.stores.product.dispatch(
           "getGroupsByCategory",
         );
-        let brandGroups = await this.$store.state.stores.product.dispatch("getGroupsByBrand");
+        let brandGroups = await this.$store.state.stores.product.dispatch(
+          "getGroupsByBrand",
+        );
 
         if (!this.isEditable) {
           categoryGroups = categoryGroups

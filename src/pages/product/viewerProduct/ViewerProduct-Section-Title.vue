@@ -1,5 +1,6 @@
 <script>
   import Section from "./ViewerProduct-Section.vue";
+  import IconEdit from "@/assets/icon/edit-000000.svg";
 
   export default {
     components: { Section },
@@ -7,6 +8,9 @@
       primaryColor: { type: Object },
       allowEdit: { type: Boolean, default: false },
       product: { type: Object, default: () => null },
+    },
+    data() {
+      return { IconEdit };
     },
     computed: {
       title: (c) => c.product?.title ?? "",
@@ -22,7 +26,7 @@
     :primaryColor="primaryColor"
     :menu="{
       title: 'Edit',
-      icon: host.icon('edit-000000').toUrl(),
+      icon: IconEdit,
       click: () =>
         $emit('click-edit', { product, title: title, brandId: brandId }),
     }"

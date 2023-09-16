@@ -11,6 +11,14 @@
 
   import Service from "@/items/Service";
 
+  import IconWhatsapp from "@/assets/icon/whatsapp-color.svg";
+  import IconCall from "@/assets/icon/call-color.svg";
+  import IconTrash from "@/assets/icon/trash-000000.svg";
+  import IconClose from "@/assets/icon/close-000000.svg";
+  import IconBookmark from "@/assets/icon/bookmark-add-000000.svg";
+  import IconBookmarkAdd from "@/assets/icon/bookmark-000000.svg";
+  import IconEdit from "@/assets/icon/edit-505050.svg";
+
   export default {
     components: {
       Actionbar,
@@ -29,6 +37,10 @@
       isExpand: { type: Boolean, default: false },
     },
     data: (c) => ({
+      IconClose,
+      IconBookmark,
+      IconBookmarkAdd,
+      IconEdit,
       nameOfUser: "",
       bookmarkHeaderIconIsHover: false,
     }),
@@ -82,14 +94,14 @@
         if (c.isExpand && c.isPhoneNumber) {
           menus.push({
             title: "Chat with Customer on Whatsapp",
-            icon: c.host.icon("whatsapp-color").toUrl(),
+            icon: IconWhatsapp,
             alth: "Chat on Whatsapp",
             href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
             target: "_blank",
           });
           menus.push({
             title: "Call Customer",
-            icon: c.host.icon("call-color").toUrl(),
+            icon: IconCall,
             href: `tel:+6${c.phoneNumberStr}`,
           });
         }
@@ -104,7 +116,7 @@
         });
         menus.push({
           title: "Delete Service",
-          icon: c.host.icon("trash-000000").toUrl(),
+          icon: IconTrash,
           click: () => c.actions.onClickRemove(c.service),
           isHidden: true,
         });
@@ -166,7 +178,10 @@
         }
 
         const name = await service.fetchName().catch((error) => {
-          this.$store.dispatch("snackbarShow", "Error getting user for service");
+          this.$store.dispatch(
+            "snackbarShow",
+            "Error getting user for service",
+          );
           return "";
         });
 
@@ -199,7 +214,7 @@
         }`,
       }"
       :leftMenus="{
-        icon: host.icon('close-000000').toUrl(),
+        icon: IconClose,
         click: () => actions.onClickClose(),
       }"
       :rightMenus="menus"
@@ -269,9 +284,7 @@
                 @mouseover="bookmarkHeaderIconIsHover = true"
                 @mouseleave="bookmarkHeaderIconIsHover = false"
                 :src="
-                  bookmarkHeaderIconIsHover
-                    ? host.icon('bookmark-add-000000').toUrl()
-                    : host.icon('bookmark-000000').toUrl()
+                  bookmarkHeaderIconIsHover ? IconBookmark : IconBookmarkAdd
                 "
               />
             </div>
@@ -280,7 +293,7 @@
               :title="`Belongings (${belongings.length})`"
               :menus="{
                 title: 'Update Belongings',
-                icon: host.icon('edit-505050').toUrl(),
+                icon: IconEdit,
                 click: () => actions.onClickUpdateBelongings(belongings),
               }"
             >

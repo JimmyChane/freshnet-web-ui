@@ -4,6 +4,9 @@
   import Menu from "@/components/Menu.vue";
   import U from "@/U";
 
+  import IconArrowDownLight from "@/assets/icon/arrow_down-white.svg";
+  import IconArrowDownDark from "@/assets/icon/arrow_down-black.svg";
+
   export default {
     components: { Menu },
     emits: ["callback-select"],
@@ -12,6 +15,9 @@
       keySelected: { type: String, default: "" },
     },
     data: (c) => ({
+      IconArrowDownLight,
+      IconArrowDownDark,
+
       isShow: false,
       menus: [],
       shouldShowIcon: false,
@@ -104,7 +110,7 @@
     <div class="Selector-separator transition" />
     <img
       class="Selector-arrow transition"
-      :src="host.res(`icon/arrow_down-${currentColor ? 'white' : 'black'}.svg`)"
+      :src="currentColor ? IconArrowDownLight : IconArrowDownDark"
       :style="{ transform: [isShow ? 'rotate(-180deg)' : 'rotate(0deg)'] }"
     />
   </Menu>

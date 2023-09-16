@@ -10,7 +10,7 @@
       <div class="ProductViewerImageSelector-button">
         <img
           class="ProductViewerImageSelector-icon"
-          :src="host.icon('image-000000').toUrl()"
+          src="@/assets/icon/image-000000.svg"
         />
       </div>
 

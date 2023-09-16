@@ -7,6 +7,10 @@
   import U from "@/U";
   import ServiceState from "@/items/ServiceState";
 
+  import IconGrid from "@/assets/icon/grid-000000.svg";
+  import IconList from "@/assets/icon/list-000000.svg";
+  import IconDetail from "@/assets/icon/detail-000000.svg";
+
   export default {
     emits: ["click-add", "click-import", "click-service"],
     components: { Empty, Actionbar, ListServices },
@@ -119,17 +123,17 @@
         {
           key: ListServices.LayoutMode.Grid,
           title: "Grid View",
-          icon: this.host.icon("grid-000000").toUrl(),
+          icon: IconGrid,
         },
         {
           key: ListServices.LayoutMode.List,
           title: "List View",
-          icon: this.host.icon("list-000000").toUrl(),
+          icon: IconList,
         },
         {
           key: ListServices.LayoutMode.Detail,
           title: "Detail View",
-          icon: this.host.icon("detail-000000").toUrl(),
+          icon: IconDetail,
         },
       ];
       this.groupMenus = [
