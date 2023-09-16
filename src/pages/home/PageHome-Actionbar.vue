@@ -1,37 +1,26 @@
-<script lang="ts">
+<script>
   import NavigationBar from "@/components/actionbar/NavigationBar.vue";
   import GlobalSearch from "@/app/search/GlobalSearch.vue";
   import Setting from "@/items/Setting";
   import { format, differenceInMinutes } from "date-fns";
-  import Vue from "vue";
-  import WorkingDay from "@/items/WorkingDay";
 
-  interface Data {
-    companyTitle: string;
-    companyCategory: string;
-    addressHref: string;
-    days: WorkingDay[];
-  }
-
-  export default Vue.extend({
+  export default {
     components: { NavigationBar, GlobalSearch },
     props: {
       isThin: { type: Boolean, default: false },
       isParentScrolledUp: { type: Boolean, default: true },
     },
-    data(): Data {
-      return {
-        companyTitle: "",
-        companyCategory: "",
-        addressHref: "",
-        days: [],
-      };
-    },
+    data: (c) => ({
+      companyTitle: "",
+      companyCategory: "",
+      addressHref: "",
+      days: [],
+    }),
     computed: {
-      businessHourDescription(): string {
+      businessHourDescription: (c) => {
         const now = new Date();
 
-        const today = this.days.find((day) => day.isToday());
+        const today = c.days.find((day) => day.isToday());
 
         if (!today) return "";
 
@@ -61,11 +50,11 @@
         )} tomorrow`;
       },
 
-      isNavigationDrawer(): boolean {
+      isNavigationDrawer() {
         return this.$store.getters.navigation.isDrawer();
       },
 
-      screenWidth(): number {
+      screenWidth() {
         return this.$store.getters.window.innerWidth;
       },
     },
@@ -76,29 +65,38 @@
     },
     methods: {
       async invalidate() {
-        this.companyTitle = (await this.$store.state.stores.setting.dispatch(
+        this.companyTitle = await this.$store.state.stores.setting.dispatch(
           "findValueOfKey",
-          { key: Setting.Key.CompanyName, default: "" },
-        )) as string;
-        this.companyCategory = (await this.$store.state.stores.setting.dispatch(
+          {
+            key: Setting.Key.CompanyName,
+            default: "",
+          },
+        );
+        this.companyCategory = await this.$store.state.stores.setting.dispatch(
           "findValueOfKey",
           { key: Setting.Key.CompanyCategory, default: "" },
-        )) as string;
-        this.addressHref = (await this.$store.state.stores.setting.dispatch(
+        );
+        this.addressHref = await this.$store.state.stores.setting.dispatch(
           "findValueOfKey",
-          { key: Setting.Key.LocationLink, default: "" },
-        )) as string;
+          {
+            key: Setting.Key.LocationLink,
+            default: "",
+          },
+        );
 
-        this.days = (await this.$store.state.stores.setting.dispatch(
+        this.days = await this.$store.state.stores.setting.dispatch(
           "findValueOfKey",
-          { key: Setting.Key.CompanyWorkingHours, default: [] },
-        )) as WorkingDay[];
+          {
+            key: Setting.Key.CompanyWorkingHours,
+            default: [],
+          },
+        );
       },
     },
     mounted() {
       this.invalidate();
     },
-  });
+  };
 </script>
 
 <template>

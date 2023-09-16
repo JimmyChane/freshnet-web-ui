@@ -5,10 +5,7 @@ export default class Color {
   static BlackWhite = new Color("Black & White", IconPaletteBw);
   static Colorful = new Color("Color", IconPaletteColor);
 
-  title: string;
-  icon: string;
-
-  constructor(title: string, icon: string) {
+  constructor(title, icon) {
     this.title = title;
     this.icon = icon;
   }

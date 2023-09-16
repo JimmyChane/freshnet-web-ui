@@ -1,15 +1,10 @@
-<script lang="ts">
-  import Specification from "@/items/Specification";
-  import Vue from "vue";
-
-  export default Vue.extend({
+<script>
+  export default {
     props: {
-      productSpecification: { type: Specification },
+      productSpecification: { type: Object, default: () => null },
       isVertical: { type: Boolean, default: false },
     },
-    data() {
-      return { title: "", icon: "", content: "" };
-    },
+    data: (c) => ({ title: "", icon: "", content: "" }),
     watch: {
       productSpecification() {
         this.invalidate();
@@ -42,7 +37,7 @@
         }, "");
       },
     },
-  });
+  };
 </script>
 
 <template>

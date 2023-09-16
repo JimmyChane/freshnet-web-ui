@@ -3,15 +3,6 @@ import DataLoader from "./tools/DataLoader";
 import Processor from "./tools/Processor";
 import DatabaseRequest from "@/request/Database";
 
-export interface Database {
-  name: string;
-  collections: Collection[];
-}
-export interface Collection {
-  name: string;
-  documents: any[];
-}
-
 const init = (Stores: any) => {
   const store: Store<any> = new Vuex.Store({
     state: {
@@ -63,11 +54,9 @@ const init = (Stores: any) => {
             context.commit("items", []);
             context.commit("lastModified", Date.now());
             const api = await DatabaseRequest.databases();
-            const items: Database[] = api
-              .optArrayContent()
-              .map((database: string) => {
-                return { name: database, collections: [] };
-              });
+            const items = api.optArrayContent().map((database: any) => {
+              return { name: database, collections: [] };
+            });
             context.commit("items", items);
             for (const database of items) {
               context.dispatch("loadCollections", { database: database.name });
@@ -84,11 +73,9 @@ const init = (Stores: any) => {
         return context.state.processor.acquire("loadCollections", async () => {
           const { database } = arg;
           const api = await DatabaseRequest.collections(database);
-          const collections: Collection[] = api
-            .optArrayContent()
-            .map((collection: string) => {
-              return { name: collection, documents: [] };
-            });
+          const collections = api.optArrayContent().map((collection: any) => {
+            return { name: collection, documents: [] };
+          });
           const dbFound = await context.dispatch("findDatabase", {
             database,
           });

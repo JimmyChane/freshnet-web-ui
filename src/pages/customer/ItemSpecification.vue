@@ -1,19 +1,11 @@
-<script lang="ts">
+<script>
   import CustomerDeviceSpecification from "@/items/CustomerDeviceSpecification";
-  import { Type } from "@/items/Specification";
-  import Vue from "vue";
-
-  interface Data {
-    specificationType: Type | null;
-  }
-
-  export default Vue.extend({
+  export default {
+    emtis: ["click", "click-remove"],
     props: {
       item: { type: CustomerDeviceSpecification, default: null },
     },
-    data(): Data {
-      return { specificationType: null };
-    },
+    data: (c) => ({ specificationType: null }),
     watch: {
       item() {
         this.invalidate();
@@ -26,12 +18,12 @@
       invalidate() {
         this.$store.state.stores.specification
           .dispatch("getItemOfKey", this.item?.typeKey ?? "")
-          .then((specificationType: Type) => {
+          .then((specificationType) => {
             this.specificationType = specificationType;
           });
       },
     },
-  });
+  };
 </script>
 
 <template>

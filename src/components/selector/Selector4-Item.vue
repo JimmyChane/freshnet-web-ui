@@ -1,14 +1,13 @@
-<script lang="ts">
-  import Vue from "vue";
-
-  export default Vue.extend({
+<script>
+  export default {
+    emits: ["click"],
     props: {
       primaryColor: { default: "black" },
       title: { type: String, default: "" },
       icon: { type: String, default: "" },
       isSelected: { type: Boolean, default: false },
     },
-  });
+  };
 </script>
 
 <template>

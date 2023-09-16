@@ -26,19 +26,8 @@ export default class NavPage {
     this.userPermissions = userPermissions;
     return this;
   }
-  setGroups(groups: NavViewGroup[]) {
+  setGroups(groups: NavViewGroup[]){
     this.groups = groups;
     return this;
-  }
-
-  // todo
-  isSelected(): boolean {
-    return false;
-  }
-  isWide(): boolean {
-    return false;
-  }
-  isExpanded(): boolean {
-    return false;
   }
 }

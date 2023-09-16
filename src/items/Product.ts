@@ -45,7 +45,7 @@ export default class Product implements Item {
   title: string = "";
   description: string = "";
   gifts: string[] = [];
-  bundles: ProductBundle[] = [];
+  bundles: any[] = [];
   brandId: string = "";
   categoryId: string = "";
   specifications: Specification[] = [];
@@ -459,7 +459,7 @@ export default class Product implements Item {
 
   setBundles(data: (ProductBundle | any)[] = []) {
     this.bundles = U.optArray(data).map((bundle) => {
-      return new ProductBundle(this.stores).fromData(bundle);
+      return new ProductBundle(this.stores).fromData(bundle).toData();
     });
   }
   addBundle(bundle: ProductBundle) {

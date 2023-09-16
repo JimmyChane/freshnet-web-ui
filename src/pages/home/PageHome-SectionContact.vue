@@ -1,28 +1,12 @@
-<script lang="ts">
+<script>
   import Section from "./PageHome-Section.vue";
   import Setting from "@/items/Setting";
   import Link from "./PageHome-Link.vue";
-  import Vue from "vue";
 
-  interface Contact {
-    title: string;
-    title1?: string;
-    href: string;
-    target: string;
-    icon: string;
-  }
-
-  interface Data {
-    callContacts: Contact[];
-    chatContacts: Contact[];
-  }
-
-  export default Vue.extend({
+  export default {
     components: { Section, Link },
     props: { isThin: { type: Boolean, default: false } },
-    data(): Data {
-      return { callContacts: [], chatContacts: [] };
-    },
+    data: (c) => ({ callContacts: [], chatContacts: [] }),
     watch: {
       "$store.state.stores.setting.getters.lastModified"() {
         this.invalidate();
@@ -33,10 +17,10 @@
     },
     methods: {
       async invalidate() {
-        const contacts = await this.$store.state.stores.setting.dispatch(
-          "findValueOfKey",
-          { key: Setting.Key.Contacts, default: [] },
-        );
+        const contacts = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
+          key: Setting.Key.Contacts,
+          default: [],
+        });
 
         this.callContacts = [];
         this.chatContacts = [];
@@ -65,7 +49,7 @@
         }
       },
     },
-  });
+  };
 </script>
 
 <template>

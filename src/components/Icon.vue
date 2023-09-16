@@ -1,8 +1,7 @@
-<script lang="ts">
+<script>
   import { Icon } from "@/host/ServerResource";
-  import Vue from "vue";
 
-  export default Vue.extend({
+  export default {
     props: {
       src: { default: "" },
       alt: { type: String, default: "" },
@@ -15,7 +14,7 @@
         return this.src;
       },
     },
-  });
+  };
 </script>
 
 <template>

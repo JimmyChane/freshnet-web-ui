@@ -1,16 +1,15 @@
-<script lang="ts">
+<script>
   import NavPage from "@/app/NavPage";
   import NavView from "@/app/NavView";
-  import Vue from "vue";
   import LeftNavItem from "./NavigationDrawer-Item.vue";
 
-  export default Vue.extend({
+  export default {
     props: {
       item: { type: [NavPage, NavView] },
       isWide: { type: Boolean },
     },
     components: { LeftNavItem },
-  });
+  };
 </script>
 
 <template>

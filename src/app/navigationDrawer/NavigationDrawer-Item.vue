@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
   import IconHome from "@/icon/IconHome.vue";
   import IconProducts from "@/icon/IconMagnifyingGlass.vue";
@@ -13,10 +13,8 @@
   import IconSetting from "@/icon/IconSetting.vue";
   import NavPage from "@/app/NavPage";
   import NavView from "@/app/NavView";
-  import Vue from "vue";
-  import { IconAsset } from "../AppTool";
 
-  export default Vue.extend({
+  export default {
     components: {
       ButtonIcon,
       IconHome,
@@ -32,36 +30,36 @@
       IconSetting,
     },
     props: {
-      item: { type: [NavPage, NavView] },
+      item: { type: [NavPage, NavView], default: () => null },
       isWide: { type: Boolean, default: true },
     },
     computed: {
-      key(): string {
+      key() {
         return this.item?.key ?? "";
       },
-      icon(): IconAsset | null {
+      icon() {
         return this.item?.icon ?? null;
       },
-      iconLight(): string {
+      iconLight() {
         return this.icon?.light ?? "";
       },
-      iconDark(): string {
+      iconDark() {
         return this.icon?.dark ?? "";
       },
-      iconUrl(): string {
+      iconUrl() {
         return this.iconDark;
         return this.isSelected ? this.iconLight : this.iconDark;
       },
-      title(): string {
+      title() {
         const { title } = this.item;
         return this.isWide ? title : title.substring(0, 1);
       },
 
-      isSelected(): boolean {
+      isSelected() {
         return this.item.isSelected();
       },
     },
-  });
+  };
 </script>
 
 <template>

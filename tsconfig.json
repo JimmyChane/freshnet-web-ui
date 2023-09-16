@@ -23,8 +23,7 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx",
-    "src/types/svg.d.ts"
+    "tests/**/*.tsx"
   ],
   "exclude": ["node_modules"]
 }

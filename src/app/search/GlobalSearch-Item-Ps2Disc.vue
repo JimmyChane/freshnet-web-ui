@@ -1,28 +1,18 @@
-<script lang="ts">
+<script>
   import ImageView from "@/components/ImageView.vue";
   import ItemSearch from "./GlobalSearch-Item.vue";
   import Labels from "./GlobalSearch-Item-Labels.vue";
   import Ps2Disc from "@/items/Ps2Disc";
-  import Server from "@/host/Server";
-  import Vue from "vue";
 
-  export default Vue.extend({
+  export default {
     components: { ImageView, ItemSearch, Labels },
-    props: {
-      item: { type: Ps2Disc },
-    },
+    props: { item: { type: Ps2Disc, default: null } },
     computed: {
-      thumbnail(): string {
-        return Server.cloudinary({ url: `ps2/disc/${this.code}.jpg` });
-      },
-      title(): string {
-        return this.item.title;
-      },
-      code(): string {
-        return this.item.code;
-      },
+      thumbnail: (c) => c.host.cloudinary({ url: `ps2/disc/${c.code}.jpg` }),
+      title: (c) => c.item?.title ?? "",
+      code: (c) => c.item?.code ?? "",
     },
-  });
+  };
 </script>
 
 <template>

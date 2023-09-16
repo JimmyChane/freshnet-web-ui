@@ -1,11 +1,11 @@
 import U from "@/U";
 
-export default class ServiceLabel {
-  static URGENT: ServiceLabel = new ServiceLabel().fromData({
+export default class Label {
+  static URGENT: Label = new Label().fromData({
     title: "Urgent",
     hexColor: "d93f35",
   });
-  static WARRANTY: ServiceLabel = new ServiceLabel().fromData({
+  static WARRANTY: Label = new Label().fromData({
     title: "Warranty",
     hexColor: "db950c",
   });
@@ -28,11 +28,11 @@ export default class ServiceLabel {
     return 0;
   }
 
-  isEqual(label: ServiceLabel): boolean {
+  isEqual(label: Label): boolean {
     return this.title === label.title && this.hexColor === label.hexColor;
   }
 
-  compare(item: ServiceLabel): number {
+  compare(item: Label): number {
     return 0;
   }
 }

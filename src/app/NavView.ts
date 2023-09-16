@@ -19,15 +19,4 @@ export default class NavView {
     this.icon = parseIcon(icon);
     return this;
   }
-
-  // todo
-  isSelected(): boolean {
-    return false;
-  }
-  isWide(): boolean {
-    return false;
-  }
-  isExpanded(): boolean {
-    return false;
-  }
 }

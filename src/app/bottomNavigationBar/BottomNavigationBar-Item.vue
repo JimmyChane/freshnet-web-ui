@@ -1,27 +1,25 @@
-<script lang="ts">
+<script>
   import U from "@/U";
   import NavPage from "@/app/NavPage";
   import IconHome from "@/icon/IconHome.vue";
   import IconProducts from "@/icon/IconMagnifyingGlass.vue";
   import IconPaper from "@/icon/IconPaper.vue";
   import IconManage from "@/icon/IconManage.vue";
-  import Vue from "vue";
 
-  export default Vue.extend({
+  export default {
     components: { IconHome, IconProducts, IconPaper, IconManage },
     props: { item: { type: NavPage } },
     computed: {
-      key(): string {
+      key() {
         return this.item.key;
       },
-      isSelected(): boolean {
-        if (typeof this.item.isSelected === "function") {
-          return this.item.isSelected();
-        }
-        return false;
+      isSelected() {
+        return U.isFunction(this.item.isSelected)
+          ? this.item.isSelected()
+          : false;
       },
     },
-  });
+  };
 </script>
 
 <template>

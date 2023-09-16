@@ -1,23 +1,14 @@
-<script lang="ts">
-  import ServiceBelonging from "@/items/ServiceBelonging";
-  import Vue from "vue";
-
-  export default Vue.extend({
+<script>
+  export default {
     props: {
-      belonging: { type: ServiceBelonging },
+      belonging: { type: Object, default: () => null },
     },
     computed: {
-      title(): string {
-        return this.belonging.title;
-      },
-      quantity(): number {
-        return this.belonging.quantity;
-      },
-      description(): string {
-        return this.belonging.description;
-      },
+      title: (c) => c.belonging.title,
+      quantity: (c) => c.belonging.quantity,
+      description: (c) => c.belonging.description,
     },
-  });
+  };
 </script>
 
 <template>

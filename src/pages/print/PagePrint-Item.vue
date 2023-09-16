@@ -1,47 +1,38 @@
-<script lang="ts">
-  import Vue from "vue";
-  import { Item } from "./PagePrintOption";
-
-  export default Vue.extend({
-    props: {
-      item: { type: Item },
-    },
-    computed: {
-      title(): string {
-        return this.item.title;
+<script>
+   export default {
+      props: { item: { type: Object } },
+      computed: {
+         title: (c) => c.item.title,
+         icon: (c) => c.item.icon,
       },
-      icon(): string {
-        return this.item.icon;
-      },
-    },
-  });
+   };
 </script>
 
 <template>
-  <div class="PagePrint-item">
-    <img class="PagePrint-item-icon" v-if="icon" :src="icon" />
-    <span class="PagePrint-item-title" v-if="title">{{ title }}</span>
-    <span class="PagePrint-item-price">{{ item.price }}</span>
-  </div>
+   <div class="PagePrint-item">
+      <img class="PagePrint-item-icon" v-if="icon" :src="icon" />
+      <span class="PagePrint-item-title" v-if="title">{{ title }}</span>
+      <span class="PagePrint-item-price">{{ item.price }}</span>
+   </div>
 </template>
 
 <style lang="scss" scoped>
-  .PagePrint-item {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
+   .PagePrint-item {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
 
-    .PagePrint-item-icon {
-      width: 2rem;
-      height: 2rem;
-    }
-    .PagePrint-item-title {
-      flex-grow: 1;
-    }
-    .PagePrint-item-price {
-      margin-left: 2rem;
-    }
-  }
+      .PagePrint-item-icon {
+         width: 2rem;
+         height: 2rem;
+      }
+      .PagePrint-item-title {
+         flex-grow: 1;
+      }
+      .PagePrint-item-price {
+         margin-left: 2rem;
+      }
+   }
 </style>

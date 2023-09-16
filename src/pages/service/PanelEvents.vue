@@ -1,27 +1,27 @@
-<script lang="ts">
+<script>
   import ListEvents from "./EventGroups.vue";
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
   import Service from "@/items/Service";
-  import Vue from "vue";
-  import ServiceEvent from "@/items/ServiceEvent";
 
-  export default Vue.extend({
+  export default {
     components: { ButtonIcon, ListEvents },
+    emits: ["click-add-event", "click-remove-event"],
     props: {
       service: { type: Service },
       actions: { type: Object },
     },
     computed: {
-      events(): ServiceEvent[] {
-        if (this.service) {
-          return this.service.events
-            .map((event) => event)
-            .sort((event1, event2) => event1.compare(event2));
-        }
-        return [];
+      events: (c) => {
+        if (!c.service) return [];
+
+        const events = c.service.events
+          .map((event) => event)
+          .sort((event1, event2) => event1.compare(event2));
+
+        return events;
       },
     },
-  });
+  };
 </script>
 
 <template>

@@ -3,7 +3,7 @@ import ServiceEvent from "./ServiceEvent";
 import ServicePrice from "./ServicePrice";
 import ServiceCustomer from "./ServiceCustomer";
 import ServiceImage from "./ServiceImage";
-import ServiceLabel from "./ServiceLabel";
+import Label from "./ServiceLabel";
 import Method from "./ServiceEventMethod";
 import State from "./ServiceState";
 
@@ -34,7 +34,7 @@ export default class Service implements Item {
   belongings: ServiceBelonging[] = [];
   private _events: ServiceEvent[] = [];
   imageFiles: ServiceImage[] = [];
-  labels: ServiceLabel[] = [];
+  labels: Label[] = [];
 
   fromData(data: any): Service {
     this.id = U.trimId(data._id);
@@ -78,25 +78,25 @@ export default class Service implements Item {
 
     // labels
     this.labels = U.optArray(data.labels)
-      .map((subData) => new ServiceLabel().fromData(subData))
+      .map((subData) => new Label().fromData(subData))
       .filter((label) => label.title.trim().length > 0);
 
     // refactoring notice to labels
     const existingLabelUrgent = this.labels.find((label) => {
-      return label.title === ServiceLabel.URGENT.title;
+      return label.title === Label.URGENT.title;
     });
     const existingLabelWarranty = this.labels.find((label) => {
-      return label.title === ServiceLabel.WARRANTY.title;
+      return label.title === Label.WARRANTY.title;
     });
     const notice = {
       isUrgent: !!data.notice?.isUrgent ?? false,
       isWarranty: !!data.notice?.isWarranty ?? false,
     };
     if (notice.isUrgent && !existingLabelUrgent) {
-      this.labels.push(ServiceLabel.URGENT);
+      this.labels.push(Label.URGENT);
     }
     if (notice.isWarranty && !existingLabelWarranty) {
-      this.labels.push(ServiceLabel.WARRANTY);
+      this.labels.push(Label.WARRANTY);
     }
 
     return this;
@@ -166,11 +166,11 @@ export default class Service implements Item {
   }
 
   isUrgent(): boolean {
-    return !!this.labels.find((label) => label.isEqual(ServiceLabel.URGENT));
+    return !!this.labels.find((label) => label.isEqual(Label.URGENT));
   }
   isWarranty(): boolean {
     return !!this.labels.find((label) => {
-      return label.isEqual(ServiceLabel.WARRANTY);
+      return label.isEqual(Label.WARRANTY);
     });
   }
 
@@ -231,12 +231,12 @@ export default class Service implements Item {
     }, new ServicePrice().fromData({ amount: 0 }));
   }
 
-  setLabels(labels: ServiceLabel[] = []) {
+  setLabels(labels: Label[] = []) {
     this.labels = U.optArray(labels)
-      .map((label: ServiceLabel) => new ServiceLabel().fromData(label.toData()))
+      .map((label: Label) => new Label().fromData(label.toData()))
       .filter((label) => label.title.trim().length > 0);
   }
-  addLabel(label: ServiceLabel) {
+  addLabel(label: Label) {
     const labels = this.labels;
     const existingLabel = labels.find((l) => l.isEqual(label));
 
@@ -244,7 +244,7 @@ export default class Service implements Item {
       this.setLabels([...labels, label]);
     }
   }
-  removeLabel(label: ServiceLabel) {
+  removeLabel(label: Label) {
     const labels = this.labels;
     const existingLabel = labels.find((l) => l.isEqual(label));
 
@@ -255,12 +255,12 @@ export default class Service implements Item {
 
   setUrgent(bool: boolean = false) {
     U.optBoolean(bool)
-      ? this.addLabel(ServiceLabel.URGENT)
-      : this.removeLabel(ServiceLabel.URGENT);
+      ? this.addLabel(Label.URGENT)
+      : this.removeLabel(Label.URGENT);
   }
   setWarranty(bool: boolean = false) {
     U.optBoolean(bool)
-      ? this.addLabel(ServiceLabel.WARRANTY)
-      : this.removeLabel(ServiceLabel.WARRANTY);
+      ? this.addLabel(Label.WARRANTY)
+      : this.removeLabel(Label.WARRANTY);
   }
 }

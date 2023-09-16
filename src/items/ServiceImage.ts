@@ -76,7 +76,7 @@ export default class ServiceImage {
   }
 
   async toBlob(
-    option: { width?: number; height?: number } = { width: 0, height: 0 },
+    option: { width: number; height: number } = { width: 0, height: 0 },
   ): Promise<string> {
     const { width = 0, height = 0 } = option;
 

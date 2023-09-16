@@ -1,11 +1,9 @@
-<script lang="ts">
-  import Vue from "vue";
+<script>
   import FloatingButton from "./BottomActionbar-FloatingButton.vue";
-
-  export default Vue.extend({
+  export default {
     props: { isHidden: { type: Boolean, default: false } },
     components: { FloatingButton },
-  });
+  };
 </script>
 
 <template>

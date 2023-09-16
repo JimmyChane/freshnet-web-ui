@@ -1,4 +1,3 @@
-import Server from "@/host/Server";
 import ItemSearcher from "../objects/ItemSearcher";
 import U from "@/U";
 
@@ -34,9 +33,6 @@ export default class Ps2Disc {
       if (ItemSearcher.textContains(this.title, str)) count++;
       return count;
     }, 0);
-  }
-  toImageUrl(): string {
-    return Server.cloudinary({ url: `ps2/disc/${this.code}.jpg` });
   }
 
   compare(item: Ps2Disc): number {

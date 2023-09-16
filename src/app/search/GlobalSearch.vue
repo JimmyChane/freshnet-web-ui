@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import SearchInput from "@/components/SearchInput.vue";
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
   import ItemSearchProduct from "./GlobalSearch-Item-Product.vue";
@@ -6,25 +6,8 @@
   import ItemSearchBrand from "./GlobalSearch-Item-Brand.vue";
   import ItemSearchPs2Disc from "./GlobalSearch-Item-Ps2Disc.vue";
   import ItemSearchService from "./GlobalSearch-Item-Service.vue";
-  import Vue from "vue";
-  import Service from "@/items/Service";
-  import Ps2Disc from "@/items/Ps2Disc";
-  import Brand from "@/items/Brand";
-  import Product from "@/items/Product";
-  import Category from "@/items/Category";
-  import User from "@/items/User";
 
-  interface Data {
-    searchText: string;
-    searches: SearchData[];
-  }
-  interface SearchData {
-    dataType: string;
-    item: any;
-    count: number;
-  }
-
-  export default Vue.extend({
+  export default {
     components: {
       SearchInput,
       ButtonIcon,
@@ -37,39 +20,26 @@
     props: {
       placeholder: { type: String },
     },
-    data(): Data {
-      return { searchText: "", searches: [] };
-    },
+    data: (c) => ({ searchText: "", searches: [] }),
     computed: {
-      user(): User {
-        return this.$store.state.stores.login.getters.user;
-      },
+      user: (c) => c.$store.state.stores.login.getters.user,
 
-      categories(): Category[] {
-        return this.$store.state.stores.category.getters.items;
-      },
-      products() {
-        const proudcts: Product[] =
-          this.$store.state.stores.product.getters.items;
-        return proudcts.filter((product) => {
+      categories: (c) => c.$store.state.stores.category.getters.items,
+      products: (c) => {
+        return c.$store.state.stores.product.getters.items.filter((product) => {
           return product.isStockAvailable();
         });
       },
-      brands(): Brand[] {
-        return this.$store.state.stores.brand.getters.items;
-      },
-      ps2Discs(): Ps2Disc[] {
-        return this.$store.state.stores.ps2.getters.items;
-      },
-      services(): Service[] {
-        if (this.user.isTypeNone()) return [];
-        return this.$store.state.stores.service.getters.items;
+      brands: (c) => c.$store.state.stores.brand.getters.items,
+      ps2Discs: (c) => c.$store.state.stores.ps2.getters.items,
+      services: (c) => {
+        if (c.user.isTypeNone()) return [];
+        return c.$store.state.stores.service.getters.items;
       },
     },
     watch: {
       user() {
-        if (!this.user.isTypeNone())
-          this.$store.state.stores.service.dispatch("getItems");
+        if (!this.user.isTypeNone()) this.$store.state.stores.service.dispatch("getItems");
         this.search(this.searchText);
       },
     },
@@ -83,7 +53,7 @@
         this.$store.state.stores.service.dispatch("getItems");
     },
     methods: {
-      search(text: string): void {
+      search(text) {
         text = this.searchText = text.toLowerCase();
         let texts = text.split(/[\s,]+/).filter((text) => text.trim().length);
 
@@ -135,21 +105,18 @@
         }, 0);
         const valueToAccept = highCount * 0.5;
 
-        if (valueToAccept) {
+        if (valueToAccept)
           this.searches = searches
             .filter((x) => x.count >= valueToAccept)
             .sort((x1, x2) => x2.count - x1.count);
-        } else {
-          this.searches = [];
-        }
+        else this.searches = [];
       },
 
       focus() {
-        const input = this.$refs.searchinput as HTMLElement;
-        input.focus();
+        this.$refs.searchinput.focus();
       },
     },
-  });
+  };
 </script>
 
 <template>

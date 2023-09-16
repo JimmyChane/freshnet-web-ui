@@ -1,22 +1,12 @@
-<script lang="ts">
-  import User from "@/items/User";
-  import Vue from "vue";
-
-  export default Vue.extend({
+<script>
+  export default {
+    emits: ["click-logout"],
     props: { isWide: { type: Boolean, default: true } },
-    data() {
-      return { redirect: "" };
-    },
+    data: (c) => ({ redirect: "" }),
     computed: {
-      user(): User {
-        return this.$store.state.stores.login.getters.user;
-      },
-      userName(): string {
-        return this.user.name;
-      },
-      isLoginPage(): boolean {
-        return this.$store.getters.currentPageKey === "login";
-      },
+      user: (c) => c.$store.state.stores.login.getters.user,
+      userName: (c) => c.user.name,
+      isLoginPage: (c) => c.$store.getters.currentPageKey === "login",
     },
     watch: {
       $route() {
@@ -34,7 +24,7 @@
       this.invalidateRedirection();
       this.$store.state.stores.login.dispatch("refresh");
     },
-  });
+  };
 </script>
 
 <template>

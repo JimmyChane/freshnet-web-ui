@@ -1,22 +1,14 @@
-<script lang="ts">
+<script>
   import Navigation from "@/tools/Navigation";
-  import Vue from "vue";
 
-  export default Vue.extend({
+  export default {
     props: { isWide: { type: Boolean, default: false } },
     computed: {
-      isDrawer(): boolean {
-        return this.$store.getters.navigation.isDrawer();
-      },
-      isExpanded(): boolean {
-        return this.$store.getters.navigation.isExpanded();
-      },
-      toggleButtonVisible(): boolean {
-        return (
-          !this.$store.getters.navigation.isThin() ||
-          this.$store.getters.window.innerWidth > Navigation.MIN_WIDTH
-        );
-      },
+      isDrawer: (c) => c.$store.getters.navigation.isDrawer(),
+      isExpanded: (c) => c.$store.getters.navigation.isExpanded(),
+      toggleButtonVisible: (c) =>
+        !c.$store.getters.navigation.isThin() ||
+        c.$store.getters.window.innerWidth > Navigation.MIN_WIDTH,
     },
     methods: {
       toggleCollapse() {
@@ -36,7 +28,7 @@
           : this.$store.getters.navigation.setLayout(nextLayout);
       },
     },
-  });
+  };
 </script>
 
 <template>

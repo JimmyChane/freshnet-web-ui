@@ -1,18 +1,17 @@
-<script lang="ts">
+<script>
   import MenuOption from "@/components/button/MenuOption.vue";
   import ImageView from "@/components/ImageView.vue";
   import ServiceEvent from "@/items/ServiceEvent";
   import ServiceEventMethod from "@/items/ServiceEventMethod";
-  import Vue from "vue";
 
-  export default Vue.extend({
+  export default {
     components: { MenuOption, ImageView },
     props: {
       event: { type: ServiceEvent },
       src: {},
     },
     computed: {
-      isInitial(): boolean {
+      isInitial() {
         return this.event.method === ServiceEventMethod.INITIAL.key;
       },
       menus() {
@@ -25,7 +24,7 @@
         ];
       },
     },
-  });
+  };
 </script>
 
 <template>

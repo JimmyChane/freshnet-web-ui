@@ -1,17 +1,15 @@
-<script lang="ts">
-  import ServiceLabel from "@/items/ServiceLabel";
+<script>
   import Vue from "vue";
-
   export default Vue.extend({
     props: {
-      label: { type: ServiceLabel },
+      label: { type: Object },
       isClickable: { type: Boolean, default: true },
     },
     computed: {
-      hexColor(): string {
+      hexColor() {
         return this.label.hexColor;
       },
-      title(): string {
+      title() {
         return this.label.title;
       },
     },
