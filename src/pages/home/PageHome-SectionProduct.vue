@@ -2,9 +2,10 @@
   import Category from "@/items/Category";
   import ImageView from "@/components/ImageView.vue";
   import chroma from "chroma-js";
-  import U from "@/U";
+
   import IconArrowDownLight from "@/assets/icon/arrowDown-FFFFFF.svg";
   import IconArrowDownDark from "@/assets/icon/arrowDown-000000.svg";
+  import { isColorDark } from "@/U";
 
   export default {
     components: { ImageView },
@@ -43,7 +44,7 @@
       color3: (c) => c.getColorMixed(c.color, 0.9),
 
       arrowIcon: (c) => {
-        return U.isColorDark(c.color) ? IconArrowDownLight : IconArrowDownDark;
+        return isColorDark(c.color) ? IconArrowDownLight : IconArrowDownDark;
       },
     },
     watch: {
@@ -119,7 +120,7 @@
 
       getColorMixed(color, value) {
         return color.mix(
-          U.isColorDark(this.color) ? "#ffffff" : "#000000",
+          isColorDark(this.color) ? "#ffffff" : "#000000",
           value,
         );
       },

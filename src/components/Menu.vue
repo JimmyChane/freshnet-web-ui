@@ -1,6 +1,6 @@
 <script>
+  import { isArray, isFunction, isObjectOnly, optArray } from "@/U";
   import PopupMenuOption from "@/app/popupMenu/PopupMenuOption";
-  import U from "@/U";
 
   export default {
     Width: PopupMenuOption.Width,
@@ -30,13 +30,12 @@
         if (this.popupMenu) this.popupMenu.hide();
 
         const menus =
-          U.isObjectOnly(this.menus) && !U.isArray(this.menus)
+          isObjectOnly(this.menus) && !isArray(this.menus)
             ? [this.menus]
-            : U.optArray(this.menus);
+            : optArray(this.menus);
 
         for (const menu of menus) {
-          const isLegacy =
-            !U.isFunction(menu.click) && U.isFunction(menu.interact);
+          const isLegacy = !isFunction(menu.click) && isFunction(menu.interact);
           if (isLegacy) menu.click = () => menu.interact();
         }
 

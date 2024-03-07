@@ -1,9 +1,10 @@
 import Vuex from "vuex";
 import CustomerRequest from "@/request/Customer";
 import DeviceStore from "./store.device";
-import U from "@/U";
+
 import StoreBuilder from "./tools/StoreBuilder";
 import Customer from "../items/Customer";
+import { isArray, isString, optString } from "@/U";
 
 const init = (Stores: any) => {
   const deviceStore = DeviceStore.init(Stores);
@@ -26,12 +27,12 @@ const init = (Stores: any) => {
       return context.state.dataLoader.data();
     })
     .action("getItemOfId", async (context, id = "") => {
-      if (!U.isString(id)) return null;
+      if (!isString(id)) return null;
       const items: Customer[] = await context.dispatch("getItems");
       return items.find((item) => item.id === id) ?? null;
     })
     .action("getItemsOfIds", async (context, ids: string[] = []) => {
-      if (!U.isArray(ids)) return [];
+      if (!isArray(ids)) return [];
 
       const items: Customer[] = await context.dispatch("getItems");
       const results = ids.map((id) => {
@@ -51,10 +52,10 @@ const init = (Stores: any) => {
       }
       const optCustomer = (eCustomer: Customer) => {
         let customer = customers.find((customer) => {
-          const eName = U.optString(customer.name);
+          const eName = optString(customer.name);
           const ePhoneNumberValue = customer.phoneNumber?.value ?? "";
 
-          const name = U.optString(eCustomer.name);
+          const name = optString(eCustomer.name);
           const phoneNumberValue = eCustomer.phoneNumber?.value ?? "";
 
           return eName === name && ePhoneNumberValue === phoneNumberValue;

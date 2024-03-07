@@ -1,6 +1,7 @@
 import Server from "@/host/Server";
-import U from "@/U";
+
 import Filename from "../objects/Filename";
+import { isObject, trimId } from "@/U";
 
 interface ImageData {
   method: string;
@@ -37,19 +38,19 @@ export default class Image {
   path: string = "";
 
   fromData(data: ImageData): this {
-    this.method = U.trimId(data.method);
-    this.path = U.trimId(data.path);
+    this.method = trimId(data.method);
+    this.path = trimId(data.path);
     return this;
   }
   toData(): ImageData {
-    return { method: U.trimId(this.method), path: U.trimId(this.path) };
+    return { method: trimId(this.method), path: trimId(this.path) };
   }
   toCount(strs: string[]): number {
     return 0;
   }
   toUrl(option: ImageUrlOption = { width: 0, height: 0 }): string {
     let { width = 0, height = 0 } =
-      U.isObject(option) && option !== null ? option : {};
+      isObject(option) && option !== null ? option : {};
 
     const method = this.method;
     const path = this.path;

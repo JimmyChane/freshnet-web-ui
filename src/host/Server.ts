@@ -1,7 +1,8 @@
 const config = require("@/../freshnet.config");
-import U from "@/U";
+
 import ServerResource, { Icon } from "./ServerResource";
 import ServerApi, { Request } from "./ServerApi";
+import { trimId } from "@/U";
 
 class Server {
   static readonly resource = new ServerResource(config.hostRes);
@@ -21,7 +22,7 @@ class Server {
 
   static cloudinary(param: { url: string } = { url: "" }): string {
     let { url } = param;
-    url = U.trimId(url);
+    url = trimId(url);
     if (url === "") return "";
     return `${config.cloudinaryRes}/${url}`;
   }

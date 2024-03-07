@@ -1,5 +1,4 @@
-import U from "@/U";
-import { IconAsset, parseIcon, parseKey } from "./AppTool";
+import { IconAsset, optString, parseIcon, parseKey } from "@/U";
 import { Icon } from "@/host/ServerResource";
 
 export default class NavView {
@@ -12,7 +11,7 @@ export default class NavView {
     return this;
   }
   setTitle(title: string) {
-    this.title = U.optString(title);
+    this.title = optString(title);
     return this;
   }
   setIcon(icon: Record<string, Icon>) {

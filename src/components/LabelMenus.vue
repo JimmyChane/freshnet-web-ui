@@ -3,9 +3,9 @@
 
   import chroma from "chroma-js";
   import Menu from "@/components/Menu.vue";
-  import U from "@/U";
 
   import IconArrowDown from "@/assets/icon/arrowDown-505050.svg";
+  import { optArray } from "@/U";
 
   export default {
     State,
@@ -23,7 +23,7 @@
       menuWidth: () => Menu.Width.SAME,
 
       parsedMenus() {
-        return U.optArray(this.menus, [this.menus])
+        return optArray(this.menus, [this.menus])
           .filter((menu) => {
             return typeof menu === "object" && menu !== null;
           })

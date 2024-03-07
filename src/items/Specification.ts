@@ -1,7 +1,7 @@
-import U from "@/U";
 import ItemSearcher from "../objects/ItemSearcher";
 import { Item } from "@/stores/tools/List";
 import Image from "./Image";
+import { isObjectOnly, trimId, trimText } from "@/U";
 
 export class Type implements Item {
   static Key = {
@@ -53,13 +53,13 @@ export class Type implements Item {
     icon?: any;
     color?: string;
   }): Type {
-    this.id = U.trimId(data._id || "");
-    this.key = U.trimId(data.key || "");
-    this.title = U.trimText(data.title || "");
-    this.icon = U.isObjectOnly(data.icon)
+    this.id = trimId(data._id || "");
+    this.key = trimId(data.key || "");
+    this.title = trimText(data.title || "");
+    this.icon = isObjectOnly(data.icon)
       ? new Image().fromData(data.icon)
       : null;
-    this.color = U.trimId(data.color || "");
+    this.color = trimId(data.color || "");
 
     return this;
   }
@@ -71,11 +71,11 @@ export class Type implements Item {
     color: string;
   } {
     return {
-      _id: U.trimId(this.id),
-      key: U.trimId(this.key),
-      title: U.trimText(this.title),
+      _id: trimId(this.id),
+      key: trimId(this.key),
+      title: trimText(this.title),
       icon: this.icon?.toData() ?? {},
-      color: U.trimId(this.color),
+      color: trimId(this.color),
     };
   }
   toCount(strs: string[]): number {
@@ -109,8 +109,8 @@ export default class Specification {
   }
 
   fromData(data: { key?: string; content?: string }): Specification {
-    this.typeKey = U.trimId(data.key);
-    this.content = U.trimText(data.content);
+    this.typeKey = trimId(data.key);
+    this.content = trimText(data.content);
     this.fetchType();
 
     return this;

@@ -1,4 +1,4 @@
-import U from "@/U";
+import { optArray } from "@/U";
 import ValidationChecker from "./ValidationChecker";
 
 export default class DataLoader {
@@ -8,7 +8,7 @@ export default class DataLoader {
       .setData((data: any) => {
         return getStore()
           .state.list.clear()
-          .addItems(...U.optArray(data));
+          .addItems(...optArray(data));
       })
       .getData(() => getStore().state.list.items);
   }

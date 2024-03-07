@@ -8,8 +8,9 @@
   import ImageView from "@/components/ImageView.vue";
   import Label from "./ItemProduct-Label.vue";
   import chroma from "chroma-js";
-  import U from "@/U";
+
   import Product from "@/items/Product";
+  import { isColorDark } from "@/U";
 
   export default {
     Mode,
@@ -31,15 +32,17 @@
           ? chroma(c.primaryColorHex)
           : chroma("cccccc");
       },
-      isPrimaryColorDark: (c) => U.isColorDark(c.primaryColor),
+      isPrimaryColorDark: (c) => isColorDark(c.primaryColor),
 
       user: (c) => c.$store.state.stores.login.getters.user,
       allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
       shouldShowPrice: (c) => {
-        let setting = c.$store.state.stores.setting.getters.items.find((setting) => {
-          return setting.key === Setting.Key.PublicShowPrice;
-        });
+        let setting = c.$store.state.stores.setting.getters.items.find(
+          (setting) => {
+            return setting.key === Setting.Key.PublicShowPrice;
+          },
+        );
         return setting?.value ?? false;
       },
 

@@ -2,7 +2,7 @@
   import PopupMenuOption from "./PopupMenuOption";
   import Item from "./PopupMenu-Item.vue";
   import chroma from "chroma-js";
-  import U from "@/U";
+  import { isFunction } from "@/U";
 
   const Width = PopupMenuOption.Width;
   const Corner = PopupMenuOption.Corner;
@@ -231,7 +231,7 @@
         this.style["pointer-events"] = "none";
       },
       clickMenu(menu) {
-        if (U.isFunction(menu.click)) {
+        if (isFunction(menu.click)) {
           menu.click(menu);
           this.hide();
         }

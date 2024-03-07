@@ -5,7 +5,6 @@ import Server from "../host/Server";
 import TimeNowGetter from "@/tools/TimeNowGetter";
 import Notification from "@/tools/Notification";
 import PopupMenuOption from "@/app/popupMenu/PopupMenuOption";
-import U from "@/U";
 
 import fileDatabaseStore from "@/stores/store.database";
 import fileLoginStore from "@/stores/store.login";
@@ -19,6 +18,7 @@ import fileCategoryStore from "@/stores/store.category";
 import fileServiceStore from "@/stores/store.service";
 import fileProductStore from "@/stores/store.product";
 import filePs2Store from "@/stores/store.ps2";
+import { optArray } from "@/U";
 
 const keyGetter = new TimeNowGetter();
 
@@ -158,7 +158,7 @@ context.actions.imageViewerShow = (
   option = { image: null, thumbnails: [] },
 ) => {
   context.state.imageViewer.image = option.image;
-  context.state.imageViewer.thumbnails = U.optArray(option.thumbnails);
+  context.state.imageViewer.thumbnails = optArray(option.thumbnails);
   context.state.imageViewer.isShowing = true;
   context.commit("imageViewer", context.state.imageViewer);
 };

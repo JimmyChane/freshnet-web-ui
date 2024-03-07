@@ -1,99 +1,99 @@
 <script>
-   import PanelAction from "@/components/panel/PanelAction.vue";
-   import Input from "@/components/Input.vue";
-   import U from "@/U";
+  import PanelAction from "@/components/panel/PanelAction.vue";
+  import Input from "@/components/Input.vue";
+  import { optString } from "@/U";
 
-   export default {
-      components: { PanelAction, Input },
-      props: {
-         popupWindow: { type: Object },
+  export default {
+    components: { PanelAction, Input },
+    props: {
+      popupWindow: { type: Object },
+    },
+    data: (c) => ({ customerName: "", customerPhoneNumber: "" }),
+    computed: {
+      isShowing: (c) => c.popupWindow.isShowing,
+      value: (c) => c.popupWindow.value,
+    },
+    watch: {
+      value() {
+        this.onNewValue();
       },
-      data: (c) => ({ customerName: "", customerPhoneNumber: "" }),
-      computed: {
-         isShowing: (c) => c.popupWindow.isShowing,
-         value: (c) => c.popupWindow.value,
+    },
+    methods: {
+      onNewValue() {
+        const value = this.value ?? {};
+        this.customerName = optString(value.name);
+        this.customerPhoneNumber = value.phoneNumber?.toString() ?? "";
       },
-      watch: {
-         value() {
-            this.onNewValue();
-         },
+      onChange() {
+        const accept = () => {
+          this.popupWindow.close();
+        };
+        const reject = () => {};
+        this.popupWindow.onConfirm(accept, reject, {
+          name: this.customerName,
+          phoneNumber: this.customerPhoneNumber,
+        });
       },
-      methods: {
-         onNewValue() {
-            const value = this.value ?? {};
-            this.customerName = U.optString(value.name);
-            this.customerPhoneNumber = value.phoneNumber?.toString() ?? "";
-         },
-         onChange() {
-            const accept = () => {
-               this.popupWindow.close();
-            };
-            const reject = () => {};
-            this.popupWindow.onConfirm(accept, reject, {
-               name: this.customerName,
-               phoneNumber: this.customerPhoneNumber,
-            });
-         },
 
-         focus() {
-            this.$refs.InputName.focus();
-         },
+      focus() {
+        this.$refs.InputName.focus();
       },
-      mounted() {
-         this.onNewValue();
-         this.focus();
-      },
-   };
+    },
+    mounted() {
+      this.onNewValue();
+      this.focus();
+    },
+  };
 </script>
 
 <template>
-   <PanelAction
-      title="Edit Customer"
-      :isShowing="isShowing"
-      :isLoading="$store.state.stores.service.getters.isFetching"
-      :isClickable="!$store.state.stores.service.getters.isFetching"
-      @click-ok="onChange"
-      @click-cancel="() => popupWindow.close()"
-      @click-dismiss="() => popupWindow.close()"
-   >
-      <div class="WindowCustomer-body">
-         <Input
-            label="Name"
-            ref="InputName"
-            autocapitalize="words"
-            :isRequired="true"
-            :bindValue="customerName"
-            @input="(comp) => (customerName = comp.value)"
-         />
-         <Input
-            ref="WindowCustomerPhoneNumber"
-            label="Phone Number"
-            type="tel"
-            :bindValue="customerPhoneNumber"
-            @input="(comp) => (customerPhoneNumber = comp.value)"
-         />
-      </div>
-   </PanelAction>
+  <PanelAction
+    title="Edit Customer"
+    :isShowing="isShowing"
+    :isLoading="$store.state.stores.service.getters.isFetching"
+    :isClickable="!$store.state.stores.service.getters.isFetching"
+    @click-ok="onChange"
+    @click-cancel="() => popupWindow.close()"
+    @click-dismiss="() => popupWindow.close()"
+  >
+    <div class="WindowCustomer-body">
+      <Input
+        label="Name"
+        ref="InputName"
+        autocapitalize="words"
+        :isRequired="true"
+        :bindValue="customerName"
+        @input="(comp) => (customerName = comp.value)"
+      />
+      <Input
+        ref="WindowCustomerPhoneNumber"
+        label="Phone Number"
+        type="tel"
+        :bindValue="customerPhoneNumber"
+        @input="(comp) => (customerPhoneNumber = comp.value)"
+      />
+    </div>
+  </PanelAction>
 </template>
 
 <style lang="scss" scoped>
-   .WindowCustomer-body {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      padding: 1rem 0;
+  .WindowCustomer-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 1rem 0;
 
-      & > * {
-         max-width: 100%;
-         width: 35rem;
-         padding: 0.6rem 0.4rem;
-         font-size: 1rem;
-         margin-top: 0;
+    & > * {
+      max-width: 100%;
+      width: 35rem;
+      padding: 0.6rem 0.4rem;
+      font-size: 1rem;
+      margin-top: 0;
 
-         border: none;
-         border-bottom: 1px solid hsl(0, 0%, 70%);
-         border-radius: 0.2rem;
-         background: hsla(0, 0%, 0%, 0.03);
-      }
-   }
+      border: none;
+      border-bottom: 1px solid hsl(0, 0%, 70%);
+      border-radius: 0.2rem;
+      background: hsla(0, 0%, 0%, 0.03);
+    }
+  }
 </style>

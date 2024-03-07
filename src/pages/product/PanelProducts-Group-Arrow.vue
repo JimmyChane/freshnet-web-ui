@@ -1,9 +1,10 @@
 <script>
   import ImageView from "@/components/ImageView.vue";
   import chroma from "chroma-js";
-  import U from "@/U";
+
   import IconArrowDownLight from "@/assets/icon/arrowDown-white.svg";
   import IconArrowDownDark from "@/assets/icon/arrowDown-black.svg";
+  import { isColorDark } from "@/U";
 
   const Direction = { Left: 1, Right: 2 };
 
@@ -24,7 +25,7 @@
         const primaryColor = chroma.valid(c.primaryColor)
           ? c.primaryColor
           : chroma("ffffff");
-        return U.isColorDark(primaryColor, 60);
+        return isColorDark(primaryColor, 60);
       },
 
       rotation() {

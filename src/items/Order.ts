@@ -1,7 +1,8 @@
 import OrderCustomer from "./OrderCustomer";
 import ItemSearcher from "../objects/ItemSearcher";
-import U from "@/U";
+
 import { Item } from "@/stores/tools/List";
+import { trimId, trimText } from "@/U";
 
 export default class Order implements Item {
   static Status = { Pending: 0, Completed: 1 };
@@ -19,12 +20,12 @@ export default class Order implements Item {
   status: number = Order.Status.Pending;
 
   fromData(data: any): Order {
-    this.id = U.trimId(data._id);
+    this.id = trimId(data._id);
     this.customer = new OrderCustomer(this.stores).fromData({
-      name: U.trimText(data.customer_name),
-      phoneNumber: U.trimText(data.phone_number),
+      name: trimText(data.customer_name),
+      phoneNumber: trimText(data.phone_number),
     });
-    this.content = U.trimText(data.content);
+    this.content = trimText(data.content);
     this.createdAt = data.createdAt;
     this.status =
       data.status !== Order.Status.Completed

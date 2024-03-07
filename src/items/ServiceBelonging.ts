@@ -1,4 +1,4 @@
-import U from "@/U";
+import { optNumber, trimText } from "@/U";
 
 export default class ServiceBelonging {
   stores: any;
@@ -13,18 +13,18 @@ export default class ServiceBelonging {
   description: string = "";
 
   fromData(data: any) {
-    this.title = U.trimText(data.title);
+    this.title = trimText(data.title);
     this.time = data.time;
-    this.quantity = Math.max(U.optNumber(data.quantity), 1);
-    this.description = U.trimText(data.description);
+    this.quantity = Math.max(optNumber(data.quantity), 1);
+    this.description = trimText(data.description);
     return this;
   }
   toData(): any {
     return {
-      title: U.trimText(this.title),
+      title: trimText(this.title),
       time: this.time,
-      quantity: Math.max(U.optNumber(this.quantity), 1),
-      description: U.trimText(this.description),
+      quantity: Math.max(optNumber(this.quantity), 1),
+      description: trimText(this.description),
     };
   }
 }

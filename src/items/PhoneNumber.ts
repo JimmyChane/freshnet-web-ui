@@ -1,5 +1,5 @@
+import { optString } from "@/U";
 import ItemSearcher from "../objects/ItemSearcher";
-import U from "@/U";
 
 interface PhoneNumberData {
   value: string;
@@ -26,7 +26,7 @@ export default class PhoneNumber {
   }
 
   toString(): string {
-    let value = U.optString(this.value);
+    let value = optString(this.value);
 
     const spliceString = (
       text: string,
@@ -63,6 +63,6 @@ export default class PhoneNumber {
   }
 
   compare(item: PhoneNumber): number {
-    return U.optString(this.value).localeCompare(U.optString(item.value));
+    return optString(this.value).localeCompare(optString(item.value));
   }
 }

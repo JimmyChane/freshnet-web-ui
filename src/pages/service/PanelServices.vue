@@ -4,12 +4,12 @@
   import Empty from "@/components/Empty.vue";
   import PageService from "@/pages/service/PageService.vue";
 
-  import U from "@/U";
   import ServiceState from "@/items/ServiceState";
 
   import IconGrid from "@/assets/icon/grid-000000.svg";
   import IconList from "@/assets/icon/list-000000.svg";
   import IconDetail from "@/assets/icon/detail-000000.svg";
+  import { optString } from "@/U";
 
   export default {
     emits: ["click-add", "click-import", "click-service"],
@@ -56,7 +56,7 @@
       isCurrentUserAdmin: (c) => c.currentUser.isTypeAdmin(),
       isCurrentUserDefault: (c) => c.currentUser.isDefault(),
 
-      currentState: (c) => U.optString(c.$route.query.state),
+      currentState: (c) => optString(c.$route.query.state),
       isCurrentStatePending: (c) => c.currentState === "pending",
     },
     watch: {

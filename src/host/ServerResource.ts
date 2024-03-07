@@ -1,5 +1,6 @@
+import { isString } from "@/U";
+
 const config = require("@/../freshnet.config");
-import U from "@/U";
 
 export class Icon {
   private name: string = "";
@@ -10,12 +11,12 @@ export class Icon {
   }
 
   constructor(name: string = "", ext: string | undefined = undefined) {
-    if (U.isString(name)) this.name = name;
-    if (U.isString(ext)) this.ext = ext;
+    if (isString(name)) this.name = name;
+    if (isString(ext)) this.ext = ext;
   }
 
   toUrl(): string {
-    const filename = !U.isString(this.ext)
+    const filename = !isString(this.ext)
       ? this.name
       : `${this.name}.${this.ext}`;
     return `${config.hostRes}/icon/${filename}`;

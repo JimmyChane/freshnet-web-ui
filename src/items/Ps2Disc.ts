@@ -1,5 +1,5 @@
+import { trimId, trimText } from "@/U";
 import ItemSearcher from "../objects/ItemSearcher";
-import U from "@/U";
 
 export default class Ps2Disc {
   stores: any;
@@ -13,16 +13,16 @@ export default class Ps2Disc {
   title: string = "";
 
   fromData(data: any) {
-    this.id = U.trimId(data._id);
-    this.code = U.trimId(data.code);
-    this.title = U.trimText(data.title);
+    this.id = trimId(data._id);
+    this.code = trimId(data.code);
+    this.title = trimText(data.title);
     return this;
   }
   toData(): any {
     return {
-      _id: U.trimId(this.id),
-      code: U.trimId(this.code),
-      title: U.trimText(this.title),
+      _id: trimId(this.id),
+      code: trimId(this.code),
+      title: trimText(this.title),
     };
   }
   toCount(strs: string[]): number {

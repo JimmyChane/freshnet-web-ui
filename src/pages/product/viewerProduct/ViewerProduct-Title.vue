@@ -1,7 +1,7 @@
 <script>
-  import U from "@/U";
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
   import IconEdit from "@/assets/icon/edit-000000.svg";
+  import { isColorDark } from "@/U";
 
   export default {
     components: { ButtonIcon },
@@ -13,7 +13,7 @@
     data: (c) => ({ IconEdit, fullTitle: "" }),
     computed: {
       titleColor: (c) =>
-        U.isColorDark(c.primaryColor)
+        isColorDark(c.primaryColor)
           ? "white"
           : c.primaryColor.mix("000000", 0.98),
 

@@ -1,21 +1,21 @@
-import U from "@/U";
+import { isFunction, isObjectOnly, optString } from "@/U";
 
 const Mixin = {
   created(this: any) {
     const getTitle = () => {
       let title = this.$options.title;
-      if (U.isFunction(title)) {
+      if (isFunction(title)) {
         title = title.call(this);
       }
-      return U.optString(title).trim();
+      return optString(title).trim();
     };
 
     const getColors = () => {
       let color = this.$options.color;
-      if (U.isFunction(color)) {
+      if (isFunction(color)) {
         color = color.call(this);
       }
-      color = U.isObjectOnly(color) ? color : {};
+      color = isObjectOnly(color) ? color : {};
 
       const {
         primary = "",
@@ -29,10 +29,10 @@ const Mixin = {
 
     const getIcons = () => {
       let icon = this.$options.icon;
-      if (U.isFunction(icon)) {
+      if (isFunction(icon)) {
         icon = icon.call(this);
       }
-      icon = U.isObjectOnly(icon) ? icon : {};
+      icon = isObjectOnly(icon) ? icon : {};
 
       const { light = "", dark = "", color = "" } = icon;
 

@@ -1,6 +1,6 @@
 import Vuex from "vuex";
 import Order from "@/items/Order";
-import U from "@/U";
+ 
 import StoreBuilder from "./tools/StoreBuilder";
 import OrderRequest from "@/request/Order";
 import Customer from "@/items/Customer";

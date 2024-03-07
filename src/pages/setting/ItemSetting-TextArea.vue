@@ -1,10 +1,10 @@
 <script>
   import ItemSettingHeader from "./ItemSetting-Header.vue";
-  import U from "@/U";
 
   import IconClose from "@/assets/icon/close-000000.svg";
   import IconSave from "@/assets/icon/save-000000.svg";
   import IconEdit from "@/assets/icon/edit-000000.svg";
+  import { optString } from "@/U";
 
   export default {
     components: { ItemSettingHeader },
@@ -12,7 +12,7 @@
     props: { item: { type: Object, default: () => null } },
     computed: {
       isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
-      isEmpty: (c) => !U.optString(c.value).length,
+      isEmpty: (c) => !optString(c.value).length,
       title: (c) => c.item.getTitle(),
       actions: (c) => {
         if (c.item.isReadonly()) {

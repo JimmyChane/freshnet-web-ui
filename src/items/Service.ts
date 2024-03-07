@@ -7,12 +7,19 @@ import Label from "./ServiceLabel";
 import Method from "./ServiceEventMethod";
 import State from "./ServiceState";
 
-import U from "@/U";
 import ItemSearcher from "../objects/ItemSearcher";
 import ServiceBelonging from "./ServiceBelonging";
 import User from "./User";
 import { Item } from "@/stores/tools/List";
 import ServiceEventMethod from "./ServiceEventMethod";
+import {
+  isObject,
+  isString,
+  optArray,
+  optBoolean,
+  trimId,
+  trimText,
+} from "@/U";
 const textContains = ItemSearcher.textContains;
 
 export default class Service implements Item {
@@ -37,12 +44,12 @@ export default class Service implements Item {
   labels: Label[] = [];
 
   fromData(data: any): Service {
-    this.id = U.trimId(data._id);
+    this.id = trimId(data._id);
     this.timestamp = data.time ? new ServiceTimestamp(data.time) : null;
-    this.username = U.trimId(data.username);
-    this.name = U.trimText(data.nameOfUser);
+    this.username = trimId(data.username);
+    this.name = trimText(data.nameOfUser);
 
-    switch (U.trimId(data.state)) {
+    switch (trimId(data.state)) {
       case State.PENDING.key:
         this.state = State.PENDING.key;
         break;
@@ -59,25 +66,25 @@ export default class Service implements Item {
         this.state = State.PENDING.key;
     }
 
-    this.customer = U.isObject(data.customer)
+    this.customer = isObject(data.customer)
       ? new ServiceCustomer(this.stores).fromData(data.customer)
       : null;
-    this.description = U.trimText(data.description);
-    this.belongings = U.optArray(data.belongings).map((belonging) => {
+    this.description = trimText(data.description);
+    this.belongings = optArray(data.belongings).map((belonging) => {
       return new ServiceBelonging(this.stores).fromData(belonging);
     });
 
-    this._events = U.optArray(data.events).map((subData) => {
+    this._events = optArray(data.events).map((subData) => {
       return new ServiceEvent(this.stores).fromData(subData);
     });
 
     // images
-    this.imageFiles = U.optArray(data.imageFiles).map((image) => {
+    this.imageFiles = optArray(data.imageFiles).map((image) => {
       return new ServiceImage(this.stores).fromData(image);
     });
 
     // labels
-    this.labels = U.optArray(data.labels)
+    this.labels = optArray(data.labels)
       .map((subData) => new Label().fromData(subData))
       .filter((label) => label.title.trim().length > 0);
 
@@ -103,13 +110,13 @@ export default class Service implements Item {
   }
   toData(): any {
     return {
-      _id: U.trimId(this.id),
+      _id: trimId(this.id),
       time: this.timestamp?.time ?? null,
-      username: U.trimId(this.username),
-      nameOfUser: U.trimText(this.name),
+      username: trimId(this.username),
+      nameOfUser: trimText(this.name),
       state: this.state,
       customer: this.customer?.toData(),
-      description: U.trimText(this.description),
+      description: trimText(this.description),
       belongings: this.belongings.map((belonging) => belonging.toData()),
       events: this._events.map((event) => event.toData()),
       imageFiles: this.imageFiles.map((image) => image.toData()),
@@ -206,7 +213,7 @@ export default class Service implements Item {
   }
 
   async fetchUser(): Promise<User | null> {
-    if (!U.isString(this.username) || this.username.trim().length === 0) {
+    if (!isString(this.username) || this.username.trim().length === 0) {
       return null;
     }
     return await this.userStore.dispatch("getUserByUsername", this.username);
@@ -232,7 +239,7 @@ export default class Service implements Item {
   }
 
   setLabels(labels: Label[] = []) {
-    this.labels = U.optArray(labels)
+    this.labels = optArray(labels)
       .map((label: Label) => new Label().fromData(label.toData()))
       .filter((label) => label.title.trim().length > 0);
   }
@@ -254,12 +261,12 @@ export default class Service implements Item {
   }
 
   setUrgent(bool: boolean = false) {
-    U.optBoolean(bool)
+    optBoolean(bool)
       ? this.addLabel(Label.URGENT)
       : this.removeLabel(Label.URGENT);
   }
   setWarranty(bool: boolean = false) {
-    U.optBoolean(bool)
+    optBoolean(bool)
       ? this.addLabel(Label.WARRANTY)
       : this.removeLabel(Label.WARRANTY);
   }

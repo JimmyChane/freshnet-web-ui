@@ -1,7 +1,8 @@
 import Server from "@/host/Server";
-import U from "@/U";
+
 import Filename from "../objects/Filename";
 import Image from "./Image";
+import { trimId } from "@/U";
 
 interface ServiceImageData {
   name: string;
@@ -30,10 +31,10 @@ export default class ServiceImage {
       method: data.method,
     });
 
-    this.name = U.trimId(data.name);
+    this.name = trimId(data.name);
     this.path = image.path;
     this.method = image.method;
-    this.storageType = U.trimId(data.storageType);
+    this.storageType = trimId(data.storageType);
     return this;
   }
 
@@ -42,10 +43,10 @@ export default class ServiceImage {
       .fromData({ path: this.path, method: this.method })
       .toData();
     return {
-      name: U.trimId(this.name),
+      name: trimId(this.name),
       path: image.path,
       method: image.method,
-      storageType: U.trimId(this.storageType),
+      storageType: trimId(this.storageType),
     };
   }
 

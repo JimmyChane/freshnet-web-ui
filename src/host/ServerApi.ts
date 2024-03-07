@@ -1,4 +1,4 @@
-import U from "@/U";
+import { isArray, isObject, isObjectOnly, optArray, optObject } from "@/U";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -46,7 +46,7 @@ export class Request {
   }
 
   private contentTypeJson(): this {
-    if (!U.isObject(this.bind.headers) || U.isArray(this.bind.headers)) {
+    if (!isObject(this.bind.headers) || isArray(this.bind.headers)) {
       this.bind.headers = {};
     }
     this.bind.headers["Content-Type"] = "application/json;charset=UTF-8";
@@ -130,7 +130,7 @@ export class Response {
 
   getArrayContent(): any[] {
     const content = this.getContent();
-    if (!U.isArray(content)) {
+    if (!isArray(content)) {
       throw new Error("content not array");
     }
     return content;
@@ -138,13 +138,13 @@ export class Response {
 
   optArrayContent(): any[] | undefined {
     const content = this.getContent();
-    return U.optArray(content) ? content : undefined;
+    return optArray(content) ? content : undefined;
   }
 
   getObjectContent(): object {
     const content = this.getContent();
-    if (U.isArray(content)) throw new Error("content array");
-    if (!U.isObject(content)) throw new Error("content not object");
+    if (isArray(content)) throw new Error("content array");
+    if (!isObject(content)) throw new Error("content not object");
     if (content === undefined) throw new Error("content undefined");
     if (content === null) throw new Error("content null");
     return content;
@@ -152,10 +152,10 @@ export class Response {
 
   optObjectContent(): object | undefined {
     const content = this.getContent();
-    if (U.isArray(content) || !U.isObjectOnly(content)) {
+    if (isArray(content) || !isObjectOnly(content)) {
       return {};
     }
-    return U.optObject(content);
+    return optObject(content);
   }
 
   getStringContent(): string {

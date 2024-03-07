@@ -5,7 +5,6 @@
 
   import Actionbar from "./Actionbar.vue";
   import SectionOrder from "./SectionOrder.vue";
-  import U from "@/U";
 
   import Order from "@/items/Order";
 
@@ -33,7 +32,7 @@
     }),
     computed: {
       isLoading: (c) => c.$store.state.stores.order.getters.isLoading,
-      items: (c) => U.optArray(c.$store.state.stores.order.getters.items),
+      items: (c) => optArray(c.$store.state.stores.order.getters.items),
       currentExpandedOrderid: (c) => c.$route.query.order,
     },
     watch: {
@@ -49,7 +48,9 @@
         this.pendingItems = [];
         this.completedItems = [];
 
-        const groups = await this.$store.state.stores.order.dispatch("getGroupsByStatus");
+        const groups = await this.$store.state.stores.order.dispatch(
+          "getGroupsByStatus",
+        );
         const groupPending = groups.find((group) => {
           return group.status === Order.Status.Pending;
         });
@@ -102,10 +103,14 @@
           (item) => $store.getters.replaceQuery({ query: { order: item.id } })
         "
         @click-complete="
-          (item) => $store.state.stores.order.dispatch('updateToCompletedOfId', item.id)
+          (item) =>
+            $store.state.stores.order.dispatch('updateToCompletedOfId', item.id)
         "
         @click-remove="
-          (item) => $store.state.stores.order.dispatch('removeOItemOfId', { id: item.id })
+          (item) =>
+            $store.state.stores.order.dispatch('removeOItemOfId', {
+              id: item.id,
+            })
         "
       />
 
@@ -121,10 +126,14 @@
           (item) => $store.getters.replaceQuery({ query: { order: item.id } })
         "
         @click-pending="
-          (item) => $store.state.stores.order.dispatch('updateToPendingOfId', item.id)
+          (item) =>
+            $store.state.stores.order.dispatch('updateToPendingOfId', item.id)
         "
         @click-remove="
-          (item) => $store.state.stores.order.dispatch('removeOItemOfId', { id: item.id })
+          (item) =>
+            $store.state.stores.order.dispatch('removeOItemOfId', {
+              id: item.id,
+            })
         "
       />
     </main>

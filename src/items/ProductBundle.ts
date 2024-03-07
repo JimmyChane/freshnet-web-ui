@@ -1,4 +1,4 @@
-import U from "@/U";
+import { trimText } from "@/U";
 
 export default class ProductBundle {
   stores: any;
@@ -10,11 +10,11 @@ export default class ProductBundle {
   title: string = "";
 
   fromData(data: { title?: string }): ProductBundle {
-    this.title = U.trimText(data.title || "");
+    this.title = trimText(data.title || "");
     return this;
   }
   toData(): { title: string } {
-    return { title: U.trimText(this.title) };
+    return { title: trimText(this.title) };
   }
   toCount(strs: string[]): number {
     return 0;

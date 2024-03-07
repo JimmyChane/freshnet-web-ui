@@ -1,10 +1,10 @@
 <script>
-  import U from "@/U";
   import NavPage from "@/app/NavPage";
   import IconHome from "@/icon/IconHome.vue";
   import IconProducts from "@/icon/IconMagnifyingGlass.vue";
   import IconPaper from "@/icon/IconPaper.vue";
   import IconManage from "@/icon/IconManage.vue";
+  import { isFunction } from "@/U";
 
   export default {
     components: { IconHome, IconProducts, IconPaper, IconManage },
@@ -14,7 +14,7 @@
         return this.item.key;
       },
       isSelected() {
-        return U.isFunction(this.item.isSelected)
+        return isFunction(this.item.isSelected)
           ? this.item.isSelected()
           : false;
       },

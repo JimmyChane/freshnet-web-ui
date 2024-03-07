@@ -1,6 +1,7 @@
 import PhoneNumber from "./PhoneNumber";
-import U from "@/U";
+
 import ItemSearcher from "../objects/ItemSearcher";
+import { optString, trimStringAll, trimText } from "@/U";
 const textContains = ItemSearcher.textContains;
 
 export default class ServiceCustomer {
@@ -14,9 +15,9 @@ export default class ServiceCustomer {
   phoneNumber: PhoneNumber | null = null;
 
   fromData(data: any): ServiceCustomer {
-    this.name = U.trimText(data.name);
+    this.name = trimText(data.name);
 
-    const phoneNumber = U.trimStringAll(data.phoneNumber, undefined);
+    const phoneNumber = trimStringAll(data.phoneNumber, undefined);
     this.phoneNumber = phoneNumber
       ? new PhoneNumber(this.stores).fromData({ value: phoneNumber })
       : null;
@@ -24,7 +25,7 @@ export default class ServiceCustomer {
   }
   toData(): any {
     return {
-      name: U.trimText(this.name),
+      name: trimText(this.name),
       phoneNumber: this.phoneNumber?.toData().value ?? "",
     };
   }
@@ -40,11 +41,11 @@ export default class ServiceCustomer {
   }
 
   isEqual(item: ServiceCustomer): boolean {
-    const eName = U.optString(item.name);
+    const eName = optString(item.name);
     const ePhoneNumber = item.phoneNumber;
     const ePhoneNumberValue = ePhoneNumber?.value ?? "";
 
-    const name = U.optString(this.name);
+    const name = optString(this.name);
     const phoneNumber = this.phoneNumber;
     const phoneNumberValue = phoneNumber?.value ?? "";
 
@@ -55,8 +56,8 @@ export default class ServiceCustomer {
     return this.compareName(item) + this.comparePhoneNumber(item);
   }
   compareName(item: ServiceCustomer): number {
-    const name1 = U.optString(this.name);
-    const name2 = U.optString(item.name);
+    const name1 = optString(this.name);
+    const name2 = optString(item.name);
     return name1.localeCompare(name2);
   }
   comparePhoneNumber(item: ServiceCustomer): number {

@@ -1,9 +1,10 @@
 import Vuex from "vuex";
-import U from "@/U";
+
 import StoreBuilder from "./tools/StoreBuilder";
 import DeviceRequest from "@/request/Device";
 import CustomerDevice from "../items/CustomerDevice";
 import Customer from "@/items/Customer";
+import { isArray } from "@/U";
 
 const init = (Stores: any) => {
   const context = new StoreBuilder<CustomerDevice>()
@@ -27,7 +28,7 @@ const init = (Stores: any) => {
       return items.find((item) => item.id === id) ?? null;
     })
     .action("getItemsOfIds", async (context, ids: string[] = []) => {
-      if (!U.isArray(ids)) return [];
+      if (!isArray(ids)) return [];
 
       const items: CustomerDevice[] = await context.dispatch("getItems");
       const results = ids.map((id) => {

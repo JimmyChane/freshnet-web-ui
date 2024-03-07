@@ -1,4 +1,4 @@
-import U from "@/U";
+import { trimId } from "@/U";
 import { Item } from "@/stores/tools/List";
 
 interface SettingData {
@@ -30,16 +30,16 @@ export default class Setting implements Item {
   }
 
   fromData(data: SettingData): this {
-    this.key = U.trimId(data.key);
-    this.visibility = U.trimId(data.visibility);
+    this.key = trimId(data.key);
+    this.visibility = trimId(data.visibility);
     this.value = data.value;
     return this;
   }
 
   toData(): SettingData {
     return {
-      key: U.trimId(this.key),
-      visibility: U.trimId(this.visibility),
+      key: trimId(this.key),
+      visibility: trimId(this.visibility),
       value: this.value,
     };
   }

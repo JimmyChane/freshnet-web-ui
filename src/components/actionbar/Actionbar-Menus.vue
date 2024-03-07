@@ -1,25 +1,25 @@
 <script>
+  import { isBoolean, isObjectOnly, optArray } from "@/U";
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
   import ButtonText from "@/components/button/ButtonText.vue";
   import MenuOption from "@/components/button/MenuOption.vue";
-  import U from "@/U";
 
   export default {
     components: { ButtonIcon, ButtonText, MenuOption },
     props: { menus: { type: Array, default: () => [] } },
     computed: {
       Menus: (c) => {
-        return U.optArray(c.menus).filter((menu) => U.isObjectOnly(menu));
+        return optArray(c.menus).filter((menu) => isObjectOnly(menu));
       },
       visibleMenus: (c) => {
         return c.Menus.filter((menu) => {
-          if (!U.isBoolean(menu.isHidden)) return true;
+          if (!isBoolean(menu.isHidden)) return true;
           return !menu.isHidden;
         });
       },
       hiddenMenus: (c) => {
         return c.Menus.filter((menu) => {
-          if (!U.isBoolean(menu.isHidden)) return false;
+          if (!isBoolean(menu.isHidden)) return false;
           return menu.isHidden;
         });
       },

@@ -15,7 +15,6 @@
   // tools
   import AppLayout from "@/tools/AppLayout";
   import Navigation from "@/tools/Navigation";
-  import U from "@/U";
   import PHE from "print-html-element"; // https://www.npmjs.com/package/print-html-element
   import "vue-virtual-scroller/dist/vue-virtual-scroller.css";
 
@@ -23,8 +22,7 @@
   import NavGroup from "./NavViewGroup";
   import NavView from "./NavView";
 
-  import { isPassed, parseGroup2s } from "./AppTool";
-  import RouteQuery from "./RouteQuery";
+  import { isFunction, isPassed, optArray, parseGroup2s, replace } from "@/U";
 
   const _children = [PageHome, PageProduct, PagePrint, PageManage];
 
@@ -70,7 +68,7 @@
 
       // pages
       pages() {
-        const pages = U.optArray(_children);
+        const pages = optArray(_children);
         if (pages.length < 1) return [];
 
         const listGroup1 = pages.map((page) => {
@@ -80,9 +78,9 @@
             .setIcon(page.icon)
             .setUserPermissions(page.userPermissions);
 
-          const children = U.isFunction(page._children) ? page._children() : [];
-          const groups = U.isFunction(page._groups) ? page._groups() : [];
-          const queries = U.isFunction(page._queries) ? page._queries() : [];
+          const children = isFunction(page._children) ? page._children() : [];
+          const groups = isFunction(page._groups) ? page._groups() : [];
+          const queries = isFunction(page._queries) ? page._queries() : [];
 
           const returnParsedGroups = [
             ...parseGroup2s([{ values: children }, ...groups]).map((obj) => {
@@ -96,7 +94,7 @@
               return isPassed(this.user, group.userPermissions);
             })
             .reduce((groups, group) => {
-              const views = U.optArray(group.values)
+              const views = optArray(group.values)
                 .filter((value) => {
                   return isPassed(this.user, value.userPermissions);
                 })
@@ -235,7 +233,7 @@
         this.setQuery(param, false);
       },
       setQuery(param = {}, isNext = true) {
-        const query = RouteQuery.replace(this.$route.query, param.query);
+        const query = replace(this.$route.query, param.query);
 
         if (!query) return;
 
@@ -265,7 +263,10 @@
       },
       logout() {
         this.$store.state.stores.login.dispatch("logout").then((user) => {
-          this.$store.dispatch("snackbarShow", `${user.name} is now logged out`);
+          this.$store.dispatch(
+            "snackbarShow",
+            `${user.name} is now logged out`,
+          );
         });
       },
     },

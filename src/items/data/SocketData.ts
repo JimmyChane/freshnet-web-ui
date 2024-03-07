@@ -1,4 +1,4 @@
-import U from "@/U";
+import { optString, replaceStringAll } from "@/U";
 
 class SocketData {
   content: any | null;
@@ -7,8 +7,8 @@ class SocketData {
   constructor(content: any | null = null, key: string = "") {
     this.content = content;
 
-    key = U.optString(key);
-    key = U.replaceStringAll(key, " ", "");
+    key = optString(key);
+    key = replaceStringAll(key, " ", "");
     if (key.length) this.key = key;
   }
 }

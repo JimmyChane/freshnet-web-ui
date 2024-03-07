@@ -1,9 +1,10 @@
 import ItemSearcher from "../objects/ItemSearcher";
-import U from "@/U";
+
 import CustomerDeviceSpecification from "./CustomerDeviceSpecification";
 import Category from "./Category";
 import Customer from "./Customer";
 import { Item } from "@/stores/tools/List";
+import { optArray, trimId, trimText } from "@/U";
 
 interface CustomerDeviceData {
   _id: string;
@@ -31,11 +32,11 @@ class CustomerDevice implements Item {
   specifications: CustomerDeviceSpecification[] = [];
 
   fromData(data: CustomerDeviceData): this {
-    this.id = U.trimId(data._id);
-    this.ownerCustomerId = U.trimId(data.ownerCustomerId);
-    this.description = U.trimText(data.description);
-    this.categoryKey = U.trimId(data.categoryKey);
-    this.specifications = U.optArray(data.specifications)
+    this.id = trimId(data._id);
+    this.ownerCustomerId = trimId(data.ownerCustomerId);
+    this.description = trimText(data.description);
+    this.categoryKey = trimId(data.categoryKey);
+    this.specifications = optArray(data.specifications)
       .map((specification) => {
         return new CustomerDeviceSpecification(this.stores).fromData(
           specification,
@@ -50,10 +51,10 @@ class CustomerDevice implements Item {
 
   toData(): CustomerDeviceData {
     return {
-      _id: U.trimId(this.id),
-      ownerCustomerId: U.trimId(this.ownerCustomerId),
-      description: U.trimId(this.description),
-      categoryKey: U.trimId(this.categoryKey),
+      _id: trimId(this.id),
+      ownerCustomerId: trimId(this.ownerCustomerId),
+      description: trimId(this.description),
+      categoryKey: trimId(this.categoryKey),
       specifications: this.specifications.map((specification) => {
         return specification.toData();
       }),

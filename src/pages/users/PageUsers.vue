@@ -4,8 +4,6 @@
   import Empty from "@/components/Empty.vue";
   import ItemUser from "./ItemUser.vue";
 
-  import U from "@/U";
-
   import WindowAdd from "./WindowAdd.vue";
   import WindowRemove from "./WindowRemove.vue";
   import WindowChange from "./WindowChange.vue";
@@ -14,6 +12,7 @@
 
   import IconAdd from "@/assets/icon/add-000000.svg";
   import IconRefresh from "@/assets/icon/refresh-000000.svg";
+  import { optNumber } from "@/U";
 
   export default {
     key: "users",
@@ -114,7 +113,7 @@
           userType: user.userType,
           onConfirm: async (data) => {
             try {
-              const userTypeNumber = U.optNumber(
+              const userTypeNumber = optNumber(
                 Number.parseInt(data.userType),
                 0,
               );

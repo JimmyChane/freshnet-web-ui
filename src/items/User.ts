@@ -1,6 +1,6 @@
 import { Item } from "@/stores/tools/List";
 import ItemSearcher from "../objects/ItemSearcher";
-import U from "@/U";
+import { trimId, trimText } from "@/U";
 
 interface UserData {
   username: string;
@@ -23,16 +23,16 @@ export default class User implements Item {
   userType: number = User.Type.None;
 
   fromData(data: UserData): this {
-    this.username = U.trimId(data.username);
-    this.name = U.trimText(data.name);
+    this.username = trimId(data.username);
+    this.name = trimText(data.name);
     this.userType = data.userType;
     return this;
   }
 
   toData(): UserData {
     return {
-      username: U.trimId(this.username),
-      name: U.trimText(this.name),
+      username: trimId(this.username),
+      name: trimText(this.name),
       userType: this.userType,
     };
   }

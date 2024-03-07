@@ -1,4 +1,4 @@
-import U from "@/U";
+ 
 import Host from "@/host/Server";
 
 // icon
@@ -6,6 +6,7 @@ import IconCall from "@/assets/icon/call-color.svg";
 import IconWhatsapp from "@/assets/icon/whatsapp-color.svg";
 import IconTelegram from "@/assets/icon/telegram-color.svg";
 import IconTelephone from "@/assets/icon/telephone-color.svg";
+import { optString } from "@/U";
 
 interface ContactLinkData {
   id: string;
@@ -57,7 +58,7 @@ class ContactLink {
   id: string = "";
 
   fromData(data: ContactLinkData): this {
-    this.id = U.optString(data.id);
+    this.id =   optString(data.id);
     this.category =
       [
         ContactCategory.Call,

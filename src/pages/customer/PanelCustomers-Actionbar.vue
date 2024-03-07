@@ -4,10 +4,10 @@
   import ItemCustomerSearch from "./ItemCustomerSearch.vue";
   import Searcher from "@/tools/Searcher";
   import TabLayout from "@/components/tabLayout/TabLayout.vue";
-  import U from "@/U";
 
   import IconAdd from "@/assets/icon/add-000000.svg";
   import IconRefresh from "@/assets/icon/refresh-000000.svg";
+  import { optString } from "@/U";
 
   export default {
     components: { NavigationBar, SearchInput, ItemCustomerSearch, TabLayout },
@@ -17,7 +17,7 @@
     },
     data: (c) => ({ IconAdd, IconRefresh, results: [] }),
     computed: {
-      filter: (c) => U.optString(c.$route.query.filter),
+      filter: (c) => optString(c.$route.query.filter),
       list: (c) => {
         switch (c.filter) {
           case "service":

@@ -5,8 +5,9 @@ import ServicePrice from "./ServicePrice";
 import ServiceImage from "./ServiceImage";
 import Method from "./ServiceEventMethod";
 import ItemSearcher from "../objects/ItemSearcher";
-import U from "@/U";
+
 import User from "./User";
+import { isObject, isString, optArray, trimId, trimText } from "@/U";
 
 export default class ServiceEvent {
   stores: any;
@@ -28,15 +29,15 @@ export default class ServiceEvent {
 
   fromData(data: any) {
     this.timestamp = new ServiceTimestamp(data.time);
-    this.username = U.trimId(data.username);
-    this.name = U.trimText(data.nameOfUser);
-    this.method = U.trimId(data.method);
-    this.description = U.trimText(data.description);
-    this.status = U.trimId(data.status);
-    this.price = U.isObject(data.price)
+    this.username = trimId(data.username);
+    this.name = trimText(data.nameOfUser);
+    this.method = trimId(data.method);
+    this.description = trimText(data.description);
+    this.status = trimId(data.status);
+    this.price = isObject(data.price)
       ? new ServicePrice().fromData(data.price)
       : null;
-    this.images = U.optArray(data.images).map((image: any) => {
+    this.images = optArray(data.images).map((image: any) => {
       return new ServiceImage(this.stores).fromData(image);
     });
     return this;
@@ -45,11 +46,11 @@ export default class ServiceEvent {
   toData() {
     return {
       time: this.timestamp?.time ?? null,
-      username: U.trimId(this.username),
-      nameOfUser: U.trimText(this.name),
-      method: U.trimId(this.method),
-      description: U.trimText(this.description),
-      status: U.trimId(this.status),
+      username: trimId(this.username),
+      nameOfUser: trimText(this.name),
+      method: trimId(this.method),
+      description: trimText(this.description),
+      status: trimId(this.status),
       price: this.price?.toData() ?? null,
       images: this.images.map((image) => image.toData()),
     };
@@ -94,7 +95,7 @@ export default class ServiceEvent {
   }
 
   async fetchUser(): Promise<User | null> {
-    if (!U.isString(this.username) || this.username.trim().length === 0)
+    if (!isString(this.username) || this.username.trim().length === 0)
       return null;
     return await this.userStore.dispatch("getUserByUsername", this.username);
   }

@@ -1,7 +1,8 @@
 import Image from "./Image";
 import ItemSearcher from "../objects/ItemSearcher";
-import U from "@/U";
+
 import { Item } from "@/stores/tools/List";
+import { isObjectOnly, trimId, trimText } from "@/U";
 
 interface BrandData {
   _id: string;
@@ -21,9 +22,9 @@ export default class Brand implements Item {
   icon: Image | null = null;
 
   fromData(data: BrandData): this {
-    this.id = U.trimId(data._id);
-    this.title = U.trimText(data.title);
-    this.icon = U.isObjectOnly(data.icon)
+    this.id = trimId(data._id);
+    this.title = trimText(data.title);
+    this.icon = isObjectOnly(data.icon)
       ? new Image().fromData(data.icon)
       : null;
     return this;

@@ -3,12 +3,13 @@ import Specification from "../items/Specification";
 import Image from "../items/Image";
 import Category from "@/items/Category";
 import Vuex from "vuex";
-import U from "@/U";
+
 import StoreBuilder from "./tools/StoreBuilder";
 import ProductRequest from "@/request/Product";
 import ProductPrices from "@/items/ProductPrices";
 import Brand from "@/items/Brand";
 import ProductBundle from "@/items/ProductBundle";
+import { isString, optString, trimText } from "@/U";
 
 const init = (Stores: any) => {
   const categoryStore = Stores.category;
@@ -119,7 +120,7 @@ const init = (Stores: any) => {
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
-          item.title = U.optString(content.title);
+          item.title = optString(content.title);
         });
       },
     )
@@ -132,7 +133,7 @@ const init = (Stores: any) => {
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           const { description } = content;
-          item.description = U.isString(description) ? description.trim() : "";
+          item.description = isString(description) ? description.trim() : "";
         });
       },
     )
@@ -212,7 +213,7 @@ const init = (Stores: any) => {
           if (!item) return;
           item.addBundle(
             new ProductBundle(Stores).fromData({
-              title: U.trimText(content.bundle.title),
+              title: trimText(content.bundle.title),
             }),
           );
         });

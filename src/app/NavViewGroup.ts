@@ -1,5 +1,4 @@
-import U from "@/U";
-import { parseKey } from "./AppTool";
+import { optArray, optString, parseKey } from "@/U";
 import NavView from "./NavView";
 
 export default class NavViewGroup {
@@ -18,7 +17,7 @@ export default class NavViewGroup {
     return this;
   }
   setTitle(title: string) {
-    this.title = U.optString(title);
+    this.title = optString(title);
     return this;
   }
   setIcon(icon: unknown) {
@@ -26,7 +25,7 @@ export default class NavViewGroup {
     return this;
   }
   setValues(values: unknown[]) {
-    this.values = U.optArray(values);
+    this.values = optArray(values);
     return this;
   }
   setChildren(children: unknown) {
@@ -47,12 +46,12 @@ export default class NavViewGroup {
     this.isLink = isLink;
     return this;
   }
-  setIsQuery(isQuery: boolean){
+  setIsQuery(isQuery: boolean) {
     this.isQuery = isQuery;
     return this;
   }
 
-  setGroups(groups: NavView[]){
+  setGroups(groups: NavView[]) {
     this.groups = groups;
     return this;
   }

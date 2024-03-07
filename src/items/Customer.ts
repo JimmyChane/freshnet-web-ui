@@ -1,8 +1,9 @@
 import PhoneNumber from "./PhoneNumber";
 import ItemSearcher from "../objects/ItemSearcher";
-import U from "@/U";
+
 import CustomerDevice from "./CustomerDevice";
 import { Item } from "@/stores/tools/List";
+import { optArray, trimId, trimText } from "@/U";
 
 const textContains = ItemSearcher.textContains;
 
@@ -52,25 +53,25 @@ export default class Customer implements Item {
   }
 
   fromData(data: CustomerData): this {
-    this.id = U.trimId(data._id);
-    this.name = U.trimText(data.name);
-    const phoneNumber = U.trimText(data.phoneNumber);
+    this.id = trimId(data._id);
+    this.name = trimText(data.name);
+    const phoneNumber = trimText(data.phoneNumber);
     this.phoneNumber = phoneNumber
       ? new PhoneNumber(this.stores).fromData({ value: phoneNumber })
       : null;
-    this.description = U.trimText(data.description);
-    this.deviceIds = U.optArray(data.deviceIds)
-      .map((deviceId) => U.trimId(deviceId))
+    this.description = trimText(data.description);
+    this.deviceIds = optArray(data.deviceIds)
+      .map((deviceId) => trimId(deviceId))
       .filter((deviceId) => !!deviceId);
     return this;
   }
 
   toData(): CustomerData {
     return {
-      _id: U.trimId(this.id),
-      name: U.trimText(this.name),
+      _id: trimId(this.id),
+      name: trimText(this.name),
       phoneNumber: this.phoneNumber?.toData().value ?? "",
-      description: U.trimText(this.description),
+      description: trimText(this.description),
       deviceIds: this.deviceIds.map((deviceId) => deviceId),
     };
   }

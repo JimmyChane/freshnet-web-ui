@@ -2,7 +2,7 @@
   import { Type } from "@/items/Specification";
   import ItemSpecification from "./PageProductExport-Layout-Two-Specification.vue";
   import ProductPrice from "@/items/ProductPrice";
-  import U from "@/U";
+  import { isArray, isObjectOnly, optString } from "@/U";
 
   export default {
     components: { ItemSpecification },
@@ -36,7 +36,7 @@
       },
       specifications: (c) => {
         if (!c.product) return [];
-        if (!U.isArray(c.product.specifications)) return [];
+        if (!isArray(c.product.specifications)) return [];
 
         return c.product.specifications
           .filter((spec) => spec && spec.type && spec.content)
@@ -94,14 +94,14 @@
       gifts: (c) => {
         const gifts = c.product?.gifts ?? [];
         return gifts
-          .map((gift) => U.optString(gift).trim())
+          .map((gift) => optString(gift).trim())
           .filter((gift) => gift.length);
       },
       bundles: (c) => {
         const bundles = c.product?.bundles ?? [];
         return bundles
-          .filter((bundle) => U.isObjectOnly(bundle))
-          .map((bundle) => U.optString(bundle.title).trim())
+          .filter((bundle) => isObjectOnly(bundle))
+          .map((bundle) => optString(bundle.title).trim())
           .filter((bundle) => bundle.length);
       },
     },

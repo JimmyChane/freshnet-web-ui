@@ -1,6 +1,6 @@
 <script>
+  import { isArray, isObjectOnly } from "@/U";
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
-  import U from "@/U";
 
   export default {
     components: { ButtonIcon },
@@ -11,8 +11,8 @@
     },
     computed: {
       theMenus: (c) => {
-        if (U.isArray(c.menus)) return c.menus;
-        if (U.isObjectOnly(c.menus)) return [c.menus];
+        if (isArray(c.menus)) return c.menus;
+        if (isObjectOnly(c.menus)) return [c.menus];
         return [];
       },
 

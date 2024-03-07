@@ -8,8 +8,9 @@ import {
   previousDay,
   endOfDay,
 } from "date-fns";
-import U from "@/U";
+
 import ItemSearcher from "../objects/ItemSearcher";
+import { optNumber } from "@/U";
 const textContains = ItemSearcher.textContains;
 
 const getTextOfDayNumber = (day: number): string => {
@@ -178,8 +179,8 @@ export default class ServiceTimestamp {
   }
 
   compare(item: ServiceTimestamp): number {
-    let time1 = U.optNumber(this.time);
-    let time2 = U.optNumber(item.time);
+    let time1 = optNumber(this.time);
+    let time2 = optNumber(item.time);
     return time2 - time1;
   }
 

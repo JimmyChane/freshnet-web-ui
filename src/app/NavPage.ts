@@ -1,7 +1,7 @@
 import { Icon } from "@/host/ServerResource";
-import { IconAsset, parseIcon, parseKey } from "./AppTool";
-import U from "@/U";
+
 import NavViewGroup from "./NavViewGroup";
+import { IconAsset, optString, parseIcon, parseKey } from "@/U";
 
 export default class NavPage {
   key: string = "";
@@ -15,7 +15,7 @@ export default class NavPage {
     return this;
   }
   setTitle(title: string) {
-    this.title = U.optString(title);
+    this.title = optString(title);
     return this;
   }
   setIcon(icon: Record<string, Icon>) {
@@ -26,7 +26,7 @@ export default class NavPage {
     this.userPermissions = userPermissions;
     return this;
   }
-  setGroups(groups: NavViewGroup[]){
+  setGroups(groups: NavViewGroup[]) {
     this.groups = groups;
     return this;
   }

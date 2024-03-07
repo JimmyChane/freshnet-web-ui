@@ -1,4 +1,4 @@
-import U from "@/U";
+import { trimId, trimText } from "@/U";
 
 export default class CustomerDeviceSpecification {
   stores: any;
@@ -11,15 +11,15 @@ export default class CustomerDeviceSpecification {
   content: string = "";
 
   fromData(data: any): CustomerDeviceSpecification {
-    this.typeKey = U.trimId(data.typeKey);
-    this.content = U.trimText(data.content);
+    this.typeKey = trimId(data.typeKey);
+    this.content = trimText(data.content);
 
     return this;
   }
   toData(): any {
     return {
-      typeKey: U.trimId(this.typeKey),
-      content: U.trimText(this.content),
+      typeKey: trimId(this.typeKey),
+      content: trimText(this.content),
     };
   }
   toCount(strs: string[]): number {

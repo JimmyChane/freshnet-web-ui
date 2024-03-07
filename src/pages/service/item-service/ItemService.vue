@@ -9,13 +9,12 @@
   import ServicePrice from "@/items/ServicePrice";
   import State from "@/items/ServiceState";
 
-  import U from "@/U";
-
   import ItemServiceCustomer from "./ItemService-Customer.vue";
   import ItemServiceTimestamp from "./ItemService-Timestamp.vue";
   import ItemServiceDetailColumn from "./ItemService-DetailColumn.vue";
 
   import IconImage from "@/assets/icon/image-FFFFFF.svg";
+  import { optArray } from "@/U";
 
   export default {
     Mode,
@@ -57,7 +56,7 @@
       primaryColor: (c) => State.findByKey(c.state).primaryColor,
 
       events: (c) => {
-        return U.optArray(c.item.events)
+        return optArray(c.item.events)
           .map((event) => event)
           .sort((event1, event2) => event1.compare(event2));
       },

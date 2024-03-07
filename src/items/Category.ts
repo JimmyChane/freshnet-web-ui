@@ -1,6 +1,6 @@
 import Image from "./Image";
 import ItemSearcher from "../objects/ItemSearcher";
-import U from "@/U";
+
 import Server from "@/host/Server";
 import { Item } from "@/stores/tools/List";
 
@@ -19,6 +19,7 @@ import BgStorage from "@/assets/bg/denny-muller-1qL31aacAPA-unsplash-w300h100.we
 import BgRam from "@/assets/bg/harrison-broadbent-ING1Uf1Fc30-unsplash-w300h100.webp";
 import BgNetwork from "@/assets/bg/jordan-harrison-40XgDxBfYXM-unsplash-w300h100.webp";
 import BgOther from "@/assets/bg/christopher-bill-3l19r5EOZaw-unsplash-w300h100.webp";
+import { isObject, trimId, trimStringAll } from "@/U";
 
 class CategoryBackground extends Image {
   static TABLET = new Image().fromData({ method: "link", path: BgTablet });
@@ -119,10 +120,10 @@ export default class Category implements Item {
   background: Image | null = null;
 
   fromData(data: CategoryData): this {
-    this.id = U.trimId(data._id);
-    this.key = U.trimId(data.key);
-    this.title = U.trimStringAll(data.title);
-    this.icon = U.isObject(data.icon) ? new Image().fromData(data.icon) : null;
+    this.id = trimId(data._id);
+    this.key = trimId(data.key);
+    this.title = trimStringAll(data.title);
+    this.icon = isObject(data.icon) ? new Image().fromData(data.icon) : null;
     this.background = CategoryBackground.getBackground(this.key);
 
     return this;

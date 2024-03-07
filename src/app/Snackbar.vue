@@ -1,5 +1,5 @@
 <script lang="ts">
-  import U from "@/U";
+  import { optArray } from "@/U";
   import Notification from "@/tools/Notification";
   import Vue from "vue";
 
@@ -9,7 +9,7 @@
     },
     computed: {
       actions(): any[] {
-        return U.optArray(this.item.actions);
+        return optArray(this.item.actions);
       },
       parsed_actions(): any[] {
         return this.actions.filter((action) => {

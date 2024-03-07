@@ -2,10 +2,10 @@
   const selectionNone = { key: "", title: "None" };
 
   import Menu from "@/components/Menu.vue";
-  import U from "@/U";
 
   import IconArrowDownLight from "@/assets/icon/arrow_down-white.svg";
   import IconArrowDownDark from "@/assets/icon/arrow_down-black.svg";
+  import { isColorDark, isString } from "@/U";
 
   export default {
     components: { Menu },
@@ -35,13 +35,13 @@
         return item?.icon?.white ?? "";
       },
       currentColor: (c) => {
-        if (!c.currentMenu || !U.isString(c.currentMenu.primaryColor)) {
+        if (!c.currentMenu || !isString(c.currentMenu.primaryColor)) {
           return "hsl(0, 0%, 96%)";
         }
         return c.currentMenu.primaryColor;
       },
       currentFontColor: (c) => {
-        return U.isColorDark(c.currentColor, 80) ? "white" : "black";
+        return isColorDark(c.currentColor, 80) ? "white" : "black";
       },
     },
     watch: {

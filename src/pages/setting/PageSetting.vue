@@ -6,12 +6,12 @@
   import ItemSettingBusinessHours from "./ItemSettingBusinessHours.vue";
   import SettingModule from "@/items/Setting";
 
-  import U from "@/U";
   import Vue from "vue";
   import Server from "@/host/Server";
   import IconPack from "@/app/IconPack";
 
   import IconRefresh from "@/assets/icon/refresh-000000.svg";
+  import { isArray, optString } from "@/U";
 
   class SettingBuilder {
     setKey(key = "") {
@@ -41,7 +41,7 @@
       setting.type = this.type;
       setting.readonly = this.readonly;
 
-      if (U.isArray(this.list)) {
+      if (isArray(this.list)) {
         setting.list = this.list.map((subSetting) => {
           if (subSetting instanceof SettingBuilder) {
             subSetting = subSetting.build();
@@ -58,20 +58,20 @@
 
   class Setting {
     getKey() {
-      return U.optString(this.key);
+      return optString(this.key);
     }
     getTitle() {
-      return U.optString(this.title);
+      return optString(this.title);
     }
     getParentTitle() {
       return this.parent?.getTitle() ?? "";
     }
 
     getType() {
-      return U.optString(this.type);
+      return optString(this.type);
     }
     getList() {
-      return U.optArray(this.list);
+      return optArray(this.list);
     }
     isReadonly() {
       return this.readonly;

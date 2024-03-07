@@ -1,9 +1,10 @@
 <script>
   import ButtonIcon from "@/components/button/ButtonIcon.vue";
   import LeftNavClickableBody from "./NavigationDrawer-Clickable-Body.vue";
-  import U from "@/U";
+
   import NavPage from "@/app/NavPage";
   import NavView from "@/app/NavView";
+  import { optArray } from "@/U";
 
   export default {
     emits: ["click", "click-expand"],
@@ -20,7 +21,7 @@
           : "NavigationDrawer-Clickable-notSelected";
       },
       hasChildren() {
-        return U.optArray(this.item.groups).length > 0;
+        return optArray(this.item.groups).length > 0;
       },
 
       isWide() {

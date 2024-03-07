@@ -1,4 +1,4 @@
-import U from "@/U";
+import { isNumber } from "@/U";
 import { RouterMode } from "vue-router";
 
 class AppHost {
@@ -19,7 +19,7 @@ class AppHost {
     return window.location.port;
   }
   private static parsePort(port: string | any): string {
-    if (!U.isNumber(port)) port = Number.parseInt(port);
+    if (!isNumber(port)) port = Number.parseInt(port);
     if (Number.isNaN(port)) port = 80;
     return `${port}`;
   }

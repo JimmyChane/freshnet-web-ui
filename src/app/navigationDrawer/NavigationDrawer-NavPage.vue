@@ -1,8 +1,8 @@
 <script>
-  import U from "@/U";
   import NavViewGroup from "./NavigationDrawer-NavViewGroup.vue";
   import NavigationLeftClickable from "./NavigationDrawer-Clickable.vue";
   import NavPage from "@/app/NavPage";
+  import { optArray } from "@/U";
 
   export default {
     components: { NavViewGroup, NavigationLeftClickable },
@@ -10,7 +10,7 @@
       group1: { type: NavPage, default: () => null },
     },
     computed: {
-      group2s: (c) => U.optArray(c.group1.groups),
+      group2s: (c) => optArray(c.group1.groups),
       hasChildren: (c) => c.group2s.length > 0,
 
       isExpanded: (c) => c.group1.isExpanded(),

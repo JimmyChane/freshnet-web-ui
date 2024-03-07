@@ -1,4 +1,4 @@
-import U from "@/U";
+import { trimId, trimText } from "@/U";
 
 export default class Label {
   static URGENT: Label = new Label().fromData({
@@ -14,14 +14,14 @@ export default class Label {
   hexColor: string = "";
 
   fromData(data: { title: string; hexColor: string }): this {
-    this.title = U.trimText(data.title);
-    this.hexColor = U.trimId(data.hexColor);
+    this.title = trimText(data.title);
+    this.hexColor = trimId(data.hexColor);
     return this;
   }
   toData(): { title: string; hexColor: string } {
     return {
-      title: U.trimText(this.title),
-      hexColor: U.trimId(this.hexColor),
+      title: trimText(this.title),
+      hexColor: trimId(this.hexColor),
     };
   }
   toCount(strs: string[]): number {

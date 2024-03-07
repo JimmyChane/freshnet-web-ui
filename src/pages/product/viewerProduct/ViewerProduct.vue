@@ -17,7 +17,7 @@
   import SettingModule from "@/items/Setting";
   import Actionbar from "@/components/actionbar/Actionbar.vue";
   import chroma from "chroma-js";
-  import U from "@/U";
+  import { isObjectOnly, optString, trimText } from "@/U";
 
   export default {
     components: {
@@ -169,11 +169,11 @@
       whatIncludeds: (c) => {
         return [
           ...c.gifts
-            .map((gift) => U.trimText(gift))
+            .map((gift) => trimText(gift))
             .filter((gift) => gift.length),
           ...c.bundles
-            .filter((bundle) => U.isObjectOnly(bundle))
-            .map((bundle) => U.trimText(bundle.title))
+            .filter((bundle) => isObjectOnly(bundle))
+            .map((bundle) => trimText(bundle.title))
             .filter((bundle) => bundle.length),
         ];
       },
@@ -285,10 +285,10 @@
       },
 
       obtainKeyOfSpecificationType(type) {
-        if (U.isObjectOnly(type)) {
+        if (isObjectOnly(type)) {
           return this.obtainKeyOfSpecificationType(type.key);
         }
-        return U.optString(type);
+        return optString(type);
       },
 
       addArrowListener() {
