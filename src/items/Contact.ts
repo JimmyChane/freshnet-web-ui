@@ -17,23 +17,6 @@ interface ContactData {
 }
 
 class ContactCategory {
-  static Call: ContactCategory = new ContactCategory('call', 'Call', IconCall);
-  static Whatsapp: ContactCategory = new ContactCategory(
-    'whatsapp',
-    'Whatsapp',
-    IconWhatsapp,
-  );
-  static Telegram: ContactCategory = new ContactCategory(
-    'telegram',
-    'Telegram',
-    IconTelegram,
-  );
-  static Telephone: ContactCategory = new ContactCategory(
-    'telephone',
-    'Telephone',
-    IconTelephone,
-  );
-
   key: string = '';
   title: string = '';
   icon: string = '';
@@ -44,6 +27,27 @@ class ContactCategory {
     this.icon = icon;
   }
 }
+
+export const CallContactCategory = new ContactCategory(
+  'call',
+  'Call',
+  IconCall,
+);
+export const WhatsappContactCategory = new ContactCategory(
+  'whatsapp',
+  'Whatsapp',
+  IconWhatsapp,
+);
+export const TelegramContactCategory = new ContactCategory(
+  'telegram',
+  'Telegram',
+  IconTelegram,
+);
+export const TelephoneContactCategory = new ContactCategory(
+  'telephone',
+  'Telephone',
+  IconTelephone,
+);
 
 class ContactLink {
   stores: any = null;
@@ -59,10 +63,10 @@ class ContactLink {
     this.id = optString(data.id);
     this.category =
       [
-        ContactCategory.Call,
-        ContactCategory.Whatsapp,
-        ContactCategory.Telegram,
-        ContactCategory.Telephone,
+        CallContactCategory,
+        WhatsappContactCategory,
+        TelegramContactCategory,
+        TelephoneContactCategory,
       ].find((category) => category.key === data.category) ?? null;
 
     return this;
@@ -88,26 +92,26 @@ class ContactLink {
 
   toHtmlHref(): string {
     if (
-      this.category === ContactCategory.Call ||
-      this.category === ContactCategory.Telephone
+      this.category === CallContactCategory ||
+      this.category === TelephoneContactCategory
     )
       return `tel:+6${this.id}`;
-    if (this.category === ContactCategory.Whatsapp)
+    if (this.category === WhatsappContactCategory)
       return `https://api.whatsapp.com/send?phone=6${this.id}`;
-    if (this.category === ContactCategory.Telegram)
+    if (this.category === TelegramContactCategory)
       return `https://t.me/${this.id}`;
     return '';
   }
 
   toHtmlTarget(): string {
     if (
-      this.category === ContactCategory.Call ||
-      this.category === ContactCategory.Telephone
+      this.category === CallContactCategory ||
+      this.category === TelephoneContactCategory
     )
       return '_self';
     if (
-      this.category === ContactCategory.Whatsapp ||
-      this.category === ContactCategory.Telegram
+      this.category === WhatsappContactCategory ||
+      this.category === TelegramContactCategory
     )
       return '_blank';
     return '';

@@ -5,7 +5,7 @@ import ImageView from '@/components/ImageView.vue';
 import ImageViews from '@/components/ImageViews.vue';
 import LabelCount from '@/components/LabelCount.vue';
 import ServicePrice from '@/items/ServicePrice';
-import State from '@/items/ServiceState';
+import { findServiceStateByKey } from '@/items/ServiceState';
 import ItemButton from '@/pages/manage/PanelItems-ItemButton.vue';
 
 import ItemServiceCustomer from './ItemService-Customer.vue';
@@ -51,7 +51,7 @@ export default {
     totalQuoteAmount: (c) => c.totalQuote?.amount ?? 0,
     timestamp: (c) => c.item.timestamp,
     state: (c) => c.item.state,
-    primaryColor: (c) => State.findByKey(c.state).primaryColor,
+    primaryColor: (c) => findServiceStateByKey(c.state).primaryColor,
 
     events: (c) => {
       return optArray(c.item.events)

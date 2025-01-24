@@ -4,37 +4,37 @@ import { Item } from '@/stores/tools/List';
 import ItemSearcher from '../objects/ItemSearcher';
 import Image from './Image';
 
+export enum SpecificationKey {
+  Processor = 'processor',
+  Ram = 'ram',
+  Size = 'size',
+  Storage = 'storage',
+  Resolution = 'resolution',
+  Display = 'display',
+  Monitor = 'monitor',
+  Graphic = 'graphic',
+
+  Keyboard = 'keyboard',
+  Backlight = 'backlight',
+  Stylus = 'stylus',
+  Camera = 'camera',
+  Battery = 'battery',
+
+  Speed = 'speed',
+  Wifi = 'wifi',
+  Bluetooth = 'bluetooth',
+
+  Print = 'print',
+  Scan = 'scan',
+  Paper = 'paper',
+  Ink = 'ink',
+  Connectivity = 'connectivity',
+
+  Colour = 'colour',
+  Os = 'os',
+}
+
 export class Type implements Item {
-  static Key = {
-    Processor: 'processor',
-    Ram: 'ram',
-    Size: 'size',
-    Storage: 'storage',
-    Resolution: 'resolution',
-    Display: 'display',
-    Monitor: 'monitor',
-    Graphic: 'graphic',
-
-    Keyboard: 'keyboard',
-    Backlight: 'backlight',
-    Stylus: 'stylus',
-    Camera: 'camera',
-    Battery: 'battery',
-
-    Speed: 'speed',
-    Wifi: 'wifi',
-    Bluetooth: 'bluetooth',
-
-    Print: 'print',
-    Scan: 'scan',
-    Paper: 'paper',
-    Ink: 'ink',
-    Connectivity: 'connectivity',
-
-    Colour: 'colour',
-    Os: 'os',
-  };
-
   stores: any;
 
   constructor(stores: any) {

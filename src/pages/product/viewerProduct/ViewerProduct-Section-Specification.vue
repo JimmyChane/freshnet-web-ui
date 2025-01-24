@@ -1,6 +1,6 @@
 <script>
 import IconEdit from '@/assets/icon/edit-000000.svg';
-import { Type } from '@/items/Specification';
+import { SpecificationKey } from '@/items/Specification';
 
 import ItemProductSpecification from './ViewerProduct-Section-Specification-Item.vue';
 import Section from './ViewerProduct-Section.vue';
@@ -14,8 +14,8 @@ export default {
   },
   computed: {
     keys() {
-      return Object.keys(Type.Key).map((objectKey) => {
-        return Type.Key[objectKey];
+      return Object.keys(SpecificationKey).map((objectKey) => {
+        return SpecificationKey[objectKey];
       });
     },
     specifications() {

@@ -1,8 +1,10 @@
 <script>
 import PanelAction from '@/components/panel/PanelAction.vue';
 import TypeSelector from '@/components/selector/TypeSelector.vue';
-import State from '@/items/ServiceState';
-import ServiceState from '@/items/ServiceState';
+import ServiceState, {
+  PENDING_SERVICE_STATE,
+  mapServiceState,
+} from '@/items/ServiceState';
 
 import LayoutFindCustomer from './LayoutFindCustomer.vue';
 import BodyBelongings from './WindowUpdateService-belongings.vue';
@@ -47,7 +49,7 @@ export default {
     },
 
     stateMenus: (c) => {
-      return State.map((state) => {
+      return mapServiceState((state) => {
         return {
           key: state.key,
           title: state.title,
@@ -67,7 +69,7 @@ export default {
       };
 
       if (!this.state) {
-        this.data.state = ServiceState.PENDING.key;
+        this.data.state = PENDING_SERVICE_STATE.key;
       }
 
       const now = new Date();

@@ -1,7 +1,11 @@
 import { isObject, isString, optArray, trimId, trimText } from '@/U';
 
 import ItemSearcher from '../objects/ItemSearcher';
-import Method from './ServiceEventMethod';
+import {
+  INFO_SERVICE_EVENT_METHOD,
+  PURCHASE_SERVICE_EVENT_METHOD,
+  QUOTATION_SERVICE_EVENT_METHOD,
+} from './ServiceEventMethod';
 import ServiceImage from './ServiceImage';
 import ServicePrice from './ServicePrice';
 import ServiceTimestamp from './ServiceTimestamp';
@@ -79,15 +83,15 @@ export default class ServiceEvent {
   }
 
   isInfo() {
-    return this.method === Method.INFO.key;
+    return this.method === INFO_SERVICE_EVENT_METHOD.key;
   }
 
   isQuotation() {
-    return this.method === Method.QUOTATION.key;
+    return this.method === QUOTATION_SERVICE_EVENT_METHOD.key;
   }
 
   isPurchase() {
-    return this.method === Method.PURCHASE.key;
+    return this.method === PURCHASE_SERVICE_EVENT_METHOD.key;
   }
 
   compare(item: ServiceEvent) {

@@ -15,14 +15,14 @@ interface CustomerData {
   deviceIds: string[];
 }
 
-export default class Customer implements Item {
-  static Requirement = {
-    name: { isRequired: true },
-    phoneNumber: { isRequired: false },
-    description: { isRequired: false },
-    deviceIds: { isRequired: false },
-  };
+export const RequirementCustomer = {
+  name: { isRequired: true },
+  phoneNumber: { isRequired: false },
+  description: { isRequired: false },
+  deviceIds: { isRequired: false },
+};
 
+export default class Customer implements Item {
   stores: any = null;
   customerStore: any = null;
 

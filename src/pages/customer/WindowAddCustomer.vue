@@ -2,7 +2,7 @@
 import Input from '@/components/Input.vue';
 import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
-import Customer from '@/items/Customer';
+import { RequirementCustomer } from '@/items/Customer';
 
 export default {
   components: { PanelAction, Input, TextArea },
@@ -10,7 +10,7 @@ export default {
     popupWindow: { type: Object },
   },
   data: (c) => ({
-    Requirement: Customer.Requirement,
+    Requirement: RequirementCustomer,
     data: { name: '', phoneNumber: '', description: '' },
   }),
   computed: {

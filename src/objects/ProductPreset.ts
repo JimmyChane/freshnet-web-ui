@@ -1,6 +1,6 @@
 import Brand from '@/items/Brand';
 import Product from '@/items/Product';
-import { Type } from '@/items/Specification';
+import { SpecificationKey } from '@/items/Specification';
 import Specification from '@/items/Specification';
 
 class Brands {
@@ -189,9 +189,9 @@ export default class ProductPreset {
         const content = itemSpec.content.toLowerCase();
 
         if (
-          key === Type.Key.Processor ||
-          key === Type.Key.Ram ||
-          key === Type.Key.Storage
+          key === SpecificationKey.Processor ||
+          key === SpecificationKey.Ram ||
+          key === SpecificationKey.Storage
         ) {
           for (const compareType of Object.keys(compares)) {
             if (!content.includes(compareType)) {
@@ -209,7 +209,7 @@ export default class ProductPreset {
           }
         }
 
-        if (key === Type.Key.Size) {
+        if (key === SpecificationKey.Size) {
           for (const compare of compares) {
             if (content.includes(compare)) {
               return {
@@ -219,7 +219,10 @@ export default class ProductPreset {
               };
             }
           }
-        } else if (key === Type.Key.Resolution || key === Type.Key.Display) {
+        } else if (
+          key === SpecificationKey.Resolution ||
+          key === SpecificationKey.Display
+        ) {
           for (const compare of compares) {
             if (content.includes(compare)) {
               return {
@@ -231,7 +234,7 @@ export default class ProductPreset {
           }
         }
 
-        if (key === Type.Key.Graphic) {
+        if (key === SpecificationKey.Graphic) {
           const reversedCompares = compares
             .map((compare: any) => compare)
             .reverse();

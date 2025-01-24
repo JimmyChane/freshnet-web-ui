@@ -3,7 +3,7 @@ import chroma from 'chroma-js';
 
 import Selector from '@/components/selector/Selector.vue';
 import Service from '@/items/Service';
-import State from '@/items/ServiceState';
+import { findServiceStateByKey } from '@/items/ServiceState';
 import Section from '@/pages/manage/PanelItem-Section.vue';
 
 import ButtonAddImage from './ButtonAddImage.vue';
@@ -51,7 +51,7 @@ export default {
     stateColor: (c) => {
       if (!c.service) return;
 
-      const state = State.findByKey(c.service.state);
+      const state = findServiceStateByKey(c.service.state);
       return chroma(state?.primaryColor ?? 'white');
     },
     backgroundColor() {

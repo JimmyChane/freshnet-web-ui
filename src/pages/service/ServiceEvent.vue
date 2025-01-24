@@ -6,8 +6,12 @@ import MenuOption from '@/components/button/MenuOption.vue';
 import WindowRemove from '@/components/window/WindowRemove.vue';
 import Service from '@/items/Service';
 import ServiceEvent from '@/items/ServiceEvent';
-import Method from '@/items/ServiceEventMethod';
-import ServiceEventMethod from '@/items/ServiceEventMethod';
+import {
+  INFO_SERVICE_EVENT_METHOD,
+  INITIAL_SERVICE_EVENT_METHOD,
+  PURCHASE_SERVICE_EVENT_METHOD,
+  QUOTATION_SERVICE_EVENT_METHOD,
+} from '@/items/ServiceEventMethod';
 
 import ImageView from './ServiceEvent-Image.vue';
 import WindowUpdateEventDescription from './WindowUpdateEventDescription.vue';
@@ -68,7 +72,7 @@ export default {
     },
 
     isInitial() {
-      return this.event.method === ServiceEventMethod.INITIAL.key;
+      return this.event.method === INITIAL_SERVICE_EVENT_METHOD.key;
     },
 
     menus() {
@@ -175,9 +179,11 @@ export default {
     },
 
     methodContext(property = '') {
-      if (this.event.isInfo()) return Method.INFO[property];
-      if (this.event.isQuotation()) return Method.QUOTATION[property];
-      if (this.event.isPurchase()) return Method.PURCHASE[property];
+      if (this.event.isInfo()) return INFO_SERVICE_EVENT_METHOD[property];
+      if (this.event.isQuotation())
+        return QUOTATION_SERVICE_EVENT_METHOD[property];
+      if (this.event.isPurchase())
+        return PURCHASE_SERVICE_EVENT_METHOD[property];
       return null;
     },
 

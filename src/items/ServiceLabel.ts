@@ -1,15 +1,6 @@
 import { trimId, trimText } from '@/U';
 
 export default class Label {
-  static URGENT: Label = new Label().fromData({
-    title: 'Urgent',
-    hexColor: 'd93f35',
-  });
-  static WARRANTY: Label = new Label().fromData({
-    title: 'Warranty',
-    hexColor: 'db950c',
-  });
-
   title: string = '';
   hexColor: string = '';
 
@@ -36,3 +27,12 @@ export default class Label {
     return 0;
   }
 }
+
+export const URGENT_SERVICE_LABEL = new Label().fromData({
+  title: 'Urgent',
+  hexColor: 'd93f35',
+});
+export const WARRANTY_SERVICE_LABEL = new Label().fromData({
+  title: 'Warranty',
+  hexColor: 'db950c',
+});

@@ -4,7 +4,7 @@ import IconDetail from '@/assets/icon/detail-000000.svg';
 import IconGrid from '@/assets/icon/grid-000000.svg';
 import IconList from '@/assets/icon/list-000000.svg';
 import Empty from '@/components/Empty.vue';
-import ServiceState from '@/items/ServiceState';
+import { mapServiceState } from '@/items/ServiceState';
 import PageService from '@/pages/service/PageService.vue';
 
 import ListServices from './ListServices.vue';
@@ -70,7 +70,7 @@ export default {
     setPageSelected(state) {
       const menu = this.stateMenus.find((menu) => menu.key === state);
 
-      const states = ServiceState.map((state) => state);
+      const states = mapServiceState((state) => state);
       if (!menu && this.stateMenus.length && states.length) {
         this.$store.getters.replaceQuery({ query: { state: states[0].key } });
       }
@@ -89,7 +89,7 @@ export default {
 
     invalidateList() {
       const services = Array.isArray(this.services) ? this.services : [];
-      ServiceState.map((state) => {
+      mapServiceState((state) => {
         this.filterList(services, state.key);
       });
 
@@ -106,7 +106,7 @@ export default {
     },
   },
   mounted() {
-    this.stateMenus = ServiceState.map((state) => {
+    this.stateMenus = mapServiceState((state) => {
       return {
         key: state.key,
         title: state.title,

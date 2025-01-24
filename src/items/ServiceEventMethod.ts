@@ -3,11 +3,6 @@ const PURPLE = '#961d96';
 const GREEN = '#258915';
 
 export default class ServiceEventMethod {
-  static INITIAL = new ServiceEventMethod('initial', 'Initial', BLUE);
-  static INFO = new ServiceEventMethod('info', 'Info', BLUE);
-  static QUOTATION = new ServiceEventMethod('quotation', 'Quotation', PURPLE);
-  static PURCHASE = new ServiceEventMethod('purchase', 'Purchase', GREEN);
-
   key: string;
   title: string;
   primaryColor: string;
@@ -18,3 +13,24 @@ export default class ServiceEventMethod {
     this.primaryColor = primaryColor;
   }
 }
+
+export const INITIAL_SERVICE_EVENT_METHOD = new ServiceEventMethod(
+  'initial',
+  'Initial',
+  BLUE,
+);
+export const INFO_SERVICE_EVENT_METHOD = new ServiceEventMethod(
+  'info',
+  'Info',
+  BLUE,
+);
+export const QUOTATION_SERVICE_EVENT_METHOD = new ServiceEventMethod(
+  'quotation',
+  'Quotation',
+  PURPLE,
+);
+export const PURCHASE_SERVICE_EVENT_METHOD = new ServiceEventMethod(
+  'purchase',
+  'Purchase',
+  GREEN,
+);

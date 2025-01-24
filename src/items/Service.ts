@@ -12,12 +12,24 @@ import ItemSearcher from '../objects/ItemSearcher';
 import ServiceBelonging from './ServiceBelonging';
 import ServiceCustomer from './ServiceCustomer';
 import ServiceEvent from './ServiceEvent';
-import Method from './ServiceEventMethod';
-import ServiceEventMethod from './ServiceEventMethod';
+import {
+  INITIAL_SERVICE_EVENT_METHOD,
+  PURCHASE_SERVICE_EVENT_METHOD,
+} from './ServiceEventMethod';
 import ServiceImage from './ServiceImage';
-import Label from './ServiceLabel';
+import Label, {
+  URGENT_SERVICE_LABEL,
+  WARRANTY_SERVICE_LABEL,
+} from './ServiceLabel';
 import ServicePrice from './ServicePrice';
-import State from './ServiceState';
+import {
+  COMPLETED_SERVICE_STATE,
+  PENDING_SERVICE_STATE,
+  REJECTED_SERVICE_STATE,
+  WAITING_SERVICE_STATE,
+  findServiceStateByKey,
+  indexServiceStateOfKey,
+} from './ServiceState';
 import ServiceTimestamp from './ServiceTimestamp';
 import User from './User';
 
@@ -51,20 +63,20 @@ export default class Service implements Item {
     this.name = trimText(data.nameOfUser);
 
     switch (trimId(data.state)) {
-      case State.PENDING.key:
-        this.state = State.PENDING.key;
+      case PENDING_SERVICE_STATE.key:
+        this.state = PENDING_SERVICE_STATE.key;
         break;
-      case State.WAITING.key:
-        this.state = State.WAITING.key;
+      case WAITING_SERVICE_STATE.key:
+        this.state = WAITING_SERVICE_STATE.key;
         break;
-      case State.COMPLETED.key:
-        this.state = State.COMPLETED.key;
+      case COMPLETED_SERVICE_STATE.key:
+        this.state = COMPLETED_SERVICE_STATE.key;
         break;
-      case State.REJECTED.key:
-        this.state = State.REJECTED.key;
+      case REJECTED_SERVICE_STATE.key:
+        this.state = REJECTED_SERVICE_STATE.key;
         break;
       default:
-        this.state = State.PENDING.key;
+        this.state = PENDING_SERVICE_STATE.key;
     }
 
     this.customer = isObject(data.customer)
@@ -91,20 +103,20 @@ export default class Service implements Item {
 
     // refactoring notice to labels
     const existingLabelUrgent = this.labels.find((label) => {
-      return label.title === Label.URGENT.title;
+      return label.title === URGENT_SERVICE_LABEL.title;
     });
     const existingLabelWarranty = this.labels.find((label) => {
-      return label.title === Label.WARRANTY.title;
+      return label.title === WARRANTY_SERVICE_LABEL.title;
     });
     const notice = {
       isUrgent: !!data.notice?.isUrgent ?? false,
       isWarranty: !!data.notice?.isWarranty ?? false,
     };
     if (notice.isUrgent && !existingLabelUrgent) {
-      this.labels.push(Label.URGENT);
+      this.labels.push(URGENT_SERVICE_LABEL);
     }
     if (notice.isWarranty && !existingLabelWarranty) {
-      this.labels.push(Label.WARRANTY);
+      this.labels.push(WARRANTY_SERVICE_LABEL);
     }
 
     return this;
@@ -127,7 +139,7 @@ export default class Service implements Item {
   toCount(strs: string[]): number {
     const { customer, timestamp, state: stateKey, description } = this;
 
-    const state = State.findByKey(stateKey);
+    const state = findServiceStateByKey(stateKey);
     const stateTitle = state?.title ?? '';
 
     const ts = [
@@ -151,7 +163,7 @@ export default class Service implements Item {
     const serviceData = this.toData();
 
     const serviceEvent = new ServiceEvent(this.stores).fromData({
-      method: ServiceEventMethod.INITIAL.key,
+      method: INITIAL_SERVICE_EVENT_METHOD.key,
       time: serviceData.time,
       username: serviceData.username,
       name: serviceData.nameOfUser,
@@ -174,11 +186,11 @@ export default class Service implements Item {
   }
 
   isUrgent(): boolean {
-    return !!this.labels.find((label) => label.isEqual(Label.URGENT));
+    return !!this.labels.find((label) => label.isEqual(URGENT_SERVICE_LABEL));
   }
   isWarranty(): boolean {
     return !!this.labels.find((label) => {
-      return label.isEqual(Label.WARRANTY);
+      return label.isEqual(WARRANTY_SERVICE_LABEL);
     });
   }
 
@@ -189,7 +201,9 @@ export default class Service implements Item {
     return value;
   }
   compareState(item: Service): number {
-    return State.indexOfKey(this.state) - State.indexOfKey(item.state);
+    return (
+      indexServiceStateOfKey(this.state) - indexServiceStateOfKey(item.state)
+    );
   }
   compareTimestamp(item: Service): number {
     if (this.timestamp && item.timestamp)
@@ -233,7 +247,7 @@ export default class Service implements Item {
   toTotalPrice(): ServicePrice {
     return this._events.reduce(
       (cost, event) => {
-        if (event.price && event.method === Method.PURCHASE.key) {
+        if (event.price && event.method === PURCHASE_SERVICE_EVENT_METHOD.key) {
           cost = cost.plus(event.price);
         }
         return cost;
@@ -266,12 +280,12 @@ export default class Service implements Item {
 
   setUrgent(bool: boolean = false) {
     optBoolean(bool)
-      ? this.addLabel(Label.URGENT)
-      : this.removeLabel(Label.URGENT);
+      ? this.addLabel(URGENT_SERVICE_LABEL)
+      : this.removeLabel(URGENT_SERVICE_LABEL);
   }
   setWarranty(bool: boolean = false) {
     optBoolean(bool)
-      ? this.addLabel(Label.WARRANTY)
-      : this.removeLabel(Label.WARRANTY);
+      ? this.addLabel(WARRANTY_SERVICE_LABEL)
+      : this.removeLabel(WARRANTY_SERVICE_LABEL);
   }
 }

@@ -12,7 +12,7 @@ import MenuIconVue from '@/components/MenuIcon.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import Selector from '@/components/selector/Selector.vue';
 import Service from '@/items/Service';
-import State from '@/items/ServiceState';
+import { mapServiceState } from '@/items/ServiceState';
 import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
 
 import BelongingVue from './ItemBelonging.vue';
@@ -78,7 +78,7 @@ export default {
     isPhoneNumber: (c) => !!c.phoneNumberStr,
 
     stateMenus: (c) => {
-      return State.map((state) => {
+      return mapServiceState((state) => {
         return {
           key: state.key,
           title: state.title,

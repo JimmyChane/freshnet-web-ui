@@ -17,22 +17,19 @@ import ProductBundle from './ProductBundle';
 import ProductPrice from './ProductPrice';
 import ProductPrices from './ProductPrices';
 import ProductStock from './ProductStock';
-import Specification, { Type } from './Specification';
+import Specification, { SpecificationKey } from './Specification';
 
 const textContains = ItemSearcher.textContains;
 
-export default class Product implements Item {
-  private static FORMAT_SPECIFICATION_ORDERS = Object.values(Type.Key);
-  private static putForwardSlash(
-    texts: string[],
-    separation: string = ' / ',
-  ): string {
-    return texts.reduce((result, text, i) => {
-      if (i === 0) return text;
-      return `${result}${separation}${text}`;
-    });
-  }
+const FORMAT_SPECIFICATION_ORDERS = Object.values(SpecificationKey);
+function putForwardSlash(texts: string[], separation: string = ' / '): string {
+  return texts.reduce((result, text, i) => {
+    if (i === 0) return text;
+    return `${result}${separation}${text}`;
+  });
+}
 
+export default class Product implements Item {
   stores: any;
   categoryStore: any;
   productStore: any;
@@ -229,15 +226,13 @@ export default class Product implements Item {
     const texts: string[] = [];
     const specs = this.specifications
       .filter((specification) => {
-        return Product.FORMAT_SPECIFICATION_ORDERS.includes(
-          specification.typeKey,
-        );
+        return FORMAT_SPECIFICATION_ORDERS.includes(specification.typeKey);
       })
       .sort((specification1, specification2) => {
-        const index1 = Product.FORMAT_SPECIFICATION_ORDERS.indexOf(
+        const index1 = FORMAT_SPECIFICATION_ORDERS.indexOf(
           specification1.typeKey,
         );
-        const index2 = Product.FORMAT_SPECIFICATION_ORDERS.indexOf(
+        const index2 = FORMAT_SPECIFICATION_ORDERS.indexOf(
           specification2.typeKey,
         );
 
@@ -247,7 +242,7 @@ export default class Product implements Item {
     // title
     const title = await this.fetchFullTitle();
     const colorSpecification = this.specifications.find((specification) => {
-      return specification.typeKey === Type.Key.Colour;
+      return specification.typeKey === SpecificationKey.Colour;
     });
     if (colorSpecification) {
       specs.splice(specs.indexOf(colorSpecification), 1);
@@ -269,7 +264,7 @@ export default class Product implements Item {
       texts.push(price);
     }
 
-    return Product.putForwardSlash(texts);
+    return putForwardSlash(texts);
   }
 
   isPricePromotion(): boolean {

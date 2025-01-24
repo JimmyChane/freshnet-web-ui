@@ -5,7 +5,10 @@ import ServiceBelonging from '@/items/ServiceBelonging';
 import ServiceCustomer from '@/items/ServiceCustomer';
 import ServiceEvent from '@/items/ServiceEvent';
 import ServiceImage from '@/items/ServiceImage';
-import ServiceLabel from '@/items/ServiceLabel';
+import {
+  URGENT_SERVICE_LABEL,
+  WARRANTY_SERVICE_LABEL,
+} from '@/items/ServiceLabel';
 import ServiceRequest from '@/request/Service';
 
 import StoreBuilder from './tools/StoreBuilder';
@@ -258,7 +261,7 @@ const init = (Stores: any) => {
     .action(
       'updateUrgentOfId',
       async (context, arg: { serviceID: string; isUrgent: boolean }) => {
-        const label = ServiceLabel.URGENT.toData();
+        const label = URGENT_SERVICE_LABEL.toData();
         if (arg.isUrgent) {
           return context.dispatch('addLabelToId', {
             serviceID: arg.serviceID,
@@ -275,7 +278,7 @@ const init = (Stores: any) => {
     .action(
       'updateWarrantyOfId',
       async (context, arg: { serviceID: string; isWarranty: boolean }) => {
-        const label = ServiceLabel.WARRANTY.toData();
+        const label = WARRANTY_SERVICE_LABEL.toData();
         if (arg.isWarranty) {
           return context.dispatch('addLabelToId', {
             serviceID: arg.serviceID,

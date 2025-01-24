@@ -4,9 +4,12 @@ import { Item } from '@/stores/tools/List';
 import ItemSearcher from '../objects/ItemSearcher';
 import OrderCustomer from './OrderCustomer';
 
-export default class Order implements Item {
-  static Status = { Pending: 0, Completed: 1 };
+export enum OrderStatus {
+  Pending = 0,
+  Completed = 1,
+}
 
+export default class Order implements Item {
   stores: any;
 
   constructor(stores: any) {
@@ -17,7 +20,7 @@ export default class Order implements Item {
   customer: OrderCustomer | null = null;
   content: string = '';
   createdAt: string = '';
-  status: number = Order.Status.Pending;
+  status: number = OrderStatus.Pending;
 
   fromData(data: any): Order {
     this.id = trimId(data._id);
@@ -28,9 +31,9 @@ export default class Order implements Item {
     this.content = trimText(data.content);
     this.createdAt = data.createdAt;
     this.status =
-      data.status !== Order.Status.Completed
-        ? Order.Status.Pending
-        : Order.Status.Completed;
+      data.status !== OrderStatus.Completed
+        ? OrderStatus.Pending
+        : OrderStatus.Completed;
 
     return this;
   }

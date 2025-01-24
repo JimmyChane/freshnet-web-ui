@@ -1,6 +1,6 @@
 <script>
 import ProductPrice from '@/items/ProductPrice';
-import { Type } from '@/items/Specification';
+import { SpecificationKey } from '@/items/Specification';
 
 import Item from './PageProductExport-Layout-One-Specification.vue';
 
@@ -29,8 +29,8 @@ export default {
     brandId: (c) => c.product?.brandId ?? '',
 
     specificationKeys: () => {
-      return Object.keys(Type.Key).map((key) => {
-        return Type.Key[key];
+      return Object.keys(SpecificationKey).map((key) => {
+        return SpecificationKey[key];
       });
     },
     specifications: (c) => {

@@ -2,10 +2,10 @@
 import Input from '@/components/Input.vue';
 import Spinner from '@/components/selector/Spinner.vue';
 import WindowAction from '@/components/window/WindowAction.vue';
-import { Type } from '@/items/Specification';
+import { SpecificationKey } from '@/items/Specification';
 
-const keys = Object.keys(Type.Key).map((objectKey) => {
-  return Type.Key[objectKey];
+const keys = Object.keys(SpecificationKey).map((objectKey) => {
+  return SpecificationKey[objectKey];
 });
 
 export default {

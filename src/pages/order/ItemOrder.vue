@@ -5,7 +5,7 @@ import IconSuccessGreen from '@/assets/icon/success-green.svg';
 import IconSuccessWhite from '@/assets/icon/success-white.svg';
 import IconTrashRed from '@/assets/icon/trash-red.svg';
 import IconTrashWhite from '@/assets/icon/trash-white.svg';
-import Order from '@/items/Order';
+import { OrderStatus } from '@/items/Order';
 import ItemOrderAction from '@/pages/order/ItemOrder-Action.vue';
 
 export default {
@@ -24,8 +24,8 @@ export default {
     };
   },
   computed: {
-    isStatusPending: (c) => c.order.status === Order.Status.Pending,
-    isStatusCompleted: (c) => c.order.status === Order.Status.Completed,
+    isStatusPending: (c) => c.order.status === OrderStatus.Pending,
+    isStatusCompleted: (c) => c.order.status === OrderStatus.Completed,
 
     dateCreated: (c) => {
       return format(new Date(c.order.createdAt), 'hh:mmaaa dd/LL/yyyy');

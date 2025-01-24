@@ -13,27 +13,30 @@ interface ImageUrlOption {
   height?: number;
 }
 
+export enum MethodImage {
+  Local = 'local',
+  Link = 'link',
+  StorageImage = 'storage-image',
+}
+export enum StorageTypeImage {
+  Gcloud = 'gcloudstorage-type1',
+  Gdrive = 'gdrive-type2',
+}
+
+export function dimensionToQuery(
+  width: number = 0,
+  height: number = 0,
+): string {
+  width = width > 0 ? width : 0;
+  height = height > 0 ? height : 0;
+
+  if (width !== 0 && height === 0) return `width=${width}`;
+  if (width === 0 && height !== 0) return `height=${height}`;
+  if (width > 0 && height > 0) return `width=${width}&height=${height}`;
+  return '';
+}
+
 export default class Image {
-  static dimensionToQuery(width: number = 0, height: number = 0): string {
-    width = width > 0 ? width : 0;
-    height = height > 0 ? height : 0;
-
-    if (width !== 0 && height === 0) return `width=${width}`;
-    if (width === 0 && height !== 0) return `height=${height}`;
-    if (width > 0 && height > 0) return `width=${width}&height=${height}`;
-    return '';
-  }
-
-  static Method = {
-    Local: 'local',
-    Link: 'link',
-    StorageImage: 'storage-image',
-  };
-  static StorageType = {
-    Gcloud: 'gcloudstorage-type1',
-    Gdrive: 'gdrive-type2',
-  };
-
   method: string = '';
   path: string = '';
 
@@ -56,7 +59,7 @@ export default class Image {
     const path = this.path;
 
     if (!method || !path) return '';
-    if (method === Image.Method.Local) {
+    if (method === MethodImage.Local) {
       let resPath = path;
       if (resPath.startsWith('.'))
         resPath = resPath.substring(1, resPath.length);
@@ -69,12 +72,12 @@ export default class Image {
 
       return `${Server.originApi}/${path}`;
     }
-    if (method === Image.Method.Link) return path;
-    if (method === Image.Method.StorageImage) {
+    if (method === MethodImage.Link) return path;
+    if (method === MethodImage.StorageImage) {
       const prefix = '/api/image/name/';
       const name = path.substring(prefix.length, path.length);
       const filename = new Filename(name);
-      const dimensionQuery = Image.dimensionToQuery(width, height);
+      const dimensionQuery = dimensionToQuery(width, height);
       const query = dimensionQuery.length ? `?${dimensionQuery}` : '';
       return `${Server.originApi}/image/name/${filename.toString()}${query}`;
     }

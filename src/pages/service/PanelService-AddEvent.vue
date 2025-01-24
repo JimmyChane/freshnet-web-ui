@@ -7,7 +7,11 @@ import {
 } from '@/app/popupMenu/PopupMenuOption';
 import TextArea from '@/components/InputTextArea.vue';
 import Menu from '@/components/Menu.vue';
-import Method from '@/items/ServiceEventMethod';
+import {
+  INFO_SERVICE_EVENT_METHOD,
+  PURCHASE_SERVICE_EVENT_METHOD,
+  QUOTATION_SERVICE_EVENT_METHOD,
+} from '@/items/ServiceEventMethod';
 
 import AddImage from './PanelService-AddEvent-AddImage.vue';
 
@@ -20,7 +24,7 @@ export default {
     eventImagePreviews: [],
 
     nameOfUser: 'unknown',
-    eventMethod: Method.QUOTATION.key,
+    eventMethod: QUOTATION_SERVICE_EVENT_METHOD.key,
     eventDescription: '',
     eventStatus: '',
     eventAmount: 0,
@@ -31,14 +35,16 @@ export default {
     primaryColor1: (c) => c.primaryColor.mix('ffffff', 0.45),
     primaryColor2: (c) => c.primaryColor.mix('ffffff', 0.6),
 
-    isMethodInfo: (c) => c.eventMethod === Method.INFO.key,
-    isMethodQuotation: (c) => c.eventMethod === Method.QUOTATION.key,
-    isMethodPurchase: (c) => c.eventMethod === Method.PURCHASE.key,
+    isMethodInfo: (c) => c.eventMethod === INFO_SERVICE_EVENT_METHOD.key,
+    isMethodQuotation: (c) =>
+      c.eventMethod === QUOTATION_SERVICE_EVENT_METHOD.key,
+    isMethodPurchase: (c) =>
+      c.eventMethod === PURCHASE_SERVICE_EVENT_METHOD.key,
 
     methodMenu: (c) => c.methodMenus.find((menu) => menu.key === c.eventMethod),
     methodMenus: (c) => [
       {
-        key: Method.QUOTATION.key,
+        key: QUOTATION_SERVICE_EVENT_METHOD.key,
         title: 'Quotation',
         color: chroma('961d96'),
         click: (menu) => {
@@ -47,7 +53,7 @@ export default {
         },
       },
       {
-        key: Method.PURCHASE.key,
+        key: PURCHASE_SERVICE_EVENT_METHOD.key,
         title: 'Purchase',
         color: chroma('258915'),
         click: (menu) => {

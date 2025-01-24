@@ -1,7 +1,7 @@
 <script>
 import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
-import Customer from '@/items/Customer';
+import { RequirementCustomer } from '@/items/Customer';
 
 import WindowSection from './WindowSection.vue';
 
@@ -10,7 +10,7 @@ export default {
   props: {
     popupWindow: { type: Object },
   },
-  data: (c) => ({ Requirement: Customer.Requirement, data: {} }),
+  data: (c) => ({ Requirement: RequirementCustomer, data: {} }),
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,
     item: (c) => c.popupWindow.item,

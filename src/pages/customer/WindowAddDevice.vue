@@ -2,7 +2,7 @@
 import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector3 from '@/components/selector/Selector3.vue';
-import Customer from '@/items/Customer';
+import { RequirementCustomer } from '@/items/Customer';
 
 import SpecificationInputs from './SpecificationInputs.vue';
 import WindowSection from './WindowSection.vue';
@@ -19,7 +19,7 @@ export default {
     popupWindow: { type: Object },
   },
   data: (c) => ({
-    Requirement: Customer.Requirement,
+    Requirement: RequirementCustomer,
     data: {
       description: '',
       categoryKey: 'none',

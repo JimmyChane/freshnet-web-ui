@@ -1,7 +1,7 @@
 <script>
 import ImageViews from '@/components/ImageViews.vue';
 import Service from '@/items/Service';
-import State from '@/items/ServiceState';
+import { findServiceStateByKey } from '@/items/ServiceState';
 
 import Labels from './GlobalSearch-Item-Labels.vue';
 import ItemSearch from './GlobalSearch-Item.vue';
@@ -13,7 +13,7 @@ export default {
     images: (c) => c.item?.imageFiles ?? [],
     stateTitle: (c) => {
       const key = c.item?.state ?? '';
-      const state = State.findByKey(key);
+      const state = findServiceStateByKey(key);
       return state?.title ?? '';
     },
     title: (c) => {

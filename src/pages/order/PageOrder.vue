@@ -3,7 +3,7 @@ import IconPack from '@/app/IconPack';
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import Server from '@/host/Server';
-import Order from '@/items/Order';
+import { OrderStatus } from '@/items/Order';
 
 import Actionbar from './Actionbar.vue';
 import SectionOrder from './SectionOrder.vue';
@@ -49,10 +49,10 @@ export default {
       const groups =
         await this.$store.state.stores.order.dispatch('getGroupsByStatus');
       const groupPending = groups.find((group) => {
-        return group.status === Order.Status.Pending;
+        return group.status === OrderStatus.Pending;
       });
       const groupCompleted = groups.find((group) => {
-        return group.status === Order.Status.Completed;
+        return group.status === OrderStatus.Completed;
       });
 
       this.pendingItems = groupPending?.items ?? [];

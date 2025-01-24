@@ -1,16 +1,20 @@
 import Vuex from 'vuex';
 
-import Customer from '@/items/Customer';
-import Order from '@/items/Order';
+import Order, { OrderStatus } from '@/items/Order';
 import OrderCustomer from '@/items/OrderCustomer';
-import OrderRequest from '@/request/Order';
+import {
+  addOrder,
+  deleteOrder,
+  getOrderList,
+  updateOrderStatus,
+} from '@/request/Order';
 
 import StoreBuilder from './tools/StoreBuilder';
 
 const init = (Stores: any) => {
   const context = new StoreBuilder<Order>()
     .onFetchItems(async () => {
-      const api = await OrderRequest.list();
+      const api = await getOrderList();
       const content: any[] = api.optArrayContent();
       return content.map((data) => new Order(Stores).fromData(data));
     })
@@ -77,13 +81,13 @@ const init = (Stores: any) => {
     .action('addItem', async (context, arg: { data: any }) => {
       const { data } = arg;
       if (!data) return null;
-      const api = await OrderRequest.add(data);
+      const api = await addOrder(data);
       const order = new Order(Stores).fromData(api.optObjectContent());
       return context.state.list.addItem(order);
     })
     .action('removeOItemOfId', async (context, arg: { id: string }) => {
       const { id } = arg;
-      const api = await OrderRequest.delete(id);
+      const api = await deleteOrder(id);
       api.getContent();
       context.state.list.removeItemById(id);
     })
@@ -91,7 +95,7 @@ const init = (Stores: any) => {
       'updateStatusOfId',
       async (context, arg: { id: string; status: number }) => {
         const { id, status } = arg;
-        const api = await OrderRequest.updateStatus(id, status);
+        const api = await updateOrderStatus(id, status);
         api.getContent();
         return context.state.list.updateItemById(id, (item) => {
           if (!item) return;
@@ -101,11 +105,11 @@ const init = (Stores: any) => {
     )
 
     .action('updateToPendingOfId', async (context, id = '') => {
-      const status = Order.Status.Pending;
+      const status = OrderStatus.Pending;
       return context.dispatch('updateStatusOfId', { id, status });
     })
     .action('updateToCompletedOfId', async (context, id = '') => {
-      const status = Order.Status.Completed;
+      const status = OrderStatus.Completed;
       return context.dispatch('updateStatusOfId', { id, status });
     })
     .build();

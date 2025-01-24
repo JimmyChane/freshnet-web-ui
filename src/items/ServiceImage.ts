@@ -2,7 +2,7 @@ import { trimId } from '@/U';
 import Server from '@/host/Server';
 
 import Filename from '../objects/Filename';
-import Image from './Image';
+import Image, { MethodImage, dimensionToQuery } from './Image';
 
 interface ServiceImageData {
   name: string;
@@ -60,10 +60,10 @@ export default class ServiceImage {
     const { width = 0, height = 0 } = option;
 
     const { path, method } = this;
-    const dimensionQuery = Image.dimensionToQuery(width, height);
+    const dimensionQuery = dimensionToQuery(width, height);
     const query = dimensionQuery.length ? `?${dimensionQuery}` : '';
 
-    if (method === Image.Method.StorageImage) {
+    if (method === MethodImage.StorageImage) {
       const prefix = '/api/image/name/';
       const name = path.substring(prefix.length, path.length);
       const filename = new Filename(name);

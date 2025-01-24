@@ -1,8 +1,11 @@
-import Price from '@/objects/Price';
+import Price, {
+  DEFAULT_CURRENCY as PRICE_DEFAULT_CURRENCY,
+  parsePrice,
+} from '@/objects/Price';
+
+export const DEFAULT_CURRENCY = PRICE_DEFAULT_CURRENCY;
 
 export default class ProductPrice {
-  static readonly Currency: string = Price.DefaultCurrency;
-
   stores: any;
 
   private price: Price | null = null;
@@ -12,7 +15,7 @@ export default class ProductPrice {
   }
 
   fromString(str: string): ProductPrice {
-    const { currency, amount: value } = Price.parse(str);
+    const { currency, amount: value } = parsePrice(str);
     this.fromData({ currency, value });
     return this;
   }
