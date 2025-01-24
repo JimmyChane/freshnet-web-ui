@@ -1,49 +1,49 @@
 <script>
-  import PanelAction from "@/components/panel/PanelAction.vue";
-  import Input from "@/components/Input.vue";
-  import { optString } from "@/U";
+import { optString } from '@/U';
+import Input from '@/components/Input.vue';
+import PanelAction from '@/components/panel/PanelAction.vue';
 
-  export default {
-    components: { PanelAction, Input },
-    props: {
-      popupWindow: { type: Object },
-    },
-    data: (c) => ({ customerName: "", customerPhoneNumber: "" }),
-    computed: {
-      isShowing: (c) => c.popupWindow.isShowing,
-      value: (c) => c.popupWindow.value,
-    },
-    watch: {
-      value() {
-        this.onNewValue();
-      },
-    },
-    methods: {
-      onNewValue() {
-        const value = this.value ?? {};
-        this.customerName = optString(value.name);
-        this.customerPhoneNumber = value.phoneNumber?.toString() ?? "";
-      },
-      onChange() {
-        const accept = () => {
-          this.popupWindow.close();
-        };
-        const reject = () => {};
-        this.popupWindow.onConfirm(accept, reject, {
-          name: this.customerName,
-          phoneNumber: this.customerPhoneNumber,
-        });
-      },
-
-      focus() {
-        this.$refs.InputName.focus();
-      },
-    },
-    mounted() {
+export default {
+  components: { PanelAction, Input },
+  props: {
+    popupWindow: { type: Object },
+  },
+  data: (c) => ({ customerName: '', customerPhoneNumber: '' }),
+  computed: {
+    isShowing: (c) => c.popupWindow.isShowing,
+    value: (c) => c.popupWindow.value,
+  },
+  watch: {
+    value() {
       this.onNewValue();
-      this.focus();
     },
-  };
+  },
+  methods: {
+    onNewValue() {
+      const value = this.value ?? {};
+      this.customerName = optString(value.name);
+      this.customerPhoneNumber = value.phoneNumber?.toString() ?? '';
+    },
+    onChange() {
+      const accept = () => {
+        this.popupWindow.close();
+      };
+      const reject = () => {};
+      this.popupWindow.onConfirm(accept, reject, {
+        name: this.customerName,
+        phoneNumber: this.customerPhoneNumber,
+      });
+    },
+
+    focus() {
+      this.$refs.InputName.focus();
+    },
+  },
+  mounted() {
+    this.onNewValue();
+    this.focus();
+  },
+};
 </script>
 
 <template>
@@ -77,23 +77,23 @@
 </template>
 
 <style lang="scss" scoped>
-  .WindowCustomer-body {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding: 1rem 0;
+.WindowCustomer-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1rem 0;
 
-    & > * {
-      max-width: 100%;
-      width: 35rem;
-      padding: 0.6rem 0.4rem;
-      font-size: 1rem;
-      margin-top: 0;
+  & > * {
+    max-width: 100%;
+    width: 35rem;
+    padding: 0.6rem 0.4rem;
+    font-size: 1rem;
+    margin-top: 0;
 
-      border: none;
-      border-bottom: 1px solid hsl(0, 0%, 70%);
-      border-radius: 0.2rem;
-      background: hsla(0, 0%, 0%, 0.03);
-    }
+    border: none;
+    border-bottom: 1px solid hsl(0, 0%, 70%);
+    border-radius: 0.2rem;
+    background: hsla(0, 0%, 0%, 0.03);
   }
+}
 </style>

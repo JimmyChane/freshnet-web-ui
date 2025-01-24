@@ -1,33 +1,29 @@
-import Server from "@/host/Server";
+import Server from '@/host/Server';
+import { API, Response } from '@/host/ServerApi';
 
-export default class User {
-  static list(): Promise<any> {
-    return Server.request().path("users").sendJson();
-  }
-  static add(
-    username: string,
-    name: string,
-    passwordNew: string,
-    passwordRepeat: string,
-  ): Promise<any> {
-    return Server.request()
-      .path("users/user")
-      .POST()
-      .bodyJson({ username, name, passwordNew, passwordRepeat })
-      .sendJson();
-  }
-  static remove(username: string): Promise<any> {
-    return Server.request()
-      .DELETE()
-      .path("users/user")
-      .bodyJson({ username })
-      .sendJson();
-  }
-  static update(username: string, userType: string): Promise<any> {
-    return Server.request()
-      .path("users/user")
-      .PUT()
-      .bodyJson({ username, userType })
-      .sendJson();
-  }
+export async function getUserList() {
+  const response = await API.get('users');
+  return new Response(response.data);
+}
+export async function addUser(
+  username: string,
+  name: string,
+  passwordNew: string,
+  passwordRepeat: string,
+) {
+  const response = await API.post('users/user', {
+    username,
+    name,
+    passwordNew,
+    passwordRepeat,
+  });
+  return new Response(response.data);
+}
+export async function removeUser(username: string) {
+  const response = await API.delete('users/user', { data: { username } });
+  return new Response(response.data);
+}
+export async function updateUser(username: string, userType: string) {
+  const response = await API.put('users/user', { username, userType });
+  return new Response(response.data);
 }

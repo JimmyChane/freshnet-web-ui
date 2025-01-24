@@ -1,13 +1,13 @@
+import { isObject, isString, optArray, trimId, trimText } from '@/U';
+
+import ItemSearcher from '../objects/ItemSearcher';
+import Method from './ServiceEventMethod';
+import ServiceImage from './ServiceImage';
+import ServicePrice from './ServicePrice';
+import ServiceTimestamp from './ServiceTimestamp';
+import User from './User';
+
 const textContains = ItemSearcher.textContains;
-
-import ServiceTimestamp from "./ServiceTimestamp";
-import ServicePrice from "./ServicePrice";
-import ServiceImage from "./ServiceImage";
-import Method from "./ServiceEventMethod";
-import ItemSearcher from "../objects/ItemSearcher";
-
-import User from "./User";
-import { isObject, isString, optArray, trimId, trimText } from "@/U";
 
 export default class ServiceEvent {
   stores: any;
@@ -19,11 +19,11 @@ export default class ServiceEvent {
   }
 
   timestamp: ServiceTimestamp | null = null;
-  username: string = "";
-  name: string = "";
-  method: string = "";
-  description: string = "";
-  status: string = "";
+  username: string = '';
+  name: string = '';
+  method: string = '';
+  description: string = '';
+  status: string = '';
   price: ServicePrice | null = null;
   images: ServiceImage[] = [];
 
@@ -58,7 +58,7 @@ export default class ServiceEvent {
 
   toCount(strs: string[]) {
     let count = strs.reduce((count, str) => {
-      if (textContains("event", str)) count++;
+      if (textContains('event', str)) count++;
       if (textContains(this.username, str)) count++;
       if (textContains(this.name, str)) count++;
       if (textContains(this.method, str)) count++;
@@ -97,17 +97,17 @@ export default class ServiceEvent {
   async fetchUser(): Promise<User | null> {
     if (!isString(this.username) || this.username.trim().length === 0)
       return null;
-    return await this.userStore.dispatch("getUserByUsername", this.username);
+    return await this.userStore.dispatch('getUserByUsername', this.username);
   }
 
   async fetchName(): Promise<string> {
     const user = await this.fetchUser();
-    const username = user ? user.username : "";
+    const username = user ? user.username : '';
 
     if (username.length && this.name) return `${this.name}(${username})`;
     if (!username.length && this.name) return this.name;
     if (username.length && !this.name) return username;
 
-    throw new Error("unknown");
+    throw new Error('unknown');
   }
 }

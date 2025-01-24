@@ -1,285 +1,280 @@
 <script>
-  import Empty from "@/components/Empty.vue";
-  import LoadingDots from "@/components/LoadingDots.vue";
-  import LabelMenus from "@/components/LabelMenus.vue";
-  import Footer from "@/app/footer/Footer.vue";
+import chroma from 'chroma-js';
 
-  import TabLayout from "./PanelProducts-TabLayout.vue";
-  import CategoryTab from "./PanelProducts-CategoryTab.vue";
-  import BrandTab from "./PanelProducts-BrandTab.vue";
+import Footer from '@/app/footer/Footer.vue';
+import IconAdd from '@/assets/icon/add-000000.svg';
+import Empty from '@/components/Empty.vue';
+import LabelMenus from '@/components/LabelMenus.vue';
+import LoadingDots from '@/components/LoadingDots.vue';
+import PageProduct from '@/pages/product/PageProduct.vue';
 
-  import ActionbarProduct from "./ActionBarProduct.vue";
-  import ItemProduct from "./ItemProduct.vue";
-  import ProductGroup from "./PanelProducts-Group.vue";
-  import chroma from "chroma-js";
+import ActionbarProduct from './ActionBarProduct.vue';
+import ItemProduct from './ItemProduct.vue';
+import BrandTab from './PanelProducts-BrandTab.vue';
+import CategoryTab from './PanelProducts-CategoryTab.vue';
+import ProductGroup from './PanelProducts-Group.vue';
+import TabLayout from './PanelProducts-TabLayout.vue';
 
-  import PageProduct from "@/pages/product/PageProduct.vue";
-  import IconAdd from "@/assets/icon/add-000000.svg";
+class MenuGroup {
+  context = null;
+  key = '';
+  title = '';
+  menus = [];
 
-  class MenuGroup {
-    context = null;
-    key = "";
-    title = "";
-    menus = [];
+  menu = null;
 
-    menu = null;
+  constructor(context, key = '', title = '', menus = []) {
+    this.context = context;
+    this.key = key;
+    this.title = title;
+    this.menus = menus;
 
-    constructor(context, key = "", title = "", menus = []) {
-      this.context = context;
-      this.key = key;
-      this.title = title;
-      this.menus = menus;
+    for (const menu of this.menus) {
+      menu.click = () => {
+        this.menu = menu;
+        const query = {};
+        query[this.key] = menu.key;
 
-      for (const menu of this.menus) {
-        menu.click = () => {
-          this.menu = menu;
-          const query = {};
-          query[this.key] = menu.key;
-
-          if (this.context.$route.query[this.key] !== menu.key) {
-            this.context.$store.getters.replaceQuery({ query });
-          }
-        };
-
-        if (this.context.$route.query[this.key] === menu.key) {
-          this.menu = menu;
+        if (this.context.$route.query[this.key] !== menu.key) {
+          this.context.$store.getters.replaceQuery({ query });
         }
-      }
+      };
 
-      if (this.menu === null) {
-        this.menu = this.menus[0];
+      if (this.context.$route.query[this.key] === menu.key) {
+        this.menu = menu;
       }
     }
+
+    if (this.menu === null) {
+      this.menu = this.menus[0];
+    }
   }
+}
 
-  export default {
-    emits: ["click-productAdd"],
-    components: {
-      ActionbarProduct,
-      TabLayout,
-      CategoryTab,
-      BrandTab,
-      ItemProduct,
-      ProductGroup,
-      LabelMenus,
-      Empty,
-      LoadingDots,
-      Footer,
+export default {
+  emits: ['click-productAdd'],
+  components: {
+    ActionbarProduct,
+    TabLayout,
+    CategoryTab,
+    BrandTab,
+    ItemProduct,
+    ProductGroup,
+    LabelMenus,
+    Empty,
+    LoadingDots,
+    Footer,
+  },
+  props: { products: { type: Array, default: () => [] } },
+  data: (c) => ({
+    labelMenuPrimaryColor: chroma('000000'),
+
+    currentProductId: '',
+
+    categoryTabs: [],
+    brandTabs: [],
+
+    filterMenus: [],
+    productGroups: [],
+  }),
+  computed: {
+    iconEmpty: () => PageProduct.icon.dark.toUrl(),
+
+    isLayoutThin: (c) => c.$store.getters.window.innerWidth < 550,
+    layoutMode: () => ItemProduct.Mode.Grid,
+
+    queryProductId: (c) => c.$route.query.productId,
+    queryCategoryId: (c) => c.$route.query.category,
+    queryBrandId: (c) => c.$route.query.brand,
+    queryStock: (c) => c.$route.query.stock,
+
+    isLoading: (c) => c.$store.state.stores.product.getters.isLoading,
+    isEmpty: (c) => !c.isLoading && !c.productGroups.length,
+    isEditable() {
+      const { user } = this.$store.state.stores.login.getters;
+      return user.isTypeAdmin() || user.isTypeStaff();
     },
-    props: { products: { type: Array, default: () => [] } },
-    data: (c) => ({
-      labelMenuPrimaryColor: chroma("000000"),
 
-      currentProductId: "",
+    initRightMenus() {
+      if (!this.isEditable) return null;
 
-      categoryTabs: [],
-      brandTabs: [],
-
-      filterMenus: [],
-      productGroups: [],
-    }),
-    computed: {
-      iconEmpty: () => PageProduct.icon.dark.toUrl(),
-
-      isLayoutThin: (c) => c.$store.getters.window.innerWidth < 550,
-      layoutMode: () => ItemProduct.Mode.Grid,
-
-      queryProductId: (c) => c.$route.query.productId,
-      queryCategoryId: (c) => c.$route.query.category,
-      queryBrandId: (c) => c.$route.query.brand,
-      queryStock: (c) => c.$route.query.stock,
-
-      isLoading: (c) => c.$store.state.stores.product.getters.isLoading,
-      isEmpty: (c) => !c.isLoading && !c.productGroups.length,
-      isEditable() {
-        const { user } = this.$store.state.stores.login.getters;
-        return user.isTypeAdmin() || user.isTypeStaff();
-      },
-
-      initRightMenus() {
-        if (!this.isEditable) return null;
-
-        const menus = [];
-        if (this.isEditable) {
-          const menuStock = this.filterMenus.find((menu) => {
-            return menu.key === "stock";
-          });
-
-          if (menuStock) {
-            menus.push({
-              title:
-                menuStock.menu.title === "All"
-                  ? "Showing All"
-                  : "Showing Available",
-              isHidden: true,
-              click: () => {
-                const index = menuStock.menus.indexOf(menuStock.menu) + 1;
-                const nextIndex = index < menuStock.menus.length ? index : 0;
-                menuStock.menus[nextIndex].click();
-              },
-            });
-          }
-        }
-
-        menus.push({
-          title: "Add",
-          icon: IconAdd,
-          click: () => this.$emit("click-productAdd"),
+      const menus = [];
+      if (this.isEditable) {
+        const menuStock = this.filterMenus.find((menu) => {
+          return menu.key === 'stock';
         });
 
-        return menus;
-      },
+        if (menuStock) {
+          menus.push({
+            title:
+              menuStock.menu.title === 'All'
+                ? 'Showing All'
+                : 'Showing Available',
+            isHidden: true,
+            click: () => {
+              const index = menuStock.menus.indexOf(menuStock.menu) + 1;
+              const nextIndex = index < menuStock.menus.length ? index : 0;
+              menuStock.menus[nextIndex].click();
+            },
+          });
+        }
+      }
+
+      menus.push({
+        title: 'Add',
+        icon: IconAdd,
+        click: () => this.$emit('click-productAdd'),
+      });
+
+      return menus;
     },
-    watch: {
-      queryProductId() {
-        this.invalidateProductId();
-      },
-      queryCategoryId() {
-        this.invalidate();
-      },
-      queryBrandId() {
-        this.invalidate();
-      },
-      queryStock() {
-        this.invalidate();
-      },
-      isEditable() {
-        this.invalidate();
-      },
-      "$store.state.stores.product.getters.lastModified"() {
-        this.invalidate();
-      },
-      "$store.state.stores.category.getters.lastModified"() {
-        this.invalidate();
-      },
+  },
+  watch: {
+    queryProductId() {
+      this.invalidateProductId();
     },
-    mounted() {
+    queryCategoryId() {
       this.invalidate();
     },
-    methods: {
-      async invalidate() {
-        this.scrollToTop();
-        this.invalidateProductId();
+    queryBrandId() {
+      this.invalidate();
+    },
+    queryStock() {
+      this.invalidate();
+    },
+    isEditable() {
+      this.invalidate();
+    },
+    '$store.state.stores.product.getters.lastModified'() {
+      this.invalidate();
+    },
+    '$store.state.stores.category.getters.lastModified'() {
+      this.invalidate();
+    },
+  },
+  mounted() {
+    this.invalidate();
+  },
+  methods: {
+    async invalidate() {
+      this.scrollToTop();
+      this.invalidateProductId();
 
-        let categoryGroups = await this.$store.state.stores.product.dispatch(
-          "getGroupsByCategory",
-        );
-        let brandGroups = await this.$store.state.stores.product.dispatch(
-          "getGroupsByBrand",
-        );
+      let categoryGroups = await this.$store.state.stores.product.dispatch(
+        'getGroupsByCategory',
+      );
+      let brandGroups =
+        await this.$store.state.stores.product.dispatch('getGroupsByBrand');
 
-        if (!this.isEditable) {
-          categoryGroups = categoryGroups
-            .filter((group) => {
-              group.items = group.items.filter((product) => {
-                if (!product.toImageThumbnail()) return false;
-                if (!product.isStockAvailable()) return false;
-                return true;
-              });
-              return group.items.length > 0;
-            })
-            .sort((group1, group2) => {
-              return group1.category.compare(group2.category);
-            });
-        }
-        brandGroups = brandGroups
+      if (!this.isEditable) {
+        categoryGroups = categoryGroups
           .filter((group) => {
-            return group.brand && group.items.length > 0;
+            group.items = group.items.filter((product) => {
+              if (!product.toImageThumbnail()) return false;
+              if (!product.isStockAvailable()) return false;
+              return true;
+            });
+            return group.items.length > 0;
           })
           .sort((group1, group2) => {
-            return group1.brand.compare(group2.brand);
+            return group1.category.compare(group2.category);
           });
-        categoryGroups.sort((group1, group2) => {
-          return group1.category.compare(group2.category);
+      }
+      brandGroups = brandGroups
+        .filter((group) => {
+          return group.brand && group.items.length > 0;
+        })
+        .sort((group1, group2) => {
+          return group1.brand.compare(group2.brand);
         });
+      categoryGroups.sort((group1, group2) => {
+        return group1.category.compare(group2.category);
+      });
 
-        // menus
-        const categoryMenus = new MenuGroup(this, "category", "Category", [
-          { title: "All" },
-          ...categoryGroups.map((group) => {
-            const { category } = group;
-            return {
-              key: category.id,
-              title: category.title,
-              background: category.background?.toUrl() ?? "",
-            };
-          }),
-        ]);
-        const brandMenus = new MenuGroup(this, "brand", "Brand", [
-          { title: "All" },
-          ...brandGroups.map((group) => {
-            const { brand } = group;
-            return { key: brand.id, title: brand.title };
-          }),
-        ]);
-
-        // tabs
-        this.categoryTabs = categoryMenus.menus.map((menu) => {
+      // menus
+      const categoryMenus = new MenuGroup(this, 'category', 'Category', [
+        { title: 'All' },
+        ...categoryGroups.map((group) => {
+          const { category } = group;
           return {
-            title: menu.title,
-            background: menu.background,
-            click: () => menu.click(menu),
-            isSelected: () => categoryMenus.menu === menu,
+            key: category.id,
+            title: category.title,
+            background: category.background?.toUrl() ?? '',
           };
-        });
-        this.brandTabs = brandMenus.menus.map((menu) => {
-          return {
-            title: menu.title,
-            icon: menu.icon?.toUrl() ?? "",
-            click: () => menu.click(menu),
-            isSelected: () => brandMenus.menu === menu,
-          };
-        });
+        }),
+      ]);
+      const brandMenus = new MenuGroup(this, 'brand', 'Brand', [
+        { title: 'All' },
+        ...brandGroups.map((group) => {
+          const { brand } = group;
+          return { key: brand.id, title: brand.title };
+        }),
+      ]);
 
-        // filters
-        this.filterMenus = [];
-        if (this.isEditable) {
-          this.filterMenus.push(
-            new MenuGroup(this, "stock", "Stock", [
-              { key: "all", title: "All" },
-              { title: "Available" },
-            ]),
-          );
-        }
+      // tabs
+      this.categoryTabs = categoryMenus.menus.map((menu) => {
+        return {
+          title: menu.title,
+          background: menu.background,
+          click: () => menu.click(menu),
+          isSelected: () => categoryMenus.menu === menu,
+        };
+      });
+      this.brandTabs = brandMenus.menus.map((menu) => {
+        return {
+          title: menu.title,
+          icon: menu.icon?.toUrl() ?? '',
+          click: () => menu.click(menu),
+          isSelected: () => brandMenus.menu === menu,
+        };
+      });
 
-        // products
-        this.productGroups = categoryGroups
-          .map((group) => {
-            const items = group.items
-              .filter((item) => {
-                if (!this.isEditable) return item.isStockAvailable();
-                if (this.queryStock === "all") return true;
-                return item.isStockAvailable();
-              })
-              .filter((product) => {
-                if (!this.queryCategoryId) return true;
-                return product.categoryId === this.queryCategoryId;
-              })
-              .filter((product) => {
-                if (!this.queryBrandId) return true;
-                return product.brandId === this.queryBrandId;
-              })
-              .sort((product1, product2) => {
-                return product1.compare(product2);
-              });
-            return {
-              id: group.category.id,
-              key: group.category.key,
-              title: group.category.title,
-              icon: group.category.icon ? group.category.icon.toUrl() : "",
-              items,
-            };
-          })
-          .filter((group) => group.items.length > 0);
-        const availableProducts = this.productGroups.reduce(
-          (products, group) => {
-            products.push(...group.items);
-            return products;
-          },
-          [],
+      // filters
+      this.filterMenus = [];
+      if (this.isEditable) {
+        this.filterMenus.push(
+          new MenuGroup(this, 'stock', 'Stock', [
+            { key: 'all', title: 'All' },
+            { title: 'Available' },
+          ]),
         );
+      }
 
-        /* this.filterMenus.push(
+      // products
+      this.productGroups = categoryGroups
+        .map((group) => {
+          const items = group.items
+            .filter((item) => {
+              if (!this.isEditable) return item.isStockAvailable();
+              if (this.queryStock === 'all') return true;
+              return item.isStockAvailable();
+            })
+            .filter((product) => {
+              if (!this.queryCategoryId) return true;
+              return product.categoryId === this.queryCategoryId;
+            })
+            .filter((product) => {
+              if (!this.queryBrandId) return true;
+              return product.brandId === this.queryBrandId;
+            })
+            .sort((product1, product2) => {
+              return product1.compare(product2);
+            });
+          return {
+            id: group.category.id,
+            key: group.category.key,
+            title: group.category.title,
+            icon: group.category.icon ? group.category.icon.toUrl() : '',
+            items,
+          };
+        })
+        .filter((group) => group.items.length > 0);
+      const availableProducts = this.productGroups.reduce((products, group) => {
+        products.push(...group.items);
+        return products;
+      }, []);
+
+      /* this.filterMenus.push(
                new MenuGroup(this, "processor", "Processor", [
                   { key: "Intel Celeron", title: "Intel Celeron" },
                   { key: "Intel Pentium", title: "Intel Pentium" },
@@ -334,22 +329,22 @@
                   { key: "RTX 3060", title: "RTX 3060" },
                ]),
             ); */
-      },
-      invalidateProductId() {
-        if (!this.queryProductId) {
-          setTimeout(() => {
-            this.currentProductId = this.queryProductId;
-          }, 500);
-        } else {
-          this.currentProductId = this.queryProductId;
-        }
-      },
-
-      scrollToTop() {
-        this._self.$el.scrollTo({ top: 0, behavior: "smooth" });
-      },
     },
-  };
+    invalidateProductId() {
+      if (!this.queryProductId) {
+        setTimeout(() => {
+          this.currentProductId = this.queryProductId;
+        }, 500);
+      } else {
+        this.currentProductId = this.queryProductId;
+      }
+    },
+
+    scrollToTop() {
+      this._self.$el.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+  },
+};
 </script>
 
 <template>
@@ -362,9 +357,9 @@
     />
 
     <div class="PanelProducts-body">
-      <span class="PanelProducts-body-title" v-if="categoryTabs.length > 0"
-        >Category</span
-      >
+      <span class="PanelProducts-body-title" v-if="categoryTabs.length > 0">
+        Category
+      </span>
       <TabLayout v-if="categoryTabs.length > 0">
         <CategoryTab
           v-for="menu of categoryTabs"
@@ -373,9 +368,9 @@
         />
       </TabLayout>
 
-      <span class="PanelProducts-body-title" v-if="brandTabs.length > 0"
-        >Brand</span
-      >
+      <span class="PanelProducts-body-title" v-if="brandTabs.length > 0">
+        Brand
+      </span>
       <TabLayout v-if="brandTabs.length > 0">
         <BrandTab v-for="menu of brandTabs" :key="menu.title" :menu="menu" />
       </TabLayout>
@@ -403,57 +398,57 @@
 </template>
 
 <style lang="scss" scoped>
-  .PanelProducts {
-    z-index: 1;
-    position: relative;
+.PanelProducts {
+  z-index: 1;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  overflow-y: auto;
+
+  .PanelProducts-actionbar {
     width: 100%;
-    height: 100%;
+    z-index: 2;
+    position: sticky;
+    top: 0;
+
+    border-bottom: 1px solid hsl(0, 0%, 80%);
+    background: var(--App-background-color);
+  }
+  .PanelProducts-body {
+    z-index: 1;
+    width: 100%;
+    padding-bottom: 10vh;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: flex-start;
-    align-items: flex-start;
-    overflow-y: auto;
 
-    .PanelProducts-actionbar {
+    .PanelProducts-body-title {
       width: 100%;
-      z-index: 2;
-      position: sticky;
-      top: 0;
+      padding: 0 1rem;
+      margin-top: 0.5rem;
+      margin-bottom: 0.2rem;
+      font-weight: 600;
+      font-size: 0.8rem;
 
-      border-bottom: 1px solid hsl(0, 0%, 80%);
-      background: var(--App-background-color);
+      &:first-child {
+        margin-top: 0;
+      }
     }
-    .PanelProducts-body {
-      z-index: 1;
+
+    .PanelProducts-categories {
+      z-index: 2;
       width: 100%;
-      padding-bottom: 10vh;
-      flex-grow: 1;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-
-      .PanelProducts-body-title {
-        width: 100%;
-        padding: 0 1rem;
-        margin-top: 0.5rem;
-        margin-bottom: 0.2rem;
-        font-weight: 600;
-        font-size: 0.8rem;
-
-        &:first-child {
-          margin-top: 0;
-        }
-      }
-
-      .PanelProducts-categories {
-        z-index: 2;
-        width: 100%;
-        gap: 0.5rem;
-        margin-top: 0.5rem;
-        display: flex;
-        flex-direction: column;
-      }
     }
   }
+}
 </style>

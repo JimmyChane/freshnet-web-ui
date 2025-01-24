@@ -1,8 +1,9 @@
-import { Item } from "@/stores/tools/List";
-import ItemSearcher from "../objects/ItemSearcher";
-import { trimId, trimText } from "@/U";
+import { trimId, trimText } from '@/U';
+import { Item } from '@/stores/tools/List';
 
-interface UserData {
+import ItemSearcher from '../objects/ItemSearcher';
+
+export interface UserData {
   username: string;
   name: string;
   userType: number;
@@ -10,7 +11,7 @@ interface UserData {
 
 export default class User implements Item {
   static Type = { None: -1, Admin: 0, Staff: 1, Customer: 2 };
-  static ReservedUsername = { Admin: "admin", Staff: "staff" };
+  static ReservedUsername = { Admin: 'admin', Staff: 'staff' };
 
   stores: any | null;
 
@@ -18,8 +19,8 @@ export default class User implements Item {
     this.stores = stores;
   }
 
-  username: string = "";
-  name: string = "";
+  username: string = '';
+  name: string = '';
   userType: number = User.Type.None;
 
   fromData(data: UserData): this {
@@ -46,10 +47,10 @@ export default class User implements Item {
   }
 
   toTextUserType(): string {
-    if (this.isTypeAdmin()) return "Admin";
-    if (this.isTypeStaff()) return "Staff";
-    if (this.isTypeCustomer()) return "Customer";
-    return "Other";
+    if (this.isTypeAdmin()) return 'Admin';
+    if (this.isTypeStaff()) return 'Staff';
+    if (this.isTypeCustomer()) return 'Customer';
+    return 'Other';
   }
 
   isTypeNone(): boolean {

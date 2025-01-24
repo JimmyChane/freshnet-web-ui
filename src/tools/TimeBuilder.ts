@@ -3,7 +3,7 @@ module.exports = class TimeBuilder {
     const timeStr = time.toString();
     return timeStr.length == 1 ? `0${timeStr}` : timeStr;
   }
-  static getCurrent(separator: string = ""): string {
+  static getCurrent(separator: string = ''): string {
     const now = new Date();
 
     const year = now.getUTCFullYear();

@@ -1,8 +1,8 @@
-import Server from "@/host/Server";
+import { trimId } from '@/U';
+import Server from '@/host/Server';
 
-import Filename from "../objects/Filename";
-import Image from "./Image";
-import { trimId } from "@/U";
+import Filename from '../objects/Filename';
+import Image from './Image';
 
 interface ServiceImageData {
   name: string;
@@ -20,10 +20,10 @@ export default class ServiceImage {
     this.loginStore = stores.login;
   }
 
-  name: string = "";
-  path: string = "";
-  method: string = "";
-  storageType: string = "";
+  name: string = '';
+  path: string = '';
+  method: string = '';
+  storageType: string = '';
 
   fromData(data: ServiceImageData): this {
     const image = new Image().fromData({
@@ -61,10 +61,10 @@ export default class ServiceImage {
 
     const { path, method } = this;
     const dimensionQuery = Image.dimensionToQuery(width, height);
-    const query = dimensionQuery.length ? `?${dimensionQuery}` : "";
+    const query = dimensionQuery.length ? `?${dimensionQuery}` : '';
 
     if (method === Image.Method.StorageImage) {
-      const prefix = "/api/image/name/";
+      const prefix = '/api/image/name/';
       const name = path.substring(prefix.length, path.length);
       const filename = new Filename(name);
       return `${Server.originApi}/image/name/${filename.toString()}${query}`;

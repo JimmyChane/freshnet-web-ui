@@ -1,16 +1,3 @@
-import AppHost from "@/host/AppHost";
-
-import Image from "./Image";
-import Specification, { Type } from "./Specification";
-import ItemSearcher from "../objects/ItemSearcher";
-
-import ProductStock from "./ProductStock";
-import ProductBundle from "./ProductBundle";
-import ProductPrices from "./ProductPrices";
-import Brand from "./Brand";
-import Category from "./Category";
-import ProductPrice from "./ProductPrice";
-import { Item } from "@/stores/tools/List";
 import {
   isObjectOnly,
   isString,
@@ -18,7 +5,19 @@ import {
   optString,
   trimId,
   trimText,
-} from "@/U";
+} from '@/U';
+import AppHost from '@/host/AppHost';
+import { Item } from '@/stores/tools/List';
+
+import ItemSearcher from '../objects/ItemSearcher';
+import Brand from './Brand';
+import Category from './Category';
+import Image from './Image';
+import ProductBundle from './ProductBundle';
+import ProductPrice from './ProductPrice';
+import ProductPrices from './ProductPrices';
+import ProductStock from './ProductStock';
+import Specification, { Type } from './Specification';
 
 const textContains = ItemSearcher.textContains;
 
@@ -26,7 +25,7 @@ export default class Product implements Item {
   private static FORMAT_SPECIFICATION_ORDERS = Object.values(Type.Key);
   private static putForwardSlash(
     texts: string[],
-    separation: string = " / ",
+    separation: string = ' / ',
   ): string {
     return texts.reduce((result, text, i) => {
       if (i === 0) return text;
@@ -48,13 +47,13 @@ export default class Product implements Item {
     this.specificationStore = stores.specification;
   }
 
-  id: string = "";
-  title: string = "";
-  description: string = "";
+  id: string = '';
+  title: string = '';
+  description: string = '';
   gifts: string[] = [];
   bundles: any[] = [];
-  brandId: string = "";
-  categoryId: string = "";
+  brandId: string = '';
+  categoryId: string = '';
   specifications: Specification[] = [];
   images: Image[] = [];
   price: ProductPrices | null = null;
@@ -140,7 +139,7 @@ export default class Product implements Item {
       specification: this.specifications.reduce(
         (obj: Record<string, string>, spec) => {
           const data = spec.toData();
-          obj[data.key ?? ""] = data.content;
+          obj[data.key ?? ''] = data.content;
           return obj;
         },
         {},
@@ -161,7 +160,7 @@ export default class Product implements Item {
     let { brand, category, specifications } = this;
 
     return strs.reduce((count, str) => {
-      if (textContains("product", str)) count++;
+      if (textContains('product', str)) count++;
       if (textContains(this.title, str)) count++;
       if (textContains(this.description, str)) count++;
       if (brand && textContains(brand.title, str)) count++;
@@ -178,53 +177,53 @@ export default class Product implements Item {
   }
   async toStringSpecifications(): Promise<string> {
     const arr1 = [
-      "Microsoft Surface Pro 9 (Platinum)",
-      "Intel 15-1235U",
-      "8GB D5",
-      "128GB SSD",
+      'Microsoft Surface Pro 9 (Platinum)',
+      'Intel 15-1235U',
+      '8GB D5',
+      '128GB SSD',
       '13.0"Touch',
-      "Intel Iris Xe Graphics",
-      "W11 (QCB-00013)",
-      "rm4999",
+      'Intel Iris Xe Graphics',
+      'W11 (QCB-00013)',
+      'rm4999',
     ];
     const arr2 = [
-      "Microsoft Surface Pro 9 (Graphite/ Sapphire/Frost)",
-      "Intel EVO Core i5-1235U",
-      "8GB D5",
-      "256GB SSD",
-      "13.0 Touch",
-      "Intel Iris Xe Graphics",
-      "W11 (QEZ-00030/ QEZ-00047/QEZ-00064)",
-      "rm5499",
-      "FREE Surface Pro Signature Keyboard",
+      'Microsoft Surface Pro 9 (Graphite/ Sapphire/Frost)',
+      'Intel EVO Core i5-1235U',
+      '8GB D5',
+      '256GB SSD',
+      '13.0 Touch',
+      'Intel Iris Xe Graphics',
+      'W11 (QEZ-00030/ QEZ-00047/QEZ-00064)',
+      'rm5499',
+      'FREE Surface Pro Signature Keyboard',
     ];
     const arr3 = [
-      "Microsoft Surface GO 3 (Matte Black)",
-      "Intel Core i3-10100Y 1.30~3.90GHz",
-      "8GB",
-      "128GB SSD",
+      'Microsoft Surface GO 3 (Matte Black)',
+      'Intel Core i3-10100Y 1.30~3.90GHz',
+      '8GB',
+      '128GB SSD',
       '10.5"Touch',
-      "Intel UHD Graphics 630",
-      "1 Year Warranty Tel: 1800-81-8798",
-      "W11 (8VC-00024)",
-      "rm3150",
+      'Intel UHD Graphics 630',
+      '1 Year Warranty Tel: 1800-81-8798',
+      'W11 (8VC-00024)',
+      'rm3150',
     ];
     const arr4 = [
-      "Microsoft Surface Go Signature Type Cover",
-      "Keyboard for Surface GO 2/3",
-      "1-YR WRTY",
-      "rm499",
+      'Microsoft Surface Go Signature Type Cover',
+      'Keyboard for Surface GO 2/3',
+      '1-YR WRTY',
+      'rm499',
     ];
     const arr5 = [
-      "Microsoft Surface GO 3 (Platinum)",
-      "Intel Pentium Gold 6500Y 1.10~3.40GHz",
-      "8GB",
-      "128GB SSD",
+      'Microsoft Surface GO 3 (Platinum)',
+      'Intel Pentium Gold 6500Y 1.10~3.40GHz',
+      '8GB',
+      '128GB SSD',
       '10.5"Touch',
-      "Intel UHD Graphics 615",
-      "1 Year Warranty Tel: 1800-81-8798",
-      "W11 (8VA-00009)",
-      "rm2560",
+      'Intel UHD Graphics 615',
+      '1 Year Warranty Tel: 1800-81-8798',
+      'W11 (8VA-00009)',
+      'rm2560',
     ];
 
     const texts: string[] = [];
@@ -265,7 +264,7 @@ export default class Product implements Item {
     );
 
     // price
-    const price = this.price?.normal?.toString() ?? "";
+    const price = this.price?.normal?.toString() ?? '';
     if (price.length > 0) {
       texts.push(price);
     }
@@ -318,8 +317,8 @@ export default class Product implements Item {
     let price1 = this.price;
     let price2 = item.price;
 
-    let promotion1 = price1 ? optString(price1.promotion).trim() : "";
-    let promotion2 = price2 ? optString(price2.promotion).trim() : "";
+    let promotion1 = price1 ? optString(price1.promotion).trim() : '';
+    let promotion2 = price2 ? optString(price2.promotion).trim() : '';
 
     let hasPromotion1 = promotion1.length > 0;
     let hasPromotion2 = promotion2.length > 0;
@@ -332,8 +331,8 @@ export default class Product implements Item {
     let price1 = this.price;
     let price2 = item.price;
 
-    let normal1 = price1 ? optString(price1.normal).trim() : "";
-    let normal2 = price2 ? optString(price2.normal).trim() : "";
+    let normal1 = price1 ? optString(price1.normal).trim() : '';
+    let normal2 = price2 ? optString(price2.normal).trim() : '';
 
     if (!normal1 && normal2) return 1;
     if (normal1 && !normal2) return -1;
@@ -355,25 +354,24 @@ export default class Product implements Item {
 
   async fetchBrand(): Promise<Brand | null | undefined> {
     if (!this.brandId) return null;
-    const brands: Brand[] = await this.brandStore.dispatch("getItems");
+    const brands: Brand[] = await this.brandStore.dispatch('getItems');
     return brands.find((brand) => brand.id === this.brandId);
   }
   async fetchFullTitle(): Promise<string> {
     const { title } = this;
     const brand = await this.fetchBrand();
-    const brandTitle = brand ? brand.title : "";
+    const brandTitle = brand ? brand.title : '';
 
-    if (!brandTitle && !title) return "";
+    if (!brandTitle && !title) return '';
     if (brandTitle && title) return `${brandTitle} ${title}`;
     if (title) return title;
     if (brandTitle) return brandTitle;
-    return "";
+    return '';
   }
   async fetchCategory(): Promise<Category | null | undefined> {
     if (!this.categoryId) return null;
-    const categories: Category[] = await this.categoryStore.dispatch(
-      "getItems",
-    );
+    const categories: Category[] =
+      await this.categoryStore.dispatch('getItems');
     return categories.find((category) => category.id === this.categoryId);
   }
 

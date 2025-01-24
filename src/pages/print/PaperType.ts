@@ -1,6 +1,6 @@
 export default class PaperType {
-  static readonly Plain = new PaperType("Plain Paper");
-  static readonly Photo = new PaperType("Photo Paper");
+  static readonly Plain = new PaperType('Plain Paper');
+  static readonly Photo = new PaperType('Photo Paper');
 
   title: string;
   icon?: string;

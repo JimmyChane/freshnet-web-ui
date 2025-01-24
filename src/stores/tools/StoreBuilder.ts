@@ -1,7 +1,8 @@
-import DataLoader from "./DataLoader";
-import List, { Item } from "./List";
-import Processor from "./Processor";
-import { ActionContext } from "vuex";
+import { ActionContext } from 'vuex';
+
+import DataLoader from './DataLoader';
+import List, { Item } from './List';
+import Processor from './Processor';
 
 type StateType<T extends Item> = {
   dataLoader: DataLoader;

@@ -1,4 +1,4 @@
-import Price from "@/objects/Price";
+import Price from '@/objects/Price';
 
 export default class ProductPrice {
   static readonly Currency: string = Price.DefaultCurrency;
@@ -17,14 +17,14 @@ export default class ProductPrice {
     return this;
   }
   fromData(
-    data: { currency: string; value: number } = { currency: "", value: 0 },
+    data: { currency: string; value: number } = { currency: '', value: 0 },
   ): ProductPrice {
     this.price = new Price(data.value, data.currency);
     return this;
   }
   toData(): { currency: string; value: number } {
     return {
-      currency: this.price?.currency ?? "",
+      currency: this.price?.currency ?? '',
       value: this.price?.amount ?? 0,
     };
   }
@@ -32,7 +32,7 @@ export default class ProductPrice {
     return this.price?.toCount(strs) ?? 0;
   }
   toString(): string {
-    return this.price?.toString() ?? "";
+    return this.price?.toString() ?? '';
   }
 
   compare(item: ProductPrice): number {
@@ -42,16 +42,16 @@ export default class ProductPrice {
   plus(value: ProductPrice | number): ProductPrice {
     const price =
       value instanceof ProductPrice
-        ? this.price?.plus(value.price) ?? new Price(0, "")
-        : this.price?.plus(value) ?? new Price(0, "");
+        ? (this.price?.plus(value.price) ?? new Price(0, ''))
+        : (this.price?.plus(value) ?? new Price(0, ''));
     const data = { value: price.amount, currency: price.currency };
     return new ProductPrice(this.stores).fromData(data);
   }
   minus(value: ProductPrice | number): ProductPrice {
     const price =
       value instanceof ProductPrice
-        ? this.price?.minus(value.price) ?? new Price(0, "")
-        : this.price?.minus(value) ?? new Price(0, "");
+        ? (this.price?.minus(value.price) ?? new Price(0, ''))
+        : (this.price?.minus(value) ?? new Price(0, ''));
     const data = { value: price.amount, currency: price.currency };
     return new ProductPrice(this.stores).fromData(data);
   }
@@ -60,6 +60,6 @@ export default class ProductPrice {
     return this.price?.amount ?? 0;
   }
   get currency(): string {
-    return this.price?.currency ?? "";
+    return this.price?.currency ?? '';
   }
 }

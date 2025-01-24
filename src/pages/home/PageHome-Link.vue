@@ -1,52 +1,53 @@
 <script>
-  import IconLinkWhite from "@/assets/icon/link-FFFFFF.svg";
-  import IconLinkColor from "@/assets/icon/link-1673E1.svg";
-  import IconExternalColor from "@/assets/icon/external-1673E1.svg";
-  import IconExternalWhite from "@/assets/icon/external-FFFFFF.svg";
-  export default {
-    props: {
-      to: { default: "" },
-      href: { type: String, default: "" },
-      target: { type: String, default: "" },
-      icon: { type: String },
-    },
-    data: () => ({ isHover: false }),
-    computed: {
-      iconLinkWhite() {
-        return this.icon ?? IconLinkWhite;
-      },
-      iconLinkColor() {
-        return this.icon ?? IconLinkColor;
-      },
-      iconExternalWhite() {
-        return this.icon ?? IconExternalWhite;
-      },
-      iconExternalColor() {
-        return this.icon ?? IconExternalColor;
-      },
-    },
-    mounted() {
-      const refLink = this.$refs.link;
-      const refExternal = this.$refs.external;
+import IconExternalColor from '@/assets/icon/external-1673E1.svg';
+import IconExternalWhite from '@/assets/icon/external-FFFFFF.svg';
+import IconLinkColor from '@/assets/icon/link-1673E1.svg';
+import IconLinkWhite from '@/assets/icon/link-FFFFFF.svg';
 
-      if (refLink) this.listenElement(refLink.$el);
-      if (refExternal) this.listenElement(refExternal);
+export default {
+  props: {
+    to: { default: '' },
+    href: { type: String, default: '' },
+    target: { type: String, default: '' },
+    icon: { type: String },
+  },
+  data: () => ({ isHover: false }),
+  computed: {
+    iconLinkWhite() {
+      return this.icon ?? IconLinkWhite;
     },
-    methods: {
-      listenElement(element) {
-        element.addEventListener("mouseenter", this.mouseEnter);
-        element.addEventListener("mouseleave", this.mouseLeave);
-        element.addEventListener("touchstart", this.mouseEnter);
-        element.addEventListener("touchend", this.mouseLeave);
-      },
-      mouseEnter() {
-        this.isHover = true;
-      },
-      mouseLeave() {
-        this.isHover = false;
-      },
+    iconLinkColor() {
+      return this.icon ?? IconLinkColor;
     },
-  };
+    iconExternalWhite() {
+      return this.icon ?? IconExternalWhite;
+    },
+    iconExternalColor() {
+      return this.icon ?? IconExternalColor;
+    },
+  },
+  mounted() {
+    const refLink = this.$refs.link;
+    const refExternal = this.$refs.external;
+
+    if (refLink) this.listenElement(refLink.$el);
+    if (refExternal) this.listenElement(refExternal);
+  },
+  methods: {
+    listenElement(element) {
+      element.addEventListener('mouseenter', this.mouseEnter);
+      element.addEventListener('mouseleave', this.mouseLeave);
+      element.addEventListener('touchstart', this.mouseEnter);
+      element.addEventListener('touchend', this.mouseLeave);
+    },
+    mouseEnter() {
+      this.isHover = true;
+    },
+    mouseLeave() {
+      this.isHover = false;
+    },
+  },
+};
 </script>
 
 <template>
@@ -77,38 +78,38 @@
 </template>
 
 <style lang="scss" scoped>
-  .SectionWhatElse-Item {
-    width: 100%;
-    height: 100%;
-    min-height: 3.5em;
-    color: var(--primary-color);
+.SectionWhatElse-Item {
+  width: 100%;
+  height: 100%;
+  min-height: 3.5em;
+  color: var(--primary-color);
 
-    font-size: 0.9em;
-    font-weight: 600;
+  font-size: 0.9em;
+  font-weight: 600;
 
-    position: relative;
+  position: relative;
 
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+a.SectionWhatElse-Item {
+  border: 2px solid var(--primary-color);
+  border-radius: 1em;
+  text-decoration: none;
+
+  &:hover {
+    background: var(--primary-color);
+    color: white;
   }
-  a.SectionWhatElse-Item {
-    border: 2px solid var(--primary-color);
-    border-radius: 1em;
-    text-decoration: none;
+  img {
+    position: absolute;
+    pointer-events: none;
+    right: 0.8em;
 
-    &:hover {
-      background: var(--primary-color);
-      color: white;
-    }
-    img {
-      position: absolute;
-      pointer-events: none;
-      right: 0.8em;
-
-      width: 0.8em;
-      height: 0.8em;
-    }
+    width: 0.8em;
+    height: 0.8em;
   }
+}
 </style>

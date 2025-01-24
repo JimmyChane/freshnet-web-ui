@@ -1,79 +1,79 @@
 <script>
-  import NavigationBar from "@/components/actionbar/NavigationBar.vue";
-  import SearchInput from "@/components/SearchInput.vue";
-  import LayoutViewSelector from "@/pages/service/PageService-LayoutViewSelector.vue";
-  import LabelMenus from "@/components/LabelMenus.vue";
+import chroma from 'chroma-js';
 
-  import ItemService from "./item-service/ItemService.vue";
-  import chroma from "chroma-js";
-  import Searcher from "@/tools/Searcher";
+import IconSearch from '@/assets/icon/search-000000.svg';
+import LabelMenus from '@/components/LabelMenus.vue';
+import SearchInput from '@/components/SearchInput.vue';
+import NavigationBar from '@/components/actionbar/NavigationBar.vue';
+import TabLayout from '@/components/tabLayout/TabLayout.vue';
+import LayoutViewSelector from '@/pages/service/PageService-LayoutViewSelector.vue';
+import Searcher from '@/tools/Searcher';
 
-  import TabLayout from "@/components/tabLayout/TabLayout.vue";
-  import IconSearch from "@/assets/icon/search-000000.svg";
+import ItemService from './item-service/ItemService.vue';
 
-  export default {
-    components: {
-      NavigationBar,
-      SearchInput,
-      LayoutViewSelector,
-      LabelMenus,
-      ItemService,
-      TabLayout,
+export default {
+  components: {
+    NavigationBar,
+    SearchInput,
+    LayoutViewSelector,
+    LabelMenus,
+    ItemService,
+    TabLayout,
+  },
+  emits: ['click-service'],
+  props: {
+    title: { type: String, default: '' },
+    menus: { type: Array, default: () => [] },
+
+    services: { type: Array, default: () => [] },
+
+    stateMenus: { type: Array, default: () => [] },
+
+    layoutMenus: { type: Array, default: () => [] },
+    layoutMenuIndex: { type: Number, default: -1 },
+
+    groupMenus: { type: Array, default: () => [] },
+    groupMenuIndex: { type: Number, default: -1 },
+
+    sortMenus: { type: Array, default: () => [] },
+    sortMenuIndex: { type: Number, default: -1 },
+  },
+  data: (c) => ({
+    IconSearch,
+    results: [],
+    primaryColorLabel: chroma('black'),
+  }),
+  computed: {
+    isOver350: (c) => c.$store.getters.window.innerWidth > 350,
+    isOver550: (c) => c.$store.getters.window.innerWidth > 550,
+    currentGroupMenu: (c) => c.groupMenus[c.groupMenuIndex],
+    currentSortMenu: (c) => c.sortMenus[c.sortMenuIndex],
+
+    tabLayoutMenus: (c) => {
+      return c.stateMenus.map((stateMenu) => {
+        return {
+          title: stateMenu.title,
+          icon: stateMenu.isSelected()
+            ? stateMenu.iconSelected
+            : stateMenu.icon,
+          count: stateMenu.list.length,
+          primaryColor: stateMenu.primaryColor,
+          isSelected: (menu) => {
+            return stateMenu.isSelected();
+          },
+          click: (menu) => {
+            stateMenu.click();
+          },
+        };
+      });
     },
-    emits: ["click-service"],
-    props: {
-      title: { type: String, default: "" },
-      menus: { type: Array, default: () => [] },
-
-      services: { type: Array, default: () => [] },
-
-      stateMenus: { type: Array, default: () => [] },
-
-      layoutMenus: { type: Array, default: () => [] },
-      layoutMenuIndex: { type: Number, default: -1 },
-
-      groupMenus: { type: Array, default: () => [] },
-      groupMenuIndex: { type: Number, default: -1 },
-
-      sortMenus: { type: Array, default: () => [] },
-      sortMenuIndex: { type: Number, default: -1 },
+  },
+  methods: {
+    searchResults(str) {
+      return Searcher.withItems(this.services).search(str);
     },
-    data: (c) => ({
-      IconSearch,
-      results: [],
-      primaryColorLabel: chroma("black"),
-    }),
-    computed: {
-      isOver350: (c) => c.$store.getters.window.innerWidth > 350,
-      isOver550: (c) => c.$store.getters.window.innerWidth > 550,
-      currentGroupMenu: (c) => c.groupMenus[c.groupMenuIndex],
-      currentSortMenu: (c) => c.sortMenus[c.sortMenuIndex],
-
-      tabLayoutMenus: (c) => {
-        return c.stateMenus.map((stateMenu) => {
-          return {
-            title: stateMenu.title,
-            icon: stateMenu.isSelected()
-              ? stateMenu.iconSelected
-              : stateMenu.icon,
-            count: stateMenu.list.length,
-            primaryColor: stateMenu.primaryColor,
-            isSelected: (menu) => {
-              return stateMenu.isSelected();
-            },
-            click: (menu) => {
-              stateMenu.click();
-            },
-          };
-        });
-      },
-    },
-    methods: {
-      searchResults(str) {
-        return Searcher.withItems(this.services).search(str);
-      },
-    },
-  };
+  },
+};
 </script>
 
 <template>
@@ -144,64 +144,64 @@
 </template>
 
 <style lang="scss" scoped>
-  .PanelServices-Actionbar {
-    height: max-content;
-    background: #f3f3f3;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.PanelServices-Actionbar {
+  height: max-content;
+  background: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
-    .PanelServices-Actionbar-top {
+  .PanelServices-Actionbar-top {
+    z-index: 3;
+    max-width: var(--max-width);
+
+    .PanelServices-Actionbar-SearchInput {
       z-index: 3;
-      max-width: var(--max-width);
-
-      .PanelServices-Actionbar-SearchInput {
-        z-index: 3;
-        width: 100%;
-        padding: 0;
-        flex-grow: 2;
-      }
-    }
-    .PanelServices-Actionbar-tabs {
-      padding: 0.3rem 1rem;
-      padding-right: 2rem;
-    }
-    .PanelServices-Actionbar-toolbar {
       width: 100%;
-      padding: 0.3rem 1rem;
-
-      z-index: 2;
-
-      display: flex;
-      flex-direction: column;
-      flex-wrap: nowrap;
-      align-items: center;
-      justify-content: center;
-      overflow-x: auto;
-
-      & > * {
-        width: 100%;
-        max-width: var(--max-width);
-        gap: 0.5rem;
-
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: flex-start;
-      }
-
-      .PanelServices-Actionbar-toolbar-menus {
-        gap: 0.5rem;
-
-        flex-grow: 1;
-        display: flex;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-items: center;
-        justify-content: flex-end;
-      }
+      padding: 0;
+      flex-grow: 2;
     }
   }
+  .PanelServices-Actionbar-tabs {
+    padding: 0.3rem 1rem;
+    padding-right: 2rem;
+  }
+  .PanelServices-Actionbar-toolbar {
+    width: 100%;
+    padding: 0.3rem 1rem;
+
+    z-index: 2;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    overflow-x: auto;
+
+    & > * {
+      width: 100%;
+      max-width: var(--max-width);
+      gap: 0.5rem;
+
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .PanelServices-Actionbar-toolbar-menus {
+      gap: 0.5rem;
+
+      flex-grow: 1;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-end;
+    }
+  }
+}
 </style>

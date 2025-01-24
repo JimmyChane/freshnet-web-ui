@@ -1,63 +1,64 @@
 <script>
-  import ItemSpec from "./ItemSpecificationInput.vue";
-  import Selector4 from "@/components/selector/Selector4.vue";
-  import { Type } from "@/items/Specification";
+import Selector4 from '@/components/selector/Selector4.vue';
+import { Type } from '@/items/Specification';
 
-  export default {
-    components: { ItemSpec, Selector4 },
-    props: {
-      items: { type: Array, default: () => [] },
-    },
-    data: (c) => ({ list: [] }),
-    computed: {
-      KeyNone: (c) => "none",
-      SpecKey: (c) => Type.Key,
-      SpecKeys: (c) => [
-        c.KeyNone,
-        ...Object.keys(c.SpecKey).map((key) => c.SpecKey[key]),
-      ],
-      SpecificationMenus: (c) => {
-        return [
-          { key: c.KeyNone, title: "None" },
-          ...c.$store.state.stores.specification.getters.items.map((item) => item),
-        ]
-          .map((item) => ({
-            key: item.key,
-            title: item.title,
-            icon: item.icon?.toUrl() ?? "",
-          }))
-          .filter((menu) => {
-            if (menu.key === "none") return true;
+import ItemSpec from './ItemSpecificationInput.vue';
 
-            const dataSpecification = c.list.find((dataSpec) => {
-              return dataSpec.typeKey === menu.key;
-            });
-            return !dataSpecification;
-          })
-          .sort((menu1, menu2) => {
-            return (
-              c.SpecKeys.indexOf(menu1.key) - c.SpecKeys.indexOf(menu2.key)
-            );
+export default {
+  components: { ItemSpec, Selector4 },
+  props: {
+    items: { type: Array, default: () => [] },
+  },
+  data: (c) => ({ list: [] }),
+  computed: {
+    KeyNone: (c) => 'none',
+    SpecKey: (c) => Type.Key,
+    SpecKeys: (c) => [
+      c.KeyNone,
+      ...Object.keys(c.SpecKey).map((key) => c.SpecKey[key]),
+    ],
+    SpecificationMenus: (c) => {
+      return [
+        { key: c.KeyNone, title: 'None' },
+        ...c.$store.state.stores.specification.getters.items.map(
+          (item) => item,
+        ),
+      ]
+        .map((item) => ({
+          key: item.key,
+          title: item.title,
+          icon: item.icon?.toUrl() ?? '',
+        }))
+        .filter((menu) => {
+          if (menu.key === 'none') return true;
+
+          const dataSpecification = c.list.find((dataSpec) => {
+            return dataSpec.typeKey === menu.key;
           });
-      },
+          return !dataSpecification;
+        })
+        .sort((menu1, menu2) => {
+          return c.SpecKeys.indexOf(menu1.key) - c.SpecKeys.indexOf(menu2.key);
+        });
     },
-    watch: {
-      items() {
-        this.list = this.items;
-      },
+  },
+  watch: {
+    items() {
+      this.list = this.items;
     },
-    methods: {
-      addItem(item) {
-        this.list.push(item);
-      },
-      removeItem(item) {
-        this.list.splice(this.list.indexOf(item), 1);
-      },
+  },
+  methods: {
+    addItem(item) {
+      this.list.push(item);
     },
-    mounted() {
-      this.$store.state.stores.specification.dispatch("refresh");
+    removeItem(item) {
+      this.list.splice(this.list.indexOf(item), 1);
     },
-  };
+  },
+  mounted() {
+    this.$store.state.stores.specification.dispatch('refresh');
+  },
+};
 </script>
 
 <template>
@@ -79,15 +80,15 @@
 </template>
 
 <style lang="scss" scoped>
-  .SpecificationInputs {
+.SpecificationInputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  --primary-color: hsl(0, 0%, 30%);
+  .SpecificationInputs-contents {
     display: flex;
     flex-direction: column;
-    gap: 1em;
-    --primary-color: hsl(0, 0%, 30%);
-    .SpecificationInputs-contents {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3em;
-    }
+    gap: 0.3em;
   }
+}
 </style>

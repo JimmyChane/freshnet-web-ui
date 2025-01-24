@@ -1,10 +1,10 @@
 <script>
-  import Link from "./PageHome-Link.vue";
+import Link from './PageHome-Link.vue';
 
-  export default {
-    components: { Link },
-    props: { isThin: { type: Boolean, default: false } },
-  };
+export default {
+  components: { Link },
+  props: { isThin: { type: Boolean, default: false } },
+};
 </script>
 
 <template>
@@ -33,44 +33,44 @@
 </template>
 
 <style lang="scss" scoped>
-  .HomeSectionService {
-    background: white;
-    overflow: hidden;
-    color: black;
+.HomeSectionService {
+  background: white;
+  overflow: hidden;
+  color: black;
 
-    border-radius: 1em;
+  border-radius: 1em;
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .HomeSectionyHour-body {
+    width: 100%;
+    padding: 1.5em;
+    gap: 0.5em;
+    line-height: 1em;
+
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
     align-items: center;
     justify-content: center;
+    place-items: center;
+    text-align: center;
 
-    .HomeSectionyHour-body {
-      width: 100%;
-      padding: 1.5em;
-      gap: 0.5em;
-      line-height: 1em;
-
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(10em, 1fr));
-      align-items: center;
-      justify-content: center;
-      place-items: center;
-      text-align: center;
-
-      & > * {
-        text-wrap: balance;
-      }
+    & > * {
+      text-wrap: balance;
     }
   }
-  .HomeSectionService-isThin {
-    width: 100%;
-    height: 100%;
-    font-size: 1rem;
-  }
-  .HomeSectionService-isWide {
-    width: 100%;
-    height: 100%;
-    font-size: 1.2rem;
-  }
+}
+.HomeSectionService-isThin {
+  width: 100%;
+  height: 100%;
+  font-size: 1rem;
+}
+.HomeSectionService-isWide {
+  width: 100%;
+  height: 100%;
+  font-size: 1.2rem;
+}
 </style>

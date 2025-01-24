@@ -1,14 +1,14 @@
 <script>
-  export default {
-    props: {
-      item: { type: Object },
-    },
-    computed: {
-      isToday: (c) => c.item.isToday(),
-      title: (c) => c.item.title,
-      content: (c) => c.item.hours.toString(),
-    },
-  };
+export default {
+  props: {
+    item: { type: Object },
+  },
+  computed: {
+    isToday: (c) => c.item.isToday(),
+    title: (c) => c.item.title,
+    content: (c) => c.item.hours.toString(),
+  },
+};
 </script>
 
 <template>
@@ -19,30 +19,30 @@
 </template>
 
 <style lang="scss" scoped>
-  .HourItem {
-    color: white;
-    font-weight: 400;
+.HourItem {
+  color: white;
+  font-weight: 400;
 
-    width: 100%;
+  width: 100%;
 
-    display: flex;
-    flex-direction: row;
-    gap: 0.5em;
-    line-height: 1em;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  line-height: 1em;
 
-    .HourItem-title {
-      text-align: start;
-      width: 6em;
-    }
-    .HourItem-content {
-      flex-grow: 1;
-      text-align: end;
-    }
+  .HourItem-title {
+    text-align: start;
+    width: 6em;
   }
-  .HourItem[isToday="true"] {
-    background: white;
-    color: var(--primary-color);
-    padding: 0.5em 0.5em;
-    border-radius: 0.5em;
+  .HourItem-content {
+    flex-grow: 1;
+    text-align: end;
   }
+}
+.HourItem[isToday='true'] {
+  background: white;
+  color: var(--primary-color);
+  padding: 0.5em 0.5em;
+  border-radius: 0.5em;
+}
 </style>

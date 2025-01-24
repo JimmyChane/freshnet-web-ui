@@ -1,30 +1,30 @@
 <script>
-  import { isBoolean, isObjectOnly, optArray } from "@/U";
-  import ButtonIcon from "@/components/button/ButtonIcon.vue";
-  import ButtonText from "@/components/button/ButtonText.vue";
-  import MenuOption from "@/components/button/MenuOption.vue";
+import { isBoolean, isObjectOnly, optArray } from '@/U';
+import ButtonIcon from '@/components/button/ButtonIcon.vue';
+import ButtonText from '@/components/button/ButtonText.vue';
+import MenuOption from '@/components/button/MenuOption.vue';
 
-  export default {
-    components: { ButtonIcon, ButtonText, MenuOption },
-    props: { menus: { type: Array, default: () => [] } },
-    computed: {
-      Menus: (c) => {
-        return optArray(c.menus).filter((menu) => isObjectOnly(menu));
-      },
-      visibleMenus: (c) => {
-        return c.Menus.filter((menu) => {
-          if (!isBoolean(menu.isHidden)) return true;
-          return !menu.isHidden;
-        });
-      },
-      hiddenMenus: (c) => {
-        return c.Menus.filter((menu) => {
-          if (!isBoolean(menu.isHidden)) return false;
-          return menu.isHidden;
-        });
-      },
+export default {
+  components: { ButtonIcon, ButtonText, MenuOption },
+  props: { menus: { type: Array, default: () => [] } },
+  computed: {
+    Menus: (c) => {
+      return optArray(c.menus).filter((menu) => isObjectOnly(menu));
     },
-  };
+    visibleMenus: (c) => {
+      return c.Menus.filter((menu) => {
+        if (!isBoolean(menu.isHidden)) return true;
+        return !menu.isHidden;
+      });
+    },
+    hiddenMenus: (c) => {
+      return c.Menus.filter((menu) => {
+        if (!isBoolean(menu.isHidden)) return false;
+        return menu.isHidden;
+      });
+    },
+  },
+};
 </script>
 
 <template>
@@ -71,31 +71,31 @@
 </template>
 
 <style lang="scss" scoped>
-  .ActionBar2Menus {
-    width: 100%;
-    min-width: max-content;
-    max-width: max-content;
+.ActionBar2Menus {
+  width: 100%;
+  min-width: max-content;
+  max-width: max-content;
 
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  flex-grow: 0;
+  align-items: center;
+  justify-content: flex-end;
+
+  .ActionBar2Menus-menu {
     display: flex;
     flex-direction: row;
-    flex-wrap: nowrap;
-    flex-grow: 0;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: center;
 
-    .ActionBar2Menus-menu {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
+    & > * {
+      font-size: 1em;
+    }
 
-      & > * {
-        font-size: 1em;
-      }
-
-      .ActionBar2Menus-menu-textButton {
-        color: inherit;
-      }
+    .ActionBar2Menus-menu-textButton {
+      color: inherit;
     }
   }
+}
 </style>

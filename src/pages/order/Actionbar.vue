@@ -1,25 +1,25 @@
 <script>
-  import NavigationBar from "@/components/actionbar/NavigationBar.vue";
-  import SearchInput from "@/components/SearchInput.vue";
-  import ItemSearch from "./ItemOrderSearch.vue";
-  import Searcher from "@/tools/Searcher";
+import IconAdd from '@/assets/icon/add-000000.svg';
+import IconRefresh from '@/assets/icon/refresh-000000.svg';
+import SearchInput from '@/components/SearchInput.vue';
+import NavigationBar from '@/components/actionbar/NavigationBar.vue';
+import Searcher from '@/tools/Searcher';
 
-  import IconAdd from "@/assets/icon/add-000000.svg";
-  import IconRefresh from "@/assets/icon/refresh-000000.svg";
+import ItemSearch from './ItemOrderSearch.vue';
 
-  export default {
-    components: { NavigationBar, SearchInput, ItemSearch },
-    props: {
-      title: { type: String, default: "" },
-      items: { type: Array, default: () => [] },
+export default {
+  components: { NavigationBar, SearchInput, ItemSearch },
+  props: {
+    title: { type: String, default: '' },
+    items: { type: Array, default: () => [] },
+  },
+  data: (c) => ({ IconAdd, IconRefresh, results: [] }),
+  methods: {
+    searchResults(str) {
+      return Searcher.withItems(this.items).search(str);
     },
-    data: (c) => ({ IconAdd, IconRefresh, results: [] }),
-    methods: {
-      searchResults(str) {
-        return Searcher.withItems(this.items).search(str);
-      },
-    },
-  };
+  },
+};
 </script>
 
 <template>
@@ -66,19 +66,19 @@
 </template>
 
 <style lang="scss" scoped>
-  .Actionbar-search {
-    .Actionbar-search-button {
-      text-decoration: none;
-      color: inherit;
-      text-align: start;
-      font-size: 1rem;
-      cursor: pointer;
-      border: none;
-      border-radius: 0.6rem;
-      background: none;
-      &:hover {
-        background: rgba(0, 0, 0, 0.05);
-      }
+.Actionbar-search {
+  .Actionbar-search-button {
+    text-decoration: none;
+    color: inherit;
+    text-align: start;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    border-radius: 0.6rem;
+    background: none;
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
     }
   }
+}
 </style>

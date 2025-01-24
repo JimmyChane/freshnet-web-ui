@@ -1,10 +1,18 @@
-import Server from "@/host/Server";
+import { API, Response } from '@/host/ServerApi';
 
-export default class Setting {
-  static list(): Promise<any> {
-    return Server.request().path("settingv3").sendJson();
+export async function getSettingList() {
+  const response = await API.get('settingv3');
+
+  const json = response.data;
+  const hostResponse = new Response(json);
+  const hostError = hostResponse.getError();
+  if (hostError) {
+    throw new Error(hostError);
   }
-  static update(setting: any): Promise<any> {
-    return Server.request().PUT().path("settingv3/system").bodyJson(setting).sendJson();
-  }
+
+  return hostResponse;
+}
+export async function updateSetting(setting: any) {
+  const response = await API.put('settingv3/system', setting);
+  return new Response(response.data);
 }

@@ -1,9 +1,9 @@
-import { isString } from "@/U";
+import { isString } from '@/U';
 
 export default class ItemSearcher {
-  static textContains(text: String = "", keyword: string = ""): boolean {
+  static textContains(text: String = '', keyword: string = ''): boolean {
     return (
-      isString(text) && text.toLowerCase().replaceAll(" ", "").includes(keyword)
+      isString(text) && text.toLowerCase().replaceAll(' ', '').includes(keyword)
     );
   }
 }

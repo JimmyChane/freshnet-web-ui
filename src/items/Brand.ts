@@ -1,8 +1,8 @@
-import Image from "./Image";
-import ItemSearcher from "../objects/ItemSearcher";
+import { isObjectOnly, trimId, trimText } from '@/U';
+import { Item } from '@/stores/tools/List';
 
-import { Item } from "@/stores/tools/List";
-import { isObjectOnly, trimId, trimText } from "@/U";
+import ItemSearcher from '../objects/ItemSearcher';
+import Image from './Image';
 
 interface BrandData {
   _id: string;
@@ -17,8 +17,8 @@ export default class Brand implements Item {
     this.stores = stores;
   }
 
-  id: string = "";
-  title: string = "";
+  id: string = '';
+  title: string = '';
   icon: Image | null = null;
 
   fromData(data: BrandData): this {

@@ -1,4 +1,4 @@
-import { trimId, trimText } from "@/U";
+import { trimId, trimText } from '@/U';
 
 export default class CustomerDeviceSpecification {
   stores: any;
@@ -7,8 +7,8 @@ export default class CustomerDeviceSpecification {
     this.stores = stores;
   }
 
-  typeKey: string = "";
-  content: string = "";
+  typeKey: string = '';
+  content: string = '';
 
   fromData(data: any): CustomerDeviceSpecification {
     this.typeKey = trimId(data.typeKey);

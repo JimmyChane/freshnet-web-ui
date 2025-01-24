@@ -1,31 +1,32 @@
 <script>
-  import Section from "./ViewerProduct-Section.vue";
-  import IconEdit from "@/assets/icon/edit-000000.svg";
+import IconEdit from '@/assets/icon/edit-000000.svg';
 
-  export default {
-    components: { Section },
-    props: {
-      primaryColor: { type: Object },
-      allowEdit: { type: Boolean, default: false },
-      product: { type: Object, default: () => null },
-    },
-    computed: {
-      description: (c) => c.product?.description ?? "",
+import Section from './ViewerProduct-Section.vue';
 
-      menu() {
-        if (!this.allowEdit) return null;
-        return {
-          title: "Edit",
-          icon: IconEdit,
-          click: () =>
-            this.$emit("click-edit", {
-              product: this.product,
-              description: this.description,
-            }),
-        };
-      },
+export default {
+  components: { Section },
+  props: {
+    primaryColor: { type: Object },
+    allowEdit: { type: Boolean, default: false },
+    product: { type: Object, default: () => null },
+  },
+  computed: {
+    description: (c) => c.product?.description ?? '',
+
+    menu() {
+      if (!this.allowEdit) return null;
+      return {
+        title: 'Edit',
+        icon: IconEdit,
+        click: () =>
+          this.$emit('click-edit', {
+            product: this.product,
+            description: this.description,
+          }),
+      };
     },
-  };
+  },
+};
 </script>
 
 <template>
@@ -44,20 +45,20 @@
 </template>
 
 <style lang="scss" scoped>
-  .SectionDescription-parent {
-    grid-area: description;
-    .SectionDescription {
-      width: 100%;
-      font-size: 1rem;
+.SectionDescription-parent {
+  grid-area: description;
+  .SectionDescription {
+    width: 100%;
+    font-size: 1rem;
 
-      background: hsla(0, 0%, 100%, 0.6);
-      padding: 1.2rem;
+    background: hsla(0, 0%, 100%, 0.6);
+    padding: 1.2rem;
+    font-size: 1rem;
+    .SectionDescription-noContent {
+      opacity: 0.6;
+      font-style: italic;
       font-size: 1rem;
-      .SectionDescription-noContent {
-        opacity: 0.6;
-        font-style: italic;
-        font-size: 1rem;
-      }
     }
   }
+}
 </style>

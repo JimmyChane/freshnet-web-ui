@@ -1,94 +1,95 @@
 <script>
-  import NavViewGroup from "./NavigationDrawer-NavViewGroup.vue";
-  import NavigationLeftClickable from "./NavigationDrawer-Clickable.vue";
-  import NavPage from "@/app/NavPage";
-  import { optArray } from "@/U";
+import { optArray } from '@/U';
+import NavPage from '@/app/NavPage';
 
-  export default {
-    components: { NavViewGroup, NavigationLeftClickable },
-    props: {
-      group1: { type: NavPage, default: () => null },
-    },
-    computed: {
-      group2s: (c) => optArray(c.group1.groups),
-      hasChildren: (c) => c.group2s.length > 0,
+import NavigationLeftClickable from './NavigationDrawer-Clickable.vue';
+import NavViewGroup from './NavigationDrawer-NavViewGroup.vue';
 
-      isExpanded: (c) => c.group1.isExpanded(),
-      isSelected: (c) => c.group1.isSelected(),
-      isWide: (c) => c.group1.isWide(),
+export default {
+  components: { NavViewGroup, NavigationLeftClickable },
+  props: {
+    group1: { type: NavPage, default: () => null },
+  },
+  computed: {
+    group2s: (c) => optArray(c.group1.groups),
+    hasChildren: (c) => c.group2s.length > 0,
 
-      style() {
-        const style = {};
+    isExpanded: (c) => c.group1.isExpanded(),
+    isSelected: (c) => c.group1.isSelected(),
+    isWide: (c) => c.group1.isWide(),
 
-        if (this.isWide) {
-          style["width"] = "100%";
-          style["border-radius"] = "0.5rem";
-          style["margin"] = "0";
-          if (this.hasChildren) {
-            style["border-radius"] = "0.5rem";
-            style["width"] = "calc(100% - 1em)";
-            style["margin"] = "0 0.5em";
-          } else {
-            style["gap"] = "0";
-          }
-        } else {
-          if (!this.hasChildren) style["background"] = "none";
-          if (!this.isSelected) {
-            style["align-items"] = "center";
-            style["justify-content"] = "center";
-          }
+    style() {
+      const style = {};
 
-          style["border-radius"] =
-            this.hasChildren || !this.isSelected ? "0.5rem" : "0";
-          style["width"] = this.isSelected ? "100%" : "min-content";
-        }
-
-        if (this.isSelected && this.hasChildren) {
-          style["background"] = "var(--third-color)";
-        }
-
-        return style;
-      },
-      styleHeader() {
-        const style = {};
-
-        if (this.isWide) {
-          if (this.isSelected) {
-            style["border-radius"] = "0";
-          }
-        } else {
-          style["border-radius"] = "0";
-          if (this.hasChildren && this.isSelected) {
-            style["width"] = "100%";
-          }
-        }
+      if (this.isWide) {
+        style['width'] = '100%';
+        style['border-radius'] = '0.5rem';
+        style['margin'] = '0';
         if (this.hasChildren) {
-          style["--primary-color"] = "#1673e1";
+          style['border-radius'] = '0.5rem';
+          style['width'] = 'calc(100% - 1em)';
+          style['margin'] = '0 0.5em';
+        } else {
+          style['gap'] = '0';
         }
-
-        return style;
-      },
-      styleChildren() {
-        const style = {};
-
-        if (this.isWide && !this.hasChildren) {
-          style["background"] = "none";
-        }
-
+      } else {
+        if (!this.hasChildren) style['background'] = 'none';
         if (!this.isSelected) {
-          style["background"] = "none";
-          style["padding"] = "0.8em";
-          style["display"] = "none";
+          style['align-items'] = 'center';
+          style['justify-content'] = 'center';
         }
 
-        if (!this.hasChildren || !this.isSelected) {
-          style["display"] = "none";
-        }
+        style['border-radius'] =
+          this.hasChildren || !this.isSelected ? '0.5rem' : '0';
+        style['width'] = this.isSelected ? '100%' : 'min-content';
+      }
 
-        return style;
-      },
+      if (this.isSelected && this.hasChildren) {
+        style['background'] = 'var(--third-color)';
+      }
+
+      return style;
     },
-  };
+    styleHeader() {
+      const style = {};
+
+      if (this.isWide) {
+        if (this.isSelected) {
+          style['border-radius'] = '0';
+        }
+      } else {
+        style['border-radius'] = '0';
+        if (this.hasChildren && this.isSelected) {
+          style['width'] = '100%';
+        }
+      }
+      if (this.hasChildren) {
+        style['--primary-color'] = '#1673e1';
+      }
+
+      return style;
+    },
+    styleChildren() {
+      const style = {};
+
+      if (this.isWide && !this.hasChildren) {
+        style['background'] = 'none';
+      }
+
+      if (!this.isSelected) {
+        style['background'] = 'none';
+        style['padding'] = '0.8em';
+        style['display'] = 'none';
+      }
+
+      if (!this.hasChildren || !this.isSelected) {
+        style['display'] = 'none';
+      }
+
+      return style;
+    },
+  },
+};
 </script>
 
 <template>
@@ -121,36 +122,36 @@
 </template>
 
 <style lang="scss" scoped>
-  .NavPage {
-    --primary-color: #1673e1;
-    --secondary-color: rgba(22, 112, 223, 0.2);
-    --third-color: hsla(213, 82%, 48%, 0.1);
+.NavPage {
+  --primary-color: #1673e1;
+  --secondary-color: rgba(22, 112, 223, 0.2);
+  --third-color: hsla(213, 82%, 48%, 0.1);
 
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .NavPage-children {
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    align-items: stretch;
+    justify-content: flex-start;
+    margin: 0.4em;
+    width: calc(100% - 0.8em);
 
-    .NavPage-children {
+    .NavPage-sectionParent {
       display: flex;
       flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
-      margin: 0.4em;
-      width: calc(100% - 0.8em);
+      align-items: center;
 
-      .NavPage-sectionParent {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-
-        .NavPage-sectionParent-line {
-          width: calc(100% - 1.2rem);
-          min-height: 1px;
-          background: hsla(0, 0%, 0%, 0.7);
-          opacity: 0.2;
-          margin: 0.8rem 0;
-        }
+      .NavPage-sectionParent-line {
+        width: calc(100% - 1.2rem);
+        min-height: 1px;
+        background: hsla(0, 0%, 0%, 0.7);
+        opacity: 0.2;
+        margin: 0.8rem 0;
       }
     }
   }
+}
 </style>

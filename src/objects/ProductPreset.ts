@@ -1,18 +1,18 @@
-import { Type } from "@/items/Specification";
-import Brand from "@/items/Brand";
-import Product from "@/items/Product";
-import Specification from "@/items/Specification";
+import Brand from '@/items/Brand';
+import Product from '@/items/Product';
+import { Type } from '@/items/Specification';
+import Specification from '@/items/Specification';
 
 class Brands {
   static INTEL = new Brand(null).fromData({
-    _id: "",
-    title: "Intel",
+    _id: '',
+    title: 'Intel',
     icon: null,
   });
-  static AMD = new Brand(null).fromData({ _id: "", title: "AMD", icon: null });
+  static AMD = new Brand(null).fromData({ _id: '', title: 'AMD', icon: null });
   static NVIDIA = new Brand(null).fromData({
-    _id: "",
-    title: "Nvidia",
+    _id: '',
+    title: 'Nvidia',
     icon: null,
   });
 }
@@ -22,7 +22,7 @@ class Unit {
   long: string;
   text: string;
 
-  constructor(short: string = "", long: string = "", text: string = "") {
+  constructor(short: string = '', long: string = '', text: string = '') {
     this.short = short;
     this.long = long;
     this.text = text;
@@ -30,10 +30,10 @@ class Unit {
 }
 
 class Memory {
-  static KILOBYTE: Unit = new Unit("kb", "kilobyte", "KiloByte");
-  static MEGABYTE: Unit = new Unit("mb", "megabyte", "MegaByte");
-  static GIGABYTE: Unit = new Unit("gb", "gigabyte", "GigaByte");
-  static TERABYTE: Unit = new Unit("tb", "terabyte", "TeraByte");
+  static KILOBYTE: Unit = new Unit('kb', 'kilobyte', 'KiloByte');
+  static MEGABYTE: Unit = new Unit('mb', 'megabyte', 'MegaByte');
+  static GIGABYTE: Unit = new Unit('gb', 'gigabyte', 'GigaByte');
+  static TERABYTE: Unit = new Unit('tb', 'terabyte', 'TeraByte');
 
   amount: number;
   unit: Unit;
@@ -49,7 +49,7 @@ class Memory {
 }
 
 class Size {
-  static INCH: Unit = new Unit('"', "inch", "Inch");
+  static INCH: Unit = new Unit('"', 'inch', 'Inch');
 
   amount: number;
   unit: Unit;
@@ -73,8 +73,8 @@ class Resolution {
   constructor(
     width: number = 0,
     height: number = 0,
-    short: string = "",
-    text: string = "",
+    short: string = '',
+    text: string = '',
   ) {
     this.width = width;
     this.height = height;
@@ -88,9 +88,9 @@ class Resolution {
 }
 
 class Label {
-  static PROMOTION = new Label("promotion", "Promotion", "#FF8A00");
-  static OUT_OF_STOCK = new Label("outOfStock", "Out of Stock", "#FF4B33");
-  static SECOND_HAND = new Label("secondHand", "Second Hand", "#249696");
+  static PROMOTION = new Label('promotion', 'Promotion', '#FF8A00');
+  static OUT_OF_STOCK = new Label('outOfStock', 'Out of Stock', '#FF4B33');
+  static SECOND_HAND = new Label('secondHand', 'Second Hand', '#249696');
 
   name: string;
   text: string;
@@ -127,12 +127,12 @@ const hdd = [
   }),
 ];
 const resolution = [
-  new Resolution(1920, 1080, "fhd", "Full HD").toString(),
-  new Resolution(1366, 768, "hd", "HD").toString(),
+  new Resolution(1920, 1080, 'fhd', 'Full HD').toString(),
+  new Resolution(1366, 768, 'hd', 'HD').toString(),
 ];
 const processor = {
-  intel: ["i9", "i7", "i5", "i3", "celeron", "pentium"],
-  amd: ["ryzen 7", "ryzen 5", "ryzen 3", "althon silver"],
+  intel: ['i9', 'i7', 'i5', 'i3', 'celeron', 'pentium'],
+  amd: ['ryzen 7', 'ryzen 5', 'ryzen 3', 'althon silver'],
 };
 const storage = { ssd, hdd };
 const graphic = [
@@ -158,12 +158,12 @@ export default class ProductPreset {
     graphic,
   };
   static Colors: Record<string, any> = {
-    processor: "#276EB0",
-    ram: "#249696",
-    size: "#3B9511",
-    resolution: "#A11357",
-    display: "#A11357",
-    storage: "#276EB0",
+    processor: '#276EB0',
+    ram: '#249696',
+    size: '#3B9511',
+    resolution: '#A11357',
+    display: '#A11357',
+    storage: '#276EB0',
   };
 
   static generateStockLabels(product: Product) {
@@ -250,6 +250,6 @@ export default class ProductPreset {
   }
 
   constructor() {
-    throw new Error("not supported");
+    throw new Error('not supported');
   }
 }

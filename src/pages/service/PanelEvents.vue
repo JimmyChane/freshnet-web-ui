@@ -1,27 +1,28 @@
 <script>
-  import ListEvents from "./EventGroups.vue";
-  import ButtonIcon from "@/components/button/ButtonIcon.vue";
-  import Service from "@/items/Service";
+import ButtonIcon from '@/components/button/ButtonIcon.vue';
+import Service from '@/items/Service';
 
-  export default {
-    components: { ButtonIcon, ListEvents },
-    emits: ["click-add-event", "click-remove-event"],
-    props: {
-      service: { type: Service },
-      actions: { type: Object },
+import ListEvents from './EventGroups.vue';
+
+export default {
+  components: { ButtonIcon, ListEvents },
+  emits: ['click-add-event', 'click-remove-event'],
+  props: {
+    service: { type: Service },
+    actions: { type: Object },
+  },
+  computed: {
+    events: (c) => {
+      if (!c.service) return [];
+
+      const events = c.service.events
+        .map((event) => event)
+        .sort((event1, event2) => event1.compare(event2));
+
+      return events;
     },
-    computed: {
-      events: (c) => {
-        if (!c.service) return [];
-
-        const events = c.service.events
-          .map((event) => event)
-          .sort((event1, event2) => event1.compare(event2));
-
-        return events;
-      },
-    },
-  };
+  },
+};
 </script>
 
 <template>
@@ -40,33 +41,33 @@
 </template>
 
 <style lang="scss" scoped>
-  .PanelEvents {
-    width: 100%;
+.PanelEvents {
+  width: 100%;
+  z-index: 1;
+
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-end;
+
+  .PanelEvents-body {
     z-index: 1;
+    position: relative;
+    padding: 0.8rem;
+    padding-bottom: 1rem;
 
-    flex-grow: 1;
+    .PanelEvents-empty {
+      padding: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff66;
 
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-end;
-
-    .PanelEvents-body {
-      z-index: 1;
-      position: relative;
-      padding: 0.8rem;
-      padding-bottom: 1rem;
-
-      .PanelEvents-empty {
-        padding: 2rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #ffffff66;
-
-        font-size: 0.8rem;
-        color: #00000080;
-      }
+      font-size: 0.8rem;
+      color: #00000080;
     }
   }
+}
 </style>

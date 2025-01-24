@@ -1,33 +1,33 @@
 <script>
-  import Section from "./ViewerProduct-Section.vue";
-  import Item from "./ViewerProduct-PriceEditor-item.vue";
-  import ProductPrice from "@/items/ProductPrice";
+import IconEdit from '@/assets/icon/edit-000000.svg';
+import ProductPrice from '@/items/ProductPrice';
 
-  import IconEdit from "@/assets/icon/edit-000000.svg";
+import Item from './ViewerProduct-PriceEditor-item.vue';
+import Section from './ViewerProduct-Section.vue';
 
-  export default {
-    components: { Section, Item },
-    props: {
-      product: { type: Object, default: () => null },
-      primaryColor: { type: Object },
+export default {
+  components: { Section, Item },
+  props: {
+    product: { type: Object, default: () => null },
+    primaryColor: { type: Object },
+  },
+  data() {
+    return { IconEdit };
+  },
+  computed: {
+    price: (context) => context.product?.price ?? null,
+    priceNormal() {
+      const normal = this.product?.getPriceNormal() ?? null;
+      if (normal && normal.value >= 0) return normal;
+      return new ProductPrice().fromData({});
     },
-    data() {
-      return { IconEdit };
+    pricePromotion() {
+      const promotion = this.product?.getPricePromotion() ?? null;
+      if (promotion && promotion.value >= 0) return promotion;
+      return new ProductPrice().fromData({});
     },
-    computed: {
-      price: (context) => context.product?.price ?? null,
-      priceNormal() {
-        const normal = this.product?.getPriceNormal() ?? null;
-        if (normal && normal.value >= 0) return normal;
-        return new ProductPrice().fromData({});
-      },
-      pricePromotion() {
-        const promotion = this.product?.getPricePromotion() ?? null;
-        if (promotion && promotion.value >= 0) return promotion;
-        return new ProductPrice().fromData({});
-      },
-    },
-  };
+  },
+};
 </script>
 
 <template>
@@ -54,19 +54,19 @@
 </template>
 
 <style lang="scss" scoped>
-  .ProductViewerPriceEditor {
+.ProductViewerPriceEditor {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  .ProductViewerPriceEditor-body {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     justify-content: flex-start;
-    .ProductViewerPriceEditor-body {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      justify-content: flex-start;
 
-      gap: 3px;
-      overflow: hidden;
-    }
+    gap: 3px;
+    overflow: hidden;
   }
+}
 </style>

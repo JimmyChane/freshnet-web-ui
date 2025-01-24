@@ -1,21 +1,21 @@
 <script>
-  import Icon from "./Icon.vue";
-  import Menu from "./Menu.vue";
+import Icon from './Icon.vue';
+import Menu from './Menu.vue';
 
-  export default {
-    Width: Menu.Width,
-    Corner: Menu.Corner,
+export default {
+  Width: Menu.Width,
+  Corner: Menu.Corner,
 
-    components: { Menu, Icon },
-    props: {
-      width: { type: Number, default: Menu.Width.AUTO },
-      corner: { type: Number, default: Menu.Corner.AUTO },
-      menus: { default: undefined },
+  components: { Menu, Icon },
+  props: {
+    width: { type: Number, default: Menu.Width.AUTO },
+    corner: { type: Number, default: Menu.Corner.AUTO },
+    menus: { default: undefined },
 
-      src: { type: String, default: "" },
-      alt: { type: String, default: "" },
-    },
-  };
+    src: { type: String, default: '' },
+    alt: { type: String, default: '' },
+  },
+};
 </script>
 
 <template>
@@ -34,30 +34,30 @@
 </template>
 
 <style lang="scss" scoped>
-  .MenuIcon {
-    font-size: 1rem;
-    font-weight: 600;
+.MenuIcon {
+  font-size: 1rem;
+  font-weight: 600;
 
-    --size: 2.7em;
-    min-width: var(--size);
-    min-height: var(--size);
-    width: var(--size);
-    height: var(--size);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  --size: 2.7em;
+  min-width: var(--size);
+  min-height: var(--size);
+  width: var(--size);
+  height: var(--size);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-    cursor: pointer;
-    background: none;
-    border: none;
-    border-radius: 50%;
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: 50%;
 
-    overflow: hidden;
+  overflow: hidden;
 
-    &:hover,
-    &:focus-within {
-      background: hsla(0, 0%, 0%, 0.1);
-    }
+  &:hover,
+  &:focus-within {
+    background: hsla(0, 0%, 0%, 0.1);
   }
+}
 </style>

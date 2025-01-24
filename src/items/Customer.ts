@@ -1,9 +1,9 @@
-import PhoneNumber from "./PhoneNumber";
-import ItemSearcher from "../objects/ItemSearcher";
+import { optArray, trimId, trimText } from '@/U';
+import { Item } from '@/stores/tools/List';
 
-import CustomerDevice from "./CustomerDevice";
-import { Item } from "@/stores/tools/List";
-import { optArray, trimId, trimText } from "@/U";
+import ItemSearcher from '../objects/ItemSearcher';
+import CustomerDevice from './CustomerDevice';
+import PhoneNumber from './PhoneNumber';
 
 const textContains = ItemSearcher.textContains;
 
@@ -31,10 +31,10 @@ export default class Customer implements Item {
     this.customerStore = stores.customer;
   }
 
-  id: string = "";
-  name: string = "";
+  id: string = '';
+  name: string = '';
   phoneNumber: PhoneNumber | null = null;
-  description: string = "";
+  description: string = '';
   deviceIds: string[] = [];
 
   cachedServices: any[] = [];
@@ -70,7 +70,7 @@ export default class Customer implements Item {
     return {
       _id: trimId(this.id),
       name: trimText(this.name),
-      phoneNumber: this.phoneNumber?.toData().value ?? "",
+      phoneNumber: this.phoneNumber?.toData().value ?? '',
       description: trimText(this.description),
       deviceIds: this.deviceIds.map((deviceId) => deviceId),
     };
@@ -78,9 +78,9 @@ export default class Customer implements Item {
 
   toCount(strs: string[]): number {
     let count = strs.reduce((count, str) => {
-      if (textContains("customer", str)) count++;
+      if (textContains('customer', str)) count++;
       if (textContains(this.name, str)) count++;
-      if (textContains(this.phoneNumber?.toString() ?? "", str)) count++;
+      if (textContains(this.phoneNumber?.toString() ?? '', str)) count++;
       if (textContains(this.description, str)) count++;
       return count;
     }, 0);
@@ -102,15 +102,14 @@ export default class Customer implements Item {
 
   async fetchDevices(): Promise<(CustomerDevice | undefined)[]> {
     if (!this.deviceIds.length) return [];
-    const devices: CustomerDevice[] = await this.customerStore.dispatch(
-      "getDevices",
-    );
+    const devices: CustomerDevice[] =
+      await this.customerStore.dispatch('getDevices');
     return this.deviceIds.map((deviceId) => {
       return devices.find((device) => device.id === deviceId);
     });
   }
 
-  async fetchDeviceGroups(property: string = ""): Promise<any[]> {
+  async fetchDeviceGroups(property: string = ''): Promise<any[]> {
     const devices: (CustomerDevice | undefined)[] = await this.fetchDevices();
 
     const optGroup = (groups: Record<string, any>[], key: any) => {

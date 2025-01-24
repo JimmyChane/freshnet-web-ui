@@ -1,20 +1,21 @@
 <script>
-  import ItemSettingHeader from "./ItemSetting-Header.vue";
-  import Toggle from "./ItemSetting-Toggle.vue";
-  import TextArea from "./ItemSetting-TextArea.vue";
-  import List from "./ItemSetting-List.vue";
-  import { optArray } from "@/U";
+import { optArray } from '@/U';
 
-  export default {
-    name: "ItemSetting",
-    components: { ItemSettingHeader, Toggle, TextArea, List },
-    props: {
-      item: { type: Object, default: () => null },
-      title: { type: String, default: "" },
-    },
-    data: (c) => ({ U }),
-    computed: { list: (c) => optArray(c.item.list) },
-  };
+import ItemSettingHeader from './ItemSetting-Header.vue';
+import List from './ItemSetting-List.vue';
+import TextArea from './ItemSetting-TextArea.vue';
+import Toggle from './ItemSetting-Toggle.vue';
+
+export default {
+  name: 'ItemSetting',
+  components: { ItemSettingHeader, Toggle, TextArea, List },
+  props: {
+    item: { type: Object, default: () => null },
+    title: { type: String, default: '' },
+  },
+  data: (c) => ({ U }),
+  computed: { list: (c) => optArray(c.item.list) },
+};
 </script>
 
 <template>
@@ -36,22 +37,22 @@
 </template>
 
 <style lang="scss" scoped>
-  .ItemSetting {
+.ItemSetting {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow: hidden;
+  gap: 2px;
+  border-radius: 1rem;
+
+  .ItemSetting-item {
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
     align-items: stretch;
-    justify-content: flex-start;
-    overflow: hidden;
-    gap: 2px;
-    border-radius: 1rem;
-
-    .ItemSetting-item {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-    }
   }
+}
 </style>

@@ -1,4 +1,4 @@
-import { Icon } from "@/host/ServerResource";
+import { Icon } from '@/host/ServerResource';
 
 export default class IconPack {
   readonly light: Icon;

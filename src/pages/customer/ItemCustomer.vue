@@ -1,56 +1,54 @@
 <script>
-  import ItemButton from "@/pages/manage/PanelItems-ItemButton.vue";
-  import Label from "./ItemCustomer-Label.vue";
-  import LabelDevice from "./ItemCustomer-LabelDevice.vue";
-  import Customer from "@/items/Customer";
+import IconOrder from '@/assets/icon/order-505050.svg';
+import IconService from '@/assets/icon/service-505050.svg';
+import Customer from '@/items/Customer';
+import ItemButton from '@/pages/manage/PanelItems-ItemButton.vue';
 
-  import IconService from "@/assets/icon/service-505050.svg";
-  import IconOrder from "@/assets/icon/order-505050.svg";
+import Label from './ItemCustomer-Label.vue';
+import LabelDevice from './ItemCustomer-LabelDevice.vue';
 
-  export default {
-    components: { ItemButton, Label, LabelDevice },
-    emtis: ["click", "click-remove"],
-    props: {
-      item: { type: Customer, default: null },
-      selected: { type: Boolean, default: false },
-    },
-    data: (c) => ({ itemDeviceGroups: [], IconService, IconOrder }),
-    computed: {
-      name: (c) => c.item.name,
-      phoneNumber: (c) => c.item.phoneNumber,
-      phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
-      services: (c) => c.item?.services ?? [],
-      orders: (c) => c.item?.orders ?? [],
-    },
-    watch: {
-      item() {
-        this.invalidate();
-      },
-    },
-    mounted() {
+export default {
+  components: { ItemButton, Label, LabelDevice },
+  emtis: ['click', 'click-remove'],
+  props: {
+    item: { type: Customer, default: null },
+    selected: { type: Boolean, default: false },
+  },
+  data: (c) => ({ itemDeviceGroups: [], IconService, IconOrder }),
+  computed: {
+    name: (c) => c.item.name,
+    phoneNumber: (c) => c.item.phoneNumber,
+    phoneNumberStr: (c) => c.phoneNumber?.toString() ?? '',
+    services: (c) => c.item?.services ?? [],
+    orders: (c) => c.item?.orders ?? [],
+  },
+  watch: {
+    item() {
       this.invalidate();
     },
-    methods: {
-      async invalidate() {
-        this.itemDeviceGroups = [];
-        if (!this.item) return;
+  },
+  mounted() {
+    this.invalidate();
+  },
+  methods: {
+    async invalidate() {
+      this.itemDeviceGroups = [];
+      if (!this.item) return;
 
-        const previousName = this.name;
-        const previousPhoneNumberStr = this.phoneNumberStr;
+      const previousName = this.name;
+      const previousPhoneNumberStr = this.phoneNumberStr;
 
-        const itemDeviceGroups = await this.item.fetchDeviceGroups(
-          "categoryKey",
-        );
+      const itemDeviceGroups = await this.item.fetchDeviceGroups('categoryKey');
 
-        if (
-          previousName === this.name &&
-          previousPhoneNumberStr === this.phoneNumberStr
-        ) {
-          this.itemDeviceGroups = itemDeviceGroups;
-        }
-      },
+      if (
+        previousName === this.name &&
+        previousPhoneNumberStr === this.phoneNumberStr
+      ) {
+        this.itemDeviceGroups = itemDeviceGroups;
+      }
     },
-  };
+  },
+};
 </script>
 
 <template>
@@ -92,58 +90,58 @@
 </template>
 
 <style lang="scss" scoped>
-  .ItemCustomer {
-    width: 100%;
-    background: white;
+.ItemCustomer {
+  width: 100%;
+  background: white;
 
-    .ItemCustomer-body {
+  .ItemCustomer-body {
+    width: 100%;
+    font-weight: 400;
+    font-size: 1rem;
+    color: black;
+    text-align: start;
+    flex-grow: 1;
+    height: unset;
+    padding: 0.5rem 0.3rem;
+
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+
+    .ItemCustomer-header {
+      padding: 0.3rem 0.5rem;
       width: 100%;
-      font-weight: 400;
-      font-size: 1rem;
-      color: black;
-      text-align: start;
-      flex-grow: 1;
-      height: unset;
-      padding: 0.5rem 0.3rem;
+      column-gap: 0.5rem;
 
       display: flex;
-      flex-direction: row;
-      align-items: stretch;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
 
-      .ItemCustomer-header {
-        padding: 0.3rem 0.5rem;
-        width: 100%;
-        column-gap: 0.5rem;
-
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-
-        :nth-child(1) {
-          font-size: 1em;
-          color: black;
-        }
-        :nth-child(2) {
-          font-size: 0.8em;
-          color: rgba(0, 0, 0, 0.8);
-        }
+      :nth-child(1) {
+        font-size: 1em;
+        color: black;
       }
+      :nth-child(2) {
+        font-size: 0.8em;
+        color: rgba(0, 0, 0, 0.8);
+      }
+    }
 
-      .ItemCustomer-labels {
-        padding: 0.3rem 0.5rem;
-        font-size: 1rem;
-        gap: 0.1rem;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
+    .ItemCustomer-labels {
+      padding: 0.3rem 0.5rem;
+      font-size: 1rem;
+      gap: 0.1rem;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
 
-        & > * {
-          --primary-color: black;
-          border-radius: 0.5rem;
-          padding: 0.4rem;
-        }
+      & > * {
+        --primary-color: black;
+        border-radius: 0.5rem;
+        padding: 0.4rem;
       }
     }
   }
+}
 </style>

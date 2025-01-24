@@ -1,17 +1,17 @@
-import { trimId, trimText } from "@/U";
+import { trimId, trimText } from '@/U';
 
 export default class Label {
   static URGENT: Label = new Label().fromData({
-    title: "Urgent",
-    hexColor: "d93f35",
+    title: 'Urgent',
+    hexColor: 'd93f35',
   });
   static WARRANTY: Label = new Label().fromData({
-    title: "Warranty",
-    hexColor: "db950c",
+    title: 'Warranty',
+    hexColor: 'db950c',
   });
 
-  title: string = "";
-  hexColor: string = "";
+  title: string = '';
+  hexColor: string = '';
 
   fromData(data: { title: string; hexColor: string }): this {
     this.title = trimText(data.title);

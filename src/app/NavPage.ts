@@ -1,11 +1,11 @@
-import { Icon } from "@/host/ServerResource";
+import { IconAsset, optString, parseIcon, parseKey } from '@/U';
+import { Icon } from '@/host/ServerResource';
 
-import NavViewGroup from "./NavViewGroup";
-import { IconAsset, optString, parseIcon, parseKey } from "@/U";
+import NavViewGroup from './NavViewGroup';
 
 export default class NavPage {
-  key: string = "";
-  title: string = "";
+  key: string = '';
+  title: string = '';
   icon: IconAsset | null = null;
   userPermissions: unknown[] = [];
   groups: NavViewGroup[] = [];

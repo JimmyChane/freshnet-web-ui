@@ -1,86 +1,84 @@
 <script>
-  import WindowAction from "@/components/window/WindowAction.vue";
-  import Spinner from "@/components/selector/Spinner.vue";
-  import { Type } from "@/items/Specification";
-  import Input from "@/components/Input.vue";
+import Input from '@/components/Input.vue';
+import Spinner from '@/components/selector/Spinner.vue';
+import WindowAction from '@/components/window/WindowAction.vue';
+import { Type } from '@/items/Specification';
 
-  const keys = Object.keys(Type.Key).map((objectKey) => {
-    return Type.Key[objectKey];
-  });
+const keys = Object.keys(Type.Key).map((objectKey) => {
+  return Type.Key[objectKey];
+});
 
-  export default {
-    components: { WindowAction, Spinner, Input },
-    props: {
-      isShowing: { type: Boolean, default: false },
-      action: { type: Object, default: null },
+export default {
+  components: { WindowAction, Spinner, Input },
+  props: {
+    isShowing: { type: Boolean, default: false },
+    action: { type: Object, default: null },
+  },
+  data: (c) => ({ data: { key: '', content: '' } }),
+  computed: {
+    typeSelections: (c) => {
+      return c.$store.state.stores.specification.getters.items
+        .map((item) => ({
+          key: item.key,
+          title: item.title,
+          icon: item.icon ? item.icon.toUrl() : '',
+          item: item,
+        }))
+        .sort((item1, item2) => {
+          let key1 = item1.key;
+          let key2 = item2.key;
+
+          let index1 = keys.indexOf(key1);
+          let index2 = keys.indexOf(key2);
+
+          index1 = index1 >= 0 ? index1 : keys.length;
+          index2 = index2 >= 0 ? index2 : keys.length;
+
+          return index1 !== index2 ? index1 - index2 : key1.localeCompare(key2);
+        });
     },
-    data: (c) => ({ data: { key: "", content: "" } }),
-    computed: {
-      typeSelections: (c) => {
-        return c.$store.state.stores.specification.getters.items
-          .map((item) => ({
-            key: item.key,
-            title: item.title,
-            icon: item.icon ? item.icon.toUrl() : "",
-            item: item,
-          }))
-          .sort((item1, item2) => {
-            let key1 = item1.key;
-            let key2 = item2.key;
-
-            let index1 = keys.indexOf(key1);
-            let index2 = keys.indexOf(key2);
-
-            index1 = index1 >= 0 ? index1 : keys.length;
-            index2 = index2 >= 0 ? index2 : keys.length;
-
-            return index1 !== index2
-              ? index1 - index2
-              : key1.localeCompare(key2);
-          });
-      },
+  },
+  methods: {
+    onDismiss() {
+      this.action.onDismiss();
+      this.data = { key: '', content: '' };
     },
-    methods: {
-      onDismiss() {
-        this.action.onDismiss();
-        this.data = { key: "", content: "" };
-      },
-      onCancel() {
-        this.action.onCancel();
-        this.data = { key: "", content: "" };
-      },
-      onConfirm() {
-        Promise.resolve()
-          .then(() => {
-            const selection = this.typeSelections.find(
-              (typeSelection) => typeSelection.key === this.data.key,
-            );
-            if (!selection) {
-              this.$store.dispatch(
-                "snackbarShow",
-                "Cannot find the matching type",
-              );
-              throw new Error();
-            }
-
-            return {
-              type: selection.key,
-              content: this.data.content,
-            };
-          })
-          .then((specification) => {
-            this.action.onConfirm(specification);
-          })
-          .catch((error) => {
+    onCancel() {
+      this.action.onCancel();
+      this.data = { key: '', content: '' };
+    },
+    onConfirm() {
+      Promise.resolve()
+        .then(() => {
+          const selection = this.typeSelections.find(
+            (typeSelection) => typeSelection.key === this.data.key,
+          );
+          if (!selection) {
             this.$store.dispatch(
-              "snackbarShow",
-              "Error While Loading Specification",
+              'snackbarShow',
+              'Cannot find the matching type',
             );
-          });
-        return;
-      },
+            throw new Error();
+          }
+
+          return {
+            type: selection.key,
+            content: this.data.content,
+          };
+        })
+        .then((specification) => {
+          this.action.onConfirm(specification);
+        })
+        .catch((error) => {
+          this.$store.dispatch(
+            'snackbarShow',
+            'Error While Loading Specification',
+          );
+        });
+      return;
     },
-  };
+  },
+};
 </script>
 
 <template>
@@ -115,23 +113,23 @@
 </template>
 
 <style lang="scss" scoped>
-  .WindowSpecificationAdd-body {
-    width: 26rem;
-    height: 35rem;
-    max-width: 100%;
-    max-height: 100%;
+.WindowSpecificationAdd-body {
+  width: 26rem;
+  height: 35rem;
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  .WindowSpecificationAdd-section {
+    width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    .WindowSpecificationAdd-section {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      .WindowSpecificationAdd-input {
-        padding-left: 0;
-        padding-right: 0;
-      }
+    gap: 20px;
+    .WindowSpecificationAdd-input {
+      padding-left: 0;
+      padding-right: 0;
     }
   }
+}
 </style>

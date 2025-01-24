@@ -1,18 +1,18 @@
-import { isAfter, isBefore, format, parse, isSameDay } from "date-fns";
+import { format, isAfter, isBefore, isSameDay, parse } from 'date-fns';
 
 class WorkingHours {
   stores: any;
-  parentDay: string = "";
+  parentDay: string = '';
 
-  constructor(stores: any, day: string = "") {
+  constructor(stores: any, day: string = '') {
     this.stores = stores;
     this.parentDay = day;
   }
 
-  private formatString: string = "h:mmaaa";
+  private formatString: string = 'h:mmaaa';
 
-  private timeStart: string = "";
-  private timeEnd: string = "";
+  private timeStart: string = '';
+  private timeEnd: string = '';
 
   private dateStart: Date = new Date();
   private dateEnd: Date = new Date();
@@ -102,11 +102,11 @@ class WorkingDay {
     this.hours = new WorkingHours(this.stores, this.title);
   }
 
-  title: string = "";
+  title: string = '';
   hours: WorkingHours;
 
   fromData(data: any): WorkingDay {
-    const { title = "", timeStart = "", timeEnd = "" } = data;
+    const { title = '', timeStart = '', timeEnd = '' } = data;
     const dataHours = { timeStart, timeEnd };
 
     this.title = title;

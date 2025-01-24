@@ -1,18 +1,18 @@
 <script>
-  import NavViewGroup from "../NavViewGroup";
-  import NavigationLeftClickable from "./NavigationDrawer-Clickable.vue";
+import NavViewGroup from '../NavViewGroup';
+import NavigationLeftClickable from './NavigationDrawer-Clickable.vue';
 
-  export default {
-    components: { NavigationLeftClickable },
-    props: {
-      group2: { type: NavViewGroup, default: () => null },
-    },
-    computed: {
-      title: (c) => c.group2.title,
-      group3s: (c) => c.group2.groups,
-      isWide: (c) => c.group2.isWide(),
-    },
-  };
+export default {
+  components: { NavigationLeftClickable },
+  props: {
+    group2: { type: NavViewGroup, default: () => null },
+  },
+  computed: {
+    title: (c) => c.group2.title,
+    group3s: (c) => c.group2.groups,
+    isWide: (c) => c.group2.isWide(),
+  },
+};
 </script>
 
 <template>
@@ -38,37 +38,37 @@
 </template>
 
 <style lang="scss" scoped>
-  .NavViewGroup {
-    display: flex;
-    flex-direction: column;
+.NavViewGroup {
+  display: flex;
+  flex-direction: column;
 
-    .NavViewGroup-title {
-      width: fit-content;
-      margin-left: 0.4em;
-      padding: 0.6rem 1rem;
+  .NavViewGroup-title {
+    width: fit-content;
+    margin-left: 0.4em;
+    padding: 0.6rem 1rem;
 
-      font-size: 0.7em;
-      font-weight: 600;
-      opacity: 1;
-      letter-spacing: 0.3em;
-    }
-
-    .NavViewGroup-groups {
-      display: flex;
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0.2em;
-
-      & > * {
-        width: 100%;
-      }
-    }
+    font-size: 0.7em;
+    font-weight: 600;
+    opacity: 1;
+    letter-spacing: 0.3em;
   }
 
-  .NavViewGroup[isWide="true"] {
-    width: 100%;
-    .NavViewGroup-group3s {
+  .NavViewGroup-groups {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.2em;
+
+    & > * {
       width: 100%;
     }
   }
+}
+
+.NavViewGroup[isWide='true'] {
+  width: 100%;
+  .NavViewGroup-group3s {
+    width: 100%;
+  }
+}
 </style>

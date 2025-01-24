@@ -1,4 +1,4 @@
-import { isObject } from "@/U";
+import { isObject } from '@/U';
 
 const isUndefinedOrNull = (value: any) => value === null || value === undefined;
 
@@ -88,8 +88,8 @@ export default class List<T extends Item> {
     const inputItem = updater(item);
     const isReadableObject =
       !isUndefinedOrNull(inputItem) && isObject(inputItem);
-    const inputItemId = isReadableObject ? inputItem.getId() : "";
-    const itemId = item === null || item === undefined ? "" : item.getUnique();
+    const inputItemId = isReadableObject ? inputItem.getId() : '';
+    const itemId = item === null || item === undefined ? '' : item.getUnique();
 
     if (isReadableObject && inputItem !== item && inputItemId === itemId) {
       const index = item ? this.items.indexOf(item) : -1;

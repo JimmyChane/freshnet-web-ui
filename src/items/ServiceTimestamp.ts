@@ -1,27 +1,29 @@
 import {
-  isToday,
-  isYesterday,
-  isThisYear,
+  endOfDay,
   getDay,
   getMonth,
   getYear,
+  isThisYear,
+  isToday,
+  isYesterday,
   previousDay,
-  endOfDay,
-} from "date-fns";
+} from 'date-fns';
 
-import ItemSearcher from "../objects/ItemSearcher";
-import { optNumber } from "@/U";
+import { optNumber } from '@/U';
+
+import ItemSearcher from '../objects/ItemSearcher';
+
 const textContains = ItemSearcher.textContains;
 
 const getTextOfDayNumber = (day: number): string => {
-  if (day === 0) return "Sunday";
-  if (day === 1) return "Monday";
-  if (day === 2) return "Tuesday";
-  if (day === 3) return "Wednesday";
-  if (day === 4) return "Thursday";
-  if (day === 5) return "Friday";
-  if (day === 6) return "Saturday";
-  return "";
+  if (day === 0) return 'Sunday';
+  if (day === 1) return 'Monday';
+  if (day === 2) return 'Tuesday';
+  if (day === 3) return 'Wednesday';
+  if (day === 4) return 'Thursday';
+  if (day === 5) return 'Friday';
+  if (day === 6) return 'Saturday';
+  return '';
 };
 
 export default class ServiceTimestamp {
@@ -33,7 +35,7 @@ export default class ServiceTimestamp {
 
   toCount(strs: string[]): number {
     return strs.reduce((count, str) => {
-      if (textContains("timestamp", str)) count++;
+      if (textContains('timestamp', str)) count++;
       if (textContains(this.toString(), str)) count++;
       return count;
     }, 0);
@@ -67,7 +69,7 @@ export default class ServiceTimestamp {
 
     const hour = timestamp.getHours();
     const minute = timestamp.getMinutes();
-    const afterTime = hour < 12 ? "am" : "pm";
+    const afterTime = hour < 12 ? 'am' : 'pm';
 
     return `${hour.toString().length === 1 ? `0${hour}` : hour}:${
       minute.toString().length === 1 ? `0${minute}` : minute

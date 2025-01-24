@@ -1,4 +1,4 @@
-import { optString, parseIcon, parseKey, IconAsset } from "@/U";
+import { IconAsset, optString, parseIcon, parseKey } from '@/U';
 
 export default class Resource {
   key: string;

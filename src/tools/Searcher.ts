@@ -1,4 +1,4 @@
-import { isString } from "@/U";
+import { isString } from '@/U';
 
 interface SearchResult {
   count: number;
@@ -30,7 +30,7 @@ export default class Searcher {
     }, []);
   }
 
-  onSplitString(str: string = ""): string[] {
+  onSplitString(str: string = ''): string[] {
     return str
       .toLowerCase()
       .split(/[\s,]+/)
@@ -46,7 +46,7 @@ export default class Searcher {
         const result = this.onCountItem(item, strs);
         if (result.count > 0) results.push(result);
       } catch (error) {
-        console.error("skip search item", error);
+        console.error('skip search item', error);
       }
       return results;
     }, [] as SearchResult[]);

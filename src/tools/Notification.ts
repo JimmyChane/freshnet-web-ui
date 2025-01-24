@@ -1,4 +1,5 @@
-import TimeNowGetter from "@/tools/TimeNowGetter";
+import TimeNowGetter from '@/tools/TimeNowGetter';
+
 const keyGetter = new TimeNowGetter();
 
 export default class Notification {
@@ -47,7 +48,7 @@ export default class Notification {
     setTimeout(() => {
       const index = this.context.state.snackbars.indexOf(this);
       this.context.state.snackbars.splice(index, 1);
-      this.context.commit("snackbars", this.context.state.snackbars);
+      this.context.commit('snackbars', this.context.state.snackbars);
     }, 80);
 
     return this;

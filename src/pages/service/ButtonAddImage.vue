@@ -1,5 +1,5 @@
 <script>
-  export default { emits: ["callback-result"] };
+export default { emits: ['callback-result'] };
 </script>
 
 <template>
@@ -23,33 +23,33 @@
 </template>
 
 <style lang="scss" scoped>
-  .ButtonImageAdd {
-    position: relative;
-    border: none;
-    background: white;
-    cursor: pointer;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+.ButtonImageAdd {
+  position: relative;
+  border: none;
+  background: white;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 
-    &:hover {
-      background: hsla(201, 35%, 25%, 0.2);
-    }
-    .ButtonImageAdd-icon {
-      width: 20%;
-      height: 20%;
-      cursor: pointer;
-    }
-    .ButtonImageAdd-pick {
-      position: absolute;
-      display: flex;
-      min-width: 100%;
-      min-height: 100%;
-      max-width: 100%;
-      max-height: 100%;
-      opacity: 0;
-      cursor: pointer;
-    }
+  &:hover {
+    background: hsla(201, 35%, 25%, 0.2);
   }
+  .ButtonImageAdd-icon {
+    width: 20%;
+    height: 20%;
+    cursor: pointer;
+  }
+  .ButtonImageAdd-pick {
+    position: absolute;
+    display: flex;
+    min-width: 100%;
+    min-height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
 </style>

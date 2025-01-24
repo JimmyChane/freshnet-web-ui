@@ -1,9 +1,10 @@
-G<script>
-  export default {
-    props: {
-      isSelected: { type: Boolean, default: false },
-    },
-  };
+G
+<script>
+export default {
+  props: {
+    isSelected: { type: Boolean, default: false },
+  },
+};
 </script>
 
 <template>

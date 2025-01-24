@@ -1,37 +1,38 @@
-import ItemSearcher from "../objects/ItemSearcher";
-import { Item } from "@/stores/tools/List";
-import Image from "./Image";
-import { isObjectOnly, trimId, trimText } from "@/U";
+import { isObjectOnly, trimId, trimText } from '@/U';
+import { Item } from '@/stores/tools/List';
+
+import ItemSearcher from '../objects/ItemSearcher';
+import Image from './Image';
 
 export class Type implements Item {
   static Key = {
-    Processor: "processor",
-    Ram: "ram",
-    Size: "size",
-    Storage: "storage",
-    Resolution: "resolution",
-    Display: "display",
-    Monitor: "monitor",
-    Graphic: "graphic",
+    Processor: 'processor',
+    Ram: 'ram',
+    Size: 'size',
+    Storage: 'storage',
+    Resolution: 'resolution',
+    Display: 'display',
+    Monitor: 'monitor',
+    Graphic: 'graphic',
 
-    Keyboard: "keyboard",
-    Backlight: "backlight",
-    Stylus: "stylus",
-    Camera: "camera",
-    Battery: "battery",
+    Keyboard: 'keyboard',
+    Backlight: 'backlight',
+    Stylus: 'stylus',
+    Camera: 'camera',
+    Battery: 'battery',
 
-    Speed: "speed",
-    Wifi: "wifi",
-    Bluetooth: "bluetooth",
+    Speed: 'speed',
+    Wifi: 'wifi',
+    Bluetooth: 'bluetooth',
 
-    Print: "print",
-    Scan: "scan",
-    Paper: "paper",
-    Ink: "ink",
-    Connectivity: "connectivity",
+    Print: 'print',
+    Scan: 'scan',
+    Paper: 'paper',
+    Ink: 'ink',
+    Connectivity: 'connectivity',
 
-    Colour: "colour",
-    Os: "os",
+    Colour: 'colour',
+    Os: 'os',
   };
 
   stores: any;
@@ -40,11 +41,11 @@ export class Type implements Item {
     this.stores = stores;
   }
 
-  id: string = "";
-  key: string = "";
-  title: string = "";
+  id: string = '';
+  key: string = '';
+  title: string = '';
   icon: Image | null = null;
-  color: string = "";
+  color: string = '';
 
   fromData(data: {
     _id?: string;
@@ -53,13 +54,13 @@ export class Type implements Item {
     icon?: any;
     color?: string;
   }): Type {
-    this.id = trimId(data._id || "");
-    this.key = trimId(data.key || "");
-    this.title = trimText(data.title || "");
+    this.id = trimId(data._id || '');
+    this.key = trimId(data.key || '');
+    this.title = trimText(data.title || '');
     this.icon = isObjectOnly(data.icon)
       ? new Image().fromData(data.icon)
       : null;
-    this.color = trimId(data.color || "");
+    this.color = trimId(data.color || '');
 
     return this;
   }
@@ -99,9 +100,9 @@ export default class Specification {
   stores: any;
   specificationStore: any;
 
-  typeKey: string = "";
+  typeKey: string = '';
   type: Type | null = null;
-  content: string = "";
+  content: string = '';
 
   constructor(stores: any) {
     this.stores = stores;
@@ -135,9 +136,8 @@ export default class Specification {
   async fetchType(): Promise<Type | null> {
     if (this.type instanceof Type) return this.type;
 
-    const specifications: Type[] = await this.specificationStore.dispatch(
-      "getItems",
-    );
+    const specifications: Type[] =
+      await this.specificationStore.dispatch('getItems');
     const specification = specifications.find((specification) => {
       return specification.key == this.typeKey;
     });
@@ -149,9 +149,9 @@ export default class Specification {
     if (this.type instanceof Type) {
       return this.type.key;
     }
-    if (typeof this.type === "string") {
+    if (typeof this.type === 'string') {
       return this.typeKey;
     }
-    return "";
+    return '';
   }
 }

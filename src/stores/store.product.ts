@@ -1,23 +1,40 @@
-import Product from "../items/Product";
-import Specification from "../items/Specification";
-import Image from "../items/Image";
-import Category from "@/items/Category";
-import Vuex from "vuex";
+import Vuex from 'vuex';
 
-import StoreBuilder from "./tools/StoreBuilder";
-import ProductRequest from "@/request/Product";
-import ProductPrices from "@/items/ProductPrices";
-import Brand from "@/items/Brand";
-import ProductBundle from "@/items/ProductBundle";
-import { isString, optString, trimText } from "@/U";
+import { isString, optArray, optString, trimText } from '@/U';
+import Brand from '@/items/Brand';
+import Category from '@/items/Category';
+import ProductBundle from '@/items/ProductBundle';
+import ProductPrices from '@/items/ProductPrices';
+import ProductRequest, {
+  addProduct,
+  addProductBundle,
+  addProductGift,
+  addProductImage,
+  addProductSpecification,
+  getProductList,
+  removeProduct,
+  updateProductAvailability,
+  updateProductBrand,
+  updateProductCategory,
+  updateProductDescription,
+  updateProductPrice,
+  updateProductSecondHand,
+  updateProductSpecifications,
+  updateProductTitle,
+} from '@/request/Product';
+
+import Image from '../items/Image';
+import Product from '../items/Product';
+import Specification from '../items/Specification';
+import StoreBuilder from './tools/StoreBuilder';
 
 const init = (Stores: any) => {
   const categoryStore = Stores.category;
 
   const context = new StoreBuilder<Product>()
     .onFetchItems(async () => {
-      const api = await ProductRequest.list();
-      const content: any[] = api.optArrayContent();
+      const api = await getProductList();
+      const content = optArray(api.optArrayContent());
       const promises = content.map((content) => {
         return new Product(Stores).fromData(content);
       });
@@ -25,27 +42,27 @@ const init = (Stores: any) => {
     })
     .onGetStore(() => Stores.product)
 
-    .action("refresh", async (context) => {
+    .action('refresh', async (context) => {
       context.state.dataLoader.doTimeout();
-      await context.dispatch("getItems");
+      await context.dispatch('getItems');
     })
-    .action("getItems", async (context) => {
+    .action('getItems', async (context) => {
       return context.state.dataLoader.data();
     })
-    .action("getItemOfId", async (context, id = "") => {
-      let items: Product[] = await context.dispatch("getItems");
+    .action('getItemOfId', async (context, id = '') => {
+      let items: Product[] = await context.dispatch('getItems');
       let item: Product | undefined = items.find((item) => item.id === id);
       if (!item) {
-        items = await context.dispatch("refresh");
+        items = await context.dispatch('refresh');
         item = items.find((item) => item.id === id);
       }
       return item;
     })
-    .action("getGroupsByCategory", async (context) => {
-      const items = await context.dispatch("getItems");
+    .action('getGroupsByCategory', async (context) => {
+      const items = await context.dispatch('getItems');
 
       const categoryOther: Category | null = await categoryStore.dispatch(
-        "getItemOfKey",
+        'getItemOfKey',
         Category.Key.Other,
       );
 
@@ -58,7 +75,7 @@ const init = (Stores: any) => {
       for (const item of items) {
         let category = await item.fetchCategory();
         if (!category) category = categoryOther;
-        let categoryId = category?.id ?? "";
+        let categoryId = category?.id ?? '';
 
         let group = groups.find((group) => {
           return group.category.id === categoryId;
@@ -73,8 +90,8 @@ const init = (Stores: any) => {
 
       return groups;
     })
-    .action("getGroupsByBrand", async (context) => {
-      const items: Product[] = await context.dispatch("getItems");
+    .action('getGroupsByBrand', async (context) => {
+      const items: Product[] = await context.dispatch('getItems');
 
       interface Group {
         brand: Brand | null | undefined;
@@ -84,7 +101,7 @@ const init = (Stores: any) => {
       const groups: Group[] = [];
       for (const item of items) {
         let group = groups.find((group) => {
-          const brandId = group.brand?.id ?? "";
+          const brandId = group.brand?.id ?? '';
           return brandId === item.brandId;
         });
 
@@ -98,26 +115,29 @@ const init = (Stores: any) => {
 
       return groups;
     })
-    .action("addItem", async (context, arg: { data: any }) => {
+    .action('addItem', async (context, arg: { data: any }) => {
       const { data } = arg;
-      if (!data) throw new Error("data not valid");
-      const api = await ProductRequest.addItem(data);
+      if (!data) throw new Error('data not valid');
+      const api = await addProduct(data);
       const inputItem = new Product(Stores).fromData(api.optObjectContent());
       return context.state.list.addItem(inputItem);
     })
-    .action("removeItemOfId", async (context, arg: { id: string }) => {
+    .action('removeItemOfId', async (context, arg: { id: string }) => {
       const { id } = arg;
-      const api = await ProductRequest.removeItem(id);
+      const api = await removeProduct(id);
       api.getContent();
       context.state.list.removeItemById(id);
       return true;
     })
     .action(
-      "updateTitleOfId",
+      'updateTitleOfId',
       async (context, arg: { id: string; title: string }) => {
         const { id, title } = arg;
-        const api = await ProductRequest.updateTitle(id, title);
-        const content = api.optObjectContent();
+        const api = await updateProductTitle(id, title);
+        const content = api.optObjectContent() as {
+          productId: string;
+          title: string;
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           item.title = optString(content.title);
@@ -125,24 +145,30 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateDescriptionOfId",
+      'updateDescriptionOfId',
       async (context, arg: { id: string; description: string }) => {
         const { id, description } = arg;
-        const api = await ProductRequest.updateDescription(id, description);
-        const content = api.optObjectContent();
+        const api = await updateProductDescription(id, description);
+        const content = api.optObjectContent() as {
+          productId: string;
+          description: string;
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           const { description } = content;
-          item.description = isString(description) ? description.trim() : "";
+          item.description = isString(description) ? description.trim() : '';
         });
       },
     )
     .action(
-      "updateBrandIdOfId",
+      'updateBrandIdOfId',
       async (context, arg: { id: string; brandId: string }) => {
         const { id, brandId } = arg;
-        const api = await ProductRequest.updateBrand(id, brandId);
-        const content = api.optObjectContent();
+        const api = await updateProductBrand(id, brandId);
+        const content = api.optObjectContent() as {
+          productId: string;
+          brandId: string;
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           item.setBrandId(content.brandId);
@@ -150,11 +176,14 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateCategoryIdOfId",
+      'updateCategoryIdOfId',
       async (context, arg: { id: string; categoryId: string }) => {
         const { id, categoryId } = arg;
-        const api = await ProductRequest.updateCategory(id, categoryId);
-        const content = api.optObjectContent();
+        const api = await updateProductCategory(id, categoryId);
+        const content = api.optObjectContent() as {
+          productId: string;
+          categoryId: string;
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           item.setCategoryId(content.categoryId);
@@ -162,11 +191,14 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateAvailabilityOfId",
+      'updateAvailabilityOfId',
       async (context, arg: { id: string; isAvailable: boolean }) => {
         const { id, isAvailable } = arg;
-        const api = await ProductRequest.updateAvailability(id, isAvailable);
-        const content = api.optObjectContent();
+        const api = await updateProductAvailability(id, isAvailable);
+        const content = api.optObjectContent() as {
+          productId: string;
+          isAvailable: boolean;
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           if (item.stock) item.stock.isAvailable = content.isAvailable;
@@ -174,11 +206,14 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateSecondHandOfId",
+      'updateSecondHandOfId',
       async (context, arg: { id: string; isSecondHand: boolean }) => {
         const { id, isSecondHand } = arg;
-        const api = await ProductRequest.updateSecondHand(id, isSecondHand);
-        const content = api.optObjectContent();
+        const api = await updateProductSecondHand(id, isSecondHand);
+        const content = api.optObjectContent() as {
+          productId: string;
+          isSecondHand: boolean;
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           if (item.stock) item.stock.isSecondHand = content.isSecondHand;
@@ -186,15 +221,18 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updatePriceOfId",
+      'updatePriceOfId',
       async (context, arg: { id: string; price: any }) => {
         const { id, price } = arg;
-        const api = await ProductRequest.updatePrice(
+        const api = await updateProductPrice(
           id,
           new ProductPrices(Stores).fromData(price).toData(),
         );
 
-        const content = api.optObjectContent();
+        const content = api.optObjectContent() as {
+          productId: string;
+          price: any;
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           item.setPrice(
@@ -204,11 +242,14 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "addBundleOfId",
+      'addBundleOfId',
       async (context, arg: { id: string; bundle: any }) => {
         const { id, bundle } = arg;
-        const api = await ProductRequest.addBundle(id, bundle);
-        const content = api.optObjectContent();
+        const api = await addProductBundle(id, bundle);
+        const content = api.optObjectContent() as {
+          productId: string;
+          bundle: any;
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           item.addBundle(
@@ -220,7 +261,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "removeBundleOfId",
+      'removeBundleOfId',
       async (context, arg: { id: string; bundle: any }) => {
         const { id, bundle } = arg;
         const api = await ProductRequest.removeBundle(id, bundle);
@@ -231,17 +272,20 @@ const init = (Stores: any) => {
         });
       },
     )
-    .action("addGiftOfId", async (context, arg: { id: string; gift: any }) => {
+    .action('addGiftOfId', async (context, arg: { id: string; gift: any }) => {
       const { id, gift } = arg;
-      const api = await ProductRequest.addGift(id, gift);
-      const content = api.optObjectContent();
+      const api = await addProductGift(id, gift);
+      const content = api.optObjectContent() as {
+        productId: string;
+        gift: any;
+      };
       return context.state.list.updateItemById(content.productId, (item) => {
         if (!item) return;
         item.addGift(content.gift);
       });
     })
     .action(
-      "removeGiftOfId",
+      'removeGiftOfId',
       async (context, arg: { id: string; gift: any }) => {
         const { id, gift } = arg;
         const api = await ProductRequest.removeGift(id, gift);
@@ -253,11 +297,14 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "addSpecificationOfId",
+      'addSpecificationOfId',
       async (context, arg: { id: string; specification: any }) => {
         const { id, specification } = arg;
-        const api = await ProductRequest.addSpecification(id, specification);
-        const content = api.optObjectContent();
+        const api = await addProductSpecification(id, specification);
+        const content = api.optObjectContent() as {
+          productId: string;
+          specification: any;
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           item.addSpecification(content.specification);
@@ -265,7 +312,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "removeSpecificationOfId",
+      'removeSpecificationOfId',
       async (context, arg: { id: string; specification: any }) => {
         const { id } = arg;
         let { specification } = arg;
@@ -283,14 +330,14 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateSpecificationsOfId",
+      'updateSpecificationsOfId',
       async (context, arg: { id: string; specifications: any[] }) => {
         const { id, specifications } = arg;
-        const api = await ProductRequest.updateSpecifications(
-          id,
-          specifications,
-        );
-        const content = api.optObjectContent();
+        const api = await updateProductSpecifications(id, specifications);
+        const content = api.optObjectContent() as {
+          productId: string;
+          specifications: any[];
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           item.setSpecifications(content.specifications);
@@ -298,7 +345,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "addImageOfId",
+      'addImageOfId',
       async (context, arg: { id: string; files: any }) => {
         const { id, files } = arg;
 
@@ -307,8 +354,11 @@ const init = (Stores: any) => {
           imageFileForm.append(file.name, file);
         }
 
-        const api = await ProductRequest.addImage(id, imageFileForm);
-        const content = api.optObjectContent();
+        const api = await addProductImage(id, imageFileForm);
+        const content = api.optObjectContent() as {
+          productId: string;
+          images: any[];
+        };
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
           item.addImages(content.images);
@@ -316,7 +366,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "removeImageOfId",
+      'removeImageOfId',
       async (context, arg: { id: string; image: any }) => {
         const { id } = arg;
         let { image } = arg;

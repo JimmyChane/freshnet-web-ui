@@ -1,4 +1,4 @@
-import { isFunction, isObjectOnly, optString } from "@/U";
+import { isFunction, isObjectOnly, optString } from '@/U';
 
 const Mixin = {
   created(this: any) {
@@ -18,10 +18,10 @@ const Mixin = {
       color = isObjectOnly(color) ? color : {};
 
       const {
-        primary = "",
-        primaryLight = "",
-        primaryDark = "",
-        accent = "",
+        primary = '',
+        primaryLight = '',
+        primaryDark = '',
+        accent = '',
       } = color;
 
       return { primary, primaryLight, primaryDark, accent };
@@ -34,7 +34,7 @@ const Mixin = {
       }
       icon = isObjectOnly(icon) ? icon : {};
 
-      const { light = "", dark = "", color = "" } = icon;
+      const { light = '', dark = '', color = '' } = icon;
 
       return { light, dark, color };
     };

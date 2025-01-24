@@ -1,57 +1,57 @@
 <script>
-  import Loading from "@/components/Loading";
-  import Input from "@/components/Input.vue";
-  import Actionbar from "@/components/actionbar/Actionbar.vue";
-  import Footer from "@/app/footer/Footer.vue";
+import Footer from '@/app/footer/Footer.vue';
+import IconHamburgerMenu from '@/assets/icon/hamburgerMenu-000000.svg';
+import Logo from '@/assets/logo/freshnet-enterprise-logo.svg';
+import Input from '@/components/Input.vue';
+import Loading from '@/components/Loading';
+import Actionbar from '@/components/actionbar/Actionbar.vue';
 
-  import ButtonLogin from "./ButtonLogin.vue";
-  import Logo from "@/assets/logo/freshnet-enterprise-logo.svg";
-  import IconHamburgerMenu from "@/assets/icon/hamburgerMenu-000000.svg";
+import ButtonLogin from './ButtonLogin.vue';
 
-  export default {
-    title: "Staff Login",
+export default {
+  title: 'Staff Login',
 
-    components: { Loading, Input, ButtonLogin, Actionbar, Footer },
-    data: (c) => ({
-      Logo,
-      IconHamburgerMenu,
-      top: { shadow: false },
-      usernameErrorText: "",
-      passwordErrorText: "",
-    }),
-    computed: {
-      isLoading: (c) => c.$store.state.stores.login.getters.isLoading,
+  components: { Loading, Input, ButtonLogin, Actionbar, Footer },
+  data: (c) => ({
+    Logo,
+    IconHamburgerMenu,
+    top: { shadow: false },
+    usernameErrorText: '',
+    passwordErrorText: '',
+  }),
+  computed: {
+    isLoading: (c) => c.$store.state.stores.login.getters.isLoading,
+  },
+  methods: {
+    clickLogin() {
+      let redirect = this.$route.query.redirect ?? '/home';
+
+      const username = this.$refs.username.value;
+      const password = this.$refs.password.value;
+      this.usernameErrorText = '';
+      this.passwordErrorText = '';
+
+      if (username === '') this.usernameErrorText = 'Missing Field';
+      if (password === '') this.passwordErrorText = 'Missing Field';
+      if (username === '' || password == '') return;
+
+      this.$store.state.stores.login
+        .dispatch('login', { username, password })
+        .then((user) => setTimeout(() => this.$router.push(redirect), 200))
+        .catch(() => {
+          this.$store.dispatch('snackbarShow', 'Login failed');
+          this.usernameErrorText = 'Check your username';
+          this.passwordErrorText = 'Check your password';
+        });
     },
-    methods: {
-      clickLogin() {
-        let redirect = this.$route.query.redirect ?? "/home";
-
-        const username = this.$refs.username.value;
-        const password = this.$refs.password.value;
-        this.usernameErrorText = "";
-        this.passwordErrorText = "";
-
-        if (username === "") this.usernameErrorText = "Missing Field";
-        if (password === "") this.passwordErrorText = "Missing Field";
-        if (username === "" || password == "") return;
-
-        this.$store.state.stores.login
-          .dispatch("login", { username, password })
-          .then((user) => setTimeout(() => this.$router.push(redirect), 200))
-          .catch(() => {
-            this.$store.dispatch("snackbarShow", "Login failed");
-            this.usernameErrorText = "Check your username";
-            this.passwordErrorText = "Check your password";
-          });
-      },
-    },
-    async mounted() {
-      let user = await this.$store.state.stores.login.dispatch("getUser");
-      if (user.isTypeNone()) return;
-      if (!this.$route.query.redirect) return;
-      this.$router.replace({ path: this.$route.query.redirect });
-    },
-  };
+  },
+  async mounted() {
+    let user = await this.$store.state.stores.login.dispatch('getUser');
+    if (user.isTypeNone()) return;
+    if (!this.$route.query.redirect) return;
+    this.$router.replace({ path: this.$route.query.redirect });
+  },
+};
 </script>
 
 <template>
@@ -118,86 +118,86 @@
 </template>
 
 <style lang="scss" scoped>
-  .PageLogin {
+.PageLogin {
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  color: black;
+  overflow-y: auto;
+  z-index: 1;
+
+  --max-width: 28em;
+
+  .PageLogin-Loading {
+    z-index: 3;
+    position: fixed;
+    top: 0;
     width: 100%;
-    height: 100%;
-    position: relative;
+  }
+
+  .PageLogin-top {
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    position: sticky;
+  }
+
+  .PageLogin-main {
+    z-index: 1;
+    width: 100%;
+    min-height: max-content;
+    height: 100dvh;
+    max-height: 100%;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
 
-    color: black;
-    overflow-y: auto;
-    z-index: 1;
+    gap: 1em;
+    padding: 2em;
 
-    --max-width: 28em;
-
-    .PageLogin-Loading {
-      z-index: 3;
-      position: fixed;
-      top: 0;
+    .PageLogin-title {
       width: 100%;
-    }
-
-    .PageLogin-top {
-      top: 0;
-      right: 0;
-      left: 0;
-      z-index: 2;
-      width: 100%;
-      position: sticky;
-    }
-
-    .PageLogin-main {
-      z-index: 1;
-      width: 100%;
-      min-height: max-content;
-      height: 100dvh;
-      max-height: 100%;
+      max-width: var(--max-width);
 
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
 
-      gap: 1em;
-      padding: 2em;
+      color: rgba(0, 0, 0, 0.8);
 
-      .PageLogin-title {
+      font-size: 4rem;
+      line-height: 1.4;
+    }
+
+    .PageLogin-content {
+      width: 100%;
+      max-width: var(--max-width);
+      padding: 20px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+
+      & > * {
         width: 100%;
-        max-width: var(--max-width);
-
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
-        color: rgba(0, 0, 0, 0.8);
-
-        font-size: 4rem;
-        line-height: 1.4;
       }
 
-      .PageLogin-content {
-        width: 100%;
-        max-width: var(--max-width);
-        padding: 20px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 14px;
-
-        & > * {
-          width: 100%;
-        }
-
-        .PageLogin-input {
-          padding: 0.8rem 1rem;
-        }
+      .PageLogin-input {
+        padding: 0.8rem 1rem;
       }
     }
   }
+}
 </style>

@@ -1,5 +1,5 @@
 <script>
-  export default { emits: ["click"] };
+export default { emits: ['click'] };
 </script>
 
 <template>
@@ -12,25 +12,25 @@
 </template>
 
 <style lang="scss" scoped>
-  .ButtonAddEvent {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+.ButtonAddEvent {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 
-    border: none;
-    background: white;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    padding: 1em;
+  border: none;
+  background: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  padding: 1em;
 
-    &:hover {
-      background: hsla(201, 22%, 53%, 0.2);
-    }
-    .ButtonAddEvent-icon {
-      width: 1em;
-      height: 1em;
-    }
+  &:hover {
+    background: hsla(201, 22%, 53%, 0.2);
   }
+  .ButtonAddEvent-icon {
+    width: 1em;
+    height: 1em;
+  }
+}
 </style>

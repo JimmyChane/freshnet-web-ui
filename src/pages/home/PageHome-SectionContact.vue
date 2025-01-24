@@ -1,55 +1,59 @@
 <script>
-  import Section from "./PageHome-Section.vue";
-  import Setting from "@/items/Setting";
-  import Link from "./PageHome-Link.vue";
+import Setting from '@/items/Setting';
 
-  export default {
-    components: { Section, Link },
-    props: { isThin: { type: Boolean, default: false } },
-    data: (c) => ({ callContacts: [], chatContacts: [] }),
-    watch: {
-      "$store.state.stores.setting.getters.lastModified"() {
-        this.invalidate();
-      },
-    },
-    mounted() {
+import Link from './PageHome-Link.vue';
+import Section from './PageHome-Section.vue';
+
+export default {
+  components: { Section, Link },
+  props: { isThin: { type: Boolean, default: false } },
+  data: (c) => ({ callContacts: [], chatContacts: [] }),
+  watch: {
+    '$store.state.stores.setting.getters.lastModified'() {
       this.invalidate();
     },
-    methods: {
-      async invalidate() {
-        const contacts = await this.$store.state.stores.setting.dispatch("findValueOfKey", {
+  },
+  mounted() {
+    this.invalidate();
+  },
+  methods: {
+    async invalidate() {
+      const contacts = await this.$store.state.stores.setting.dispatch(
+        'findValueOfKey',
+        {
           key: Setting.Key.Contacts,
           default: [],
-        });
+        },
+      );
 
-        this.callContacts = [];
-        this.chatContacts = [];
-        for (const contact of contacts) {
-          for (const link of contact.links) {
-            const categoryKey = link.category?.key ?? "";
-            const categoryIcon = link.category?.icon ?? "";
-            if (categoryKey === "call" || categoryKey === "telephone") {
-              this.callContacts.push({
-                title: contact.title,
-                href: link.toHtmlHref(),
-                target: link.toHtmlTarget(),
-                icon: categoryIcon,
-              });
-            } else {
-              const categoryTitle = link.category?.title ?? "";
-              this.chatContacts.push({
-                title: contact.title,
-                title1: categoryTitle,
-                href: link.toHtmlHref(),
-                target: link.toHtmlTarget(),
-                icon: categoryIcon,
-              });
-            }
+      this.callContacts = [];
+      this.chatContacts = [];
+      for (const contact of contacts) {
+        for (const link of contact.links) {
+          const categoryKey = link.category?.key ?? '';
+          const categoryIcon = link.category?.icon ?? '';
+          if (categoryKey === 'call' || categoryKey === 'telephone') {
+            this.callContacts.push({
+              title: contact.title,
+              href: link.toHtmlHref(),
+              target: link.toHtmlTarget(),
+              icon: categoryIcon,
+            });
+          } else {
+            const categoryTitle = link.category?.title ?? '';
+            this.chatContacts.push({
+              title: contact.title,
+              title1: categoryTitle,
+              href: link.toHtmlHref(),
+              target: link.toHtmlTarget(),
+              icon: categoryIcon,
+            });
           }
         }
-      },
+      }
     },
-  };
+  },
+};
 </script>
 
 <template>
@@ -91,45 +95,45 @@
 </template>
 
 <style lang="scss" scoped>
-  .HomeSectionContact {
+.HomeSectionContact {
+  width: 100%;
+  border-radius: 1em;
+  overflow: hidden;
+  gap: 1.5em 0.8em;
+
+  display: grid;
+  grid-auto-flow: row;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+
+  justify-content: center;
+  align-items: center;
+  justify-items: center;
+  align-content: center;
+
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  & > * {
+    gap: 1.5em;
     width: 100%;
-    border-radius: 1em;
-    overflow: hidden;
-    gap: 1.5em 0.8em;
-
-    display: grid;
-    grid-auto-flow: row;
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
-
-    justify-content: center;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-items: center;
-    align-content: center;
 
-    flex-direction: row;
-    flex-wrap: wrap;
+    span {
+      text-align: center;
+    }
 
     & > * {
-      gap: 1.5em;
       width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      span {
-        text-align: center;
-      }
+      gap: 0.5em;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
 
       & > * {
-        width: 100%;
-        gap: 0.5em;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(12em, 1fr));
-
-        & > * {
-          flex-direction: column;
-        }
+        flex-direction: column;
       }
     }
   }
+}
 </style>

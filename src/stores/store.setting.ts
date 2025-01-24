@@ -1,9 +1,12 @@
-import Vuex from "vuex";
-import Setting from "@/items/Setting";
-import StoreBuilder from "./tools/StoreBuilder";
-import SettingRequest from "@/request/Setting";
-import Contact from "@/items/Contact";
-import WorkingDay from "@/items/WorkingDay";
+import Vuex from 'vuex';
+
+import { optArray } from '@/U';
+import Contact from '@/items/Contact';
+import Setting from '@/items/Setting';
+import WorkingDay from '@/items/WorkingDay';
+import { getSettingList, updateSetting } from '@/request/Setting';
+
+import StoreBuilder from './tools/StoreBuilder';
 
 const isPredefinedSetting = (key: string) => {
   return [
@@ -17,70 +20,70 @@ const isPredefinedSetting = (key: string) => {
 const init = (Stores: any) => {
   const context = new StoreBuilder<Setting>()
     .onFetchItems(async () => {
-      const api = await SettingRequest.list();
-      const list: any[] = api.optArrayContent();
+      const api = await getSettingList();
+      const list = optArray(api.optArrayContent());
       const items = list.map((content) => {
         return new Setting(Stores).fromData(content);
       });
 
       const contacts = [
         new Contact(Stores).fromData({
-          title: "Beh Aik Keong",
+          title: 'Beh Aik Keong',
           links: [
-            { category: "call", id: "0167959444" },
-            { category: "whatsapp", id: "0167959444" },
+            { category: 'call', id: '0167959444' },
+            { category: 'whatsapp', id: '0167959444' },
           ],
         }),
         new Contact(Stores).fromData({
-          title: "Office (Mobile)",
+          title: 'Office (Mobile)',
           links: [
-            { category: "call", id: "0146315353" },
-            { category: "whatsapp", id: "0146315353" },
-            { category: "telegram", id: "FreshnetEnterprise" },
+            { category: 'call', id: '0146315353' },
+            { category: 'whatsapp', id: '0146315353' },
+            { category: 'telegram', id: 'FreshnetEnterprise' },
           ],
         }),
         new Contact(Stores).fromData({
-          title: "Office",
-          links: [{ category: "telephone", id: "0332897297" }],
+          title: 'Office',
+          links: [{ category: 'telephone', id: '0332897297' }],
         }),
       ];
       const days: WorkingDay[] = [];
       days.push(
         ...[
           new WorkingDay(null, days).fromData({
-            title: "Monday",
-            timeStart: "0900",
-            timeEnd: "1900",
+            title: 'Monday',
+            timeStart: '0900',
+            timeEnd: '1900',
           }),
           new WorkingDay(null, days).fromData({
-            title: "Tuesday",
-            timeStart: "0900",
-            timeEnd: "1900",
+            title: 'Tuesday',
+            timeStart: '0900',
+            timeEnd: '1900',
           }),
           new WorkingDay(null, days).fromData({
-            title: "Wednesday",
-            timeStart: "0900",
-            timeEnd: "1900",
+            title: 'Wednesday',
+            timeStart: '0900',
+            timeEnd: '1900',
           }),
           new WorkingDay(null, days).fromData({
-            title: "Thursday",
-            timeStart: "0900",
-            timeEnd: "1900",
+            title: 'Thursday',
+            timeStart: '0900',
+            timeEnd: '1900',
           }),
           new WorkingDay(null, days).fromData({
-            title: "Friday",
-            timeStart: "0900",
-            timeEnd: "1900",
+            title: 'Friday',
+            timeStart: '0900',
+            timeEnd: '1900',
           }),
           new WorkingDay(null, days).fromData({
-            title: "Saturday",
-            timeStart: "0900",
-            timeEnd: "1900",
+            title: 'Saturday',
+            timeStart: '0900',
+            timeEnd: '1900',
           }),
           new WorkingDay(null, days).fromData({
-            title: "Sunday",
-            timeStart: "1000",
-            timeEnd: "1830",
+            title: 'Sunday',
+            timeStart: '1000',
+            timeEnd: '1830',
           }),
         ],
       );
@@ -100,33 +103,36 @@ const init = (Stores: any) => {
         new Setting(Stores).fromData({
           key: Setting.Key.CompanyName,
           visibility: Setting.Visibility.Protected,
-          value: "Freshnet Enterprise",
+          value: 'Freshnet Enterprise',
         }),
         new Setting(Stores).fromData({
           key: Setting.Key.CompanyCategory,
           visibility: Setting.Visibility.Protected,
-          value: "Computer Store",
+          value: 'Computer Store',
         }),
       ];
     })
     .onGetStore(() => Stores.setting)
-    .action("refresh", async (context) => {
+    .action('refresh', async (context) => {
       context.state.dataLoader.doTimeout();
-      await context.dispatch("getItems");
+      await context.dispatch('getItems');
     })
-    .action("getItems", async (context) => {
+    .action('getItems', async (context) => {
       return context.state.dataLoader.data();
     })
     .action(
-      "updateItem",
+      'updateItem',
       async (context, arg: { key: string; value: string }) => {
         const { key, value } = arg;
 
-        if (isPredefinedSetting(key)) throw new Error("testing");
+        if (isPredefinedSetting(key)) throw new Error('testing');
 
         const setting = new Setting(Stores).fromData({ key, value }).toData();
-        const api = await SettingRequest.update(setting);
-        const content = api.getObjectContent();
+        const api = await updateSetting(setting);
+        const content = api.getObjectContent() as {
+          key: string;
+          value: string;
+        };
 
         context.state.list.updateItemById(content.key, (item) => {
           if (!item) return;
@@ -136,16 +142,16 @@ const init = (Stores: any) => {
         return context.state.list.items;
       },
     )
-    .action("findItemOfKey", async (context, arg = { key: "" }) => {
+    .action('findItemOfKey', async (context, arg = { key: '' }) => {
       const { key } = arg;
-      const items: Setting[] = await context.dispatch("getItems");
+      const items: Setting[] = await context.dispatch('getItems');
       return items.find((item) => item.key === key);
     })
     .action(
-      "findValueOfKey",
-      async (context, arg = { key: "", default: "" }) => {
-        const { key = "", default: defaultValue = "" } = arg;
-        const item = await context.dispatch("findItemOfKey", { key });
+      'findValueOfKey',
+      async (context, arg = { key: '', default: '' }) => {
+        const { key = '', default: defaultValue = '' } = arg;
+        const item = await context.dispatch('findItemOfKey', { key });
         return item?.value ?? defaultValue;
       },
     )

@@ -1,10 +1,10 @@
-import ItemSearcher from "../objects/ItemSearcher";
+import { optArray, trimId, trimText } from '@/U';
+import { Item } from '@/stores/tools/List';
 
-import CustomerDeviceSpecification from "./CustomerDeviceSpecification";
-import Category from "./Category";
-import Customer from "./Customer";
-import { Item } from "@/stores/tools/List";
-import { optArray, trimId, trimText } from "@/U";
+import ItemSearcher from '../objects/ItemSearcher';
+import Category from './Category';
+import Customer from './Customer';
+import CustomerDeviceSpecification from './CustomerDeviceSpecification';
 
 interface CustomerDeviceData {
   _id: string;
@@ -25,10 +25,10 @@ class CustomerDevice implements Item {
     this.customerStore = stores.customer;
   }
 
-  id: string = "";
-  ownerCustomerId: string = "";
-  description: string = "";
-  categoryKey: string = "";
+  id: string = '';
+  ownerCustomerId: string = '';
+  description: string = '';
+  categoryKey: string = '';
   specifications: CustomerDeviceSpecification[] = [];
 
   fromData(data: CustomerDeviceData): this {
@@ -80,14 +80,13 @@ class CustomerDevice implements Item {
   }
 
   async fetchCustomer(): Promise<Customer | undefined> {
-    const customers: Customer[] = await this.customerStore.dispatch("getItems");
+    const customers: Customer[] = await this.customerStore.dispatch('getItems');
     return customers.find((customer) => customer.id === this.ownerCustomerId);
   }
 
   async fetchCategory(): Promise<Category | undefined> {
-    const categories: Category[] = await this.categoryStore.dispatch(
-      "getItems",
-    );
+    const categories: Category[] =
+      await this.categoryStore.dispatch('getItems');
     return categories.find((category) => category.key === this.categoryKey);
   }
 

@@ -1,4 +1,4 @@
-import { trimText } from "@/U";
+import { trimText } from '@/U';
 
 export default class ProductBundle {
   stores: any;
@@ -7,10 +7,10 @@ export default class ProductBundle {
     this.stores = stores;
   }
 
-  title: string = "";
+  title: string = '';
 
   fromData(data: { title?: string }): ProductBundle {
-    this.title = trimText(data.title || "");
+    this.title = trimText(data.title || '');
     return this;
   }
   toData(): { title: string } {

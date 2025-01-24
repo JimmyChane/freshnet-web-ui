@@ -24,16 +24,16 @@ export default class Navigation {
   }
 
   private getVisibilityRequest(
-    page: string = "",
-    view: string = "",
+    page: string = '',
+    view: string = '',
   ): { page: string; view: string; visibility: number } | undefined {
     return this.visibilityRequests.find((request) => {
       return request.page === page && request.view === view;
     });
   }
   private getLayoutRequest(
-    page: string = "",
-    view: string = "",
+    page: string = '',
+    view: string = '',
   ): { page: string; view: string; layout: number } | undefined {
     return this.layoutRequests.find((request) => {
       return request.page === page && request.view === view;

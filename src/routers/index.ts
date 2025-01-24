@@ -1,63 +1,63 @@
-import AppHost from "@/host/AppHost";
-import Vue from "vue";
-import VueRouter, { RouteConfig, NavigationGuard } from "vue-router";
+import Vue from 'vue';
+import VueRouter, { NavigationGuard, RouteConfig } from 'vue-router';
 
-import PageLogin from "@/pages/login/PageLogin.vue";
+import AppHost from '@/host/AppHost';
+import PageLogin from '@/pages/login/PageLogin.vue';
 
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
-    path: "/item/id/:id",
+    path: '/item/id/:id',
     beforeEnter(to, from, next) {
-      next({ path: "/product/view", query: { productId: to.params.id } });
+      next({ path: '/product/view', query: { productId: to.params.id } });
     },
   },
   {
-    path: "/product/id/:id",
+    path: '/product/id/:id',
     beforeEnter(to, from, next) {
-      next({ path: "/product/view", query: { productId: to.params.id } });
+      next({ path: '/product/view', query: { productId: to.params.id } });
     },
   },
 
   // product combo
   {
-    path: "/product/combo",
-    redirect: "/product/browse",
-    children: [{ path: "*", redirect: "/product/browse" }],
+    path: '/product/combo',
+    redirect: '/product/browse',
+    children: [{ path: '*', redirect: '/product/browse' }],
   },
 
   // product
   {
-    path: "/product",
-    name: "product",
-    component: () => import("@/pages/product/PageProduct.vue"),
+    path: '/product',
+    name: 'product',
+    component: () => import('@/pages/product/PageProduct.vue'),
     children: [
       {
-        path: "browse",
-        redirect: "/product",
-        children: [{ path: ":category", redirect: "/product" }],
+        path: 'browse',
+        redirect: '/product',
+        children: [{ path: ':category', redirect: '/product' }],
       },
     ],
   },
   {
-    path: "/product/view",
-    component: () => import("@/pages/product/PageProductView.vue"),
+    path: '/product/view',
+    component: () => import('@/pages/product/PageProductView.vue'),
   },
   {
-    path: "/product/export",
-    component: () => import("@/pages/product/PageProductExport.vue"),
+    path: '/product/export',
+    component: () => import('@/pages/product/PageProductExport.vue'),
   },
 
   // manage
   {
-    path: "/manage",
+    path: '/manage',
     beforeEnter(to, from, next) {
       let { query } = to;
       let { view } = query;
 
       if (!view) {
-        view = "service";
+        view = 'service';
         delete query.view;
       }
 
@@ -67,73 +67,73 @@ const routes: Array<RouteConfig> = [
     },
   },
   {
-    path: "/manage/product",
+    path: '/manage/product',
     beforeEnter(to, from, next) {
       let { query } = to;
       if (query) {
         let { item } = query;
 
-        if (typeof item === "string") {
+        if (typeof item === 'string') {
           query.productId = item;
           delete query.item;
         }
       }
 
       try {
-        next({ path: "/product/browse", query });
+        next({ path: '/product/browse', query });
       } catch (error) {}
     },
   },
   {
-    path: "/manage",
-    name: "manage",
-    component: () => import("@/pages/manage/PageManage.vue"),
+    path: '/manage',
+    name: 'manage',
+    component: () => import('@/pages/manage/PageManage.vue'),
     children: [
       {
-        path: "profile",
-        component: () => import("@/pages/profile/PageProfile.vue"),
+        path: 'profile',
+        component: () => import('@/pages/profile/PageProfile.vue'),
       },
       {
-        path: "customer",
-        component: () => import("@/pages/customer/PageCustomer.vue"),
+        path: 'customer',
+        component: () => import('@/pages/customer/PageCustomer.vue'),
       },
       {
-        path: "service",
-        component: () => import("@/pages/service/PageService.vue"),
+        path: 'service',
+        component: () => import('@/pages/service/PageService.vue'),
       },
       {
-        path: "order",
-        component: () => import("@/pages/order/PageOrder.vue"),
+        path: 'order',
+        component: () => import('@/pages/order/PageOrder.vue'),
       },
       {
-        path: "users",
-        component: () => import("@/pages/users/PageUsers.vue"),
+        path: 'users',
+        component: () => import('@/pages/users/PageUsers.vue'),
       },
       {
-        path: "database",
-        component: () => import("@/pages/database/PageDatabase.vue"),
+        path: 'database',
+        component: () => import('@/pages/database/PageDatabase.vue'),
       },
       {
-        path: "setting",
-        component: () => import("@/pages/setting/PageSetting.vue"),
+        path: 'setting',
+        component: () => import('@/pages/setting/PageSetting.vue'),
       },
     ],
   },
 
   // home
   {
-    path: "/home",
-    name: "home",
-    component: () => import("@/pages/home/PageHome.vue"),
+    path: '/home',
+    name: 'home',
+    component: () => import('@/pages/home/PageHome.vue'),
     beforeEnter(to, from, next) {
-      if (AppHost.ROUTER_MODE === "history") {
+      if (AppHost.ROUTER_MODE === 'history') {
         const { hash } = to;
 
-        let legacyPath = to.redirectedFrom ?? "";
-        if (legacyPath.startsWith("/#")) {
+        let legacyPath = to.redirectedFrom ?? '';
+        if (legacyPath.startsWith('/#')) {
           legacyPath = hash.substring(2);
 
-          if (!hash.startsWith("/")) {
+          if (!hash.startsWith('/')) {
             legacyPath = `/${legacyPath}`;
           }
           if (legacyPath.length) {
@@ -148,25 +148,25 @@ const routes: Array<RouteConfig> = [
   },
   // login
   {
-    path: "/login",
-    name: "login",
+    path: '/login',
+    name: 'login',
     component: PageLogin,
   },
   // print
   {
-    path: "/print",
-    name: "print",
-    component: () => import("@/pages/print/PagePrint.vue"),
+    path: '/print',
+    name: 'print',
+    component: () => import('@/pages/print/PagePrint.vue'),
   },
   // error
   {
-    path: "/error/404",
-    name: "error/404",
-    component: () => import("@/pages/error/Page404.vue"),
+    path: '/error/404',
+    name: 'error/404',
+    component: () => import('@/pages/error/Page404.vue'),
   },
 
-  { path: "/", redirect: { path: "/home" } },
-  { path: "*", redirect: { path: "/error/404" } },
+  { path: '/', redirect: { path: '/home' } },
+  { path: '*', redirect: { path: '/error/404' } },
 ];
 
 const router = new VueRouter({ mode: AppHost.ROUTER_MODE, routes });

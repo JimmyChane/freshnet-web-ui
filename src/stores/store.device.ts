@@ -1,10 +1,11 @@
-import Vuex from "vuex";
+import Vuex from 'vuex';
 
-import StoreBuilder from "./tools/StoreBuilder";
-import DeviceRequest from "@/request/Device";
-import CustomerDevice from "../items/CustomerDevice";
-import Customer from "@/items/Customer";
-import { isArray } from "@/U";
+import { isArray } from '@/U';
+import Customer from '@/items/Customer';
+import DeviceRequest from '@/request/Device';
+
+import CustomerDevice from '../items/CustomerDevice';
+import StoreBuilder from './tools/StoreBuilder';
 
 const init = (Stores: any) => {
   const context = new StoreBuilder<CustomerDevice>()
@@ -15,28 +16,28 @@ const init = (Stores: any) => {
         return new CustomerDevice(Stores).fromData(content);
       });
     })
-    .action("refresh", async (context) => {
+    .action('refresh', async (context) => {
       context.state.dataLoader.doTimeout();
-      await context.dispatch("getItems");
+      await context.dispatch('getItems');
     })
-    .action("getItems", async (context) => {
+    .action('getItems', async (context) => {
       return context.state.dataLoader.data();
     })
-    .action("getItemOfId", async (context, id = "") => {
-      if (typeof id !== "string") return null;
-      const items: CustomerDevice[] = await context.dispatch("getItems");
+    .action('getItemOfId', async (context, id = '') => {
+      if (typeof id !== 'string') return null;
+      const items: CustomerDevice[] = await context.dispatch('getItems');
       return items.find((item) => item.id === id) ?? null;
     })
-    .action("getItemsOfIds", async (context, ids: string[] = []) => {
+    .action('getItemsOfIds', async (context, ids: string[] = []) => {
       if (!isArray(ids)) return [];
 
-      const items: CustomerDevice[] = await context.dispatch("getItems");
+      const items: CustomerDevice[] = await context.dispatch('getItems');
       const results = ids.map((id) => {
         return items.find((item) => item.id === id) ?? null;
       });
       return results;
     })
-    .action("addItem", async (context, arg = {}) => {
+    .action('addItem', async (context, arg = {}) => {
       const data: any = new CustomerDevice(Stores).fromData(arg).toData();
       delete data.id;
       const api = await DeviceRequest.add({ content: data });
@@ -53,7 +54,7 @@ const init = (Stores: any) => {
       }
       return item;
     })
-    .action("removeItemOfId", async (context, arg = {}) => {
+    .action('removeItemOfId', async (context, arg = {}) => {
       const api = await DeviceRequest.remove({
         content: {
           ownerCustomerId: arg.ownerCustomerId,
@@ -74,7 +75,7 @@ const init = (Stores: any) => {
       return context.state.list.removeItemByItem(item);
     })
     .action(
-      "updateSpecificationsOfId",
+      'updateSpecificationsOfId',
       async (context, arg: { _id: string; specifications: any[] }) => {
         const { _id, specifications } = arg;
         const api = await DeviceRequest.updateSpecification({
@@ -89,7 +90,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateDescriptionOfId",
+      'updateDescriptionOfId',
       async (context, arg: { _id: string; description: string }) => {
         const { _id, description } = arg;
         const api = await DeviceRequest.updateDescription({

@@ -5,15 +5,15 @@
 </template>
 
 <style lang="scss" scoped>
-  .PageHomeSection-title {
-    font-size: 2rem;
-    font-weight: 500;
+.PageHomeSection-title {
+  font-size: 2rem;
+  font-weight: 500;
 
-    color: black;
+  color: black;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
 </style>

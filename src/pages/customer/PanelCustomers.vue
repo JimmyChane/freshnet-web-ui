@@ -1,67 +1,66 @@
 <script>
-  import Actionbar from "./PanelCustomers-Actionbar.vue";
-  import ItemCustomer from "./ItemCustomer.vue";
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
 
-  import Empty from "@/components/Empty.vue";
+import { optString } from '@/U';
+import Empty from '@/components/Empty.vue';
+import PageCustomer from '@/pages/customer/PageCustomer.vue';
 
-  import PageCustomer from "@/pages/customer/PageCustomer.vue";
+import ItemCustomer from './ItemCustomer.vue';
+import Actionbar from './PanelCustomers-Actionbar.vue';
 
-  import { DynamicScroller, DynamicScrollerItem } from "vue-virtual-scroller";
-  import { optString } from "@/U";
+export default {
+  components: {
+    Actionbar,
+    DynamicScroller,
+    DynamicScrollerItem,
+    ItemCustomer,
+    Empty,
+  },
+  emits: ['click-refresh', 'click-item-add', 'click-item-remove'],
+  props: {
+    title: { type: String, default: '' },
+    items: { type: Array, default: () => [] },
+    itemSelected: { type: Object, default: () => null },
+  },
+  data: (c) => ({ scrollTop: 0, itemSelect: null }),
+  computed: {
+    iconEmpty: () => PageCustomer.icon.dark.toUrl(),
 
-  export default {
-    components: {
-      Actionbar,
-      DynamicScroller,
-      DynamicScrollerItem,
-      ItemCustomer,
-      Empty,
+    filter: (c) => optString(c.$route.query.filter),
+
+    listService: (c) => c.items.filter((item) => item.services.length),
+    listOrder: (c) => c.items.filter((item) => item.orders.length),
+    list: (c) => {
+      switch (c.filter) {
+        case 'service':
+          return c.listService;
+        case 'order':
+          return c.listOrder;
+        default:
+          return c.items;
+      }
     },
-    emits: ["click-refresh", "click-item-add", "click-item-remove"],
-    props: {
-      title: { type: String, default: "" },
-      items: { type: Array, default: () => [] },
-      itemSelected: { type: Object, default: () => null },
+    myList: (c) => {
+      return c.list.map((item) => {
+        return { id: c.itemKey(item), item };
+      });
     },
-    data: (c) => ({ scrollTop: 0, itemSelect: null }),
-    computed: {
-      iconEmpty: () => PageCustomer.icon.dark.toUrl(),
-
-      filter: (c) => optString(c.$route.query.filter),
-
-      listService: (c) => c.items.filter((item) => item.services.length),
-      listOrder: (c) => c.items.filter((item) => item.orders.length),
-      list: (c) => {
-        switch (c.filter) {
-          case "service":
-            return c.listService;
-          case "order":
-            return c.listOrder;
-          default:
-            return c.items;
-        }
-      },
-      myList: (c) => {
-        return c.list.map((item) => {
-          return { id: c.itemKey(item), item };
-        });
-      },
+  },
+  methods: {
+    itemKey(item) {
+      return `${this.itemName(item)}${this.itemPhoneNumberValue(item)}`;
     },
-    methods: {
-      itemKey(item) {
-        return `${this.itemName(item)}${this.itemPhoneNumberValue(item)}`;
-      },
-      itemName(item) {
-        return optString(item?.name);
-      },
-      itemPhoneNumberValue(item) {
-        return item?.phoneNumber?.value ?? "";
-      },
-      itemPhoneNumberStr(item) {
-        return optString(item?.phoneNumber.toUrl());
-      },
+    itemName(item) {
+      return optString(item?.name);
     },
-  };
+    itemPhoneNumberValue(item) {
+      return item?.phoneNumber?.value ?? '';
+    },
+    itemPhoneNumberStr(item) {
+      return optString(item?.phoneNumber.toUrl());
+    },
+  },
+};
 </script>
 
 <template>
@@ -115,46 +114,46 @@
 </template>
 
 <style lang="scss" scoped>
-  .PanelCustomers {
-    width: 100%;
-    height: 100%;
+.PanelCustomers {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+
+  .PanelCustomers-top {
+    z-index: 2;
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  .PanelCustomers-body {
+    --gap: 4px;
+
+    z-index: 1;
+    padding: calc(1rem - var(--gap) * 0.5) 1rem;
+    padding-bottom: 10rem;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    justify-content: stretch;
+    align-items: center;
 
-    .PanelCustomers-top {
-      z-index: 2;
-      position: sticky;
-      top: 0;
-      left: 0;
-      right: 0;
-    }
-    .PanelCustomers-body {
-      --gap: 4px;
-
-      z-index: 1;
-      padding: calc(1rem - var(--gap) * 0.5) 1rem;
-      padding-bottom: 10rem;
+    .PanelCustomers-item-div {
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: calc(var(--gap) * 0.5) 0;
+    }
+    .PanelCustomers-item {
+      margin: 0 auto;
+      width: 100%;
+      max-width: 35rem;
+      max-width: 25rem;
 
-      .PanelCustomers-item-div {
-        display: flex;
-        padding: calc(var(--gap) * 0.5) 0;
-      }
-      .PanelCustomers-item {
-        margin: 0 auto;
-        width: 100%;
-        max-width: 35rem;
-        max-width: 25rem;
-
-        text-decoration: none;
-        font-size: 1rem;
-        color: inherit;
-        overflow: hidden;
-      }
+      text-decoration: none;
+      font-size: 1rem;
+      color: inherit;
+      overflow: hidden;
     }
   }
+}
 </style>

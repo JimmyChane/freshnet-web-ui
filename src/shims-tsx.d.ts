@@ -1,4 +1,4 @@
-import Vue, { VNode } from "vue";
+import Vue, { VNode } from 'vue';
 
 declare global {
   namespace JSX {
@@ -10,12 +10,12 @@ declare global {
   }
 }
 
-declare module "*.svg" {
+declare module '*.svg' {
   const content: string;
   export default content;
 }
 
-declare module "*.webp" {
+declare module '*.webp' {
   const content: string;
   export default content;
 }

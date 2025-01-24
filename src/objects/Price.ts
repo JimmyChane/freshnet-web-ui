@@ -1,10 +1,10 @@
 class Price {
-  static readonly DefaultCurrency = "RM";
+  static readonly DefaultCurrency = 'RM';
 
   static parse(any: Price | number | string | any): Price {
     if (any instanceof Price) return any;
-    if (typeof any === "number") return new Price(any);
-    if (typeof any === "string") {
+    if (typeof any === 'number') return new Price(any);
+    if (typeof any === 'string') {
       const currencyParses = [];
       const amountParsed = this.parseAmount(any);
 
@@ -17,7 +17,7 @@ class Price {
 
       return new Price(
         amountParsed,
-        currencyParses.length ? currencyParses[0].value : "",
+        currencyParses.length ? currencyParses[0].value : '',
       );
     }
 
@@ -34,19 +34,19 @@ class Price {
     return {
       indexStart,
       indexEnd,
-      value: indexStart === -1 ? "" : content.substring(indexStart, indexEnd),
+      value: indexStart === -1 ? '' : content.substring(indexStart, indexEnd),
     };
   }
 
   private static parseAmount(content: string): number {
-    let valueString = "";
+    let valueString = '';
     let hasNumberFront = false;
     let hasNumberBack = false;
     let hasDot = false;
     for (let i = 0; i < content.length; i++) {
       let char = content.charAt(i);
 
-      if (char === " ") {
+      if (char === ' ') {
         if (hasDot || hasNumberFront || hasNumberBack) break;
         continue;
       }
@@ -59,9 +59,9 @@ class Price {
         continue;
       }
 
-      if (char === ".") {
+      if (char === '.') {
         if (hasDot) break;
-        valueString += ".";
+        valueString += '.';
         hasDot = true;
         continue;
       }
@@ -75,9 +75,9 @@ class Price {
   private _amount: number;
   private _currency: string;
 
-  constructor(amount: number = 0, currency: string = "RM") {
+  constructor(amount: number = 0, currency: string = 'RM') {
     this._currency =
-      currency.trim().replace(" ", "").toUpperCase() || Price.DefaultCurrency;
+      currency.trim().replace(' ', '').toUpperCase() || Price.DefaultCurrency;
     this._amount = isNaN(amount) ? 0 : Number(amount);
   }
 
@@ -107,8 +107,8 @@ class Price {
     const { amount, currency } = this;
 
     let text = amount.toFixed(2);
-    let dotIndex = text.indexOf(".") - 3;
-    let minusIndex = text.indexOf("-") + 1;
+    let dotIndex = text.indexOf('.') - 3;
+    let minusIndex = text.indexOf('-') + 1;
     while (dotIndex > minusIndex) {
       const part1 = `${text.substring(0, dotIndex)}`;
       const part2 = `${text.substring(dotIndex, text.length)}`;

@@ -1,9 +1,9 @@
 <script>
-  export default {
-    props: {
-      tintColor: { type: String },
-    },
-  };
+export default {
+  props: {
+    tintColor: { type: String },
+  },
+};
 </script>
 
 <template>

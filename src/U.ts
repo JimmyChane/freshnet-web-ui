@@ -1,8 +1,10 @@
-import chroma from "chroma-js";
-import Server from "@/host/Server";
-import { Icon } from "@/host/ServerResource";
-import User from "@/items/User";
-import NavViewGroup from "./app/NavViewGroup";
+import chroma from 'chroma-js';
+
+import Server from '@/host/Server';
+import { Icon } from '@/host/ServerResource';
+import User from '@/items/User';
+
+import NavViewGroup from './app/NavViewGroup';
 
 export interface IconAsset {
   light: string;
@@ -22,28 +24,28 @@ export interface GroupAsset {
 }
 
 export function isString(str: any): boolean {
-  return typeof str === "string";
+  return typeof str === 'string';
 }
 export function isNumber(num: any): boolean {
-  return typeof num === "number" && !Number.isNaN(num);
+  return typeof num === 'number' && !Number.isNaN(num);
 }
 export function isBoolean(bool: any): boolean {
-  return typeof bool === "boolean";
+  return typeof bool === 'boolean';
 }
 export function isArray(arr: any): boolean {
   return Array.isArray(arr);
 }
 export function isObject(obj: any): boolean {
-  return typeof obj === "object";
+  return typeof obj === 'object';
 }
 export function isObjectOnly(obj: any): boolean {
   return isObject(obj) && obj;
 }
 export function isFunction(fun: any): boolean {
-  return typeof fun === "function";
+  return typeof fun === 'function';
 }
 
-export function optString(str: any, fallback = ""): string {
+export function optString(str: any, fallback = ''): string {
   return isString(str) ? str : fallback;
 }
 export function optNumber(num: any, fallback = 0): number {
@@ -63,16 +65,16 @@ export function optObjectOnly(obj: any, fallback = {}): {} {
 }
 
 export function trimId(str: any): string {
-  return replaceStringAll(str, " ", "");
+  return replaceStringAll(str, ' ', '');
 }
 export function trimText(str: any): string {
-  return replaceStringAll(str, "  ", " ").trim();
+  return replaceStringAll(str, '  ', ' ').trim();
 }
-export function trimStringAll(str = "", fallback = ""): string {
+export function trimStringAll(str = '', fallback = ''): string {
   str = trimText(str);
   return str.length ? str : fallback;
 }
-export function replaceStringAll(str = "", regex = "", replace = ""): string {
+export function replaceStringAll(str = '', regex = '', replace = ''): string {
   str = optString(str);
   regex = optString(regex);
   replace = optString(replace);
@@ -87,11 +89,11 @@ export function replaceStringAll(str = "", regex = "", replace = ""): string {
 }
 
 export function isColorDark(color: any, threshold = 60): boolean {
-  return chroma.deltaE(color, "000000") < threshold;
+  return chroma.deltaE(color, '000000') < threshold;
 }
 
 export function objectToArray<T>(object: Record<string, T> | any): Parse[] {
-  return Object.keys(typeof object === "object" ? object : {}).map((key) => {
+  return Object.keys(typeof object === 'object' ? object : {}).map((key) => {
     return {
       key,
       value: object[key],
@@ -102,8 +104,8 @@ export function isPassed(user: User, permissions: any[] | any) {
   permissions = Array.isArray(permissions) ? permissions : [];
 
   if (permissions.length > 0) {
-    if (user.isTypeAdmin() && !permissions.includes("admin")) return false;
-    if (user.isTypeStaff() && !permissions.includes("staff")) return false;
+    if (user.isTypeAdmin() && !permissions.includes('admin')) return false;
+    if (user.isTypeStaff() && !permissions.includes('staff')) return false;
   }
 
   return true;
@@ -123,7 +125,7 @@ export function parseIcon(icon: Record<string, Icon> | any): IconAsset | null {
   return { light, dark };
 }
 export function parseKey(str: string | any) {
-  return optString(str).trim().replace(" ", "");
+  return optString(str).trim().replace(' ', '');
 }
 export function parseGroup2s(array: GroupAsset[]): NavViewGroup[] {
   return optArray(array).map((obj: GroupAsset) => {
@@ -141,10 +143,10 @@ export function parseGroup2s(array: GroupAsset[]): NavViewGroup[] {
 }
 
 export function isValidKey(key: string | any): boolean {
-  return isString(key) && !key.includes(" ");
+  return isString(key) && !key.includes(' ');
 }
 export function isValidValue(value: any): boolean {
-  return value !== null && value !== undefined && value !== "";
+  return value !== null && value !== undefined && value !== '';
 }
 export function replace(
   currentQuery: Record<string, any>,

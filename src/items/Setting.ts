@@ -1,5 +1,5 @@
-import { trimId } from "@/U";
-import { Item } from "@/stores/tools/List";
+import { trimId } from '@/U';
+import { Item } from '@/stores/tools/List';
 
 interface SettingData {
   key: string;
@@ -8,21 +8,21 @@ interface SettingData {
 }
 
 export default class Setting implements Item {
-  static Visibility = { Protected: "protected", Private: "private" };
+  static Visibility = { Protected: 'protected', Private: 'private' };
   static Key = {
-    PublicShowPrice: "public-showPrice",
-    Location: "store-location",
-    LocationLink: "store-location-link",
-    Contacts: "store-contacts",
-    CompanyName: "store-name",
-    CompanyCategory: "store-category",
-    CompanyWorkingHours: "store-working-hours",
+    PublicShowPrice: 'public-showPrice',
+    Location: 'store-location',
+    LocationLink: 'store-location-link',
+    Contacts: 'store-contacts',
+    CompanyName: 'store-name',
+    CompanyCategory: 'store-category',
+    CompanyWorkingHours: 'store-working-hours',
   };
 
   stores: any | null;
 
-  key: string = "";
-  visibility: string = "";
+  key: string = '';
+  visibility: string = '';
   value: any;
 
   constructor(stores: any | null) {

@@ -1,4 +1,4 @@
-import ProductPrice from "./ProductPrice";
+import ProductPrice from './ProductPrice';
 
 class ProductPrices {
   stores: any;
@@ -11,16 +11,16 @@ class ProductPrices {
   promotion: ProductPrice | null = null;
 
   fromData(data: { normal?: string; promotion?: string } = {}): ProductPrices {
-    this.normal = new ProductPrice(this.stores).fromString(data.normal || "");
+    this.normal = new ProductPrice(this.stores).fromString(data.normal || '');
     this.promotion = new ProductPrice(this.stores).fromString(
-      data.promotion || "",
+      data.promotion || '',
     );
     return this;
   }
   toData(): { normal: string; promotion: string } {
     return {
-      normal: this.normal?.toString() ?? "",
-      promotion: this.promotion?.toString() ?? "",
+      normal: this.normal?.toString() ?? '',
+      promotion: this.promotion?.toString() ?? '',
     };
   }
   toCount(strs: string[]): number {

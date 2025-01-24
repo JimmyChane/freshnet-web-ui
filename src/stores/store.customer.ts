@@ -1,10 +1,11 @@
-import Vuex from "vuex";
-import CustomerRequest from "@/request/Customer";
-import DeviceStore from "./store.device";
+import Vuex from 'vuex';
 
-import StoreBuilder from "./tools/StoreBuilder";
-import Customer from "../items/Customer";
-import { isArray, isString, optString } from "@/U";
+import { isArray, isString, optString } from '@/U';
+import CustomerRequest from '@/request/Customer';
+
+import Customer from '../items/Customer';
+import DeviceStore from './store.device';
+import StoreBuilder from './tools/StoreBuilder';
 
 const init = (Stores: any) => {
   const deviceStore = DeviceStore.init(Stores);
@@ -18,34 +19,34 @@ const init = (Stores: any) => {
       });
     })
     .onGetStore(() => Stores.customer)
-    .action("refresh", async (context) => {
+    .action('refresh', async (context) => {
       context.state.dataLoader.doTimeout();
-      await context.dispatch("getItems");
-      await deviceStore.dispatch("refresh");
+      await context.dispatch('getItems');
+      await deviceStore.dispatch('refresh');
     })
-    .action("getItems", async (context) => {
+    .action('getItems', async (context) => {
       return context.state.dataLoader.data();
     })
-    .action("getItemOfId", async (context, id = "") => {
+    .action('getItemOfId', async (context, id = '') => {
       if (!isString(id)) return null;
-      const items: Customer[] = await context.dispatch("getItems");
+      const items: Customer[] = await context.dispatch('getItems');
       return items.find((item) => item.id === id) ?? null;
     })
-    .action("getItemsOfIds", async (context, ids: string[] = []) => {
+    .action('getItemsOfIds', async (context, ids: string[] = []) => {
       if (!isArray(ids)) return [];
 
-      const items: Customer[] = await context.dispatch("getItems");
+      const items: Customer[] = await context.dispatch('getItems');
       const results = ids.map((id) => {
         return items.find((item) => item.id === id) ?? null;
       });
       return results;
     })
-    .action("generateCustomersAcross", async (context) => {
+    .action('generateCustomersAcross', async (context) => {
       const cloneCustomer = (customer: Customer) => {
         return new Customer(Stores).fromData(customer.toData());
       };
 
-      const customers: Customer[] = await context.dispatch("getItems");
+      const customers: Customer[] = await context.dispatch('getItems');
       for (const customer of customers) {
         customer.cachedServices = [];
         customer.cachedOrders = [];
@@ -53,10 +54,10 @@ const init = (Stores: any) => {
       const optCustomer = (eCustomer: Customer) => {
         let customer = customers.find((customer) => {
           const eName = optString(customer.name);
-          const ePhoneNumberValue = customer.phoneNumber?.value ?? "";
+          const ePhoneNumberValue = customer.phoneNumber?.value ?? '';
 
           const name = optString(eCustomer.name);
-          const phoneNumberValue = eCustomer.phoneNumber?.value ?? "";
+          const phoneNumberValue = eCustomer.phoneNumber?.value ?? '';
 
           return eName === name && ePhoneNumberValue === phoneNumberValue;
         });
@@ -70,9 +71,9 @@ const init = (Stores: any) => {
       };
 
       const serviceGroups = await Stores.service.dispatch(
-        "getGroupsByCustomer",
+        'getGroupsByCustomer',
       );
-      const orderGroups = await Stores.order.dispatch("getGroupsByCustomer");
+      const orderGroups = await Stores.order.dispatch('getGroupsByCustomer');
       for (const serviceGroup of serviceGroups) {
         const customer = optCustomer(serviceGroup.customer);
         customer.cachedServices.push(...serviceGroup.items);
@@ -84,7 +85,7 @@ const init = (Stores: any) => {
 
       return customers;
     })
-    .action("addItem", async (context, arg = {}) => {
+    .action('addItem', async (context, arg = {}) => {
       const data: any = new Customer(Stores).fromData(arg).toData();
       delete data.id;
       const api = await CustomerRequest.add(data);
@@ -92,7 +93,7 @@ const init = (Stores: any) => {
       const item = new Customer(Stores).fromData(content);
       return context.state.list.addItem(item);
     })
-    .action("removeItemOfId", async (context, arg: { _id: string }) => {
+    .action('removeItemOfId', async (context, arg: { _id: string }) => {
       const { _id } = arg;
       const api = await CustomerRequest.remove(_id);
       const content = api.optObjectContent();
@@ -100,7 +101,7 @@ const init = (Stores: any) => {
       return context.state.list.removeItemByItem(item);
     })
     .action(
-      "updateNamePhoneNumberOfItemId",
+      'updateNamePhoneNumberOfItemId',
       async (
         context,
         arg: { _id: string; name: string; phoneNumber: string },
@@ -121,7 +122,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateDescriptionOfId",
+      'updateDescriptionOfId',
       async (context, arg: { _id: string; description: string }) => {
         const { _id, description } = arg;
         const api = await CustomerRequest.updateDescription(_id, description);
@@ -137,19 +138,19 @@ const init = (Stores: any) => {
   context.getters.devices = () => deviceStore.getters.items;
 
   // legacy
-  context.actions.getDevices = () => deviceStore.dispatch("getItems");
+  context.actions.getDevices = () => deviceStore.dispatch('getItems');
   context.actions.getDeviceById = (context: any, id: string) =>
-    deviceStore.dispatch("getItemOfId", id);
+    deviceStore.dispatch('getItemOfId', id);
   context.actions.getDevicesByIds = (context: any, ids: string[]) =>
-    deviceStore.dispatch("getItemsOfIds", ids);
+    deviceStore.dispatch('getItemsOfIds', ids);
   context.actions.addDevice = (context: any, arg: any) =>
-    deviceStore.dispatch("addItem", arg);
+    deviceStore.dispatch('addItem', arg);
   context.actions.removeDevice = (context: any, arg: any) =>
-    deviceStore.dispatch("removeItemOfId", arg);
+    deviceStore.dispatch('removeItemOfId', arg);
   context.actions.updateDeviceSpecifications = (context: any, arg: any) =>
-    deviceStore.dispatch("updateSpecificationsOfId", arg);
+    deviceStore.dispatch('updateSpecificationsOfId', arg);
   context.actions.updateDeviceDescription = (context: any, arg: any) =>
-    deviceStore.dispatch("updateDescriptionOfId", arg);
+    deviceStore.dispatch('updateDescriptionOfId', arg);
 
   return new Vuex.Store(context.build());
 };

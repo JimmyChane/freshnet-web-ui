@@ -1,12 +1,10 @@
- 
-import Host from "@/host/Server";
-
+import { optString } from '@/U';
 // icon
-import IconCall from "@/assets/icon/call-color.svg";
-import IconWhatsapp from "@/assets/icon/whatsapp-color.svg";
-import IconTelegram from "@/assets/icon/telegram-color.svg";
-import IconTelephone from "@/assets/icon/telephone-color.svg";
-import { optString } from "@/U";
+import IconCall from '@/assets/icon/call-color.svg';
+import IconTelegram from '@/assets/icon/telegram-color.svg';
+import IconTelephone from '@/assets/icon/telephone-color.svg';
+import IconWhatsapp from '@/assets/icon/whatsapp-color.svg';
+import Host from '@/host/Server';
 
 interface ContactLinkData {
   id: string;
@@ -19,28 +17,28 @@ interface ContactData {
 }
 
 class ContactCategory {
-  static Call: ContactCategory = new ContactCategory("call", "Call", IconCall);
+  static Call: ContactCategory = new ContactCategory('call', 'Call', IconCall);
   static Whatsapp: ContactCategory = new ContactCategory(
-    "whatsapp",
-    "Whatsapp",
+    'whatsapp',
+    'Whatsapp',
     IconWhatsapp,
   );
   static Telegram: ContactCategory = new ContactCategory(
-    "telegram",
-    "Telegram",
+    'telegram',
+    'Telegram',
     IconTelegram,
   );
   static Telephone: ContactCategory = new ContactCategory(
-    "telephone",
-    "Telephone",
+    'telephone',
+    'Telephone',
     IconTelephone,
   );
 
-  key: string = "";
-  title: string = "";
-  icon: string = "";
+  key: string = '';
+  title: string = '';
+  icon: string = '';
 
-  constructor(key: string = "", title: string = "", icon: string = "") {
+  constructor(key: string = '', title: string = '', icon: string = '') {
     this.key = key;
     this.title = title;
     this.icon = icon;
@@ -55,10 +53,10 @@ class ContactLink {
   }
 
   category: ContactCategory | null = null;
-  id: string = "";
+  id: string = '';
 
   fromData(data: ContactLinkData): this {
-    this.id =   optString(data.id);
+    this.id = optString(data.id);
     this.category =
       [
         ContactCategory.Call,
@@ -98,7 +96,7 @@ class ContactLink {
       return `https://api.whatsapp.com/send?phone=6${this.id}`;
     if (this.category === ContactCategory.Telegram)
       return `https://t.me/${this.id}`;
-    return "";
+    return '';
   }
 
   toHtmlTarget(): string {
@@ -106,13 +104,13 @@ class ContactLink {
       this.category === ContactCategory.Call ||
       this.category === ContactCategory.Telephone
     )
-      return "_self";
+      return '_self';
     if (
       this.category === ContactCategory.Whatsapp ||
       this.category === ContactCategory.Telegram
     )
-      return "_blank";
-    return "";
+      return '_blank';
+    return '';
   }
 }
 
@@ -123,7 +121,7 @@ class Contact {
     this.stores = stores;
   }
 
-  title: string = "";
+  title: string = '';
   links: ContactLink[] = [];
 
   fromData(data: ContactData): this {

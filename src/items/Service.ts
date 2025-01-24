@@ -1,17 +1,3 @@
-import ServiceTimestamp from "./ServiceTimestamp";
-import ServiceEvent from "./ServiceEvent";
-import ServicePrice from "./ServicePrice";
-import ServiceCustomer from "./ServiceCustomer";
-import ServiceImage from "./ServiceImage";
-import Label from "./ServiceLabel";
-import Method from "./ServiceEventMethod";
-import State from "./ServiceState";
-
-import ItemSearcher from "../objects/ItemSearcher";
-import ServiceBelonging from "./ServiceBelonging";
-import User from "./User";
-import { Item } from "@/stores/tools/List";
-import ServiceEventMethod from "./ServiceEventMethod";
 import {
   isObject,
   isString,
@@ -19,7 +5,22 @@ import {
   optBoolean,
   trimId,
   trimText,
-} from "@/U";
+} from '@/U';
+import { Item } from '@/stores/tools/List';
+
+import ItemSearcher from '../objects/ItemSearcher';
+import ServiceBelonging from './ServiceBelonging';
+import ServiceCustomer from './ServiceCustomer';
+import ServiceEvent from './ServiceEvent';
+import Method from './ServiceEventMethod';
+import ServiceEventMethod from './ServiceEventMethod';
+import ServiceImage from './ServiceImage';
+import Label from './ServiceLabel';
+import ServicePrice from './ServicePrice';
+import State from './ServiceState';
+import ServiceTimestamp from './ServiceTimestamp';
+import User from './User';
+
 const textContains = ItemSearcher.textContains;
 
 export default class Service implements Item {
@@ -31,13 +32,13 @@ export default class Service implements Item {
     this.userStore = stores.user;
   }
 
-  id: string = "";
+  id: string = '';
   timestamp: ServiceTimestamp | null = null;
-  username: string = "";
-  name: string = "";
-  state: string = "";
+  username: string = '';
+  name: string = '';
+  state: string = '';
   customer: ServiceCustomer | null = null;
-  description: string = "";
+  description: string = '';
   belongings: ServiceBelonging[] = [];
   private _events: ServiceEvent[] = [];
   imageFiles: ServiceImage[] = [];
@@ -127,10 +128,10 @@ export default class Service implements Item {
     const { customer, timestamp, state: stateKey, description } = this;
 
     const state = State.findByKey(stateKey);
-    const stateTitle = state?.title ?? "";
+    const stateTitle = state?.title ?? '';
 
     const ts = [
-      "service",
+      'service',
       description,
       stateTitle,
       ...this.labels.map((label) => label.title),
@@ -216,26 +217,29 @@ export default class Service implements Item {
     if (!isString(this.username) || this.username.trim().length === 0) {
       return null;
     }
-    return await this.userStore.dispatch("getUserByUsername", this.username);
+    return await this.userStore.dispatch('getUserByUsername', this.username);
   }
   async fetchName(): Promise<string> {
     const user = await this.fetchUser();
-    const username = user?.username ?? "";
+    const username = user?.username ?? '';
 
     if (username.length && this.name) return `${this.name}(${username})`;
     if (!username.length && this.name) return this.name;
     if (username.length && !this.name) return username;
 
-    throw new Error("unknown");
+    throw new Error('unknown');
   }
 
   toTotalPrice(): ServicePrice {
-    return this._events.reduce((cost, event) => {
-      if (event.price && event.method === Method.PURCHASE.key) {
-        cost = cost.plus(event.price);
-      }
-      return cost;
-    }, new ServicePrice().fromData({ amount: 0 }));
+    return this._events.reduce(
+      (cost, event) => {
+        if (event.price && event.method === Method.PURCHASE.key) {
+          cost = cost.plus(event.price);
+        }
+        return cost;
+      },
+      new ServicePrice().fromData({ amount: 0 }),
+    );
   }
 
   setLabels(labels: Label[] = []) {

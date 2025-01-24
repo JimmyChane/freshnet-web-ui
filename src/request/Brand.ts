@@ -1,7 +1,6 @@
-import Server from "@/host/Server";
+import { API, Response } from '@/host/ServerApi';
 
-export default class Brand {
-  static list(): Promise<any> {
-    return Server.request().path("brand/").sendJson();
-  }
+export async function getBrandList(): Promise<Response> {
+  const response = await API.get('brand/');
+  return new Response(response.data);
 }

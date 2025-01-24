@@ -1,7 +1,9 @@
-import Vuex, { Store } from "vuex";
-import DataLoader from "./tools/DataLoader";
-import Processor from "./tools/Processor";
-import DatabaseRequest from "@/request/Database";
+import Vuex, { Store } from 'vuex';
+
+import DatabaseRequest from '@/request/Database';
+
+import DataLoader from './tools/DataLoader';
+import Processor from './tools/Processor';
 
 const init = (Stores: any) => {
   const store: Store<any> = new Vuex.Store({
@@ -12,12 +14,12 @@ const init = (Stores: any) => {
         .loadData(async () => {
           const api = await DatabaseRequest.info();
           const baseInfo = api.getContent();
-          store.dispatch("loadDatabases");
+          store.dispatch('loadDatabases');
           return baseInfo;
         })
         .setData((data) => {
-          store.commit("baseInfo", data ? data : null);
-          store.commit("lastModified", Date.now());
+          store.commit('baseInfo', data ? data : null);
+          store.commit('lastModified', Date.now());
         })
         .getData(() => store.getters.baseInfo),
       baseInfo: null,
@@ -37,46 +39,46 @@ const init = (Stores: any) => {
     },
     actions: {
       refresh: async (context) => {
-        return context.state.processor.acquire("refresh", async () => {
+        return context.state.processor.acquire('refresh', async () => {
           context.state.dataLoader.doTimeout();
-          await context.dispatch("loadBaseInfo");
+          await context.dispatch('loadBaseInfo');
         });
       },
 
       loadBaseInfo: async (context) => {
-        return context.state.processor.acquire("loadBaseInfo", async () => {
+        return context.state.processor.acquire('loadBaseInfo', async () => {
           return context.state.dataLoader.data();
         });
       },
       loadDatabases: async (context) => {
-        return context.state.processor.acquire("loadDatabases", async () => {
+        return context.state.processor.acquire('loadDatabases', async () => {
           try {
-            context.commit("items", []);
-            context.commit("lastModified", Date.now());
+            context.commit('items', []);
+            context.commit('lastModified', Date.now());
             const api = await DatabaseRequest.databases();
             const items = api.optArrayContent().map((database: any) => {
               return { name: database, collections: [] };
             });
-            context.commit("items", items);
+            context.commit('items', items);
             for (const database of items) {
-              context.dispatch("loadCollections", { database: database.name });
+              context.dispatch('loadCollections', { database: database.name });
             }
             return context.getters.items;
           } catch (error) {
-            context.commit("items", []);
-            context.commit("lastModified", Date.now());
+            context.commit('items', []);
+            context.commit('lastModified', Date.now());
             throw error;
           }
         });
       },
       loadCollections: async (context, arg = {}) => {
-        return context.state.processor.acquire("loadCollections", async () => {
+        return context.state.processor.acquire('loadCollections', async () => {
           const { database } = arg;
           const api = await DatabaseRequest.collections(database);
           const collections = api.optArrayContent().map((collection: any) => {
             return { name: collection, documents: [] };
           });
-          const dbFound = await context.dispatch("findDatabase", {
+          const dbFound = await context.dispatch('findDatabase', {
             database,
           });
           while (dbFound.collections.length) {
@@ -85,19 +87,19 @@ const init = (Stores: any) => {
           dbFound.collections.push(...collections);
           for (const collection of dbFound.collections) {
             const arg = { database: dbFound.name, collection: collection.name };
-            context.dispatch("loadDocuments", arg);
+            context.dispatch('loadDocuments', arg);
           }
           return dbFound.collections;
         });
       },
       loadDocuments: async (context, arg = {}) => {
-        return context.state.processor.acquire("loadDocuments", async () => {
+        return context.state.processor.acquire('loadDocuments', async () => {
           const { database, collection } = arg;
           const api = await DatabaseRequest.documents(database, collection);
           const documents = api.optArrayContent();
           const outputArg = { database, collection };
           const collectionFound = await context.dispatch(
-            "findCollection",
+            'findCollection',
             outputArg,
           );
           while (collectionFound.documents.length) {
@@ -112,34 +114,34 @@ const init = (Stores: any) => {
       },
 
       imports: async (context, arg = {}) => {
-        return context.state.processor.acquire("imports", async () => {
+        return context.state.processor.acquire('imports', async () => {
           const { json } = arg;
           const api = await DatabaseRequest.import({ content: json });
           throw new Error();
         });
       },
       exportDatabase: async (context, arg = {}) => {
-        return context.state.processor.acquire("exportDatabase", async () => {
+        return context.state.processor.acquire('exportDatabase', async () => {
           const { database } = arg;
           return (await DatabaseRequest.export(database)).getContent();
         });
       },
 
       findDatabase: async (context, arg = {}) => {
-        return context.state.processor.acquire("findDatabase", async () => {
+        return context.state.processor.acquire('findDatabase', async () => {
           const { database } = arg;
           const dbFound = context.state.items.find((db: { name: string }) => {
             return db.name === database;
           });
-          if (!dbFound) throw new Error("database not found");
+          if (!dbFound) throw new Error('database not found');
 
           return dbFound;
         });
       },
       findCollection: async (context, arg = {}) => {
-        return context.state.processor.acquire("findCollection", async () => {
+        return context.state.processor.acquire('findCollection', async () => {
           const { database, collection } = arg;
-          const dbFound = await context.dispatch("findDatabase", {
+          const dbFound = await context.dispatch('findDatabase', {
             database,
           });
           const collectionFound = dbFound.collections.find(
@@ -147,7 +149,7 @@ const init = (Stores: any) => {
               return dbCollection.name === collection;
             },
           );
-          if (!collectionFound) throw new Error("collection not found");
+          if (!collectionFound) throw new Error('collection not found');
 
           return collectionFound;
         });

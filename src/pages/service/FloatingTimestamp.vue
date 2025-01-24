@@ -1,9 +1,9 @@
 <script>
-  export default {
-    props: {
-      title: { type: String },
-    },
-  };
+export default {
+  props: {
+    title: { type: String },
+  },
+};
 </script>
 
 <template>
@@ -11,18 +11,18 @@
 </template>
 
 <style lang="scss" scoped>
-  .FloatingTimestamp {
-    font-size: 0.7rem;
-    font-weight: 600;
-    text-align: center;
+.FloatingTimestamp {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
 
-    background: white;
-    box-shadow: 0 0 0.4rem hsl(0, 0%, 80%);
-    padding: 0.5rem 0.7rem;
-    border-radius: 1em;
-    line-height: 0.6em;
+  background: white;
+  box-shadow: 0 0 0.4rem hsl(0, 0%, 80%);
+  padding: 0.5rem 0.7rem;
+  border-radius: 1em;
+  line-height: 0.6em;
 
-    position: sticky;
-    top: 0;
-  }
+  position: sticky;
+  top: 0;
+}
 </style>

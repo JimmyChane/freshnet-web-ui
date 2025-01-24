@@ -1,77 +1,74 @@
 <script>
-  import WindowAdd from "./WindowAdd.vue";
-  import Loading from "@/components/Loading.vue";
-  import Input from "@/components/Input.vue";
+import IconPack from '@/app/IconPack';
+import Input from '@/components/Input.vue';
+import Loading from '@/components/Loading.vue';
+import Server from '@/host/Server';
+import Order from '@/items/Order';
 
-  import Actionbar from "./Actionbar.vue";
-  import SectionOrder from "./SectionOrder.vue";
+import Actionbar from './Actionbar.vue';
+import SectionOrder from './SectionOrder.vue';
+import WindowAdd from './WindowAdd.vue';
 
-  import Order from "@/items/Order";
+export default {
+  key: 'order',
+  name: 'ViewOrder',
+  title: 'Orders',
+  icon: new IconPack(
+    Server.resource.icon('order-FFFFFF'),
+    Server.resource.icon('order-000000'),
+  ),
+  userPermissions: ['admin', 'staff'],
 
-  import Server from "@/host/Server";
-  import IconPack from "@/app/IconPack";
+  components: { Loading, Actionbar, SectionOrder, Input },
+  data: (c) => ({
+    display: { showDialogAppendOrder: false },
 
-  export default {
-    key: "order",
-    name: "ViewOrder",
-    title: "Orders",
-    icon: new IconPack(
-      Server.resource.icon("order-FFFFFF"),
-      Server.resource.icon("order-000000"),
-    ),
-    userPermissions: ["admin", "staff"],
+    scrollTop: 0,
 
-    components: { Loading, Actionbar, SectionOrder, Input },
-    data: (c) => ({
-      display: { showDialogAppendOrder: false },
-
-      scrollTop: 0,
-
-      pendingItems: [],
-      completedItems: [],
-    }),
-    computed: {
-      isLoading: (c) => c.$store.state.stores.order.getters.isLoading,
-      items: (c) => optArray(c.$store.state.stores.order.getters.items),
-      currentExpandedOrderid: (c) => c.$route.query.order,
-    },
-    watch: {
-      "$store.state.stores.order.getters.lastModified"() {
-        this.invalidate();
-      },
-    },
-    mounted() {
+    pendingItems: [],
+    completedItems: [],
+  }),
+  computed: {
+    isLoading: (c) => c.$store.state.stores.order.getters.isLoading,
+    items: (c) => optArray(c.$store.state.stores.order.getters.items),
+    currentExpandedOrderid: (c) => c.$route.query.order,
+  },
+  watch: {
+    '$store.state.stores.order.getters.lastModified'() {
       this.invalidate();
     },
-    methods: {
-      async invalidate() {
-        this.pendingItems = [];
-        this.completedItems = [];
+  },
+  mounted() {
+    this.invalidate();
+  },
+  methods: {
+    async invalidate() {
+      this.pendingItems = [];
+      this.completedItems = [];
 
-        const groups = await this.$store.state.stores.order.dispatch(
-          "getGroupsByStatus",
-        );
-        const groupPending = groups.find((group) => {
-          return group.status === Order.Status.Pending;
-        });
-        const groupCompleted = groups.find((group) => {
-          return group.status === Order.Status.Completed;
-        });
+      const groups =
+        await this.$store.state.stores.order.dispatch('getGroupsByStatus');
+      const groupPending = groups.find((group) => {
+        return group.status === Order.Status.Pending;
+      });
+      const groupCompleted = groups.find((group) => {
+        return group.status === Order.Status.Completed;
+      });
 
-        this.pendingItems = groupPending?.items ?? [];
-        this.completedItems = groupCompleted?.items ?? [];
-      },
-      refresh() {
-        this.$store.state.stores.order.dispatch("refresh").catch((error) => {
-          this.$store.dispatch("snackbarShow", "Error While Refreshing Order");
-          console.error(error);
-        });
-      },
-      toAdd() {
-        this.$store.dispatch("openPopupWindow", { component: WindowAdd });
-      },
+      this.pendingItems = groupPending?.items ?? [];
+      this.completedItems = groupCompleted?.items ?? [];
     },
-  };
+    refresh() {
+      this.$store.state.stores.order.dispatch('refresh').catch((error) => {
+        this.$store.dispatch('snackbarShow', 'Error While Refreshing Order');
+        console.error(error);
+      });
+    },
+    toAdd() {
+      this.$store.dispatch('openPopupWindow', { component: WindowAdd });
+    },
+  },
+};
 </script>
 
 <template>
@@ -146,54 +143,54 @@
 </template>
 
 <style lang="scss" scoped>
-  .PageOrder {
-    --width-max: 550px;
+.PageOrder {
+  --width-max: 550px;
 
-    position: relative;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-items: stretch;
+
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  padding-bottom: 80px;
+
+  main {
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    align-items: stretch;
+    padding-top: 10px;
 
-    overflow-y: auto;
-    height: 100%;
-    width: 100%;
-    padding-bottom: 80px;
-
-    main {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 10px;
-
+    .main-section {
+      margin-top: 10px;
+      margin-bottom: 20px;
+      background: white;
+      box-shadow: 0 2px 4px #b5b5b5;
+      padding: 10px;
+    }
+    @media (min-width: 550px) {
+      padding-left: 20px;
+      padding-right: 20px;
       .main-section {
-        margin-top: 10px;
-        margin-bottom: 20px;
-        background: white;
-        box-shadow: 0 2px 4px #b5b5b5;
-        padding: 10px;
+        border-radius: 1rem;
       }
-      @media (min-width: 550px) {
-        padding-left: 20px;
-        padding-right: 20px;
-        .main-section {
-          border-radius: 1rem;
-        }
-      }
-    }
-
-    .viewOrder-item {
-      .viewOrder-item-seperator {
-        margin: 4px 0;
-        min-width: auto;
-        min-height: 0.5px;
-        background: hsla(0, 0%, 0%, 0.1);
-      }
-    }
-
-    .viewOrder-loading {
-      position: absolute;
     }
   }
+
+  .viewOrder-item {
+    .viewOrder-item-seperator {
+      margin: 4px 0;
+      min-width: auto;
+      min-height: 0.5px;
+      background: hsla(0, 0%, 0%, 0.1);
+    }
+  }
+
+  .viewOrder-loading {
+    position: absolute;
+  }
+}
 </style>

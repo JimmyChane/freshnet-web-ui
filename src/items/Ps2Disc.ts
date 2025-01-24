@@ -1,5 +1,6 @@
-import { trimId, trimText } from "@/U";
-import ItemSearcher from "../objects/ItemSearcher";
+import { trimId, trimText } from '@/U';
+
+import ItemSearcher from '../objects/ItemSearcher';
 
 export default class Ps2Disc {
   stores: any;
@@ -8,9 +9,9 @@ export default class Ps2Disc {
     this.stores = stores;
   }
 
-  id: string = "";
-  code: string = "";
-  title: string = "";
+  id: string = '';
+  code: string = '';
+  title: string = '';
 
   fromData(data: any) {
     this.id = trimId(data._id);
@@ -27,8 +28,8 @@ export default class Ps2Disc {
   }
   toCount(strs: string[]): number {
     return strs.reduce((count, str) => {
-      if (ItemSearcher.textContains("ps2", str)) count++;
-      if (ItemSearcher.textContains("disc", str)) count++;
+      if (ItemSearcher.textContains('ps2', str)) count++;
+      if (ItemSearcher.textContains('disc', str)) count++;
       if (ItemSearcher.textContains(this.code, str)) count++;
       if (ItemSearcher.textContains(this.title, str)) count++;
       return count;

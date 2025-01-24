@@ -1,7 +1,8 @@
-import PhoneNumber from "./PhoneNumber";
+import { optString, trimStringAll, trimText } from '@/U';
 
-import ItemSearcher from "../objects/ItemSearcher";
-import { optString, trimStringAll, trimText } from "@/U";
+import ItemSearcher from '../objects/ItemSearcher';
+import PhoneNumber from './PhoneNumber';
+
 const textContains = ItemSearcher.textContains;
 
 export default class ServiceCustomer {
@@ -11,7 +12,7 @@ export default class ServiceCustomer {
     this.stores = stores;
   }
 
-  name: string = "";
+  name: string = '';
   phoneNumber: PhoneNumber | null = null;
 
   fromData(data: any): ServiceCustomer {
@@ -26,12 +27,12 @@ export default class ServiceCustomer {
   toData(): any {
     return {
       name: trimText(this.name),
-      phoneNumber: this.phoneNumber?.toData().value ?? "",
+      phoneNumber: this.phoneNumber?.toData().value ?? '',
     };
   }
   toCount(strs: string[]): number {
     let count = strs.reduce((count, str) => {
-      if (textContains("customer", str)) count++;
+      if (textContains('customer', str)) count++;
       if (textContains(this.name, str)) count += 4;
       return count;
     }, 0);
@@ -43,11 +44,11 @@ export default class ServiceCustomer {
   isEqual(item: ServiceCustomer): boolean {
     const eName = optString(item.name);
     const ePhoneNumber = item.phoneNumber;
-    const ePhoneNumberValue = ePhoneNumber?.value ?? "";
+    const ePhoneNumberValue = ePhoneNumber?.value ?? '';
 
     const name = optString(this.name);
     const phoneNumber = this.phoneNumber;
-    const phoneNumberValue = phoneNumber?.value ?? "";
+    const phoneNumberValue = phoneNumber?.value ?? '';
 
     return eName === name && ePhoneNumberValue === phoneNumberValue;
   }

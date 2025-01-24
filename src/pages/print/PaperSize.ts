@@ -1,23 +1,23 @@
-import Size from "./Size";
+import IconPaperA3 from '@/assets/icon/paper-a3.svg';
+import IconPaperA4 from '@/assets/icon/paper-a4.svg';
 
-import IconPaperA4 from "@/assets/icon/paper-a4.svg";
-import IconPaperA3 from "@/assets/icon/paper-a3.svg";
+import Size from './Size';
 
 export default class PaperSize {
   static readonly _4R = new PaperSize(
-    "4R",
+    '4R',
     IconPaperA4,
-    new Size("10.2cm", "15.2cm"),
+    new Size('10.2cm', '15.2cm'),
   );
   static readonly A4 = new PaperSize(
-    "A4",
+    'A4',
     IconPaperA4,
-    new Size("210mm", "297mm"),
+    new Size('210mm', '297mm'),
   );
   static readonly A3 = new PaperSize(
-    "A3",
+    'A3',
     IconPaperA3,
-    new Size("297mm", "420mm"),
+    new Size('297mm', '420mm'),
   );
 
   title: string;

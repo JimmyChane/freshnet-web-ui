@@ -1,48 +1,50 @@
 <script>
-  import ItemEvent from "./ServiceEvent.vue";
-  import FloatingTimestampVue from "./FloatingTimestamp.vue";
-  import Service from "@/items/Service";
-  import { format } from "date-fns";
+import { format } from 'date-fns';
 
-  export default {
-    components: { ItemEvent, FloatingTimestampVue },
-    props: {
-      service: { type: Service },
-      events: { type: Array, default: () => [] },
-      actions: { type: Object },
+import Service from '@/items/Service';
+
+import FloatingTimestampVue from './FloatingTimestamp.vue';
+import ItemEvent from './ServiceEvent.vue';
+
+export default {
+  components: { ItemEvent, FloatingTimestampVue },
+  props: {
+    service: { type: Service },
+    events: { type: Array, default: () => [] },
+    actions: { type: Object },
+  },
+  computed: {
+    moreEvents() {
+      if (!this.service) return [];
+
+      return [...this.service.events].reverse();
     },
-    computed: {
-      moreEvents() {
-        if (!this.service) return [];
 
-        return [...this.service.events].reverse();
-      },
+    groups() {
+      return this.moreEvents.reduce((groups, event) => {
+        const ts = event.timestamp;
+        const time = ts.time;
 
-      groups() {
-        return this.moreEvents.reduce((groups, event) => {
-          const ts = event.timestamp;
-          const time = ts.time;
+        const optGroup = (title) => {
+          let group = groups.find((group) => group.title === title);
+          if (!group) groups.push((group = { title, events: [] }));
+          return group;
+        };
+        const putItem = (title) => optGroup(title).events.push(event);
 
-          const optGroup = (title) => {
-            let group = groups.find((group) => group.title === title);
-            if (!group) groups.push((group = { title, events: [] }));
-            return group;
-          };
-          const putItem = (title) => optGroup(title).events.push(event);
+        if (ts.isToday()) {
+          putItem(`Today, ${format(time, 'EEE, dd/LL/yyyy')}`);
+        } else if (ts.isYesterday()) {
+          putItem(`Yesterday, ${format(time, 'EEE, dd/LL/yyyy')}`);
+        } else {
+          putItem(format(time, 'EEE, dd/LL/yyyy'));
+        }
 
-          if (ts.isToday()) {
-            putItem(`Today, ${format(time, "EEE, dd/LL/yyyy")}`);
-          } else if (ts.isYesterday()) {
-            putItem(`Yesterday, ${format(time, "EEE, dd/LL/yyyy")}`);
-          } else {
-            putItem(format(time, "EEE, dd/LL/yyyy"));
-          }
-
-          return groups;
-        }, []);
-      },
+        return groups;
+      }, []);
     },
-  };
+  },
+};
 </script>
 
 <template>
@@ -68,24 +70,24 @@
 </template>
 
 <style lang="scss" scoped>
-  .ListEvents {
+.ListEvents {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+
+  .ListEvents-group {
     width: 100%;
+    gap: 0.2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
 
-    .ListEvents-group {
+    .ListEvents-group-item {
+      z-index: 2;
       width: 100%;
-      gap: 0.2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      .ListEvents-group-item {
-        z-index: 2;
-        width: 100%;
-      }
     }
   }
+}
 </style>

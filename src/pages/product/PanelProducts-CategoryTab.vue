@@ -1,28 +1,28 @@
 <script>
-  import { isFunction } from "@/U";
+import { isFunction } from '@/U';
 
-  export default {
-    props: { menu: { type: Object } },
-    computed: {
-      title: (c) => c.menu.title,
-      icon: (c) => c.menu.icon,
-      background: (c) => c.menu.background ?? "",
-      count: (c) => c.menu.count,
+export default {
+  props: { menu: { type: Object } },
+  computed: {
+    title: (c) => c.menu.title,
+    icon: (c) => c.menu.icon,
+    background: (c) => c.menu.background ?? '',
+    count: (c) => c.menu.count,
+  },
+  methods: {
+    isSelected() {
+      const { menu } = this;
+
+      if (!isFunction(menu.isSelected)) return false;
+
+      return menu.isSelected(menu);
     },
-    methods: {
-      isSelected() {
-        const { menu } = this;
-
-        if (!isFunction(menu.isSelected)) return false;
-
-        return menu.isSelected(menu);
-      },
-      click() {
-        if (!isFunction(this.menu.click)) return;
-        this.menu.click(this.menu);
-      },
+    click() {
+      if (!isFunction(this.menu.click)) return;
+      this.menu.click(this.menu);
     },
-  };
+  },
+};
 </script>
 
 <template>
@@ -43,81 +43,81 @@
 </template>
 
 <style lang="scss" scoped>
-  .TabLayout-Tab {
-    height: 3.4em;
-    height: 3em;
-    border: none;
-    border-radius: 1em;
-    font-size: 1em;
-    padding: 1.2em;
+.TabLayout-Tab {
+  height: 3.4em;
+  height: 3em;
+  border: none;
+  border-radius: 1em;
+  font-size: 1em;
+  padding: 1.2em;
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
-    position: relative;
+  position: relative;
 
-    .TabLayout-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: inherit;
-    }
-    .TabLayout-tint {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      border-radius: 0.9em;
-      border: 1px solid hsla(0, 0%, 0%, 0.1);
-    }
-    .TabLayout-Tab-title {
-      z-index: 1;
-      text-align: start;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-      font-weight: 600;
-    }
+  .TabLayout-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+  }
+  .TabLayout-tint {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    border-radius: 0.9em;
+    border: 1px solid hsla(0, 0%, 0%, 0.1);
+  }
+  .TabLayout-Tab-title {
+    z-index: 1;
+    text-align: start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    font-weight: 600;
+  }
+}
+
+.TabLayout-Tab[isSelected='true'] {
+  color: white;
+
+  .TabLayout-tint {
+    background: var(--background-select);
+  }
+}
+.TabLayout-Tab[isSelected='false'] {
+  color: black;
+  cursor: pointer;
+
+  .TabLayout-tint {
+    background: var(--background-deselect);
   }
 
-  .TabLayout-Tab[isSelected="true"] {
-    color: white;
-
-    .TabLayout-tint {
-      background: var(--background-select);
-    }
+  &:hover {
+    background: #e2e2e2;
   }
-  .TabLayout-Tab[isSelected="false"] {
-    color: black;
-    cursor: pointer;
+}
 
-    .TabLayout-tint {
-      background: var(--background-deselect);
-    }
+.TabLayout-Tab[isWide='true'] {
+  width: 9em;
+  justify-content: flex-start;
 
-    &:hover {
-      background: #e2e2e2;
-    }
-  }
+  --background-select: linear-gradient(90deg, #000000 0%, #000000cc 100%);
+  --background-deselect: linear-gradient(90deg, #ffffff 0%, #ffffffcc 100%);
+}
+.TabLayout-Tab[isWide='false'] {
+  width: max-content;
+  justify-content: center;
 
-  .TabLayout-Tab[isWide="true"] {
-    width: 9em;
-    justify-content: flex-start;
-
-    --background-select: linear-gradient(90deg, #000000 0%, #000000cc 100%);
-    --background-deselect: linear-gradient(90deg, #ffffff 0%, #ffffffcc 100%);
-  }
-  .TabLayout-Tab[isWide="false"] {
-    width: max-content;
-    justify-content: center;
-
-    --background-select: #000000e6;
-    --background-deselect: #ffffffe6;
-  }
+  --background-select: #000000e6;
+  --background-deselect: #ffffffe6;
+}
 </style>

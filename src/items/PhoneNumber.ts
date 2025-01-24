@@ -1,5 +1,6 @@
-import { optString } from "@/U";
-import ItemSearcher from "../objects/ItemSearcher";
+import { optString } from '@/U';
+
+import ItemSearcher from '../objects/ItemSearcher';
 
 interface PhoneNumberData {
   value: string;
@@ -12,7 +13,7 @@ export default class PhoneNumber {
     this.stores = stores;
   }
 
-  value: string = "";
+  value: string = '';
 
   fromData(data: PhoneNumberData): this {
     this.value = data.value;

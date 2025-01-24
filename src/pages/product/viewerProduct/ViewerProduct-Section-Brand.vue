@@ -1,41 +1,42 @@
 <script>
-  import Section from "./ViewerProduct-Section.vue";
-  import IconEdit from "@/assets/icon/edit-000000.svg";
+import IconEdit from '@/assets/icon/edit-000000.svg';
 
-  export default {
-    components: { Section },
-    props: {
-      primaryColor: { type: Object },
-      allowEdit: { type: Boolean, default: false },
-      product: { type: Object, default: () => null },
-    },
-    data: (c) => ({ IconEdit, brand: null }),
-    computed: {
-      title: (c) => (c.product ? c.product.title : ""),
+import Section from './ViewerProduct-Section.vue';
 
-      brandId: (c) => c.product?.brandId ?? "",
-      brandTitle: (c) => c.brand?.title ?? "",
-      brandIconUrl: (c) => c.brand?.icon?.toUrl() ?? "",
-    },
-    watch: {
-      product() {
-        this.invalidate();
-      },
-      brandId() {
-        this.invalidate();
-      },
-    },
-    mounted() {
+export default {
+  components: { Section },
+  props: {
+    primaryColor: { type: Object },
+    allowEdit: { type: Boolean, default: false },
+    product: { type: Object, default: () => null },
+  },
+  data: (c) => ({ IconEdit, brand: null }),
+  computed: {
+    title: (c) => (c.product ? c.product.title : ''),
+
+    brandId: (c) => c.product?.brandId ?? '',
+    brandTitle: (c) => c.brand?.title ?? '',
+    brandIconUrl: (c) => c.brand?.icon?.toUrl() ?? '',
+  },
+  watch: {
+    product() {
       this.invalidate();
     },
-    methods: {
-      async invalidate() {
-        this.brand = null;
-        if (!this.product) return;
-        this.brand = await this.product.fetchBrand();
-      },
+    brandId() {
+      this.invalidate();
     },
-  };
+  },
+  mounted() {
+    this.invalidate();
+  },
+  methods: {
+    async invalidate() {
+      this.brand = null;
+      if (!this.product) return;
+      this.brand = await this.product.fetchBrand();
+    },
+  },
+};
 </script>
 
 <template>
@@ -57,9 +58,9 @@
           v-if="brandIconUrl"
           :src="brandIconUrl"
         />
-        <span class="SectionBrand-item-title" v-if="brandTitle">{{
-          brandTitle
-        }}</span>
+        <span class="SectionBrand-item-title" v-if="brandTitle">
+          {{ brandTitle }}
+        </span>
       </div>
 
       <span class="SectionBrand-noContent" v-else>No Brand</span>
@@ -68,42 +69,42 @@
 </template>
 
 <style lang="scss" scoped>
-  .SectionBrand {
+.SectionBrand {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  .SectionBrand-item {
     width: 100%;
+    padding: 0.8rem;
+    gap: 1.4rem;
+    background: hsla(0, 0%, 100%, 0.6);
+
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: flex-start;
-    align-items: flex-start;
-    .SectionBrand-item {
-      width: 100%;
-      padding: 0.8rem;
-      gap: 1.4rem;
-      background: hsla(0, 0%, 100%, 0.6);
 
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: flex-start;
-
-      .SectionBrand-item-icon {
-        padding: 0.5rem;
-        height: 2rem;
-        background: hsla(0, 0%, 100%, 0.5);
-        border: 1px solid white;
-        border-radius: 0.2rem;
-      }
-      .SectionBrand-item-title {
-        font-size: 1.1rem;
-        font-weight: 600;
-      }
+    .SectionBrand-item-icon {
+      padding: 0.5rem;
+      height: 2rem;
+      background: hsla(0, 0%, 100%, 0.5);
+      border: 1px solid white;
+      border-radius: 0.2rem;
     }
-    .SectionBrand-noContent {
-      width: 100%;
-      padding: 1.2rem;
-      font-style: italic;
-      font-size: 0.8rem;
-      color: hsla(0, 0%, 0%, 0.6);
-      background: hsla(0, 0%, 100%, 0.6);
+    .SectionBrand-item-title {
+      font-size: 1.1rem;
+      font-weight: 600;
     }
   }
+  .SectionBrand-noContent {
+    width: 100%;
+    padding: 1.2rem;
+    font-style: italic;
+    font-size: 0.8rem;
+    color: hsla(0, 0%, 0%, 0.6);
+    background: hsla(0, 0%, 100%, 0.6);
+  }
+}
 </style>

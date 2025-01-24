@@ -1,10 +1,11 @@
-import { isNumber } from "@/U";
-import { RouterMode } from "vue-router";
+import { RouterMode } from 'vue-router';
+
+import { isNumber } from '@/U';
 
 class AppHost {
   private static parseOrigin(protocol: string, hostname: string, port: string) {
     port = this.parsePort(port);
-    return port === "80"
+    return port === '80'
       ? `${protocol}//${hostname}`
       : `${protocol}//${hostname}:${port}`;
   }
@@ -24,7 +25,7 @@ class AppHost {
     return `${port}`;
   }
 
-  public readonly ROUTER_MODE: RouterMode = "history";
+  public readonly ROUTER_MODE: RouterMode = 'history';
 
   get origin() {
     return AppHost.parseOrigin(
@@ -34,7 +35,7 @@ class AppHost {
     );
   }
   get path() {
-    return this.ROUTER_MODE === "hash" ? `${this.origin}/#` : `${this.origin}`;
+    return this.ROUTER_MODE === 'hash' ? `${this.origin}/#` : `${this.origin}`;
   }
 }
 

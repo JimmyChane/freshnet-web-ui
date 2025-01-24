@@ -1,4 +1,4 @@
-import { optNumber, trimText } from "@/U";
+import { optNumber, trimText } from '@/U';
 
 export default class ServiceBelonging {
   stores: any;
@@ -7,10 +7,10 @@ export default class ServiceBelonging {
     this.stores = stores;
   }
 
-  title: string = "";
+  title: string = '';
   time: number = 0;
   quantity: number = 1;
-  description: string = "";
+  description: string = '';
 
   fromData(data: any) {
     this.title = trimText(data.title);

@@ -33,7 +33,7 @@ export default class Processor {
   }
 
   public isLoading(key?: string): boolean {
-    if (typeof key !== "string") return this.keys.length > 0;
+    if (typeof key !== 'string') return this.keys.length > 0;
     return !!this.keys.find((loading) => loading === key);
   }
 }

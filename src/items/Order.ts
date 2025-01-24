@@ -1,8 +1,8 @@
-import OrderCustomer from "./OrderCustomer";
-import ItemSearcher from "../objects/ItemSearcher";
+import { trimId, trimText } from '@/U';
+import { Item } from '@/stores/tools/List';
 
-import { Item } from "@/stores/tools/List";
-import { trimId, trimText } from "@/U";
+import ItemSearcher from '../objects/ItemSearcher';
+import OrderCustomer from './OrderCustomer';
 
 export default class Order implements Item {
   static Status = { Pending: 0, Completed: 1 };
@@ -13,10 +13,10 @@ export default class Order implements Item {
     this.stores = stores;
   }
 
-  id: string = "";
+  id: string = '';
   customer: OrderCustomer | null = null;
-  content: string = "";
-  createdAt: string = "";
+  content: string = '';
+  createdAt: string = '';
   status: number = Order.Status.Pending;
 
   fromData(data: any): Order {
@@ -47,7 +47,7 @@ export default class Order implements Item {
   }
   toCount(strs: string[]): number {
     let count = strs.reduce((count, str) => {
-      if (ItemSearcher.textContains("order", str)) count++;
+      if (ItemSearcher.textContains('order', str)) count++;
       if (ItemSearcher.textContains(this.content, str)) count++;
       if (ItemSearcher.textContains(String(this.status), str)) count++;
       return count;

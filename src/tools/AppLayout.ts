@@ -19,8 +19,8 @@ export default class AppLayout {
   }
 
   private getVisibilityRequest(
-    page: string = "",
-    view: string = "",
+    page: string = '',
+    view: string = '',
   ): { page: string; view: string; mode: number } | undefined {
     return this.requests.find((request) => {
       return request.page === page && request.view === view;

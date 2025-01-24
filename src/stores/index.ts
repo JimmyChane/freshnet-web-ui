@@ -1,24 +1,26 @@
-import Vue from "vue";
-import Vuex, { Store, StoreOptions } from "vuex";
-import socketIo, { Socket } from "socket.io-client";
-import Server from "../host/Server";
-import TimeNowGetter from "@/tools/TimeNowGetter";
-import Notification from "@/tools/Notification";
-import PopupMenuOption from "@/app/popupMenu/PopupMenuOption";
+import Vue from 'vue';
+import Vuex, { Store, StoreOptions } from 'vuex';
 
-import fileDatabaseStore from "@/stores/store.database";
-import fileLoginStore from "@/stores/store.login";
-import fileUserStore from "@/stores/store.user";
-import fileSettingStore from "@/stores/store.setting";
-import fileCustomerStore from "@/stores/store.customer";
-import fileOrderStore from "@/stores/store.order";
-import fileBrandStore from "@/stores/store.brand";
-import fileSpecificationStore from "@/stores/store.specification";
-import fileCategoryStore from "@/stores/store.category";
-import fileServiceStore from "@/stores/store.service";
-import fileProductStore from "@/stores/store.product";
-import filePs2Store from "@/stores/store.ps2";
-import { optArray } from "@/U";
+import socketIo, { Socket } from 'socket.io-client';
+
+import { optArray } from '@/U';
+import PopupMenuOption from '@/app/popupMenu/PopupMenuOption';
+import fileBrandStore from '@/stores/store.brand';
+import fileCategoryStore from '@/stores/store.category';
+import fileCustomerStore from '@/stores/store.customer';
+import fileDatabaseStore from '@/stores/store.database';
+import fileLoginStore from '@/stores/store.login';
+import fileOrderStore from '@/stores/store.order';
+import fileProductStore from '@/stores/store.product';
+import filePs2Store from '@/stores/store.ps2';
+import fileServiceStore from '@/stores/store.service';
+import fileSettingStore from '@/stores/store.setting';
+import fileSpecificationStore from '@/stores/store.specification';
+import fileUserStore from '@/stores/store.user';
+import Notification from '@/tools/Notification';
+import TimeNowGetter from '@/tools/TimeNowGetter';
+
+import Server from '../host/Server';
 
 const keyGetter = new TimeNowGetter();
 
@@ -115,8 +117,8 @@ context.actions.socketNotify = (
 ) => {
   const { manager, key, content } = body;
   switch (manager) {
-    case "service":
-      Stores.service.dispatch("socketNotify", { key, content });
+    case 'service':
+      Stores.service.dispatch('socketNotify', { key, content });
       break;
   }
 };
@@ -125,25 +127,25 @@ context.actions.openSocket = (context: any) => {
 
   const option: Record<string, any> = {
     extraHeaders: {
-      authorization: window.localStorage.getItem("userToken"),
+      authorization: window.localStorage.getItem('userToken'),
     },
   };
   const socket = socketIo(Server.originApi, option)
-    .on("connect", () => console.info("Socket", "Connected"))
-    .on("connect_error", () => console.info("Socket", "Connect Error"))
-    .on("disconnect", (reason) => console.info("Socket", "Disconnected"))
-    .on("notify", (body) => context.dispatch("socketNotify", body));
-  context.commit("socket", socket);
+    .on('connect', () => console.info('Socket', 'Connected'))
+    .on('connect_error', () => console.info('Socket', 'Connect Error'))
+    .on('disconnect', (reason) => console.info('Socket', 'Disconnected'))
+    .on('notify', (body) => context.dispatch('socketNotify', body));
+  context.commit('socket', socket);
 };
 context.actions.closeSocket = (context: any) => {
   if (!context.getters.isConnected) return;
   const socket = context.state.socket;
-  context.commit("socket", null);
+  context.commit('socket', null);
   socket.close();
 };
 context.actions.restartSocket = (context: any) => {
-  context.dispatch("closeSocket");
-  context.dispatch("openSocket");
+  context.dispatch('closeSocket');
+  context.dispatch('openSocket');
 };
 
 // imageViewer
@@ -160,20 +162,20 @@ context.actions.imageViewerShow = (
   context.state.imageViewer.image = option.image;
   context.state.imageViewer.thumbnails = optArray(option.thumbnails);
   context.state.imageViewer.isShowing = true;
-  context.commit("imageViewer", context.state.imageViewer);
+  context.commit('imageViewer', context.state.imageViewer);
 };
 context.actions.imageViewerHide = (context: any) => {
   context.state.imageViewer.isShowing = false;
-  context.commit("imageViewer", context.state.imageViewer);
+  context.commit('imageViewer', context.state.imageViewer);
   setTimeout(() => {
     context.state.imageViewer.thumbnails = [];
     context.state.imageViewer.image = null;
-    context.commit("imageViewer", context.state.imageViewer);
+    context.commit('imageViewer', context.state.imageViewer);
   }, 300);
 };
 context.actions.imageViewerSelect = (context: any, image = null) => {
   context.state.imageViewer.image = image;
-  context.commit("imageViewer", context.state.imageViewer);
+  context.commit('imageViewer', context.state.imageViewer);
 };
 
 // popupMenus
@@ -222,14 +224,14 @@ context.actions.popupMenuShow = (
         setTimeout(() => {
           const index = context.state.popupMenus.indexOf(popupMenu);
           context.state.popupMenus.splice(index, 1);
-          context.commit("popupMenus", context.state.popupMenus);
+          context.commit('popupMenus', context.state.popupMenus);
         }, 300);
       }, 300);
     },
   };
 
   context.state.popupMenus.push(popupMenu);
-  context.commit("popupMenus", context.state.popupMenus);
+  context.commit('popupMenus', context.state.popupMenus);
 
   return popupMenu;
 };
@@ -242,9 +244,9 @@ context.getters.snackbars = (state: any) => {
   return state.snackbars;
 };
 context.actions.snackbarShow = (context: any, arg: any) => {
-  if (typeof arg === "string") arg = { text: arg };
+  if (typeof arg === 'string') arg = { text: arg };
   context.state.snackbars.push(new Notification(context, arg).show());
-  context.commit("snackbars", context.state.snackbars);
+  context.commit('snackbars', context.state.snackbars);
 };
 
 // popup windows
@@ -290,7 +292,7 @@ context.actions.openPopupWindow = (
         setTimeout(() => {
           const index = context.state.popupWindows.indexOf(popupWindow);
           context.state.popupWindows.splice(index, 1);
-          context.commit("popupWindows", context.state.popupWindows);
+          context.commit('popupWindows', context.state.popupWindows);
         }, 300);
       }, 300);
     },
@@ -301,7 +303,7 @@ context.actions.openPopupWindow = (
   });
 
   context.state.popupWindows.push(popupWindow);
-  context.commit("popupWindows", context.state.popupWindows);
+  context.commit('popupWindows', context.state.popupWindows);
 
   setTimeout(() => popupWindow.open(), 300);
 
@@ -340,17 +342,17 @@ context.modules = {
   ps2: Stores.ps2,
 };
 
-context.state.stores["database"] = Stores.database;
-context.state.stores["login"] = Stores.login;
-context.state.stores["user"] = Stores.user;
-context.state.stores["setting"] = Stores.setting;
-context.state.stores["customer"] = Stores.customer;
-context.state.stores["order"] = Stores.order;
-context.state.stores["brand"] = Stores.brand;
-context.state.stores["specification"] = Stores.specification;
-context.state.stores["category"] = Stores.category;
-context.state.stores["service"] = Stores.service;
-context.state.stores["product"] = Stores.product;
-context.state.stores["ps2"] = Stores.ps2;
+context.state.stores['database'] = Stores.database;
+context.state.stores['login'] = Stores.login;
+context.state.stores['user'] = Stores.user;
+context.state.stores['setting'] = Stores.setting;
+context.state.stores['customer'] = Stores.customer;
+context.state.stores['order'] = Stores.order;
+context.state.stores['brand'] = Stores.brand;
+context.state.stores['specification'] = Stores.specification;
+context.state.stores['category'] = Stores.category;
+context.state.stores['service'] = Stores.service;
+context.state.stores['product'] = Stores.product;
+context.state.stores['ps2'] = Stores.ps2;
 
 export default store;

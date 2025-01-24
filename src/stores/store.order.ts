@@ -1,10 +1,11 @@
-import Vuex from "vuex";
-import Order from "@/items/Order";
- 
-import StoreBuilder from "./tools/StoreBuilder";
-import OrderRequest from "@/request/Order";
-import Customer from "@/items/Customer";
-import OrderCustomer from "@/items/OrderCustomer";
+import Vuex from 'vuex';
+
+import Customer from '@/items/Customer';
+import Order from '@/items/Order';
+import OrderCustomer from '@/items/OrderCustomer';
+import OrderRequest from '@/request/Order';
+
+import StoreBuilder from './tools/StoreBuilder';
 
 const init = (Stores: any) => {
   const context = new StoreBuilder<Order>()
@@ -15,22 +16,22 @@ const init = (Stores: any) => {
     })
     .onGetStore(() => Stores.order)
 
-    .action("refresh", async (context) => {
+    .action('refresh', async (context) => {
       context.state.dataLoader.doTimeout();
-      await context.dispatch("getItems");
+      await context.dispatch('getItems');
     })
 
-    .action("getItems", async (context) => {
+    .action('getItems', async (context) => {
       return context.state.dataLoader.data();
     })
 
-    .action("getGroupsByCustomer", async (context) => {
+    .action('getGroupsByCustomer', async (context) => {
       interface Group {
         customer: OrderCustomer | null;
         items: Order[];
       }
 
-      const items: Order[] = await context.dispatch("getItems");
+      const items: Order[] = await context.dispatch('getItems');
       const groups: Group[] = items.reduce((groups: Group[], item: Order) => {
         let group: Group | undefined = groups.find((group: Group) => {
           if (group.customer === item.customer) return true;
@@ -49,13 +50,13 @@ const init = (Stores: any) => {
 
       return groups;
     })
-    .action("getGroupsByStatus", async (context) => {
+    .action('getGroupsByStatus', async (context) => {
       interface Group {
         status: number;
         items: Order[];
       }
 
-      const items = await context.dispatch("getItems");
+      const items = await context.dispatch('getItems');
       const groups: Group[] = items.reduce((groups: Group[], item: Order) => {
         let group: Group | undefined = groups.find((group: Group) => {
           return group.status === item.status;
@@ -73,21 +74,21 @@ const init = (Stores: any) => {
       return groups;
     })
 
-    .action("addItem", async (context, arg: { data: any }) => {
+    .action('addItem', async (context, arg: { data: any }) => {
       const { data } = arg;
       if (!data) return null;
       const api = await OrderRequest.add(data);
       const order = new Order(Stores).fromData(api.optObjectContent());
       return context.state.list.addItem(order);
     })
-    .action("removeOItemOfId", async (context, arg: { id: string }) => {
+    .action('removeOItemOfId', async (context, arg: { id: string }) => {
       const { id } = arg;
       const api = await OrderRequest.delete(id);
       api.getContent();
       context.state.list.removeItemById(id);
     })
     .action(
-      "updateStatusOfId",
+      'updateStatusOfId',
       async (context, arg: { id: string; status: number }) => {
         const { id, status } = arg;
         const api = await OrderRequest.updateStatus(id, status);
@@ -99,13 +100,13 @@ const init = (Stores: any) => {
       },
     )
 
-    .action("updateToPendingOfId", async (context, id = "") => {
+    .action('updateToPendingOfId', async (context, id = '') => {
       const status = Order.Status.Pending;
-      return context.dispatch("updateStatusOfId", { id, status });
+      return context.dispatch('updateStatusOfId', { id, status });
     })
-    .action("updateToCompletedOfId", async (context, id = "") => {
+    .action('updateToCompletedOfId', async (context, id = '') => {
       const status = Order.Status.Completed;
-      return context.dispatch("updateStatusOfId", { id, status });
+      return context.dispatch('updateStatusOfId', { id, status });
     })
     .build();
 

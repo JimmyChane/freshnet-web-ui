@@ -1,5 +1,6 @@
-import { optArray, optBoolean } from "@/U";
-import ProductPrices from "./ProductPrices";
+import { optArray, optBoolean } from '@/U';
+
+import ProductPrices from './ProductPrices';
 
 export default class ProductStock {
   stores: any;

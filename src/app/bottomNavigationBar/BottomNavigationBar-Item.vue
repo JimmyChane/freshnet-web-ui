@@ -1,25 +1,23 @@
 <script>
-  import NavPage from "@/app/NavPage";
-  import IconHome from "@/icon/IconHome.vue";
-  import IconProducts from "@/icon/IconMagnifyingGlass.vue";
-  import IconPaper from "@/icon/IconPaper.vue";
-  import IconManage from "@/icon/IconManage.vue";
-  import { isFunction } from "@/U";
+import { isFunction } from '@/U';
+import NavPage from '@/app/NavPage';
+import IconHome from '@/icon/IconHome.vue';
+import IconProducts from '@/icon/IconMagnifyingGlass.vue';
+import IconManage from '@/icon/IconManage.vue';
+import IconPaper from '@/icon/IconPaper.vue';
 
-  export default {
-    components: { IconHome, IconProducts, IconPaper, IconManage },
-    props: { item: { type: NavPage } },
-    computed: {
-      key() {
-        return this.item.key;
-      },
-      isSelected() {
-        return isFunction(this.item.isSelected)
-          ? this.item.isSelected()
-          : false;
-      },
+export default {
+  components: { IconHome, IconProducts, IconPaper, IconManage },
+  props: { item: { type: NavPage } },
+  computed: {
+    key() {
+      return this.item.key;
     },
-  };
+    isSelected() {
+      return isFunction(this.item.isSelected) ? this.item.isSelected() : false;
+    },
+  },
+};
 </script>
 
 <template>
@@ -54,86 +52,86 @@
       :src="isSelected ? item.icon.light : item.icon.dark"
       :alt="`Go to ${item.title}`"
     />
-    <span :class="['BottomNavigationBar-Item-title', 'transition']">{{
-      item.title
-    }}</span>
+    <span :class="['BottomNavigationBar-Item-title', 'transition']">
+      {{ item.title }}
+    </span>
   </router-link>
 </template>
 
 <style lang="scss" scoped>
-  .BottomNavigationBar-Item {
-    --primary-color: #1673e1;
-    --secondary-color: hsla(213, 82%, 48%, 0.2);
-    --third-color: hsla(213, 82%, 48%, 0.1);
-    --icon-size: 1.8em;
-    --padding: 0.4em;
-    --padding-inline: 1em;
-    --gap: 0.7em;
+.BottomNavigationBar-Item {
+  --primary-color: #1673e1;
+  --secondary-color: hsla(213, 82%, 48%, 0.2);
+  --third-color: hsla(213, 82%, 48%, 0.1);
+  --icon-size: 1.8em;
+  --padding: 0.4em;
+  --padding-inline: 1em;
+  --gap: 0.7em;
 
-    background: none;
-    border: none;
-    color: inherit;
-    text-decoration: inherit;
-    padding: var(--padding);
-    padding-inline: var(--padding-inline);
+  background: none;
+  border: none;
+  color: inherit;
+  text-decoration: inherit;
+  padding: var(--padding);
+  padding-inline: var(--padding-inline);
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    font-size: 1rem;
-    border-radius: 2em;
-    font-weight: 600;
-    transition: all 200ms cubic-bezier(1, 0, 0, 1);
-    position: relative;
-    overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 1rem;
+  border-radius: 2em;
+  font-weight: 600;
+  transition: all 200ms cubic-bezier(1, 0, 0, 1);
+  position: relative;
+  overflow: hidden;
 
-    .BottomNavigationBar-Item-icon {
-      width: var(--icon-size);
-      height: var(--icon-size);
-      padding: 0.2em;
-      transition-timing-function: cubic-bezier(1, 0, 0, 1);
-    }
-    .BottomNavigationBar-Item-title {
-      min-width: max-content;
-      position: absolute;
-      left: calc(var(--padding-inline) + var(--icon-size) + var(--gap));
-      font-size: 0.9em;
-      color: var(--primary-color);
-    }
+  .BottomNavigationBar-Item-icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    padding: 0.2em;
+    transition-timing-function: cubic-bezier(1, 0, 0, 1);
+  }
+  .BottomNavigationBar-Item-title {
+    min-width: max-content;
+    position: absolute;
+    left: calc(var(--padding-inline) + var(--icon-size) + var(--gap));
+    font-size: 0.9em;
+    color: var(--primary-color);
+  }
+}
+
+.BottomNavigationBar-Item[isSelected='true'] {
+  cursor: initial;
+  flex-grow: 1;
+  background: var(--secondary-color);
+
+  .BottomNavigationBar-Item-icon {
+    --color: var(--primary-color);
   }
 
-  .BottomNavigationBar-Item[isSelected="true"] {
-    cursor: initial;
-    flex-grow: 1;
-    background: var(--secondary-color);
-
-    .BottomNavigationBar-Item-icon {
-      --color: var(--primary-color);
-    }
-
-    @media (max-width: 350px) {
-      flex-grow: 0;
-      .BottomNavigationBar-Item-title {
-        opacity: 0;
-      }
-    }
-  }
-  .BottomNavigationBar-Item[isSelected="false"] {
-    cursor: pointer;
+  @media (max-width: 350px) {
     flex-grow: 0;
-
-    .BottomNavigationBar-Item-icon {
-      --primary-color: #1673e1;
-      --secondary-color: #00000080;
-    }
     .BottomNavigationBar-Item-title {
       opacity: 0;
     }
-
-    &:hover,
-    &:focus {
-      background: var(--third-color);
-    }
   }
+}
+.BottomNavigationBar-Item[isSelected='false'] {
+  cursor: pointer;
+  flex-grow: 0;
+
+  .BottomNavigationBar-Item-icon {
+    --primary-color: #1673e1;
+    --secondary-color: #00000080;
+  }
+  .BottomNavigationBar-Item-title {
+    opacity: 0;
+  }
+
+  &:hover,
+  &:focus {
+    background: var(--third-color);
+  }
+}
 </style>

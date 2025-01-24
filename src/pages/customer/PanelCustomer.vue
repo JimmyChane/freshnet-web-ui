@@ -1,141 +1,138 @@
 <script>
-  import Actionbar from "@/components/actionbar/Actionbar.vue";
-  import Loading from "@/components/Loading.vue";
+import chroma from 'chroma-js';
 
-  import PanelItemCustomer from "@/pages/manage/PanelItem-Customer.vue";
-  import Section from "@/pages/manage/PanelItem-Section.vue";
+import IconAdd from '@/assets/icon/add-000000.svg';
+import IconCall from '@/assets/icon/call-color.svg';
+import IconClose from '@/assets/icon/close-000000.svg';
+import IconEdit from '@/assets/icon/edit-000000.svg';
+import IconTrash from '@/assets/icon/trash-000000.svg';
+import IconWhatsapp from '@/assets/icon/whatsapp-color.svg';
+import Loading from '@/components/Loading.vue';
+import Actionbar from '@/components/actionbar/Actionbar.vue';
+import Customer from '@/items/Customer';
+import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
+import Section from '@/pages/manage/PanelItem-Section.vue';
+import ItemService from '@/pages/service/item-service/ItemService.vue';
 
-  import Item from "./PanelCustomer-Item.vue";
-  import ItemService from "@/pages/service/item-service/ItemService.vue";
-  import ItemDevice from "./ItemDevice.vue";
-  import PanelCustomerEmpty from "./PanelCustomer-Empty.vue";
+import ItemDevice from './ItemDevice.vue';
+import PanelCustomerEmpty from './PanelCustomer-Empty.vue';
+import Item from './PanelCustomer-Item.vue';
 
-  import chroma from "chroma-js";
-  import Customer from "@/items/Customer";
+export default {
+  components: {
+    Actionbar,
+    Loading,
+    Section,
+    Item,
+    ItemService,
+    ItemDevice,
+    PanelCustomerEmpty,
+    PanelItemCustomer,
+  },
+  emits: [
+    'click-item-close',
+    'click-item-remove',
+    'click-item-device-remove',
+    'click-item-device-update-specifications',
+    'click-item-device-update-description',
+  ],
+  props: {
+    item: { type: Customer, default: () => null },
+  },
+  data: (c) => ({
+    IconClose,
+    IconEdit,
+    IconAdd,
+    top: { showShadow: false },
 
-  import IconClose from "@/assets/icon/close-000000.svg";
-  import IconEdit from "@/assets/icon/edit-000000.svg";
-  import IconAdd from "@/assets/icon/add-000000.svg";
-  import IconTrash from "@/assets/icon/trash-000000.svg";
-  import IconWhatsapp from "@/assets/icon/whatsapp-color.svg";
-  import IconCall from "@/assets/icon/call-color.svg";
+    devices: [],
+    isLoadingDevices: false,
+  }),
+  computed: {
+    isWide: (c) => c.$store.getters.window.innerWidth > 600,
 
-  export default {
-    components: {
-      Actionbar,
-      Loading,
-      Section,
-      Item,
-      ItemService,
-      ItemDevice,
-      PanelCustomerEmpty,
-      PanelItemCustomer,
+    menus: (c) => {
+      const menus = [];
+
+      if (c.isPhoneNumber) {
+        menus.push({
+          title: 'Chat with Customer on Whatsapp',
+          icon: IconWhatsapp,
+          alth: 'Chat on Whatsapp',
+          href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
+          target: '_blank',
+        });
+        menus.push({
+          title: 'Call Customer',
+          icon: IconCall,
+          href: `tel:+6${c.phoneNumberStr}`,
+        });
+      }
+
+      if (c.isFromStoreCustomer) {
+        menus.push({
+          title: 'Delete Customer',
+          icon: IconTrash,
+          click: () => c.$emit('click-item-remove', { item: c.item }),
+          isHidden: true,
+        });
+      }
+
+      return menus;
     },
-    emits: [
-      "click-item-close",
-      "click-item-remove",
-      "click-item-device-remove",
-      "click-item-device-update-specifications",
-      "click-item-device-update-description",
-    ],
-    props: {
-      item: { type: Customer, default: () => null },
-    },
-    data: (c) => ({
-      IconClose,
-      IconEdit,
-      IconAdd,
-      top: { showShadow: false },
 
-      devices: [],
-      isLoadingDevices: false,
-    }),
-    computed: {
-      isWide: (c) => c.$store.getters.window.innerWidth > 600,
+    id: (c) => c.item?.id ?? '',
+    name: (c) => c.item?.name ?? '',
+    phoneNumber: (c) => c.item?.phoneNumber ?? null,
+    phoneNumberStr: (c) => c.phoneNumber?.toString() ?? '',
+    isPhoneNumber: (c) => !!c.phoneNumberStr,
+    description: (c) => c.item?.description ?? '',
+    deviceIds: (c) => c.item?.deviceIds ?? [],
+    services: (c) => c.item?.services ?? [],
+    orders: (c) => c.item?.orders ?? [],
+    isFromStoreCustomer: (c) => c.item?.isFromStoreCustomer() ?? false,
 
-      menus: (c) => {
-        const menus = [];
-
-        if (c.isPhoneNumber) {
-          menus.push({
-            title: "Chat with Customer on Whatsapp",
-            icon: IconWhatsapp,
-            alth: "Chat on Whatsapp",
-            href: `https://api.whatsapp.com/send?phone=6${c.phoneNumberStr}`,
-            target: "_blank",
-          });
-          menus.push({
-            title: "Call Customer",
-            icon: IconCall,
-            href: `tel:+6${c.phoneNumberStr}`,
-          });
-        }
-
-        if (c.isFromStoreCustomer) {
-          menus.push({
-            title: "Delete Customer",
-            icon: IconTrash,
-            click: () => c.$emit("click-item-remove", { item: c.item }),
-            isHidden: true,
-          });
-        }
-
-        return menus;
-      },
-
-      id: (c) => c.item?.id ?? "",
-      name: (c) => c.item?.name ?? "",
-      phoneNumber: (c) => c.item?.phoneNumber ?? null,
-      phoneNumberStr: (c) => c.phoneNumber?.toString() ?? "",
-      isPhoneNumber: (c) => !!c.phoneNumberStr,
-      description: (c) => c.item?.description ?? "",
-      deviceIds: (c) => c.item?.deviceIds ?? [],
-      services: (c) => c.item?.services ?? [],
-      orders: (c) => c.item?.orders ?? [],
-      isFromStoreCustomer: (c) => c.item?.isFromStoreCustomer() ?? false,
-
-      primaryColor: () => chroma("294656"),
-      actionbarColor: (c) => c.backgroundColor.brighten(0.4),
-      actionbarShadow: (c) => c.actionbarColor.darken(0.8),
-      backgroundColor: (c) => c.primaryColor.mix("ffffff", 0.65),
-    },
-    watch: {
-      item() {
-        this.invalidateDevices();
-      },
-      "item.deviceIds"() {
-        this.invalidateDevices();
-      },
-    },
-    mounted() {
+    primaryColor: () => chroma('294656'),
+    actionbarColor: (c) => c.backgroundColor.brighten(0.4),
+    actionbarShadow: (c) => c.actionbarColor.darken(0.8),
+    backgroundColor: (c) => c.primaryColor.mix('ffffff', 0.65),
+  },
+  watch: {
+    item() {
       this.invalidateDevices();
     },
-    methods: {
-      async invalidateDevices() {
-        this.devices = [];
-
-        if (!this.deviceIds.length) {
-          return;
-        }
-
-        const cacheItem = this.item;
-        this.isLoadingDevices = true;
-
-        const devices = await this.$store.state.stores.customer.dispatch(
-          "getDevices",
-        );
-        if (this.item !== cacheItem) {
-          return;
-        }
-
-        this.isLoadingDevices = false;
-        this.devices = this.item.deviceIds.map((deviceId) => {
-          const device = devices.find((device) => device.id === deviceId);
-          return { deviceId, device };
-        });
-      },
+    'item.deviceIds'() {
+      this.invalidateDevices();
     },
-  };
+  },
+  mounted() {
+    this.invalidateDevices();
+  },
+  methods: {
+    async invalidateDevices() {
+      this.devices = [];
+
+      if (!this.deviceIds.length) {
+        return;
+      }
+
+      const cacheItem = this.item;
+      this.isLoadingDevices = true;
+
+      const devices =
+        await this.$store.state.stores.customer.dispatch('getDevices');
+      if (this.item !== cacheItem) {
+        return;
+      }
+
+      this.isLoadingDevices = false;
+      this.devices = this.item.deviceIds.map((deviceId) => {
+        const device = devices.find((device) => device.id === deviceId);
+        return { deviceId, device };
+      });
+    },
+  },
+};
 </script>
 
 <template>
@@ -258,58 +255,58 @@
 </template>
 
 <style lang="scss" scoped>
-  .PanelCustomer {
-    width: 100%;
-    width: 100dvw;
-    max-width: 100%;
-    height: 100%;
-    overflow-y: auto;
+.PanelCustomer {
+  width: 100%;
+  width: 100dvw;
+  max-width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow-x: hidden;
+
+  .PanelCustomer-body {
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    overflow-x: hidden;
+    align-items: center;
 
-    .PanelCustomer-body {
+    .PanelCustomer-main {
+      width: 40rem;
+      max-width: 100%;
+
+      padding-bottom: 10rem;
+      padding: 1rem;
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: 2rem;
+      row-gap: 0.5rem;
 
-      .PanelCustomer-main {
-        width: 40rem;
-        max-width: 100%;
+      & > * {
+        border-radius: 1rem;
+        overflow: hidden;
+      }
 
-        padding-bottom: 10rem;
-        padding: 1rem;
+      .PanelCustomer-section-devices {
         display: flex;
         flex-direction: column;
-        gap: 2rem;
-        row-gap: 0.5rem;
-
-        & > * {
-          border-radius: 1rem;
-          overflow: hidden;
-        }
-
-        .PanelCustomer-section-devices {
-          display: flex;
-          flex-direction: column;
-          border-radius: 1rem;
-          gap: 3px;
-          overflow: hidden;
-        }
-        .PanelCustomer-devices-loading {
-          width: 100%;
-          height: 4px;
-        }
-        .PanelCustomer-SectionService-item {
-          width: 100%;
-          border-radius: 1rem;
-          text-decoration: none;
-          display: flex;
-          flex-direction: column;
-          align-items: stretch;
-        }
+        border-radius: 1rem;
+        gap: 3px;
+        overflow: hidden;
+      }
+      .PanelCustomer-devices-loading {
+        width: 100%;
+        height: 4px;
+      }
+      .PanelCustomer-SectionService-item {
+        width: 100%;
+        border-radius: 1rem;
+        text-decoration: none;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
       }
     }
   }
+}
 </style>

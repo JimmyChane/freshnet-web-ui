@@ -1,5 +1,6 @@
-import { optArray } from "@/U";
-import ValidationChecker from "./ValidationChecker";
+import { optArray } from '@/U';
+
+import ValidationChecker from './ValidationChecker';
 
 export default class DataLoader {
   static withStore(getStore: () => any = () => {}) {
@@ -61,10 +62,10 @@ export default class DataLoader {
     const loadData = this._loadData;
 
     if (!processor || !getData || !setData || !loadData) {
-      throw new Error("DataLoader not properly initialized.");
+      throw new Error('DataLoader not properly initialized.');
     }
 
-    return processor.acquire("DataLoader", async () => {
+    return processor.acquire('DataLoader', async () => {
       try {
         if (validator.isValid()) return getData();
 

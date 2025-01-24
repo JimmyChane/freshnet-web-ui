@@ -1,13 +1,13 @@
-declare module "*.vue" {
-  import Vue from "vue";
+declare module '*.vue' {
+  import Vue from 'vue';
   export default Vue;
 }
-declare module "*.svg" {
+declare module '*.svg' {
   const content: string;
   export default content;
 }
 
-declare module "*.webp" {
+declare module '*.webp' {
   const content: string;
   export default content;
 }

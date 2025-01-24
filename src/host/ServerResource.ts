@@ -1,16 +1,16 @@
-import { isString } from "@/U";
+import { isString } from '@/U';
 
-const config = require("@/../freshnet.config");
+const config = require('@/../freshnet.config');
 
 export class Icon {
-  private name: string = "";
+  private name: string = '';
   private ext?: string = undefined;
 
-  static url(name: string = "", ext: string | undefined = undefined): string {
+  static url(name: string = '', ext: string | undefined = undefined): string {
     return new Icon(name, ext).toUrl();
   }
 
-  constructor(name: string = "", ext: string | undefined = undefined) {
+  constructor(name: string = '', ext: string | undefined = undefined) {
     if (isString(name)) this.name = name;
     if (isString(ext)) this.ext = ext;
   }
@@ -33,7 +33,7 @@ export default class ServerResource {
     this.serverUrl = serverUrl;
   }
 
-  icon(name: string = "", ext: string = "svg"): Icon {
+  icon(name: string = '', ext: string = 'svg'): Icon {
     return new Icon(name, ext);
   }
   res(path: string): string {

@@ -1,7 +1,7 @@
-import Server from "@/host/Server";
+import Server from '@/host/Server';
+import { API, Response } from '@/host/ServerApi';
 
-export default class Specification {
-  static list(): Promise<any> {
-    return Server.request().path("spec/").sendJson();
-  }
+export async function getSpecificationList() {
+  const response = await API.get('spec/');
+  return new Response(response.data);
 }

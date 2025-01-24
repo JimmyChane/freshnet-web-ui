@@ -1,36 +1,36 @@
-import IconPendingWhite from "@/assets/icon/pending-white.svg";
-import IconPendingColor from "@/assets/icon/pending-color.svg";
-import IconWaitingWhite from "@/assets/icon/waiting-white.svg";
-import IconWaitingColor from "@/assets/icon/waiting-color.svg";
-import IconCompletedWhite from "@/assets/icon/completed-white.svg";
-import IconCompletedColor from "@/assets/icon/completed-color.svg";
-import IconRejectedWhite from "@/assets/icon/rejected-white.svg";
-import IconRejectedColor from "@/assets/icon/rejected-color.svg";
+import IconCompletedColor from '@/assets/icon/completed-color.svg';
+import IconCompletedWhite from '@/assets/icon/completed-white.svg';
+import IconPendingColor from '@/assets/icon/pending-color.svg';
+import IconPendingWhite from '@/assets/icon/pending-white.svg';
+import IconRejectedColor from '@/assets/icon/rejected-color.svg';
+import IconRejectedWhite from '@/assets/icon/rejected-white.svg';
+import IconWaitingColor from '@/assets/icon/waiting-color.svg';
+import IconWaitingWhite from '@/assets/icon/waiting-white.svg';
 
 export default class ServiceState {
   static PENDING = new ServiceState(
-    "pending",
-    "Working",
+    'pending',
+    'Working',
     { white: IconPendingWhite, color: IconPendingColor },
-    "#f4a60d",
+    '#f4a60d',
   );
   static WAITING = new ServiceState(
-    "waiting",
-    "Waiting for Pickup",
+    'waiting',
+    'Waiting for Pickup',
     { white: IconWaitingWhite, color: IconWaitingColor },
-    "#c336d9",
+    '#c336d9',
   );
   static COMPLETED = new ServiceState(
-    "completed",
-    "Finished & Pickup",
+    'completed',
+    'Finished & Pickup',
     { white: IconCompletedWhite, color: IconCompletedColor },
-    "#25ad86",
+    '#25ad86',
   );
   static REJECTED = new ServiceState(
-    "rejected",
-    "Rejected & Pickup",
+    'rejected',
+    'Rejected & Pickup',
     { white: IconRejectedWhite, color: IconRejectedColor },
-    "#d94136",
+    '#d94136',
   );
 
   private static readonly LIST = [
@@ -61,10 +61,10 @@ export default class ServiceState {
   primaryColor: string;
 
   constructor(
-    key: string = "",
-    title: string = "",
-    icon: { white: string; color: string } = { white: "", color: "" },
-    primaryColor: string = "",
+    key: string = '',
+    title: string = '',
+    icon: { white: string; color: string } = { white: '', color: '' },
+    primaryColor: string = '',
   ) {
     this.key = key;
     this.title = title;

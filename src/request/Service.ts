@@ -1,20 +1,20 @@
-import Server from "@/host/Server";
+import Server from '@/host/Server';
 
 export default class Service {
   static list(): Promise<any> {
-    return Server.request().path("service_v2/get/items").sendJson();
+    return Server.request().path('service_v2/get/items').sendJson();
   }
   static import(service: any): Promise<any> {
     return Server.request()
       .POST()
-      .path("service_v2/import/item/")
+      .path('service_v2/import/item/')
       .bodyJson({ content: service })
       .sendJson();
   }
   static add(service: any): Promise<any> {
     return Server.request()
       .POST()
-      .path("service_v2/add/item/")
+      .path('service_v2/add/item/')
       .bodyJson({ content: service })
       .sendJson();
   }

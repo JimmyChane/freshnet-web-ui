@@ -1,5 +1,5 @@
-import PaperType from "./PaperType";
-import PaperSize from "./PaperSize";
+import PaperSize from './PaperSize';
+import PaperType from './PaperType';
 
 export default class Paper {
   static readonly Photo4R = new Paper(PaperType.Photo, PaperSize._4R);

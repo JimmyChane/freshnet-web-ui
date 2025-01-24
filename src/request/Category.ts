@@ -1,7 +1,6 @@
-import Server from "@/host/Server";
+import { API, Response } from '@/host/ServerApi';
 
-export default class Category {
-  static list(): Promise<any> {
-    return Server.request().path("productv2/category/list/").sendJson();
-  }
+export async function getCategoryList(): Promise<Response> {
+  const response = await API.get('productv2/category/list/');
+  return new Response(response.data);
 }

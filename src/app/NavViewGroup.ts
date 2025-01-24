@@ -1,10 +1,11 @@
-import { optArray, optString, parseKey } from "@/U";
-import NavView from "./NavView";
+import { optArray, optString, parseKey } from '@/U';
+
+import NavView from './NavView';
 
 export default class NavViewGroup {
-  key: string = "";
-  title: string = "";
-  icon: unknown = "";
+  key: string = '';
+  title: string = '';
+  icon: unknown = '';
   values: unknown[] = [];
   children: unknown;
   userPermissions: unknown[] = [];

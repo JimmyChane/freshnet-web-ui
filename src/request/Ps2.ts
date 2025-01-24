@@ -1,7 +1,6 @@
-import Server from "@/host/Server";
+import { API, Response } from '@/host/ServerApi';
 
-export default class Ps2 {
-  static listDisc(): Promise<any> {
-    return Server.request().path("ps2/disc/").sendJson();
-  }
+export async function getPs2DiscList(): Promise<Response> {
+  const response = await API.get('ps2/disc/');
+  return new Response(response.data);
 }

@@ -1,4 +1,4 @@
-import Price from "@/objects/Price";
+import Price from '@/objects/Price';
 
 export default class ServicePrice {
   private price: Price | null = null;
@@ -7,24 +7,24 @@ export default class ServicePrice {
     return this.price?.amount ?? 0;
   }
   get currency(): string {
-    return this.price?.currency ?? "rm";
+    return this.price?.currency ?? 'rm';
   }
 
   fromData(data: { amount: number; currency?: string }): this {
-    this.price = new Price(data.amount, data.currency ?? "rm");
+    this.price = new Price(data.amount, data.currency ?? 'rm');
     return this;
   }
   toData(): { amount: number; currency: string } {
     return {
       amount: this.price?.amount ?? 0,
-      currency: this.price?.currency ?? "rm",
+      currency: this.price?.currency ?? 'rm',
     };
   }
   toCount(strs: string[]): number {
     return this.price?.toCount(strs) ?? 0;
   }
   toString(): string {
-    return this.price?.toString() ?? "";
+    return this.price?.toString() ?? '';
   }
 
   compare(item: ServicePrice): number {
@@ -39,7 +39,7 @@ export default class ServicePrice {
         : this.price?.plus(value);
     const data = {
       amount: price?.amount ?? 0,
-      currency: price?.currency ?? "rm",
+      currency: price?.currency ?? 'rm',
     };
     return new ServicePrice().fromData(data);
   }
@@ -50,7 +50,7 @@ export default class ServicePrice {
         : this.price?.minus(value);
     const data = {
       amount: price?.amount ?? 0,
-      currency: price?.currency ?? "rm",
+      currency: price?.currency ?? 'rm',
     };
     return new ServicePrice().fromData(data);
   }

@@ -1,29 +1,31 @@
-import Service from "@/items/Service";
-import ServiceImage from "@/items/ServiceImage";
-import Vuex from "vuex";
-import ServiceCustomer from "@/items/ServiceCustomer";
-import ServiceEvent from "@/items/ServiceEvent";
-import StoreBuilder from "./tools/StoreBuilder";
-import ServiceLabel from "@/items/ServiceLabel";
-import ServiceRequest from "@/request/Service";
-import ServiceBelonging from "@/items/ServiceBelonging";
+import Vuex from 'vuex';
+
+import Service from '@/items/Service';
+import ServiceBelonging from '@/items/ServiceBelonging';
+import ServiceCustomer from '@/items/ServiceCustomer';
+import ServiceEvent from '@/items/ServiceEvent';
+import ServiceImage from '@/items/ServiceImage';
+import ServiceLabel from '@/items/ServiceLabel';
+import ServiceRequest from '@/request/Service';
+
+import StoreBuilder from './tools/StoreBuilder';
 
 const Notify = {
-  ItemAdd: "item-add",
-  ItemRemove: "item-remove",
-  ItemImageAdd: "item-image-add",
-  ItemImageRemove: "item-image-remove",
-  ItemEventAdd: "item-event-add",
-  ItemEventRemove: "item-event-remove",
-  ItemEventImageAdd: "item-event-image-add",
-  ItemEventImageRemove: "item-event-image-remove",
-  ItemEventDescriptionUpdate: "item-event-description-update",
-  ItemLabelAdd: "item-label-add",
-  ItemLabelRemove: "item-label-remove",
-  ItemStateUpdate: "item-state-update",
-  ItemDescriptionUpdate: "item-description-update",
-  ItemBelongingsUpdate: "item-belongings-update",
-  ItemCustomerUpdate: "item-customer-update",
+  ItemAdd: 'item-add',
+  ItemRemove: 'item-remove',
+  ItemImageAdd: 'item-image-add',
+  ItemImageRemove: 'item-image-remove',
+  ItemEventAdd: 'item-event-add',
+  ItemEventRemove: 'item-event-remove',
+  ItemEventImageAdd: 'item-event-image-add',
+  ItemEventImageRemove: 'item-event-image-remove',
+  ItemEventDescriptionUpdate: 'item-event-description-update',
+  ItemLabelAdd: 'item-label-add',
+  ItemLabelRemove: 'item-label-remove',
+  ItemStateUpdate: 'item-state-update',
+  ItemDescriptionUpdate: 'item-description-update',
+  ItemBelongingsUpdate: 'item-belongings-update',
+  ItemCustomerUpdate: 'item-customer-update',
 };
 
 const init = (Stores: any) => {
@@ -35,24 +37,24 @@ const init = (Stores: any) => {
     })
     .onGetStore(() => Stores.service)
 
-    .action("refresh", async (context) => {
+    .action('refresh', async (context) => {
       context.state.dataLoader.doTimeout();
-      await context.dispatch("getItems");
+      await context.dispatch('getItems');
     })
-    .action("getItems", async (context) => {
+    .action('getItems', async (context) => {
       return context.state.dataLoader.data();
     })
-    .action("getItemOfId", async (context, id = "") => {
-      let items: Service[] = await context.dispatch("getItems");
+    .action('getItemOfId', async (context, id = '') => {
+      let items: Service[] = await context.dispatch('getItems');
       return items.find((service) => service.id === id);
     })
-    .action("getGroupsByCustomer", async (context) => {
+    .action('getGroupsByCustomer', async (context) => {
       interface Group {
         customer: ServiceCustomer | null;
         items: Service[];
       }
 
-      const items: Service[] = await context.dispatch("getItems");
+      const items: Service[] = await context.dispatch('getItems');
       const groups: Group[] = items.reduce((groups: Group[], item: Service) => {
         let group: Group | undefined = groups.find((group: Group) => {
           if (group.customer && item.customer) {
@@ -72,7 +74,7 @@ const init = (Stores: any) => {
 
       return groups;
     })
-    .action("importItem", async (context, arg: { data: any }) => {
+    .action('importItem', async (context, arg: { data: any }) => {
       const { data } = arg;
       if (!data) throw new Error();
       const service = new Service(Stores).fromData(data).toData();
@@ -80,22 +82,22 @@ const init = (Stores: any) => {
       const inputItem = new Service(Stores).fromData(content);
       return context.state.list.addItem(inputItem);
     })
-    .action("addItem", async (context, arg: { data: any }) => {
+    .action('addItem', async (context, arg: { data: any }) => {
       const { data } = arg;
       if (!data) return null;
-      if (!data) throw new Error("invalid data");
+      if (!data) throw new Error('invalid data');
 
       const content = (await ServiceRequest.add(data)).optObjectContent();
       const inputItem = new Service(Stores).fromData(content);
       return context.state.list.addItem(inputItem);
     })
-    .action("removeItemOfId", async (context, arg: { id: string }) => {
+    .action('removeItemOfId', async (context, arg: { id: string }) => {
       const { id } = arg;
       (await ServiceRequest.remove(id)).getContent();
       return context.state.list.removeItemById(id);
     })
     .action(
-      "updateStateOfId",
+      'updateStateOfId',
       async (context, arg: { serviceID: string; state: string }) => {
         const { serviceID, state } = arg;
 
@@ -107,7 +109,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateDescriptionOfId",
+      'updateDescriptionOfId',
       async (context, arg: { serviceID: string; description: string }) => {
         const { serviceID, description } = arg;
 
@@ -123,7 +125,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateBelongingsOfId",
+      'updateBelongingsOfId',
       async (context, arg: { serviceID: string; belongings: any[] }) => {
         const { serviceID, belongings } = arg;
         const api = await ServiceRequest.updateBelongings(
@@ -139,7 +141,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateCustomerOfId",
+      'updateCustomerOfId',
       async (context, arg: { serviceID: string; customer: any }) => {
         const { serviceID, customer } = arg;
         const api = await ServiceRequest.updateCustomer(serviceID, customer);
@@ -152,8 +154,8 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "addEventToId",
-      async (context, arg = { serviceID: "", data: null }) => {
+      'addEventToId',
+      async (context, arg = { serviceID: '', data: null }) => {
         const { serviceID: id, data: eventData } = arg;
         if (!id || !eventData) return null;
 
@@ -169,12 +171,12 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "addEventImage",
+      'addEventImage',
       async (
         context,
         arg: { serviceID: string; eventTime: number; imageFiles: any[] },
       ) => {
-        const { serviceID = "", eventTime = 0, imageFiles = [] } = arg;
+        const { serviceID = '', eventTime = 0, imageFiles = [] } = arg;
 
         const formData = new FormData();
         for (const imageFile of imageFiles) {
@@ -216,7 +218,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "removeEventFromId",
+      'removeEventFromId',
       async (context, arg: { serviceID: string; time: number }) => {
         const { serviceID, time } = arg;
 
@@ -230,7 +232,7 @@ const init = (Stores: any) => {
         });
       },
     )
-    .action("updateEventDescription", async (context, arg = {}) => {
+    .action('updateEventDescription', async (context, arg = {}) => {
       const { serviceID, time, description } = arg;
 
       const api = await ServiceRequest.updateEventDescription(
@@ -254,16 +256,16 @@ const init = (Stores: any) => {
       });
     })
     .action(
-      "updateUrgentOfId",
+      'updateUrgentOfId',
       async (context, arg: { serviceID: string; isUrgent: boolean }) => {
         const label = ServiceLabel.URGENT.toData();
         if (arg.isUrgent) {
-          return context.dispatch("addLabelToId", {
+          return context.dispatch('addLabelToId', {
             serviceID: arg.serviceID,
             label,
           });
         } else {
-          return context.dispatch("removeLabelFromId", {
+          return context.dispatch('removeLabelFromId', {
             serviceID: arg.serviceID,
             label,
           });
@@ -271,16 +273,16 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "updateWarrantyOfId",
+      'updateWarrantyOfId',
       async (context, arg: { serviceID: string; isWarranty: boolean }) => {
         const label = ServiceLabel.WARRANTY.toData();
         if (arg.isWarranty) {
-          return context.dispatch("addLabelToId", {
+          return context.dispatch('addLabelToId', {
             serviceID: arg.serviceID,
             label,
           });
         } else {
-          return context.dispatch("removeLabelFromId", {
+          return context.dispatch('removeLabelFromId', {
             serviceID: arg.serviceID,
             label,
           });
@@ -288,7 +290,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "addLabelToId",
+      'addLabelToId',
       async (context, arg: { serviceID: string; label: any }) => {
         const { serviceID, label } = arg;
         const api = await ServiceRequest.addLabel(serviceID, label);
@@ -296,14 +298,14 @@ const init = (Stores: any) => {
         const inputItem = new Service(Stores).fromData(content);
         return context.state.list.updateItemById(inputItem.id, (item) => {
           if (!item) return;
-          if (label.title === "Urgent") item.setUrgent(inputItem.isUrgent());
-          if (label.title === "Warranty")
+          if (label.title === 'Urgent') item.setUrgent(inputItem.isUrgent());
+          if (label.title === 'Warranty')
             item.setWarranty(inputItem.isUrgent());
         });
       },
     )
     .action(
-      "removeLabelFromId",
+      'removeLabelFromId',
       async (context, arg: { serviceID: string; label: any }) => {
         const { serviceID, label } = arg;
 
@@ -316,7 +318,7 @@ const init = (Stores: any) => {
         });
       },
     )
-    .action("addImageTemp", async (context, imageFiles = []) => {
+    .action('addImageTemp', async (context, imageFiles = []) => {
       const formData = new FormData();
       for (const imageFile of imageFiles) {
         formData.append(imageFile.name, imageFile);
@@ -326,7 +328,7 @@ const init = (Stores: any) => {
       return api.optArrayContent();
     })
     .action(
-      "addImageToId",
+      'addImageToId',
       async (context, arg: { serviceID: string; imageFiles: any[] }) => {
         const { serviceID, imageFiles } = arg;
 
@@ -353,7 +355,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "removeImageFromId",
+      'removeImageFromId',
       async (context, arg: { serviceID: string; image: any }) => {
         const { serviceID, image } = arg;
 
@@ -368,7 +370,7 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "removeImageFromId",
+      'removeImageFromId',
       async (context, arg: { serviceID: string; image: any }) => {
         const { serviceID, image } = arg;
 
@@ -382,12 +384,12 @@ const init = (Stores: any) => {
       },
     )
     .action(
-      "removeEventImage",
+      'removeEventImage',
       async (
         context,
         arg: { serviceID: string; eventTime: number; image: any },
       ) => {
-        const { serviceID = "", eventTime = 0, image } = arg;
+        const { serviceID = '', eventTime = 0, image } = arg;
 
         const api = await ServiceRequest.removeEventImage(
           serviceID,
@@ -414,7 +416,7 @@ const init = (Stores: any) => {
         });
       },
     )
-    .action("socketNotify", async (context: any, data: any) => {
+    .action('socketNotify', async (context: any, data: any) => {
       const { key, content } = data;
 
       if (key === Notify.ItemAdd) {
@@ -526,16 +528,16 @@ const init = (Stores: any) => {
         const { id, label } = content;
         context.state.list.updateItemById(id, (item: Service) => {
           if (!item) return;
-          if (label.title === "Urgent") item.setUrgent(true);
-          if (label.title === "Warranty") item.setWarranty(true);
+          if (label.title === 'Urgent') item.setUrgent(true);
+          if (label.title === 'Warranty') item.setWarranty(true);
         });
       }
       if (key === Notify.ItemLabelRemove) {
         const { id, label } = content;
         context.state.list.updateItemById(id, (item: Service) => {
           if (!item) return;
-          if (label.title === "Urgent") item.setUrgent(false);
-          if (label.title === "Warranty") item.setWarranty(false);
+          if (label.title === 'Urgent') item.setUrgent(false);
+          if (label.title === 'Warranty') item.setWarranty(false);
         });
       }
       if (key === Notify.ItemStateUpdate) {

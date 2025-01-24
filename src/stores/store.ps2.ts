@@ -1,24 +1,27 @@
-import Vuex from "vuex";
-import ItemPs2Disc from "../items/Ps2Disc";
-import StoreBuilder from "./tools/StoreBuilder";
-import Ps2Request from "@/request/Ps2";
+import Vuex from 'vuex';
+
+import { optArray } from '@/U';
+import { getPs2DiscList } from '@/request/Ps2';
+
+import ItemPs2Disc from '../items/Ps2Disc';
+import StoreBuilder from './tools/StoreBuilder';
 
 const init = (Stores: any) => {
   const context = new StoreBuilder()
     .onFetchItems(async () => {
-      const api = await Ps2Request.listDisc();
-      const content: any[] = api.optArrayContent();
+      const api = await getPs2DiscList();
+      const content = optArray(api.optArrayContent());
       const items = content.map((content) => {
         return new ItemPs2Disc(Stores).fromData(content);
       });
       return items.sort((a, b) => a.compare(b));
     })
     .onGetStore(() => Stores.ps2)
-    .action("refresh", async (context) => {
+    .action('refresh', async (context) => {
       context.state.dataLoader.doTimeout();
-      await context.dispatch("getItems");
+      await context.dispatch('getItems');
     })
-    .action("getItems", async (context) => {
+    .action('getItems', async (context) => {
       return context.state.dataLoader.data();
     })
     .build();

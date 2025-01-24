@@ -1,73 +1,72 @@
 <script>
-  import NavigationBar from "@/components/actionbar/NavigationBar.vue";
-  import Loading from "@/components/Loading.vue";
-  import ButtonIcon from "@/components/button/ButtonIcon.vue";
-  import Input from "@/components/Input.vue";
-  import Section from "./PageProfile-Section.vue";
-  import SectionTitle from "./PageProfile-Section-Title.vue";
-  import SectionMain from "./PageProfile-Section-Main.vue";
+import IconPack from '@/app/IconPack';
+import IconArrowDown from '@/assets/icon/arrowDown-000000.svg';
+import Input from '@/components/Input.vue';
+import Loading from '@/components/Loading.vue';
+import NavigationBar from '@/components/actionbar/NavigationBar.vue';
+import ButtonIcon from '@/components/button/ButtonIcon.vue';
+import Server from '@/host/Server';
 
-  import WindowChangePassword from "./WindowChangePassword.vue";
+import SectionMain from './PageProfile-Section-Main.vue';
+import SectionTitle from './PageProfile-Section-Title.vue';
+import Section from './PageProfile-Section.vue';
+import WindowChangePassword from './WindowChangePassword.vue';
 
-  import Server from "@/host/Server";
-  import IconPack from "@/app/IconPack";
-  import IconArrowDown from "@/assets/icon/arrowDown-000000.svg";
+export default {
+  key: 'profile',
+  title: 'Your Profile',
+  icon: new IconPack(
+    Server.resource.icon('profile-FFFFFF'),
+    Server.resource.icon('profile-000000'),
+  ),
 
-  export default {
-    key: "profile",
-    title: "Your Profile",
-    icon: new IconPack(
-      Server.resource.icon("profile-FFFFFF"),
-      Server.resource.icon("profile-000000"),
-    ),
-
-    components: {
-      NavigationBar,
-      Loading,
-      ButtonIcon,
-      Input,
-      Section,
-      SectionTitle,
-      SectionMain,
+  components: {
+    NavigationBar,
+    Loading,
+    ButtonIcon,
+    Input,
+    Section,
+    SectionTitle,
+    SectionMain,
+  },
+  data: (c) => ({
+    IconArrowDown,
+    user: null,
+    isLoading: false,
+    scrollTop: 0,
+  }),
+  computed: {
+    name: (c) => c.user.name,
+    username: (c) => c.user.username,
+    typeDisplay() {
+      if (this.user.isTypeAdmin()) return 'Admin';
+      if (this.user.isTypeStaff()) return 'Staff';
+      if (this.user.isTypeCustomer()) return 'Customer';
+      return 'Other';
     },
-    data: (c) => ({
-      IconArrowDown,
-      user: null,
-      isLoading: false,
-      scrollTop: 0,
-    }),
-    computed: {
-      name: (c) => c.user.name,
-      username: (c) => c.user.username,
-      typeDisplay() {
-        if (this.user.isTypeAdmin()) return "Admin";
-        if (this.user.isTypeStaff()) return "Staff";
-        if (this.user.isTypeCustomer()) return "Customer";
-        return "Other";
-      },
+  },
+  methods: {
+    openWindowChangePassword() {
+      const popupWindow = this.$store.dispatch('openPopupWindow', {
+        component: WindowChangePassword,
+      });
     },
-    methods: {
-      openWindowChangePassword() {
-        const popupWindow = this.$store.dispatch("openPopupWindow", {
-          component: WindowChangePassword,
-        });
-      },
-    },
-    async mounted() {
-      this.isLoading = true;
-      await this.$store.state.stores.login
-        .dispatch("getUser")
-        .then((user) => {
-          this.isLoading = false;
-          this.user = user;
-        })
-        .catch((error) => {
-          this.$store.dispatch("snackbarShow", "Failed to validate");
-          this.isLoading = false;
-          this.user = null;
-        });
-    },
-  };
+  },
+  async mounted() {
+    this.isLoading = true;
+    await this.$store.state.stores.login
+      .dispatch('getUser')
+      .then((user) => {
+        this.isLoading = false;
+        this.user = user;
+      })
+      .catch((error) => {
+        this.$store.dispatch('snackbarShow', 'Failed to validate');
+        this.isLoading = false;
+        this.user = null;
+      });
+  },
+};
 </script>
 
 <template>
@@ -115,84 +114,84 @@
 </template>
 
 <style lang="scss" scoped>
-  .PageProfile {
+.PageProfile {
+  position: relative;
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  .PageProfile-scroll {
     position: relative;
-    flex-grow: 1;
-    width: 100%;
+    overflow: auto;
     height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     justify-content: flex-start;
 
-    .PageProfile-scroll {
-      position: relative;
-      overflow: auto;
-      height: 100%;
+    .PageProfile-body {
+      z-index: 1;
+      width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      gap: 3rem 6rem;
+      padding: 4rem;
 
-      .PageProfile-body {
-        z-index: 1;
+      .PageProfile-loading {
+        position: absolute;
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 3rem 6rem;
-        padding: 4rem;
+        z-index: 1;
+      }
 
-        .PageProfile-loading {
-          position: absolute;
-          width: 100%;
-          z-index: 1;
-        }
-
-        .PageProfile-introduction {
-          .PageProfile-introduction-body {
-            width: 20em;
-            max-width: 100%;
-            background: hsla(0, 0%, 0%, 0.8);
-            color: white;
-            display: flex;
-            flex-direction: column;
-            gap: 1em;
-            padding: 2em;
-            border-radius: 1em;
-            .PageProfile-user-name {
-              font-size: 2em;
-            }
-            .PageProfile-user-main {
-              display: flex;
-              flex-direction: row;
-              column-gap: 4rem;
-
-              & > * {
-                display: flex;
-                flex-direction: column;
-              }
-            }
-          }
-        }
-
-        .PageProfile-section-changePassword {
-          width: max-content;
+      .PageProfile-introduction {
+        .PageProfile-introduction-body {
+          width: 20em;
+          max-width: 100%;
+          background: hsla(0, 0%, 0%, 0.8);
+          color: white;
           display: flex;
-          flex-direction: row;
-          align-items: center;
-          gap: 2rem;
-
-          .PageProfile-section-changePassword-body {
-            flex-grow: 1;
+          flex-direction: column;
+          gap: 1em;
+          padding: 2em;
+          border-radius: 1em;
+          .PageProfile-user-name {
+            font-size: 2em;
+          }
+          .PageProfile-user-main {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            column-gap: 4rem;
+
+            & > * {
+              display: flex;
+              flex-direction: column;
+            }
           }
-          .PageProfile-section-changePassword-arrow {
-            transform: rotate(-90deg);
-          }
+        }
+      }
+
+      .PageProfile-section-changePassword {
+        width: max-content;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 2rem;
+
+        .PageProfile-section-changePassword-body {
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+        }
+        .PageProfile-section-changePassword-arrow {
+          transform: rotate(-90deg);
         }
       }
     }
   }
+}
 </style>
