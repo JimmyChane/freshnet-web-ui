@@ -2,7 +2,7 @@
 import Input from '@/components/Input.vue';
 import LabelMenus from '@/components/LabelMenus.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
-import Category from '@/items/Category';
+import Category, { CategoryKey } from '@/items/Category';
 
 export default {
   components: { PanelAction, Input, LabelMenus },
@@ -72,7 +72,7 @@ export default {
       }
 
       const categoryOther = categories.find((category) => {
-        return category.key === Category.Key.Other;
+        return category.key === CategoryKey.Other;
       });
       if (!this.categoryMenu && categoryOther) {
         this.categoryMenu = this.categoryMenus.find((menu) => {

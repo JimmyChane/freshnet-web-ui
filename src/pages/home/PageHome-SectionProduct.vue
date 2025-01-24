@@ -5,7 +5,7 @@ import { isColorDark } from '@/U';
 import IconArrowDownDark from '@/assets/icon/arrowDown-000000.svg';
 import IconArrowDownLight from '@/assets/icon/arrowDown-FFFFFF.svg';
 import ImageView from '@/components/ImageView.vue';
-import Category from '@/items/Category';
+import Category, { CategoryKey } from '@/items/Category';
 
 export default {
   components: { ImageView },
@@ -85,9 +85,9 @@ export default {
       const products = groups
         .filter((group) => {
           return (
-            group.category.key === Category.Key.Notebook ||
-            group.category.key === Category.Key.Desktop ||
-            group.category.key === Category.Key.Printer
+            group.category.key === CategoryKey.Notebook ||
+            group.category.key === CategoryKey.Desktop ||
+            group.category.key === CategoryKey.Printer
           );
         })
         .sort((group1, group2) => group1.category.compare(group2.category))

@@ -1,11 +1,10 @@
 <script>
 import { isArray, isFunction, isObjectOnly, optArray } from '@/U';
-
 import {
   POPUP_MENU_ALIGNMENT,
   POPUP_MENU_CORNER,
   POPUP_MENU_WIDTH,
-} from './PopupMenuOption';
+} from '@/app/popupMenu/PopupMenuOption';
 
 export default {
   Width: POPUP_MENU_ALIGNMENT,

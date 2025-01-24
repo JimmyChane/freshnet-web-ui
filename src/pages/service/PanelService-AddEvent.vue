@@ -1,12 +1,15 @@
 <script>
 import chroma from 'chroma-js';
 
+import {
+  POPUP_MENU_ALIGNMENT,
+  POPUP_MENU_WIDTH,
+} from '@/app/popupMenu/PopupMenuOption';
 import TextArea from '@/components/InputTextArea.vue';
 import Menu from '@/components/Menu.vue';
 import Method from '@/items/ServiceEventMethod';
 
 import AddImage from './PanelService-AddEvent-AddImage.vue';
-import { POPUP_MENU_ALIGNMENT, POPUP_MENU_WIDTH } from './PopupMenuOption';
 
 export default {
   components: { Menu, TextArea, AddImage },

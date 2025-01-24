@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 
 import { isString, optArray, optString, trimText } from '@/U';
 import Brand from '@/items/Brand';
-import Category from '@/items/Category';
+import Category, { CategoryKey } from '@/items/Category';
 import ProductBundle from '@/items/ProductBundle';
 import ProductPrices from '@/items/ProductPrices';
 import ProductRequest, {
@@ -63,7 +63,7 @@ const init = (Stores: any) => {
 
       const categoryOther: Category | null = await categoryStore.dispatch(
         'getItemOfKey',
-        Category.Key.Other,
+        CategoryKey.Other,
       );
 
       interface Group {

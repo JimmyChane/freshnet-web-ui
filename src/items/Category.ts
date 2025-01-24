@@ -14,68 +14,126 @@ import BgCctv from '@/assets/bg/michal-jakubowski-oQD9uq4Rd4I-unsplash-w300h100.
 import BgMonitor from '@/assets/bg/monitor-u3223qe-gallery-3-w300h100.webp';
 import BgDesktop from '@/assets/bg/niclas-illg-wzVQp_NRIHg-unsplash-w300h100.webp';
 import BgMouse from '@/assets/bg/ryan-putra-j4PqlNVZ4Bc-unsplash-w300h100.webp';
-import Server from '@/host/Server';
 import { Item } from '@/stores/tools/List';
 
 import ItemSearcher from '../objects/ItemSearcher';
 import Image from './Image';
 
-class CategoryBackground extends Image {
-  static TABLET = new Image().fromData({ method: 'link', path: BgTablet });
-  static NOTEBOOK = new Image().fromData({ method: 'link', path: BgNotebook });
-  static DESKTOP = new Image().fromData({ method: 'link', path: BgDesktop });
-  static PRINTER = new Image().fromData({ method: 'link', path: BgPrinter });
-  static CARTRIDGE = new Image().fromData({
-    method: 'link',
-    path: BgCartridge,
-  });
-  static MOUSE = new Image().fromData({ method: 'link', path: BgMouse });
-  static KEYBOARD = new Image().fromData({ method: 'link', path: BgKeyboard });
-  static AUDIO = new Image().fromData({ method: 'link', path: BgAudio });
-  static MONITOR = new Image().fromData({ method: 'link', path: BgMonitor });
-  static WEBCAM = new Image().fromData({ method: 'link', path: BgWebcam });
-  static CCTV = new Image().fromData({ method: 'link', path: BgCctv });
-  static STORAGE = new Image().fromData({ method: 'link', path: BgStorage });
-  static RAM = new Image().fromData({ method: 'link', path: BgRam });
-  static NETWORK = new Image().fromData({ method: 'link', path: BgNetwork });
-  static OTHER = new Image().fromData({ method: 'link', path: BgOther });
+export const TABLET_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgTablet,
+});
+export const NOTEBOOK_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgNotebook,
+});
+export const DESKTOP_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgDesktop,
+});
+export const PRINTER_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgPrinter,
+});
+export const CARTRIDGE_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgCartridge,
+});
+export const MOUSE_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgMouse,
+});
+export const KEYBOARD_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgKeyboard,
+});
+export const AUDIO_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgAudio,
+});
+export const MONITOR_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgMonitor,
+});
+export const WEBCAM_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgWebcam,
+});
+export const CCTV_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgCctv,
+});
+export const STORAGE_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgStorage,
+});
+export const RAM_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgRam,
+});
+export const NETWORK_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgNetwork,
+});
+export const OTHER_CATEGORY_BACKGROUND = new Image().fromData({
+  method: 'link',
+  path: BgOther,
+});
 
-  static getBackground(key: string): Image | null {
-    switch (key) {
-      case Category.Key.Tablet:
-        return CategoryBackground.TABLET;
-      case Category.Key.Notebook:
-        return CategoryBackground.NOTEBOOK;
-      case Category.Key.Desktop:
-        return CategoryBackground.DESKTOP;
-      case Category.Key.Printer:
-        return CategoryBackground.PRINTER;
-      case Category.Key.Cartridge:
-        return CategoryBackground.CARTRIDGE;
-      case Category.Key.Mouse:
-        return CategoryBackground.MOUSE;
-      case Category.Key.Keyboard:
-        return CategoryBackground.KEYBOARD;
-      case Category.Key.Audio:
-        return CategoryBackground.AUDIO;
-      case Category.Key.Monitor:
-        return CategoryBackground.MONITOR;
-      case Category.Key.Webcam:
-        return CategoryBackground.WEBCAM;
-      case Category.Key.Cctv:
-        return CategoryBackground.CCTV;
-      case Category.Key.Storage:
-        return CategoryBackground.STORAGE;
-      case Category.Key.Ram:
-        return CategoryBackground.RAM;
-      case Category.Key.Network:
-        return CategoryBackground.NETWORK;
-      case Category.Key.Other:
-        return CategoryBackground.OTHER;
-      default:
-        return null;
-    }
+export function getCategoryBackground(key: string): Image | null {
+  switch (key) {
+    case CategoryKey.Tablet:
+      return TABLET_CATEGORY_BACKGROUND;
+    case CategoryKey.Notebook:
+      return NOTEBOOK_CATEGORY_BACKGROUND;
+    case CategoryKey.Desktop:
+      return DESKTOP_CATEGORY_BACKGROUND;
+    case CategoryKey.Printer:
+      return PRINTER_CATEGORY_BACKGROUND;
+    case CategoryKey.Cartridge:
+      return CARTRIDGE_CATEGORY_BACKGROUND;
+    case CategoryKey.Mouse:
+      return MOUSE_CATEGORY_BACKGROUND;
+    case CategoryKey.Keyboard:
+      return KEYBOARD_CATEGORY_BACKGROUND;
+    case CategoryKey.Audio:
+      return AUDIO_CATEGORY_BACKGROUND;
+    case CategoryKey.Monitor:
+      return MONITOR_CATEGORY_BACKGROUND;
+    case CategoryKey.Webcam:
+      return WEBCAM_CATEGORY_BACKGROUND;
+    case CategoryKey.Cctv:
+      return CCTV_CATEGORY_BACKGROUND;
+    case CategoryKey.Storage:
+      return STORAGE_CATEGORY_BACKGROUND;
+    case CategoryKey.Ram:
+      return RAM_CATEGORY_BACKGROUND;
+    case CategoryKey.Network:
+      return NETWORK_CATEGORY_BACKGROUND;
+    case CategoryKey.Other:
+      return OTHER_CATEGORY_BACKGROUND;
+    default:
+      return null;
   }
+}
+
+export enum CategoryKey {
+  Tablet = 'tablet',
+  Notebook = 'laptop',
+  Desktop = 'desktopComputer',
+  Printer = 'printer',
+  Cartridge = 'cartridge',
+  Mouse = 'mouse',
+  Keyboard = 'keyboard',
+  Audio = 'audio',
+  Monitor = 'monitor',
+  Webcam = 'webcam',
+  Cctv = 'cctv-camera',
+  Storage = 'storage',
+  Ram = 'ram',
+  Network = 'network',
+  Charger = 'charger',
+  Other = 'other',
 }
 
 interface CategoryData {
@@ -87,25 +145,6 @@ interface CategoryData {
 }
 
 export default class Category implements Item {
-  static Key = {
-    Tablet: 'tablet',
-    Notebook: 'laptop',
-    Desktop: 'desktopComputer',
-    Printer: 'printer',
-    Cartridge: 'cartridge',
-    Mouse: 'mouse',
-    Keyboard: 'keyboard',
-    Audio: 'audio',
-    Monitor: 'monitor',
-    Webcam: 'webcam',
-    Cctv: 'cctv-camera',
-    Storage: 'storage',
-    Ram: 'ram',
-    Network: 'network',
-    Charger: 'charger',
-    Other: 'other',
-  };
-
   stores: any = null;
 
   constructor(stores: any) {
@@ -123,7 +162,7 @@ export default class Category implements Item {
     this.key = trimId(data.key);
     this.title = trimStringAll(data.title);
     this.icon = isObject(data.icon) ? new Image().fromData(data.icon) : null;
-    this.background = CategoryBackground.getBackground(this.key);
+    this.background = getCategoryBackground(this.key);
 
     return this;
   }
@@ -151,7 +190,7 @@ export default class Category implements Item {
   }
 
   compare(item: Category): number {
-    const keyOrders = Object.values(Category.Key);
+    const keyOrders = Object.values(CategoryKey) as string[];
 
     let index1 = keyOrders.indexOf(this.key);
     let index2 = keyOrders.indexOf(item.key);
