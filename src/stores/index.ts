@@ -4,7 +4,10 @@ import Vuex, { Store, StoreOptions } from 'vuex';
 import socketIo, { Socket } from 'socket.io-client';
 
 import { optArray } from '@/U';
-import PopupMenuOption from '@/app/popupMenu/PopupMenuOption';
+import {
+  POPUP_MENU_CORNER,
+  POPUP_MENU_WIDTH,
+} from '@/app/popupMenu/PopupMenuOption';
 import fileBrandStore from '@/stores/store.brand';
 import fileCategoryStore from '@/stores/store.category';
 import fileCustomerStore from '@/stores/store.customer';
@@ -199,8 +202,8 @@ context.actions.popupMenuShow = (
     anchor: null,
     menus: [],
     option: {
-      width: PopupMenuOption.Width.AUTO,
-      corner: PopupMenuOption.Corner.AUTO,
+      width: POPUP_MENU_WIDTH.AUTO,
+      corner: POPUP_MENU_CORNER.AUTO,
       primaryColor: undefined,
     },
   },

@@ -6,7 +6,7 @@ import PageLogin from '@/pages/login/PageLogin.vue';
 
 Vue.use(VueRouter);
 
-const routes: Array<RouteConfig> = [
+const routes: RouteConfig[] = [
   {
     path: '/item/id/:id',
     beforeEnter(to, from, next) {

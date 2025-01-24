@@ -4,11 +4,15 @@ import chroma from 'chroma-js';
 import { isFunction } from '@/U';
 
 import Item from './PopupMenu-Item.vue';
-import PopupMenuOption from './PopupMenuOption';
+import {
+  POPUP_MENU_ALIGNMENT,
+  POPUP_MENU_CORNER,
+  POPUP_MENU_WIDTH,
+} from './PopupMenuOption';
 
-const Width = PopupMenuOption.Width;
-const Corner = PopupMenuOption.Corner;
-const Alignment = PopupMenuOption.Alignment;
+const Width = POPUP_MENU_ALIGNMENT;
+const Corner = POPUP_MENU_CORNER;
+const Alignment = POPUP_MENU_WIDTH;
 
 export default {
   Width,

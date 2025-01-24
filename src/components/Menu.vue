@@ -1,16 +1,21 @@
 <script>
 import { isArray, isFunction, isObjectOnly, optArray } from '@/U';
-import PopupMenuOption from '@/app/popupMenu/PopupMenuOption';
+
+import {
+  POPUP_MENU_ALIGNMENT,
+  POPUP_MENU_CORNER,
+  POPUP_MENU_WIDTH,
+} from './PopupMenuOption';
 
 export default {
-  Width: PopupMenuOption.Width,
-  Corner: PopupMenuOption.Corner,
-  Alignment: PopupMenuOption.Alignment,
+  Width: POPUP_MENU_ALIGNMENT,
+  Corner: POPUP_MENU_CORNER,
+  Alignment: POPUP_MENU_WIDTH,
 
   props: {
-    width: { type: Number, default: PopupMenuOption.Width.AUTO },
-    corner: { type: Number, default: PopupMenuOption.Corner.AUTO },
-    alignment: { type: Number, default: PopupMenuOption.Alignment.AUTO },
+    width: { type: Number, default: POPUP_MENU_ALIGNMENT.AUTO },
+    corner: { type: Number, default: POPUP_MENU_CORNER.AUTO },
+    alignment: { type: Number, default: POPUP_MENU_WIDTH.AUTO },
     menus: { default: undefined },
     primaryColor: { default: undefined },
   },
