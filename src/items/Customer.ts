@@ -1,11 +1,9 @@
 import { optArray, trimId, trimText } from '@/U';
+import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import ItemSearcher from '../objects/ItemSearcher';
 import CustomerDevice from './CustomerDevice';
 import PhoneNumber from './PhoneNumber';
-
-const textContains = ItemSearcher.textContains;
 
 interface CustomerData {
   _id: string;

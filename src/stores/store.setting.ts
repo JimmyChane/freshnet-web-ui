@@ -2,19 +2,21 @@ import Vuex from 'vuex';
 
 import { optArray } from '@/U';
 import Contact from '@/items/Contact';
-import Setting from '@/items/Setting';
+import Setting, { SettingKey, SettingVisibility } from '@/items/Setting';
 import WorkingDay from '@/items/WorkingDay';
 import { getSettingList, updateSetting } from '@/request/Setting';
 
 import StoreBuilder from './tools/StoreBuilder';
 
 const isPredefinedSetting = (key: string) => {
-  return [
-    Setting.Key.Contacts,
-    Setting.Key.CompanyName,
-    Setting.Key.CompanyCategory,
-    Setting.Key.CompanyWorkingHours,
-  ].includes(key);
+  return (
+    [
+      SettingKey.Contacts,
+      SettingKey.CompanyName,
+      SettingKey.CompanyCategory,
+      SettingKey.CompanyWorkingHours,
+    ] as string[]
+  ).includes(key);
 };
 
 const init = (Stores: any) => {
@@ -91,23 +93,23 @@ const init = (Stores: any) => {
       return [
         ...items.filter((item) => !isPredefinedSetting(item.key)),
         new Setting(Stores).fromData({
-          key: Setting.Key.CompanyWorkingHours,
-          visibility: Setting.Visibility.Protected,
+          key: SettingKey.CompanyWorkingHours,
+          visibility: SettingVisibility.Protected,
           value: days,
         }),
         new Setting(Stores).fromData({
-          key: Setting.Key.Contacts,
-          visibility: Setting.Visibility.Protected,
+          key: SettingKey.Contacts,
+          visibility: SettingVisibility.Protected,
           value: contacts,
         }),
         new Setting(Stores).fromData({
-          key: Setting.Key.CompanyName,
-          visibility: Setting.Visibility.Protected,
+          key: SettingKey.CompanyName,
+          visibility: SettingVisibility.Protected,
           value: 'Freshnet Enterprise',
         }),
         new Setting(Stores).fromData({
-          key: Setting.Key.CompanyCategory,
-          visibility: Setting.Visibility.Protected,
+          key: SettingKey.CompanyCategory,
+          visibility: SettingVisibility.Protected,
           value: 'Computer Store',
         }),
       ];

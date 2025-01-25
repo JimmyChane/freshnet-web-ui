@@ -1,7 +1,7 @@
 import { trimId, trimText } from '@/U';
+import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import ItemSearcher from '../objects/ItemSearcher';
 import OrderCustomer from './OrderCustomer';
 
 export enum OrderStatus {
@@ -50,9 +50,9 @@ export default class Order implements Item {
   }
   toCount(strs: string[]): number {
     let count = strs.reduce((count, str) => {
-      if (ItemSearcher.textContains('order', str)) count++;
-      if (ItemSearcher.textContains(this.content, str)) count++;
-      if (ItemSearcher.textContains(String(this.status), str)) count++;
+      if (textContains('order', str)) count++;
+      if (textContains(this.content, str)) count++;
+      if (textContains(String(this.status), str)) count++;
       return count;
     }, 0);
     if (this.customer) count += this.customer.toCount(strs);

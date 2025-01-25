@@ -1,4 +1,3 @@
-import Server from '@/host/Server';
 import { API, Response } from '@/host/ServerApi';
 
 export async function getSpecificationList() {

@@ -5,8 +5,11 @@ import { isColorDark } from '@/U';
 import ImageView from '@/components/ImageView.vue';
 import Product from '@/items/Product';
 import ProductPrice from '@/items/ProductPrice';
-import Setting from '@/items/Setting';
-import ProductPreset from '@/objects/ProductPreset';
+import { SettingKey } from '@/items/Setting';
+import {
+  generateSpecificationLabels,
+  generateStockLabels,
+} from '@/objects/ProductPreset';
 
 import Label from './ItemProduct-Label.vue';
 
@@ -40,7 +43,7 @@ export default {
     shouldShowPrice: (c) => {
       let setting = c.$store.state.stores.setting.getters.items.find(
         (setting) => {
-          return setting.key === Setting.Key.PublicShowPrice;
+          return setting.key === SettingKey.PublicShowPrice;
         },
       );
       return setting?.value ?? false;
@@ -73,9 +76,9 @@ export default {
         return { from: normal, to: promotion };
       return null;
     },
-    specLabels: (c) => ProductPreset.generateSpecificationLabels(c.item),
+    specLabels: (c) => generateSpecificationLabels(c.item),
     labels: (c) => {
-      return ProductPreset.generateStockLabels(c.item).map((label) => {
+      return generateStockLabels(c.item).map((label) => {
         return { title: label.text, primaryColor: chroma(label.color) };
       });
     },

@@ -1,9 +1,7 @@
 import { optString, trimStringAll, trimText } from '@/U';
+import { textContains } from '@/objects/ItemSearcher';
 
-import ItemSearcher from '../objects/ItemSearcher';
 import PhoneNumber from './PhoneNumber';
-
-const textContains = ItemSearcher.textContains;
 
 export default class ServiceCustomer {
   stores: any;

@@ -4,22 +4,6 @@ import IconPaperA4 from '@/assets/icon/paper-a4.svg';
 import Size from './Size';
 
 export default class PaperSize {
-  static readonly _4R = new PaperSize(
-    '4R',
-    IconPaperA4,
-    new Size('10.2cm', '15.2cm'),
-  );
-  static readonly A4 = new PaperSize(
-    'A4',
-    IconPaperA4,
-    new Size('210mm', '297mm'),
-  );
-  static readonly A3 = new PaperSize(
-    'A3',
-    IconPaperA3,
-    new Size('297mm', '420mm'),
-  );
-
   title: string;
   icon: string;
   size: Size;
@@ -40,3 +24,19 @@ export default class PaperSize {
     return this.size.toString();
   }
 }
+
+export const FourRPaperSize = new PaperSize(
+  '4R',
+  IconPaperA4,
+  new Size('10.2cm', '15.2cm'),
+);
+export const A4PaperSize = new PaperSize(
+  'A4',
+  IconPaperA4,
+  new Size('210mm', '297mm'),
+);
+export const A3PaperSize = new PaperSize(
+  'A3',
+  IconPaperA3,
+  new Size('297mm', '420mm'),
+);

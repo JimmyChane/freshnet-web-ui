@@ -1,6 +1,6 @@
 <script>
 import ProductPrice from '@/items/ProductPrice';
-import SettingModule from '@/items/Setting';
+import SettingModule, { SettingKey } from '@/items/Setting';
 
 import Section from './ViewerProduct-Section.vue';
 
@@ -70,7 +70,7 @@ export default {
       this.settingShowPrice = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: SettingModule.Key.PublicShowPrice,
+          key: SettingKey.PublicShowPrice,
           default: false,
         },
       );

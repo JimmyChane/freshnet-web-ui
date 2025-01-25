@@ -1,5 +1,5 @@
 <script>
-import Setting from '@/items/Setting';
+import { SettingKey } from '@/items/Setting';
 
 export default {
   props: { isThin: { type: Boolean, default: false } },
@@ -17,13 +17,13 @@ export default {
       this.address = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: Setting.Key.Location,
+          key: SettingKey.Location,
         },
       );
       this.link = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: Setting.Key.LocationLink,
+          key: SettingKey.LocationLink,
         },
       );
     },

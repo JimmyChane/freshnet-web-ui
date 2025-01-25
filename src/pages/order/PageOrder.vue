@@ -2,7 +2,7 @@
 import IconPack from '@/app/IconPack';
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
-import Server from '@/host/Server';
+import { iconServer } from '@/host/Server';
 import { OrderStatus } from '@/items/Order';
 
 import Actionbar from './Actionbar.vue';
@@ -13,10 +13,7 @@ export default {
   key: 'order',
   name: 'ViewOrder',
   title: 'Orders',
-  icon: new IconPack(
-    Server.resource.icon('order-FFFFFF'),
-    Server.resource.icon('order-000000'),
-  ),
+  icon: new IconPack(iconServer('order-FFFFFF'), iconServer('order-000000')),
   userPermissions: ['admin', 'staff'],
 
   components: { Loading, Actionbar, SectionOrder, Input },

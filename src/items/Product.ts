@@ -7,9 +7,9 @@ import {
   trimText,
 } from '@/U';
 import AppHost from '@/host/AppHost';
+import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import ItemSearcher from '../objects/ItemSearcher';
 import Brand from './Brand';
 import Category from './Category';
 import Image from './Image';
@@ -18,8 +18,6 @@ import ProductPrice from './ProductPrice';
 import ProductPrices from './ProductPrices';
 import ProductStock from './ProductStock';
 import Specification, { SpecificationKey } from './Specification';
-
-const textContains = ItemSearcher.textContains;
 
 const FORMAT_SPECIFICATION_ORDERS = Object.values(SpecificationKey);
 function putForwardSlash(texts: string[], separation: string = ' / '): string {
@@ -226,13 +224,15 @@ export default class Product implements Item {
     const texts: string[] = [];
     const specs = this.specifications
       .filter((specification) => {
-        return FORMAT_SPECIFICATION_ORDERS.includes(specification.typeKey);
+        return (FORMAT_SPECIFICATION_ORDERS as string[]).includes(
+          specification.typeKey,
+        );
       })
       .sort((specification1, specification2) => {
-        const index1 = FORMAT_SPECIFICATION_ORDERS.indexOf(
+        const index1 = (FORMAT_SPECIFICATION_ORDERS as string[]).indexOf(
           specification1.typeKey,
         );
-        const index2 = FORMAT_SPECIFICATION_ORDERS.indexOf(
+        const index2 = (FORMAT_SPECIFICATION_ORDERS as string[]).indexOf(
           specification2.typeKey,
         );
 

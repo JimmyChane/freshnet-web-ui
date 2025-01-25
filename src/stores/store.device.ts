@@ -2,7 +2,13 @@ import Vuex from 'vuex';
 
 import { isArray } from '@/U';
 import Customer from '@/items/Customer';
-import DeviceRequest from '@/request/Device';
+import {
+  addDevice,
+  getDeviceList,
+  removeDevice,
+  updateDeviceDescription,
+  updateDeviceSpecification,
+} from '@/request/Device';
 
 import CustomerDevice from '../items/CustomerDevice';
 import StoreBuilder from './tools/StoreBuilder';
@@ -10,7 +16,7 @@ import StoreBuilder from './tools/StoreBuilder';
 const init = (Stores: any) => {
   const context = new StoreBuilder<CustomerDevice>()
     .onFetchItems(async () => {
-      const api = await DeviceRequest.list();
+      const api = await getDeviceList();
       const content: any[] = api.optArrayContent();
       return content.map((content) => {
         return new CustomerDevice(Stores).fromData(content);
@@ -40,7 +46,7 @@ const init = (Stores: any) => {
     .action('addItem', async (context, arg = {}) => {
       const data: any = new CustomerDevice(Stores).fromData(arg).toData();
       delete data.id;
-      const api = await DeviceRequest.add({ content: data });
+      const api = await addDevice({ content: data });
       const content = api.optObjectContent();
       const item = context.state.list.addItem(
         new CustomerDevice(Stores).fromData(content),
@@ -55,7 +61,7 @@ const init = (Stores: any) => {
       return item;
     })
     .action('removeItemOfId', async (context, arg = {}) => {
-      const api = await DeviceRequest.remove({
+      const api = await removeDevice({
         content: {
           ownerCustomerId: arg.ownerCustomerId,
           deviceId: arg.id,
@@ -78,7 +84,7 @@ const init = (Stores: any) => {
       'updateSpecificationsOfId',
       async (context, arg: { _id: string; specifications: any[] }) => {
         const { _id, specifications } = arg;
-        const api = await DeviceRequest.updateSpecification({
+        const api = await updateDeviceSpecification({
           content: { _id, specifications },
         });
         const content = api.optObjectContent();
@@ -93,7 +99,7 @@ const init = (Stores: any) => {
       'updateDescriptionOfId',
       async (context, arg: { _id: string; description: string }) => {
         const { _id, description } = arg;
-        const api = await DeviceRequest.updateDescription({
+        const api = await updateDeviceDescription({
           content: { _id, description },
         });
         const content = api.optObjectContent();

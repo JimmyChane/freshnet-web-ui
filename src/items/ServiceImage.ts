@@ -1,5 +1,5 @@
 import { trimId } from '@/U';
-import Server from '@/host/Server';
+import { originApiServer } from '@/host/Server';
 
 import Filename from '../objects/Filename';
 import Image, { MethodImage, dimensionToQuery } from './Image';
@@ -67,13 +67,11 @@ export default class ServiceImage {
       const prefix = '/api/image/name/';
       const name = path.substring(prefix.length, path.length);
       const filename = new Filename(name);
-      return `${Server.originApi}/image/name/${filename.toString()}${query}`;
+      return `${originApiServer()}/image/name/${filename.toString()}${query}`;
     }
 
     const filename = new Filename(this.name);
-    return `${
-      Server.originApi
-    }/service_v2/get/image/${filename.toString()}${query}`;
+    return `${originApiServer()}/service_v2/get/image/${filename.toString()}${query}`;
   }
 
   async toBlob(

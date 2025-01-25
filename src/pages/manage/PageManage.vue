@@ -1,6 +1,6 @@
 <script>
 import IconPack from '@/app/IconPack';
-import Server from '@/host/Server';
+import { iconServer } from '@/host/Server';
 import PageCustomer from '@/pages/customer/PageCustomer.vue';
 import PageDatabase from '@/pages/database/PageDatabase.vue';
 import PageOrder from '@/pages/order/PageOrder.vue';
@@ -13,10 +13,7 @@ export default {
   key: 'manage',
   name: 'Manage',
   title: 'Manage',
-  icon: new IconPack(
-    Server.resource.icon('manage-FFFFFF'),
-    Server.resource.icon('manage-000000'),
-  ),
+  icon: new IconPack(iconServer('manage-FFFFFF'), iconServer('manage-000000')),
 
   _children() {
     return [PageProfile];

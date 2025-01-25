@@ -6,8 +6,8 @@ import IconPack from '@/app/IconPack';
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import Server from '@/host/Server';
-import SettingModule from '@/items/Setting';
+import { iconServer } from '@/host/Server';
+import SettingModule, { SettingKey } from '@/items/Setting';
 
 import ItemSetting from './ItemSetting.vue';
 import ItemSettingBusinessHours from './ItemSettingBusinessHours.vue';
@@ -96,8 +96,8 @@ export default {
   key: 'setting',
   title: 'Settings',
   icon: new IconPack(
-    Server.resource.icon('setting-FFFFFF'),
-    Server.resource.icon('setting-000000'),
+    iconServer('setting-FFFFFF'),
+    iconServer('setting-000000'),
   ),
   userPermissions: ['admin'],
 
@@ -146,12 +146,12 @@ export default {
             .setReadonly(true)
             .setList(
               new SettingBuilder()
-                .setKey(SettingModule.Key.CompanyName)
+                .setKey(SettingKey.CompanyName)
                 .setReadonly(true)
                 .setTitle('Name')
                 .setType('text'),
               new SettingBuilder()
-                .setKey(SettingModule.Key.CompanyCategory)
+                .setKey(SettingKey.CompanyCategory)
                 .setReadonly(true)
                 .setTitle('Category')
                 .setType('text'),
@@ -165,11 +165,11 @@ export default {
             .setTitle('Location')
             .setList(
               new SettingBuilder()
-                .setKey(SettingModule.Key.Location)
+                .setKey(SettingKey.Location)
                 .setTitle('Address')
                 .setType('text'),
               new SettingBuilder()
-                .setKey(SettingModule.Key.LocationLink)
+                .setKey(SettingKey.LocationLink)
                 .setTitle('Link')
                 .setType('text'),
             )
@@ -184,7 +184,7 @@ export default {
             .setTitle('Product Page')
             .setList(
               new SettingBuilder()
-                .setKey(SettingModule.Key.PublicShowPrice)
+                .setKey(SettingKey.PublicShowPrice)
                 .setTitle('Show Price in View Mode')
                 .setType('boolean'),
             )

@@ -1,7 +1,7 @@
 import { isObjectOnly, trimId, trimText } from '@/U';
+import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import ItemSearcher from '../objects/ItemSearcher';
 import Image from './Image';
 
 export enum SpecificationKey {
@@ -81,8 +81,8 @@ export class Type implements Item {
   }
   toCount(strs: string[]): number {
     return strs.reduce((count, str) => {
-      if (ItemSearcher.textContains(this.key, str)) count++;
-      if (ItemSearcher.textContains(this.title, str)) count++;
+      if (textContains(this.key, str)) count++;
+      if (textContains(this.title, str)) count++;
       return count;
     }, 0);
   }
@@ -124,7 +124,7 @@ export default class Specification {
   }
   toCount(strs: string[]): number {
     return strs.reduce((count, str) => {
-      if (ItemSearcher.textContains(this.content, str)) count++;
+      if (textContains(this.content, str)) count++;
       return count;
     }, 0);
   }

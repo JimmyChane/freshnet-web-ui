@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 
 import { getUser, loginUser, updateUserPassword } from '@/request/Login';
 
-import ItemUser from '../items/User';
+import ItemUser, { UserType } from '../items/User';
 import User from '../items/User';
 import Processor from './tools/Processor';
 
@@ -31,7 +31,7 @@ const onNewCredentail = (
 const noneUser = new ItemUser(null).fromData({
   username: '',
   name: '',
-  userType: ItemUser.Type.None,
+  userType: UserType.None,
 });
 
 const init = (Stores: any) => {

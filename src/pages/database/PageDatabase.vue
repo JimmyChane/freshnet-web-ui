@@ -4,7 +4,7 @@ import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import Server from '@/host/Server';
+import { iconServer } from '@/host/Server';
 
 import ItemDatabase from './ItemDatabase.vue';
 
@@ -12,8 +12,8 @@ export default {
   key: 'database',
   title: 'Database',
   icon: new IconPack(
-    Server.resource.icon('database-FFFFFF'),
-    Server.resource.icon('database-000000'),
+    iconServer('database-FFFFFF'),
+    iconServer('database-000000'),
   ),
   userPermissions: ['admin'],
 

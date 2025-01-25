@@ -1,6 +1,6 @@
 import { isObject, isString, optArray, trimId, trimText } from '@/U';
+import { textContains } from '@/objects/ItemSearcher';
 
-import ItemSearcher from '../objects/ItemSearcher';
 import {
   INFO_SERVICE_EVENT_METHOD,
   PURCHASE_SERVICE_EVENT_METHOD,
@@ -10,8 +10,6 @@ import ServiceImage from './ServiceImage';
 import ServicePrice from './ServicePrice';
 import ServiceTimestamp from './ServiceTimestamp';
 import User from './User';
-
-const textContains = ItemSearcher.textContains;
 
 export default class ServiceEvent {
   stores: any;

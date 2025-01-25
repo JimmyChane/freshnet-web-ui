@@ -1,5 +1,5 @@
 <script>
-import Setting from '@/items/Setting';
+import { SettingKey } from '@/items/Setting';
 
 import ButtonContact from './BottomActionbar-ButtonContact.vue';
 import ButtonTop from './BottomActionbar-ButtonTop.vue';
@@ -41,7 +41,7 @@ export default {
     async invalidate() {
       const contacts = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
-        { key: Setting.Key.Contacts, default: [] },
+        { key: SettingKey.Contacts, default: [] },
       );
       const contact = this.findContactByTitle(contacts, 'Beh Aik Keong');
 

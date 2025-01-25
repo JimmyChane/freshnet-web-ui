@@ -2,7 +2,7 @@
 import IconPrinter from '@/assets/icon/printer-000000.svg';
 import PrintContent from '@/components/PrintContent.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import Pixel from '@/objects/Pixel';
+import { cmToPixel } from '@/objects/Pixel';
 
 import Layout from './PageCategoryExport-Layout.vue';
 
@@ -12,8 +12,8 @@ export default {
     user: (c) => c.$store.state.stores.login.getters.user,
     allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
-    width: () => Pixel.cm(210),
-    height: () => Pixel.cm(297),
+    width: () => cmToPixel(210),
+    height: () => cmToPixel(297),
   },
   data: () => ({ IconPrinter, products: [] }),
   methods: {

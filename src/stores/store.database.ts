@@ -1,6 +1,13 @@
 import Vuex, { Store } from 'vuex';
 
-import DatabaseRequest from '@/request/Database';
+import {
+  getCollections,
+  getDatabases,
+  getDocuments,
+  getExport,
+  getImport,
+  getInfo,
+} from '@/request/Database';
 
 import DataLoader from './tools/DataLoader';
 import Processor from './tools/Processor';
@@ -12,7 +19,7 @@ const init = (Stores: any) => {
       dataLoader: new DataLoader({ timeout: 1000 * 5 }) // 5sec
         .processor(() => store.state.processor)
         .loadData(async () => {
-          const api = await DatabaseRequest.info();
+          const api = await getInfo();
           const baseInfo = api.getContent();
           store.dispatch('loadDatabases');
           return baseInfo;
@@ -55,7 +62,7 @@ const init = (Stores: any) => {
           try {
             context.commit('items', []);
             context.commit('lastModified', Date.now());
-            const api = await DatabaseRequest.databases();
+            const api = await getDatabases();
             const items = api.optArrayContent().map((database: any) => {
               return { name: database, collections: [] };
             });
@@ -74,7 +81,7 @@ const init = (Stores: any) => {
       loadCollections: async (context, arg = {}) => {
         return context.state.processor.acquire('loadCollections', async () => {
           const { database } = arg;
-          const api = await DatabaseRequest.collections(database);
+          const api = await getCollections(database);
           const collections = api.optArrayContent().map((collection: any) => {
             return { name: collection, documents: [] };
           });
@@ -95,7 +102,7 @@ const init = (Stores: any) => {
       loadDocuments: async (context, arg = {}) => {
         return context.state.processor.acquire('loadDocuments', async () => {
           const { database, collection } = arg;
-          const api = await DatabaseRequest.documents(database, collection);
+          const api = await getDocuments(database, collection);
           const documents = api.optArrayContent();
           const outputArg = { database, collection };
           const collectionFound = await context.dispatch(
@@ -116,14 +123,14 @@ const init = (Stores: any) => {
       imports: async (context, arg = {}) => {
         return context.state.processor.acquire('imports', async () => {
           const { json } = arg;
-          const api = await DatabaseRequest.import({ content: json });
+          const api = await getImport({ content: json });
           throw new Error();
         });
       },
       exportDatabase: async (context, arg = {}) => {
         return context.state.processor.acquire('exportDatabase', async () => {
           const { database } = arg;
-          return (await DatabaseRequest.export(database)).getContent();
+          return (await getExport(database)).getContent();
         });
       },
 

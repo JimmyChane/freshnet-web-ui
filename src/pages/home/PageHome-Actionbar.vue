@@ -3,7 +3,8 @@ import { differenceInMinutes, format } from 'date-fns';
 
 import GlobalSearch from '@/app/search/GlobalSearch.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import Setting from '@/items/Setting';
+import { cloudinaryServer } from '@/host/Server';
+import { SettingKey } from '@/items/Setting';
 
 export default {
   components: { NavigationBar, GlobalSearch },
@@ -16,6 +17,8 @@ export default {
     companyCategory: '',
     addressHref: '',
     days: [],
+
+    cloudinaryServer,
   }),
   computed: {
     businessHourDescription: (c) => {
@@ -69,18 +72,18 @@ export default {
       this.companyTitle = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: Setting.Key.CompanyName,
+          key: SettingKey.CompanyName,
           default: '',
         },
       );
       this.companyCategory = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
-        { key: Setting.Key.CompanyCategory, default: '' },
+        { key: SettingKey.CompanyCategory, default: '' },
       );
       this.addressHref = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: Setting.Key.LocationLink,
+          key: SettingKey.LocationLink,
           default: '',
         },
       );
@@ -88,7 +91,7 @@ export default {
       this.days = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: Setting.Key.CompanyWorkingHours,
+          key: SettingKey.CompanyWorkingHours,
           default: [],
         },
       );
@@ -115,7 +118,7 @@ export default {
           class="HomeActionbar-logo"
           :style="{ 'grid-area': 'logo' }"
           :src="
-            host.cloudinary({
+            cloudinaryServer({
               url: 'logo/svg/freshnet-enterprise-logo.svg',
             })
           "

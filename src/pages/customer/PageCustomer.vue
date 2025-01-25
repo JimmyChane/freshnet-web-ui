@@ -4,7 +4,7 @@ import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
-import Server from '@/host/Server';
+import { iconServer } from '@/host/Server';
 
 import PanelCustomer from './PanelCustomer.vue';
 import PanelCustomers from './PanelCustomers.vue';
@@ -21,8 +21,8 @@ export default {
   key: 'customer',
   title: 'Customers',
   icon: new IconPack(
-    Server.resource.icon('customers-FFFFFF'),
-    Server.resource.icon('customers-000000'),
+    iconServer('customers-FFFFFF'),
+    iconServer('customers-000000'),
   ),
 
   userPermissions: ['admin', 'staff'],

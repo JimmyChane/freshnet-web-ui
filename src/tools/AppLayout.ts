@@ -1,8 +1,11 @@
+export enum AppLayoutId {
+  NORMAL = -1,
+  FULL = -2,
+}
+
+export const APP_LAYOUT_KEYS = Object.values(AppLayoutId);
+
 export default class AppLayout {
-  static Layout = { NORMAL: -1, FULL: -2 };
-
-  private static LAYOUTS: number[] = Object.values(this.Layout);
-
   context: any;
   requests: { page: string; view: string; mode: number }[] = [];
 
@@ -28,7 +31,7 @@ export default class AppLayout {
   }
 
   setLayout(mode: number = 0): void {
-    if (!AppLayout.LAYOUTS.includes(mode)) return;
+    if (!APP_LAYOUT_KEYS.includes(mode)) return;
 
     const page = this.getCurrentPageKey();
     const view = this.getCurrentViewKey();
@@ -52,14 +55,14 @@ export default class AppLayout {
 
   getCurrentLayout(): number {
     const request = this.getCurrentVisibilityRequest();
-    return request?.mode ?? AppLayout.Layout.FULL;
+    return request?.mode ?? AppLayoutId.FULL;
   }
 
   isNormal(): boolean {
-    return this.getCurrentLayout() === AppLayout.Layout.NORMAL;
+    return this.getCurrentLayout() === AppLayoutId.NORMAL;
   }
 
   isFull(): boolean {
-    return this.getCurrentLayout() === AppLayout.Layout.FULL;
+    return this.getCurrentLayout() === AppLayoutId.FULL;
   }
 }

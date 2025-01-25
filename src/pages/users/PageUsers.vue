@@ -6,7 +6,7 @@ import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import Server from '@/host/Server';
+import { iconServer } from '@/host/Server';
 
 import ItemUser from './ItemUser.vue';
 import WindowAdd from './WindowAdd.vue';
@@ -16,10 +16,7 @@ import WindowRemove from './WindowRemove.vue';
 export default {
   key: 'users',
   title: 'Other Users',
-  icon: new IconPack(
-    Server.resource.icon('users-FFFFFF'),
-    Server.resource.icon('users-000000'),
-  ),
+  icon: new IconPack(iconServer('users-FFFFFF'), iconServer('users-000000')),
   userPermissions: ['admin'],
 
   components: { NavigationBar, Loading, Empty, ItemUser },

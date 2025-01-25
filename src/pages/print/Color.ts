@@ -2,9 +2,6 @@ import IconPaletteBw from '@/assets/icon/palette-bw.svg';
 import IconPaletteColor from '@/assets/icon/palette-cmyk.svg';
 
 export default class Color {
-  static BlackWhite = new Color('Black & White', IconPaletteBw);
-  static Colorful = new Color('Color', IconPaletteColor);
-
   title: any;
   icon: any;
 
@@ -16,3 +13,6 @@ export default class Color {
     return this.title;
   }
 }
+
+export const BlackWhiteColor = new Color('Black & White', IconPaletteBw);
+export const ColorfulColor = new Color('Color', IconPaletteColor);

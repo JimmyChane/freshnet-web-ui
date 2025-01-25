@@ -1,5 +1,5 @@
 <script>
-import SettingModule from '@/items/Setting';
+import { SettingKey } from '@/items/Setting';
 
 import ItemSettingHeader from './ItemSetting-Header.vue';
 import ContactItem from './ItemSettingContacts-Item.vue';
@@ -8,7 +8,7 @@ export default {
   components: { ItemSettingHeader, ContactItem },
   data: (c) => ({
     U,
-    key: SettingModule.Key.Contacts,
+    key: SettingKey.Contacts,
     title: 'Contacts (Readonly)',
     values: [],
   }),

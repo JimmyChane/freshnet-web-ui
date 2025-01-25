@@ -14,9 +14,9 @@ import BgCctv from '@/assets/bg/michal-jakubowski-oQD9uq4Rd4I-unsplash-w300h100.
 import BgMonitor from '@/assets/bg/monitor-u3223qe-gallery-3-w300h100.webp';
 import BgDesktop from '@/assets/bg/niclas-illg-wzVQp_NRIHg-unsplash-w300h100.webp';
 import BgMouse from '@/assets/bg/ryan-putra-j4PqlNVZ4Bc-unsplash-w300h100.webp';
+import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import ItemSearcher from '../objects/ItemSearcher';
 import Image from './Image';
 
 export const TABLET_CATEGORY_BACKGROUND = new Image().fromData({
@@ -180,11 +180,10 @@ export default class Category implements Item {
   toCount(strs: string[]): number {
     return strs.reduce((count, str) => {
       if (this.title === 'Notebook')
-        count += ItemSearcher.textContains('Laptop', str) ? 1 : 0;
-      if (this.title === 'Notebook' && ItemSearcher.textContains('Laptop', str))
-        count++;
-      if (ItemSearcher.textContains(this.title, str)) count++;
-      if (ItemSearcher.textContains('category', str)) count++;
+        count += textContains('Laptop', str) ? 1 : 0;
+      if (this.title === 'Notebook' && textContains('Laptop', str)) count++;
+      if (textContains(this.title, str)) count++;
+      if (textContains('category', str)) count++;
       return count;
     }, 0);
   }

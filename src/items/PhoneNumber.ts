@@ -1,6 +1,6 @@
 import { optString } from '@/U';
 
-import ItemSearcher from '../objects/ItemSearcher';
+import { textContains } from '../objects/ItemSearcher';
 
 interface PhoneNumberData {
   value: string;
@@ -54,7 +54,7 @@ export default class PhoneNumber {
 
   toCount(strs: string[]): number {
     return strs.reduce((count, str) => {
-      if (ItemSearcher.textContains(this.value, str)) count += 4;
+      if (textContains(this.value, str)) count += 4;
       return count;
     }, 0);
   }

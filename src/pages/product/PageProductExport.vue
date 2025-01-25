@@ -1,7 +1,7 @@
 <script>
 import PrintContent from '@/components/PrintContent.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import Pixel from '@/objects/Pixel';
+import { cmToPixel } from '@/objects/Pixel';
 
 import ExportButton from './PageProductExport-Export.vue';
 import LayoutOne from './PageProductExport-Layout-One.vue';
@@ -10,40 +10,39 @@ import ExportLayoutOption from './PageProductExport-LayoutOption.vue';
 import PanelOption from './PageProductExport-PanelOption.vue';
 
 class Orientation {
-  static Portrait = new Orientation('Portrait');
-  static Landscape = new Orientation('Landscape');
-
   constructor(title = '') {
     this.title = title;
   }
 }
-class Size {
-  static A5 = new Size('A5', Pixel.cm(148.5), Pixel.cm(210));
-  static A4 = new Size('A4', Pixel.cm(210), Pixel.cm(297));
+const PortraitOrientation = new Orientation('Portrait');
+const LandscapeOrientation = new Orientation('Landscape');
 
+class Size {
   constructor(title = '', width = 0, height = 0) {
     this.title = title;
     this.width = width;
     this.height = height;
   }
 }
-class GridCount {
-  static One = new GridCount('1', 1);
-  static Two = new GridCount('2', 2);
+const A5Size = new Size('A5', cmToPixel(148.5), cmToPixel(210));
+const A4Size = new Size('A4', cmToPixel(210), cmToPixel(297));
 
+class GridCount {
   constructor(title = '', count = 0) {
     this.title = title;
     this.count = count;
   }
 }
-class Layout {
-  static One = new Layout('Layout One');
-  static Two = new Layout('Layout Two');
+const OneGridCount = new GridCount('1', 1);
+const TwoGridCount = new GridCount('2', 2);
 
+class Layout {
   constructor(title = '') {
     this.title = title;
   }
 }
+const OneLayout = new Layout('Layout One');
+const TwoLayout = new Layout('Layout Two');
 
 class Option {
   selectedItem = null;
@@ -82,15 +81,11 @@ export default {
     product: null,
 
     options: [
-      new Option(
-        'Orientation',
-        [Orientation.Portrait, Orientation.Landscape],
-        0,
-      ),
-      new Option('Size', [Size.A5, Size.A4], 1),
+      new Option('Orientation', [PortraitOrientation, LandscapeOrientation], 0),
+      new Option('Size', [A5Size, A4Size], 1),
       new Option('Rows', [new GridCount('1', 1), new GridCount('2', 2)], 1),
       new Option('Columns', [new GridCount('1', 1), new GridCount('2', 2)], 0),
-      new Option('Layouts', [Layout.One, Layout.Two], 0),
+      new Option('Layouts', [OneLayout, TwoLayout], 0),
     ],
     layouts: [
       { title: 'Layout 1' },
@@ -113,8 +108,8 @@ export default {
     column: (c) => c.options[3].selectedItem,
     layout: (c) => c.options[4].selectedItem,
 
-    isPortrait: (c) => c.orientation === Orientation.Portrait,
-    isLandscape: (c) => c.orientation === Orientation.Landscape,
+    isPortrait: (c) => c.orientation === PortraitOrientation,
+    isLandscape: (c) => c.orientation === LandscapeOrientation,
 
     canvasWidth: (c) => (c.isPortrait ? c.size.width : c.size.height),
     canvasHeight: (c) => (c.isPortrait ? c.size.height : c.size.width),
@@ -124,8 +119,8 @@ export default {
     itemWidth: (c) => c.canvasWidth / c.canvasColumnCount,
     itemHeight: (c) => c.canvasHeight / c.canvasRowCount,
 
-    isLayoutOne: (c) => c.layout === Layout.One,
-    isLayoutTwo: (c) => c.layout === Layout.Two,
+    isLayoutOne: (c) => c.layout === OneLayout,
+    isLayoutTwo: (c) => c.layout === TwoLayout,
   },
   watch: {
     productId() {

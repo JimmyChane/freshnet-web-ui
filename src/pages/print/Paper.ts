@@ -1,13 +1,11 @@
-import PaperSize from './PaperSize';
-import PaperType from './PaperType';
+import PaperSize, {
+  A3PaperSize,
+  A4PaperSize,
+  FourRPaperSize,
+} from './PaperSize';
+import PaperType, { PhotoPaperType, PlainPaperType } from './PaperType';
 
 export default class Paper {
-  static readonly Photo4R = new Paper(PaperType.Photo, PaperSize._4R);
-  static readonly PhotoA4 = new Paper(PaperType.Photo, PaperSize.A4);
-
-  static readonly PlainA4 = new Paper(PaperType.Plain, PaperSize.A4);
-  static readonly PlainA3 = new Paper(PaperType.Plain, PaperSize.A3);
-
   paperType: PaperType;
   paperSize: PaperSize;
 
@@ -20,3 +18,9 @@ export default class Paper {
     return `${this.paperType.title} ${this.paperSize.title}`;
   }
 }
+
+export const Photo4RPaper = new Paper(PhotoPaperType, FourRPaperSize);
+export const PhotoA4Paper = new Paper(PhotoPaperType, A4PaperSize);
+
+export const PlainA4Paper = new Paper(PlainPaperType, A4PaperSize);
+export const PlainA3Paper = new Paper(PlainPaperType, A3PaperSize);

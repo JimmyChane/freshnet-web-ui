@@ -1,7 +1,7 @@
 <script>
 import IconPack from '@/app/IconPack';
 import Footer from '@/app/footer/Footer.vue';
-import Server from '@/host/Server';
+import { iconServer } from '@/host/Server';
 
 import Actionbar from './PageHome-Actionbar.vue';
 import Header from './PageHome-Header.vue';
@@ -18,10 +18,7 @@ export default {
   key: 'home',
   name: 'Home',
   title: 'Home',
-  icon: new IconPack(
-    Server.resource.icon('home-FFFFFF'),
-    Server.resource.icon('home-000000'),
-  ),
+  icon: new IconPack(iconServer('home-FFFFFF'), iconServer('home-000000')),
 
   components: {
     Footer,

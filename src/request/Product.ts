@@ -1,4 +1,4 @@
-import Server from '@/host/Server';
+import { requestServer } from '@/host/Server';
 import { API, Response } from '@/host/ServerApi';
 
 export async function getProductList() {
@@ -96,33 +96,34 @@ export async function addProductImage(id: string, imageForm: any) {
   return new Response(response.data);
 }
 
-export default class Product {
-  static removeBundle(id: string, bundle: any): Promise<any> {
-    return Server.request()
-      .DELETE()
-      .path('productv2/bundle/')
-      .bodyJson({ content: { productId: id, bundle: bundle } })
-      .sendJson();
-  }
-  static removeGift(id: string, gift: any): Promise<any> {
-    return Server.request()
-      .DELETE()
-      .path('productv2/gift/')
-      .bodyJson({ content: { productId: id, gift } })
-      .sendJson();
-  }
-  static removeSpecification(id: string, specification: any): Promise<any> {
-    return Server.request()
-      .DELETE()
-      .path('productv2/specification/')
-      .bodyJson({ content: { productId: id, specification } })
-      .sendJson();
-  }
-  static removeImage(id: string, image: any): Promise<any> {
-    return Server.request()
-      .DELETE()
-      .path(`productv2/id/${id}/image/`)
-      .bodyJson({ content: { image } })
-      .sendJson();
-  }
+export function removeProductBundle(id: string, bundle: any): Promise<any> {
+  return requestServer()
+    .DELETE()
+    .path('productv2/bundle/')
+    .bodyJson({ content: { productId: id, bundle: bundle } })
+    .sendJson();
+}
+export function removeProductGift(id: string, gift: any): Promise<any> {
+  return requestServer()
+    .DELETE()
+    .path('productv2/gift/')
+    .bodyJson({ content: { productId: id, gift } })
+    .sendJson();
+}
+export function removeProductSpecification(
+  id: string,
+  specification: any,
+): Promise<any> {
+  return requestServer()
+    .DELETE()
+    .path('productv2/specification/')
+    .bodyJson({ content: { productId: id, specification } })
+    .sendJson();
+}
+export function removeProductImage(id: string, image: any): Promise<any> {
+  return requestServer()
+    .DELETE()
+    .path(`productv2/id/${id}/image/`)
+    .bodyJson({ content: { image } })
+    .sendJson();
 }

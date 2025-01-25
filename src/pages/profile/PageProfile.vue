@@ -5,7 +5,7 @@ import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
-import Server from '@/host/Server';
+import { iconServer } from '@/host/Server';
 
 import SectionMain from './PageProfile-Section-Main.vue';
 import SectionTitle from './PageProfile-Section-Title.vue';
@@ -16,8 +16,8 @@ export default {
   key: 'profile',
   title: 'Your Profile',
   icon: new IconPack(
-    Server.resource.icon('profile-FFFFFF'),
-    Server.resource.icon('profile-000000'),
+    iconServer('profile-FFFFFF'),
+    iconServer('profile-000000'),
   ),
 
   components: {

@@ -1,39 +1,40 @@
-import Server from '@/host/Server';
+import { requestServer } from '@/host/Server';
 
-export default class Database {
-  static info(): Promise<any> {
-    return Server.request().POST().path('database/info').sendJson();
-  }
+export function getInfo(): Promise<any> {
+  return requestServer().POST().path('database/info').sendJson();
+}
 
-  static databases(): Promise<any> {
-    return Server.request().POST().path('database/databases').sendJson();
-  }
+export function getDatabases(): Promise<any> {
+  return requestServer().POST().path('database/databases').sendJson();
+}
 
-  static collections(database: string): Promise<any> {
-    return Server.request()
-      .POST()
-      .path(`database/database/${database}/collections`)
-      .sendJson();
-  }
+export function getCollections(database: string): Promise<any> {
+  return requestServer()
+    .POST()
+    .path(`database/database/${database}/collections`)
+    .sendJson();
+}
 
-  static documents(database: string, collection: string): Promise<any> {
-    return Server.request()
-      .POST()
-      .path(`database/database/${database}/collection/${collection}/documents`)
-      .sendJson();
-  }
+export function getDocuments(
+  database: string,
+  collection: string,
+): Promise<any> {
+  return requestServer()
+    .POST()
+    .path(`database/database/${database}/collection/${collection}/documents`)
+    .sendJson();
+}
 
-  static import(body: any): Promise<any> {
-    return Server.request()
-      .POST()
-      .path('database/imports')
-      .bodyJson(body)
-      .sendJson();
-  }
+export function getImport(body: any): Promise<any> {
+  return requestServer()
+    .POST()
+    .path('database/imports')
+    .bodyJson(body)
+    .sendJson();
+}
 
-  static export(database: string): Promise<any> {
-    return Server.request()
-      .path(`database/database/${database}/exportv2`)
-      .sendJson();
-  }
+export function getExport(database: string): Promise<any> {
+  return requestServer()
+    .path(`database/database/${database}/exportv2`)
+    .sendJson();
 }

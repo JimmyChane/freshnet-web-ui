@@ -1,6 +1,6 @@
 import { ActionContext } from 'vuex';
 
-import DataLoader from './DataLoader';
+import DataLoader, { withStoreToDataLoader } from './DataLoader';
 import List, { Item } from './List';
 import Processor from './Processor';
 
@@ -21,7 +21,7 @@ export default class StoreBuilder<T extends Item> {
 
   constructor() {
     this.state = {
-      dataLoader: DataLoader.withStore(() => {
+      dataLoader: withStoreToDataLoader(() => {
         return this._getStore();
       }).loadData(() => {
         return this._fetchItems();

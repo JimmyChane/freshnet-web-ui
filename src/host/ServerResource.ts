@@ -6,10 +6,6 @@ export class Icon {
   private name: string = '';
   private ext?: string = undefined;
 
-  static url(name: string = '', ext: string | undefined = undefined): string {
-    return new Icon(name, ext).toUrl();
-  }
-
   constructor(name: string = '', ext: string | undefined = undefined) {
     if (isString(name)) this.name = name;
     if (isString(ext)) this.ext = ext;
@@ -39,4 +35,11 @@ export default class ServerResource {
   res(path: string): string {
     return `${this.serverUrl}/${path}`;
   }
+}
+
+export function urlIcon(
+  name: string = '',
+  ext: string | undefined = undefined,
+): string {
+  return new Icon(name, ext).toUrl();
 }

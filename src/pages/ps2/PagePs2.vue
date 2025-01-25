@@ -10,7 +10,7 @@ import LoadingDots from '@/components/LoadingDots.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
-import Server from '@/host/Server';
+import { iconServer } from '@/host/Server';
 
 import ItemPs2Disc from './ItemPs2Disc.vue';
 import WindowItemPs2Disc from './WindowItemPs2Disc.vue';
@@ -20,8 +20,8 @@ export default {
   name: 'PagePs2',
   title: 'PS2 Disc',
   icon: new IconPack(
-    Server.resource.icon('playstation-FFFFFF'),
-    Server.resource.icon('playstation-000000'),
+    iconServer('playstation-FFFFFF'),
+    iconServer('playstation-000000'),
   ),
 
   components: {

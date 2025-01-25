@@ -2,8 +2,8 @@
 import IconPack from '@/app/IconPack';
 import Footer from '@/app/footer/Footer.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
-import Server from '@/host/Server';
-import Navigation from '@/tools/Navigation';
+import { iconServer } from '@/host/Server';
+import { NavigationLayout } from '@/tools/Navigation';
 
 import PanelProduct from './PanelProduct.vue';
 import PanelProducts from './PanelProducts.vue';
@@ -21,8 +21,8 @@ export default {
   key: 'product',
   title: 'Search',
   icon: new IconPack(
-    Server.resource.icon('magnifying-glass'),
-    Server.resource.icon('magnifying-glass'),
+    iconServer('magnifying-glass'),
+    iconServer('magnifying-glass'),
   ),
 
   components: {
@@ -137,7 +137,7 @@ export default {
     this.invalidate();
     this.onProduct();
     this.onProductId();
-    this.$store.getters.navigation.setLayout(Navigation.Layout.THIN);
+    this.$store.getters.navigation.setLayout(NavigationLayout.THIN);
   },
   methods: {
     async invalidate() {

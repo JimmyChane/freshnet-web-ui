@@ -1,14 +1,18 @@
 <script>
-import Navigation from '@/tools/Navigation';
+import { cloudinaryServer } from '@/host/Server';
+import { NAVIGATION_MIN_WIDTH, NavigationLayout } from '@/tools/Navigation';
 
 export default {
   props: { isWide: { type: Boolean, default: false } },
+  data: () => {
+    return { cloudinaryServer };
+  },
   computed: {
     isDrawer: (c) => c.$store.getters.navigation.isDrawer(),
     isExpanded: (c) => c.$store.getters.navigation.isExpanded(),
     toggleButtonVisible: (c) =>
       !c.$store.getters.navigation.isThin() ||
-      c.$store.getters.window.innerWidth > Navigation.MIN_WIDTH,
+      c.$store.getters.window.innerWidth > NAVIGATION_MIN_WIDTH,
   },
   methods: {
     toggleCollapse() {
@@ -20,8 +24,8 @@ export default {
       }
 
       const nextLayout = this.isWide
-        ? Navigation.Layout.THIN
-        : Navigation.Layout.WIDE;
+        ? NavigationLayout.THIN
+        : NavigationLayout.WIDE;
 
       this.$store.getters.navigation.getCurrentLayoutRequest() === null
         ? this.$store.getters.navigation.setDefaultLayout(nextLayout)
@@ -37,7 +41,7 @@ export default {
       <img
         class="LeftNavHeader-icon transition"
         :src="
-          host.cloudinary({
+          cloudinaryServer({
             url: 'logo/svg/freshnet-enterprise-logo.svg',
           })
         "

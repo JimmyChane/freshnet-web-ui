@@ -1,4 +1,4 @@
-import Server from '@/host/Server';
+import { requestServer } from '@/host/Server';
 
 interface CustomerContent {
   _id?: string;
@@ -7,47 +7,45 @@ interface CustomerContent {
   description?: string;
 }
 
-export default class Customer {
-  static list(): Promise<any> {
-    return Server.request().path('customer/list').sendJson();
-  }
+export function getCustomerList(): Promise<any> {
+  return requestServer().path('customer/list').sendJson();
+}
 
-  static add(content: CustomerContent = {}): Promise<any> {
-    return Server.request()
-      .POST()
-      .path('customer/add')
-      .bodyJson({ content })
-      .sendJson();
-  }
+export function addCustomer(content: CustomerContent = {}): Promise<any> {
+  return requestServer()
+    .POST()
+    .path('customer/add')
+    .bodyJson({ content })
+    .sendJson();
+}
 
-  static remove(id: string = ''): Promise<any> {
-    return Server.request()
-      .DELETE()
-      .path('customer/remove')
-      .bodyJson({ content: { _id: id } })
-      .sendJson();
-  }
+export function removeCustomer(id: string = ''): Promise<any> {
+  return requestServer()
+    .DELETE()
+    .path('customer/remove')
+    .bodyJson({ content: { _id: id } })
+    .sendJson();
+}
 
-  static updateNamePhoneNumber(
-    id: string = '',
-    name: string = '',
-    phoneNumber: string = '',
-  ): Promise<any> {
-    return Server.request()
-      .PUT()
-      .path('customer/update/namePhoneNumber')
-      .bodyJson({ content: { _id: id, name, phoneNumber } })
-      .sendJson();
-  }
+export function updateCustomerNamePhoneNumber(
+  id: string = '',
+  name: string = '',
+  phoneNumber: string = '',
+): Promise<any> {
+  return requestServer()
+    .PUT()
+    .path('customer/update/namePhoneNumber')
+    .bodyJson({ content: { _id: id, name, phoneNumber } })
+    .sendJson();
+}
 
-  static updateDescription(
-    id: string = '',
-    description: string = '',
-  ): Promise<any> {
-    return Server.request()
-      .PUT()
-      .path('customer/update/description')
-      .bodyJson({ content: { id, description } })
-      .sendJson();
-  }
+export function updateCustomerDescription(
+  id: string = '',
+  description: string = '',
+): Promise<any> {
+  return requestServer()
+    .PUT()
+    .path('customer/update/description')
+    .bodyJson({ content: { id, description } })
+    .sendJson();
 }

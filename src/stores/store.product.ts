@@ -5,7 +5,7 @@ import Brand from '@/items/Brand';
 import Category, { CategoryKey } from '@/items/Category';
 import ProductBundle from '@/items/ProductBundle';
 import ProductPrices from '@/items/ProductPrices';
-import ProductRequest, {
+import {
   addProduct,
   addProductBundle,
   addProductGift,
@@ -13,6 +13,10 @@ import ProductRequest, {
   addProductSpecification,
   getProductList,
   removeProduct,
+  removeProductBundle,
+  removeProductGift,
+  removeProductImage,
+  removeProductSpecification,
   updateProductAvailability,
   updateProductBrand,
   updateProductCategory,
@@ -264,7 +268,7 @@ const init = (Stores: any) => {
       'removeBundleOfId',
       async (context, arg: { id: string; bundle: any }) => {
         const { id, bundle } = arg;
-        const api = await ProductRequest.removeBundle(id, bundle);
+        const api = await removeProductBundle(id, bundle);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
@@ -288,7 +292,7 @@ const init = (Stores: any) => {
       'removeGiftOfId',
       async (context, arg: { id: string; gift: any }) => {
         const { id, gift } = arg;
-        const api = await ProductRequest.removeGift(id, gift);
+        const api = await removeProductGift(id, gift);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
@@ -321,7 +325,7 @@ const init = (Stores: any) => {
             ? specification.toData()
             : specification;
         specification.type = specification.key;
-        const api = await ProductRequest.removeSpecification(id, specification);
+        const api = await removeProductSpecification(id, specification);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;
@@ -371,7 +375,7 @@ const init = (Stores: any) => {
         const { id } = arg;
         let { image } = arg;
         image = image instanceof Image ? image.toData() : image;
-        const api = await ProductRequest.removeImage(id, image);
+        const api = await removeProductImage(id, image);
         const content = api.optObjectContent();
         return context.state.list.updateItemById(content.productId, (item) => {
           if (!item) return;

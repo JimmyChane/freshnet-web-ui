@@ -7,7 +7,7 @@ import SearchInput from '@/components/SearchInput.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import TabLayout from '@/components/tabLayout/TabLayout.vue';
 import LayoutViewSelector from '@/pages/service/PageService-LayoutViewSelector.vue';
-import Searcher from '@/tools/Searcher';
+import { withItems } from '@/tools/Searcher';
 
 import ItemService from './item-service/ItemService.vue';
 
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     searchResults(str) {
-      return Searcher.withItems(this.services).search(str);
+      return withItems(this.services).search(str);
     },
   },
 };

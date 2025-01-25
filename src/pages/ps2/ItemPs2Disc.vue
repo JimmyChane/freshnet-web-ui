@@ -1,10 +1,14 @@
 <script>
 import ImageView from '@/components/ImageView.vue';
+import { cloudinaryServer } from '@/host/Server';
 
 export default {
   components: { ImageView },
   props: {
     ps2Disc: { type: Object, default: () => null },
+  },
+  data: () => {
+    return { cloudinaryServer };
   },
   computed: {
     imageUrl: (c) => `ps2/disc/${c.code}.jpg`,
@@ -18,7 +22,7 @@ export default {
   <div class="ItemPs2Disc">
     <ImageView
       class="ItemPs2Disc-image"
-      :src="host.cloudinary({ url: imageUrl })"
+      :src="cloudinaryServer({ url: imageUrl })"
     />
 
     <div class="ItemPs2Disc-content">

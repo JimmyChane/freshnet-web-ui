@@ -1,5 +1,5 @@
 <script>
-import Setting from '@/items/Setting';
+import { SettingKey } from '@/items/Setting';
 
 import Contact from './Footer-Contact.vue';
 
@@ -19,17 +19,17 @@ export default {
       this.address = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: Setting.Key.Location,
+          key: SettingKey.Location,
         },
       );
       this.addressHref = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
-        { key: Setting.Key.LocationLink },
+        { key: SettingKey.LocationLink },
       );
 
       const contacts = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
-        { key: Setting.Key.Contacts, default: [] },
+        { key: SettingKey.Contacts, default: [] },
       );
       this.contacts = contacts.map((contact) => {
         const links = contact.links.map((link) => {

@@ -4,7 +4,6 @@ import IconCall from '@/assets/icon/call-color.svg';
 import IconTelegram from '@/assets/icon/telegram-color.svg';
 import IconTelephone from '@/assets/icon/telephone-color.svg';
 import IconWhatsapp from '@/assets/icon/whatsapp-color.svg';
-import Host from '@/host/Server';
 
 interface ContactLinkData {
   id: string;

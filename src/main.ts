@@ -5,10 +5,8 @@ import router from '@/routers/index';
 import store from '@/stores/index';
 
 import App from './app/App.vue';
-import Server from './host/Server';
 
 Vue.config.productionTip = false;
-Vue.prototype.host = Server;
 Vue.mixin(Mixin);
 
 new Vue({

@@ -1,7 +1,13 @@
 import Vuex from 'vuex';
 
 import { isArray, isString, optString } from '@/U';
-import CustomerRequest from '@/request/Customer';
+import {
+  addCustomer,
+  getCustomerList,
+  removeCustomer,
+  updateCustomerDescription,
+  updateCustomerNamePhoneNumber,
+} from '@/request/Customer';
 
 import Customer from '../items/Customer';
 import DeviceStore from './store.device';
@@ -12,7 +18,7 @@ const init = (Stores: any) => {
 
   const context = new StoreBuilder<Customer>()
     .onFetchItems(async () => {
-      const api = await CustomerRequest.list();
+      const api = await getCustomerList();
       const content: any[] = api.optArrayContent();
       return content.map((content) => {
         return new Customer(Stores).fromData(content);
@@ -88,14 +94,14 @@ const init = (Stores: any) => {
     .action('addItem', async (context, arg = {}) => {
       const data: any = new Customer(Stores).fromData(arg).toData();
       delete data.id;
-      const api = await CustomerRequest.add(data);
+      const api = await addCustomer(data);
       const content = api.optObjectContent();
       const item = new Customer(Stores).fromData(content);
       return context.state.list.addItem(item);
     })
     .action('removeItemOfId', async (context, arg: { _id: string }) => {
       const { _id } = arg;
-      const api = await CustomerRequest.remove(_id);
+      const api = await removeCustomer(_id);
       const content = api.optObjectContent();
       const item = new Customer(Stores).fromData(content);
       return context.state.list.removeItemByItem(item);
@@ -107,11 +113,7 @@ const init = (Stores: any) => {
         arg: { _id: string; name: string; phoneNumber: string },
       ) => {
         const { _id, name, phoneNumber } = arg;
-        const api = await CustomerRequest.updateNamePhoneNumber(
-          _id,
-          name,
-          phoneNumber,
-        );
+        const api = await updateCustomerNamePhoneNumber(_id, name, phoneNumber);
         const content = api.optObjectContent();
         const inputItem = new Customer(Stores).fromData(content);
         return context.state.list.updateItemById(inputItem.id, (item) => {
@@ -125,7 +127,7 @@ const init = (Stores: any) => {
       'updateDescriptionOfId',
       async (context, arg: { _id: string; description: string }) => {
         const { _id, description } = arg;
-        const api = await CustomerRequest.updateDescription(_id, description);
+        const api = await updateCustomerDescription(_id, description);
         const content = api.optObjectContent();
         const inputItem = new Customer(Stores).fromData(content);
         return context.state.list.updateItemById(inputItem.id, (item) => {

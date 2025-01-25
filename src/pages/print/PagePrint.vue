@@ -2,7 +2,7 @@
 import IconPack from '@/app/IconPack';
 import Footer from '@/app/footer/Footer.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import Server from '@/host/Server';
+import { iconServer } from '@/host/Server';
 import Price from '@/objects/Price';
 
 import Output from './Output';
@@ -10,7 +10,7 @@ import Card from './PagePrint-Card.vue';
 import Tabs from './PagePrint-Tabs.vue';
 import Paper from './Paper';
 import PaperSide from './PaperSide';
-import PaperSize from './PaperSize';
+import { A3PaperSize, A4PaperSize } from './PaperSize';
 
 class Media {
   constructor(title = '', items = []) {
@@ -43,10 +43,7 @@ class Item {
 export default {
   key: 'print',
   title: 'Printing',
-  icon: new IconPack(
-    Server.resource.icon('paper-FFFFFF'),
-    Server.resource.icon('paper-000000'),
-  ),
+  icon: new IconPack(iconServer('paper-FFFFFF'), iconServer('paper-000000')),
 
   components: { NavigationBar, Tabs, Card, Footer },
   data: (c) => ({
@@ -110,16 +107,16 @@ export default {
       new Media('Laminate Document', [
         new Category(null, [
           new Subcategory(null, [
-            new Item(PaperSize.A4, new Price(2.0)),
-            new Item(PaperSize.A3, new Price(4.0)),
+            new Item(A4PaperSize, new Price(2.0)),
+            new Item(A3PaperSize, new Price(4.0)),
           ]),
         ]),
       ]),
       new Media('Scan Document', [
         new Category(null, [
           new Subcategory(null, [
-            new Item(PaperSize.A4, new Price(0.5)),
-            new Item(PaperSize.A3, new Price(0.5)),
+            new Item(A4PaperSize, new Price(0.5)),
+            new Item(A3PaperSize, new Price(0.5)),
           ]),
         ]),
       ]),

@@ -1,5 +1,5 @@
 <script>
-import Setting from '@/items/Setting';
+import { SettingKey } from '@/items/Setting';
 
 import Link from './PageHome-Link.vue';
 import Section from './PageHome-Section.vue';
@@ -21,7 +21,7 @@ export default {
       const contacts = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: Setting.Key.Contacts,
+          key: SettingKey.Contacts,
           default: [],
         },
       );

@@ -1,7 +1,7 @@
 import { isObjectOnly, trimId, trimText } from '@/U';
+import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import ItemSearcher from '../objects/ItemSearcher';
 import Image from './Image';
 
 interface BrandData {
@@ -40,8 +40,8 @@ export default class Brand implements Item {
 
   toCount(strs: string[]): number {
     return strs.reduce((count, str) => {
-      if (ItemSearcher.textContains(this.title, str)) count++;
-      if (ItemSearcher.textContains(this.title, str)) count++;
+      if (textContains(this.title, str)) count++;
+      if (textContains(this.title, str)) count++;
       return count;
     }, 0);
   }

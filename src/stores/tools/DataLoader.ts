@@ -3,17 +3,6 @@ import { optArray } from '@/U';
 import ValidationChecker from './ValidationChecker';
 
 export default class DataLoader {
-  static withStore(getStore: () => any = () => {}) {
-    return new DataLoader({ timeout: 1000 * 60 * 10 }) // 10min
-      .processor(() => getStore().state.processor)
-      .setData((data: any) => {
-        return getStore()
-          .state.list.clear()
-          .addItems(...optArray(data));
-      })
-      .getData(() => getStore().state.list.items);
-  }
-
   private $validator: ValidationChecker;
 
   private _getProcessor: (() => any) | undefined;
@@ -87,4 +76,15 @@ export default class DataLoader {
       }
     });
   }
+}
+
+export function withStoreToDataLoader(getStore: () => any = () => {}) {
+  return new DataLoader({ timeout: 1000 * 60 * 10 }) // 10min
+    .processor(() => getStore().state.processor)
+    .setData((data: any) => {
+      return getStore()
+        .state.list.clear()
+        .addItems(...optArray(data));
+    })
+    .getData(() => getStore().state.list.items);
 }

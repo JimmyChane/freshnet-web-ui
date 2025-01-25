@@ -1,5 +1,5 @@
 <script>
-import SettingModule from '@/items/Setting';
+import { SettingKey } from '@/items/Setting';
 
 import ItemSettingHeader from './ItemSetting-Header.vue';
 import BusinessHoursItem from './ItemSettingBusinessHours-Item.vue';
@@ -9,7 +9,7 @@ export default {
   components: { ItemSettingHeader, BusinessHoursItem },
   data: (c) => ({
     U,
-    key: SettingModule.Key.CompanyWorkingHours,
+    key: SettingKey.CompanyWorkingHours,
     title: 'Business Hours (Readonly)',
     values: [],
   }),

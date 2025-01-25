@@ -4,7 +4,7 @@ import IconSearch from '@/assets/icon/search-000000.svg';
 import SearchInput from '@/components/SearchInput.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import Searcher from '@/tools/Searcher';
+import { withItems } from '@/tools/Searcher';
 
 import ItemSearchProduct from './ItemSearchProduct.vue';
 
@@ -26,7 +26,7 @@ export default {
       if (!paths.length) return '';
       return paths[paths.length - 1];
     },
-    productSearches: (c) => Searcher.withItems(c.products).search(c.searchText),
+    productSearches: (c) => withItems(c.products).search(c.searchText),
 
     initRightMenus() {
       const menus = [];

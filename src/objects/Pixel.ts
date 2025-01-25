@@ -1,5 +1,3 @@
-export default class Pixel {
-  static cm(x: number): number {
-    return x * 3.7795275591;
-  }
+export function cmToPixel(x: number) {
+  return x * 3.7795275591;
 }

@@ -6,9 +6,9 @@ import {
   trimId,
   trimText,
 } from '@/U';
+import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import ItemSearcher from '../objects/ItemSearcher';
 import ServiceBelonging from './ServiceBelonging';
 import ServiceCustomer from './ServiceCustomer';
 import ServiceEvent from './ServiceEvent';
@@ -32,8 +32,6 @@ import {
 } from './ServiceState';
 import ServiceTimestamp from './ServiceTimestamp';
 import User from './User';
-
-const textContains = ItemSearcher.textContains;
 
 export default class Service implements Item {
   stores: any;

@@ -1,7 +1,7 @@
 import { optArray, trimId, trimText } from '@/U';
+import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import ItemSearcher from '../objects/ItemSearcher';
 import Category from './Category';
 import Customer from './Customer';
 import CustomerDeviceSpecification from './CustomerDeviceSpecification';
@@ -63,9 +63,9 @@ class CustomerDevice implements Item {
 
   toCount(strs: string[]): number {
     const count = strs.reduce((count, str) => {
-      if (ItemSearcher.textContains(this.ownerCustomerId, str)) count++;
-      if (ItemSearcher.textContains(this.description, str)) count++;
-      if (ItemSearcher.textContains(this.categoryKey, str)) count++;
+      if (textContains(this.ownerCustomerId, str)) count++;
+      if (textContains(this.description, str)) count++;
+      if (textContains(this.categoryKey, str)) count++;
       count += this.specifications.reduce((count, specification) => {
         return count + specification.toCount(strs);
       }, 0);

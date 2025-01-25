@@ -1,7 +1,7 @@
 <script>
 import LoadingDots from '@/components/LoadingDots.vue';
 import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
-import AppLayout from '@/tools/AppLayout';
+import { AppLayoutId } from '@/tools/AppLayout';
 
 export default {
   components: { ViewerProduct, LoadingDots },
@@ -18,7 +18,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.getters.appLayout.setLayout(AppLayout.Layout.FULL);
+    this.$store.getters.appLayout.setLayout(AppLayoutId.FULL);
     this.$store.getters.navigation.disableNavigationDrawer();
 
     this.invalidate();

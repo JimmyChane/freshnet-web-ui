@@ -5,7 +5,7 @@ import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import SearchInput from '@/components/SearchInput.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import TabLayout from '@/components/tabLayout/TabLayout.vue';
-import Searcher from '@/tools/Searcher';
+import { withItems } from '@/tools/Searcher';
 
 import ItemCustomerSearch from './ItemCustomerSearch.vue';
 
@@ -70,7 +70,7 @@ export default {
   },
   methods: {
     searchResults(str) {
-      return Searcher.withItems(this.items).search(str);
+      return withItems(this.items).search(str);
     },
 
     itemKey(item) {

@@ -1,5 +1,5 @@
 <script>
-import Setting from '@/items/Setting';
+import { SettingKey } from '@/items/Setting';
 
 import SectionTitle from './PageHome-Section-Title.vue';
 import Section from './PageHome-Section.vue';
@@ -19,7 +19,7 @@ export default {
       const workingDays = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: Setting.Key.CompanyWorkingHours,
+          key: SettingKey.CompanyWorkingHours,
           default: [],
         },
       );

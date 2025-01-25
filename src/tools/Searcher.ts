@@ -7,13 +7,13 @@ interface SearchResult {
   };
 }
 
-export default class Searcher {
-  static withItems(items: { toCount(strs: string[]): number }[] = []) {
-    const searcher = new Searcher();
-    searcher.items = items;
-    return searcher;
-  }
+export function withItems(items: { toCount(strs: string[]): number }[] = []) {
+  const searcher = new Searcher();
+  searcher.items = items;
+  return searcher;
+}
 
+export default class Searcher {
   items: { toCount(strs: string[]): number }[] = [];
 
   constructor() {}

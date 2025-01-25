@@ -1,7 +1,12 @@
 <script>
+import { cloudinaryServer } from '@/host/Server';
+
 export default {
   props: {
     item: { type: Object, default: () => null },
+  },
+  data: () => {
+    return { cloudinaryServer };
   },
   computed: {
     imageUrl: (c) => (c.code ? `ps2/disc/${c.code}.jpg` : ''),
@@ -15,7 +20,7 @@ export default {
   <div class="WindowItemPs2Disc">
     <img
       class="WindowItemPs2Disc-img"
-      :src="host.cloudinary({ url: imageUrl })"
+      :src="cloudinaryServer({ url: imageUrl })"
     />
 
     <div class="WindowItemPs2Disc-text">

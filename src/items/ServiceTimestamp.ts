@@ -10,10 +10,7 @@ import {
 } from 'date-fns';
 
 import { optNumber } from '@/U';
-
-import ItemSearcher from '../objects/ItemSearcher';
-
-const textContains = ItemSearcher.textContains;
+import { textContains } from '@/objects/ItemSearcher';
 
 const getTextOfDayNumber = (day: number): string => {
   if (day === 0) return 'Sunday';

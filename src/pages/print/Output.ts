@@ -1,10 +1,6 @@
-import Color from './Color';
+import Color, { BlackWhiteColor, ColorfulColor } from './Color';
 
 export default class Output {
-  static BlackWhite = new Output('', Color.BlackWhite);
-  static Colorful = new Output('', Color.Colorful);
-  static BorderlessColorful = new Output('Borderless', Color.Colorful);
-
   title: any;
   color: any;
 
@@ -18,3 +14,7 @@ export default class Output {
     return `${this.color.title} ${this.title}`;
   }
 }
+
+export const BlackWhiteOutput = new Output('', BlackWhiteColor);
+export const ColorfulOutput = new Output('', ColorfulColor);
+export const BorderlessColorfulOutput = new Output('Borderless', ColorfulColor);

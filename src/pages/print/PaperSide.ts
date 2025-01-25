@@ -1,16 +1,8 @@
 import IconPaper1 from '@/assets/icon/paper-1sided.svg';
 import IconPaper2 from '@/assets/icon/paper-2sided.svg';
 import IconPaperA4Ic1 from '@/assets/icon/paper-a4-1sided-ic.svg';
-import Host from '@/host/Server';
 
 export default class PaperSide {
-  static readonly Front = new PaperSide('1 Side', IconPaper1);
-  static readonly FrontBack = new PaperSide('2 Side', IconPaper2);
-  static readonly FrontIc = new PaperSide(
-    '1 Side IC Full Copy',
-    IconPaperA4Ic1,
-  );
-
   title: string;
   icon: string;
 
@@ -19,3 +11,10 @@ export default class PaperSide {
     this.icon = icon;
   }
 }
+
+export const FrontPaperSide = new PaperSide('1 Side', IconPaper1);
+export const FrontBackPaperSide = new PaperSide('2 Side', IconPaper2);
+export const FrontIcPaperSide = new PaperSide(
+  '1 Side IC Full Copy',
+  IconPaperA4Ic1,
+);

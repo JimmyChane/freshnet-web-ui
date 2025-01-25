@@ -1,7 +1,7 @@
 <script>
 import { getHours } from 'date-fns';
 
-import Setting from '@/items/Setting';
+import { SettingKey } from '@/items/Setting';
 
 import Section from './PageHome-Section.vue';
 
@@ -41,18 +41,18 @@ export default {
       this.companyTitle = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: Setting.Key.CompanyName,
+          key: SettingKey.CompanyName,
           default: '',
         },
       );
       this.companyCategory = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
-        { key: Setting.Key.CompanyCategory, default: '' },
+        { key: SettingKey.CompanyCategory, default: '' },
       );
       this.addressHref = await this.$store.state.stores.setting.dispatch(
         'findValueOfKey',
         {
-          key: Setting.Key.LocationLink,
+          key: SettingKey.LocationLink,
           default: '',
         },
       );

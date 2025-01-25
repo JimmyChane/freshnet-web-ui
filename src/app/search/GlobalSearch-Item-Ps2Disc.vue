@@ -1,5 +1,6 @@
 <script>
 import ImageView from '@/components/ImageView.vue';
+import { cloudinaryServer } from '@/host/Server';
 import Ps2Disc from '@/items/Ps2Disc';
 
 import Labels from './GlobalSearch-Item-Labels.vue';
@@ -9,7 +10,7 @@ export default {
   components: { ImageView, ItemSearch, Labels },
   props: { item: { type: Ps2Disc, default: null } },
   computed: {
-    thumbnail: (c) => c.host.cloudinary({ url: `ps2/disc/${c.code}.jpg` }),
+    thumbnail: (c) => cloudinaryServer({ url: `ps2/disc/${c.code}.jpg` }),
     title: (c) => c.item?.title ?? '',
     code: (c) => c.item?.code ?? '',
   },

@@ -1,14 +1,21 @@
+export const NAVIGATION_MIN_WIDTH: number = 1000;
+export enum NavigationVisibility {
+  NONE = -1,
+  EXPANDED = -2,
+  COLLAPSED = -3,
+}
+export enum NavigationLayout {
+  WIDE = -1,
+  THIN = -2,
+}
+
+export const NAVIGATION_VISIBILITIES = Object.values(NavigationVisibility);
+export const NAVIGATION_LAYOUTS = Object.values(NavigationLayout);
+
 export default class Navigation {
-  static MIN_WIDTH: number = 1000;
-  static Visibility = { NONE: -1, EXPANDED: -2, COLLAPSED: -3 };
-  static Layout = { WIDE: -1, THIN: -2 };
-
-  private static VISIBILITIES: number[] = Object.values(this.Visibility);
-  private static LAYOUTS: number[] = Object.values(this.Layout);
-
   context: any;
-  defaultVisibility: number = Navigation.Visibility.COLLAPSED;
-  defaultLayout: number = Navigation.Layout.WIDE;
+  defaultVisibility: number = NavigationVisibility.COLLAPSED;
+  defaultLayout: number = NavigationLayout.WIDE;
   visibilityRequests: { page: string; view: string; visibility: number }[] = [];
   layoutRequests: { page: string; view: string; layout: number }[] = [];
 
@@ -41,16 +48,16 @@ export default class Navigation {
   }
 
   setDefaultVisibility(visibility: number = 0): void {
-    if (!Navigation.VISIBILITIES.includes(visibility)) return;
+    if (!NAVIGATION_VISIBILITIES.includes(visibility)) return;
     this.defaultVisibility = visibility;
   }
   setDefaultLayout(layout: number = 0): void {
-    if (!Navigation.LAYOUTS.includes(layout)) return;
+    if (!NAVIGATION_LAYOUTS.includes(layout)) return;
     this.defaultLayout = layout;
   }
 
   setVisibility(visibility: number = 0): void {
-    if (!Navigation.VISIBILITIES.includes(visibility)) return;
+    if (!NAVIGATION_VISIBILITIES.includes(visibility)) return;
 
     const page = this.getCurrentPageKey();
     const view = this.getCurrentViewKey();
@@ -59,7 +66,7 @@ export default class Navigation {
     else this.visibilityRequests.push({ page, view, visibility });
   }
   setLayout(layout: number = 0): void {
-    if (!Navigation.LAYOUTS.includes(layout)) return;
+    if (!NAVIGATION_LAYOUTS.includes(layout)) return;
 
     const page = this.getCurrentPageKey();
     const view = this.getCurrentViewKey();
@@ -110,10 +117,10 @@ export default class Navigation {
 
     const { innerWidth } = this.context.window;
 
-    if (this.getCurrentLayout() === Navigation.Layout.WIDE) {
-      return innerWidth <= Navigation.MIN_WIDTH;
+    if (this.getCurrentLayout() === NavigationLayout.WIDE) {
+      return innerWidth <= NAVIGATION_MIN_WIDTH;
     }
-    return this.getCurrentLayout() === Navigation.Layout.THIN;
+    return this.getCurrentLayout() === NavigationLayout.THIN;
   }
 
   isDrawer(): boolean {
@@ -121,22 +128,22 @@ export default class Navigation {
   }
 
   isNone(): boolean {
-    return this.getCurrentVisibility() === Navigation.Visibility.NONE;
+    return this.getCurrentVisibility() === NavigationVisibility.NONE;
   }
   isExpanded(): boolean {
-    return this.getCurrentVisibility() === Navigation.Visibility.EXPANDED;
+    return this.getCurrentVisibility() === NavigationVisibility.EXPANDED;
   }
   isCollapsed(): boolean {
-    return this.getCurrentVisibility() === Navigation.Visibility.COLLAPSED;
+    return this.getCurrentVisibility() === NavigationVisibility.COLLAPSED;
   }
 
   openNavigationDrawer(): void {
-    this.setVisibility(Navigation.Visibility.EXPANDED);
+    this.setVisibility(NavigationVisibility.EXPANDED);
   }
   closeNavigationDrawer(): void {
-    this.setVisibility(Navigation.Visibility.COLLAPSED);
+    this.setVisibility(NavigationVisibility.COLLAPSED);
   }
   disableNavigationDrawer(): void {
-    this.setVisibility(Navigation.Visibility.NONE);
+    this.setVisibility(NavigationVisibility.NONE);
   }
 }

@@ -23,7 +23,7 @@ import fileUserStore from '@/stores/store.user';
 import Notification from '@/tools/Notification';
 import TimeNowGetter from '@/tools/TimeNowGetter';
 
-import Server from '../host/Server';
+import Server, { originApiServer } from '../host/Server';
 
 const keyGetter = new TimeNowGetter();
 
@@ -133,7 +133,7 @@ context.actions.openSocket = (context: any) => {
       authorization: window.localStorage.getItem('userToken'),
     },
   };
-  const socket = socketIo(Server.originApi, option)
+  const socket = socketIo(originApiServer(), option)
     .on('connect', () => console.info('Socket', 'Connected'))
     .on('connect_error', () => console.info('Socket', 'Connect Error'))
     .on('disconnect', (reason) => console.info('Socket', 'Disconnected'))

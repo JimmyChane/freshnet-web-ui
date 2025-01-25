@@ -7,18 +7,21 @@ interface SettingData {
   value: any;
 }
 
-export default class Setting implements Item {
-  static Visibility = { Protected: 'protected', Private: 'private' };
-  static Key = {
-    PublicShowPrice: 'public-showPrice',
-    Location: 'store-location',
-    LocationLink: 'store-location-link',
-    Contacts: 'store-contacts',
-    CompanyName: 'store-name',
-    CompanyCategory: 'store-category',
-    CompanyWorkingHours: 'store-working-hours',
-  };
+export enum SettingVisibility {
+  Protected = 'protected',
+  Private = 'private',
+}
+export enum SettingKey {
+  PublicShowPrice = 'public-showPrice',
+  Location = 'store-location',
+  LocationLink = 'store-location-link',
+  Contacts = 'store-contacts',
+  CompanyName = 'store-name',
+  CompanyCategory = 'store-category',
+  CompanyWorkingHours = 'store-working-hours',
+}
 
+export default class Setting implements Item {
   stores: any | null;
 
   key: string = '';

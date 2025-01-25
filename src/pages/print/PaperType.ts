@@ -1,7 +1,4 @@
 export default class PaperType {
-  static readonly Plain = new PaperType('Plain Paper');
-  static readonly Photo = new PaperType('Photo Paper');
-
   title: string;
   icon?: string;
 
@@ -10,3 +7,6 @@ export default class PaperType {
     this.icon = icon;
   }
 }
+
+export const PlainPaperType = new PaperType('Plain Paper');
+export const PhotoPaperType = new PaperType('Photo Paper');
