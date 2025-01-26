@@ -1,5 +1,5 @@
 <script>
-import IconPack from '@/app/IconPack';
+import { IconPack } from '@/app/IconPack';
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';
 import Loading from '@/components/Loading.vue';

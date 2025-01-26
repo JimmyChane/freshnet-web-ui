@@ -1,10 +1,10 @@
 import Vuex from 'vuex';
 
-import Service from '@/items/Service';
-import ServiceBelonging from '@/items/ServiceBelonging';
-import ServiceCustomer from '@/items/ServiceCustomer';
-import ServiceEvent from '@/items/ServiceEvent';
-import ServiceImage from '@/items/ServiceImage';
+import { Service } from '@/items/Service';
+import { ServiceBelonging } from '@/items/ServiceBelonging';
+import { ServiceCustomer } from '@/items/ServiceCustomer';
+import { ServiceEvent } from '@/items/ServiceEvent';
+import { ServiceImage } from '@/items/ServiceImage';
 import {
   URGENT_SERVICE_LABEL,
   WARRANTY_SERVICE_LABEL,
@@ -30,7 +30,7 @@ import {
   updateServiceState,
 } from '@/request/Service';
 
-import StoreBuilder from './tools/StoreBuilder';
+import { StoreBuilder } from './tools/StoreBuilder';
 
 const Notify = {
   ItemAdd: 'item-add',
@@ -50,7 +50,7 @@ const Notify = {
   ItemCustomerUpdate: 'item-customer-update',
 };
 
-const init = (Stores: any) => {
+export const initService = (Stores: any) => {
   const context = new StoreBuilder<Service>()
     .onFetchItems(async () => {
       const api = await getServiceList();
@@ -582,5 +582,3 @@ const init = (Stores: any) => {
 
   return new Vuex.Store(context);
 };
-
-export default { init };

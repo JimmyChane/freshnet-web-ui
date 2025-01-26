@@ -1,7 +1,7 @@
 <script>
 import ImageView from '@/components/ImageView.vue';
 import { cloudinaryServer } from '@/host/Server';
-import Ps2Disc from '@/items/Ps2Disc';
+import { Ps2Disc } from '@/items/Ps2Disc';
 
 import Labels from './GlobalSearch-Item-Labels.vue';
 import ItemSearch from './GlobalSearch-Item.vue';

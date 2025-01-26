@@ -1,12 +1,12 @@
 import Vuex from 'vuex';
 
 import { optArray } from '@/U';
-import Category from '@/items/Category';
+import { Category } from '@/items/Category';
 import { getCategoryList } from '@/request/Category';
 
-import StoreBuilder from './tools/StoreBuilder';
+import { StoreBuilder } from './tools/StoreBuilder';
 
-const init = (Stores: any) => {
+export const initCategory = (Stores: any) => {
   const context = new StoreBuilder<Category>()
     .onFetchItems(async () => {
       const api = await getCategoryList();
@@ -34,5 +34,3 @@ const init = (Stores: any) => {
 
   return new Vuex.Store(context);
 };
-
-export default { init };

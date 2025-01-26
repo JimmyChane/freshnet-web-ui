@@ -1,6 +1,6 @@
 import { IconAsset, optString, parseIcon, parseKey } from '@/U';
 
-export default class Resource {
+export class Resource {
   key: string;
   title: string;
   icon: IconAsset | null;

@@ -1,6 +1,6 @@
 import { trimId, trimText } from '@/U';
 
-export default class Label {
+export class Label {
   title: string = '';
   hexColor: string = '';
 

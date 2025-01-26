@@ -2,9 +2,9 @@ import { optArray, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import Category from './Category';
-import Customer from './Customer';
-import CustomerDeviceSpecification from './CustomerDeviceSpecification';
+import { Category } from './Category';
+import { Customer } from './Customer';
+import { CustomerDeviceSpecification } from './CustomerDeviceSpecification';
 
 interface CustomerDeviceData {
   _id: string;
@@ -14,7 +14,7 @@ interface CustomerDeviceData {
   specifications: any[];
 }
 
-class CustomerDevice implements Item {
+export class CustomerDevice implements Item {
   stores: any = null;
   categoryStore: any = null;
   customerStore: any = null;
@@ -94,5 +94,3 @@ class CustomerDevice implements Item {
     return this.id;
   }
 }
-
-export default CustomerDevice;

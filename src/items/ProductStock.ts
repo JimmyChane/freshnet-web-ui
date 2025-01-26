@@ -1,8 +1,8 @@
 import { optArray, optBoolean } from '@/U';
 
-import ProductPrices from './ProductPrices';
+import { ProductPrices } from './ProductPrices';
 
-export default class ProductStock {
+export class ProductStock {
   stores: any;
 
   constructor(stores: any) {

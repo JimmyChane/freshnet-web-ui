@@ -2,7 +2,7 @@
 import Vue from 'vue';
 
 import { optArray } from '@/U';
-import Notification from '@/tools/Notification';
+import { Notification } from '@/tools/Notification';
 
 export default Vue.extend({
   props: {

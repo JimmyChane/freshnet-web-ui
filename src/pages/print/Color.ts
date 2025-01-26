@@ -1,7 +1,7 @@
 import IconPaletteBw from '@/assets/icon/palette-bw.svg';
 import IconPaletteColor from '@/assets/icon/palette-cmyk.svg';
 
-export default class Color {
+export class Color {
   title: any;
   icon: any;
 

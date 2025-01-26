@@ -1,4 +1,4 @@
-export default class Processor {
+export class Processor {
   private keys: string[] = [];
 
   private async add(key: string): Promise<string> {

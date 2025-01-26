@@ -1,6 +1,6 @@
 import { trimId, trimText } from '@/U';
 
-export default class CustomerDeviceSpecification {
+export class CustomerDeviceSpecification {
   stores: any;
 
   constructor(stores: any) {

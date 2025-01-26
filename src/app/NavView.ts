@@ -1,7 +1,7 @@
 import { IconAsset, optString, parseIcon, parseKey } from '@/U';
 import { Icon } from '@/host/ServerResource';
 
-export default class NavView {
+export class NavView {
   key: string = '';
   title: string = '';
   icon: IconAsset | null = null;

@@ -1,6 +1,6 @@
 <script>
 import ImageViews from '@/components/ImageViews.vue';
-import Product from '@/items/Product';
+import { Product } from '@/items/Product';
 
 import Labels from './GlobalSearch-Item-Labels.vue';
 import ItemSearch from './GlobalSearch-Item.vue';

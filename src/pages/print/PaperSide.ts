@@ -2,7 +2,7 @@ import IconPaper1 from '@/assets/icon/paper-1sided.svg';
 import IconPaper2 from '@/assets/icon/paper-2sided.svg';
 import IconPaperA4Ic1 from '@/assets/icon/paper-a4-1sided-ic.svg';
 
-export default class PaperSide {
+export class PaperSide {
   title: string;
   icon: string;
 

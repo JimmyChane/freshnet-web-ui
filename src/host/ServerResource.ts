@@ -22,7 +22,7 @@ export class Icon {
   }
 }
 
-export default class ServerResource {
+export class ServerResource {
   private serverUrl: string;
 
   constructor(serverUrl: string) {

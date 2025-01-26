@@ -3,7 +3,6 @@ import chroma from 'chroma-js';
 
 import { isObjectOnly, optString, trimText } from '@/U';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
-import SettingModule from '@/items/Setting';
 import { SpecificationKey } from '@/items/Specification';
 
 import BottomActionbar from './ViewerProduct-BottomActionbar.vue';

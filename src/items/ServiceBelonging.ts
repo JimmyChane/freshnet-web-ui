@@ -1,6 +1,6 @@
 import { optNumber, trimText } from '@/U';
 
-export default class ServiceBelonging {
+export class ServiceBelonging {
   stores: any;
 
   constructor(stores: any) {

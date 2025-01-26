@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 
 import { isArray } from '@/U';
-import Customer from '@/items/Customer';
+import { Customer } from '@/items/Customer';
 import {
   addDevice,
   getDeviceList,
@@ -10,10 +10,10 @@ import {
   updateDeviceSpecification,
 } from '@/request/Device';
 
-import CustomerDevice from '../items/CustomerDevice';
-import StoreBuilder from './tools/StoreBuilder';
+import { CustomerDevice } from '../items/CustomerDevice';
+import { StoreBuilder } from './tools/StoreBuilder';
 
-const init = (Stores: any) => {
+export const initDevice = (Stores: any) => {
   const context = new StoreBuilder<CustomerDevice>()
     .onFetchItems(async () => {
       const api = await getDeviceList();
@@ -116,5 +116,3 @@ const init = (Stores: any) => {
 
   return deviceStore;
 };
-
-export default { init };

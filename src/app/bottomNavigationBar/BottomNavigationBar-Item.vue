@@ -1,6 +1,6 @@
 <script>
 import { isFunction } from '@/U';
-import NavPage from '@/app/NavPage';
+import { NavPage } from '@/app/NavPage';
 import IconHome from '@/icon/IconHome.vue';
 import IconProducts from '@/icon/IconMagnifyingGlass.vue';
 import IconManage from '@/icon/IconManage.vue';

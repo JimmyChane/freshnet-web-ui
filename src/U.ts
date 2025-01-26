@@ -2,9 +2,9 @@ import chroma from 'chroma-js';
 
 import { iconServer } from '@/host/Server';
 import { Icon } from '@/host/ServerResource';
-import User from '@/items/User';
+import { User } from '@/items/User';
 
-import NavViewGroup from './app/NavViewGroup';
+import { NavViewGroup } from './app/NavViewGroup';
 
 export interface IconAsset {
   light: string;

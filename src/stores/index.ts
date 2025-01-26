@@ -8,22 +8,22 @@ import {
   POPUP_MENU_CORNER,
   POPUP_MENU_WIDTH,
 } from '@/app/popupMenu/PopupMenuOption';
-import fileBrandStore from '@/stores/store.brand';
-import fileCategoryStore from '@/stores/store.category';
-import fileCustomerStore from '@/stores/store.customer';
-import fileDatabaseStore from '@/stores/store.database';
-import fileLoginStore from '@/stores/store.login';
-import fileOrderStore from '@/stores/store.order';
-import fileProductStore from '@/stores/store.product';
-import filePs2Store from '@/stores/store.ps2';
-import fileServiceStore from '@/stores/store.service';
-import fileSettingStore from '@/stores/store.setting';
-import fileSpecificationStore from '@/stores/store.specification';
-import fileUserStore from '@/stores/store.user';
-import Notification from '@/tools/Notification';
-import TimeNowGetter from '@/tools/TimeNowGetter';
+import { initBrand } from '@/stores/store.brand';
+import { initCategory } from '@/stores/store.category';
+import { initCustomer } from '@/stores/store.customer';
+import { initDatabase } from '@/stores/store.database';
+import { initLogin } from '@/stores/store.login';
+import { initOrder } from '@/stores/store.order';
+import { initProduct } from '@/stores/store.product';
+import { initPs2 } from '@/stores/store.ps2';
+import { initService } from '@/stores/store.service';
+import { initSetting } from '@/stores/store.setting';
+import { initSpecification } from '@/stores/store.specification';
+import { initUser } from '@/stores/store.user';
+import { Notification } from '@/tools/Notification';
+import { TimeNowGetter } from '@/tools/TimeNowGetter';
 
-import Server, { originApiServer } from '../host/Server';
+import { originApiServer } from '../host/Server';
 
 const keyGetter = new TimeNowGetter();
 
@@ -313,22 +313,22 @@ context.actions.openPopupWindow = (
   return popupWindow;
 };
 
-const store = new Vuex.Store(context);
+export const store = new Vuex.Store(context);
 
 // modules
 Stores.store = store;
-Stores.database = fileDatabaseStore.init(Stores);
-Stores.login = fileLoginStore.init(Stores);
-Stores.user = fileUserStore.init(Stores);
-Stores.setting = fileSettingStore.init(Stores);
-Stores.customer = fileCustomerStore.init(Stores);
-Stores.order = fileOrderStore.init(Stores);
-Stores.brand = fileBrandStore.init(Stores);
-Stores.specification = fileSpecificationStore.init(Stores);
-Stores.category = fileCategoryStore.init(Stores);
-Stores.service = fileServiceStore.init(Stores);
-Stores.product = fileProductStore.init(Stores);
-Stores.ps2 = filePs2Store.init(Stores);
+Stores.database = initDatabase(Stores);
+Stores.login = initLogin(Stores);
+Stores.user = initUser(Stores);
+Stores.setting = initSetting(Stores);
+Stores.customer = initCustomer(Stores);
+Stores.order = initOrder(Stores);
+Stores.brand = initBrand(Stores);
+Stores.specification = initSpecification(Stores);
+Stores.category = initCategory(Stores);
+Stores.service = initService(Stores);
+Stores.product = initProduct(Stores);
+Stores.ps2 = initPs2(Stores);
 
 context.modules = {
   database: Stores.database,
@@ -357,5 +357,3 @@ context.state.stores['category'] = Stores.category;
 context.state.stores['service'] = Stores.service;
 context.state.stores['product'] = Stores.product;
 context.state.stores['ps2'] = Stores.ps2;
-
-export default store;

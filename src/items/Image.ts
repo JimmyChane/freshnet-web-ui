@@ -1,7 +1,7 @@
 import { isObject, trimId } from '@/U';
-import Server, { originApiServer, resServer } from '@/host/Server';
+import { originApiServer, resServer } from '@/host/Server';
 
-import Filename from '../objects/Filename';
+import { Filename } from '../objects/Filename';
 
 interface ImageData {
   method: string;
@@ -36,7 +36,7 @@ export function dimensionToQuery(
   return '';
 }
 
-export default class Image {
+export class Image {
   method: string = '';
   path: string = '';
 

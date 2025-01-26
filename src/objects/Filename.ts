@@ -1,4 +1,4 @@
-export default class Filename {
+export class Filename {
   name: string;
   ext: string;
 

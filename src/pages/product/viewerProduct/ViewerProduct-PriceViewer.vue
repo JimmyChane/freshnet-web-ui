@@ -1,6 +1,6 @@
 <script>
-import ProductPrice from '@/items/ProductPrice';
-import SettingModule, { SettingKey } from '@/items/Setting';
+import { ProductPrice } from '@/items/ProductPrice';
+import { SettingKey } from '@/items/Setting';
 
 import Section from './ViewerProduct-Section.vue';
 

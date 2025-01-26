@@ -1,8 +1,8 @@
 import { trimId } from '@/U';
 import { originApiServer } from '@/host/Server';
 
-import Filename from '../objects/Filename';
-import Image, { MethodImage, dimensionToQuery } from './Image';
+import { Filename } from '../objects/Filename';
+import { Image, MethodImage, dimensionToQuery } from './Image';
 
 interface ServiceImageData {
   name: string;
@@ -11,7 +11,7 @@ interface ServiceImageData {
   storageType: string;
 }
 
-export default class ServiceImage {
+export class ServiceImage {
   stores: any;
   loginStore: any;
 

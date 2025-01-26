@@ -6,18 +6,18 @@ import {
   trimId,
   trimText,
 } from '@/U';
-import AppHost from '@/host/AppHost';
+import { APP_HOST as AppHost } from '@/host/AppHost';
 import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import Brand from './Brand';
-import Category from './Category';
-import Image from './Image';
-import ProductBundle from './ProductBundle';
-import ProductPrice from './ProductPrice';
-import ProductPrices from './ProductPrices';
-import ProductStock from './ProductStock';
-import Specification, { SpecificationKey } from './Specification';
+import { Brand } from './Brand';
+import { Category } from './Category';
+import { Image } from './Image';
+import { ProductBundle } from './ProductBundle';
+import { ProductPrice } from './ProductPrice';
+import { ProductPrices } from './ProductPrices';
+import { ProductStock } from './ProductStock';
+import { Specification, SpecificationKey } from './Specification';
 
 const FORMAT_SPECIFICATION_ORDERS = Object.values(SpecificationKey);
 function putForwardSlash(texts: string[], separation: string = ' / '): string {
@@ -27,7 +27,7 @@ function putForwardSlash(texts: string[], separation: string = ' / '): string {
   });
 }
 
-export default class Product implements Item {
+export class Product implements Item {
   stores: any;
   categoryStore: any;
   productStore: any;

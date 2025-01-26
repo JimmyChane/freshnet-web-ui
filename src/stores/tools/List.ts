@@ -6,7 +6,7 @@ export interface Item {
   getUnique(): string;
 }
 
-export default class List<T extends Item> {
+export class List<T extends Item> {
   lastModified: number = 0;
   items: T[] = [];
 

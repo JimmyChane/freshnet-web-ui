@@ -2,12 +2,12 @@
 import Vue from 'vue';
 
 import { isArray, optString } from '@/U';
-import IconPack from '@/app/IconPack';
+import { IconPack } from '@/app/IconPack';
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { iconServer } from '@/host/Server';
-import SettingModule, { SettingKey } from '@/items/Setting';
+import { Setting as SettingModule } from '@/items/Setting';
 
 import ItemSetting from './ItemSetting.vue';
 import ItemSettingBusinessHours from './ItemSettingBusinessHours.vue';

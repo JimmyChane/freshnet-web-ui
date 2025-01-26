@@ -1,8 +1,8 @@
-import TimeNowGetter from '@/tools/TimeNowGetter';
+import { TimeNowGetter } from '@/tools/TimeNowGetter';
 
 const keyGetter = new TimeNowGetter();
 
-export default class Notification {
+export class Notification {
   context: any;
 
   key: number;

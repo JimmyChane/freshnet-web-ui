@@ -1,6 +1,6 @@
 import { Icon } from '@/host/ServerResource';
 
-export default class IconPack {
+export class IconPack {
   readonly light: Icon;
   readonly dark: Icon;
 

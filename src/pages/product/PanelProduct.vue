@@ -5,7 +5,7 @@ import IconCopyLight from '@/assets/icon/copy-FFFFFF.svg';
 import IconPrinter from '@/assets/icon/printer-000000.svg';
 import IconTrash from '@/assets/icon/trash-000000.svg';
 import IconView from '@/assets/icon/view-000000.svg';
-import AppHost from '@/host/AppHost';
+import { APP_HOST as AppHost } from '@/host/AppHost';
 import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
 
 export default {

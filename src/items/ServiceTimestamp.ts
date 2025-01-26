@@ -23,7 +23,7 @@ const getTextOfDayNumber = (day: number): string => {
   return '';
 };
 
-export default class ServiceTimestamp {
+export class ServiceTimestamp {
   time: number;
 
   constructor(utc: number = 0) {

@@ -9,10 +9,10 @@ import {
   getInfo,
 } from '@/request/Database';
 
-import DataLoader from './tools/DataLoader';
-import Processor from './tools/Processor';
+import { DataLoader } from './tools/DataLoader';
+import { Processor } from './tools/Processor';
 
-const init = (Stores: any) => {
+export const initDatabase = (Stores: any) => {
   const store: Store<any> = new Vuex.Store({
     state: {
       lastModified: 0,
@@ -166,5 +166,3 @@ const init = (Stores: any) => {
 
   return store;
 };
-
-export default { init };

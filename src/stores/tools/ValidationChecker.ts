@@ -1,4 +1,4 @@
-export default class ValidationChecker {
+export class ValidationChecker {
   private _timeout: number = 0;
   private _checkpoint: number = 0;
 

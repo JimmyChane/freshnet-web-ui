@@ -1,11 +1,12 @@
-import Price, {
+import {
   DEFAULT_CURRENCY as PRICE_DEFAULT_CURRENCY,
+  Price,
   parsePrice,
 } from '@/objects/Price';
 
 export const DEFAULT_CURRENCY = PRICE_DEFAULT_CURRENCY;
 
-export default class ProductPrice {
+export class ProductPrice {
   stores: any;
 
   private price: Price | null = null;

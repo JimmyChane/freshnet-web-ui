@@ -3,8 +3,8 @@ import chroma from 'chroma-js';
 
 import { isColorDark } from '@/U';
 import ImageView from '@/components/ImageView.vue';
-import Product from '@/items/Product';
-import ProductPrice from '@/items/ProductPrice';
+import { Product } from '@/items/Product';
+import { ProductPrice } from '@/items/ProductPrice';
 import { SettingKey } from '@/items/Setting';
 import {
   generateSpecificationLabels,

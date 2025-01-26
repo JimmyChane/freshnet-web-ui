@@ -117,7 +117,7 @@ class ContactLink {
   }
 }
 
-class Contact {
+export class Contact {
   stores: any = null;
 
   constructor(stores: any) {
@@ -151,5 +151,3 @@ class Contact {
     return 0;
   }
 }
-
-export default Contact;

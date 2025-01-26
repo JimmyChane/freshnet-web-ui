@@ -1,7 +1,6 @@
-import Brand from '@/items/Brand';
-import Product from '@/items/Product';
-import { SpecificationKey } from '@/items/Specification';
-import Specification from '@/items/Specification';
+import { Brand } from '@/items/Brand';
+import { Product } from '@/items/Product';
+import { Specification, SpecificationKey } from '@/items/Specification';
 
 export const INTEL_BRAND = new Brand(null).fromData({
   _id: '',

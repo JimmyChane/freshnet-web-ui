@@ -1,4 +1,4 @@
-export default class TimeNowGetter {
+export class TimeNowGetter {
   private last: number = 0;
 
   get(): number {

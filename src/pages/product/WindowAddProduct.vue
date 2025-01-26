@@ -2,7 +2,7 @@
 import Input from '@/components/Input.vue';
 import LabelMenus from '@/components/LabelMenus.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
-import Category, { CategoryKey } from '@/items/Category';
+import { CategoryKey } from '@/items/Category';
 
 export default {
   components: { PanelAction, Input, LabelMenus },

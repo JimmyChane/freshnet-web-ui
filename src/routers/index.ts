@@ -1,7 +1,7 @@
 import Vue from 'vue';
-import VueRouter, { NavigationGuard, RouteConfig } from 'vue-router';
+import VueRouter, { RouteConfig } from 'vue-router';
 
-import AppHost from '@/host/AppHost';
+import { APP_HOST as AppHost } from '@/host/AppHost';
 import PageLogin from '@/pages/login/PageLogin.vue';
 
 Vue.use(VueRouter);
@@ -169,6 +169,4 @@ const routes: RouteConfig[] = [
   { path: '*', redirect: { path: '/error/404' } },
 ];
 
-const router = new VueRouter({ mode: AppHost.ROUTER_MODE, routes });
-
-export default router;
+export const router = new VueRouter({ mode: AppHost.ROUTER_MODE, routes });

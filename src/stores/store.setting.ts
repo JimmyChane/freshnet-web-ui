@@ -1,12 +1,12 @@
 import Vuex from 'vuex';
 
 import { optArray } from '@/U';
-import Contact from '@/items/Contact';
-import Setting, { SettingKey, SettingVisibility } from '@/items/Setting';
-import WorkingDay from '@/items/WorkingDay';
+import { Contact } from '@/items/Contact';
+import { Setting, SettingKey, SettingVisibility } from '@/items/Setting';
+import { WorkingDay } from '@/items/WorkingDay';
 import { getSettingList, updateSetting } from '@/request/Setting';
 
-import StoreBuilder from './tools/StoreBuilder';
+import { StoreBuilder } from './tools/StoreBuilder';
 
 const isPredefinedSetting = (key: string) => {
   return (
@@ -19,7 +19,7 @@ const isPredefinedSetting = (key: string) => {
   ).includes(key);
 };
 
-const init = (Stores: any) => {
+export const initSetting = (Stores: any) => {
   const context = new StoreBuilder<Setting>()
     .onFetchItems(async () => {
       const api = await getSettingList();
@@ -161,5 +161,3 @@ const init = (Stores: any) => {
 
   return new Vuex.Store(context);
 };
-
-export default { init };

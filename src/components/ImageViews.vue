@@ -1,8 +1,8 @@
 <script>
 import { optArray } from '@/U';
 import ImageView from '@/components/ImageView.vue';
-import Image from '@/items/Image';
-import ServiceImage from '@/items/ServiceImage';
+import { Image } from '@/items/Image';
+import { ServiceImage } from '@/items/ServiceImage';
 
 export default {
   components: { ImageView },

@@ -13,7 +13,7 @@ export function withItems(items: { toCount(strs: string[]): number }[] = []) {
   return searcher;
 }
 
-export default class Searcher {
+export class Searcher {
   items: { toCount(strs: string[]): number }[] = [];
 
   constructor() {}

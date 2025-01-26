@@ -2,7 +2,7 @@ const BLUE = '#0771d2';
 const PURPLE = '#961d96';
 const GREEN = '#258915';
 
-export default class ServiceEventMethod {
+export class ServiceEventMethod {
   key: string;
   title: string;
   primaryColor: string;

@@ -1,8 +1,9 @@
 <script>
 import PanelAction from '@/components/panel/PanelAction.vue';
 import TypeSelector from '@/components/selector/TypeSelector.vue';
-import ServiceState, {
+import {
   PENDING_SERVICE_STATE,
+  ServiceState,
   mapServiceState,
 } from '@/items/ServiceState';
 
@@ -17,7 +18,6 @@ export default {
   components: {
     PanelAction,
     TypeSelector,
-    ServiceState,
     LayoutFindCustomer,
     BodyUser,
     BodyCustomer,

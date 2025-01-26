@@ -1,5 +1,5 @@
 <script>
-import Customer from '@/items/Customer';
+import { Customer } from '@/items/Customer';
 
 export default {
   props: {

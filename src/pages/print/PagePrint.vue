@@ -1,15 +1,15 @@
 <script>
-import IconPack from '@/app/IconPack';
+import { IconPack } from '@/app/IconPack';
 import Footer from '@/app/footer/Footer.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { iconServer } from '@/host/Server';
-import Price from '@/objects/Price';
+import { Price } from '@/objects/Price';
 
-import Output from './Output';
+import { Output } from './Output';
 import Card from './PagePrint-Card.vue';
 import Tabs from './PagePrint-Tabs.vue';
-import Paper from './Paper';
-import PaperSide from './PaperSide';
+import { Paper } from './Paper';
+import { PaperSide } from './PaperSide';
 import { A3PaperSize, A4PaperSize } from './PaperSize';
 
 class Media {

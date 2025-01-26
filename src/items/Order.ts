@@ -2,14 +2,14 @@ import { trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import OrderCustomer from './OrderCustomer';
+import { OrderCustomer } from './OrderCustomer';
 
 export enum OrderStatus {
   Pending = 0,
   Completed = 1,
 }
 
-export default class Order implements Item {
+export class Order implements Item {
   stores: any;
 
   constructor(stores: any) {

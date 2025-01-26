@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 
-import Order, { OrderStatus } from '@/items/Order';
-import OrderCustomer from '@/items/OrderCustomer';
+import { Order, OrderStatus } from '@/items/Order';
+import { OrderCustomer } from '@/items/OrderCustomer';
 import {
   addOrder,
   deleteOrder,
@@ -9,9 +9,9 @@ import {
   updateOrderStatus,
 } from '@/request/Order';
 
-import StoreBuilder from './tools/StoreBuilder';
+import { StoreBuilder } from './tools/StoreBuilder';
 
-const init = (Stores: any) => {
+export const initOrder = (Stores: any) => {
   const context = new StoreBuilder<Order>()
     .onFetchItems(async () => {
       const api = await getOrderList();
@@ -116,5 +116,3 @@ const init = (Stores: any) => {
 
   return new Vuex.Store(context);
 };
-
-export default { init };

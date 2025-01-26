@@ -7,7 +7,7 @@ import IconRejectedWhite from '@/assets/icon/rejected-white.svg';
 import IconWaitingColor from '@/assets/icon/waiting-color.svg';
 import IconWaitingWhite from '@/assets/icon/waiting-white.svg';
 
-export default class ServiceState {
+export class ServiceState {
   key: string;
   title: string;
   icon: { white: string; color: string };

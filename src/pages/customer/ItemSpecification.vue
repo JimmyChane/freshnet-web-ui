@@ -1,5 +1,5 @@
 <script>
-import CustomerDeviceSpecification from '@/items/CustomerDeviceSpecification';
+import { CustomerDeviceSpecification } from '@/items/CustomerDeviceSpecification';
 
 export default {
   emtis: ['click', 'click-remove'],

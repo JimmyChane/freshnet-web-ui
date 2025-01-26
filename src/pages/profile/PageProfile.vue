@@ -1,5 +1,5 @@
 <script>
-import IconPack from '@/app/IconPack';
+import { IconPack } from '@/app/IconPack';
 import IconArrowDown from '@/assets/icon/arrowDown-000000.svg';
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';

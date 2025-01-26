@@ -1,6 +1,6 @@
 import { trimText } from '@/U';
 
-export default class ProductBundle {
+export class ProductBundle {
   stores: any;
 
   constructor(stores: any) {

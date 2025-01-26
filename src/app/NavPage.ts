@@ -1,9 +1,9 @@
 import { IconAsset, optString, parseIcon, parseKey } from '@/U';
 import { Icon } from '@/host/ServerResource';
 
-import NavViewGroup from './NavViewGroup';
+import { NavViewGroup } from './NavViewGroup';
 
-export default class NavPage {
+export class NavPage {
   key: string = '';
   title: string = '';
   icon: IconAsset | null = null;

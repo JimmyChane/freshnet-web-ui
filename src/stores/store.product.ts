@@ -1,10 +1,10 @@
 import Vuex from 'vuex';
 
 import { isString, optArray, optString, trimText } from '@/U';
-import Brand from '@/items/Brand';
-import Category, { CategoryKey } from '@/items/Category';
-import ProductBundle from '@/items/ProductBundle';
-import ProductPrices from '@/items/ProductPrices';
+import { Brand } from '@/items/Brand';
+import { Category, CategoryKey } from '@/items/Category';
+import { ProductBundle } from '@/items/ProductBundle';
+import { ProductPrices } from '@/items/ProductPrices';
 import {
   addProduct,
   addProductBundle,
@@ -27,12 +27,12 @@ import {
   updateProductTitle,
 } from '@/request/Product';
 
-import Image from '../items/Image';
-import Product from '../items/Product';
-import Specification from '../items/Specification';
-import StoreBuilder from './tools/StoreBuilder';
+import { Image } from '../items/Image';
+import { Product } from '../items/Product';
+import { Specification } from '../items/Specification';
+import { StoreBuilder } from './tools/StoreBuilder';
 
-const init = (Stores: any) => {
+export const initProduct = (Stores: any) => {
   const categoryStore = Stores.category;
 
   const context = new StoreBuilder<Product>()
@@ -387,5 +387,3 @@ const init = (Stores: any) => {
 
   return new Vuex.Store(context);
 };
-
-export default { init };

@@ -1,8 +1,8 @@
 import { ActionContext } from 'vuex';
 
-import DataLoader, { withStoreToDataLoader } from './DataLoader';
-import List, { Item } from './List';
-import Processor from './Processor';
+import { DataLoader, withStoreToDataLoader } from './DataLoader';
+import { Item, List } from './List';
+import { Processor } from './Processor';
 
 type StateType<T extends Item> = {
   dataLoader: DataLoader;
@@ -10,7 +10,7 @@ type StateType<T extends Item> = {
   list: List<T>;
 };
 
-export default class StoreBuilder<T extends Item> {
+export class StoreBuilder<T extends Item> {
   private _fetchItems: () => any = () => {};
   private _getStore: () => void = () => {};
 

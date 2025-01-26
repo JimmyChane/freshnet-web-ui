@@ -1,5 +1,5 @@
 <script>
-import Product from '@/items/Product';
+import { Product } from '@/items/Product';
 
 import ProductVue from './PageCategoryExport-Layout-Product.vue';
 

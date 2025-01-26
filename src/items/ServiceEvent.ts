@@ -6,12 +6,12 @@ import {
   PURCHASE_SERVICE_EVENT_METHOD,
   QUOTATION_SERVICE_EVENT_METHOD,
 } from './ServiceEventMethod';
-import ServiceImage from './ServiceImage';
-import ServicePrice from './ServicePrice';
-import ServiceTimestamp from './ServiceTimestamp';
-import User from './User';
+import { ServiceImage } from './ServiceImage';
+import { ServicePrice } from './ServicePrice';
+import { ServiceTimestamp } from './ServiceTimestamp';
+import { User } from './User';
 
-export default class ServiceEvent {
+export class ServiceEvent {
   stores: any;
   userStore: any;
 

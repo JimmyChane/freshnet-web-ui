@@ -4,7 +4,7 @@ import IconImage from '@/assets/icon/image-FFFFFF.svg';
 import ImageView from '@/components/ImageView.vue';
 import ImageViews from '@/components/ImageViews.vue';
 import LabelCount from '@/components/LabelCount.vue';
-import ServicePrice from '@/items/ServicePrice';
+import { ServicePrice } from '@/items/ServicePrice';
 import { findServiceStateByKey } from '@/items/ServiceState';
 import ItemButton from '@/pages/manage/PanelItems-ItemButton.vue';
 

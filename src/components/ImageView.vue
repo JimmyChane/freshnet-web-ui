@@ -1,7 +1,7 @@
 <script>
 import { isString } from '@/U';
-import Image from '@/items/Image';
-import ServiceImage from '@/items/ServiceImage';
+import { Image } from '@/items/Image';
+import { ServiceImage } from '@/items/ServiceImage';
 
 class Container {
   constructor(image) {

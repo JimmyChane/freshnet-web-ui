@@ -9,19 +9,20 @@ import {
 import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import ServiceBelonging from './ServiceBelonging';
-import ServiceCustomer from './ServiceCustomer';
-import ServiceEvent from './ServiceEvent';
+import { ServiceBelonging } from './ServiceBelonging';
+import { ServiceCustomer } from './ServiceCustomer';
+import { ServiceEvent } from './ServiceEvent';
 import {
   INITIAL_SERVICE_EVENT_METHOD,
   PURCHASE_SERVICE_EVENT_METHOD,
 } from './ServiceEventMethod';
-import ServiceImage from './ServiceImage';
-import Label, {
+import { ServiceImage } from './ServiceImage';
+import {
+  Label,
   URGENT_SERVICE_LABEL,
   WARRANTY_SERVICE_LABEL,
 } from './ServiceLabel';
-import ServicePrice from './ServicePrice';
+import { ServicePrice } from './ServicePrice';
 import {
   COMPLETED_SERVICE_STATE,
   PENDING_SERVICE_STATE,
@@ -30,10 +31,10 @@ import {
   findServiceStateByKey,
   indexServiceStateOfKey,
 } from './ServiceState';
-import ServiceTimestamp from './ServiceTimestamp';
-import User from './User';
+import { ServiceTimestamp } from './ServiceTimestamp';
+import { User } from './User';
 
-export default class Service implements Item {
+export class Service implements Item {
   stores: any;
   userStore: any;
 

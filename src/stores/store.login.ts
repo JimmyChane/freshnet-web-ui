@@ -2,9 +2,8 @@ import Vuex from 'vuex';
 
 import { getUser, loginUser, updateUserPassword } from '@/request/Login';
 
-import ItemUser, { UserType } from '../items/User';
-import User from '../items/User';
-import Processor from './tools/Processor';
+import { User, UserType } from '../items/User';
+import { Processor } from './tools/Processor';
 
 const storageTokenKey = 'userToken';
 const getToken = () => {
@@ -22,19 +21,19 @@ const onNewCredentail = (
   Stores: any,
 ) => {
   const { token, user } = arg;
-  const newUser = new ItemUser(Stores).fromData(user);
+  const newUser = new User(Stores).fromData(user);
   setToken(token);
   context.commit('user', newUser);
   context.commit('lastModified', Date.now());
   return newUser;
 };
-const noneUser = new ItemUser(null).fromData({
+const noneUser = new User(null).fromData({
   username: '',
   name: '',
   userType: UserType.None,
 });
 
-const init = (Stores: any) => {
+export const initLogin = (Stores: any) => {
   const { store } = Stores;
 
   const loginStore = new Vuex.Store({
@@ -116,7 +115,7 @@ const init = (Stores: any) => {
 
             const api = await getUser(token);
             const content = api.optObjectContent() as { user: User };
-            const user = new ItemUser(Stores).fromData(content.user);
+            const user = new User(Stores).fromData(content.user);
 
             const userNow = context.state.user;
             if (userNow) {
@@ -171,5 +170,3 @@ const init = (Stores: any) => {
 
   return loginStore;
 };
-
-export default { init };

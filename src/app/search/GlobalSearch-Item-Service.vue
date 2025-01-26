@@ -1,6 +1,6 @@
 <script>
 import ImageViews from '@/components/ImageViews.vue';
-import Service from '@/items/Service';
+import { Service } from '@/items/Service';
 import { findServiceStateByKey } from '@/items/ServiceState';
 
 import Labels from './GlobalSearch-Item-Labels.vue';

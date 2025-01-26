@@ -1,4 +1,4 @@
-export default class Size {
+export class Size {
   width: string;
   height: string;
 

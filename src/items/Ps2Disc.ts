@@ -2,7 +2,7 @@ import { trimId, trimText } from '@/U';
 
 import { textContains } from '../objects/ItemSearcher';
 
-export default class Ps2Disc {
+export class Ps2Disc {
   stores: any;
 
   constructor(stores: any) {

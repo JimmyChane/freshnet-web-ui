@@ -6,7 +6,7 @@ interface PhoneNumberData {
   value: string;
 }
 
-export default class PhoneNumber {
+export class PhoneNumber {
   stores: any;
 
   constructor(stores: any) {

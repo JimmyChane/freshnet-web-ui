@@ -3,10 +3,10 @@ import Vuex from 'vuex';
 import { optArray } from '@/U';
 import { getPs2DiscList } from '@/request/Ps2';
 
-import ItemPs2Disc from '../items/Ps2Disc';
-import StoreBuilder from './tools/StoreBuilder';
+import { Ps2Disc as ItemPs2Disc } from '../items/Ps2Disc';
+import { StoreBuilder } from './tools/StoreBuilder';
 
-const init = (Stores: any) => {
+export const initPs2 = (Stores: any) => {
   const context = new StoreBuilder()
     .onFetchItems(async () => {
       const api = await getPs2DiscList();
@@ -28,5 +28,3 @@ const init = (Stores: any) => {
 
   return new Vuex.Store(context);
 };
-
-export default { init };

@@ -1,6 +1,6 @@
-import ProductPrice from './ProductPrice';
+import { ProductPrice } from './ProductPrice';
 
-class ProductPrices {
+export class ProductPrices {
   stores: any;
 
   constructor(stores: any) {
@@ -35,5 +35,3 @@ class ProductPrices {
     return 0;
   }
 }
-
-export default ProductPrices;

@@ -1,6 +1,6 @@
 <script>
-import NavPage from '@/app/NavPage';
-import NavView from '@/app/NavView';
+import { NavPage } from '@/app/NavPage';
+import { NavView } from '@/app/NavView';
 
 import LeftNavItem from './NavigationDrawer-Item.vue';
 

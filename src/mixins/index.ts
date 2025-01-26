@@ -1,6 +1,6 @@
 import { isFunction, isObjectOnly, optString } from '@/U';
 
-const Mixin = {
+export const Mixin = {
   created(this: any) {
     const getTitle = () => {
       let title = this.$options.title;
@@ -46,5 +46,3 @@ const Mixin = {
     }
   },
 };
-
-export default Mixin;

@@ -91,7 +91,7 @@ class WorkingHours {
   }
 }
 
-class WorkingDay {
+export class WorkingDay {
   stores: any;
   parentDays: WorkingDay[] = [];
 
@@ -155,5 +155,3 @@ class WorkingDay {
     return this.parentDays[nextIndex];
   }
 }
-
-export default WorkingDay;

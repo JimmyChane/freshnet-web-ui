@@ -1,5 +1,5 @@
 <script>
-import IconPack from '@/app/IconPack';
+import { IconPack } from '@/app/IconPack';
 import Footer from '@/app/footer/Footer.vue';
 import { iconServer } from '@/host/Server';
 

@@ -1,6 +1,6 @@
-import Price from '@/objects/Price';
+import { Price } from '@/objects/Price';
 
-export default class ServicePrice {
+export class ServicePrice {
   private price: Price | null = null;
 
   get amount(): number {

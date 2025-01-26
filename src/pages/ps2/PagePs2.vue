@@ -1,5 +1,5 @@
 <script>
-import IconPack from '@/app/IconPack';
+import { IconPack } from '@/app/IconPack';
 import Footer from '@/app/footer/Footer.vue';
 import IconClose from '@/assets/icon/close-2A4858.svg';
 import IconHamburgerMenu from '@/assets/icon/hamburgerMenu-000000.svg';

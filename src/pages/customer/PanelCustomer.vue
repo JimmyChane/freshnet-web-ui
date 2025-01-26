@@ -9,7 +9,7 @@ import IconTrash from '@/assets/icon/trash-000000.svg';
 import IconWhatsapp from '@/assets/icon/whatsapp-color.svg';
 import Loading from '@/components/Loading.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
-import Customer from '@/items/Customer';
+import { Customer } from '@/items/Customer';
 import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
 import Section from '@/pages/manage/PanelItem-Section.vue';
 import ItemService from '@/pages/service/item-service/ItemService.vue';

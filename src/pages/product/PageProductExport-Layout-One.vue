@@ -1,5 +1,5 @@
 <script>
-import ProductPrice from '@/items/ProductPrice';
+import { ProductPrice } from '@/items/ProductPrice';
 import { SpecificationKey } from '@/items/Specification';
 
 import Item from './PageProductExport-Layout-One-Specification.vue';

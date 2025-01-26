@@ -1,6 +1,6 @@
-import ServiceCustomer from './ServiceCustomer';
+import { ServiceCustomer } from './ServiceCustomer';
 
-export default class OrderCustomer extends ServiceCustomer {
+export class OrderCustomer extends ServiceCustomer {
   constructor(stores: any) {
     super(stores);
   }

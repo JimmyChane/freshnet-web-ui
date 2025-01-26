@@ -12,7 +12,7 @@ export enum NavigationLayout {
 export const NAVIGATION_VISIBILITIES = Object.values(NavigationVisibility);
 export const NAVIGATION_LAYOUTS = Object.values(NavigationLayout);
 
-export default class Navigation {
+export class Navigation {
   context: any;
   defaultVisibility: number = NavigationVisibility.COLLAPSED;
   defaultLayout: number = NavigationLayout.WIDE;

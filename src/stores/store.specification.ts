@@ -4,9 +4,9 @@ import { optArray } from '@/U';
 import { Type } from '@/items/Specification';
 import { getSpecificationList } from '@/request/Specification';
 
-import StoreBuilder from './tools/StoreBuilder';
+import { StoreBuilder } from './tools/StoreBuilder';
 
-const init = (Stores: any) => {
+export const initSpecification = (Stores: any) => {
   const context = new StoreBuilder<Type>()
     .onFetchItems(async () => {
       const api = await getSpecificationList();
@@ -32,5 +32,3 @@ const init = (Stores: any) => {
 
   return new Vuex.Store(context);
 };
-
-export default { init };

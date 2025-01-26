@@ -1,5 +1,5 @@
 <script>
-import IconPack from '@/app/IconPack';
+import { IconPack } from '@/app/IconPack';
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import { iconServer } from '@/host/Server';

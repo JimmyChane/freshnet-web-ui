@@ -19,7 +19,7 @@ export enum UserReservedUsername {
   Staff = 'staff',
 }
 
-export default class User implements Item {
+export class User implements Item {
   stores: any | null;
 
   constructor(stores: any | null) {

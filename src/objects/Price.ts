@@ -70,7 +70,7 @@ function parseAmount(content: string): number {
   return Number.isNaN(valueParse) ? 0 : valueParse;
 }
 
-class Price {
+export class Price {
   private _amount: number;
   private _currency: string;
 
@@ -128,5 +128,3 @@ class Price {
     }, 0);
   }
 }
-
-export default Price;

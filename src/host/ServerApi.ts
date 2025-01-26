@@ -189,7 +189,7 @@ export class Response {
   }
 }
 
-export default class ServerApi {
+export class ServerApi {
   private serverUrl: string;
 
   constructor(serverUrl: string) {

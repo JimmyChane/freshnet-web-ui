@@ -1,6 +1,6 @@
-import Color, { BlackWhiteColor, ColorfulColor } from './Color';
+import { BlackWhiteColor, ColorfulColor } from './Color';
 
-export default class Output {
+export class Output {
   title: any;
   color: any;
 

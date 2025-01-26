@@ -1,5 +1,5 @@
 <script>
-import IconPack from '@/app/IconPack';
+import { IconPack } from '@/app/IconPack';
 import { iconServer } from '@/host/Server';
 import PageCustomer from '@/pages/customer/PageCustomer.vue';
 import PageDatabase from '@/pages/database/PageDatabase.vue';

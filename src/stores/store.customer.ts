@@ -9,12 +9,12 @@ import {
   updateCustomerNamePhoneNumber,
 } from '@/request/Customer';
 
-import Customer from '../items/Customer';
-import DeviceStore from './store.device';
-import StoreBuilder from './tools/StoreBuilder';
+import { Customer } from '../items/Customer';
+import { initDevice } from './store.device';
+import { StoreBuilder } from './tools/StoreBuilder';
 
-const init = (Stores: any) => {
-  const deviceStore = DeviceStore.init(Stores);
+export const initCustomer = (Stores: any) => {
+  const deviceStore = initDevice(Stores);
 
   const context = new StoreBuilder<Customer>()
     .onFetchItems(async () => {
@@ -156,5 +156,3 @@ const init = (Stores: any) => {
 
   return new Vuex.Store(context.build());
 };
-
-export default { init };

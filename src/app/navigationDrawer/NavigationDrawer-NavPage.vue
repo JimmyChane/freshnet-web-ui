@@ -1,6 +1,6 @@
 <script>
 import { optArray } from '@/U';
-import NavPage from '@/app/NavPage';
+import { NavPage } from '@/app/NavPage';
 
 import NavigationLeftClickable from './NavigationDrawer-Clickable.vue';
 import NavViewGroup from './NavigationDrawer-NavViewGroup.vue';

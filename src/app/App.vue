@@ -11,12 +11,12 @@ import PageManage from '@/pages/manage/PageManage.vue';
 import PagePrint from '@/pages/print/PagePrint.vue';
 import PageProduct from '@/pages/product/PageProduct.vue';
 // tools
-import AppLayout from '@/tools/AppLayout';
-import Navigation from '@/tools/Navigation';
+import { AppLayout } from '@/tools/AppLayout';
+import { Navigation } from '@/tools/Navigation';
 
-import NavPage from './NavPage';
-import NavView from './NavView';
-import NavGroup from './NavViewGroup';
+import { NavPage } from './NavPage';
+import { NavView } from './NavView';
+import { NavViewGroup as NavGroup } from './NavViewGroup';
 import Snackbar from './Snackbar.vue';
 import Status from './Status.vue';
 import ViewerImage from './ViewerImage.vue';

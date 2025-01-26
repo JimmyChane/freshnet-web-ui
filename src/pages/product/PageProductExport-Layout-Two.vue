@@ -1,6 +1,6 @@
 <script>
 import { isArray, isObjectOnly, optString } from '@/U';
-import ProductPrice from '@/items/ProductPrice';
+import { ProductPrice } from '@/items/ProductPrice';
 import { SpecificationKey } from '@/items/Specification';
 
 import ItemSpecification from './PageProductExport-Layout-Two-Specification.vue';

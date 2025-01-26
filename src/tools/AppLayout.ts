@@ -5,7 +5,7 @@ export enum AppLayoutId {
 
 export const APP_LAYOUT_KEYS = Object.values(AppLayoutId);
 
-export default class AppLayout {
+export class AppLayout {
   context: any;
   requests: { page: string; view: string; mode: number }[] = [];
 

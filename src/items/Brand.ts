@@ -2,7 +2,7 @@ import { isObjectOnly, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import Image from './Image';
+import { Image } from './Image';
 
 interface BrandData {
   _id: string;
@@ -10,7 +10,7 @@ interface BrandData {
   icon?: any;
 }
 
-export default class Brand implements Item {
+export class Brand implements Item {
   stores: any;
 
   constructor(stores: any) {

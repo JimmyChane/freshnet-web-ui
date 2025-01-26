@@ -1,8 +1,8 @@
 import { optArray } from '@/U';
 
-import ValidationChecker from './ValidationChecker';
+import { ValidationChecker } from './ValidationChecker';
 
-export default class DataLoader {
+export class DataLoader {
   private $validator: ValidationChecker;
 
   private _getProcessor: (() => any) | undefined;

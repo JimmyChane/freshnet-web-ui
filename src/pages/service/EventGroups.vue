@@ -1,7 +1,7 @@
 <script>
 import { format } from 'date-fns';
 
-import Service from '@/items/Service';
+import { Service } from '@/items/Service';
 
 import FloatingTimestampVue from './FloatingTimestamp.vue';
 import ItemEvent from './ServiceEvent.vue';

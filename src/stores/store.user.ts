@@ -3,11 +3,10 @@ import Vuex from 'vuex';
 import { optArray } from '@/U';
 import { addUser, getUserList, removeUser, updateUser } from '@/request/User';
 
-import ItemUser, { UserData } from '../items/User';
-import User from '../items/User';
-import StoreBuilder from './tools/StoreBuilder';
+import { User, UserData } from '../items/User';
+import { StoreBuilder } from './tools/StoreBuilder';
 
-const init = (Stores: any) => {
+export const initUser = (Stores: any) => {
   const loginStore = Stores.login;
 
   const context = new StoreBuilder<User>()
@@ -17,7 +16,7 @@ const init = (Stores: any) => {
 
       const api = await getUserList();
       const content = optArray(api.optArrayContent());
-      return content.map((data) => new ItemUser(Stores).fromData(data));
+      return content.map((data) => new User(Stores).fromData(data));
     })
     .onGetStore(() => Stores.user)
     .action('refresh', async (context) => {
@@ -42,7 +41,7 @@ const init = (Stores: any) => {
           const { username, userType } = arg;
           const api = await updateUser(username, userType);
           const content = api.optObjectContent() as UserData;
-          const userChange = new ItemUser(Stores).fromData(content);
+          const userChange = new User(Stores).fromData(content);
           if (!userChange) throw new Error();
           context.state.list.updateItemById(userChange.username, (item) => {
             return userChange;
@@ -77,7 +76,7 @@ const init = (Stores: any) => {
           arg.passwordRepeat,
         );
         const content = api.getObjectContent() as UserData;
-        const newUser = new ItemUser(Stores).fromData(content);
+        const newUser = new User(Stores).fromData(content);
         context.state.list.addItem(newUser);
         return newUser;
       },
@@ -101,5 +100,3 @@ const init = (Stores: any) => {
 
   return new Vuex.Store(context);
 };
-
-export default { init };

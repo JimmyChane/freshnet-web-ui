@@ -4,8 +4,8 @@ import { format, formatDistanceToNow } from 'date-fns';
 import IconTrash from '@/assets/icon/trash-000000.svg';
 import MenuOption from '@/components/button/MenuOption.vue';
 import WindowRemove from '@/components/window/WindowRemove.vue';
-import Service from '@/items/Service';
-import ServiceEvent from '@/items/ServiceEvent';
+import { Service } from '@/items/Service';
+import { ServiceEvent } from '@/items/ServiceEvent';
 import {
   INFO_SERVICE_EVENT_METHOD,
   INITIAL_SERVICE_EVENT_METHOD,

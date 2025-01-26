@@ -1,6 +1,6 @@
 <script>
 import { optNumber } from '@/U';
-import IconPack from '@/app/IconPack';
+import { IconPack } from '@/app/IconPack';
 import IconAdd from '@/assets/icon/add-000000.svg';
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';

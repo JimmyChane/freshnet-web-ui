@@ -1,5 +1,5 @@
 <script>
-import Brand from '@/items/Brand';
+import { Brand } from '@/items/Brand';
 
 import Labels from './GlobalSearch-Item-Labels.vue';
 import ItemSearch from './GlobalSearch-Item.vue';

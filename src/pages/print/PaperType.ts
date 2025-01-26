@@ -1,4 +1,4 @@
-export default class PaperType {
+export class PaperType {
   title: string;
   icon?: string;
 

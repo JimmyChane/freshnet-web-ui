@@ -2,7 +2,7 @@ import { isObjectOnly, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import Image from './Image';
+import { Image } from './Image';
 
 export enum SpecificationKey {
   Processor = 'processor',
@@ -96,7 +96,7 @@ export class Type implements Item {
   }
 }
 
-export default class Specification {
+export class Specification {
   stores: any;
   specificationStore: any;
 

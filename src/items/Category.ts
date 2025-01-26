@@ -17,7 +17,7 @@ import BgMouse from '@/assets/bg/ryan-putra-j4PqlNVZ4Bc-unsplash-w300h100.webp';
 import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import Image from './Image';
+import { Image } from './Image';
 
 export const TABLET_CATEGORY_BACKGROUND = new Image().fromData({
   method: 'link',
@@ -144,7 +144,7 @@ interface CategoryData {
   background?: any;
 }
 
-export default class Category implements Item {
+export class Category implements Item {
   stores: any = null;
 
   constructor(stores: any) {

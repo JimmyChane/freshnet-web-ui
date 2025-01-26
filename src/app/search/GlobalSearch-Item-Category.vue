@@ -1,5 +1,5 @@
 <script>
-import Category from '@/items/Category';
+import { Category } from '@/items/Category';
 
 import Labels from './GlobalSearch-Item-Labels.vue';
 import ItemSearch from './GlobalSearch-Item.vue';

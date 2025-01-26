@@ -17,7 +17,7 @@ class AppHost {
   }
 }
 
-export default new AppHost();
+export const APP_HOST = new AppHost();
 
 export function parseOrigin(protocol: string, hostname: string, port: string) {
   port = parsePort(port);

@@ -1,9 +1,9 @@
 import IconPaperA3 from '@/assets/icon/paper-a3.svg';
 import IconPaperA4 from '@/assets/icon/paper-a4.svg';
 
-import Size from './Size';
+import { Size } from './Size';
 
-export default class PaperSize {
+export class PaperSize {
   title: string;
   icon: string;
   size: Size;

@@ -11,7 +11,7 @@ import IconWhatsapp from '@/assets/icon/whatsapp-color.svg';
 import MenuIconVue from '@/components/MenuIcon.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import Selector from '@/components/selector/Selector.vue';
-import Service from '@/items/Service';
+import { Service } from '@/items/Service';
 import { mapServiceState } from '@/items/ServiceState';
 import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
 

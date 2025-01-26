@@ -2,8 +2,8 @@ import { optArray, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import CustomerDevice from './CustomerDevice';
-import PhoneNumber from './PhoneNumber';
+import { CustomerDevice } from './CustomerDevice';
+import { PhoneNumber } from './PhoneNumber';
 
 interface CustomerData {
   _id: string;
@@ -20,7 +20,7 @@ export const RequirementCustomer = {
   deviceIds: { isRequired: false },
 };
 
-export default class Customer implements Item {
+export class Customer implements Item {
   stores: any = null;
   customerStore: any = null;
 

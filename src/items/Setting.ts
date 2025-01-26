@@ -21,7 +21,7 @@ export enum SettingKey {
   CompanyWorkingHours = 'store-working-hours',
 }
 
-export default class Setting implements Item {
+export class Setting implements Item {
   stores: any | null;
 
   key: string = '';

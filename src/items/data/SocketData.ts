@@ -1,6 +1,6 @@
 import { optString, replaceStringAll } from '@/U';
 
-class SocketData {
+export class SocketData {
   content: any | null;
   key?: string;
 
@@ -12,5 +12,3 @@ class SocketData {
     if (key.length) this.key = key;
   }
 }
-
-export default SocketData;

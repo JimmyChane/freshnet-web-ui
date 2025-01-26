@@ -1,11 +1,12 @@
-import PaperSize, {
+import {
   A3PaperSize,
   A4PaperSize,
   FourRPaperSize,
+  PaperSize,
 } from './PaperSize';
-import PaperType, { PhotoPaperType, PlainPaperType } from './PaperType';
+import { PaperType, PhotoPaperType, PlainPaperType } from './PaperType';
 
-export default class Paper {
+export class Paper {
   paperType: PaperType;
   paperSize: PaperSize;
 
