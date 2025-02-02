@@ -5,7 +5,7 @@ import IconGrid from '@/assets/icon/grid-000000.svg';
 import IconList from '@/assets/icon/list-000000.svg';
 import Empty from '@/components/Empty.vue';
 import { mapServiceState } from '@/items/ServiceState';
-import PageService from '@/pages/service/PageService.vue';
+import { SERVICE_ROUTE } from '@/router';
 
 import ListServices from './ListServices.vue';
 import Actionbar from './PanelServices-Actionbar.vue';
@@ -32,7 +32,7 @@ export default {
     sortMenus: [],
   }),
   computed: {
-    iconEmpty: () => PageService.icon.dark.toUrl(),
+    iconEmpty: () => SERVICE_ROUTE.icon.dark.toUrl(),
 
     items: (c) => c.stateMenus[c.stateMenuIndex]?.list ?? [],
 

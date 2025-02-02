@@ -6,7 +6,7 @@ import IconAdd from '@/assets/icon/add-000000.svg';
 import Empty from '@/components/Empty.vue';
 import LabelMenus from '@/components/LabelMenus.vue';
 import LoadingDots from '@/components/LoadingDots.vue';
-import PageProduct from '@/pages/product/PageProduct.vue';
+import { PRODUCT_ROUTE } from '@/router';
 
 import ActionbarProduct from './ActionBarProduct.vue';
 import ItemProduct from './ItemProduct.vue';
@@ -78,7 +78,7 @@ export default {
     productGroups: [],
   }),
   computed: {
-    iconEmpty: () => PageProduct.icon.dark.toUrl(),
+    iconEmpty: () => PRODUCT_ROUTE.icon.dark.toUrl(),
 
     isLayoutThin: (c) => c.$store.getters.window.innerWidth < 550,
     layoutMode: () => ItemProduct.Mode.Grid,

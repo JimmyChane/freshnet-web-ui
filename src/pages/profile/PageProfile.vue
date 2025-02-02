@@ -1,11 +1,10 @@
 <script>
-import { IconPack } from '@/app/IconPack';
 import IconArrowDown from '@/assets/icon/arrowDown-000000.svg';
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
-import { iconServer } from '@/host/Server';
+import { PROFILE_ROUTE } from '@/router';
 
 import SectionMain from './PageProfile-Section-Main.vue';
 import SectionTitle from './PageProfile-Section-Title.vue';
@@ -13,13 +12,6 @@ import Section from './PageProfile-Section.vue';
 import WindowChangePassword from './WindowChangePassword.vue';
 
 export default {
-  key: 'profile',
-  title: 'Your Profile',
-  icon: new IconPack(
-    iconServer('profile-FFFFFF'),
-    iconServer('profile-000000'),
-  ),
-
   components: {
     NavigationBar,
     Loading,
@@ -30,6 +22,7 @@ export default {
     SectionMain,
   },
   data: (c) => ({
+    PROFILE_ROUTE,
     IconArrowDown,
     user: null,
     isLoading: false,
@@ -75,7 +68,7 @@ export default {
       class="PageProfile-scroll"
       @scroll="(event) => (scrollTop = event.target.scrollTop)"
     >
-      <NavigationBar style="z-index: 2" :title="$options.title" />
+      <NavigationBar style="z-index: 2" :title="PROFILE_ROUTE.title" />
 
       <div class="PageProfile-body" v-if="user">
         <Section class="PageProfile-introduction">

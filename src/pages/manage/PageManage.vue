@@ -1,39 +1,12 @@
 <script>
 import { IconPack } from '@/app/IconPack';
 import { iconServer } from '@/host/Server';
-import PageCustomer from '@/pages/customer/PageCustomer.vue';
-import PageDatabase from '@/pages/database/PageDatabase.vue';
-import PageOrder from '@/pages/order/PageOrder.vue';
-import PageProfile from '@/pages/profile/PageProfile.vue';
-import PageService from '@/pages/service/PageService.vue';
-import PageSetting from '@/pages/setting/PageSetting.vue';
-import PageUsers from '@/pages/users/PageUsers.vue';
 
 export default {
   key: 'manage',
   name: 'Manage',
   title: 'Manage',
   icon: new IconPack(iconServer('manage-FFFFFF'), iconServer('manage-000000')),
-
-  _children() {
-    return [PageProfile];
-  },
-  _groups() {
-    return [
-      {
-        key: 'record',
-        title: 'Record',
-        children: [PageCustomer, PageService, PageOrder],
-      },
-      {
-        key: 'system',
-        title: 'System',
-        children: [PageUsers, PageDatabase, PageSetting],
-      },
-    ];
-  },
-
-  userPermissions: ['admin', 'staff'],
 
   computed: {
     user: (c) => c.$store.state.stores.login.getters.user,

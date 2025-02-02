@@ -1,24 +1,16 @@
 <script>
-import { IconPack } from '@/app/IconPack';
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import { iconServer } from '@/host/Server';
+import { DATABASE_ROUTE } from '@/router';
 
 import ItemDatabase from './ItemDatabase.vue';
 
 export default {
-  key: 'database',
-  title: 'Database',
-  icon: new IconPack(
-    iconServer('database-FFFFFF'),
-    iconServer('database-000000'),
-  ),
-  userPermissions: ['admin'],
-
   components: { Loading, Empty, NavigationBar, ItemDatabase },
   data: (c) => ({
+    DATABASE_ROUTE,
     IconRefresh,
     scrollTop: 0,
     imports: { data: null },
@@ -98,7 +90,7 @@ export default {
   >
     <NavigationBar
       style="z-index: 2"
-      :title="$options.title"
+      :title="DATABASE_ROUTE.title"
       :rightMenus="[
         {
           key: 'refresh',
@@ -128,7 +120,7 @@ export default {
 
     <Empty
       v-if="!baseInfo && !databases.length && !isLoading"
-      :icon="$options.icon.dark.toUrl()"
+      :icon="DATABASE_ROUTE.icon.dark.toUrl()"
     />
 
     <Loading class="PageDatabase-loading" :isShowing="isLoading" />

@@ -1,12 +1,11 @@
 <script>
 import { optNumber } from '@/U';
-import { IconPack } from '@/app/IconPack';
 import IconAdd from '@/assets/icon/add-000000.svg';
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import { iconServer } from '@/host/Server';
+import { USERS_ROUTE } from '@/router';
 
 import ItemUser from './ItemUser.vue';
 import WindowAdd from './WindowAdd.vue';
@@ -14,14 +13,9 @@ import WindowChange from './WindowChange.vue';
 import WindowRemove from './WindowRemove.vue';
 
 export default {
-  key: 'users',
-  title: 'Other Users',
-  icon: new IconPack(iconServer('users-FFFFFF'), iconServer('users-000000')),
-  userPermissions: ['admin'],
-
   components: { NavigationBar, Loading, Empty, ItemUser },
   data() {
-    return { IconAdd, IconRefresh };
+    return { USERS_ROUTE, IconAdd, IconRefresh };
   },
   computed: {
     isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
@@ -143,7 +137,7 @@ export default {
 <template>
   <div class="PageUsers">
     <NavigationBar
-      :title="$options.title"
+      :title="USERS_ROUTE.title"
       :rightMenus="[
         isCurrentUserAdmin
           ? {
@@ -176,7 +170,7 @@ export default {
 
     <Empty
       v-if="!users.length && !isLoading"
-      :icon="$options.icon.dark.toUrl()"
+      :icon="USERS_ROUTE.icon.dark.toUrl()"
     />
 
     <Loading class="PageUsers-loading" :isShowing="isLoading" />

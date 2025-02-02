@@ -1,10 +1,8 @@
 <script>
-import { IconPack } from '@/app/IconPack';
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Loading from '@/components/Loading.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import WindowRemove from '@/components/window/WindowRemove.vue';
-import { iconServer } from '@/host/Server';
 
 import PanelService from './PanelService.vue';
 import PanelServices from './PanelServices.vue';
@@ -16,14 +14,6 @@ import WindowUpdateCustomer from './WindowUpdateCustomer.vue';
 import WindowUpdateDescription from './WindowUpdateDescription.vue';
 
 export default {
-  key: 'service',
-  title: 'Services',
-  icon: new IconPack(
-    iconServer('service-FFFFFF'),
-    iconServer('service-000000'),
-  ),
-  userPermissions: ['admin', 'staff'],
-
   components: { PanelServices, Loading, PanelService, PanelRight },
   data: (c) => ({
     actions: {

@@ -1,20 +1,19 @@
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import { Icon } from '@/host/ServerResource';
 
-export default {
-  props: {
-    src: { default: '' },
-    alt: { type: String, default: '' },
-  },
-  computed: {
-    srcString() {
-      if (this.src instanceof Icon) {
-        return this.src.toUrl();
-      }
-      return this.src;
-    },
-  },
-};
+const props = withDefaults(
+  defineProps<{ src?: string | Icon; alt?: string }>(),
+  { src: '', alt: '' },
+);
+
+const srcString = computed(() => {
+  if (props.src instanceof Icon) {
+    return props.src.toUrl();
+  }
+  return props.src;
+});
 </script>
 
 <template>

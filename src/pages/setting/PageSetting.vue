@@ -2,12 +2,11 @@
 import Vue from 'vue';
 
 import { isArray, optString } from '@/U';
-import { IconPack } from '@/app/IconPack';
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import { iconServer } from '@/host/Server';
 import { Setting as SettingModule } from '@/items/Setting';
+import { SETTING_ROUTE } from '@/router';
 
 import ItemSetting from './ItemSetting.vue';
 import ItemSettingBusinessHours from './ItemSettingBusinessHours.vue';
@@ -93,14 +92,6 @@ class Setting {
 }
 
 export default {
-  key: 'setting',
-  title: 'Settings',
-  icon: new IconPack(
-    iconServer('setting-FFFFFF'),
-    iconServer('setting-000000'),
-  ),
-  userPermissions: ['admin'],
-
   components: {
     NavigationBar,
     Empty,
@@ -108,7 +99,7 @@ export default {
     ItemSettingContacts,
     ItemSettingBusinessHours,
   },
-  data: (c) => ({ IconRefresh, SettingModule, SettingBuilder }),
+  data: (c) => ({ SETTING_ROUTE, IconRefresh, SettingModule, SettingBuilder }),
   computed: {
     isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
     isEmpty: (c) => !c.$store.state.stores.user.getters.items.length,
@@ -127,7 +118,7 @@ export default {
 <template>
   <div class="PageSetting">
     <NavigationBar
-      :title="$options.title"
+      :title="SETTING_ROUTE.title"
       :rightMenus="[
         {
           key: 'refresh',
@@ -193,7 +184,10 @@ export default {
       />
     </div>
 
-    <Empty v-if="isEmpty && !isLoading" :icon="$options.icon.dark.toUrl()" />
+    <Empty
+      v-if="isEmpty && !isLoading"
+      :icon="SETTING_ROUTE.icon.dark.toUrl()"
+    />
   </div>
 </template>
 

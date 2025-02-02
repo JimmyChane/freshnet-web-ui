@@ -1,9 +1,8 @@
 <script>
-import { IconPack } from '@/app/IconPack';
 import Footer from '@/app/footer/Footer.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import { iconServer } from '@/host/Server';
 import { Price } from '@/objects/Price';
+import { PRINT_ROUTE } from '@/router';
 
 import { Output } from './Output';
 import Card from './PagePrint-Card.vue';
@@ -41,12 +40,9 @@ class Item {
 }
 
 export default {
-  key: 'print',
-  title: 'Printing',
-  icon: new IconPack(iconServer('paper-FFFFFF'), iconServer('paper-000000')),
-
   components: { NavigationBar, Tabs, Card, Footer },
   data: (c) => ({
+    PRINT_ROUTE,
     items: [
       new Media('Photostat', [
         new Category(Paper.PlainA4, [
@@ -220,7 +216,7 @@ export default {
 
 <template>
   <div class="PagePrint">
-    <NavigationBar :style="{ 'z-index': '3' }" :title="$options.title" />
+    <NavigationBar :style="{ 'z-index': '3' }" :title="PRINT_ROUTE.title" />
 
     <div class="PagePrint-tabs" :style="{ 'z-index': '2' }">
       <Tabs v-if="tabs0.length" :items="tabs0" />

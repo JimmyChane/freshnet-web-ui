@@ -3,7 +3,7 @@ import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
 
 import { optString } from '@/U';
 import Empty from '@/components/Empty.vue';
-import PageCustomer from '@/pages/customer/PageCustomer.vue';
+import { CUSTOMER_ROUTE } from '@/router';
 
 import ItemCustomer from './ItemCustomer.vue';
 import Actionbar from './PanelCustomers-Actionbar.vue';
@@ -24,7 +24,7 @@ export default {
   },
   data: (c) => ({ scrollTop: 0, itemSelect: null }),
   computed: {
-    iconEmpty: () => PageCustomer.icon.dark.toUrl(),
+    iconEmpty: () => CUSTOMER_ROUTE.icon.dark.toUrl(),
 
     filter: (c) => optString(c.$route.query.filter),
 

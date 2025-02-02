@@ -1,10 +1,9 @@
 <script>
-import { IconPack } from '@/app/IconPack';
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
-import { iconServer } from '@/host/Server';
+import { CUSTOMER_ROUTE } from '@/router';
 
 import PanelCustomer from './PanelCustomer.vue';
 import PanelCustomers from './PanelCustomers.vue';
@@ -18,15 +17,6 @@ import WindowUpdateDeviceDescription from './WindowUpdateDeviceDescription.vue';
 import WindowUpdateDeviceSpecifications from './WindowUpdateDeviceSpecifications.vue';
 
 export default {
-  key: 'customer',
-  title: 'Customers',
-  icon: new IconPack(
-    iconServer('customers-FFFFFF'),
-    iconServer('customers-000000'),
-  ),
-
-  userPermissions: ['admin', 'staff'],
-
   components: {
     Loading,
     PopupWindow,
@@ -36,6 +26,7 @@ export default {
     PanelRight,
   },
   data: (c) => ({
+    CUSTOMER_ROUTE,
     panelListened: { isWide: false },
     items: [],
     drawerCustomer: null,
@@ -186,7 +177,7 @@ export default {
       class="PageCustomer-panelLeft transition"
       :items="items"
       :itemSelected="currentCustomer"
-      :title="$options.title"
+      :title="CUSTOMER_ROUTE.title"
       @click-refresh="() => invalidate()"
       @click-item-add="() => clickItemAdd()"
       @click-item-remove="(param) => clickItemRemove(param.item)"

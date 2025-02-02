@@ -1,8 +1,6 @@
 <script>
-import { IconPack } from '@/app/IconPack';
 import Footer from '@/app/footer/Footer.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
-import { iconServer } from '@/host/Server';
 import { NavigationLayout } from '@/tools/Navigation';
 
 import PanelProduct from './PanelProduct.vue';
@@ -18,13 +16,6 @@ import WindowUpdateSpecifications from './WindowUpdateSpecifications.vue';
 import WindowUpdateTitleBrand from './WindowUpdateTitleBrand.vue';
 
 export default {
-  key: 'product',
-  title: 'Search',
-  icon: new IconPack(
-    iconServer('magnifying-glass'),
-    iconServer('magnifying-glass'),
-  ),
-
   components: {
     Footer,
     PanelRight,

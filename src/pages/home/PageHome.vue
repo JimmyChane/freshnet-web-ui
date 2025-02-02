@@ -1,7 +1,5 @@
 <script>
-import { IconPack } from '@/app/IconPack';
 import Footer from '@/app/footer/Footer.vue';
-import { iconServer } from '@/host/Server';
 
 import Actionbar from './PageHome-Actionbar.vue';
 import Header from './PageHome-Header.vue';
@@ -15,11 +13,6 @@ import SectionProduct from './PageHome-SectionProduct.vue';
 import SectionService from './PageHome-SectionService.vue';
 
 export default {
-  key: 'home',
-  name: 'Home',
-  title: 'Home',
-  icon: new IconPack(iconServer('home-FFFFFF'), iconServer('home-000000')),
-
   components: {
     Footer,
     Actionbar,

@@ -1,10 +1,109 @@
-import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 
 import { APP_HOST as AppHost } from '@/host/AppHost';
 import PageLogin from '@/pages/login/PageLogin.vue';
 
-Vue.use(VueRouter);
+import { IconPack } from './app/IconPack';
+import { iconServer } from './host/Server';
+
+export const HOME_ROUTE = {
+  key: 'home',
+  name: 'Home',
+  title: 'Home',
+  icon: new IconPack(iconServer('home-FFFFFF'), iconServer('home-000000')),
+};
+export const PRODUCT_ROUTE = {
+  key: 'product',
+  title: 'Search',
+  icon: new IconPack(
+    iconServer('magnifying-glass'),
+    iconServer('magnifying-glass'),
+  ),
+};
+export const PRINT_ROUTE = {
+  key: 'print',
+  title: 'Printing',
+  icon: new IconPack(iconServer('paper-FFFFFF'), iconServer('paper-000000')),
+};
+
+export const PROFILE_ROUTE = {
+  key: 'profile',
+  title: 'Your Profile',
+  icon: new IconPack(
+    iconServer('profile-FFFFFF'),
+    iconServer('profile-000000'),
+  ),
+};
+export const CUSTOMER_ROUTE = {
+  key: 'customer',
+  title: 'Customers',
+  icon: new IconPack(
+    iconServer('customers-FFFFFF'),
+    iconServer('customers-000000'),
+  ),
+  userPermissions: ['admin', 'staff'],
+};
+export const SERVICE_ROUTE = {
+  key: 'service',
+  title: 'Services',
+  icon: new IconPack(
+    iconServer('service-FFFFFF'),
+    iconServer('service-000000'),
+  ),
+  userPermissions: ['admin', 'staff'],
+};
+export const ORDER_ROUTE = {
+  key: 'order',
+  name: 'ViewOrder',
+  title: 'Orders',
+  icon: new IconPack(iconServer('order-FFFFFF'), iconServer('order-000000')),
+  userPermissions: ['admin', 'staff'],
+};
+export const USERS_ROUTE = {
+  key: 'users',
+  title: 'Other Users',
+  icon: new IconPack(iconServer('users-FFFFFF'), iconServer('users-000000')),
+  userPermissions: ['admin'],
+};
+export const DATABASE_ROUTE = {
+  key: 'database',
+  title: 'Database',
+  icon: new IconPack(
+    iconServer('database-FFFFFF'),
+    iconServer('database-000000'),
+  ),
+  userPermissions: ['admin'],
+};
+export const SETTING_ROUTE = {
+  key: 'setting',
+  title: 'Settings',
+  icon: new IconPack(
+    iconServer('setting-FFFFFF'),
+    iconServer('setting-000000'),
+  ),
+  userPermissions: ['admin'],
+};
+export const MANAGE_ROUTE = {
+  key: 'manage',
+  name: 'Manage',
+  title: 'Manage',
+  icon: new IconPack(iconServer('manage-FFFFFF'), iconServer('manage-000000')),
+
+  children: [PROFILE_ROUTE],
+  groups: [
+    {
+      key: 'record',
+      title: 'Record',
+      children: [CUSTOMER_ROUTE, SERVICE_ROUTE, ORDER_ROUTE],
+    },
+    {
+      key: 'system',
+      title: 'System',
+      children: [USERS_ROUTE, DATABASE_ROUTE, SETTING_ROUTE],
+    },
+  ],
+  userPermissions: ['admin', 'staff'],
+};
 
 const routes: RouteConfig[] = [
   {

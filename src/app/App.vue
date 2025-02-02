@@ -6,10 +6,7 @@ import PHE from 'print-html-element';
 
 import { isFunction, isPassed, optArray, parseGroup2s, replace } from '@/U';
 import PopupWindow from '@/components/window/PopupWindow.vue';
-import PageHome from '@/pages/home/PageHome.vue';
-import PageManage from '@/pages/manage/PageManage.vue';
-import PagePrint from '@/pages/print/PagePrint.vue';
-import PageProduct from '@/pages/product/PageProduct.vue';
+import { HOME_ROUTE, MANAGE_ROUTE, PRINT_ROUTE, PRODUCT_ROUTE } from '@/router';
 // tools
 import { AppLayout } from '@/tools/AppLayout';
 import { Navigation } from '@/tools/Navigation';
@@ -24,14 +21,8 @@ import NavigationBottom from './bottomNavigationBar/BottomNavigationBar.vue';
 import NavigationDrawer from './navigationDrawer/NavigationDrawer.vue';
 import PopupMenu from './popupMenu/PopupMenu.vue';
 
-const _children = [PageHome, PageProduct, PagePrint, PageManage];
-
 export default {
   name: 'App',
-
-  _children() {
-    return _children;
-  },
 
   components: {
     NavigationDrawer,
@@ -68,7 +59,7 @@ export default {
 
     // pages
     pages() {
-      const pages = optArray(_children);
+      const pages = [HOME_ROUTE, PRODUCT_ROUTE, PRINT_ROUTE, MANAGE_ROUTE];
       if (pages.length < 1) return [];
 
       const listGroup1 = pages.map((page) => {
@@ -78,8 +69,8 @@ export default {
           .setIcon(page.icon)
           .setUserPermissions(page.userPermissions);
 
-        const children = isFunction(page._children) ? page._children() : [];
-        const groups = isFunction(page._groups) ? page._groups() : [];
+        const children = isFunction(page.children) ? page.children() : [];
+        const groups = isFunction(page.groups) ? page.groups() : [];
         const queries = isFunction(page._queries) ? page._queries() : [];
 
         const returnParsedGroups = [

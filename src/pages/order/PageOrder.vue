@@ -1,23 +1,17 @@
 <script>
-import { IconPack } from '@/app/IconPack';
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
-import { iconServer } from '@/host/Server';
 import { OrderStatus } from '@/items/Order';
+import { ORDER_ROUTE } from '@/router';
 
 import Actionbar from './Actionbar.vue';
 import SectionOrder from './SectionOrder.vue';
 import WindowAdd from './WindowAdd.vue';
 
 export default {
-  key: 'order',
-  name: 'ViewOrder',
-  title: 'Orders',
-  icon: new IconPack(iconServer('order-FFFFFF'), iconServer('order-000000')),
-  userPermissions: ['admin', 'staff'],
-
   components: { Loading, Actionbar, SectionOrder, Input },
   data: (c) => ({
+    ORDER_ROUTE,
     display: { showDialogAppendOrder: false },
 
     scrollTop: 0,
@@ -75,7 +69,7 @@ export default {
   >
     <Actionbar
       class="PageOrder-actionbar"
-      :title="$options.title"
+      :title="ORDER_ROUTE.title"
       :items="items"
       @click-item="
         (item) => $store.getters.replaceQuery({ query: { order: item.id } })
