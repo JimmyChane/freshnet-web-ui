@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
-import { Mixin } from '@/mixins/index';
-import { router } from '@/routers/index';
+import { Mixin } from '@/mixin';
+import { router } from '@/router';
 import { store } from '@/stores/index';
 
 import App from './app/App.vue';
