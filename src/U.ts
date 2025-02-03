@@ -54,8 +54,9 @@ export function optNumber(num: any, fallback = 0): number {
 export function optBoolean(bool: any, fallback = false): boolean {
   return isBoolean(bool) ? bool : fallback;
 }
-export function optArray(arr: any, fallback = []): [] {
-  return isArray(arr) ? arr : fallback;
+export function optArray<T>(arr: T[] | undefined, fallback: T[] = []): T[] {
+  if (arr === undefined) return fallback;
+  return Array.isArray(arr) ? arr : fallback;
 }
 export function optObject(obj: any, fallback = {}): {} {
   return isObject(obj) ? obj : fallback;

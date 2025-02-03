@@ -1,5 +1,10 @@
 import { ProductPrice } from './ProductPrice';
 
+export interface ProductPricesData {
+  normal?: string;
+  promotion?: string;
+}
+
 export class ProductPrices {
   stores: any;
 

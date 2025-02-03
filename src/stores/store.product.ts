@@ -28,7 +28,7 @@ import {
 } from '@/request/Product';
 
 import { Image } from '../items/Image';
-import { Product } from '../items/Product';
+import { Product, ProductData } from '../items/Product';
 import { Specification } from '../items/Specification';
 import { StoreBuilder } from './tools/StoreBuilder';
 
@@ -123,7 +123,9 @@ export const initProduct = (Stores: any) => {
       const { data } = arg;
       if (!data) throw new Error('data not valid');
       const api = await addProduct(data);
-      const inputItem = new Product(Stores).fromData(api.optObjectContent());
+      const inputItem = new Product(Stores).fromData(
+        api.optObjectContent() as ProductData,
+      );
       return context.state.list.addItem(inputItem);
     })
     .action('removeItemOfId', async (context, arg: { id: string }) => {

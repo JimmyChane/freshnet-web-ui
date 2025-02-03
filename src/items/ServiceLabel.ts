@@ -1,10 +1,15 @@
 import { trimId, trimText } from '@/U';
 
+export interface LabelData {
+  title?: string;
+  hexColor?: string;
+}
+
 export class Label {
   title: string = '';
   hexColor: string = '';
 
-  fromData(data: { title: string; hexColor: string }): this {
+  fromData(data: LabelData): this {
     this.title = trimText(data.title);
     this.hexColor = trimId(data.hexColor);
     return this;

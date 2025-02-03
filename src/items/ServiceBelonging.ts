@@ -1,5 +1,13 @@
 import { optNumber, trimText } from '@/U';
 
+// todo: copied
+export interface ServiceBelongingData {
+  title?: string;
+  time?: number;
+  quantity?: number;
+  description?: string;
+}
+
 export class ServiceBelonging {
   stores: any;
 

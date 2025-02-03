@@ -13,10 +13,10 @@ import { Item } from '@/stores/tools/List';
 import { Brand } from './Brand';
 import { Category } from './Category';
 import { Image } from './Image';
-import { ProductBundle } from './ProductBundle';
+import { ProductBundle, ProductBundleData } from './ProductBundle';
 import { ProductPrice } from './ProductPrice';
-import { ProductPrices } from './ProductPrices';
-import { ProductStock } from './ProductStock';
+import { ProductPrices, ProductPricesData } from './ProductPrices';
+import { ProductStock, ProductStockData } from './ProductStock';
 import { Specification, SpecificationKey } from './Specification';
 
 const FORMAT_SPECIFICATION_ORDERS = Object.values(SpecificationKey);
@@ -25,6 +25,22 @@ function putForwardSlash(texts: string[], separation: string = ' / '): string {
     if (i === 0) return text;
     return `${result}${separation}${text}`;
   });
+}
+
+export interface ProductData {
+  _id?: string;
+  title?: string;
+  description?: string;
+  stock?: ProductStockData;
+  brandId?: string;
+  categoryId?: string;
+  gifts?: string[];
+  bundles?: ProductBundleData[];
+  specifications?: { type?: string; content?: string }[];
+  specification?: Record<string, string>;
+  images?: { method?: string; path?: string }[];
+  image?: { method?: string; path?: string };
+  price?: ProductPricesData;
 }
 
 export class Product implements Item {
@@ -57,11 +73,14 @@ export class Product implements Item {
   category: Category | null = null;
   brand: Brand | null = null;
 
-  fromData(data: any): Product {
+  fromData(data: ProductData): Product {
     this.id = trimId(data._id);
     this.title = trimText(data.title);
     this.description = trimText(data.description);
-    this.stock = new ProductStock(this.stores).fromData(data.stock);
+    this.stock =
+      typeof data.stock === 'object'
+        ? new ProductStock(this.stores).fromData(data.stock)
+        : new ProductStock({});
     this.setBrandId(trimId(data.brandId));
     this.setCategoryId(trimId(data.categoryId));
     this.setGifts(
@@ -83,20 +102,23 @@ export class Product implements Item {
         };
       },
     );
-    if (isObjectOnly(data.specification)) {
+    if (typeof data.specification === 'object' && data.specification) {
+      const { specification } = data;
       specifications.unshift(
-        ...Object.keys(data.specification).map((type) => {
+        ...Object.keys(specification).map((type) => {
           return {
             type: trimId(type),
-            content: trimId(data.specification[type]),
+            content: trimId(specification[type]),
           };
         }),
       );
     }
     this.setSpecifications(specifications);
 
-    const images: { method: string; path: string }[] = optArray(data.images);
-    if (isObjectOnly(data.image)) images.unshift(data.image);
+    const images = optArray(data.images);
+    if (typeof data.image === 'object' && data.image) {
+      images.unshift(data.image);
+    }
     this.setImages(
       images.map((image) => {
         return {

@@ -9,8 +9,8 @@ import {
 import { textContains } from '@/objects/ItemSearcher';
 import { Item } from '@/stores/tools/List';
 
-import { ServiceBelonging } from './ServiceBelonging';
-import { ServiceCustomer } from './ServiceCustomer';
+import { ServiceBelonging, ServiceBelongingData } from './ServiceBelonging';
+import { ServiceCustomer, ServiceCustomerData } from './ServiceCustomer';
 import { ServiceEvent } from './ServiceEvent';
 import {
   INITIAL_SERVICE_EVENT_METHOD,
@@ -19,6 +19,7 @@ import {
 import { ServiceImage } from './ServiceImage';
 import {
   Label,
+  LabelData,
   URGENT_SERVICE_LABEL,
   WARRANTY_SERVICE_LABEL,
 } from './ServiceLabel';
@@ -33,6 +34,25 @@ import {
 } from './ServiceState';
 import { ServiceTimestamp } from './ServiceTimestamp';
 import { User } from './User';
+
+// todo: copied
+export interface ServiceData {
+  _id?: string;
+  time?: number;
+  username?: string;
+  nameOfUser?: string;
+  state?: string;
+  imageFiles?: any[];
+  events?: any[];
+  customer?: ServiceCustomerData;
+  description?: string;
+  belongings?: ServiceBelongingData[];
+  labels?: LabelData[];
+  notice?: {
+    isUrgent?: boolean;
+    isWarranty?: boolean;
+  };
+}
 
 export class Service implements Item {
   stores: any;
@@ -55,7 +75,7 @@ export class Service implements Item {
   imageFiles: ServiceImage[] = [];
   labels: Label[] = [];
 
-  fromData(data: any): Service {
+  fromData(data: ServiceData): Service {
     this.id = trimId(data._id);
     this.timestamp = data.time ? new ServiceTimestamp(data.time) : null;
     this.username = trimId(data.username);

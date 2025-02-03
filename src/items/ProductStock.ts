@@ -1,6 +1,12 @@
 import { optArray, optBoolean } from '@/U';
 
-import { ProductPrices } from './ProductPrices';
+import { ProductPrices, ProductPricesData } from './ProductPrices';
+
+export interface ProductStockData {
+  isAvailable?: boolean;
+  isSecondHand?: boolean;
+  prices?: ProductPricesData[];
+}
 
 export class ProductStock {
   stores: any;
@@ -13,7 +19,7 @@ export class ProductStock {
   isSecondHand: boolean = false;
   prices: any[] = [];
 
-  fromData(data: any) {
+  fromData(data: ProductStockData) {
     this.isAvailable = optBoolean(data.isAvailable, true);
     this.isSecondHand = optBoolean(data.isSecondHand, false);
 

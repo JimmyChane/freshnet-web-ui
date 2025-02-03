@@ -1,10 +1,6 @@
-import { RouterMode } from 'vue-router';
-
 import { isNumber } from '@/U';
 
 class AppHost {
-  public readonly ROUTER_MODE: RouterMode = 'history';
-
   get origin() {
     return parseOrigin(
       getClientProtocol(),
@@ -13,7 +9,7 @@ class AppHost {
     );
   }
   get path() {
-    return this.ROUTER_MODE === 'hash' ? `${this.origin}/#` : `${this.origin}`;
+    return `${this.origin}`;
   }
 }
 

@@ -1,5 +1,9 @@
 import { trimText } from '@/U';
 
+export interface ProductBundleData {
+  title?: string;
+}
+
 export class ProductBundle {
   stores: any;
 

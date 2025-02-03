@@ -1,7 +1,5 @@
 <script>
-import Vue from 'vue';
-
-export default Vue.extend({
+export default {
   props: {
     label: { type: Object },
     isClickable: { type: Boolean, default: true },
@@ -14,7 +12,7 @@ export default Vue.extend({
       return this.label.title;
     },
   },
-});
+};
 </script>
 
 <template>

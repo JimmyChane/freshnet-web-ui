@@ -20,7 +20,7 @@ import { initService } from '@/stores/store.service';
 import { initSetting } from '@/stores/store.setting';
 import { initSpecification } from '@/stores/store.specification';
 import { initUser } from '@/stores/store.user';
-import { Notification } from '@/tools/Notification';
+import { Snackbar } from '@/tools/Snackbar';
 import { TimeNowGetter } from '@/tools/TimeNowGetter';
 
 import { originApiServer } from '../host/Server';
@@ -56,7 +56,7 @@ interface State {
   socket: Socket | null;
   imageViewer: ImageViewerContext;
   popupMenus: PopupMenu[];
-  snackbars: Notification[];
+  snackbars: Snackbar[];
   popupWindows: PopupWindow[];
   stores: Record<string, Store<any>>;
 }
@@ -248,7 +248,7 @@ context.getters.snackbars = (state: any) => {
 };
 context.actions.snackbarShow = (context: any, arg: any) => {
   if (typeof arg === 'string') arg = { text: arg };
-  context.state.snackbars.push(new Notification(context, arg).show());
+  context.state.snackbars.push(new Snackbar(context, arg).show());
   context.commit('snackbars', context.state.snackbars);
 };
 

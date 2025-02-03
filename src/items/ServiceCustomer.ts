@@ -3,6 +3,12 @@ import { textContains } from '@/objects/ItemSearcher';
 
 import { PhoneNumber } from './PhoneNumber';
 
+// todo: copied
+export interface ServiceCustomerData {
+  name?: string;
+  phoneNumber?: string;
+}
+
 export class ServiceCustomer {
   stores: any;
 

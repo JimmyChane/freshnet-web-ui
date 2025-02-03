@@ -1,23 +1,16 @@
-<script lang="ts">
-import Vue from 'vue';
+<script setup lang="ts">
+import { computed } from 'vue';
 
 import { optArray } from '@/U';
-import { Notification } from '@/tools/Notification';
+import { Snackbar } from '@/tools/Snackbar';
 
-export default Vue.extend({
-  props: {
-    item: { type: Notification },
-  },
-  computed: {
-    actions(): any[] {
-      return optArray(this.item.actions);
-    },
-    parsed_actions(): any[] {
-      return this.actions.filter((action) => {
-        return this.actions.indexOf(action) < 2;
-      });
-    },
-  },
+const props = defineProps<{ item: Snackbar }>();
+
+const actions = computed(() => optArray(props.item.actions));
+const parsed_actions = computed(() => {
+  return actions.value.filter((action) => {
+    return actions.value.indexOf(action) < 2;
+  });
 });
 </script>
 

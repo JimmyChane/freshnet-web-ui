@@ -1,6 +1,5 @@
 import VueRouter, { RouteConfig } from 'vue-router';
 
-import { APP_HOST as AppHost } from '@/host/AppHost';
 import PageLogin from '@/pages/login/PageLogin.vue';
 
 import { IconPack } from './app/IconPack';
@@ -225,21 +224,19 @@ const routes: RouteConfig[] = [
     name: 'home',
     component: () => import('@/pages/home/PageHome.vue'),
     beforeEnter(to, from, next) {
-      if (AppHost.ROUTER_MODE === 'history') {
-        const { hash } = to;
+      const { hash } = to;
 
-        let legacyPath = to.redirectedFrom ?? '';
-        if (legacyPath.startsWith('/#')) {
-          legacyPath = hash.substring(2);
+      let legacyPath = to.redirectedFrom ?? '';
+      if (legacyPath.startsWith('/#')) {
+        legacyPath = hash.substring(2);
 
-          if (!hash.startsWith('/')) {
-            legacyPath = `/${legacyPath}`;
-          }
-          if (legacyPath.length) {
-            next({ path: legacyPath, query: to.query });
-          }
-          return;
+        if (!hash.startsWith('/')) {
+          legacyPath = `/${legacyPath}`;
         }
+        if (legacyPath.length) {
+          next({ path: legacyPath, query: to.query });
+        }
+        return;
       }
 
       next();
@@ -268,4 +265,7 @@ const routes: RouteConfig[] = [
   { path: '*', redirect: { path: '/error/404' } },
 ];
 
-export const router = new VueRouter({ mode: AppHost.ROUTER_MODE, routes });
+export const router = new VueRouter({
+  mode: 'history',
+  routes,
+});

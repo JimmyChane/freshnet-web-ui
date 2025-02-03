@@ -2,7 +2,20 @@ import { TimeNowGetter } from '@/tools/TimeNowGetter';
 
 const keyGetter = new TimeNowGetter();
 
-export class Notification {
+export interface SnackbarAction {
+  key: string;
+  title: string;
+  click: () => void;
+}
+
+export interface SnackbarOption {
+  text?: string;
+  isLoading?: boolean;
+  icon?: string;
+  actions?: SnackbarAction[];
+}
+
+export class Snackbar {
   context: any;
 
   key: number;
@@ -11,17 +24,9 @@ export class Notification {
   icon: string | undefined;
   text: string | undefined;
   isLoading: boolean | undefined;
-  actions: any[] | undefined;
+  actions: SnackbarAction[] | undefined;
 
-  constructor(
-    context: any,
-    param: {
-      text?: string;
-      isLoading?: boolean;
-      icon?: string;
-      actions?: any[];
-    } = {},
-  ) {
+  constructor(context: any, param: SnackbarOption = {}) {
     this.context = context;
 
     this.key = keyGetter.get();
