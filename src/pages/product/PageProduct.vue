@@ -1,6 +1,8 @@
 <script>
 import Footer from '@/app/footer/Footer.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
+import { onCreatedRoute } from '@/mixin';
+import { PRODUCT_ROUTE } from '@/router';
 import { NavigationLayout } from '@/tools/Navigation';
 
 import PanelProduct from './PanelProduct.vue';
@@ -123,6 +125,9 @@ export default {
     '$store.state.stores.category.getters.lastModified'() {
       this.invalidate();
     },
+  },
+  created() {
+    onCreatedRoute(PRODUCT_ROUTE);
   },
   mounted() {
     this.invalidate();

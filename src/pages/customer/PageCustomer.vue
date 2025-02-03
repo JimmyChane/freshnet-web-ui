@@ -3,6 +3,7 @@ import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
+import { onCreatedRoute } from '@/mixin';
 import { CUSTOMER_ROUTE } from '@/router';
 
 import PanelCustomer from './PanelCustomer.vue';
@@ -82,6 +83,9 @@ export default {
         this.drawerCustomer = this.currentCustomer;
       }
     },
+  },
+  created() {
+    onCreatedRoute(CUSTOMER_ROUTE);
   },
   mounted() {
     this.invalidate();

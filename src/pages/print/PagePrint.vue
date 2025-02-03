@@ -1,6 +1,7 @@
 <script>
 import Footer from '@/app/footer/Footer.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
+import { onCreatedRoute } from '@/mixin';
 import { Price } from '@/objects/Price';
 import { PRINT_ROUTE } from '@/router';
 
@@ -207,6 +208,8 @@ export default {
     },
   },
   created() {
+    onCreatedRoute(PRINT_ROUTE);
+
     this.tab0 = this.tabs0[0];
     this.tab1 = this.tabs1[0];
     this.tab2 = this.tabs2[0];

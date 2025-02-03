@@ -3,6 +3,8 @@ import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Loading from '@/components/Loading.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import WindowRemove from '@/components/window/WindowRemove.vue';
+import { onCreatedRoute } from '@/mixin';
+import { SERVICE_ROUTE } from '@/router';
 
 import PanelService from './PanelService.vue';
 import PanelServices from './PanelServices.vue';
@@ -68,6 +70,9 @@ export default {
     currentServiceId() {
       this.invalidate();
     },
+  },
+  created() {
+    onCreatedRoute(SERVICE_ROUTE);
   },
   mounted() {
     this.invalidate();

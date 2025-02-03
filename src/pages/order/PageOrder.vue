@@ -2,6 +2,7 @@
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import { OrderStatus } from '@/items/Order';
+import { onCreatedRoute } from '@/mixin';
 import { ORDER_ROUTE } from '@/router';
 
 import Actionbar from './Actionbar.vue';
@@ -28,6 +29,9 @@ export default {
     '$store.state.stores.order.getters.lastModified'() {
       this.invalidate();
     },
+  },
+  created() {
+    onCreatedRoute(ORDER_ROUTE);
   },
   mounted() {
     this.invalidate();

@@ -5,7 +5,6 @@ import Logo from '@/assets/logo/freshnet-enterprise-logo.svg';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 
 export default {
-  rtitle: 'Page Not Found',
   components: { Actionbar, Footer },
   data: (c) => ({
     Logo,
@@ -13,6 +12,9 @@ export default {
     drawer: { isExpand: false },
     top: { shadow: false },
   }),
+  created() {
+    document.title = 'Page Not Found';
+  },
 };
 </script>
 

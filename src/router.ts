@@ -5,7 +5,17 @@ import PageLogin from '@/pages/login/PageLogin.vue';
 import { IconPack } from './app/IconPack';
 import { iconServer } from './host/Server';
 
-export const HOME_ROUTE = {
+export interface AppRoute {
+  key: string;
+  name?: string;
+  title: string;
+  icon: IconPack;
+  children?: { key: string; title: string; icon: IconPack }[];
+  groups?: { key: string; title: string; children: AppRoute[] }[];
+  userPermissions?: string[];
+}
+
+export const HOME_ROUTE: AppRoute = {
   key: 'home',
   name: 'Home',
   title: 'Home',
@@ -19,13 +29,13 @@ export const PRODUCT_ROUTE = {
     iconServer('magnifying-glass'),
   ),
 };
-export const PRINT_ROUTE = {
+export const PRINT_ROUTE: AppRoute = {
   key: 'print',
   title: 'Printing',
   icon: new IconPack(iconServer('paper-FFFFFF'), iconServer('paper-000000')),
 };
 
-export const PROFILE_ROUTE = {
+export const PROFILE_ROUTE: AppRoute = {
   key: 'profile',
   title: 'Your Profile',
   icon: new IconPack(
@@ -33,7 +43,7 @@ export const PROFILE_ROUTE = {
     iconServer('profile-000000'),
   ),
 };
-export const CUSTOMER_ROUTE = {
+export const CUSTOMER_ROUTE: AppRoute = {
   key: 'customer',
   title: 'Customers',
   icon: new IconPack(
@@ -42,7 +52,7 @@ export const CUSTOMER_ROUTE = {
   ),
   userPermissions: ['admin', 'staff'],
 };
-export const SERVICE_ROUTE = {
+export const SERVICE_ROUTE: AppRoute = {
   key: 'service',
   title: 'Services',
   icon: new IconPack(
@@ -51,20 +61,20 @@ export const SERVICE_ROUTE = {
   ),
   userPermissions: ['admin', 'staff'],
 };
-export const ORDER_ROUTE = {
+export const ORDER_ROUTE: AppRoute = {
   key: 'order',
   name: 'ViewOrder',
   title: 'Orders',
   icon: new IconPack(iconServer('order-FFFFFF'), iconServer('order-000000')),
   userPermissions: ['admin', 'staff'],
 };
-export const USERS_ROUTE = {
+export const USERS_ROUTE: AppRoute = {
   key: 'users',
   title: 'Other Users',
   icon: new IconPack(iconServer('users-FFFFFF'), iconServer('users-000000')),
   userPermissions: ['admin'],
 };
-export const DATABASE_ROUTE = {
+export const DATABASE_ROUTE: AppRoute = {
   key: 'database',
   title: 'Database',
   icon: new IconPack(
@@ -73,7 +83,7 @@ export const DATABASE_ROUTE = {
   ),
   userPermissions: ['admin'],
 };
-export const SETTING_ROUTE = {
+export const SETTING_ROUTE: AppRoute = {
   key: 'setting',
   title: 'Settings',
   icon: new IconPack(
@@ -82,7 +92,7 @@ export const SETTING_ROUTE = {
   ),
   userPermissions: ['admin'],
 };
-export const MANAGE_ROUTE = {
+export const MANAGE_ROUTE: AppRoute = {
   key: 'manage',
   name: 'Manage',
   title: 'Manage',

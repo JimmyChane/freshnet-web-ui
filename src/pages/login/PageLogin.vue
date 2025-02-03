@@ -5,6 +5,7 @@ import Logo from '@/assets/logo/freshnet-enterprise-logo.svg';
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
+import { onCreatedContext } from '@/mixin';
 
 import ButtonLogin from './ButtonLogin.vue';
 
@@ -44,6 +45,9 @@ export default {
           this.passwordErrorText = 'Check your password';
         });
     },
+  },
+  created() {
+    onCreatedContext(this);
   },
   async mounted() {
     let user = await this.$store.state.stores.login.dispatch('getUser');

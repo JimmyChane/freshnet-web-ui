@@ -4,6 +4,7 @@ import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
+import { onCreatedRoute } from '@/mixin';
 import { PROFILE_ROUTE } from '@/router';
 
 import SectionMain from './PageProfile-Section-Main.vue';
@@ -44,6 +45,9 @@ export default {
         component: WindowChangePassword,
       });
     },
+  },
+  created() {
+    onCreatedRoute(PROFILE_ROUTE);
   },
   async mounted() {
     this.isLoading = true;

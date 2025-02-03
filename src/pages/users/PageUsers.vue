@@ -5,6 +5,7 @@ import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
+import { onCreatedRoute } from '@/mixin';
 import { USERS_ROUTE } from '@/router';
 
 import ItemUser from './ItemUser.vue';
@@ -31,6 +32,9 @@ export default {
         return 0;
       });
     },
+  },
+  created() {
+    onCreatedRoute(USERS_ROUTE);
   },
   mounted() {
     this.onIntentRefresh();

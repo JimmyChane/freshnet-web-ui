@@ -1,13 +1,7 @@
 <script>
-import { IconPack } from '@/app/IconPack';
-import { iconServer } from '@/host/Server';
+import { MANAGE_ROUTE } from '@/router';
 
 export default {
-  key: 'manage',
-  name: 'Manage',
-  title: 'Manage',
-  icon: new IconPack(iconServer('manage-FFFFFF'), iconServer('manage-000000')),
-
   computed: {
     user: (c) => c.$store.state.stores.login.getters.user,
   },
@@ -32,6 +26,9 @@ export default {
         query: { redirect: this.$router.currentRoute.fullPath },
       });
     },
+  },
+  created() {
+    onCreatedRoute(MANAGE_ROUTE);
   },
   async mounted() {
     try {

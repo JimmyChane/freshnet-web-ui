@@ -6,6 +6,7 @@ import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Empty from '@/components/Empty.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { Setting as SettingModule } from '@/items/Setting';
+import { onCreatedRoute } from '@/mixin';
 import { SETTING_ROUTE } from '@/router';
 
 import ItemSetting from './ItemSetting.vue';
@@ -108,6 +109,9 @@ export default {
     refresh() {
       this.$store.state.stores.user.dispatch('refresh');
     },
+  },
+  created() {
+    onCreatedRoute(SETTING_ROUTE);
   },
   mounted() {
     this.refresh();
