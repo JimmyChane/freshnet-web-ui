@@ -91,6 +91,11 @@ class WorkingHours {
   }
 }
 
+export interface WorkingDayData {
+  title?: string;
+  timeStart?: string;
+  timeEnd?: string;
+}
 export class WorkingDay {
   stores: any;
   parentDays: WorkingDay[] = [];
@@ -105,7 +110,7 @@ export class WorkingDay {
   title: string = '';
   hours: WorkingHours;
 
-  fromData(data: any): WorkingDay {
+  fromData(data: WorkingDayData): WorkingDay {
     const { title = '', timeStart = '', timeEnd = '' } = data;
     const dataHours = { timeStart, timeEnd };
 

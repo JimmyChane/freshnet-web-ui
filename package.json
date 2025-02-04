@@ -16,6 +16,7 @@
     "core-js": "^3.8.3",
     "date-fns": "^2.30.0",
     "path-browserify": "^1.0.1",
+    "pinia": "^2.3.1",
     "print-html-element": "^0.5.1",
     "socket.io-client": "^4.7.2",
     "stream-browserify": "^3.0.0",

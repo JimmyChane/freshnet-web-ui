@@ -1,8 +1,9 @@
 import { trimId, trimText } from '@/U';
+import { Item } from '@/stores/tools/List';
 
 import { textContains } from '../objects/ItemSearcher';
 
-export class Ps2Disc {
+export class Ps2Disc implements Item {
   stores: any;
 
   constructor(stores: any) {
@@ -38,5 +39,9 @@ export class Ps2Disc {
 
   compare(item: Ps2Disc): number {
     return this.title.localeCompare(item.title);
+  }
+
+  getUnique(): string {
+    return this.id;
   }
 }

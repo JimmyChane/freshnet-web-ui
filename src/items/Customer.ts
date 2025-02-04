@@ -5,7 +5,7 @@ import { Item } from '@/stores/tools/List';
 import { CustomerDevice } from './CustomerDevice';
 import { PhoneNumber } from './PhoneNumber';
 
-interface CustomerData {
+export interface CustomerData {
   _id: string;
   name: string;
   phoneNumber: string | undefined;
