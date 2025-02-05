@@ -1,16 +1,22 @@
 <script>
 import ToggleButton from '@/components/button/ToggleButton.vue';
+import { useSettingStore } from '@/pinia-stores/setting.store';
+import { useUserStore } from '@/pinia-stores/user.store';
 
 export default {
   components: { ToggleButton },
   props: { item: { type: Object, default: () => null } },
   data: (c) => ({ value: undefined }),
   computed: {
-    isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+
+    isLoading: (c) => useUserStore().isLoading,
     title: (c) => c.item.getTitle(),
   },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidateValue();
     },
     item() {

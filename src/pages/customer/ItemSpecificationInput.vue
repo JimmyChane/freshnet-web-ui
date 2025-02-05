@@ -1,6 +1,7 @@
 <script>
 import IconClose from '@/assets/icon/close-000000.svg';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
+import { useSpecificationStore } from '@/pinia-stores/specification.store';
 
 export default {
   components: { ButtonIcon },
@@ -13,9 +14,7 @@ export default {
     specifications: (c) => {
       return [
         { key: 'none', title: 'None' },
-        ...c.$store.state.stores.specification.getters.items.map(
-          (item) => item,
-        ),
+        ...useSpecificationStore().items.map((item) => item),
       ].map((item) => ({
         key: item.key,
         title: item.title,

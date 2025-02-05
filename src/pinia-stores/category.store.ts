@@ -17,7 +17,7 @@ export const useCategoryStore = defineStore('category', () => {
     .loadData(async () => {
       const api = await getCategoryList();
       const content = optArray(api.optArrayContent());
-      return content.map((content) => new Category(content));
+      return content.map((content) => new Category().fromData(content));
     });
 
   const processor = ref(new Processor());

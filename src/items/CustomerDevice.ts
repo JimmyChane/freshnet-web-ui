@@ -1,5 +1,7 @@
 import { optArray, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
+import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useCustomerStore } from '@/pinia-stores/customer.store';
 import { Item } from '@/stores/tools/List';
 
 import { Category } from './Category';
@@ -15,16 +17,6 @@ interface CustomerDeviceData {
 }
 
 export class CustomerDevice implements Item {
-  stores: any = null;
-  categoryStore: any = null;
-  customerStore: any = null;
-
-  constructor(stores: any) {
-    this.stores = stores;
-    this.categoryStore = stores.category;
-    this.customerStore = stores.customer;
-  }
-
   id: string = '';
   ownerCustomerId: string = '';
   description: string = '';
@@ -38,9 +30,7 @@ export class CustomerDevice implements Item {
     this.categoryKey = trimId(data.categoryKey);
     this.specifications = optArray(data.specifications)
       .map((specification) => {
-        return new CustomerDeviceSpecification(this.stores).fromData(
-          specification,
-        );
+        return new CustomerDeviceSpecification().fromData(specification);
       })
       .filter((specification) => {
         return specification.typeKey && specification.content;
@@ -80,13 +70,12 @@ export class CustomerDevice implements Item {
   }
 
   async fetchCustomer(): Promise<Customer | undefined> {
-    const customers: Customer[] = await this.customerStore.dispatch('getItems');
+    const customers: Customer[] = await useCustomerStore().getItems();
     return customers.find((customer) => customer.id === this.ownerCustomerId);
   }
 
   async fetchCategory(): Promise<Category | undefined> {
-    const categories: Category[] =
-      await this.categoryStore.dispatch('getItems');
+    const categories: Category[] = await useCategoryStore().getItems();
     return categories.find((category) => category.key === this.categoryKey);
   }
 

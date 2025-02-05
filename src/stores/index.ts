@@ -8,18 +8,6 @@ import {
   POPUP_MENU_CORNER,
   POPUP_MENU_WIDTH,
 } from '@/app/popupMenu/PopupMenuOption';
-import { initBrand } from '@/stores/store.brand';
-import { initCategory } from '@/stores/store.category';
-import { initCustomer } from '@/stores/store.customer';
-import { initDatabase } from '@/stores/store.database';
-import { initLogin } from '@/stores/store.login';
-import { initOrder } from '@/stores/store.order';
-import { initProduct } from '@/stores/store.product';
-import { initPs2 } from '@/stores/store.ps2';
-import { initService } from '@/stores/store.service';
-import { initSetting } from '@/stores/store.setting';
-import { initSpecification } from '@/stores/store.specification';
-import { initUser } from '@/stores/store.user';
 import { Snackbar } from '@/tools/Snackbar';
 import { TimeNowGetter } from '@/tools/TimeNowGetter';
 
@@ -314,46 +302,3 @@ context.actions.openPopupWindow = (
 };
 
 export const store = new Vuex.Store(context);
-
-// modules
-Stores.store = store;
-Stores.database = initDatabase(Stores);
-Stores.login = initLogin(Stores);
-Stores.user = initUser(Stores);
-Stores.setting = initSetting(Stores);
-Stores.customer = initCustomer(Stores);
-Stores.order = initOrder(Stores);
-Stores.brand = initBrand(Stores);
-Stores.specification = initSpecification(Stores);
-Stores.category = initCategory(Stores);
-Stores.service = initService(Stores);
-Stores.product = initProduct(Stores);
-Stores.ps2 = initPs2(Stores);
-
-context.modules = {
-  database: Stores.database,
-  login: Stores.login,
-  user: Stores.user,
-  setting: Stores.setting,
-  customer: Stores.customer,
-  order: Stores.order,
-  brand: Stores.brand,
-  specification: Stores.specification,
-  category: Stores.category,
-  service: Stores.service,
-  product: Stores.product,
-  ps2: Stores.ps2,
-};
-
-context.state.stores['database'] = Stores.database;
-context.state.stores['login'] = Stores.login;
-context.state.stores['user'] = Stores.user;
-context.state.stores['setting'] = Stores.setting;
-context.state.stores['customer'] = Stores.customer;
-context.state.stores['order'] = Stores.order;
-context.state.stores['brand'] = Stores.brand;
-context.state.stores['specification'] = Stores.specification;
-context.state.stores['category'] = Stores.category;
-context.state.stores['service'] = Stores.service;
-context.state.stores['product'] = Stores.product;
-context.state.stores['ps2'] = Stores.ps2;

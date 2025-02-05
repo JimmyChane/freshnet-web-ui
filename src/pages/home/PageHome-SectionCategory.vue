@@ -1,15 +1,23 @@
 <script>
+import { mapStores } from 'pinia';
+
+import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useProductStore } from '@/pinia-stores/product.store';
+
 import Item from './PageHome-SectionCategory-Item.vue';
 
 export default {
   components: { Item },
   props: { isThin: { type: Boolean, default: false } },
   data: (c) => ({ groups: [] }),
+  computed: {
+    ...mapStores(useCategoryStore, useProductStore),
+  },
   watch: {
-    '$store.state.stores.category.getters.lastModified'() {
+    'categoryStore.lastModified'() {
       this.invalidate();
     },
-    '$store.state.stores.product.getters.lastModified'() {
+    'productStore.lastModified'() {
       this.invalidate();
     },
   },
@@ -20,9 +28,7 @@ export default {
     async invalidate() {
       this.groups = [];
 
-      const groups = (
-        await this.$store.state.stores.product.dispatch('getGroupsByCategory')
-      )
+      const groups = (await useProductStore().getGroupsByCategory())
         .filter((group) => {
           group.items = group.items.filter((product) => {
             return product.toImageThumbnail() && product.isStockAvailable();

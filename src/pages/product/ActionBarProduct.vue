@@ -4,6 +4,8 @@ import IconSearch from '@/assets/icon/search-000000.svg';
 import SearchInput from '@/components/SearchInput.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
+import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useProductStore } from '@/pinia-stores/product.store';
 import { withItems } from '@/tools/Searcher';
 
 import ItemSearchProduct from './ItemSearchProduct.vue';
@@ -52,8 +54,8 @@ export default {
         title: 'Refresh',
         icon: IconRefresh,
         click: () => {
-          this.$store.state.stores.category.dispatch('refresh');
-          this.$store.state.stores.product.dispatch('refresh');
+          useCategoryStore().refresh();
+          useProductStore().refresh();
         },
       });
 

@@ -4,6 +4,8 @@ import Empty from '@/components/Empty.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { onCreatedRoute } from '@/mixin';
+import { useDatabaseStore } from '@/pinia-stores/database.store';
+import { useLoginStore } from '@/pinia-stores/login.store';
 import { DATABASE_ROUTE } from '@/router';
 
 import ItemDatabase from './ItemDatabase.vue';
@@ -19,20 +21,18 @@ export default {
   }),
   computed: {
     isLoading: (c) => {
-      const loginStore = c.$store.state.stores.login;
-      const databaseStore = c.$store.state.stores.database;
-      return loginStore.getters.isLoading || databaseStore.getters.isLoading;
+      return useLoginStore().isLoading || useDatabaseStore().isLoading;
     },
-    user: (c) => c.$store.state.stores.login.getters.user,
-    baseInfo: (c) => c.$store.state.stores.database.getters.baseInfo,
-    databases: (c) => c.$store.state.stores.database.getters.items,
+    user: (c) => useLoginStore().user,
+    baseInfo: (c) => useDatabaseStore().baseInfo,
+    databases: (c) => useDatabaseStore().items,
   },
   created() {
     onCreatedRoute(DATABASE_ROUTE);
   },
   mounted() {
-    this.$store.state.stores.login
-      .dispatch('refresh')
+    useLoginStore()
+      .refresh()
       .then(() => {
         this.actionRefresh();
       })
@@ -59,9 +59,7 @@ export default {
       reader.onload = (event) => {
         this.imports.data = reader.result;
 
-        this.$store.state.stores.database.dispatch('imports', {
-          json: reader.result,
-        });
+        useDatabaseStore().imports({ json: reader.result });
       };
       reader.readAsText(file);
     },
@@ -76,7 +74,7 @@ export default {
           if (this.user === null || !this.user.isTypeAdmin()) {
             throw new Error();
           }
-          return this.$store.state.stores.database.dispatch('loadBaseInfo');
+          return useDatabaseStore().loadBaseInfo();
         })
         .catch((error) => {
           this.$store.dispatch('snackbarShow', 'Error Loading Databases');

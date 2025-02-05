@@ -1,5 +1,6 @@
 <script>
 import { CustomerDeviceSpecification } from '@/items/CustomerDeviceSpecification';
+import { useSpecificationStore } from '@/pinia-stores/specification.store';
 
 export default {
   emtis: ['click', 'click-remove'],
@@ -17,8 +18,8 @@ export default {
   },
   methods: {
     invalidate() {
-      this.$store.state.stores.specification
-        .dispatch('getItemOfKey', this.item?.typeKey ?? '')
+      useSpecificationStore()
+        .getItemOfKey(this.item?.typeKey ?? '')
         .then((specificationType) => {
           this.specificationType = specificationType;
         });

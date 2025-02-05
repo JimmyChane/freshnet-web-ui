@@ -3,6 +3,9 @@ import Input from '@/components/Input.vue';
 import LabelMenus from '@/components/LabelMenus.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import { CategoryKey } from '@/items/Category';
+import { useBrandStore } from '@/pinia-stores/brand.store';
+import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useProductStore } from '@/pinia-stores/product.store';
 
 export default {
   components: { PanelAction, Input, LabelMenus },
@@ -35,15 +38,14 @@ export default {
   },
   mounted() {
     this.invalidate();
-    this.$store.state.stores.brand.dispatch('getItems');
-    this.$store.state.stores.category.dispatch('getItems');
-    this.$store.state.stores.product.dispatch('getItems');
+    useBrandStore().getItems();
+    useCategoryStore().getItems();
+    useProductStore().getItems();
   },
   methods: {
     async invalidate() {
-      const brands = await this.$store.state.stores.brand.dispatch('getItems');
-      const categories =
-        await this.$store.state.stores.category.dispatch('getItems');
+      const brands = await useBrandStore().getItems();
+      const categories = await useCategoryStore().getItems();
 
       this.brandMenus = [
         { key: 'none', title: 'None' },

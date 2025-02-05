@@ -11,12 +11,6 @@ interface BrandData {
 }
 
 export class Brand implements Item {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
-
   id: string = '';
   title: string = '';
   icon: Image | null = null;

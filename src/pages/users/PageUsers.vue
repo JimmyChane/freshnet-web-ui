@@ -6,6 +6,8 @@ import Empty from '@/components/Empty.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { onCreatedRoute } from '@/mixin';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useUserStore } from '@/pinia-stores/user.store';
 import { USERS_ROUTE } from '@/router';
 
 import ItemUser from './ItemUser.vue';
@@ -19,18 +21,18 @@ export default {
     return { USERS_ROUTE, IconAdd, IconRefresh };
   },
   computed: {
-    isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
+    isLoading: (c) => useUserStore().isLoading,
     isCurrentUserAdmin: (c) => (c.user ? c.user.isTypeAdmin() : false),
 
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     users: (c) => {
-      return (
-        !c.user.isTypeNone() ? c.$store.state.stores.user.getters.items : []
-      ).sort((user1, user2) => {
-        if (user1.username === c.user.username) return -1;
-        if (user2.username === c.user.username) return 1;
-        return 0;
-      });
+      return (!c.user.isTypeNone() ? useUserStore().items : []).sort(
+        (user1, user2) => {
+          if (user1.username === c.user.username) return -1;
+          if (user2.username === c.user.username) return 1;
+          return 0;
+        },
+      );
     },
   },
   created() {
@@ -46,9 +48,11 @@ export default {
     },
 
     onIntentRefresh() {
-      this.$store.state.stores.user.dispatch('refresh').catch((error) => {
-        this.$store.dispatch('snackbarShow', 'Failed to validate user');
-      });
+      useUserStore()
+        .refresh()
+        .catch((error) => {
+          this.$store.dispatch('snackbarShow', 'Failed to validate user');
+        });
     },
 
     async openWindowAdd() {
@@ -56,15 +60,12 @@ export default {
         component: WindowAdd,
         onConfirm: async (data) => {
           try {
-            const user = await this.$store.state.stores.user.dispatch(
-              'addUser',
-              {
-                username: data.username,
-                name: data.name,
-                passwordNew: data.passwordNew,
-                passwordRepeat: data.passwordRepeat,
-              },
-            );
+            const user = await useUserStore().addUser({
+              username: data.username,
+              name: data.name,
+              passwordNew: data.passwordNew,
+              passwordRepeat: data.passwordRepeat,
+            });
 
             if (user) {
               popupWindow.close();
@@ -83,10 +84,9 @@ export default {
         component: WindowRemove,
         onConfirm: async () => {
           try {
-            const result = await this.$store.state.stores.user.dispatch(
-              'removeUserByUsername',
-              { username: user.username },
-            );
+            const result = await useUserStore().removeUserByUsername({
+              username: user.username,
+            });
 
             if (result) {
               popupWindow.close();
@@ -109,13 +109,10 @@ export default {
           try {
             const userTypeNumber = optNumber(Number.parseInt(data.userType), 0);
 
-            const userChange = await this.$store.state.stores.user.dispatch(
-              'updateTypeOfUserByUsername',
-              {
-                username: data.user.username,
-                userType: userTypeNumber,
-              },
-            );
+            const userChange = await useUserStore().updateTypeOfUserByUsername({
+              username: data.user.username,
+              userType: userTypeNumber,
+            });
             if (userChange) {
               popupWindow.close();
               return;

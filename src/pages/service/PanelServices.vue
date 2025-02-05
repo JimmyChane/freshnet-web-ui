@@ -1,10 +1,14 @@
 <script>
+import { mapStores } from 'pinia';
+
 import { optString } from '@/U';
 import IconDetail from '@/assets/icon/detail-000000.svg';
 import IconGrid from '@/assets/icon/grid-000000.svg';
 import IconList from '@/assets/icon/list-000000.svg';
 import Empty from '@/components/Empty.vue';
 import { mapServiceState } from '@/items/ServiceState';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useServiceStore } from '@/pinia-stores/service.store';
 import { SERVICE_ROUTE } from '@/router';
 
 import ListServices from './ListServices.vue';
@@ -32,6 +36,8 @@ export default {
     sortMenus: [],
   }),
   computed: {
+    ...mapStores(useServiceStore),
+
     iconEmpty: () => SERVICE_ROUTE.icon.dark.toUrl(),
 
     items: (c) => c.stateMenus[c.stateMenuIndex]?.list ?? [],
@@ -51,7 +57,7 @@ export default {
       return menu?.key ?? ListServices.GroupMode.DateCreated;
     },
 
-    currentUser: (c) => c.$store.state.stores.login.getters.user,
+    currentUser: (c) => useLoginStore().user,
     isCurrentUserAdmin: (c) => c.currentUser.isTypeAdmin(),
     isCurrentUserDefault: (c) => c.currentUser.isDefault(),
 
@@ -220,10 +226,7 @@ export default {
       @click-item="(item) => $emit('click-service', item)"
     />
 
-    <Empty
-      v-if="!items.length && !$store.state.stores.service.getters.isLoading"
-      :icon="iconEmpty"
-    />
+    <Empty v-if="!items.length && !serviceStore.isLoading" :icon="iconEmpty" />
   </div>
 </template>
 

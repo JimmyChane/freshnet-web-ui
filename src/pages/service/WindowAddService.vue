@@ -1,5 +1,9 @@
 <script>
+import { mapStores } from 'pinia';
+
 import PanelAction from '@/components/panel/PanelAction.vue';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useServiceStore } from '@/pinia-stores/service.store';
 
 import LayoutFindCustomer from './LayoutFindCustomer.vue';
 import BodyBelongings from './WindowUpdateService-belongings.vue';
@@ -31,9 +35,11 @@ export default {
     },
   }),
   computed: {
+    ...mapStores(useServiceStore),
+
     isShowing: (c) => c.popupWindow.isShowing,
 
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     userIsDefault: (c) => c.user.isDefault() || c.user.isDefault(),
   },
   watch: {
@@ -53,7 +59,7 @@ export default {
     },
 
     onUser() {
-      this.$store.state.stores.login.dispatch('refresh');
+      useLoginStore().refresh();
     },
     onReset() {
       this.data = {
@@ -114,8 +120,8 @@ export default {
   <PanelAction
     title="Add Service"
     :isShowing="isShowing"
-    :isLoading="$store.state.stores.service.getters.isFetching"
-    :isClickable="!$store.state.stores.service.getters.isFetching"
+    :isLoading="serviceStore.isFetching"
+    :isClickable="!serviceStore.isFetching"
     @click-ok="() => onCreate()"
     @click-cancel="
       () => {

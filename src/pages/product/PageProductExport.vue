@@ -2,6 +2,8 @@
 import PrintContent from '@/components/PrintContent.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { cmToPixel } from '@/objects/Pixel';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useProductStore } from '@/pinia-stores/product.store';
 
 import ExportButton from './PageProductExport-Export.vue';
 import LayoutOne from './PageProductExport-Layout-One.vue';
@@ -97,7 +99,7 @@ export default {
     bodyHeight: 0,
   }),
   computed: {
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
     productId: (context) => context.$route.query.productId,
@@ -142,10 +144,7 @@ export default {
     async invalidateProduct() {
       this.product = null;
 
-      const product = await this.$store.state.stores.product.dispatch(
-        'getItemOfId',
-        this.productId,
-      );
+      const product = await useProductStore().getItemOfId(this.productId);
       if (!product) return;
 
       document.title = await product.fetchFullTitle();
@@ -169,7 +168,7 @@ export default {
   },
   async mounted() {
     try {
-      const user = await this.$store.state.stores.login.dispatch('getUser');
+      const user = await useLoginStore().getUser();
       if (user.isTypeNone()) this.redirectToLogin();
     } catch (error) {
       this.redirectToLogin();

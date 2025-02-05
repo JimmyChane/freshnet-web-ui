@@ -1,6 +1,8 @@
 <script>
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
 
+import { mapStores } from 'pinia';
+
 import { optString } from '@/U';
 import Empty from '@/components/Empty.vue';
 import { CUSTOMER_ROUTE } from '@/router';
@@ -24,6 +26,8 @@ export default {
   },
   data: (c) => ({ scrollTop: 0, itemSelect: null }),
   computed: {
+    ...mapStores(useCustomerStore),
+
     iconEmpty: () => CUSTOMER_ROUTE.icon.dark.toUrl(),
 
     filter: (c) => optString(c.$route.query.filter),
@@ -106,10 +110,7 @@ export default {
       </template>
     </DynamicScroller>
 
-    <Empty
-      v-if="!list.length && !$store.state.stores.customer.getters.isLoading"
-      :icon="iconEmpty"
-    />
+    <Empty v-if="!list.length && !customerStore.isLoading" :icon="iconEmpty" />
   </div>
 </template>
 

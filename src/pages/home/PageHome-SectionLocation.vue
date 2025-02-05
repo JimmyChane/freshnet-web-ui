@@ -1,11 +1,17 @@
 <script>
 import { SettingKey } from '@/items/Setting';
+import { useSettingStore } from '@/pinia-stores/setting.store';
 
 export default {
   props: { isThin: { type: Boolean, default: false } },
   data: (c) => ({ address: '', link: '' }),
+  computed: {
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+  },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidate();
     },
   },
@@ -14,18 +20,12 @@ export default {
   },
   methods: {
     async invalidate() {
-      this.address = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SettingKey.Location,
-        },
-      );
-      this.link = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SettingKey.LocationLink,
-        },
-      );
+      this.address = await useSettingStore().findValueOfKey({
+        key: SettingKey.Location,
+      });
+      this.link = await useSettingStore().findValueOfKey({
+        key: SettingKey.LocationLink,
+      });
     },
   },
 };

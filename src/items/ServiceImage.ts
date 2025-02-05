@@ -1,5 +1,6 @@
 import { trimId } from '@/U';
 import { originApiServer } from '@/host/Server';
+import { useLoginStore } from '@/pinia-stores/login.store';
 
 import { Filename } from '../objects/Filename';
 import { Image, MethodImage, dimensionToQuery } from './Image';
@@ -12,14 +13,6 @@ interface ServiceImageData {
 }
 
 export class ServiceImage {
-  stores: any;
-  loginStore: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-    this.loginStore = stores.login;
-  }
-
   name: string = '';
   path: string = '';
   method: string = '';
@@ -80,9 +73,12 @@ export class ServiceImage {
     const { width = 0, height = 0 } = option;
 
     const url = this.toUrl({ width, height });
-    const options = {
-      headers: { authorization: this.loginStore.getters.token },
-    };
+    const options: RequestInit = {};
+    const token = useLoginStore().token;
+    if (typeof token === 'string') {
+      options.headers = { authorization: token };
+    }
+
     const response = await fetch(url, options);
     const blob = await response.blob();
     return URL.createObjectURL(blob);

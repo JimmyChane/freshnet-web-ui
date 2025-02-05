@@ -6,6 +6,7 @@ import PHE from 'print-html-element';
 
 import { isFunction, isPassed, optArray, parseGroup2s, replace } from '@/U';
 import PopupWindow from '@/components/window/PopupWindow.vue';
+import { useLoginStore } from '@/pinia-stores/login.store';
 import { HOME_ROUTE, MANAGE_ROUTE, PRINT_ROUTE, PRODUCT_ROUTE } from '@/router';
 // tools
 import { AppLayout } from '@/tools/AppLayout';
@@ -55,7 +56,7 @@ export default {
     navigation: null,
   }),
   computed: {
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
 
     // pages
     pages() {
@@ -146,14 +147,14 @@ export default {
       return paths.length > 1 ? paths[1] : '';
     },
 
-    isLogging: (c) => c.$store.state.stores.login.getters.isLogging,
+    isLogging: (c) => useLoginStore().isLogging,
   },
   watch: {
     currentPaths() {
       this.navigation.closeNavigationDrawer();
     },
     isLogging() {
-      if (!this.$store.state.stores.login.getters.user && this.isLogging) {
+      if (!useLoginStore().user && this.isLogging) {
         this.$store.dispatch('snackbarShow', 'User Logging');
       }
     },
@@ -242,7 +243,7 @@ export default {
     },
 
     async invalidateUser() {
-      const user = await this.$store.state.stores.login.dispatch('getUser');
+      const user = await useLoginStore().getUser();
 
       if (user.isTypeAdmin() || user.isTypeStaff()) {
         this.shouldShowStatus = true;
@@ -253,9 +254,14 @@ export default {
       }
     },
     logout() {
-      this.$store.state.stores.login.dispatch('logout').then((user) => {
-        this.$store.dispatch('snackbarShow', `${user.name} is now logged out`);
-      });
+      useLoginStore()
+        .logout()
+        .then((user) => {
+          this.$store.dispatch(
+            'snackbarShow',
+            `${user.name} is now logged out`,
+          );
+        });
     },
   },
 };

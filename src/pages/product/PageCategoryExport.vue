@@ -3,13 +3,15 @@ import IconPrinter from '@/assets/icon/printer-000000.svg';
 import PrintContent from '@/components/PrintContent.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { cmToPixel } from '@/objects/Pixel';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useProductStore } from '@/pinia-stores/product.store';
 
 import Layout from './PageCategoryExport-Layout.vue';
 
 export default {
   components: { NavigationBar, PrintContent, Layout },
   computed: {
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
     width: () => cmToPixel(210),
@@ -18,11 +20,8 @@ export default {
   data: () => ({ IconPrinter, products: [] }),
   methods: {
     async invalidate() {
-      const productStore = this.$store.state.stores.product;
       const { id } = this.$route.query;
-      const groups = await $store.state.stores.product.dispatch(
-        'getGroupsByCategory',
-      );
+      const groups = await useProductStore().getGroupsByCategory();
       const group = groups.find((group) => group.category.id === id);
       this.products = group?.items ?? [];
     },

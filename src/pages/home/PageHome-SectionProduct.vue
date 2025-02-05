@@ -1,11 +1,14 @@
 <script>
 import chroma from 'chroma-js';
+import { mapStores } from 'pinia';
 
 import { isColorDark } from '@/U';
 import IconArrowDownDark from '@/assets/icon/arrowDown-000000.svg';
 import IconArrowDownLight from '@/assets/icon/arrowDown-FFFFFF.svg';
 import ImageView from '@/components/ImageView.vue';
 import { CategoryKey } from '@/items/Category';
+import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useProductStore } from '@/pinia-stores/product.store';
 
 export default {
   components: { ImageView },
@@ -25,9 +28,8 @@ export default {
     isDestroyed: false,
   }),
   computed: {
-    '$store.state.stores.category.getters.lastModified'() {
-      this.invalidate();
-    },
+    ...mapStores(useCategoryStore),
+
     item() {
       if (this.productIndex < 0) this.productIndex = this.products.length - 1;
       if (this.productIndex >= this.products.length) this.productIndex = 0;
@@ -48,6 +50,9 @@ export default {
     },
   },
   watch: {
+    'categoryStore.lastModified'() {
+      this.invalidate();
+    },
     item() {
       this.invalidateProduct();
     },
@@ -76,9 +81,7 @@ export default {
 
     async invalidate() {
       this.products = [];
-      const groups = await this.$store.state.stores.product.dispatch(
-        'getGroupsByCategory',
-      );
+      const groups = await useProductStore().getGroupsByCategory();
       if (!groups.length) return;
 
       this.itemTitle = '';

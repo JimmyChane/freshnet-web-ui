@@ -12,6 +12,8 @@ import {
   PURCHASE_SERVICE_EVENT_METHOD,
   QUOTATION_SERVICE_EVENT_METHOD,
 } from '@/items/ServiceEventMethod';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useServiceStore } from '@/pinia-stores/service.store';
 
 import AddImage from './PanelService-AddEvent-AddImage.vue';
 
@@ -63,7 +65,7 @@ export default {
       },
     ],
 
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     isUserDefault: (c) => {
       if (c.user.isTypeNone()) return false;
       const isUserAdmin = c.user.isTypeAdmin() && c.user.isDefault();
@@ -159,10 +161,8 @@ export default {
       const { files } = event.target;
       const imageFiles = [];
       for (const file of files) imageFiles.push(file);
-      const tempImageContents = await this.$store.state.stores.service.dispatch(
-        'addImageTemp',
-        imageFiles,
-      );
+      const tempImageContents =
+        await useServiceStore().addImageTemp(imageFiles);
       const images = imageFiles.map((imageFile, index) => {
         const tempImageContent = tempImageContents[index];
 

@@ -5,6 +5,7 @@ import GlobalSearch from '@/app/search/GlobalSearch.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { cloudinaryServer } from '@/host/Server';
 import { SettingKey } from '@/items/Setting';
+import { useSettingStore } from '@/pinia-stores/setting.store';
 
 export default {
   components: { NavigationBar, GlobalSearch },
@@ -21,6 +22,10 @@ export default {
     cloudinaryServer,
   }),
   computed: {
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+
     businessHourDescription: (c) => {
       const now = new Date();
 
@@ -63,38 +68,29 @@ export default {
     },
   },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidate();
     },
   },
   methods: {
     async invalidate() {
-      this.companyTitle = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SettingKey.CompanyName,
-          default: '',
-        },
-      );
-      this.companyCategory = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        { key: SettingKey.CompanyCategory, default: '' },
-      );
-      this.addressHref = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SettingKey.LocationLink,
-          default: '',
-        },
-      );
+      this.companyTitle = await useSettingStore().findValueOfKey({
+        key: SettingKey.CompanyName,
+        default: '',
+      });
+      this.companyCategory = await useSettingStore().findValueOfKey({
+        key: SettingKey.CompanyCategory,
+        default: '',
+      });
+      this.addressHref = await useSettingStore().findValueOfKey({
+        key: SettingKey.LocationLink,
+        default: '',
+      });
 
-      this.days = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SettingKey.CompanyWorkingHours,
-          default: [],
-        },
-      );
+      this.days = await useSettingStore().findValueOfKey({
+        key: SettingKey.CompanyWorkingHours,
+        default: [],
+      });
     },
   },
   mounted() {

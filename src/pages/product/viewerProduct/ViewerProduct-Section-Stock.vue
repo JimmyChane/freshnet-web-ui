@@ -1,4 +1,8 @@
 <script>
+import { mapStores } from 'pinia';
+
+import { useProductStore } from '@/pinia-stores/product.store';
+
 import Section from './ViewerProduct-Section.vue';
 import Checkbox from './ViewerProduct-StockCheckbox.vue';
 
@@ -10,6 +14,8 @@ export default {
     product: { type: Object, default: () => null },
   },
   computed: {
+    ...mapStores(useProductStore),
+
     productIsAvailable: (c) => c.product?.isStockAvailable() ?? true,
     productIsSecondHand: (c) => c.product?.isStockSecondHand() ?? false,
   },
@@ -25,7 +31,7 @@ export default {
         :checked="!productIsAvailable"
         @click="
           () => {
-            $store.state.stores.product.dispatch('updateAvailabilityOfId', {
+            productStore.updateAvailabilityOfId({
               id: product.id,
               isAvailable: !productIsAvailable,
             });
@@ -38,7 +44,7 @@ export default {
         :checked="productIsSecondHand"
         @click="
           () => {
-            $store.state.stores.product.dispatch('updateSecondHandOfId', {
+            productStore.updateSecondHandOfId({
               id: product.id,
               isSecondHand: !productIsSecondHand,
             });

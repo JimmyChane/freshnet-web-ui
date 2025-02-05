@@ -5,6 +5,7 @@ import Selector from '@/components/selector/Selector.vue';
 import { Service } from '@/items/Service';
 import { findServiceStateByKey } from '@/items/ServiceState';
 import Section from '@/pages/manage/PanelItem-Section.vue';
+import { useServiceStore } from '@/pinia-stores/service.store';
 
 import ButtonAddImage from './ButtonAddImage.vue';
 import ButtonImage from './ButtonImage.vue';
@@ -125,11 +126,8 @@ export default {
       return 'unknown';
     },
     onImageAdd(imageFiles) {
-      this.$store.state.stores.service
-        .dispatch('addImageToId', {
-          serviceID: this.service.id,
-          imageFiles,
-        })
+      useServiceStore()
+        .addImageToId({ serviceID: this.service.id, imageFiles })
         .then((serivce) => {})
         .catch((error) => {
           this.$store.dispatch('snackbarShow', 'Failed to Add Image');

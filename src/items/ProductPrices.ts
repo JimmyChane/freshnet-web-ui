@@ -6,20 +6,12 @@ export interface ProductPricesData {
 }
 
 export class ProductPrices {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
-
   normal: ProductPrice | null = null;
   promotion: ProductPrice | null = null;
 
   fromData(data: { normal?: string; promotion?: string } = {}): ProductPrices {
-    this.normal = new ProductPrice(this.stores).fromString(data.normal || '');
-    this.promotion = new ProductPrice(this.stores).fromString(
-      data.promotion || '',
-    );
+    this.normal = new ProductPrice().fromString(data.normal || '');
+    this.promotion = new ProductPrice().fromString(data.promotion || '');
     return this;
   }
   toData(): { normal: string; promotion: string } {

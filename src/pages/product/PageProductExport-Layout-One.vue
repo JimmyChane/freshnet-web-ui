@@ -1,6 +1,7 @@
 <script>
 import { ProductPrice } from '@/items/ProductPrice';
 import { SpecificationKey } from '@/items/Specification';
+import { useLoginStore } from '@/pinia-stores/login.store';
 
 import Item from './PageProductExport-Layout-One-Specification.vue';
 
@@ -23,7 +24,7 @@ export default {
     specificationGap: 0,
   }),
   computed: {
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
     brandId: (c) => c.product?.brandId ?? '',

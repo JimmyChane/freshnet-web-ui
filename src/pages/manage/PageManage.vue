@@ -1,9 +1,11 @@
 <script>
+import { onCreatedRoute } from '@/mixin';
+import { useLoginStore } from '@/pinia-stores/login.store';
 import { MANAGE_ROUTE } from '@/router';
 
 export default {
   computed: {
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
   },
   watch: {
     user(userNow, userWas) {
@@ -15,7 +17,7 @@ export default {
   methods: {
     clickLogout() {
       if (!this.user.isTypeNone()) {
-        this.$store.state.stores.login
+        useLoginStore()
           .dispatch('logout')
           .then(() => this.redirectToLogin());
       }
@@ -32,7 +34,7 @@ export default {
   },
   async mounted() {
     try {
-      const user = await this.$store.state.stores.login.dispatch('getUser');
+      const user = await useLoginStore().getUser();
       if (user.isTypeNone()) this.redirectToLogin();
     } catch (error) {
       this.redirectToLogin();

@@ -23,7 +23,7 @@ export const useOrderStore = defineStore('order', () => {
     .loadData(async () => {
       const api = await getOrderList();
       const content: any[] = api.optArrayContent();
-      return content.map((data) => new Order(data));
+      return content.map((data) => new Order().fromData(data));
     });
 
   const processor = ref(new Processor());
@@ -94,7 +94,7 @@ export const useOrderStore = defineStore('order', () => {
     const { data } = arg;
     if (!data) return null;
     const api = await addOrder(data);
-    const order = new Order(api.optObjectContent());
+    const order = new Order().fromData(api.optObjectContent());
     return list.value.addItem(order);
   }
   async function removeOItemOfId(arg: { id: string }) {

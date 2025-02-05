@@ -1,14 +1,14 @@
 <script>
 import LoadingDots from '@/components/LoadingDots.vue';
 import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
+import { useProductStore } from '@/pinia-stores/product.store';
 import { AppLayoutId } from '@/tools/AppLayout';
 
 export default {
   components: { ViewerProduct, LoadingDots },
   data: (c) => ({ product: null }),
   computed: {
-    isLoading: (context) =>
-      context.$store.state.stores.product.getters.isLoading,
+    isLoading: (context) => useProductStore().isLoading,
     isOver1200px: (context) => context.$store.getters.window.innerWidth > 1200,
     productId: (context) => context.$route.query.productId,
   },
@@ -25,8 +25,7 @@ export default {
   },
   methods: {
     async invalidate() {
-      const products =
-        await this.$store.state.stores.product.dispatch('getItems');
+      const products = await useProductStore().getItems();
       this.product = products.find((product) => {
         return product.id === this.productId;
       });

@@ -1,5 +1,6 @@
 import { isObjectOnly, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
+import { useSpecificationStore } from '@/pinia-stores/specification.store';
 import { Item } from '@/stores/tools/List';
 
 import { Image } from './Image';
@@ -35,12 +36,6 @@ export enum SpecificationKey {
 }
 
 export class Type implements Item {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
-
   id: string = '';
   key: string = '';
   title: string = '';
@@ -97,17 +92,9 @@ export class Type implements Item {
 }
 
 export class Specification {
-  stores: any;
-  specificationStore: any;
-
   typeKey: string = '';
   type: Type | null = null;
   content: string = '';
-
-  constructor(stores: any) {
-    this.stores = stores;
-    this.specificationStore = stores.specification;
-  }
 
   fromData(data: { key?: string; content?: string }): Specification {
     this.typeKey = trimId(data.key);
@@ -136,8 +123,7 @@ export class Specification {
   async fetchType(): Promise<Type | null> {
     if (this.type instanceof Type) return this.type;
 
-    const specifications: Type[] =
-      await this.specificationStore.dispatch('getItems');
+    const specifications: Type[] = await useSpecificationStore().getItems();
     const specification = specifications.find((specification) => {
       return specification.key == this.typeKey;
     });

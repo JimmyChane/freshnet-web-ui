@@ -2,6 +2,7 @@
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector3 from '@/components/selector/Selector3.vue';
+import { useBrandStore } from '@/pinia-stores/brand.store';
 
 export default {
   components: { PanelAction, Selector3, Input },
@@ -15,10 +16,7 @@ export default {
     product: (c) => c.input?.product ?? '',
     title: (c) => c.data?.title ?? '',
     brandId: (c) => c.data?.brandId ?? '',
-    brand: (c) =>
-      c.$store.state.stores.brand.getters.items.find(
-        (brand) => brand.id === c.brandId,
-      ),
+    brand: (c) => useBrandStore().items.find((brand) => brand.id === c.brandId),
     brandTitle: (c) => c.brand?.title ?? '',
     parsedTitleBrand: (c) => {
       if (c.title && c.brandTitle) return `${c.brandTitle} ${c.title}`;
@@ -28,16 +26,15 @@ export default {
     },
 
     brandMenus: (c) => {
-      return [
-        { _id: '', title: 'None' },
-        ...c.$store.state.stores.brand.getters.items,
-      ].map((item) => {
-        return {
-          key: item.id,
-          title: item.title,
-          icon: item.icon?.toUrl() ?? '',
-        };
-      });
+      return [{ _id: '', title: 'None' }, ...useBrandStore().items].map(
+        (item) => {
+          return {
+            key: item.id,
+            title: item.title,
+            icon: item.icon?.toUrl() ?? '',
+          };
+        },
+      );
     },
   },
   methods: {

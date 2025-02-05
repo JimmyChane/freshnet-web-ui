@@ -9,12 +9,6 @@ export interface ProductStockData {
 }
 
 export class ProductStock {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
-
   isAvailable: boolean = true;
   isSecondHand: boolean = false;
   prices: any[] = [];
@@ -25,7 +19,7 @@ export class ProductStock {
 
     // deprecated on 2022_04_09
     this.prices = optArray(data.prices)
-      .map((price) => new ProductPrices(this.stores).fromData(price))
+      .map((price) => new ProductPrices().fromData(price))
       .map((price) => price.toData())
       .filter((price) => price && Object.keys(price).length);
 
@@ -36,7 +30,7 @@ export class ProductStock {
       isAvailable: optBoolean(this.isAvailable),
       isSecondHand: optBoolean(this.isSecondHand),
       prices: this.prices
-        .map((price) => new ProductPrices(this.stores).fromData(price))
+        .map((price) => new ProductPrices().fromData(price))
         .map((price) => price.toData()),
     };
   }

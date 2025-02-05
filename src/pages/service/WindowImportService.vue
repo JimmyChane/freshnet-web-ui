@@ -1,4 +1,6 @@
 <script>
+import { mapStores } from 'pinia';
+
 import PanelAction from '@/components/panel/PanelAction.vue';
 import TypeSelector from '@/components/selector/TypeSelector.vue';
 import {
@@ -6,6 +8,8 @@ import {
   ServiceState,
   mapServiceState,
 } from '@/items/ServiceState';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useServiceStore } from '@/pinia-stores/service.store';
 
 import LayoutFindCustomer from './LayoutFindCustomer.vue';
 import BodyBelongings from './WindowUpdateService-belongings.vue';
@@ -39,9 +43,11 @@ export default {
     },
   }),
   computed: {
+    ...mapStores(useServiceStore),
+
     isShowing: (c) => c.popupWindow.isShowing,
 
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     nameUserType: (c) => {
       if (c.user.isTypeAdmin()) return 'Admin';
       if (c.user.isTypeStaff()) return 'Staff';
@@ -101,8 +107,8 @@ export default {
         return;
       }
 
-      this.$store.state.stores.service
-        .dispatch('importItem', { data: this.data })
+      useServiceStore()
+        .importItem({ data: this.data })
         .then((service) => {
           this.popupWindow.showService(service);
           this.popupWindow.close();
@@ -130,8 +136,8 @@ export default {
   <PanelAction
     title="Import Service"
     :isShowing="isShowing"
-    :isLoading="$store.state.stores.service.getters.isFetching"
-    :isClickable="!$store.state.stores.service.getters.isFetching"
+    :isLoading="serviceStore.isFetching"
+    :isClickable="!serviceStore.isFetching"
     @click-ok="onOk()"
     @click-cancel="() => popupWindow.close()"
     @click-dismiss="() => popupWindow.close()"

@@ -1,4 +1,6 @@
 <script>
+import { useCategoryStore } from '@/pinia-stores/category.store';
+
 import Label from './ItemCustomer-Label.vue';
 
 export default {
@@ -22,10 +24,7 @@ export default {
   methods: {
     async invalidate() {
       this.category = null;
-      this.category = await this.$store.state.stores.category.dispatch(
-        'getItemOfKey',
-        this.categoryKey,
-      );
+      this.category = await useCategoryStore().getItemOfKey(this.categoryKey);
     },
   },
 };

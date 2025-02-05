@@ -1,8 +1,11 @@
 <script>
+import { mapStores } from 'pinia';
+
 import IconEdit from '@/assets/icon/edit-505050.svg';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import MenuOption from '@/components/button/MenuOption.vue';
 import ToggleButton from '@/components/button/ToggleButton.vue';
+import { useProductStore } from '@/pinia-stores/product.store';
 
 import ItemPrice from '../item/ItemPrice.vue';
 import ItemProductSpecification from '../item/ItemProductSpecification.vue';
@@ -36,6 +39,9 @@ export default {
   },
   props: {
     product: { type: Object, default: null },
+  },
+  computed: {
+    ...mapStores(useProductStore),
   },
   data: (c) => ({
     IconEdit,
@@ -126,8 +132,8 @@ export default {
             class="WindowProduct-image-add"
             @callback-result="
               (files) => {
-                $store.state.stores.product
-                  .dispatch('addImageOfId', { id: item.id, files })
+                productStore
+                  .addImageOfId({ id: item.id, files })
                   .then((product) => {
                     item.data.images = item.data.images;
                   });
@@ -263,7 +269,7 @@ export default {
           :isToggled="item.stock.isAvailable"
           @click-toggle="
             (toggle) => {
-              $store.state.stores.product.dispatch('updateAvailabilityOfId', {
+              productStore.updateAvailabilityOfId({
                 id: item.id,
                 isAvailable: toggle,
               });
@@ -279,7 +285,7 @@ export default {
           :isToggled="item.stock.isSecondHand"
           @click-toggle="
             (toggle) => {
-              $store.state.stores.product.dispatch('updateSecondHandOfId', {
+              productStore.updateSecondHandOfId({
                 id: item.id,
                 isSecondHand: toggle,
               });
@@ -320,11 +326,8 @@ export default {
                   key: 'delete',
                   title: 'Delete',
                   interact: () => {
-                    $store.state.stores.product
-                      .dispatch('removeBundleOfId', {
-                        id: item.id,
-                        bundle,
-                      })
+                    productStore
+                      .removeBundleOfId({ id: item.id, bundle })
                       .then((product) => {});
                   },
                 },
@@ -365,11 +368,8 @@ export default {
                   key: 'delete',
                   title: 'Delete',
                   interact: () => {
-                    $store.state.stores.product
-                      .dispatch('removeGiftOfId', {
-                        id: item.id,
-                        gift,
-                      })
+                    productStore
+                      .removeGiftOfId({ id: item.id, gift })
                       .then((product) => {});
                   },
                 },
@@ -400,11 +400,8 @@ export default {
             :key="JSON.stringify(price)"
             :price="price"
             @request-delete="
-              $store.state.stores.product
-                .dispatch('deletePriceOfProductId', {
-                  productId: item.id,
-                  price,
-                })
+              productStore
+                .deletePriceOfProductId({ productId: item.id, price })
                 .then((product) => {})
             "
           />

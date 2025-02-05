@@ -11,6 +11,7 @@ import Actionbar from '@/components/actionbar/Actionbar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
 import { iconServer } from '@/host/Server';
+import { usePs2Store } from '@/pinia-stores/ps2.store';
 
 import ItemPs2Disc from './ItemPs2Disc.vue';
 import WindowItemPs2Disc from './WindowItemPs2Disc.vue';
@@ -42,8 +43,8 @@ export default {
     searchKeyword: '',
   }),
   computed: {
-    isLoading: (c) => c.$store.state.stores.ps2.getters.isLoading,
-    ps2Discs: (c) => c.$store.state.stores.ps2.getters.items,
+    isLoading: (c) => usePs2Store().isLoading,
+    ps2Discs: (c) => usePs2Store().items,
     ps2DiscSearches: (c) => {
       let searchKeywords = c.searchKeyword.toLowerCase().split(' ');
       if (searchKeywords.length == 0) return [];
@@ -72,10 +73,12 @@ export default {
     },
   },
   mounted() {
-    this.$store.state.stores.ps2.dispatch('getItems').catch((error) => {
-      this.$store.dispatch('snackbarShow', 'Failed to load');
-      console.error(error);
-    });
+    usePs2Store()
+      .getItems()
+      .catch((error) => {
+        this.$store.dispatch('snackbarShow', 'Failed to load');
+        console.error(error);
+      });
   },
 };
 </script>

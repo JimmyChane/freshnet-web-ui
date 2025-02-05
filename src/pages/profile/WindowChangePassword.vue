@@ -1,6 +1,7 @@
 <script>
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
+import { useLoginStore } from '@/pinia-stores/login.store';
 
 export default {
   components: { PanelAction, Input },
@@ -25,8 +26,8 @@ export default {
         return;
       }
 
-      this.$store.state.stores.login
-        .dispatch('changePassword', { passwordVerify, passwordNew })
+      useLoginStore()
+        .changePassword({ passwordVerify, passwordNew })
         .then((user) => this.popupWindow.close())
         .catch((error) =>
           this.$store.dispatch('snackbarShow', 'Changing Password Error'),

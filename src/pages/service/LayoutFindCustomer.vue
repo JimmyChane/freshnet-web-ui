@@ -1,4 +1,6 @@
 <script>
+import { useCustomerStore } from '@/pinia-stores/customer.store';
+
 export default {
   props: {
     inputName: { type: String, default: '' },
@@ -20,9 +22,7 @@ export default {
     async invalidate() {
       this.customerTemplates = [];
       this.customerSuggestions = [];
-      const customers = await this.$store.state.stores.customer.dispatch(
-        'generateCustomersAcross',
-      );
+      const customers = await useCustomerStore().generateCustomersAcross();
 
       this.customerTemplates = customers;
       this.input();

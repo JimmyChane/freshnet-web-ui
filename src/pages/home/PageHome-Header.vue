@@ -2,6 +2,7 @@
 import { getHours } from 'date-fns';
 
 import { SettingKey } from '@/items/Setting';
+import { useSettingStore } from '@/pinia-stores/setting.store';
 
 import Section from './PageHome-Section.vue';
 
@@ -9,6 +10,10 @@ export default {
   components: { Section },
   data: (c) => ({ companyTitle: '', companyCategory: '', addressHref: '' }),
   computed: {
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+
     greetTitle() {
       const periods = [
         { title: 'Good Midnight', start: 0, end: 4 },
@@ -29,7 +34,7 @@ export default {
     },
   },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidate();
     },
   },
@@ -38,24 +43,18 @@ export default {
   },
   methods: {
     async invalidate() {
-      this.companyTitle = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SettingKey.CompanyName,
-          default: '',
-        },
-      );
-      this.companyCategory = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        { key: SettingKey.CompanyCategory, default: '' },
-      );
-      this.addressHref = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SettingKey.LocationLink,
-          default: '',
-        },
-      );
+      this.companyTitle = await useSettingStore().findValueOfKey({
+        key: SettingKey.CompanyName,
+        default: '',
+      });
+      this.companyCategory = await useSettingStore().findValueOfKey({
+        key: SettingKey.CompanyCategory,
+        default: '',
+      });
+      this.addressHref = await useSettingStore().findValueOfKey({
+        key: SettingKey.LocationLink,
+        default: '',
+      });
     },
   },
 };

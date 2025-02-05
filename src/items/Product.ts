@@ -1,13 +1,8 @@
-import {
-  isObjectOnly,
-  isString,
-  optArray,
-  optString,
-  trimId,
-  trimText,
-} from '@/U';
+import { isString, optArray, optString, trimId, trimText } from '@/U';
 import { APP_HOST as AppHost } from '@/host/AppHost';
 import { textContains } from '@/objects/ItemSearcher';
+import { useBrandStore } from '@/pinia-stores/brand.store';
+import { useCategoryStore } from '@/pinia-stores/category.store';
 import { Item } from '@/stores/tools/List';
 
 import { Brand } from './Brand';
@@ -44,20 +39,6 @@ export interface ProductData {
 }
 
 export class Product implements Item {
-  stores: any;
-  categoryStore: any;
-  productStore: any;
-  brandStore: any;
-  specificationStore: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-    this.categoryStore = stores.category;
-    this.productStore = stores.product;
-    this.brandStore = stores.brand;
-    this.specificationStore = stores.specification;
-  }
-
   id: string = '';
   title: string = '';
   description: string = '';
@@ -79,8 +60,8 @@ export class Product implements Item {
     this.description = trimText(data.description);
     this.stock =
       typeof data.stock === 'object'
-        ? new ProductStock(this.stores).fromData(data.stock)
-        : new ProductStock({});
+        ? new ProductStock().fromData(data.stock)
+        : new ProductStock();
     this.setBrandId(trimId(data.brandId));
     this.setCategoryId(trimId(data.categoryId));
     this.setGifts(
@@ -90,7 +71,7 @@ export class Product implements Item {
     );
     this.setBundles(
       optArray(data.bundles)
-        .map((bundle) => new ProductBundle(this.stores).fromData(bundle))
+        .map((bundle) => new ProductBundle().fromData(bundle))
         .map((bundle) => bundle.toData()),
     );
 
@@ -136,9 +117,7 @@ export class Product implements Item {
       });
       if (prices.length > 0) dataPrice = prices[prices.length - 1];
     }
-    const price = dataPrice
-      ? new ProductPrices(this.stores).fromData(dataPrice)
-      : null;
+    const price = dataPrice ? new ProductPrices().fromData(dataPrice) : null;
     this.setPrice(price?.toData());
 
     return this;
@@ -165,7 +144,7 @@ export class Product implements Item {
       price:
         this.price instanceof ProductPrices
           ? this.price.toData()
-          : new ProductPrices(this.stores).fromData(this.price ?? {}).toData(),
+          : new ProductPrices().fromData(this.price ?? {}).toData(),
     };
   }
 
@@ -371,7 +350,7 @@ export class Product implements Item {
 
   async fetchBrand(): Promise<Brand | null | undefined> {
     if (!this.brandId) return null;
-    const brands: Brand[] = await this.brandStore.dispatch('getItems');
+    const brands: Brand[] = await useBrandStore().getItems();
     return brands.find((brand) => brand.id === this.brandId);
   }
   async fetchFullTitle(): Promise<string> {
@@ -387,8 +366,7 @@ export class Product implements Item {
   }
   async fetchCategory(): Promise<Category | null | undefined> {
     if (!this.categoryId) return null;
-    const categories: Category[] =
-      await this.categoryStore.dispatch('getItems');
+    const categories: Category[] = await useCategoryStore().getItems();
     return categories.find((category) => category.id === this.categoryId);
   }
 
@@ -421,7 +399,7 @@ export class Product implements Item {
     });
   }
   setPrice(price: any) {
-    this.price = new ProductPrices(this.stores).fromData(price ?? {});
+    this.price = new ProductPrices().fromData(price ?? {});
   }
 
   setImages(images: (Image | any)[]) {
@@ -445,14 +423,14 @@ export class Product implements Item {
 
   setSpecifications(specifications: { type: string; content: string }[] = []) {
     this.specifications = specifications.map((specification) => {
-      return new Specification(this.stores).fromData({
+      return new Specification().fromData({
         key: specification.type,
         content: specification.content,
       });
     });
   }
   addSpecification(specification: { type: string; content: string }) {
-    const specContent = new Specification(this.stores).fromData({
+    const specContent = new Specification().fromData({
       key: specification.type,
       content: specification.content,
     });
@@ -477,7 +455,7 @@ export class Product implements Item {
 
   setBundles(data: (ProductBundle | any)[] = []) {
     this.bundles = optArray(data).map((bundle) => {
-      return new ProductBundle(this.stores).fromData(bundle).toData();
+      return new ProductBundle().fromData(bundle).toData();
     });
   }
   addBundle(bundle: ProductBundle) {

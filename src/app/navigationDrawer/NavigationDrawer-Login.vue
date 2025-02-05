@@ -1,10 +1,12 @@
 <script>
+import { useLoginStore } from '@/pinia-stores/login.store';
+
 export default {
   emits: ['click-logout'],
   props: { isWide: { type: Boolean, default: true } },
   data: (c) => ({ redirect: '' }),
   computed: {
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     userName: (c) => c.user.name,
     isLoginPage: (c) => c.$store.getters.currentPageKey === 'login',
   },
@@ -22,7 +24,7 @@ export default {
   },
   mounted() {
     this.invalidateRedirection();
-    this.$store.state.stores.login.dispatch('refresh');
+    useLoginStore().refresh();
   },
 };
 </script>

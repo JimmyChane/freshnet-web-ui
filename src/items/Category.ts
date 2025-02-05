@@ -145,12 +145,6 @@ interface CategoryData {
 }
 
 export class Category implements Item {
-  stores: any = null;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
-
   id: string = '';
   key: string = '';
   title: string = '';

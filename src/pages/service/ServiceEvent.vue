@@ -12,6 +12,7 @@ import {
   PURCHASE_SERVICE_EVENT_METHOD,
   QUOTATION_SERVICE_EVENT_METHOD,
 } from '@/items/ServiceEventMethod';
+import { useServiceStore } from '@/pinia-stores/service.store';
 
 import ImageView from './ServiceEvent-Image.vue';
 import WindowUpdateEventDescription from './WindowUpdateEventDescription.vue';
@@ -96,11 +97,8 @@ export default {
             element.addEventListener('change', (event) => {
               const imageFiles = event.target.files;
 
-              this.$store.state.stores.service
-                .dispatch('addImageToId', {
-                  serviceID: this.service.id,
-                  imageFiles,
-                })
+              useServiceStore()
+                .addImageToId({ serviceID: this.service.id, imageFiles })
                 .then((serivce) => {})
                 .catch((error) => {
                   this.$store.dispatch('snackbarShow', 'Failed to Add Image');
@@ -125,8 +123,8 @@ export default {
             element.accept = '.jpeg, .jpg, .png, .webp';
             element.multiple = true;
             element.addEventListener('change', (e) => {
-              this.$store.state.stores.service
-                .dispatch('addEventImage', {
+              useServiceStore()
+                .addEventImage({
                   serviceID: this.service.id,
                   eventTime: this.time,
                   imageFiles: e.target.files,
@@ -202,10 +200,10 @@ export default {
       if (this.isInitial) {
         onConfirm = async (accept, reject) => {
           try {
-            const service = await this.$store.state.stores.service.dispatch(
-              'removeImageFromId',
-              { serviceID: this.service.id, image },
-            );
+            const service = await useServiceStore().removeImageFromId({
+              serviceID: this.service.id,
+              image,
+            });
             this.$store.dispatch('imageViewerHide');
             accept();
           } catch (error) {
@@ -222,10 +220,8 @@ export default {
               eventTime: this.time,
               image,
             };
-            const service = await this.$store.state.stores.service.dispatch(
-              'removeEventImage',
-              requestOption,
-            );
+            const service =
+              await useServiceStore().removeEventImage(requestOption);
             this.$store.dispatch('imageViewerHide');
             accept();
           } catch (error) {

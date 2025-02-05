@@ -7,6 +7,7 @@ import {
   trimText,
 } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
+import { useUserStore } from '@/pinia-stores/user.store';
 import { Item } from '@/stores/tools/List';
 
 import { ServiceBelonging, ServiceBelongingData } from './ServiceBelonging';
@@ -55,14 +56,6 @@ export interface ServiceData {
 }
 
 export class Service implements Item {
-  stores: any;
-  userStore: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-    this.userStore = stores.user;
-  }
-
   id: string = '';
   timestamp: ServiceTimestamp | null = null;
   username: string = '';
@@ -99,20 +92,20 @@ export class Service implements Item {
     }
 
     this.customer = isObject(data.customer)
-      ? new ServiceCustomer(this.stores).fromData(data.customer)
+      ? new ServiceCustomer().fromData(data.customer)
       : null;
     this.description = trimText(data.description);
     this.belongings = optArray(data.belongings).map((belonging) => {
-      return new ServiceBelonging(this.stores).fromData(belonging);
+      return new ServiceBelonging().fromData(belonging);
     });
 
     this._events = optArray(data.events).map((subData) => {
-      return new ServiceEvent(this.stores).fromData(subData);
+      return new ServiceEvent().fromData(subData);
     });
 
     // images
     this.imageFiles = optArray(data.imageFiles).map((image) => {
-      return new ServiceImage(this.stores).fromData(image);
+      return new ServiceImage().fromData(image);
     });
 
     // labels
@@ -181,7 +174,7 @@ export class Service implements Item {
   get events(): ServiceEvent[] {
     const serviceData = this.toData();
 
-    const serviceEvent = new ServiceEvent(this.stores).fromData({
+    const serviceEvent = new ServiceEvent().fromData({
       method: INITIAL_SERVICE_EVENT_METHOD.key,
       time: serviceData.time,
       username: serviceData.username,
@@ -246,11 +239,11 @@ export class Service implements Item {
     return totalPrice1.compare(totalPrice2);
   }
 
-  async fetchUser(): Promise<User | null> {
+  async fetchUser(): Promise<User | undefined> {
     if (!isString(this.username) || this.username.trim().length === 0) {
-      return null;
+      return undefined;
     }
-    return await this.userStore.dispatch('getUserByUsername', this.username);
+    return await useUserStore().getUserByUsername(this.username);
   }
   async fetchName(): Promise<string> {
     const user = await this.fetchUser();

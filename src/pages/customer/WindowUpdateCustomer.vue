@@ -2,6 +2,7 @@
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import { RequirementCustomer } from '@/items/Customer';
+import { useCustomerStore } from '@/pinia-stores/customer.store';
 
 import WindowSection from './WindowSection.vue';
 
@@ -17,8 +18,8 @@ export default {
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,
     item: (c) => c.popupWindow.item,
-    isLoading: (c) => c.$store.state.stores.customer.getters.isLoading,
-    isClickable: (c) => !c.$store.state.stores.customer.getters.isLoading,
+    isLoading: (c) => useCustomerStore().isLoading,
+    isClickable: (c) => !useCustomerStore().isLoading,
   },
   watch: {
     isShowing() {
@@ -60,8 +61,8 @@ export default {
         return;
       }
 
-      this.$store.state.stores.customer
-        .dispatch('updateNamePhoneNumberOfItemId', {
+      useCustomerStore()
+        .updateNamePhoneNumberOfItemId({
           _id: this.item.id,
           name: this.data.name,
           phoneNumber: this.data.phoneNumber,

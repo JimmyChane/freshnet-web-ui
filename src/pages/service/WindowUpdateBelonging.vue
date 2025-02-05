@@ -1,5 +1,8 @@
 <script>
+import { mapStores } from 'pinia';
+
 import PanelAction from '@/components/panel/PanelAction.vue';
+import { useServiceStore } from '@/pinia-stores/service.store';
 
 import BelongingListEdit from './BelongingListEdit.vue';
 
@@ -9,6 +12,8 @@ export default {
     popupWindow: { type: Object },
   },
   computed: {
+    ...mapStores(useServiceStore),
+
     isShowing: (c) => c.popupWindow.isShowing,
     values: (c) => c.popupWindow.values,
   },
@@ -34,8 +39,8 @@ export default {
   <PanelAction
     title="Edit Belongings"
     :isShowing="isShowing"
-    :isLoading="$store.state.stores.service.getters.isFetching"
-    :isClickable="!$store.state.stores.service.getters.isFetching"
+    :isLoading="serviceStore.isFetching"
+    :isClickable="!serviceStore.isFetching"
     @click-ok="() => onChange()"
     @click-cancel="() => popupWindow.close()"
     @click-dismiss="() => popupWindow.close()"

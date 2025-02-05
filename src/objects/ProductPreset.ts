@@ -2,17 +2,17 @@ import { Brand } from '@/items/Brand';
 import { Product } from '@/items/Product';
 import { Specification, SpecificationKey } from '@/items/Specification';
 
-export const INTEL_BRAND = new Brand(null).fromData({
+export const INTEL_BRAND = new Brand().fromData({
   _id: '',
   title: 'Intel',
   icon: null,
 });
-export const AMD_BRAND = new Brand(null).fromData({
+export const AMD_BRAND = new Brand().fromData({
   _id: '',
   title: 'AMD',
   icon: null,
 });
-export const NVIDIA_BRAND = new Brand(null).fromData({
+export const NVIDIA_BRAND = new Brand().fromData({
   _id: '',
   title: 'Nvidia',
   icon: null,

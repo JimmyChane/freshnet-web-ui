@@ -1,12 +1,13 @@
 <script>
 import Input from '@/components/Input.vue';
+import { useLoginStore } from '@/pinia-stores/login.store';
 
 export default {
   components: { Input },
   props: { name: { type: String, default: '' } },
   data: (c) => ({ nameOfUser: '' }),
   computed: {
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     isUserDefault: (c) => c.user.isDefault(),
     nameUserType: (c) => {
       if (c.user.isTypeAdmin()) return 'Admin';

@@ -7,11 +7,7 @@ interface PhoneNumberData {
 }
 
 export class PhoneNumber {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
+  constructor() {}
 
   value: string = '';
 

@@ -13,6 +13,7 @@ import { Customer } from '@/items/Customer';
 import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
 import Section from '@/pages/manage/PanelItem-Section.vue';
 import ItemService from '@/pages/service/item-service/ItemService.vue';
+import { useCustomerStore } from '@/pinia-stores/customer.store';
 
 import ItemDevice from './ItemDevice.vue';
 import PanelCustomerEmpty from './PanelCustomer-Empty.vue';
@@ -119,8 +120,7 @@ export default {
       const cacheItem = this.item;
       this.isLoadingDevices = true;
 
-      const devices =
-        await this.$store.state.stores.customer.dispatch('getDevices');
+      const devices = await useCustomerStore().getDevices();
       if (this.item !== cacheItem) {
         return;
       }

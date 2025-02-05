@@ -1,5 +1,6 @@
 <script>
 import Input from '@/components/Input.vue';
+import { useOrderStore } from '@/pinia-stores/order.store';
 
 export default {
   components: { Input },
@@ -31,8 +32,8 @@ export default {
       if (order.customer_name === '') delete order.customer_name;
       if (order.phone_number === '') delete order.phone_number;
 
-      this.$store.state.stores.order
-        .dispatch('addItem', { data: order })
+      useOrderStore()
+        .addItem({ data: order })
         .then((order) => this.popupWindow.close())
         .catch((error) => {
           this.$store.dispatch('snackbarShow', 'Error While Creating Order');

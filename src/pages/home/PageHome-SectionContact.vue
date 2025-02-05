@@ -1,5 +1,6 @@
 <script>
 import { SettingKey } from '@/items/Setting';
+import { useSettingStore } from '@/pinia-stores/setting.store';
 
 import Link from './PageHome-Link.vue';
 import Section from './PageHome-Section.vue';
@@ -8,8 +9,13 @@ export default {
   components: { Section, Link },
   props: { isThin: { type: Boolean, default: false } },
   data: (c) => ({ callContacts: [], chatContacts: [] }),
+  computed: {
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+  },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidate();
     },
   },
@@ -18,13 +24,10 @@ export default {
   },
   methods: {
     async invalidate() {
-      const contacts = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SettingKey.Contacts,
-          default: [],
-        },
-      );
+      const contacts = await useSettingStore().findValueOfKey({
+        key: SettingKey.Contacts,
+        default: [],
+      });
 
       this.callContacts = [];
       this.chatContacts = [];

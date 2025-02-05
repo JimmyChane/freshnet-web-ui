@@ -4,12 +4,6 @@ import { Item } from '@/stores/tools/List';
 import { textContains } from '../objects/ItemSearcher';
 
 export class Ps2Disc implements Item {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
-
   id: string = '';
   code: string = '';
   title: string = '';

@@ -1,6 +1,7 @@
 <script>
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector4 from '@/components/selector/Selector4.vue';
+import { useCategoryStore } from '@/pinia-stores/category.store';
 
 export default {
   components: { PanelAction, Selector4 },
@@ -13,7 +14,7 @@ export default {
     input: (c) => c.popupWindow.input,
     product: (c) => c.input?.product ?? null,
     categoryId: (c) => c.input?.categoryId ?? '',
-    categories: (c) => c.$store.state.stores.category.getters.items,
+    categories: (c) => useCategoryStore().items,
     items: (c) => [
       { key: '', title: 'None' },
       ...c.categories.map((category) => {

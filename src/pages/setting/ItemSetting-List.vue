@@ -1,12 +1,19 @@
 <script>
+import { useSettingStore } from '@/pinia-stores/setting.store';
+import { useUserStore } from '@/pinia-stores/user.store';
+
 export default {
   props: { item: { type: Object, default: () => null } },
   data: (c) => ({ U, values: [] }),
   computed: {
-    isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+
+    isLoading: (c) => useUserStore().isLoading,
   },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidateValue();
     },
     item() {

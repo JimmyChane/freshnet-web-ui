@@ -1,5 +1,6 @@
 <script>
 import { format, formatDistanceToNow } from 'date-fns';
+import { mapStores } from 'pinia';
 
 import IconBookmarkAdd from '@/assets/icon/bookmark-000000.svg';
 import IconBookmark from '@/assets/icon/bookmark-add-000000.svg';
@@ -14,6 +15,7 @@ import Selector from '@/components/selector/Selector.vue';
 import { Service } from '@/items/Service';
 import { mapServiceState } from '@/items/ServiceState';
 import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
+import { useServiceStore } from '@/pinia-stores/service.store';
 
 import BelongingVue from './ItemBelonging.vue';
 import LabelVue from './PanelService-Info-Label.vue';
@@ -45,6 +47,8 @@ export default {
     bookmarkHeaderIconIsHover: false,
   }),
   computed: {
+    ...mapStores(useServiceStore),
+
     timestamp: (c) => c.service.timestamp,
     timestampText: (c) => {
       const { time } = c.timestamp;
@@ -131,7 +135,7 @@ export default {
           key: 'urgent',
           title: 'Urgent',
           click: () => {
-            this.$store.state.stores.service.dispatch('updateUrgentOfId', {
+            useServiceStore().updateUrgentOfId({
               serviceID: this.service.id,
               isUrgent: !this.service.isUrgent(),
             });
@@ -141,7 +145,7 @@ export default {
           key: 'warranty',
           title: 'Warranty',
           click: () => {
-            this.$store.state.stores.service.dispatch('updateWarrantyOfId', {
+            useServiceStore().updateWarrantyOfId({
               serviceID: this.service.id,
               isWarranty: !this.service.isWarranty(),
             });
@@ -239,7 +243,7 @@ export default {
             :isClickable="false"
             @click="
               () => {
-                $store.state.stores.service.dispatch('removeLabelFromId', {
+                serviceStore.removeLabelFromId({
                   serviceID: service.id,
                   label,
                 });
@@ -268,7 +272,7 @@ export default {
                 :label="label"
                 @click="
                   () => {
-                    $store.state.stores.service.dispatch('removeLabelFromId', {
+                    serviceStore.removeLabelFromId({
                       serviceID: service.id,
                       label,
                     });
@@ -321,7 +325,7 @@ export default {
                 @callback-select="
                   (state) => {
                     if (!service) return;
-                    $store.state.stores.service.dispatch('updateStateOfId', {
+                    serviceStore.updateStateOfId({
                       serviceID: service.id,
                       state,
                     });

@@ -10,12 +10,6 @@ export enum OrderStatus {
 }
 
 export class Order implements Item {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
-
   id: string = '';
   customer: OrderCustomer | null = null;
   content: string = '';
@@ -24,7 +18,7 @@ export class Order implements Item {
 
   fromData(data: any): Order {
     this.id = trimId(data._id);
-    this.customer = new OrderCustomer(this.stores).fromData({
+    this.customer = new OrderCustomer().fromData({
       name: trimText(data.customer_name),
       phoneNumber: trimText(data.phone_number),
     });

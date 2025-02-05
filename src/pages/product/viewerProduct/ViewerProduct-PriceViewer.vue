@@ -1,6 +1,7 @@
 <script>
 import { ProductPrice } from '@/items/ProductPrice';
 import { SettingKey } from '@/items/Setting';
+import { useSettingStore } from '@/pinia-stores/setting.store';
 
 import Section from './ViewerProduct-Section.vue';
 
@@ -12,6 +13,10 @@ export default {
   },
   data: (c) => ({ settingShowPrice: false }),
   computed: {
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+
     priceNormal() {
       if (!this.product) return null;
       const normal = this.product.getPriceNormal();
@@ -58,7 +63,7 @@ export default {
     isSecondHand: (context) => context.product.isStockSecondHand(),
   },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidate();
     },
   },
@@ -67,13 +72,10 @@ export default {
   },
   methods: {
     async invalidate() {
-      this.settingShowPrice = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SettingKey.PublicShowPrice,
-          default: false,
-        },
-      );
+      this.settingShowPrice = await useSettingStore().findValueOfKey({
+        key: SettingKey.PublicShowPrice,
+        default: false,
+      });
     },
   },
 };

@@ -5,6 +5,7 @@ import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import { onCreatedRoute } from '@/mixin';
+import { useLoginStore } from '@/pinia-stores/login.store';
 import { PROFILE_ROUTE } from '@/router';
 
 import SectionMain from './PageProfile-Section-Main.vue';
@@ -51,8 +52,8 @@ export default {
   },
   async mounted() {
     this.isLoading = true;
-    await this.$store.state.stores.login
-      .dispatch('getUser')
+    await useLoginStore()
+      .getUser()
       .then((user) => {
         this.isLoading = false;
         this.user = user;

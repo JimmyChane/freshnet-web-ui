@@ -7,6 +7,7 @@ import Empty from '@/components/Empty.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { Setting as SettingModule } from '@/items/Setting';
 import { onCreatedRoute } from '@/mixin';
+import { useUserStore } from '@/pinia-stores/user.store';
 import { SETTING_ROUTE } from '@/router';
 
 import ItemSetting from './ItemSetting.vue';
@@ -78,17 +79,13 @@ class Setting {
   }
 
   findValue() {
-    return Vue.prototype.$store.state.stores.user.getters.items.find(
-      (setting) => {
-        return setting.key === this.key;
-      },
-    );
+    return useUserStore().items.find((setting) => setting.key === this.key);
   }
   async updateValue(value) {
     if (!this.getKey().length) return;
 
     const data = { key: this.getKey(), value };
-    await Vue.prototype.$store.state.stores.user.dispatch('updateItem', data);
+    await useUserStore().updateItem(data);
   }
 }
 
@@ -102,12 +99,12 @@ export default {
   },
   data: (c) => ({ SETTING_ROUTE, IconRefresh, SettingModule, SettingBuilder }),
   computed: {
-    isLoading: (c) => c.$store.state.stores.user.getters.isLoading,
-    isEmpty: (c) => !c.$store.state.stores.user.getters.items.length,
+    isLoading: (c) => useUserStore().isLoading,
+    isEmpty: (c) => !useUserStore().items.length,
   },
   methods: {
     refresh() {
-      this.$store.state.stores.user.dispatch('refresh');
+      useUserStore().refresh();
     },
   },
   created() {

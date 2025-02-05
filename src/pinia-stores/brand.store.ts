@@ -18,7 +18,7 @@ export const useBrandStore = defineStore('brand', () => {
       const api = await getBrandList();
       const content = optArray(api.optArrayContent());
       return content.map((content) => {
-        return new Brand(content);
+        return new Brand().fromData(content);
       });
     });
 

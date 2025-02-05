@@ -1,9 +1,12 @@
 <script>
 import chroma from 'chroma-js';
+import { mapStores } from 'pinia';
 
 import { isObjectOnly, optString, trimText } from '@/U';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import { SpecificationKey } from '@/items/Specification';
+import { useProductStore } from '@/pinia-stores/product.store';
+import { useSettingStore } from '@/pinia-stores/setting.store';
 
 import BottomActionbar from './ViewerProduct-BottomActionbar.vue';
 import ProductViewerImagePreview from './ViewerProduct-ImagePreview.vue';
@@ -75,6 +78,12 @@ export default {
     settingShowPrice: false,
   }),
   computed: {
+    ...mapStores(useProductStore),
+
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+
     tabs() {
       if (!this.product) {
         return [];
@@ -185,7 +194,7 @@ export default {
     },
   },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidateSettings();
     },
     isWide() {
@@ -207,13 +216,10 @@ export default {
   },
   methods: {
     async invalidateSettings() {
-      this.settingShowPrice = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SpecificationKey.PublicShowPrice,
-          default: false,
-        },
-      );
+      this.settingShowPrice = await useSettingStore().findValueOfKey({
+        key: SpecificationKey.PublicShowPrice,
+        default: false,
+      });
     },
 
     invalidateBound() {
@@ -445,10 +451,7 @@ export default {
           @click-image="(image) => (imagePreviewIndex = images.indexOf(image))"
           @click-add-image-file="
             (files) => {
-              $store.state.stores.product.dispatch('addImageOfId', {
-                id: product.id,
-                files,
-              });
+              productStore.addImageOfId({ id: product.id, files });
             }
           "
         />

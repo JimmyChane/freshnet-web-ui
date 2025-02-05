@@ -1,5 +1,6 @@
 <script>
 import { SettingKey } from '@/items/Setting';
+import { useSettingStore } from '@/pinia-stores/setting.store';
 
 import SectionTitle from './PageHome-Section-Title.vue';
 import Section from './PageHome-Section.vue';
@@ -9,20 +10,22 @@ export default {
   components: { Section, SectionTitle, Item },
   props: { isThin: { type: Boolean, default: false } },
   data: (c) => ({ items: [], todayWorkingDay: null }),
+  computed: {
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+  },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidate();
     },
   },
   methods: {
     async invalidate() {
-      const workingDays = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: SettingKey.CompanyWorkingHours,
-          default: [],
-        },
-      );
+      const workingDays = await useSettingStore().findValueOfKey({
+        key: SettingKey.CompanyWorkingHours,
+        default: [],
+      });
 
       this.todayWorkingDay = workingDays.find((workingDay) => {
         return workingDay.isToday();

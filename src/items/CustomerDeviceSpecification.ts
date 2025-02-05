@@ -1,12 +1,6 @@
 import { trimId, trimText } from '@/U';
 
 export class CustomerDeviceSpecification {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
-
   typeKey: string = '';
   content: string = '';
 

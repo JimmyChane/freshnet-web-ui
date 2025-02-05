@@ -22,7 +22,7 @@ function deleteToken() {
 }
 
 export const useLoginStore = defineStore('login', () => {
-  const userNone = new User({
+  const userNone = new User().fromData({
     username: '',
     name: '',
     userType: UserType.None,
@@ -34,7 +34,7 @@ export const useLoginStore = defineStore('login', () => {
 
   function onNewCredentail(arg: { token: string; user: User }) {
     const { token, user: userData } = arg;
-    const newUser = new User(userData);
+    const newUser = new User().fromData(userData);
     setToken(token);
 
     user.value = newUser;
@@ -101,7 +101,7 @@ export const useLoginStore = defineStore('login', () => {
 
         const api = await getUserRequest(token);
         const content = api.optObjectContent() as { user: User };
-        const xUser = new User(content.user);
+        const xUser = new User().fromData(content.user);
 
         const userNow = user.value;
         if (userNow) {

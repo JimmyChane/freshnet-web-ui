@@ -1,6 +1,7 @@
 <script>
 import Selector4 from '@/components/selector/Selector4.vue';
 import { SpecificationKey } from '@/items/Specification';
+import { useSpecificationStore } from '@/pinia-stores/specification.store';
 
 import ItemSpec from './ItemSpecificationInput.vue';
 
@@ -20,9 +21,7 @@ export default {
     SpecificationMenus: (c) => {
       return [
         { key: c.KeyNone, title: 'None' },
-        ...c.$store.state.stores.specification.getters.items.map(
-          (item) => item,
-        ),
+        ...useSpecificationStore().items.map((item) => item),
       ]
         .map((item) => ({
           key: item.key,
@@ -56,7 +55,7 @@ export default {
     },
   },
   mounted() {
-    this.$store.state.stores.specification.dispatch('refresh');
+    useSpecificationStore().refresh();
   },
 };
 </script>

@@ -1,5 +1,7 @@
 <script>
 import { SettingKey } from '@/items/Setting';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useSettingStore } from '@/pinia-stores/setting.store';
 
 import ButtonContact from './BottomActionbar-ButtonContact.vue';
 import ButtonTop from './BottomActionbar-ButtonTop.vue';
@@ -26,8 +28,13 @@ export default {
     whatsappTarget: '',
     whatsappIcon: '',
   }),
+  computed: {
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+  },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidate();
     },
     product() {
@@ -39,10 +46,10 @@ export default {
   },
   methods: {
     async invalidate() {
-      const contacts = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        { key: SettingKey.Contacts, default: [] },
-      );
+      const contacts = await useLoginStore().findValueOfKey({
+        key: SettingKey.Contacts,
+        default: [],
+      });
       const contact = this.findContactByTitle(contacts, 'Beh Aik Keong');
 
       const contactCall =

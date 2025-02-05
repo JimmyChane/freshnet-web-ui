@@ -1,6 +1,12 @@
 <script>
 import SearchInput from '@/components/SearchInput.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
+import { useBrandStore } from '@/pinia-stores/brand.store';
+import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useProductStore } from '@/pinia-stores/product.store';
+import { usePs2Store } from '@/pinia-stores/ps2.store';
+import { useServiceStore } from '@/pinia-stores/service.store';
 
 import ItemSearchBrand from './GlobalSearch-Item-Brand.vue';
 import ItemSearchCategory from './GlobalSearch-Item-Category.vue';
@@ -23,36 +29,36 @@ export default {
   },
   data: (c) => ({ searchText: '', searches: [] }),
   computed: {
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
 
-    categories: (c) => c.$store.state.stores.category.getters.items,
+    categories: (c) => useCategoryStore().items,
     products: (c) => {
-      return c.$store.state.stores.product.getters.items.filter((product) => {
+      return useProductStore().items.filter((product) => {
         return product.isStockAvailable();
       });
     },
-    brands: (c) => c.$store.state.stores.brand.getters.items,
-    ps2Discs: (c) => c.$store.state.stores.ps2.getters.items,
+    brands: (c) => useBrandStore().items,
+    ps2Discs: (c) => usePs2Store().items,
     services: (c) => {
       if (c.user.isTypeNone()) return [];
-      return c.$store.state.stores.service.getters.items;
+      return useServiceStore().items;
     },
   },
   watch: {
     user() {
-      if (!this.user.isTypeNone())
-        this.$store.state.stores.service.dispatch('getItems');
+      if (!this.user.isTypeNone()) useServiceStore().getItems();
       this.search(this.searchText);
     },
   },
   mounted() {
-    this.$store.state.stores.ps2.dispatch('getItems');
-    this.$store.state.stores.brand.dispatch('getItems');
-    this.$store.state.stores.category.dispatch('getItems');
-    this.$store.state.stores.category.dispatch('refresh');
-    this.$store.state.stores.product.dispatch('refresh');
-    if (this.user.isTypeAdmin() || this.user.isTypeStaff())
-      this.$store.state.stores.service.dispatch('getItems');
+    usePs2Store().getItems();
+    useBrandStore().getItems();
+    useCategoryStore().getItems();
+    useCategoryStore().refresh();
+    useProductStore().refresh();
+    if (this.user.isTypeAdmin() || this.user.isTypeStaff()) {
+      useServiceStore().getItems();
+    }
   },
   methods: {
     search(text) {

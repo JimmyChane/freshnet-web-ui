@@ -2,6 +2,7 @@
 import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import { RequirementCustomer } from '@/items/Customer';
+import { useCustomerStore } from '@/pinia-stores/customer.store';
 
 import ItemSpecification from './ItemSpecification.vue';
 import WindowSection from './WindowSection.vue';
@@ -19,8 +20,8 @@ export default {
     isShowing: (c) => c.popupWindow.isShowing,
     customer: (c) => c.popupWindow.customer,
     device: (c) => c.popupWindow.device,
-    isLoading: (c) => c.$store.state.stores.customer.getters.isLoading,
-    isClickable: (c) => !c.$store.state.stores.customer.getters.isLoading,
+    isLoading: (c) => useCustomerStore().isLoading,
+    isClickable: (c) => !useCustomerStore().isLoading,
 
     specifications: (c) => {
       const specifications = c.device ? c.device.specifications : [];
@@ -50,8 +51,8 @@ export default {
 
     clickOk() {
       this.data.description = this.data.description.trim();
-      this.$store.state.stores.customer
-        .dispatch('updateDeviceDescription', {
+      useCustomerStore()
+        .updateDeviceDescription({
           _id: this.device.id,
           description: this.data.description,
         })

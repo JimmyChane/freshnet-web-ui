@@ -9,12 +9,6 @@ export interface ServiceBelongingData {
 }
 
 export class ServiceBelonging {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
-
   title: string = '';
   time: number = 0;
   quantity: number = 1;

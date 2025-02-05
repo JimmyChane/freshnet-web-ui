@@ -1,8 +1,11 @@
 <script>
+import { mapStores } from 'pinia';
+
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import { OrderStatus } from '@/items/Order';
 import { onCreatedRoute } from '@/mixin';
+import { useOrderStore } from '@/pinia-stores/order.store';
 import { ORDER_ROUTE } from '@/router';
 
 import Actionbar from './Actionbar.vue';
@@ -21,12 +24,14 @@ export default {
     completedItems: [],
   }),
   computed: {
-    isLoading: (c) => c.$store.state.stores.order.getters.isLoading,
-    items: (c) => optArray(c.$store.state.stores.order.getters.items),
+    ...mapStores(useOrderStore),
+
+    isLoading: (c) => useOrderStore().isLoading,
+    items: (c) => optArray(useOrderStore().items),
     currentExpandedOrderid: (c) => c.$route.query.order,
   },
   watch: {
-    '$store.state.stores.order.getters.lastModified'() {
+    'orderStore.lastModified'() {
       this.invalidate();
     },
   },
@@ -41,8 +46,7 @@ export default {
       this.pendingItems = [];
       this.completedItems = [];
 
-      const groups =
-        await this.$store.state.stores.order.dispatch('getGroupsByStatus');
+      const groups = await useOrderStore().getGroupsByStatus();
       const groupPending = groups.find((group) => {
         return group.status === OrderStatus.Pending;
       });
@@ -54,10 +58,12 @@ export default {
       this.completedItems = groupCompleted?.items ?? [];
     },
     refresh() {
-      this.$store.state.stores.order.dispatch('refresh').catch((error) => {
-        this.$store.dispatch('snackbarShow', 'Error While Refreshing Order');
-        console.error(error);
-      });
+      useOrderStore()
+        .refresh()
+        .catch((error) => {
+          this.$store.dispatch('snackbarShow', 'Error While Refreshing Order');
+          console.error(error);
+        });
     },
     toAdd() {
       this.$store.dispatch('openPopupWindow', { component: WindowAdd });
@@ -94,16 +100,8 @@ export default {
         @click-expand="
           (item) => $store.getters.replaceQuery({ query: { order: item.id } })
         "
-        @click-complete="
-          (item) =>
-            $store.state.stores.order.dispatch('updateToCompletedOfId', item.id)
-        "
-        @click-remove="
-          (item) =>
-            $store.state.stores.order.dispatch('removeOItemOfId', {
-              id: item.id,
-            })
-        "
+        @click-complete="(item) => orderStore.updateToCompletedOfId(item.id)"
+        @click-remove="(item) => orderStore.removeOItemOfId({ id: item.id })"
       />
 
       <SectionOrder
@@ -117,23 +115,12 @@ export default {
         @click-expand="
           (item) => $store.getters.replaceQuery({ query: { order: item.id } })
         "
-        @click-pending="
-          (item) =>
-            $store.state.stores.order.dispatch('updateToPendingOfId', item.id)
-        "
-        @click-remove="
-          (item) =>
-            $store.state.stores.order.dispatch('removeOItemOfId', {
-              id: item.id,
-            })
-        "
+        @click-pending="(item) => orderStore.updateToPendingOfId(item.id)"
+        @click-remove="(item) => orderStore.removeOItemOfId({ id: item.id })"
       />
     </main>
 
-    <Loading
-      class="viewOrder-loading"
-      :isShowing="$store.state.stores.order.getters.isLoading"
-    />
+    <Loading class="viewOrder-loading" :isShowing="orderStore.isLoading" />
   </div>
 </template>
 

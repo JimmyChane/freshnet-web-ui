@@ -22,15 +22,9 @@ export enum SettingKey {
 }
 
 export class Setting implements Item {
-  stores: any | null;
-
   key: string = '';
   visibility: string = '';
   value: any;
-
-  constructor(stores: any | null) {
-    this.stores = stores;
-  }
 
   fromData(data: SettingData): this {
     this.key = trimId(data.key);

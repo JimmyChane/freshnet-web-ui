@@ -1,6 +1,9 @@
 <script>
+import { mapStores } from 'pinia';
+
 import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
+import { useServiceStore } from '@/pinia-stores/service.store';
 
 export default {
   components: { PanelAction, TextArea },
@@ -9,6 +12,8 @@ export default {
   },
   data: (c) => ({ value: '' }),
   computed: {
+    ...mapStores(useServiceStore),
+
     isShowing: (c) => c.popupWindow.isShowing,
     description: (c) => c.popupWindow.description,
   },
@@ -44,8 +49,8 @@ export default {
   <PanelAction
     title="Edit Description"
     :isShowing="isShowing"
-    :isLoading="$store.state.stores.service.getters.isFetching"
-    :isClickable="!$store.state.stores.service.getters.isFetching"
+    :isLoading="serviceStore.isFetching"
+    :isClickable="!serviceStore.isFetching"
     @click-ok="() => onChange()"
     @click-cancel="() => popupWindow.close()"
     @click-dismiss="() => popupWindow.close()"

@@ -1,5 +1,6 @@
 import { isObject, isString, optArray, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
+import { useUserStore } from '@/pinia-stores/user.store';
 
 import {
   INFO_SERVICE_EVENT_METHOD,
@@ -12,14 +13,6 @@ import { ServiceTimestamp } from './ServiceTimestamp';
 import { User } from './User';
 
 export class ServiceEvent {
-  stores: any;
-  userStore: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-    this.userStore = stores.user;
-  }
-
   timestamp: ServiceTimestamp | null = null;
   username: string = '';
   name: string = '';
@@ -40,7 +33,7 @@ export class ServiceEvent {
       ? new ServicePrice().fromData(data.price)
       : null;
     this.images = optArray(data.images).map((image: any) => {
-      return new ServiceImage(this.stores).fromData(image);
+      return new ServiceImage().fromData(image);
     });
     return this;
   }
@@ -96,10 +89,10 @@ export class ServiceEvent {
     return (item.timestamp?.time ?? 0) - (this.timestamp?.time ?? 0);
   }
 
-  async fetchUser(): Promise<User | null> {
+  async fetchUser(): Promise<User | undefined> {
     if (!isString(this.username) || this.username.trim().length === 0)
-      return null;
-    return await this.userStore.dispatch('getUserByUsername', this.username);
+      return undefined;
+    return await useUserStore().getUserByUsername(this.username);
   }
 
   async fetchName(): Promise<string> {

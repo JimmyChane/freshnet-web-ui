@@ -7,13 +7,7 @@ import {
 export const DEFAULT_CURRENCY = PRICE_DEFAULT_CURRENCY;
 
 export class ProductPrice {
-  stores: any;
-
   private price: Price | null = null;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
 
   fromString(str: string): ProductPrice {
     const { currency, amount: value } = parsePrice(str);
@@ -49,7 +43,7 @@ export class ProductPrice {
         ? (this.price?.plus(value.price) ?? new Price(0, ''))
         : (this.price?.plus(value) ?? new Price(0, ''));
     const data = { value: price.amount, currency: price.currency };
-    return new ProductPrice(this.stores).fromData(data);
+    return new ProductPrice().fromData(data);
   }
   minus(value: ProductPrice | number): ProductPrice {
     const price =
@@ -57,7 +51,7 @@ export class ProductPrice {
         ? (this.price?.minus(value.price) ?? new Price(0, ''))
         : (this.price?.minus(value) ?? new Price(0, ''));
     const data = { value: price.amount, currency: price.currency };
-    return new ProductPrice(this.stores).fromData(data);
+    return new ProductPrice().fromData(data);
   }
 
   get value(): number {

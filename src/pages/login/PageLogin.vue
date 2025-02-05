@@ -6,6 +6,7 @@ import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import { onCreatedContext } from '@/mixin';
+import { useLoginStore } from '@/pinia-stores/login.store';
 
 import ButtonLogin from './ButtonLogin.vue';
 
@@ -21,7 +22,7 @@ export default {
     passwordErrorText: '',
   }),
   computed: {
-    isLoading: (c) => c.$store.state.stores.login.getters.isLoading,
+    isLoading: (c) => useLoginStore().isLoading,
   },
   methods: {
     clickLogin() {
@@ -36,8 +37,8 @@ export default {
       if (password === '') this.passwordErrorText = 'Missing Field';
       if (username === '' || password == '') return;
 
-      this.$store.state.stores.login
-        .dispatch('login', { username, password })
+      useLoginStore()
+        .login({ username, password })
         .then((user) => setTimeout(() => this.$router.push(redirect), 200))
         .catch(() => {
           this.$store.dispatch('snackbarShow', 'Login failed');
@@ -50,7 +51,7 @@ export default {
     onCreatedContext(this);
   },
   async mounted() {
-    let user = await this.$store.state.stores.login.dispatch('getUser');
+    let user = await useLoginStore().getUser();
     if (user.isTypeNone()) return;
     if (!this.$route.query.redirect) return;
     this.$router.replace({ path: this.$route.query.redirect });

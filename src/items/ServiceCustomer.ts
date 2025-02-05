@@ -10,11 +10,7 @@ export interface ServiceCustomerData {
 }
 
 export class ServiceCustomer {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
+  constructor() {}
 
   name: string = '';
   phoneNumber: PhoneNumber | null = null;
@@ -24,7 +20,7 @@ export class ServiceCustomer {
 
     const phoneNumber = trimStringAll(data.phoneNumber, undefined);
     this.phoneNumber = phoneNumber
-      ? new PhoneNumber(this.stores).fromData({ value: phoneNumber })
+      ? new PhoneNumber().fromData({ value: phoneNumber })
       : null;
     return this;
   }

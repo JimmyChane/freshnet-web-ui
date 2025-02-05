@@ -10,6 +10,8 @@ import {
   generateSpecificationLabels,
   generateStockLabels,
 } from '@/objects/ProductPreset';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useSettingStore } from '@/pinia-stores/setting.store';
 
 import Label from './ItemProduct-Label.vue';
 
@@ -37,15 +39,13 @@ export default {
     },
     isPrimaryColorDark: (c) => isColorDark(c.primaryColor),
 
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
     shouldShowPrice: (c) => {
-      let setting = c.$store.state.stores.setting.getters.items.find(
-        (setting) => {
-          return setting.key === SettingKey.PublicShowPrice;
-        },
-      );
+      let setting = useSettingStore().items.find((setting) => {
+        return setting.key === SettingKey.PublicShowPrice;
+      });
       return setting?.value ?? false;
     },
 
@@ -95,7 +95,7 @@ export default {
     },
   },
   async mounted() {
-    this.$store.state.stores.setting.dispatch('getItems');
+    useSettingStore().getItems();
     this.invalidateFullTitle();
     this.invalidatePreview();
   },

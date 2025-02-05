@@ -5,12 +5,6 @@ export interface ProductBundleData {
 }
 
 export class ProductBundle {
-  stores: any;
-
-  constructor(stores: any) {
-    this.stores = stores;
-  }
-
   title: string = '';
 
   fromData(data: { title?: string }): ProductBundle {

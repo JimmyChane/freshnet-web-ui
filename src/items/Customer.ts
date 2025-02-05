@@ -1,5 +1,6 @@
 import { optArray, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
+import { useCustomerStore } from '@/pinia-stores/customer.store';
 import { Item } from '@/stores/tools/List';
 
 import { CustomerDevice } from './CustomerDevice';
@@ -21,14 +22,6 @@ export const RequirementCustomer = {
 };
 
 export class Customer implements Item {
-  stores: any = null;
-  customerStore: any = null;
-
-  constructor(stores: any) {
-    this.stores = stores;
-    this.customerStore = stores.customer;
-  }
-
   id: string = '';
   name: string = '';
   phoneNumber: PhoneNumber | null = null;
@@ -55,7 +48,7 @@ export class Customer implements Item {
     this.name = trimText(data.name);
     const phoneNumber = trimText(data.phoneNumber);
     this.phoneNumber = phoneNumber
-      ? new PhoneNumber(this.stores).fromData({ value: phoneNumber })
+      ? new PhoneNumber().fromData({ value: phoneNumber })
       : null;
     this.description = trimText(data.description);
     this.deviceIds = optArray(data.deviceIds)
@@ -100,8 +93,7 @@ export class Customer implements Item {
 
   async fetchDevices(): Promise<(CustomerDevice | undefined)[]> {
     if (!this.deviceIds.length) return [];
-    const devices: CustomerDevice[] =
-      await this.customerStore.dispatch('getDevices');
+    const devices: CustomerDevice[] = await useCustomerStore().getDevices();
     return this.deviceIds.map((deviceId) => {
       return devices.find((device) => device.id === deviceId);
     });

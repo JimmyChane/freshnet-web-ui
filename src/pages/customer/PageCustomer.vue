@@ -1,9 +1,12 @@
 <script>
+import { mapStores } from 'pinia';
+
 import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
 import { onCreatedRoute } from '@/mixin';
+import { useCustomerStore } from '@/pinia-stores/customer.store';
 import { CUSTOMER_ROUTE } from '@/router';
 
 import PanelCustomer from './PanelCustomer.vue';
@@ -33,7 +36,9 @@ export default {
     drawerCustomer: null,
   }),
   computed: {
-    isLoading: (c) => c.$store.state.stores.customer.getters.isLoading,
+    ...mapStores(useCustomerStore),
+
+    isLoading: (c) => useCustomerStore().isLoading,
 
     queryId: (c) => c.$route.query.id,
     queryName: (c) => c.$route.query.name,
@@ -73,7 +78,7 @@ export default {
     },
   },
   watch: {
-    '$store.state.stores.customer.getters.items'() {
+    'customerStore.items'() {
       this.invalidate();
     },
     currentCustomer() {
@@ -93,13 +98,11 @@ export default {
   methods: {
     async invalidate() {
       this.items = [];
-      this.items = await this.$store.state.stores.customer.dispatch(
-        'generateCustomersAcross',
-      );
+      this.items = await useCustomerStore().generateCustomersAcross();
     },
 
     clickRefresh() {
-      this.$store.state.stores.customer.dispatch('refresh');
+      useCustomerStore().refresh();
       this.invalidate();
     },
     clickClose() {

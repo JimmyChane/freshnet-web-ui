@@ -3,6 +3,9 @@ import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector3 from '@/components/selector/Selector3.vue';
 import { RequirementCustomer } from '@/items/Customer';
+import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useCustomerStore } from '@/pinia-stores/customer.store';
+import { useSpecificationStore } from '@/pinia-stores/specification.store';
 
 import SpecificationInputs from './SpecificationInputs.vue';
 import WindowSection from './WindowSection.vue';
@@ -30,12 +33,12 @@ export default {
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,
     item: (c) => c.popupWindow.item,
-    isLoading: (c) => c.$store.state.stores.customer.getters.isLoading,
-    isClickable: (c) => !c.$store.state.stores.customer.getters.isLoading,
+    isLoading: (c) => useCustomerStore().isLoading,
+    isClickable: (c) => !useCustomerStore().isLoading,
     categoryMenus: (c) =>
       [
         { key: 'none', title: 'None' },
-        ...c.$store.state.stores.category.getters.items.map((item) => item),
+        ...useCategoryStore().items.map((item) => item),
       ].map((item) => ({
         key: item.key,
         title: item.title,
@@ -61,8 +64,8 @@ export default {
   },
   methods: {
     bindData() {
-      this.$store.state.stores.category.dispatch('getItems');
-      this.$store.state.stores.specification.dispatch('getItems');
+      useCategoryStore().getItems();
+      useSpecificationStore().getItems();
     },
 
     clickOk() {
@@ -79,8 +82,8 @@ export default {
       if (this.data.categoryKey === 'none') {
         this.$store.dispatch('snackbarShow', 'Category is Required');
       } else {
-        this.$store.state.stores.customer
-          .dispatch('addDevice', this.data)
+        useCustomerStore()
+          .addDevice(this.data)
           .then((item) => this.popupWindow.close())
           .catch((error) => {
             console.error(error);

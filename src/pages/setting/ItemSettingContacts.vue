@@ -1,5 +1,6 @@
 <script>
 import { SettingKey } from '@/items/Setting';
+import { useSettingStore } from '@/pinia-stores/setting.store';
 
 import ItemSettingHeader from './ItemSetting-Header.vue';
 import ContactItem from './ItemSettingContacts-Item.vue';
@@ -12,20 +13,22 @@ export default {
     title: 'Contacts (Readonly)',
     values: [],
   }),
+  computed: {
+    lastModified() {
+      return useSettingStore().lastModified;
+    },
+  },
   watch: {
-    '$store.state.stores.setting.getters.lastModified'() {
+    lastModified() {
       this.invalidate();
     },
   },
   methods: {
     async invalidate() {
-      this.values = await this.$store.state.stores.setting.dispatch(
-        'findValueOfKey',
-        {
-          key: this.key,
-          default: [],
-        },
-      );
+      this.values = await useSettingStore().findValueOfKey({
+        key: this.key,
+        default: [],
+      });
     },
   },
   mounted() {

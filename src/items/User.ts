@@ -20,12 +20,6 @@ export enum UserReservedUsername {
 }
 
 export class User implements Item {
-  stores: any | null;
-
-  constructor(stores: any | null) {
-    this.stores = stores;
-  }
-
   username: string = '';
   name: string = '';
   userType: number = UserType.None;

@@ -2,6 +2,7 @@
 import { isArray, isObjectOnly, optString } from '@/U';
 import { ProductPrice } from '@/items/ProductPrice';
 import { SpecificationKey } from '@/items/Specification';
+import { useLoginStore } from '@/pinia-stores/login.store';
 
 import ItemSpecification from './PageProductExport-Layout-Two-Specification.vue';
 
@@ -25,7 +26,7 @@ export default {
     specificationPadding: 0,
   }),
   computed: {
-    user: (c) => c.$store.state.stores.login.getters.user,
+    user: (c) => useLoginStore().user,
     allowEdit: (c) => c.user.isTypeAdmin() || c.user.isTypeStaff(),
 
     brandId: (c) => c.product?.brandId ?? '',

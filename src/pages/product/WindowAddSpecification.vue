@@ -3,6 +3,7 @@ import Input from '@/components/Input.vue';
 import Spinner from '@/components/selector/Spinner.vue';
 import WindowAction from '@/components/window/WindowAction.vue';
 import { SpecificationKey } from '@/items/Specification';
+import { useSpecificationStore } from '@/pinia-stores/specification.store';
 
 const keys = Object.keys(SpecificationKey).map((objectKey) => {
   return SpecificationKey[objectKey];
@@ -17,8 +18,8 @@ export default {
   data: (c) => ({ data: { key: '', content: '' } }),
   computed: {
     typeSelections: (c) => {
-      return c.$store.state.stores.specification.getters.items
-        .map((item) => ({
+      return useSpecificationStore()
+        .items.map((item) => ({
           key: item.key,
           title: item.title,
           icon: item.icon ? item.icon.toUrl() : '',

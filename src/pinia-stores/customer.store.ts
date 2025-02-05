@@ -28,9 +28,9 @@ export const useCustomerStore = defineStore('customer', () => {
     .getData(() => list.value.items)
     .loadData(async () => {
       const api = await getCustomerList();
-      const content = optArray(api.optArrayContent());
+      const content: CustomerData[] = optArray(api.optArrayContent());
       return content.map((content) => {
-        return new Customer(content);
+        return new Customer().fromData(content);
       });
     });
 
@@ -63,7 +63,7 @@ export const useCustomerStore = defineStore('customer', () => {
     const cloneCustomer = (
       customer: Customer | ServiceCustomer | OrderCustomer,
     ) => {
-      return new Customer(customer.toData());
+      return new Customer().fromData(customer.toData());
     };
 
     const customers: Customer[] = await getItems();
@@ -108,18 +108,18 @@ export const useCustomerStore = defineStore('customer', () => {
     return customers;
   }
   async function addItem(arg: CustomerData) {
-    const data: any = new Customer(arg).toData();
+    const data: any = new Customer().fromData(arg).toData();
     delete data.id;
     const api = await addCustomer(data);
     const content = api.optObjectContent();
-    const item = new Customer(content);
+    const item = new Customer().fromData(content);
     return list.value.addItem(item);
   }
   async function removeItemOfId(arg: { _id: string }) {
     const { _id } = arg;
     const api = await removeCustomer(_id);
     const content = api.optObjectContent();
-    const item = new Customer(content);
+    const item = new Customer().fromData(content);
     return list.value.removeItemByItem(item);
   }
   async function updateNamePhoneNumberOfItemId(arg: {
@@ -130,7 +130,7 @@ export const useCustomerStore = defineStore('customer', () => {
     const { _id, name, phoneNumber } = arg;
     const api = await updateCustomerNamePhoneNumber(_id, name, phoneNumber);
     const content = api.optObjectContent();
-    const inputItem = new Customer(content);
+    const inputItem = new Customer().fromData(content);
     return list.value.updateItemById(inputItem.id, (item) => {
       if (!item) return;
       item.name = inputItem.name;
@@ -145,7 +145,7 @@ export const useCustomerStore = defineStore('customer', () => {
     const { _id, description } = arg;
     const api = await updateCustomerDescription(_id, description);
     const content = api.optObjectContent();
-    const inputItem = new Customer(content);
+    const inputItem = new Customer().fromData(content);
     return list.value.updateItemById(inputItem.id, (item) => {
       if (!item) return;
       item.description = inputItem.description;

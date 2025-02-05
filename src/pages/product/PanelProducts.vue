@@ -1,11 +1,15 @@
 <script>
 import chroma from 'chroma-js';
+import { mapStores } from 'pinia';
 
 import Footer from '@/app/footer/Footer.vue';
 import IconAdd from '@/assets/icon/add-000000.svg';
 import Empty from '@/components/Empty.vue';
 import LabelMenus from '@/components/LabelMenus.vue';
 import LoadingDots from '@/components/LoadingDots.vue';
+import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useProductStore } from '@/pinia-stores/product.store';
 import { PRODUCT_ROUTE } from '@/router';
 
 import ActionbarProduct from './ActionBarProduct.vue';
@@ -78,6 +82,8 @@ export default {
     productGroups: [],
   }),
   computed: {
+    ...mapStores(useCategoryStore, useProductStore),
+
     iconEmpty: () => PRODUCT_ROUTE.icon.dark.toUrl(),
 
     isLayoutThin: (c) => c.$store.getters.window.innerWidth < 550,
@@ -88,10 +94,10 @@ export default {
     queryBrandId: (c) => c.$route.query.brand,
     queryStock: (c) => c.$route.query.stock,
 
-    isLoading: (c) => c.$store.state.stores.product.getters.isLoading,
+    isLoading: (c) => useProductStore().isLoading,
     isEmpty: (c) => !c.isLoading && !c.productGroups.length,
     isEditable() {
-      const { user } = this.$store.state.stores.login.getters;
+      const user = useLoginStore().user;
       return user.isTypeAdmin() || user.isTypeStaff();
     },
 
@@ -145,10 +151,10 @@ export default {
     isEditable() {
       this.invalidate();
     },
-    '$store.state.stores.product.getters.lastModified'() {
+    'productStore.lastModified'() {
       this.invalidate();
     },
-    '$store.state.stores.category.getters.lastModified'() {
+    'categoryStore.lastModified'() {
       this.invalidate();
     },
   },
@@ -160,11 +166,8 @@ export default {
       this.scrollToTop();
       this.invalidateProductId();
 
-      let categoryGroups = await this.$store.state.stores.product.dispatch(
-        'getGroupsByCategory',
-      );
-      let brandGroups =
-        await this.$store.state.stores.product.dispatch('getGroupsByBrand');
+      let categoryGroups = await useProductStore().getGroupsByCategory();
+      let brandGroups = await useProductStore().getGroupsByBrand();
 
       if (!this.isEditable) {
         categoryGroups = categoryGroups

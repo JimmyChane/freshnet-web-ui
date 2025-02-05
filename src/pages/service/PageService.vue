@@ -1,9 +1,13 @@
 <script>
+import { mapStores } from 'pinia';
+
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import Loading from '@/components/Loading.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import WindowRemove from '@/components/window/WindowRemove.vue';
 import { onCreatedRoute } from '@/mixin';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useServiceStore } from '@/pinia-stores/service.store';
 import { SERVICE_ROUTE } from '@/router';
 
 import PanelService from './PanelService.vue';
@@ -23,8 +27,8 @@ export default {
       onClickRemove: (service) => c.clickRemoveService(service),
       onClickToAddEvent: (event) => {
         const arg = { serviceID: c.currentService.id, data: event };
-        c.$store.state.stores.service
-          .dispatch('addEventToId', arg)
+        useServiceStore()
+          .addEventToId(arg)
           .catch((error) => {
             c.$store.dispatch('snackbarShow', 'Failed to create an event');
             throw error;
@@ -47,6 +51,8 @@ export default {
     drawerService: null,
   }),
   computed: {
+    ...mapStores(useServiceStore),
+
     actionMenus: (c) => {
       return [
         {
@@ -58,9 +64,9 @@ export default {
       ];
     },
 
-    currentUser: (c) => c.$store.state.stores.login.getters.user,
+    currentUser: (c) => useLoginStore().user,
 
-    lastModified: (c) => c.$store.state.stores.service.getters.lastModified,
+    lastModified: (c) => useServiceStore().lastModified,
     currentServiceId: (c) => c.$route.query.service,
   },
   watch: {
@@ -76,11 +82,11 @@ export default {
   },
   mounted() {
     this.invalidate();
-    this.$store.state.stores.service.dispatch('refresh');
+    useServiceStore().refresh();
   },
   methods: {
     async invalidate() {
-      const items = await this.$store.state.stores.service.dispatch('getItems');
+      const items = await useServiceStore().getItems();
       for (const item of items) {
         item.events.sort((event1, event2) => event1.compare(event2));
       }
@@ -88,7 +94,7 @@ export default {
 
       this.items = items;
 
-      await this.$store.state.stores.login.dispatch('refresh');
+      await useLoginStore().refresh();
       await this.invalidateServiceId();
     },
     async invalidateServiceId() {
@@ -98,8 +104,7 @@ export default {
         return;
       }
 
-      const service = await this.$store.state.stores.service.dispatch(
-        'getItemOfId',
+      const service = await useServiceStore().getItemOfId(
         this.currentServiceId,
       );
 
@@ -125,19 +130,14 @@ export default {
     },
 
     clickRefresh() {
-      this.$store.state.stores.service.dispatch('refresh');
+      useServiceStore().refresh();
     },
     clickAddService() {
       const popupWindow = this.$store.dispatch('openPopupWindow', {
         component: WindowAddService,
         onConfirm: async (accept, reject, data) => {
           try {
-            const result = await this.$store.state.stores.service.dispatch(
-              'addItem',
-              {
-                data,
-              },
-            );
+            const result = await useServiceStore().addItem({ data });
 
             result ? accept() : reject();
             this.clickService(result);
@@ -188,9 +188,7 @@ export default {
         value: service,
         onConfirm: async (accept, reject) => {
           try {
-            await this.$store.state.stores.service.dispatch('removeItemOfId', {
-              id: service.id,
-            });
+            await useServiceStore().removeItemOfId({ id: service.id });
             accept();
             if (this.currentServiceId === service.id) {
               this.$store.getters.replaceQuery({ query: { service: null } });
@@ -210,7 +208,7 @@ export default {
         message: 'After deleting this event, it cannot be reverted.',
         value: data,
         onConfirm: async (accept, reject) => {
-          await this.$store.state.stores.service.dispatch('removeEventFromId', {
+          await useServiceStore().removeEventFromId({
             serviceID: data.service.id,
             time: data.event.timestamp.time,
           });
@@ -226,10 +224,10 @@ export default {
         value: image,
         onConfirm: async (accept, reject) => {
           try {
-            const service = await this.$store.state.stores.service.dispatch(
-              'removeImageFromId',
-              { serviceID: this.currentService.id, image },
-            );
+            const service = await useServiceStore().removeImageFromId({
+              serviceID: this.currentService.id,
+              image,
+            });
             this.$store.dispatch('imageViewerHide');
             accept();
           } catch (error) {
@@ -247,10 +245,10 @@ export default {
         description,
         onConfirm: async (accept, reject, description) => {
           try {
-            const service = await this.$store.state.stores.service.dispatch(
-              'updateDescriptionOfId',
-              { serviceID: this.currentService.id, description },
-            );
+            const service = await useServiceStore().updateDescriptionOfId({
+              serviceID: this.currentService.id,
+              description,
+            });
             accept();
           } catch (error) {
             this.$store.dispatch('snackbarShow', 'Update Description Failed');
@@ -266,10 +264,10 @@ export default {
         values: belongings,
         onConfirm: async (accept, reject, belongings) => {
           try {
-            const service = await this.$store.state.stores.service.dispatch(
-              'updateBelongingsOfId',
-              { serviceID: this.currentService.id, belongings },
-            );
+            const service = await useServiceStore().updateBelongingsOfId({
+              serviceID: this.currentService.id,
+              belongings,
+            });
             accept();
           } catch (error) {
             this.$store.dispatch('snackbarShow', 'Update Belongings Failed');
@@ -285,7 +283,7 @@ export default {
         value: customer,
         onConfirm: async (accept, reject, customer) => {
           try {
-            const service = await this.$store.state.stores.service.dispatch(
+            const service = await useServiceStore().updateCustomerOfId(
               'updateCustomerOfId',
               { serviceID: this.currentService.id, customer },
             );
@@ -331,10 +329,7 @@ export default {
       />
     </PanelRight>
 
-    <Loading
-      class="PageService-loading"
-      :isShowing="$store.state.stores.service.getters.isLoading"
-    />
+    <Loading class="PageService-loading" :isShowing="serviceStore.isLoading" />
   </div>
 </template>
 

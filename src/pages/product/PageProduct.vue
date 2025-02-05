@@ -1,7 +1,12 @@
 <script>
+import { mapStores } from 'pinia';
+
 import Footer from '@/app/footer/Footer.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import { onCreatedRoute } from '@/mixin';
+import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useLoginStore } from '@/pinia-stores/login.store';
+import { useProductStore } from '@/pinia-stores/product.store';
 import { PRODUCT_ROUTE } from '@/router';
 import { NavigationLayout } from '@/tools/Navigation';
 
@@ -38,11 +43,13 @@ export default {
     scrollTop: 0,
   }),
   computed: {
+    ...mapStores(useCategoryStore, useProductStore),
+
     isEditable: (c) => {
-      const { user } = c.$store.state.stores.login.getters;
+      const user = useLoginStore().user;
       return user.isTypeAdmin() || user.isTypeStaff();
     },
-    isLoading: (c) => c.$store.state.stores.product.getters.isLoading,
+    isLoading: (c) => useProductStore().isLoading,
 
     paths: (c) => {
       return c.$store.getters.paths;
@@ -119,10 +126,10 @@ export default {
     productId() {
       this.onProductId();
     },
-    '$store.state.stores.product.getters.lastModified'() {
+    'productStore.lastModified'() {
       this.invalidate();
     },
-    '$store.state.stores.category.getters.lastModified'() {
+    'categoryStore.lastModified'() {
       this.invalidate();
     },
   },
@@ -139,12 +146,9 @@ export default {
     async invalidate() {
       this.groups = [];
 
-      let groups = await this.$store.state.stores.product.dispatch(
-        'getGroupsByCategory',
-      );
+      let groups = await useProductStore().getGroupsByCategory();
 
-      const categories =
-        await this.$store.state.stores.category.dispatch('getItems');
+      const categories = await useCategoryStore().getItems();
       categories.forEach((category) => {
         const group = groups.find((group) => {
           return group.category.id === category.id;
@@ -233,8 +237,7 @@ export default {
     async onProductId() {
       this.product = null;
       if (this.productId) {
-        const products =
-          await this.$store.state.stores.product.dispatch('getItems');
+        const products = await useProductStore().getItems();
         this.product = products.find((product) => {
           return product.id === this.productId;
         });
@@ -261,8 +264,8 @@ export default {
       const popupWindow = await this.$store.dispatch('openPopupWindow', {
         component: WindowAddProduct,
         onConfirm: (output) => {
-          this.$store.state.stores.product
-            .dispatch('addItem', { data: output })
+          useProductStore()
+            .addItem({ data: output })
             .then((product) => {
               popupWindow.close();
               this.setProduct(product);
@@ -279,8 +282,8 @@ export default {
         component: WindowRemoveProduct,
         input,
         onConfirm: (input) => {
-          this.$store.state.stores.product
-            .dispatch('removeItemOfId', { id: input.productId })
+          useProductStore()
+            .removeItemOfId({ id: input.productId })
             .then(() => {
               popupWindow.close();
               this.setProduct(null);
@@ -297,11 +300,8 @@ export default {
         input,
         onConfirm: (input) => {
           const { product, image } = input;
-          this.$store.state.stores.product
-            .dispatch('removeImageOfId', {
-              id: product.id,
-              image,
-            })
+          useProductStore()
+            .removeImageOfId({ id: product.id, image })
             .then(() => popupWindow.close())
             .catch(() => {});
         },
@@ -315,17 +315,14 @@ export default {
         onConfirm: (input) => {
           const { product, title, brandId } = input;
 
-          const promiseTitle = this.$store.state.stores.product.dispatch(
-            'updateTitleOfId',
-            {
-              id: product.id,
-              title,
-            },
-          );
-          const promiseBrand = this.$store.state.stores.product.dispatch(
-            'updateBrandIdOfId',
-            { id: product.id, brandId },
-          );
+          const promiseTitle = useProductStore().updateTitleOfId({
+            id: product.id,
+            title,
+          });
+          const promiseBrand = useProductStore().updateBrandIdOfId({
+            id: product.id,
+            brandId,
+          });
           Promise.all([promiseTitle, promiseBrand])
             .then(() => popupWindow.close())
             .catch((error) => {
@@ -340,8 +337,8 @@ export default {
         input,
         onConfirm: (input) => {
           const { product, price } = input;
-          this.$store.state.stores.product
-            .dispatch('updatePriceOfId', { id: product.id, price })
+          useProductStore()
+            .updatePriceOfId({ id: product.id, price })
             .then((product) => popupWindow.close())
             .catch((error) => {
               this.$store.dispatch('snackbarShow', 'Cannot Update');
@@ -355,8 +352,8 @@ export default {
         input,
         onConfirm: (input) => {
           const { product, description } = input;
-          this.$store.state.stores.product
-            .dispatch('updateDescriptionOfId', {
+          useProductStore()
+            .updateDescriptionOfId({
               id: product.id,
               description,
             })
@@ -373,11 +370,8 @@ export default {
         input,
         onConfirm: (input) => {
           const { product, categoryId } = input;
-          this.$store.state.stores.product
-            .dispatch('updateCategoryIdOfId', {
-              id: product.id,
-              categoryId,
-            })
+          useProductStore()
+            .updateCategoryIdOfId({ id: product.id, categoryId })
             .then((product) => popupWindow.close())
             .catch((error) => {
               this.$store.dispatch('snackbarShow', 'Cannot Update');
@@ -391,8 +385,8 @@ export default {
         input,
         onConfirm: (input) => {
           const { product, specifications } = input;
-          this.$store.state.stores.product
-            .dispatch('updateSpecificationsOfId', {
+          useProductStore()
+            .updateSpecificationsOfId({
               id: product.id,
               specifications: specifications.map((specification) => {
                 return {

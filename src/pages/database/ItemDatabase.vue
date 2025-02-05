@@ -3,6 +3,7 @@ import IconDownload from '@/assets/icon/download-black.svg';
 import IconMinus from '@/assets/icon/minus-black.svg';
 import IconPlus from '@/assets/icon/plus-black.svg';
 import ButtonIconText from '@/components/button/ButtonIconText.vue';
+import { useDatabaseStore } from '@/pinia-stores/database.store';
 
 import ItemCollection from './ItemCollection.vue';
 
@@ -40,8 +41,8 @@ export default {
     },
 
     pushDownloadDatabase() {
-      this.$store.state.stores.database
-        .dispatch('exportDatabase', { database: this.database.name })
+      useDatabaseStore()
+        .exportDatabase({ database: this.database.name })
         .then((databaseContext) => {
           let { filename, data } = databaseContext;
           let dataString = JSON.stringify(data, null, 0);

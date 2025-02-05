@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 
 import { optArray } from '@/U';
-import { User } from '@/items/User';
+import { User, UserData } from '@/items/User';
 import {
   addUser as addUserRequest,
   getUserList,
@@ -27,7 +27,7 @@ export const useUserStore = defineStore('user', () => {
 
       const api = await getUserList();
       const content = optArray(api.optArrayContent());
-      return content.map((data) => new User(data));
+      return content.map((data) => new User().fromData(data));
     });
 
   const processor = ref(new Processor());
@@ -55,8 +55,8 @@ export const useUserStore = defineStore('user', () => {
 
       const { username, userType } = arg;
       const api = await updateUser(username, userType);
-      const content = api.optObjectContent();
-      const userChange = new User(content);
+      const content = api.optObjectContent() as UserData;
+      const userChange = new User().fromData(content);
       if (!userChange) throw new Error();
       list.value.updateItemById(userChange.username, (item) => {
         return userChange;
@@ -84,8 +84,8 @@ export const useUserStore = defineStore('user', () => {
       arg.passwordNew,
       arg.passwordRepeat,
     );
-    const content = api.getObjectContent();
-    const newUser = new User(content);
+    const content = api.getObjectContent() as UserData;
+    const newUser = new User().fromData(content);
     list.value.addItem(newUser);
     return newUser;
   }
