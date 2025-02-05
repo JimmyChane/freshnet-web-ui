@@ -2,7 +2,7 @@
 import { isArray, isObjectOnly, optString } from '@/U';
 import { ProductPrice } from '@/items/ProductPrice';
 import { SpecificationKey } from '@/items/Specification';
-import { useLoginStore } from '@/pinia-stores/login.store';
+import { useLoginStore } from '@/stores/login.store';
 
 import ItemSpecification from './PageProductExport-Layout-Two-Specification.vue';
 

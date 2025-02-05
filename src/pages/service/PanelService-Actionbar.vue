@@ -15,7 +15,7 @@ import Selector from '@/components/selector/Selector.vue';
 import { Service } from '@/items/Service';
 import { mapServiceState } from '@/items/ServiceState';
 import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
-import { useServiceStore } from '@/pinia-stores/service.store';
+import { useServiceStore } from '@/stores/service.store';
 
 import BelongingVue from './ItemBelonging.vue';
 import LabelVue from './PanelService-Info-Label.vue';

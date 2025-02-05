@@ -1,6 +1,6 @@
 <script>
 import { SettingKey } from '@/items/Setting';
-import { useSettingStore } from '@/pinia-stores/setting.store';
+import { useSettingStore } from '@/stores/setting.store';
 
 import Contact from './Footer-Contact.vue';
 

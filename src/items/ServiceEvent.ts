@@ -1,6 +1,6 @@
 import { isObject, isString, optArray, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
-import { useUserStore } from '@/pinia-stores/user.store';
+import { useUserStore } from '@/stores/user.store';
 
 import {
   INFO_SERVICE_EVENT_METHOD,

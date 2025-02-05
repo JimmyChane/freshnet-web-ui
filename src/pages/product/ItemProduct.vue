@@ -10,8 +10,8 @@ import {
   generateSpecificationLabels,
   generateStockLabels,
 } from '@/objects/ProductPreset';
-import { useLoginStore } from '@/pinia-stores/login.store';
-import { useSettingStore } from '@/pinia-stores/setting.store';
+import { useLoginStore } from '@/stores/login.store';
+import { useSettingStore } from '@/stores/setting.store';
 
 import Label from './ItemProduct-Label.vue';
 

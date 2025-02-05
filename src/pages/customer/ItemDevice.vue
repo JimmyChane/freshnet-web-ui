@@ -3,7 +3,7 @@ import IconOption from '@/assets/icon/option-000000.svg';
 import IconTrash from '@/assets/icon/trash-DB4A2A.svg';
 import MenuOption from '@/components/button/MenuOption.vue';
 import { CustomerDevice } from '@/items/CustomerDevice';
-import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useCategoryStore } from '@/stores/category.store';
 
 import ItemSpecification from './ItemSpecification.vue';
 import Item from './PanelCustomer-Item.vue';

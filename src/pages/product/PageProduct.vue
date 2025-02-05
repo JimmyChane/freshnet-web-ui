@@ -4,10 +4,10 @@ import { mapStores } from 'pinia';
 import Footer from '@/app/footer/Footer.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import { onCreatedRoute } from '@/mixin';
-import { useCategoryStore } from '@/pinia-stores/category.store';
-import { useLoginStore } from '@/pinia-stores/login.store';
-import { useProductStore } from '@/pinia-stores/product.store';
 import { PRODUCT_ROUTE } from '@/router';
+import { useCategoryStore } from '@/stores/category.store';
+import { useLoginStore } from '@/stores/login.store';
+import { useProductStore } from '@/stores/product.store';
 import { NavigationLayout } from '@/tools/Navigation';
 
 import PanelProduct from './PanelProduct.vue';

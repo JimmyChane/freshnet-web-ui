@@ -6,7 +6,7 @@ import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import { onCreatedContext } from '@/mixin';
-import { useLoginStore } from '@/pinia-stores/login.store';
+import { useLoginStore } from '@/stores/login.store';
 
 import ButtonLogin from './ButtonLogin.vue';
 

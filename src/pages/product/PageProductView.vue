@@ -1,7 +1,7 @@
 <script>
 import LoadingDots from '@/components/LoadingDots.vue';
 import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
-import { useProductStore } from '@/pinia-stores/product.store';
+import { useProductStore } from '@/stores/product.store';
 import { AppLayoutId } from '@/tools/AppLayout';
 
 export default {

@@ -5,7 +5,7 @@ import GlobalSearch from '@/app/search/GlobalSearch.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { cloudinaryServer } from '@/host/Server';
 import { SettingKey } from '@/items/Setting';
-import { useSettingStore } from '@/pinia-stores/setting.store';
+import { useSettingStore } from '@/stores/setting.store';
 
 export default {
   components: { NavigationBar, GlobalSearch },

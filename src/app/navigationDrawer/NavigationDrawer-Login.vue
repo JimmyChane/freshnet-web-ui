@@ -1,5 +1,5 @@
 <script>
-import { useLoginStore } from '@/pinia-stores/login.store';
+import { useLoginStore } from '@/stores/login.store';
 
 export default {
   emits: ['click-logout'],

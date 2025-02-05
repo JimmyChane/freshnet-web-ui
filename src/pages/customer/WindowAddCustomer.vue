@@ -3,7 +3,7 @@ import Input from '@/components/Input.vue';
 import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import { RequirementCustomer } from '@/items/Customer';
-import { useCustomerStore } from '@/pinia-stores/customer.store';
+import { useCustomerStore } from '@/stores/customer.store';
 
 export default {
   components: { PanelAction, Input, TextArea },

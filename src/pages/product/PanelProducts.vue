@@ -7,10 +7,10 @@ import IconAdd from '@/assets/icon/add-000000.svg';
 import Empty from '@/components/Empty.vue';
 import LabelMenus from '@/components/LabelMenus.vue';
 import LoadingDots from '@/components/LoadingDots.vue';
-import { useCategoryStore } from '@/pinia-stores/category.store';
-import { useLoginStore } from '@/pinia-stores/login.store';
-import { useProductStore } from '@/pinia-stores/product.store';
 import { PRODUCT_ROUTE } from '@/router';
+import { useCategoryStore } from '@/stores/category.store';
+import { useLoginStore } from '@/stores/login.store';
+import { useProductStore } from '@/stores/product.store';
 
 import ActionbarProduct from './ActionBarProduct.vue';
 import ItemProduct from './ItemProduct.vue';

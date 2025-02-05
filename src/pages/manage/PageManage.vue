@@ -1,7 +1,7 @@
 <script>
 import { onCreatedRoute } from '@/mixin';
-import { useLoginStore } from '@/pinia-stores/login.store';
 import { MANAGE_ROUTE } from '@/router';
+import { useLoginStore } from '@/stores/login.store';
 
 export default {
   computed: {

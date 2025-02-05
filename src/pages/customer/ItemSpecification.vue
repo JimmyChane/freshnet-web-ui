@@ -1,6 +1,6 @@
 <script>
 import { CustomerDeviceSpecification } from '@/items/CustomerDeviceSpecification';
-import { useSpecificationStore } from '@/pinia-stores/specification.store';
+import { useSpecificationStore } from '@/stores/specification.store';
 
 export default {
   emtis: ['click', 'click-remove'],

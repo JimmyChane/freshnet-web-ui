@@ -1,7 +1,7 @@
 <script>
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
-import { useLoginStore } from '@/pinia-stores/login.store';
+import { useLoginStore } from '@/stores/login.store';
 
 export default {
   components: { PanelAction, Input },

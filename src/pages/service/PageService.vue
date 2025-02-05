@@ -6,9 +6,9 @@ import Loading from '@/components/Loading.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import WindowRemove from '@/components/window/WindowRemove.vue';
 import { onCreatedRoute } from '@/mixin';
-import { useLoginStore } from '@/pinia-stores/login.store';
-import { useServiceStore } from '@/pinia-stores/service.store';
 import { SERVICE_ROUTE } from '@/router';
+import { useLoginStore } from '@/stores/login.store';
+import { useServiceStore } from '@/stores/service.store';
 
 import PanelService from './PanelService.vue';
 import PanelServices from './PanelServices.vue';

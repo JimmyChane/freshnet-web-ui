@@ -6,8 +6,8 @@ import PHE from 'print-html-element';
 
 import { isFunction, isPassed, optArray, parseGroup2s, replace } from '@/U';
 import PopupWindow from '@/components/window/PopupWindow.vue';
-import { useLoginStore } from '@/pinia-stores/login.store';
 import { HOME_ROUTE, MANAGE_ROUTE, PRINT_ROUTE, PRODUCT_ROUTE } from '@/router';
+import { useLoginStore } from '@/stores/login.store';
 // tools
 import { AppLayout } from '@/tools/AppLayout';
 import { Navigation } from '@/tools/Navigation';

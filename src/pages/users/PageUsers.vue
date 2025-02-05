@@ -6,9 +6,9 @@ import Empty from '@/components/Empty.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { onCreatedRoute } from '@/mixin';
-import { useLoginStore } from '@/pinia-stores/login.store';
-import { useUserStore } from '@/pinia-stores/user.store';
 import { USERS_ROUTE } from '@/router';
+import { useLoginStore } from '@/stores/login.store';
+import { useUserStore } from '@/stores/user.store';
 
 import ItemUser from './ItemUser.vue';
 import WindowAdd from './WindowAdd.vue';

@@ -5,7 +5,7 @@ import Selector from '@/components/selector/Selector.vue';
 import { Service } from '@/items/Service';
 import { findServiceStateByKey } from '@/items/ServiceState';
 import Section from '@/pages/manage/PanelItem-Section.vue';
-import { useServiceStore } from '@/pinia-stores/service.store';
+import { useServiceStore } from '@/stores/service.store';
 
 import ButtonAddImage from './ButtonAddImage.vue';
 import ButtonImage from './ButtonImage.vue';

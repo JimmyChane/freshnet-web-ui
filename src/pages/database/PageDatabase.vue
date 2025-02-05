@@ -4,9 +4,9 @@ import Empty from '@/components/Empty.vue';
 import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { onCreatedRoute } from '@/mixin';
-import { useDatabaseStore } from '@/pinia-stores/database.store';
-import { useLoginStore } from '@/pinia-stores/login.store';
 import { DATABASE_ROUTE } from '@/router';
+import { useDatabaseStore } from '@/stores/database.store';
+import { useLoginStore } from '@/stores/login.store';
 
 import ItemDatabase from './ItemDatabase.vue';
 

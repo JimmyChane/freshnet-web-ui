@@ -1,6 +1,6 @@
 import { isObjectOnly, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
-import { useSpecificationStore } from '@/pinia-stores/specification.store';
+import { useSpecificationStore } from '@/stores/specification.store';
 import { Item } from '@/stores/tools/List';
 
 import { Image } from './Image';

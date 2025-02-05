@@ -5,8 +5,8 @@ import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import { onCreatedRoute } from '@/mixin';
-import { useLoginStore } from '@/pinia-stores/login.store';
 import { PROFILE_ROUTE } from '@/router';
+import { useLoginStore } from '@/stores/login.store';
 
 import SectionMain from './PageProfile-Section-Main.vue';
 import SectionTitle from './PageProfile-Section-Title.vue';

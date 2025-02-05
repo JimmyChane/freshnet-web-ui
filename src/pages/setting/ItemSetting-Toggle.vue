@@ -1,7 +1,7 @@
 <script>
 import ToggleButton from '@/components/button/ToggleButton.vue';
-import { useSettingStore } from '@/pinia-stores/setting.store';
-import { useUserStore } from '@/pinia-stores/user.store';
+import { useSettingStore } from '@/stores/setting.store';
+import { useUserStore } from '@/stores/user.store';
 
 export default {
   components: { ToggleButton },

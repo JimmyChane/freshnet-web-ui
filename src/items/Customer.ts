@@ -1,6 +1,6 @@
 import { optArray, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
-import { useCustomerStore } from '@/pinia-stores/customer.store';
+import { useCustomerStore } from '@/stores/customer.store';
 import { Item } from '@/stores/tools/List';
 
 import { CustomerDevice } from './CustomerDevice';

@@ -2,8 +2,8 @@
 import PrintContent from '@/components/PrintContent.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { cmToPixel } from '@/objects/Pixel';
-import { useLoginStore } from '@/pinia-stores/login.store';
-import { useProductStore } from '@/pinia-stores/product.store';
+import { useLoginStore } from '@/stores/login.store';
+import { useProductStore } from '@/stores/product.store';
 
 import ExportButton from './PageProductExport-Export.vue';
 import LayoutOne from './PageProductExport-Layout-One.vue';

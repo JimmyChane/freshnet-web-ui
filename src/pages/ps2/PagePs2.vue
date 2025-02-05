@@ -11,7 +11,7 @@ import Actionbar from '@/components/actionbar/Actionbar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
 import { iconServer } from '@/host/Server';
-import { usePs2Store } from '@/pinia-stores/ps2.store';
+import { usePs2Store } from '@/stores/ps2.store';
 
 import ItemPs2Disc from './ItemPs2Disc.vue';
 import WindowItemPs2Disc from './WindowItemPs2Disc.vue';

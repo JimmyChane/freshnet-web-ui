@@ -1,5 +1,5 @@
 <script>
-import { useCustomerStore } from '@/pinia-stores/customer.store';
+import { useCustomerStore } from '@/stores/customer.store';
 
 export default {
   props: {

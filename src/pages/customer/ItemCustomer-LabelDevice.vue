@@ -1,5 +1,5 @@
 <script>
-import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useCategoryStore } from '@/stores/category.store';
 
 import Label from './ItemCustomer-Label.vue';
 

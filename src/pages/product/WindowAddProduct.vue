@@ -3,9 +3,9 @@ import Input from '@/components/Input.vue';
 import LabelMenus from '@/components/LabelMenus.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import { CategoryKey } from '@/items/Category';
-import { useBrandStore } from '@/pinia-stores/brand.store';
-import { useCategoryStore } from '@/pinia-stores/category.store';
-import { useProductStore } from '@/pinia-stores/product.store';
+import { useBrandStore } from '@/stores/brand.store';
+import { useCategoryStore } from '@/stores/category.store';
+import { useProductStore } from '@/stores/product.store';
 
 export default {
   components: { PanelAction, Input, LabelMenus },

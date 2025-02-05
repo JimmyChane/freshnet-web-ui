@@ -12,8 +12,8 @@ import {
   PURCHASE_SERVICE_EVENT_METHOD,
   QUOTATION_SERVICE_EVENT_METHOD,
 } from '@/items/ServiceEventMethod';
-import { useLoginStore } from '@/pinia-stores/login.store';
-import { useServiceStore } from '@/pinia-stores/service.store';
+import { useLoginStore } from '@/stores/login.store';
+import { useServiceStore } from '@/stores/service.store';
 
 import AddImage from './PanelService-AddEvent-AddImage.vue';
 

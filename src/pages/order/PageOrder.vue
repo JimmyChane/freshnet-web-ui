@@ -5,8 +5,8 @@ import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading.vue';
 import { OrderStatus } from '@/items/Order';
 import { onCreatedRoute } from '@/mixin';
-import { useOrderStore } from '@/pinia-stores/order.store';
 import { ORDER_ROUTE } from '@/router';
+import { useOrderStore } from '@/stores/order.store';
 
 import Actionbar from './Actionbar.vue';
 import SectionOrder from './SectionOrder.vue';

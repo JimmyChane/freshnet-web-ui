@@ -12,7 +12,7 @@ import {
   PURCHASE_SERVICE_EVENT_METHOD,
   QUOTATION_SERVICE_EVENT_METHOD,
 } from '@/items/ServiceEventMethod';
-import { useServiceStore } from '@/pinia-stores/service.store';
+import { useServiceStore } from '@/stores/service.store';
 
 import ImageView from './ServiceEvent-Image.vue';
 import WindowUpdateEventDescription from './WindowUpdateEventDescription.vue';

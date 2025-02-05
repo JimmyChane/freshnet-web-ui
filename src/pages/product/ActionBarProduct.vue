@@ -4,8 +4,8 @@ import IconSearch from '@/assets/icon/search-000000.svg';
 import SearchInput from '@/components/SearchInput.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import { useCategoryStore } from '@/pinia-stores/category.store';
-import { useProductStore } from '@/pinia-stores/product.store';
+import { useCategoryStore } from '@/stores/category.store';
+import { useProductStore } from '@/stores/product.store';
 import { withItems } from '@/tools/Searcher';
 
 import ItemSearchProduct from './ItemSearchProduct.vue';

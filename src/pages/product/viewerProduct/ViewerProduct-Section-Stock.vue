@@ -1,7 +1,7 @@
 <script>
 import { mapStores } from 'pinia';
 
-import { useProductStore } from '@/pinia-stores/product.store';
+import { useProductStore } from '@/stores/product.store';
 
 import Section from './ViewerProduct-Section.vue';
 import Checkbox from './ViewerProduct-StockCheckbox.vue';

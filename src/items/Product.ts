@@ -1,8 +1,8 @@
 import { isString, optArray, optString, trimId, trimText } from '@/U';
 import { APP_HOST as AppHost } from '@/host/AppHost';
 import { textContains } from '@/objects/ItemSearcher';
-import { useBrandStore } from '@/pinia-stores/brand.store';
-import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useBrandStore } from '@/stores/brand.store';
+import { useCategoryStore } from '@/stores/category.store';
 import { Item } from '@/stores/tools/List';
 
 import { Brand } from './Brand';

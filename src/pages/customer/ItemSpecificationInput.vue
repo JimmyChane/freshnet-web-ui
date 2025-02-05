@@ -1,7 +1,7 @@
 <script>
 import IconClose from '@/assets/icon/close-000000.svg';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
-import { useSpecificationStore } from '@/pinia-stores/specification.store';
+import { useSpecificationStore } from '@/stores/specification.store';
 
 export default {
   components: { ButtonIcon },

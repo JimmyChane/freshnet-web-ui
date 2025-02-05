@@ -3,8 +3,8 @@ import { optString } from '@/U';
 import IconClose from '@/assets/icon/close-000000.svg';
 import IconEdit from '@/assets/icon/edit-000000.svg';
 import IconSave from '@/assets/icon/save-000000.svg';
-import { useSettingStore } from '@/pinia-stores/setting.store';
-import { useUserStore } from '@/pinia-stores/user.store';
+import { useSettingStore } from '@/stores/setting.store';
+import { useUserStore } from '@/stores/user.store';
 
 import ItemSettingHeader from './ItemSetting-Header.vue';
 

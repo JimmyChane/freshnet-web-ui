@@ -3,9 +3,9 @@ import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector3 from '@/components/selector/Selector3.vue';
 import { RequirementCustomer } from '@/items/Customer';
-import { useCategoryStore } from '@/pinia-stores/category.store';
-import { useCustomerStore } from '@/pinia-stores/customer.store';
-import { useSpecificationStore } from '@/pinia-stores/specification.store';
+import { useCategoryStore } from '@/stores/category.store';
+import { useCustomerStore } from '@/stores/customer.store';
+import { useSpecificationStore } from '@/stores/specification.store';
 
 import SpecificationInputs from './SpecificationInputs.vue';
 import WindowSection from './WindowSection.vue';

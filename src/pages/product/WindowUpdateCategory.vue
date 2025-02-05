@@ -1,7 +1,7 @@
 <script>
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector4 from '@/components/selector/Selector4.vue';
-import { useCategoryStore } from '@/pinia-stores/category.store';
+import { useCategoryStore } from '@/stores/category.store';
 
 export default {
   components: { PanelAction, Selector4 },

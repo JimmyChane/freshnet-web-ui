@@ -5,7 +5,7 @@ import IconEdit from '@/assets/icon/edit-505050.svg';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import MenuOption from '@/components/button/MenuOption.vue';
 import ToggleButton from '@/components/button/ToggleButton.vue';
-import { useProductStore } from '@/pinia-stores/product.store';
+import { useProductStore } from '@/stores/product.store';
 
 import ItemPrice from '../item/ItemPrice.vue';
 import ItemProductSpecification from '../item/ItemProductSpecification.vue';

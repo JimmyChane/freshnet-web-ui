@@ -1,7 +1,7 @@
 <script>
 import Selector4 from '@/components/selector/Selector4.vue';
 import { SpecificationKey } from '@/items/Specification';
-import { useSpecificationStore } from '@/pinia-stores/specification.store';
+import { useSpecificationStore } from '@/stores/specification.store';
 
 import ItemSpec from './ItemSpecificationInput.vue';
 

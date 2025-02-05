@@ -1,6 +1,6 @@
 import { trimId } from '@/U';
 import { originApiServer } from '@/host/Server';
-import { useLoginStore } from '@/pinia-stores/login.store';
+import { useLoginStore } from '@/stores/login.store';
 
 import { Filename } from '../objects/Filename';
 import { Image, MethodImage, dimensionToQuery } from './Image';

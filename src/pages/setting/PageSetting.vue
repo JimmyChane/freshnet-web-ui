@@ -7,8 +7,8 @@ import Empty from '@/components/Empty.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { Setting as SettingModule } from '@/items/Setting';
 import { onCreatedRoute } from '@/mixin';
-import { useUserStore } from '@/pinia-stores/user.store';
 import { SETTING_ROUTE } from '@/router';
+import { useUserStore } from '@/stores/user.store';
 
 import ItemSetting from './ItemSetting.vue';
 import ItemSettingBusinessHours from './ItemSettingBusinessHours.vue';

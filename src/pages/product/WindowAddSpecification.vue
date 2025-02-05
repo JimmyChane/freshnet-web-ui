@@ -3,7 +3,7 @@ import Input from '@/components/Input.vue';
 import Spinner from '@/components/selector/Spinner.vue';
 import WindowAction from '@/components/window/WindowAction.vue';
 import { SpecificationKey } from '@/items/Specification';
-import { useSpecificationStore } from '@/pinia-stores/specification.store';
+import { useSpecificationStore } from '@/stores/specification.store';
 
 const keys = Object.keys(SpecificationKey).map((objectKey) => {
   return SpecificationKey[objectKey];

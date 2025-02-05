@@ -13,7 +13,7 @@ import { Customer } from '@/items/Customer';
 import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
 import Section from '@/pages/manage/PanelItem-Section.vue';
 import ItemService from '@/pages/service/item-service/ItemService.vue';
-import { useCustomerStore } from '@/pinia-stores/customer.store';
+import { useCustomerStore } from '@/stores/customer.store';
 
 import ItemDevice from './ItemDevice.vue';
 import PanelCustomerEmpty from './PanelCustomer-Empty.vue';

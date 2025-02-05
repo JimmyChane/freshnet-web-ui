@@ -1,6 +1,6 @@
 <script>
-import { useSettingStore } from '@/pinia-stores/setting.store';
-import { useUserStore } from '@/pinia-stores/user.store';
+import { useSettingStore } from '@/stores/setting.store';
+import { useUserStore } from '@/stores/user.store';
 
 export default {
   props: { item: { type: Object, default: () => null } },

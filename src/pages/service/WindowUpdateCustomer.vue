@@ -4,7 +4,7 @@ import { mapStores } from 'pinia';
 import { optString } from '@/U';
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
-import { useServiceStore } from '@/pinia-stores/service.store';
+import { useServiceStore } from '@/stores/service.store';
 
 export default {
   components: { PanelAction, Input },

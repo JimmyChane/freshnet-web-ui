@@ -6,8 +6,8 @@ import Loading from '@/components/Loading.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
 import { onCreatedRoute } from '@/mixin';
-import { useCustomerStore } from '@/pinia-stores/customer.store';
 import { CUSTOMER_ROUTE } from '@/router';
+import { useCustomerStore } from '@/stores/customer.store';
 
 import PanelCustomer from './PanelCustomer.vue';
 import PanelCustomers from './PanelCustomers.vue';

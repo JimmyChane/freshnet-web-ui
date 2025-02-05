@@ -1,8 +1,8 @@
 <script>
 import { mapStores } from 'pinia';
 
-import { useCategoryStore } from '@/pinia-stores/category.store';
-import { useProductStore } from '@/pinia-stores/product.store';
+import { useCategoryStore } from '@/stores/category.store';
+import { useProductStore } from '@/stores/product.store';
 
 import Item from './PageHome-SectionCategory-Item.vue';
 

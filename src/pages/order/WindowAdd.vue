@@ -1,6 +1,6 @@
 <script>
 import Input from '@/components/Input.vue';
-import { useOrderStore } from '@/pinia-stores/order.store';
+import { useOrderStore } from '@/stores/order.store';
 
 export default {
   components: { Input },

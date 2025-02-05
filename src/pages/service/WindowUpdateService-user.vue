@@ -1,6 +1,6 @@
 <script>
 import Input from '@/components/Input.vue';
-import { useLoginStore } from '@/pinia-stores/login.store';
+import { useLoginStore } from '@/stores/login.store';
 
 export default {
   components: { Input },

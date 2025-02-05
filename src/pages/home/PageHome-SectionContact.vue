@@ -1,6 +1,6 @@
 <script>
 import { SettingKey } from '@/items/Setting';
-import { useSettingStore } from '@/pinia-stores/setting.store';
+import { useSettingStore } from '@/stores/setting.store';
 
 import Link from './PageHome-Link.vue';
 import Section from './PageHome-Section.vue';

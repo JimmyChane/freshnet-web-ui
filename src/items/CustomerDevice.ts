@@ -1,7 +1,7 @@
 import { optArray, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
-import { useCategoryStore } from '@/pinia-stores/category.store';
-import { useCustomerStore } from '@/pinia-stores/customer.store';
+import { useCategoryStore } from '@/stores/category.store';
+import { useCustomerStore } from '@/stores/customer.store';
 import { Item } from '@/stores/tools/List';
 
 import { Category } from './Category';

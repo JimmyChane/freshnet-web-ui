@@ -3,7 +3,7 @@ import { isArray } from '@/U';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import { RequirementCustomer } from '@/items/Customer';
 import { CustomerDeviceSpecification } from '@/items/CustomerDeviceSpecification';
-import { useCustomerStore } from '@/pinia-stores/customer.store';
+import { useCustomerStore } from '@/stores/customer.store';
 
 import SpecificationInputs from './SpecificationInputs.vue';
 import WindowSection from './WindowSection.vue';

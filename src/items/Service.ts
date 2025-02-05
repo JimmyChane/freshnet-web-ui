@@ -7,8 +7,8 @@ import {
   trimText,
 } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
-import { useUserStore } from '@/pinia-stores/user.store';
 import { Item } from '@/stores/tools/List';
+import { useUserStore } from '@/stores/user.store';
 
 import { ServiceBelonging, ServiceBelongingData } from './ServiceBelonging';
 import { ServiceCustomer, ServiceCustomerData } from './ServiceCustomer';

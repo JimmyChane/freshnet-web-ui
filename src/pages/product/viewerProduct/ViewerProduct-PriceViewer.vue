@@ -1,7 +1,7 @@
 <script>
 import { ProductPrice } from '@/items/ProductPrice';
 import { SettingKey } from '@/items/Setting';
-import { useSettingStore } from '@/pinia-stores/setting.store';
+import { useSettingStore } from '@/stores/setting.store';
 
 import Section from './ViewerProduct-Section.vue';
 
