@@ -1,3 +1,4 @@
+import { useAppStore } from '@/stores/app.store';
 import { TimeNowGetter } from '@/tools/TimeNowGetter';
 
 const keyGetter = new TimeNowGetter();
@@ -16,8 +17,6 @@ export interface SnackbarOption {
 }
 
 export class Snackbar {
-  context: any;
-
   key: number;
   isShowing: boolean = false;
 
@@ -26,9 +25,7 @@ export class Snackbar {
   isLoading: boolean | undefined;
   actions: SnackbarAction[] | undefined;
 
-  constructor(context: any, param: SnackbarOption = {}) {
-    this.context = context;
-
+  constructor(param: SnackbarOption = {}) {
     this.key = keyGetter.get();
 
     this.icon = param.icon;
@@ -38,7 +35,7 @@ export class Snackbar {
   }
 
   get index(): number {
-    return this.context.getters.snackbars.indexOf(this);
+    return useAppStore().snackbars.indexOf(this);
   }
 
   show(timeout: number = 3000): this {
@@ -51,9 +48,9 @@ export class Snackbar {
     this.isShowing = false;
 
     setTimeout(() => {
-      const index = this.context.state.snackbars.indexOf(this);
-      this.context.state.snackbars.splice(index, 1);
-      this.context.commit('snackbars', this.context.state.snackbars);
+      const index = useAppStore().snackbars.indexOf(this);
+      useAppStore().snackbars.splice(index, 1);
+      useAppStore().snackbars = useAppStore().snackbars;
     }, 80);
 
     return this;

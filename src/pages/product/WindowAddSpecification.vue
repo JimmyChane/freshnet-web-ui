@@ -3,6 +3,7 @@ import Input from '@/components/Input.vue';
 import Spinner from '@/components/selector/Spinner.vue';
 import WindowAction from '@/components/window/WindowAction.vue';
 import { SpecificationKey } from '@/items/Specification';
+import { useAppStore } from '@/stores/app.store';
 import { useSpecificationStore } from '@/stores/specification.store';
 
 const keys = Object.keys(SpecificationKey).map((objectKey) => {
@@ -55,10 +56,7 @@ export default {
             (typeSelection) => typeSelection.key === this.data.key,
           );
           if (!selection) {
-            this.$store.dispatch(
-              'snackbarShow',
-              'Cannot find the matching type',
-            );
+            useAppStore().snackbarShow('Cannot find the matching type');
             throw new Error();
           }
 
@@ -71,10 +69,7 @@ export default {
           this.action.onConfirm(specification);
         })
         .catch((error) => {
-          this.$store.dispatch(
-            'snackbarShow',
-            'Error While Loading Specification',
-          );
+          useAppStore().snackbarShow('Error While Loading Specification');
         });
       return;
     },

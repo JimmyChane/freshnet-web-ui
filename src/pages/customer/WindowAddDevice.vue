@@ -3,6 +3,7 @@ import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector3 from '@/components/selector/Selector3.vue';
 import { RequirementCustomer } from '@/items/Customer';
+import { useAppStore } from '@/stores/app.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useCustomerStore } from '@/stores/customer.store';
 import { useSpecificationStore } from '@/stores/specification.store';
@@ -80,14 +81,14 @@ export default {
       });
 
       if (this.data.categoryKey === 'none') {
-        this.$store.dispatch('snackbarShow', 'Category is Required');
+        useAppStore().snackbarShow('Category is Required');
       } else {
         useCustomerStore()
           .addDevice(this.data)
           .then((item) => this.popupWindow.close())
           .catch((error) => {
             console.error(error);
-            this.$store.dispatch('snackbarShow', 'Error Adding Device');
+            useAppStore().snackbarShow('Error Adding Device');
           });
       }
     },

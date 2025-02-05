@@ -7,6 +7,7 @@ import IconTrash from '@/assets/icon/trash-000000.svg';
 import IconView from '@/assets/icon/view-000000.svg';
 import { APP_HOST as AppHost } from '@/host/AppHost';
 import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
+import { useAppStore } from '@/stores/app.store';
 
 export default {
   components: { ViewerProduct },
@@ -30,7 +31,7 @@ export default {
     isBackable: { type: Boolean, default: true },
   },
   computed: {
-    openedWindowCount: (c) => c.$store.getters.popupWindows.length,
+    openedWindowCount: (c) => useAppStore().popupWindows.length,
     actionbarLeftMenus() {
       return {
         key: 'close',
@@ -88,16 +89,16 @@ export default {
   methods: {
     clickCopyLink() {
       if (!this.product) {
-        this.$store.dispatch('snackbarShow', 'Cannot Copy');
+        useAppStore().snackbarShow('Cannot Copy');
         return;
       }
       const link = this.product.getLink();
       if (!link) {
-        this.$store.dispatch('snackbarShow', 'Cannot Copy');
+        useAppStore().snackbarShow('Cannot Copy');
         return;
       }
-      this.$store.getters.copyText(link);
-      this.$store.dispatch('snackbarShow', {
+      useAppStore().copyText(link);
+      useAppStore().snackbarShow({
         icon: IconCopyLight,
         text: 'Copied to Clipboard',
         actions: [{ title: 'Open', click: () => this.clickView() }],
@@ -107,9 +108,9 @@ export default {
       let urlView = `${AppHost.path}/product/view`;
 
       if (!this.product) {
-        this.$store.getters.openLink(urlView);
+        useAppStore().openLink(urlView);
       } else {
-        this.$store.getters.openLink(`${urlView}?productId=${this.product.id}`);
+        useAppStore().openLink(`${urlView}?productId=${this.product.id}`);
       }
     },
   },

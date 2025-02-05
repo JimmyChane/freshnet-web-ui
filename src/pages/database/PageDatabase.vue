@@ -5,6 +5,7 @@ import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { onCreatedRoute } from '@/mixin';
 import { DATABASE_ROUTE } from '@/router';
+import { useAppStore } from '@/stores/app.store';
 import { useDatabaseStore } from '@/stores/database.store';
 import { useLoginStore } from '@/stores/login.store';
 
@@ -37,10 +38,7 @@ export default {
         this.actionRefresh();
       })
       .catch((error) => {
-        this.$store.dispatch(
-          'snackbarShow',
-          'Your login credential could be invalid',
-        );
+        useAppStore().snackbarShow('Your login credential could be invalid');
         throw error;
       });
   },
@@ -77,7 +75,7 @@ export default {
           return useDatabaseStore().loadBaseInfo();
         })
         .catch((error) => {
-          this.$store.dispatch('snackbarShow', 'Error Loading Databases');
+          useAppStore().snackbarShow('Error Loading Databases');
           throw error;
         });
     },

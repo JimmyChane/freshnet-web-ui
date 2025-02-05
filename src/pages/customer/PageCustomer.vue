@@ -7,6 +7,7 @@ import PanelRight from '@/components/panel/PanelRight.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
 import { onCreatedRoute } from '@/mixin';
 import { CUSTOMER_ROUTE } from '@/router';
+import { useAppStore } from '@/stores/app.store';
 import { useCustomerStore } from '@/stores/customer.store';
 
 import PanelCustomer from './PanelCustomer.vue';
@@ -65,7 +66,7 @@ export default {
       }
 
       if (!isSearchById && (customer?.isFromStoreCustomer() ?? false)) {
-        c.$store.getters.replaceQuery({
+        useAppStore().replaceQuery({
           query: {
             id: customer.id,
             name: null,
@@ -106,18 +107,16 @@ export default {
       this.invalidate();
     },
     clickClose() {
-      this.$store.getters.nextQuery({
+      useAppStore().nextQuery({
         query: { id: null, name: null, phoneNumber: null },
       });
     },
 
     clickItemAdd() {
-      this.$store.dispatch('openPopupWindow', {
-        component: WindowAddCustomer,
-      });
+      useAppStore().openPopupWindow({ component: WindowAddCustomer });
     },
     clickAddItemDevice(data) {
-      this.$store.dispatch('openPopupWindow', {
+      useAppStore().openPopupWindow({
         component: WindowAddDevice,
         item: data?.item ?? null,
       });
@@ -126,7 +125,7 @@ export default {
     clickItemRemove(item) {
       const data = { item };
 
-      this.$store.dispatch('openPopupWindow', {
+      useAppStore().openPopupWindow({
         component: WindowRemoveCustomer,
         item: data?.item ?? null,
         onConfirm: () => {
@@ -137,26 +136,26 @@ export default {
       });
     },
     clickRemoveItemDevice(data) {
-      this.$store.dispatch('openPopupWindow', {
+      useAppStore().openPopupWindow({
         component: WindowRemoveDevice,
         param: data ? { customer: data.item, device: data.device } : null,
       });
     },
 
     clickUpdateCustomer(data) {
-      this.$store.dispatch('openPopupWindow', {
+      useAppStore().openPopupWindow({
         component: WindowUpdateCustomer,
         item: data?.item ?? null,
       });
     },
     clickUpdateDescription(data) {
-      this.$store.dispatch('openPopupWindow', {
+      useAppStore().openPopupWindow({
         component: WindowUpdateDescription,
         item: data?.item ?? null,
       });
     },
     clickUpdateItemDeviceSpecifications(data) {
-      this.$store.dispatch('openPopupWindow', {
+      useAppStore().openPopupWindow({
         component: WindowUpdateDeviceSpecifications,
         param: data
           ? {
@@ -168,7 +167,7 @@ export default {
       });
     },
     clickUpdateItemDeviceDescription(data) {
-      this.$store.dispatch('openPopupWindow', {
+      useAppStore().openPopupWindow({
         component: WindowUpdateDeviceDescription,
         customer: data?.customer ?? null,
         device: data?.device ?? null,

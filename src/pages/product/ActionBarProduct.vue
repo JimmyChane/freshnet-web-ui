@@ -4,6 +4,7 @@ import IconSearch from '@/assets/icon/search-000000.svg';
 import SearchInput from '@/components/SearchInput.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useProductStore } from '@/stores/product.store';
 import { withItems } from '@/tools/Searcher';
@@ -19,9 +20,9 @@ export default {
   },
   data: (c) => ({ searchText: '' }),
   computed: {
-    isOver550px: (c) => c.$store.getters.window.innerWidth > 550,
+    isOver550px: (c) => useAppStore().window.innerWidth > 550,
 
-    paths: (c) => c.$store.getters.paths,
+    paths: (c) => useAppStore().paths,
     lastPath: (c) => {
       let { paths } = c;
       if (!Array.isArray(paths)) return '';

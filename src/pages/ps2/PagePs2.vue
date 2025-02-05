@@ -1,4 +1,6 @@
 <script>
+import { mapStores } from 'pinia';
+
 import { IconPack } from '@/app/IconPack';
 import Footer from '@/app/footer/Footer.vue';
 import IconClose from '@/assets/icon/close-2A4858.svg';
@@ -11,6 +13,7 @@ import Actionbar from '@/components/actionbar/Actionbar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
 import { iconServer } from '@/host/Server';
+import { useAppStore } from '@/stores/app.store';
 import { usePs2Store } from '@/stores/ps2.store';
 
 import ItemPs2Disc from './ItemPs2Disc.vue';
@@ -43,6 +46,8 @@ export default {
     searchKeyword: '',
   }),
   computed: {
+    ...mapStores(useAppStore),
+
     isLoading: (c) => usePs2Store().isLoading,
     ps2Discs: (c) => usePs2Store().items,
     ps2DiscSearches: (c) => {
@@ -76,7 +81,7 @@ export default {
     usePs2Store()
       .getItems()
       .catch((error) => {
-        this.$store.dispatch('snackbarShow', 'Failed to load');
+        useAppStore().snackbarShow('Failed to load');
         console.error(error);
       });
   },
@@ -89,12 +94,12 @@ export default {
       <Actionbar
         class="PagePs2-header transition"
         :leftMenus="
-          $store.getters.navigation.isDrawer()
+          appStore.navigation.isDrawer()
             ? [
                 {
                   title: 'Hamburger Menu',
                   icon: IconHamburgerMenu,
-                  click: () => $store.getters.navigation.openNavigationDrawer(),
+                  click: () => appStore.navigation.openNavigationDrawer(),
                 },
                 {
                   title: 'Home',
@@ -189,7 +194,7 @@ export default {
       @click-dismiss="
         () => {
           if ($route.fullPath !== '/ps2') {
-            $store.getters.replaceQuery({ query: { discCode: null } });
+            appStore.replaceQuery({ query: { discCode: null } });
           }
         }
       "

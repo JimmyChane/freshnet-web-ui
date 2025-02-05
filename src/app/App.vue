@@ -1,12 +1,14 @@
 <script>
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
+import { mapStores } from 'pinia';
 // https://www.npmjs.com/package/print-html-element
 import PHE from 'print-html-element';
 
 import { isFunction, isPassed, optArray, parseGroup2s, replace } from '@/U';
 import PopupWindow from '@/components/window/PopupWindow.vue';
 import { HOME_ROUTE, MANAGE_ROUTE, PRINT_ROUTE, PRODUCT_ROUTE } from '@/router';
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 // tools
 import { AppLayout } from '@/tools/AppLayout';
@@ -56,6 +58,8 @@ export default {
     navigation: null,
   }),
   computed: {
+    ...mapStores(useAppStore),
+
     user: (c) => useLoginStore().user,
 
     // pages
@@ -155,7 +159,7 @@ export default {
     },
     isLogging() {
       if (!useLoginStore().user && this.isLogging) {
-        this.$store.dispatch('snackbarShow', 'User Logging');
+        useAppStore().snackbarShow('User Logging');
       }
     },
     user() {
@@ -163,7 +167,7 @@ export default {
     },
   },
   async created() {
-    this.$store.state.app = this;
+    useAppStore().app = this;
     this.appLayout = new AppLayout(this);
     this.navigation = new Navigation(this);
     window.addEventListener('resize', this.invalidateWindow);
@@ -247,20 +251,17 @@ export default {
 
       if (user.isTypeAdmin() || user.isTypeStaff()) {
         this.shouldShowStatus = true;
-        this.$store.dispatch('openSocket');
+        useAppStore().openSocket();
       } else {
         this.shouldShowStatus = false;
-        this.$store.dispatch('closeSocket');
+        useAppStore().closeSocket();
       }
     },
     logout() {
       useLoginStore()
         .logout()
         .then((user) => {
-          this.$store.dispatch(
-            'snackbarShow',
-            `${user.name} is now logged out`,
-          );
+          useAppStore().snackbarShow(`${user.name} is now logged out`);
         });
     },
   },
@@ -296,7 +297,7 @@ export default {
 
     <ViewerImage style="z-index: auto" />
     <PopupWindow
-      v-for="(popupWindow, index) in $store.getters.popupWindows"
+      v-for="(popupWindow, index) in appStore.popupWindows"
       :style="{ 'z-index': 6 + index }"
       :key="popupWindow.key"
       :isShowing="popupWindow.isShowing"
@@ -309,21 +310,21 @@ export default {
     </PopupWindow>
 
     <PopupMenu
-      :style="{ 'z-index': 7 + $store.getters.popupWindows.length }"
-      v-for="popupMenu of $store.getters.popupMenus"
+      :style="{ 'z-index': 7 + appStore.popupWindows.length }"
+      v-for="popupMenu of appStore.popupMenus"
       :key="popupMenu.key"
       :popupMenu="popupMenu"
       class="App-PopupMenu"
     />
     <Snackbar
-      :style="{ 'z-index': 8 + $store.getters.popupWindows.length }"
-      v-for="snackbar of $store.getters.snackbars"
+      :style="{ 'z-index': 8 + appStore.popupWindows.length }"
+      v-for="snackbar of appStore.snackbars"
       :key="snackbar.key"
       :item="snackbar"
     />
     <Status
       v-if="shouldShowStatus"
-      :style="{ 'z-index': 9 + $store.getters.popupWindows.length }"
+      :style="{ 'z-index': 9 + appStore.popupWindows.length }"
     />
   </div>
 </template>

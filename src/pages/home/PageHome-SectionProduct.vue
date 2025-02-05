@@ -7,6 +7,7 @@ import IconArrowDownDark from '@/assets/icon/arrowDown-000000.svg';
 import IconArrowDownLight from '@/assets/icon/arrowDown-FFFFFF.svg';
 import ImageView from '@/components/ImageView.vue';
 import { CategoryKey } from '@/items/Category';
+import { useAppStore } from '@/stores/app.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useProductStore } from '@/stores/product.store';
 
@@ -28,7 +29,7 @@ export default {
     isDestroyed: false,
   }),
   computed: {
-    ...mapStores(useCategoryStore),
+    ...mapStores(useCategoryStore, useAppStore),
 
     item() {
       if (this.productIndex < 0) this.productIndex = this.products.length - 1;
@@ -151,7 +152,7 @@ export default {
         class="HomeSectionProduct-img"
         v-if="itemImage"
         :src="itemImage"
-        @click="() => $store.dispatch('imageViewerShow', { image: itemImage })"
+        @click="() => appStore.imageViewerShow({ image: itemImage })"
       />
 
       <div class="HomeSectionProduct-content">

@@ -1,8 +1,11 @@
 <script>
+import { mapStores } from 'pinia';
+
 import Footer from '@/app/footer/Footer.vue';
 import IconHamburgerMenu from '@/assets/icon/hamburgerMenu-000000.svg';
 import Logo from '@/assets/logo/freshnet-enterprise-logo.svg';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
+import { useAppStore } from '@/stores/app.store';
 
 export default {
   components: { Actionbar, Footer },
@@ -12,6 +15,9 @@ export default {
     drawer: { isExpand: false },
     top: { shadow: false },
   }),
+  computed: {
+    ...mapStores(useAppStore),
+  },
   created() {
     document.title = 'Page Not Found';
   },
@@ -25,7 +31,7 @@ export default {
   >
     <Actionbar
       :class="['Home-top', 'transition', top.shadow ? 'Home-top-shadow' : '']"
-      v-if="$store.getters.navigation.isDrawer()"
+      v-if="appStore.navigation.isDrawer()"
       :leftMenus="[
         {
           key: 'home',
@@ -36,7 +42,7 @@ export default {
         {
           title: 'Hamburger Menu',
           icon: IconHamburgerMenu,
-          click: () => $store.getters.navigation.openNavigationDrawer(),
+          click: () => appStore.navigation.openNavigationDrawer(),
         },
       ]"
     />

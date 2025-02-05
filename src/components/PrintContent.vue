@@ -1,4 +1,6 @@
 <script>
+import { useAppStore } from '@/stores/app.store';
+
 export default {
   props: {
     width: { type: Number, default: 0 },
@@ -24,7 +26,7 @@ export default {
     },
     print() {
       const element = this.$refs.canvas;
-      if (element) this.$store.getters.print(element);
+      if (element) useAppStore().print(element);
     },
     listenerResize() {
       this.invalidateCard();

@@ -1,4 +1,6 @@
 <script>
+import { mapStores } from 'pinia';
+
 import Footer from '@/app/footer/Footer.vue';
 import IconHamburgerMenu from '@/assets/icon/hamburgerMenu-000000.svg';
 import Logo from '@/assets/logo/freshnet-enterprise-logo.svg';
@@ -6,6 +8,7 @@ import Input from '@/components/Input.vue';
 import Loading from '@/components/Loading';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import { onCreatedContext } from '@/mixin';
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 
 import ButtonLogin from './ButtonLogin.vue';
@@ -22,6 +25,7 @@ export default {
     passwordErrorText: '',
   }),
   computed: {
+    ...mapStores(useAppStore),
     isLoading: (c) => useLoginStore().isLoading,
   },
   methods: {
@@ -41,7 +45,7 @@ export default {
         .login({ username, password })
         .then((user) => setTimeout(() => this.$router.push(redirect), 200))
         .catch(() => {
-          this.$store.dispatch('snackbarShow', 'Login failed');
+          useAppStore().snackbarShow('Login failed');
           this.usernameErrorText = 'Check your username';
           this.passwordErrorText = 'Check your password';
         });
@@ -68,12 +72,12 @@ export default {
 
     <Actionbar
       class="PageLogin-top transition"
-      v-if="$store.getters.navigation.isDrawer()"
+      v-if="appStore.navigation.isDrawer()"
       :leftMenus="[
         {
           title: 'Hamburger Menu',
           icon: IconHamburgerMenu,
-          click: () => $store.getters.navigation.openNavigationDrawer(),
+          click: () => appStore.navigation.openNavigationDrawer(),
         },
         {
           key: 'home',

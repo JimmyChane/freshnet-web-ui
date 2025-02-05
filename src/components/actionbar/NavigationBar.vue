@@ -1,6 +1,7 @@
 <script>
 import IconHamburgerMenuDark from '@/assets/icon/hamburgerMenu-000000.svg';
 import IconHamburgerMenuLight from '@/assets/icon/hamburgerMenu-FFFFFF.svg';
+import { useAppStore } from '@/stores/app.store';
 
 import Actionbar from './Actionbar.vue';
 
@@ -14,7 +15,7 @@ export default {
   },
   computed: {
     moreLeftMenus: (c) => {
-      if (!c.$store.getters.navigation.isDrawer()) return c.leftMenus;
+      if (!useAppStore().navigation.isDrawer()) return c.leftMenus;
 
       const hamburgerMenuIcon =
         c.iconTheme === 'white'
@@ -25,7 +26,7 @@ export default {
           key: 'hamburgerMenu',
           title: 'Hamburger Menu',
           icon: hamburgerMenuIcon,
-          click: () => c.$store.getters.navigation.openNavigationDrawer(),
+          click: () => useAppStore().navigation.openNavigationDrawer(),
         },
         ...c.leftMenus,
       ];

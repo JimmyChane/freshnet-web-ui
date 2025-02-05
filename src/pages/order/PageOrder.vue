@@ -6,6 +6,7 @@ import Loading from '@/components/Loading.vue';
 import { OrderStatus } from '@/items/Order';
 import { onCreatedRoute } from '@/mixin';
 import { ORDER_ROUTE } from '@/router';
+import { useAppStore } from '@/stores/app.store';
 import { useOrderStore } from '@/stores/order.store';
 
 import Actionbar from './Actionbar.vue';
@@ -24,7 +25,7 @@ export default {
     completedItems: [],
   }),
   computed: {
-    ...mapStores(useOrderStore),
+    ...mapStores(useOrderStore, useAppStore),
 
     isLoading: (c) => useOrderStore().isLoading,
     items: (c) => optArray(useOrderStore().items),
@@ -61,12 +62,12 @@ export default {
       useOrderStore()
         .refresh()
         .catch((error) => {
-          this.$store.dispatch('snackbarShow', 'Error While Refreshing Order');
+          useAppStore().snackbarShow('Error While Refreshing Order');
           console.error(error);
         });
     },
     toAdd() {
-      this.$store.dispatch('openPopupWindow', { component: WindowAdd });
+      useAppStore().openPopupWindow({ component: WindowAdd });
     },
   },
 };
@@ -82,7 +83,7 @@ export default {
       :title="ORDER_ROUTE.title"
       :items="items"
       @click-item="
-        (item) => $store.getters.replaceQuery({ query: { order: item.id } })
+        (item) => appStore.replaceQuery({ query: { order: item.id } })
       "
       @click-item-add="() => toAdd()"
       @click-refresh="() => refresh()"
@@ -95,10 +96,10 @@ export default {
         :items="pendingItems"
         :currentItemIdSelected="currentExpandedOrderid"
         @click-collapse="
-          (item) => $store.getters.replaceQuery({ query: { order: null } })
+          (item) => appStore.replaceQuery({ query: { order: null } })
         "
         @click-expand="
-          (item) => $store.getters.replaceQuery({ query: { order: item.id } })
+          (item) => appStore.replaceQuery({ query: { order: item.id } })
         "
         @click-complete="(item) => orderStore.updateToCompletedOfId(item.id)"
         @click-remove="(item) => orderStore.removeOItemOfId({ id: item.id })"
@@ -110,10 +111,10 @@ export default {
         :items="completedItems"
         :currentItemIdSelected="currentExpandedOrderid"
         @click-collapse="
-          (item) => $store.getters.replaceQuery({ query: { order: null } })
+          (item) => appStore.replaceQuery({ query: { order: null } })
         "
         @click-expand="
-          (item) => $store.getters.replaceQuery({ query: { order: item.id } })
+          (item) => appStore.replaceQuery({ query: { order: item.id } })
         "
         @click-pending="(item) => orderStore.updateToPendingOfId(item.id)"
         @click-remove="(item) => orderStore.removeOItemOfId({ id: item.id })"

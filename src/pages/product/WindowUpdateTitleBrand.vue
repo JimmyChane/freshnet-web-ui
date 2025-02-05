@@ -2,6 +2,7 @@
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector3 from '@/components/selector/Selector3.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useBrandStore } from '@/stores/brand.store';
 
 export default {
@@ -46,7 +47,7 @@ export default {
       };
 
       if (!output.title) {
-        this.$store.dispatch('snackbarShow', 'You must specify title');
+        useAppStore().snackbarShow('You must specify title');
         return;
       }
 

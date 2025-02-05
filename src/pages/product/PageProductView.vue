@@ -1,6 +1,7 @@
 <script>
 import LoadingDots from '@/components/LoadingDots.vue';
 import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useProductStore } from '@/stores/product.store';
 import { AppLayoutId } from '@/tools/AppLayout';
 
@@ -9,7 +10,7 @@ export default {
   data: (c) => ({ product: null }),
   computed: {
     isLoading: (context) => useProductStore().isLoading,
-    isOver1200px: (context) => context.$store.getters.window.innerWidth > 1200,
+    isOver1200px: (context) => useAppStore().window.innerWidth > 1200,
     productId: (context) => context.$route.query.productId,
   },
   watch: {
@@ -18,8 +19,8 @@ export default {
     },
   },
   mounted() {
-    this.$store.getters.appLayout.setLayout(AppLayoutId.FULL);
-    this.$store.getters.navigation.disableNavigationDrawer();
+    useAppStore().appLayout.setLayout(AppLayoutId.FULL);
+    useAppStore().navigation.disableNavigationDrawer();
 
     this.invalidate();
   },

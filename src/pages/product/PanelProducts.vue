@@ -8,6 +8,7 @@ import Empty from '@/components/Empty.vue';
 import LabelMenus from '@/components/LabelMenus.vue';
 import LoadingDots from '@/components/LoadingDots.vue';
 import { PRODUCT_ROUTE } from '@/router';
+import { useAppStore } from '@/stores/app.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useProductStore } from '@/stores/product.store';
@@ -40,7 +41,7 @@ class MenuGroup {
         query[this.key] = menu.key;
 
         if (this.context.$route.query[this.key] !== menu.key) {
-          this.context.$store.getters.replaceQuery({ query });
+          useAppStore().replaceQuery({ query });
         }
       };
 
@@ -86,7 +87,7 @@ export default {
 
     iconEmpty: () => PRODUCT_ROUTE.icon.dark.toUrl(),
 
-    isLayoutThin: (c) => c.$store.getters.window.innerWidth < 550,
+    isLayoutThin: (c) => useAppStore().window.innerWidth < 550,
     layoutMode: () => ItemProduct.Mode.Grid,
 
     queryProductId: (c) => c.$route.query.productId,

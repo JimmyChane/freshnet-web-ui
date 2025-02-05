@@ -7,6 +7,7 @@ import Loading from '@/components/Loading.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { onCreatedRoute } from '@/mixin';
 import { USERS_ROUTE } from '@/router';
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useUserStore } from '@/stores/user.store';
 
@@ -51,12 +52,12 @@ export default {
       useUserStore()
         .refresh()
         .catch((error) => {
-          this.$store.dispatch('snackbarShow', 'Failed to validate user');
+          useAppStore().snackbarShow('Failed to validate user');
         });
     },
 
     async openWindowAdd() {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowAdd,
         onConfirm: async (data) => {
           try {
@@ -71,16 +72,16 @@ export default {
               popupWindow.close();
               return;
             }
-            this.$store.dispatch('snackbarShow', 'Failed to add user');
+            useAppStore().snackbarShow('Failed to add user');
             throw new Error();
           } catch (error) {
-            this.$store.dispatch('snackbarShow', 'Error to add user');
+            useAppStore().snackbarShow('Error to add user');
           }
         },
       });
     },
     async openWindowRemove(user) {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowRemove,
         onConfirm: async () => {
           try {
@@ -92,16 +93,16 @@ export default {
               popupWindow.close();
               return;
             }
-            this.$store.dispatch('snackbarShow', 'Failed to remove user');
+            useAppStore().snackbarShow('Failed to remove user');
             throw new Error();
           } catch (error) {
-            this.$store.dispatch('snackbarShow', 'Error to remove user');
+            useAppStore().snackbarShow('Error to remove user');
           }
         },
       });
     },
     async openWindowChange(user) {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowChange,
         user,
         userType: user.userType,
@@ -117,16 +118,10 @@ export default {
               popupWindow.close();
               return;
             }
-            this.$store.dispatch(
-              'snackbarShow',
-              'Failed to change user priviledge',
-            );
+            useAppStore().snackbarShow('Failed to change user priviledge');
             throw new Error();
           } catch (error) {
-            this.$store.dispatch(
-              'snackbarShow',
-              'Error to change user priviledge',
-            );
+            useAppStore().snackbarShow('Error to change user priviledge');
           }
         },
       });

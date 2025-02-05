@@ -13,6 +13,7 @@ import { Customer } from '@/items/Customer';
 import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
 import Section from '@/pages/manage/PanelItem-Section.vue';
 import ItemService from '@/pages/service/item-service/ItemService.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useCustomerStore } from '@/stores/customer.store';
 
 import ItemDevice from './ItemDevice.vue';
@@ -50,7 +51,7 @@ export default {
     isLoadingDevices: false,
   }),
   computed: {
-    isWide: (c) => c.$store.getters.window.innerWidth > 600,
+    isWide: (c) => useAppStore().window.innerWidth > 600,
 
     menus: (c) => {
       const menus = [];

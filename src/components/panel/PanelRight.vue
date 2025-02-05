@@ -1,6 +1,7 @@
 <script>
 import Drawer from '@/components/Drawer.vue';
 import BottomsheetWindow from '@/components/window/BottomsheetWindow.vue';
+import { useAppStore } from '@/stores/app.store';
 
 import { Edge, Mode } from '../DrawerOption';
 
@@ -13,7 +14,7 @@ export default {
     titleEmpty: { type: String, default: 'Select to view' },
   },
   computed: {
-    isWide: (c) => c.$store.getters.window.innerWidth > c.wideWidthThreshold,
+    isWide: (c) => useAppStore().window.innerWidth > c.wideWidthThreshold,
 
     drawerEdge: (c) => Edge.RIGHT,
     drawerMode: (c) => {

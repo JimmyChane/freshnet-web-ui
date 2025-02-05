@@ -2,6 +2,7 @@
 import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import { RequirementCustomer } from '@/items/Customer';
+import { useAppStore } from '@/stores/app.store';
 import { useCustomerStore } from '@/stores/customer.store';
 
 import WindowSection from './WindowSection.vue';
@@ -43,10 +44,7 @@ export default {
       this.data.description = this.data.description.trim();
 
       if (this.Requirement.description.isRequired && !this.data.description) {
-        this.$store.dispatch(
-          'snackbarShow',
-          'You must specify the "Description"',
-        );
+        useAppStore().snackbarShow('You must specify the "Description"');
         return;
       }
       useCustomerStore()

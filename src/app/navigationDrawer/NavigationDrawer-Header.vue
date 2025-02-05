@@ -1,5 +1,6 @@
 <script>
 import { cloudinaryServer } from '@/host/Server';
+import { useAppStore } from '@/stores/app.store';
 import { NAVIGATION_MIN_WIDTH, NavigationLayout } from '@/tools/Navigation';
 
 export default {
@@ -8,18 +9,18 @@ export default {
     return { cloudinaryServer };
   },
   computed: {
-    isDrawer: (c) => c.$store.getters.navigation.isDrawer(),
-    isExpanded: (c) => c.$store.getters.navigation.isExpanded(),
+    isDrawer: (c) => useAppStore().navigation.isDrawer(),
+    isExpanded: (c) => useAppStore().navigation.isExpanded(),
     toggleButtonVisible: (c) =>
-      !c.$store.getters.navigation.isThin() ||
-      c.$store.getters.window.innerWidth > NAVIGATION_MIN_WIDTH,
+      !useAppStore().navigation.isThin() ||
+      useAppStore().window.innerWidth > NAVIGATION_MIN_WIDTH,
   },
   methods: {
     toggleCollapse() {
       if (this.isDrawer) {
         this.isExpanded
-          ? this.$store.getters.navigation.closeNavigationDrawer()
-          : this.$store.getters.navigation.openNavigationDrawer();
+          ? useAppStore().navigation.closeNavigationDrawer()
+          : useAppStore().navigation.openNavigationDrawer();
         return;
       }
 
@@ -27,9 +28,9 @@ export default {
         ? NavigationLayout.THIN
         : NavigationLayout.WIDE;
 
-      this.$store.getters.navigation.getCurrentLayoutRequest() === null
-        ? this.$store.getters.navigation.setDefaultLayout(nextLayout)
-        : this.$store.getters.navigation.setLayout(nextLayout);
+      useAppStore().navigation.getCurrentLayoutRequest() === null
+        ? useAppStore().navigation.setDefaultLayout(nextLayout)
+        : useAppStore().navigation.setLayout(nextLayout);
     },
   },
 };

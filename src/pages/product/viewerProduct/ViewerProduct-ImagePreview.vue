@@ -1,6 +1,7 @@
 <script>
 import ImageView from '@/components/ImageView.vue';
 import MenuOption from '@/components/button/MenuOption.vue';
+import { useAppStore } from '@/stores/app.store';
 
 import Arrow from './ViewerProduct-ImagePreview-Arrow.vue';
 
@@ -28,7 +29,7 @@ export default {
     ArrowDirection: Arrow.Direction,
   }),
   computed: {
-    isThin: (c) => c.$store.getters.window.innerWidth < 550,
+    isThin: (c) => useAppStore().window.innerWidth < 550,
     imageIsShowing: (c) => (c.imageIsFetching ? !!c.imageUrl : true),
   },
   watch: {

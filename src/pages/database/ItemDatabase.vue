@@ -3,6 +3,7 @@ import IconDownload from '@/assets/icon/download-black.svg';
 import IconMinus from '@/assets/icon/minus-black.svg';
 import IconPlus from '@/assets/icon/plus-black.svg';
 import ButtonIconText from '@/components/button/ButtonIconText.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useDatabaseStore } from '@/stores/database.store';
 
 import ItemCollection from './ItemCollection.vue';
@@ -23,7 +24,7 @@ export default {
     collections: (c) => c.database.collections,
     areExpanded: (c) => c.expands.length >= c.collections.length,
     areCollapsed: (c) => c.expands.length === 0,
-    isWide: (c) => c.$store.getters.window.innerWidth > 500,
+    isWide: (c) => useAppStore().window.innerWidth > 500,
   },
   methods: {
     addExpand(name) {
@@ -46,7 +47,7 @@ export default {
         .then((databaseContext) => {
           let { filename, data } = databaseContext;
           let dataString = JSON.stringify(data, null, 0);
-          this.$store.getters.pushDownload(filename, dataString);
+          useAppStore().pushDownload(filename, dataString);
         });
     },
   },

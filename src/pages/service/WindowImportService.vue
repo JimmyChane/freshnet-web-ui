@@ -8,6 +8,7 @@ import {
   ServiceState,
   mapServiceState,
 } from '@/items/ServiceState';
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useServiceStore } from '@/stores/service.store';
 
@@ -99,11 +100,11 @@ export default {
       this.data = this.trimData();
 
       if (Number.isNaN(this.data.time)) {
-        this.$store.dispatch('snackbarShow', 'Date & Time Not Set');
+        useAppStore().snackbarShow('Date & Time Not Set');
         return;
       }
       if (!this.data.state) {
-        this.$store.dispatch('snackbarShow', 'State Not Set');
+        useAppStore().snackbarShow('State Not Set');
         return;
       }
 
@@ -114,7 +115,7 @@ export default {
           this.popupWindow.close();
         })
         .catch((error) => {
-          this.$store.dispatch('snackbarShow', 'Failed to import a service');
+          useAppStore().snackbarShow('Failed to import a service');
           console.error(error);
         });
     },

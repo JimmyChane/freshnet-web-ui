@@ -12,6 +12,7 @@ import {
   PURCHASE_SERVICE_EVENT_METHOD,
   QUOTATION_SERVICE_EVENT_METHOD,
 } from '@/items/ServiceEventMethod';
+import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
 
 import ImageView from './ServiceEvent-Image.vue';
@@ -101,7 +102,7 @@ export default {
                 .addImageToId({ serviceID: this.service.id, imageFiles })
                 .then((serivce) => {})
                 .catch((error) => {
-                  this.$store.dispatch('snackbarShow', 'Failed to Add Image');
+                  useAppStore().snackbarShow('Failed to Add Image');
                 });
             });
 
@@ -131,7 +132,7 @@ export default {
                 })
                 .then((serivce) => {})
                 .catch((error) => {
-                  this.$store.dispatch('snackbarShow', 'Failed to Add Image');
+                  useAppStore().snackbarShow('Failed to Add Image');
                 });
             });
             element.dispatchEvent(
@@ -168,7 +169,7 @@ export default {
       if (!event) return (this.nameOfUser = '');
 
       const name = await this.event.fetchName().catch((error) => {
-        this.$store.dispatch('snackbarShow', 'Error getting user for event');
+        useAppStore().snackbarShow('Error getting user for event');
         return '';
       });
 
@@ -189,7 +190,7 @@ export default {
       this.actions.onClickUpdateDescription(this.service.description);
     },
     clickEditDescription() {
-      this.$store.dispatch('openPopupWindow', {
+      useAppStore().openPopupWindow({
         component: WindowUpdateEventDescription,
         service: this.service,
         serviceEvent: this.event,
@@ -204,10 +205,10 @@ export default {
               serviceID: this.service.id,
               image,
             });
-            this.$store.dispatch('imageViewerHide');
+            useAppStore().imageViewerHide();
             accept();
           } catch (error) {
-            this.$store.dispatch('snackbarShow', 'Delete Image Failed');
+            useAppStore().snackbarShow('Delete Image Failed');
             reject();
             throw error;
           }
@@ -222,17 +223,17 @@ export default {
             };
             const service =
               await useServiceStore().removeEventImage(requestOption);
-            this.$store.dispatch('imageViewerHide');
+            useAppStore().imageViewerHide();
             accept();
           } catch (error) {
-            this.$store.dispatch('snackbarShow', 'Delete Image Failed');
+            useAppStore().snackbarShow('Delete Image Failed');
             reject();
             throw error;
           }
         };
       }
 
-      this.$store.dispatch('openPopupWindow', {
+      useAppStore().openPopupWindow({
         component: WindowRemove,
         title: 'Delete Image',
         message: 'After deleting this image, it cannot be reverted.',
@@ -291,7 +292,7 @@ export default {
         @click="
           () => {
             const option = { image, thumbnails: images };
-            $store.dispatch('imageViewerShow', option);
+            useAppStore().imageViewerShow(option);
           }
         "
         @click-remove="() => clickRemoveServiceImage(image)"

@@ -5,6 +5,7 @@ import {
   POPUP_MENU_CORNER,
   POPUP_MENU_WIDTH,
 } from '@/app/popupMenu/PopupMenuOption';
+import { useAppStore } from '@/stores/app.store';
 
 export default {
   Width: POPUP_MENU_ALIGNMENT,
@@ -43,7 +44,7 @@ export default {
         if (isLegacy) menu.click = () => menu.interact();
       }
 
-      this.popupMenu = await this.$store.dispatch('popupMenuShow', {
+      this.popupMenu = await useAppStore().popupMenuShow({
         anchor: this._self.$el,
         menus,
         option: {

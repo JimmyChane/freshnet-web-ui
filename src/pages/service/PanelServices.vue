@@ -8,6 +8,7 @@ import IconList from '@/assets/icon/list-000000.svg';
 import Empty from '@/components/Empty.vue';
 import { mapServiceState } from '@/items/ServiceState';
 import { SERVICE_ROUTE } from '@/router';
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useServiceStore } from '@/stores/service.store';
 
@@ -78,7 +79,7 @@ export default {
 
       const states = mapServiceState((state) => state);
       if (!menu && this.stateMenus.length && states.length) {
-        this.$store.getters.replaceQuery({ query: { state: states[0].key } });
+        useAppStore().replaceQuery({ query: { state: states[0].key } });
       }
 
       this.stateMenuIndex = this.stateMenus.indexOf(menu);
@@ -159,7 +160,7 @@ export default {
       };
       menu.click = () => {
         if (this.currentState === menu.key) return;
-        this.$store.getters.replaceQuery({ query: { state: menu.key } });
+        useAppStore().replaceQuery({ query: { state: menu.key } });
       };
     }
     for (const menu of this.layoutMenus) {

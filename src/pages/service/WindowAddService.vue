@@ -2,6 +2,7 @@
 import { mapStores } from 'pinia';
 
 import PanelAction from '@/components/panel/PanelAction.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useServiceStore } from '@/stores/service.store';
 
@@ -80,15 +81,15 @@ export default {
       };
 
       if (this.userIsDefault && !this.nameOfUser.trim()) {
-        this.$store.dispatch('snackbarShow', 'You must specify your name');
+        useAppStore().snackbarShow('You must specify your name');
         return;
       }
       if (!data.customer.name) {
-        this.$store.dispatch('snackbarShow', 'You must specify customer name');
+        useAppStore().snackbarShow('You must specify customer name');
         return;
       }
       if (!data.description) {
-        this.$store.dispatch('snackbarShow', 'You must specify description');
+        useAppStore().snackbarShow('You must specify description');
         return;
       }
       if (this.userIsDefault && this.nameOfUser.trim()) {

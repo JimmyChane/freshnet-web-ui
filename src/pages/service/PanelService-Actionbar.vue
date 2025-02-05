@@ -15,6 +15,7 @@ import Selector from '@/components/selector/Selector.vue';
 import { Service } from '@/items/Service';
 import { mapServiceState } from '@/items/ServiceState';
 import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
 
 import BelongingVue from './ItemBelonging.vue';
@@ -182,7 +183,7 @@ export default {
       }
 
       const name = await service.fetchName().catch((error) => {
-        this.$store.dispatch('snackbarShow', 'Error getting user for service');
+        useAppStore().snackbarShow('Error getting user for service');
         return '';
       });
 

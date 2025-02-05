@@ -5,6 +5,7 @@ import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import SearchInput from '@/components/SearchInput.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import TabLayout from '@/components/tabLayout/TabLayout.vue';
+import { useAppStore } from '@/stores/app.store';
 import { withItems } from '@/tools/Searcher';
 
 import ItemCustomerSearch from './ItemCustomerSearch.vue';
@@ -62,7 +63,7 @@ export default {
       ].map((menu) => {
         menu.isSelected = (menu) => c.filter === menu.key;
         menu.click = (menu) => {
-          c.$store.getters.replaceQuery({ query: { filter: menu.key } });
+          useAppStore().replaceQuery({ query: { filter: menu.key } });
         };
         return menu;
       });

@@ -5,6 +5,7 @@ import GlobalSearch from '@/app/search/GlobalSearch.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { cloudinaryServer } from '@/host/Server';
 import { SettingKey } from '@/items/Setting';
+import { useAppStore } from '@/stores/app.store';
 import { useSettingStore } from '@/stores/setting.store';
 
 export default {
@@ -60,11 +61,11 @@ export default {
     },
 
     isNavigationDrawer() {
-      return this.$store.getters.navigation.isDrawer();
+      return useAppStore().navigation.isDrawer();
     },
 
     screenWidth() {
-      return this.$store.getters.window.innerWidth;
+      return useAppStore().window.innerWidth;
     },
   },
   watch: {

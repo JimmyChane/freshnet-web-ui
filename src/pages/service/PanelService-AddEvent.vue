@@ -12,6 +12,7 @@ import {
   PURCHASE_SERVICE_EVENT_METHOD,
   QUOTATION_SERVICE_EVENT_METHOD,
 } from '@/items/ServiceEventMethod';
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useServiceStore } from '@/stores/service.store';
 
@@ -120,11 +121,11 @@ export default {
     },
     submit() {
       if (this.isUserDefault && !this.nameOfUser.trim()) {
-        this.$store.dispatch('snackbarShow', 'You must specify your name');
+        useAppStore().snackbarShow('You must specify your name');
         return;
       }
       if (!this.eventDescription.trim()) {
-        this.$store.dispatch('snackbarShow', 'You must specify "Description"');
+        useAppStore().snackbarShow('You must specify "Description"');
         return;
       }
 

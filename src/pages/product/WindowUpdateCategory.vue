@@ -1,6 +1,7 @@
 <script>
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector4 from '@/components/selector/Selector4.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useCategoryStore } from '@/stores/category.store';
 
 export default {
@@ -35,7 +36,7 @@ export default {
   methods: {
     clickConfirm() {
       if (this.categoryId === this.outputCategoryId) {
-        this.$store.dispatch('snackbarShow', 'No Changes');
+        useAppStore().snackbarShow('No Changes');
         return;
       }
 

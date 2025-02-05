@@ -3,6 +3,7 @@ import { mapStores } from 'pinia';
 
 import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
 
 export default {
@@ -25,7 +26,7 @@ export default {
   methods: {
     onChange() {
       if (this.description === this.value) {
-        this.$store.dispatch('snackbarShow', 'No Changes');
+        useAppStore().snackbarShow('No Changes');
         return;
       }
 

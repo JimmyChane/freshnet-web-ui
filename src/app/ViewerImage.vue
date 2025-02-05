@@ -1,8 +1,11 @@
 <script>
+import { mapStores } from 'pinia';
+
 import IconClose from '@/assets/icon/close-000000.svg';
 import ImageView from '@/components/ImageView.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import Bottomsheet from '@/components/window/BottomsheetWindow.vue';
+import { useAppStore } from '@/stores/app.store';
 
 export default {
   components: { Bottomsheet, Actionbar, ImageView },
@@ -22,9 +25,11 @@ export default {
     translateX: 0,
   }),
   computed: {
-    isShowing: (c) => c.$store.getters.imageViewer.isShowing,
-    image: (c) => c.$store.getters.imageViewer.image,
-    thumbnails: (c) => c.$store.getters.imageViewer.thumbnails,
+    ...mapStores(useAppStore),
+
+    isShowing: (c) => useAppStore().imageViewer.isShowing,
+    image: (c) => useAppStore().imageViewer.image,
+    thumbnails: (c) => useAppStore().imageViewer.thumbnails,
 
     style() {
       const transforms = [
@@ -58,7 +63,7 @@ export default {
   },
   methods: {
     clickDismiss() {
-      this.$store.dispatch('imageViewerHide');
+      useAppStore().imageViewerHide();
     },
     invalidateContainerSize() {
       const { Container } = this.$refs;
@@ -153,7 +158,7 @@ export default {
                 ]"
                 v-for="thumbnail of thumbnails"
                 :key="thumbnail.toUrl()"
-                @click="() => $store.dispatch('imageViewerSelect', thumbnail)"
+                @click="() => appStore.imageViewerSelect(thumbnail)"
               >
                 <ImageView class="ImageView-images-item" :src="thumbnail" />
               </button>

@@ -1,6 +1,9 @@
 <script>
+import { mapStores } from 'pinia';
+
 import Drawer from '@/components/Drawer.vue';
 import { Edge, Mode } from '@/components/DrawerOption';
+import { useAppStore } from '@/stores/app.store';
 
 import LeftNavHeader from './NavigationDrawer-Header.vue';
 import LeftNavLogin from './NavigationDrawer-Login.vue';
@@ -21,11 +24,13 @@ export default {
     dragWidth: 0,
   }),
   computed: {
-    isWide: (c) => c.$store.getters.navigation.isWide(),
-    isDrawer: (c) => c.$store.getters.navigation.isDrawer(),
-    isExpand: (c) => c.$store.getters.navigation.isExpanded(),
-    selectedPageKey: (c) => c.$store.getters.currentPageKey,
-    selectedViewKey: (c) => c.$store.getters.currentViewKey,
+    ...mapStores(useAppStore),
+
+    isWide: (c) => useAppStore().navigation.isWide(),
+    isDrawer: (c) => useAppStore().navigation.isDrawer(),
+    isExpand: (c) => useAppStore().navigation.isExpanded(),
+    selectedPageKey: (c) => useAppStore().currentPageKey,
+    selectedViewKey: (c) => useAppStore().currentViewKey,
 
     drawerMode() {
       if (!this.isDrawer) return Mode.FIXED;
@@ -34,7 +39,7 @@ export default {
     drawerEdge: () => Edge.LEFT,
 
     navigations() {
-      const navigations = this.$store.getters.pages;
+      const navigations = useAppStore().pages;
 
       navigations.forEach((nav) => {
         nav.isExpanded = () => this.expandedPageKey === nav.key;
@@ -138,14 +143,14 @@ export default {
       const y = touch.pageY;
       this.refDrawer.onDragEnd(x, y);
       if (x > this.dragOpen) {
-        this.$store.getters.navigation.openNavigationDrawer();
+        useAppStore().navigation.openNavigationDrawer();
         this.focus();
       }
       this.isDragging = false;
     },
 
     emitCollapse() {
-      this.$store.getters.navigation.closeNavigationDrawer();
+      useAppStore().navigation.closeNavigationDrawer();
       this.expandedPageKey = '';
     },
 
@@ -168,14 +173,14 @@ export default {
         (this.hasQueryKey('') && this.getQueryValue('') === undefined) ||
         (key === '' && nextValue === '')
       ) {
-        this.$store.getters.replaceQuery({});
+        useAppStore().replaceQuery({});
         return;
       }
 
       const query = {};
       query[key] = nextValue;
 
-      this.$store.getters.replaceQuery({ query });
+      useAppStore().replaceQuery({ query });
     },
 
     focus() {},
@@ -210,7 +215,7 @@ export default {
 
       <LeftNavLogin
         style="z-index: 2"
-        v-if="$store.getters.currentPageKey !== 'login'"
+        v-if="appStore.currentPageKey !== 'login'"
         @click-logout="$emit('click-logout')"
         :isWide="isWide"
       />

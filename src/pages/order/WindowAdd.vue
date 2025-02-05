@@ -1,5 +1,6 @@
 <script>
 import Input from '@/components/Input.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useOrderStore } from '@/stores/order.store';
 
 export default {
@@ -36,7 +37,7 @@ export default {
         .addItem({ data: order })
         .then((order) => this.popupWindow.close())
         .catch((error) => {
-          this.$store.dispatch('snackbarShow', 'Error While Creating Order');
+          useAppStore().snackbarShow('Error While Creating Order');
         });
     },
   },

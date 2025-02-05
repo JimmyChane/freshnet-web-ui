@@ -3,6 +3,7 @@ import { mapStores } from 'pinia';
 
 import TextArea from '@/components/InputTextArea.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
 
 export default {
@@ -22,7 +23,7 @@ export default {
     onChange() {
       const { description } = this;
       if (description === this.serviceEvent.description) {
-        this.$store.dispatch('snackbarShow', 'No changes were made');
+        useAppStore().snackbarShow('No changes were made');
         return;
       }
 

@@ -5,6 +5,7 @@ import Footer from '@/app/footer/Footer.vue';
 import PanelRight from '@/components/panel/PanelRight.vue';
 import { onCreatedRoute } from '@/mixin';
 import { PRODUCT_ROUTE } from '@/router';
+import { useAppStore } from '@/stores/app.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useProductStore } from '@/stores/product.store';
@@ -43,7 +44,7 @@ export default {
     scrollTop: 0,
   }),
   computed: {
-    ...mapStores(useCategoryStore, useProductStore),
+    ...mapStores(useCategoryStore, useProductStore, useAppStore),
 
     isEditable: (c) => {
       const user = useLoginStore().user;
@@ -52,7 +53,7 @@ export default {
     isLoading: (c) => useProductStore().isLoading,
 
     paths: (c) => {
-      return c.$store.getters.paths;
+      return useAppStore().paths;
     },
     lastPath: (c) => {
       let { paths } = c;
@@ -140,7 +141,7 @@ export default {
     this.invalidate();
     this.onProduct();
     this.onProductId();
-    this.$store.getters.navigation.setLayout(NavigationLayout.THIN);
+    useAppStore().navigation.setLayout(NavigationLayout.THIN);
   },
   methods: {
     async invalidate() {
@@ -248,20 +249,20 @@ export default {
       this.setProductId(product?.id ?? null);
     },
     setProductId(productId) {
-      this.$store.getters.nextQuery({
+      useAppStore().nextQuery({
         query: { productId: productId ?? null },
       });
     },
 
     async clickSearch() {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowSearch,
         items: this.products,
       });
     },
 
     async clickAddProduct() {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowAddProduct,
         onConfirm: (output) => {
           useProductStore()
@@ -271,14 +272,14 @@ export default {
               this.setProduct(product);
             })
             .catch((error) => {
-              this.$store.dispatch('snackbarShow', 'Product Creation Failed');
+              useAppStore().snackbarShow('Product Creation Failed');
             });
         },
       });
     },
 
     async clickRemoveProduct(input) {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowRemoveProduct,
         input,
         onConfirm: (input) => {
@@ -289,13 +290,13 @@ export default {
               this.setProduct(null);
             })
             .catch((error) => {
-              this.$store.dispatch('snackbarShow', 'Product Deletion Failed');
+              useAppStore().snackbarShow('Product Deletion Failed');
             });
         },
       });
     },
     async clickRemoveProductImage(input) {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowRemoveImage,
         input,
         onConfirm: (input) => {
@@ -309,7 +310,7 @@ export default {
     },
 
     async clickUpdateProductTitleBrand(input) {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowUpdateTitleBrand,
         input,
         onConfirm: (input) => {
@@ -326,13 +327,13 @@ export default {
           Promise.all([promiseTitle, promiseBrand])
             .then(() => popupWindow.close())
             .catch((error) => {
-              this.$store.dispatch('snackbarShow', 'Some Cannot Update');
+              useAppStore().snackbarShow('Some Cannot Update');
             });
         },
       });
     },
     async clickUpdateProductPrice(input) {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowUpdatePrice,
         input,
         onConfirm: (input) => {
@@ -341,13 +342,13 @@ export default {
             .updatePriceOfId({ id: product.id, price })
             .then((product) => popupWindow.close())
             .catch((error) => {
-              this.$store.dispatch('snackbarShow', 'Cannot Update');
+              useAppStore().snackbarShow('Cannot Update');
             });
         },
       });
     },
     async clickUpdateProductDescription(input) {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowUpdateDescription,
         input,
         onConfirm: (input) => {
@@ -359,13 +360,13 @@ export default {
             })
             .then((product) => popupWindow.close())
             .catch((error) => {
-              this.$store.dispatch('snackbarShow', 'Cannot Update');
+              useAppStore().snackbarShow('Cannot Update');
             });
         },
       });
     },
     async clickUpdateProductCategory(input) {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowUpdateCategory,
         input,
         onConfirm: (input) => {
@@ -374,13 +375,13 @@ export default {
             .updateCategoryIdOfId({ id: product.id, categoryId })
             .then((product) => popupWindow.close())
             .catch((error) => {
-              this.$store.dispatch('snackbarShow', 'Cannot Update');
+              useAppStore().snackbarShow('Cannot Update');
             });
         },
       });
     },
     async clickUpdateProductSpecifications(input) {
-      const popupWindow = await this.$store.dispatch('openPopupWindow', {
+      const popupWindow = await useAppStore().openPopupWindow({
         component: WindowUpdateSpecifications,
         input,
         onConfirm: (input) => {
@@ -397,7 +398,7 @@ export default {
             })
             .then((product) => popupWindow.close())
             .catch((error) => {
-              this.$store.dispatch('snackbarShow', 'Cannot Update');
+              useAppStore().snackbarShow('Cannot Update');
             });
         },
       });

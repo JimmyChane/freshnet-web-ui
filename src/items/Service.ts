@@ -121,8 +121,8 @@ export class Service implements Item {
       return label.title === WARRANTY_SERVICE_LABEL.title;
     });
     const notice = {
-      isUrgent: !!data.notice?.isUrgent ?? false,
-      isWarranty: !!data.notice?.isWarranty ?? false,
+      isUrgent: !!(data.notice?.isUrgent ?? false),
+      isWarranty: !!(data.notice?.isWarranty ?? false),
     };
     if (notice.isUrgent && !existingLabelUrgent) {
       this.labels.push(URGENT_SERVICE_LABEL);

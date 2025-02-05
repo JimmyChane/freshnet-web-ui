@@ -1,6 +1,7 @@
 <script>
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 
 export default {
@@ -19,8 +20,7 @@ export default {
       const { passwordVerify, passwordNew, passwordRepeat } = this;
 
       if (passwordNew !== passwordRepeat) {
-        this.$store.dispatch(
-          'snackbarShow',
+        useAppStore().snackbarShow(
           'Repeat Password Not Match With New Password',
         );
         return;
@@ -30,7 +30,7 @@ export default {
         .changePassword({ passwordVerify, passwordNew })
         .then((user) => this.popupWindow.close())
         .catch((error) =>
-          this.$store.dispatch('snackbarShow', 'Changing Password Error'),
+          useAppStore().snackbarShow('Changing Password Error'),
         );
     },
   },

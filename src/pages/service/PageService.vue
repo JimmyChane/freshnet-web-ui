@@ -7,6 +7,7 @@ import PanelRight from '@/components/panel/PanelRight.vue';
 import WindowRemove from '@/components/window/WindowRemove.vue';
 import { onCreatedRoute } from '@/mixin';
 import { SERVICE_ROUTE } from '@/router';
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useServiceStore } from '@/stores/service.store';
 
@@ -30,7 +31,7 @@ export default {
         useServiceStore()
           .addEventToId(arg)
           .catch((error) => {
-            c.$store.dispatch('snackbarShow', 'Failed to create an event');
+            useAppStore().snackbarShow('Failed to create an event');
             throw error;
           });
       },
@@ -51,7 +52,7 @@ export default {
     drawerService: null,
   }),
   computed: {
-    ...mapStores(useServiceStore),
+    ...mapStores(useServiceStore, useAppStore),
 
     actionMenus: (c) => {
       return [
@@ -133,7 +134,7 @@ export default {
       useServiceStore().refresh();
     },
     clickAddService() {
-      const popupWindow = this.$store.dispatch('openPopupWindow', {
+      const popupWindow = useAppStore().openPopupWindow({
         component: WindowAddService,
         onConfirm: async (accept, reject, data) => {
           try {
@@ -142,7 +143,7 @@ export default {
             result ? accept() : reject();
             this.clickService(result);
           } catch (error) {
-            this.$store.dispatch('snackbarShow', 'Failed to create a service');
+            useAppStore().snackbarShow('Failed to create a service');
             reject();
             throw error;
           }
@@ -150,7 +151,7 @@ export default {
       });
     },
     clickImportService() {
-      const popupWindow = this.$store.dispatch('openPopupWindow', {
+      const popupWindow = useAppStore().openPopupWindow({
         component: WindowImportService,
         showService: (service) => this.clickService(service),
       });
@@ -163,15 +164,15 @@ export default {
       const query = { service: service?.id ?? null };
 
       if (hasPreviousSerivce && hasNextService) {
-        this.$store.getters.replaceQuery({ query });
+        useAppStore().replaceQuery({ query });
       } else {
-        this.$store.getters.nextQuery({ query });
+        useAppStore().nextQuery({ query });
       }
 
       this.updateServiceUI(service);
     },
     clickSearch() {
-      const popupWindow = this.$store.dispatch('openPopupWindow', {
+      const popupWindow = useAppStore().openPopupWindow({
         component: WindowSearch,
         items: this.items,
         clickItem: (service) => {
@@ -181,7 +182,7 @@ export default {
     },
 
     clickRemoveService(service) {
-      const popupWindow = this.$store.dispatch('openPopupWindow', {
+      const popupWindow = useAppStore().openPopupWindow({
         component: WindowRemove,
         title: 'Delete Service',
         message: 'After deleting this service, it cannot be reverted.',
@@ -191,10 +192,10 @@ export default {
             await useServiceStore().removeItemOfId({ id: service.id });
             accept();
             if (this.currentServiceId === service.id) {
-              this.$store.getters.replaceQuery({ query: { service: null } });
+              useAppStore().replaceQuery({ query: { service: null } });
             }
           } catch (error) {
-            this.$store.dispatch('snackbarShow', 'Delete Failed');
+            useAppStore().snackbarShow('Delete Failed');
             reject();
             throw error;
           }
@@ -202,7 +203,7 @@ export default {
       });
     },
     cllickRemoveServiceEvent(data) {
-      const popupWindow = this.$store.dispatch('openPopupWindow', {
+      const popupWindow = useAppStore().openPopupWindow({
         component: WindowRemove,
         title: 'Delete Event',
         message: 'After deleting this event, it cannot be reverted.',
@@ -217,7 +218,7 @@ export default {
       });
     },
     clickRemoveServiceImage(image) {
-      const popupWindow = this.$store.dispatch('openPopupWindow', {
+      const popupWindow = useAppStore().openPopupWindow({
         component: WindowRemove,
         title: 'Delete Image',
         message: 'After deleting this image, it cannot be reverted.',
@@ -228,10 +229,10 @@ export default {
               serviceID: this.currentService.id,
               image,
             });
-            this.$store.dispatch('imageViewerHide');
+            useAppStore().imageViewerHide();
             accept();
           } catch (error) {
-            this.$store.dispatch('snackbarShow', 'Delete Image Failed');
+            useAppStore().snackbarShow('Delete Image Failed');
             reject();
             throw error;
           }
@@ -240,7 +241,7 @@ export default {
     },
 
     clickEditServiceDescritpion(description) {
-      const popupWindow = this.$store.dispatch('openPopupWindow', {
+      const popupWindow = useAppStore().openPopupWindow({
         component: WindowUpdateDescription,
         description,
         onConfirm: async (accept, reject, description) => {
@@ -251,7 +252,7 @@ export default {
             });
             accept();
           } catch (error) {
-            this.$store.dispatch('snackbarShow', 'Update Description Failed');
+            useAppStore().snackbarShow('Update Description Failed');
             reject();
             throw error;
           }
@@ -259,7 +260,7 @@ export default {
       });
     },
     clickEditServiceBelongings(belongings) {
-      const popupWindow = this.$store.dispatch('openPopupWindow', {
+      const popupWindow = useAppStore().openPopupWindow({
         component: WindowUpdateBelonging,
         values: belongings,
         onConfirm: async (accept, reject, belongings) => {
@@ -270,7 +271,7 @@ export default {
             });
             accept();
           } catch (error) {
-            this.$store.dispatch('snackbarShow', 'Update Belongings Failed');
+            useAppStore().snackbarShow('Update Belongings Failed');
             reject();
             throw error;
           }
@@ -278,7 +279,7 @@ export default {
       });
     },
     clickEditServiceCustomer(customer) {
-      const popupWindow = this.$store.dispatch('openPopupWindow', {
+      const popupWindow = useAppStore().openPopupWindow({
         component: WindowUpdateCustomer,
         value: customer,
         onConfirm: async (accept, reject, customer) => {
@@ -289,7 +290,7 @@ export default {
             );
             accept();
           } catch (error) {
-            this.$store.dispatch('snackbarShow', 'Update Customer Failed');
+            useAppStore().snackbarShow('Update Customer Failed');
             reject();
             throw error;
           }
@@ -317,9 +318,7 @@ export default {
       class="PageService-PanelRight"
       titleEmpty="Select service to view"
       :isShowing="!!currentService"
-      @click-collapse="
-        () => $store.getters.nextQuery({ query: { service: null } })
-      "
+      @click-collapse="() => appStore.nextQuery({ query: { service: null } })"
       @on-isWide="(isWide) => (panelListened.isWide = isWide)"
     >
       <PanelService

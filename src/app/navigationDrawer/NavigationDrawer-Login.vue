@@ -1,4 +1,5 @@
 <script>
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 
 export default {
@@ -8,7 +9,7 @@ export default {
   computed: {
     user: (c) => useLoginStore().user,
     userName: (c) => c.user.name,
-    isLoginPage: (c) => c.$store.getters.currentPageKey === 'login',
+    isLoginPage: (c) => useAppStore().currentPageKey === 'login',
   },
   watch: {
     $route() {

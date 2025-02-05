@@ -2,6 +2,7 @@
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import { RequirementCustomer } from '@/items/Customer';
+import { useAppStore } from '@/stores/app.store';
 import { useCustomerStore } from '@/stores/customer.store';
 
 import WindowSection from './WindowSection.vue';
@@ -50,14 +51,11 @@ export default {
       this.data.phoneNumber = this.data.phoneNumber.trim();
 
       if (this.Requirement.name.isRequired && !this.data.name) {
-        this.$store.dispatch('snackbarShow', 'You must specify the "Name"');
+        useAppStore().snackbarShow('You must specify the "Name"');
         return;
       }
       if (this.Requirement.phoneNumber.isRequired && !this.data.phoneNumber) {
-        this.$store.dispatch(
-          'snackbarShow',
-          'You must specify the "Phone Number"',
-        );
+        useAppStore().snackbarShow('You must specify the "Phone Number"');
         return;
       }
 

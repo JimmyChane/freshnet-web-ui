@@ -7,6 +7,7 @@ import SearchInput from '@/components/SearchInput.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import TabLayout from '@/components/tabLayout/TabLayout.vue';
 import LayoutViewSelector from '@/pages/service/PageService-LayoutViewSelector.vue';
+import { useAppStore } from '@/stores/app.store';
 import { withItems } from '@/tools/Searcher';
 
 import ItemService from './item-service/ItemService.vue';
@@ -44,8 +45,8 @@ export default {
     primaryColorLabel: chroma('black'),
   }),
   computed: {
-    isOver350: (c) => c.$store.getters.window.innerWidth > 350,
-    isOver550: (c) => c.$store.getters.window.innerWidth > 550,
+    isOver350: (c) => useAppStore().window.innerWidth > 350,
+    isOver550: (c) => useAppStore().window.innerWidth > 550,
     currentGroupMenu: (c) => c.groupMenus[c.groupMenuIndex],
     currentSortMenu: (c) => c.sortMenus[c.sortMenuIndex],
 

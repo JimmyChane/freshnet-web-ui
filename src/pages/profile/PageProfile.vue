@@ -6,6 +6,7 @@ import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import { onCreatedRoute } from '@/mixin';
 import { PROFILE_ROUTE } from '@/router';
+import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 
 import SectionMain from './PageProfile-Section-Main.vue';
@@ -42,7 +43,7 @@ export default {
   },
   methods: {
     openWindowChangePassword() {
-      const popupWindow = this.$store.dispatch('openPopupWindow', {
+      const popupWindow = useAppStore().openPopupWindow({
         component: WindowChangePassword,
       });
     },
@@ -59,7 +60,7 @@ export default {
         this.user = user;
       })
       .catch((error) => {
-        this.$store.dispatch('snackbarShow', 'Failed to validate');
+        useAppStore().snackbarShow('Failed to validate');
         this.isLoading = false;
         this.user = null;
       });

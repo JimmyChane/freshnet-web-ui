@@ -5,6 +5,7 @@ import Selector from '@/components/selector/Selector.vue';
 import { Service } from '@/items/Service';
 import { findServiceStateByKey } from '@/items/ServiceState';
 import Section from '@/pages/manage/PanelItem-Section.vue';
+import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
 
 import ButtonAddImage from './ButtonAddImage.vue';
@@ -29,7 +30,7 @@ export default {
   },
   data: (c) => ({ nameOfUser: '', scrollTop: 0, isActionbarExpand: false }),
   computed: {
-    windowWidth: (c) => c.$store.getters.window.innerWidth,
+    windowWidth: (c) => useAppStore().window.innerWidth,
 
     isWide: (c) => c.windowWidth > 600,
 
@@ -112,7 +113,7 @@ export default {
       }
 
       const name = await service.fetchName().catch((error) => {
-        this.$store.dispatch('snackbarShow', 'Error getting user for service');
+        useAppStore().snackbarShow('Error getting user for service');
         return '';
       });
 
@@ -130,7 +131,7 @@ export default {
         .addImageToId({ serviceID: this.service.id, imageFiles })
         .then((serivce) => {})
         .catch((error) => {
-          this.$store.dispatch('snackbarShow', 'Failed to Add Image');
+          useAppStore().snackbarShow('Failed to Add Image');
         });
     },
 

@@ -5,6 +5,7 @@ import { mapStores } from 'pinia';
 import { isObjectOnly, optString, trimText } from '@/U';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import { SpecificationKey } from '@/items/Specification';
+import { useAppStore } from '@/stores/app.store';
 import { useProductStore } from '@/stores/product.store';
 import { useSettingStore } from '@/stores/setting.store';
 
@@ -78,7 +79,7 @@ export default {
     settingShowPrice: false,
   }),
   computed: {
-    ...mapStores(useProductStore),
+    ...mapStores(useProductStore, useAppStore),
 
     lastModified() {
       return useSettingStore().lastModified;
@@ -190,7 +191,7 @@ export default {
     backgroundColor: (c) => c.primaryColor.mix('ffffff', 0.6),
 
     isImageViewerShowing() {
-      return this.$store.getters.imageViewer.isShowing;
+      return useAppStore().imageViewer.isShowing;
     },
   },
   watch: {
@@ -429,11 +430,7 @@ export default {
           :hasProductPrevious="!!productPrevious"
           :hasProductNext="!!productNext"
           @click-image="
-            (image) =>
-              $store.dispatch('imageViewerShow', {
-                image,
-                thumbnails: images,
-              })
+            (image) => appStore.imageViewerShow({ image, thumbnails: images })
           "
           @click-previous="() => clickPreviousImage()"
           @click-next="() => clickNextImage()"
