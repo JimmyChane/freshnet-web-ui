@@ -3,15 +3,15 @@ import { APP_HOST as AppHost } from '@/host/AppHost';
 import { textContains } from '@/objects/ItemSearcher';
 import { useBrandStore } from '@/stores/brand.store';
 import { useCategoryStore } from '@/stores/category.store';
-import { Item } from '@/stores/tools/List';
+import type { Item } from '@/stores/tools/List';
 
 import { Brand } from './Brand';
 import { Category } from './Category';
 import { Image } from './Image';
-import { ProductBundle, ProductBundleData } from './ProductBundle';
+import { ProductBundle, type ProductBundleData } from './ProductBundle';
 import { ProductPrice } from './ProductPrice';
-import { ProductPrices, ProductPricesData } from './ProductPrices';
-import { ProductStock, ProductStockData } from './ProductStock';
+import { ProductPrices, type ProductPricesData } from './ProductPrices';
+import { ProductStock, type ProductStockData } from './ProductStock';
 import { Specification, SpecificationKey } from './Specification';
 
 const FORMAT_SPECIFICATION_ORDERS = Object.values(SpecificationKey);

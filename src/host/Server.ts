@@ -1,9 +1,8 @@
 import { trimId } from '@/U';
+import config from '@/freshnet.config';
 
 import { Request, ServerApi } from './ServerApi';
 import { Icon, ServerResource } from './ServerResource';
-
-const config = require('@/../freshnet.config');
 
 export const resourceServer = new ServerResource(config.hostRes);
 export const apiServer = new ServerApi(config.hostApi);

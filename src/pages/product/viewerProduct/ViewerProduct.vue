@@ -224,8 +224,8 @@ export default {
     },
 
     invalidateBound() {
-      this.scrollTop = this._self.$el.scrollTop;
-      this.height = this._self.$el.offsetHeight;
+      this.scrollTop = this.$refs.self.scrollTop;
+      this.height = this.$refs.self.offsetHeight;
     },
     async invalidateProduct() {
       if (this.product) {
@@ -323,7 +323,7 @@ export default {
         setTimeout(() => this.scrollToTop(0), timeout);
         return;
       }
-      this._self.$el.scrollTo({ top: 0, behavior: 'smooth' });
+      this.$refs.self.scrollTo({ top: 0, behavior: 'smooth' });
     },
     scrollTo(key = '') {
       const ref = this.$refs[`key${key}`];
@@ -377,6 +377,7 @@ export default {
 
 <template>
   <div
+    ref="self"
     class="ViewerProduct"
     :style="{
       '--primary-color': primaryColor,

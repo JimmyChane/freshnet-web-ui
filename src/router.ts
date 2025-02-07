@@ -1,6 +1,10 @@
-import VueRouter, { RouteConfig } from 'vue-router';
+import {
+  type RouteRecordRaw,
+  createRouter,
+  createWebHistory,
+} from 'vue-router';
 
-import PageLogin from '@/pages/login/PageLogin.vue';
+import LoginPage from '@/pages/login/PageLogin.vue';
 
 import { IconPack } from './app/IconPack';
 import { iconServer } from './host/Server';
@@ -114,17 +118,17 @@ export const MANAGE_ROUTE: AppRoute = {
   userPermissions: ['admin', 'staff'],
 };
 
-const routes: RouteConfig[] = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/item/id/:id',
-    beforeEnter(to, from, next) {
-      next({ path: '/product/view', query: { productId: to.params.id } });
+    redirect(to) {
+      return { path: '/product/view', query: { productId: to.params.id } };
     },
   },
   {
     path: '/product/id/:id',
-    beforeEnter(to, from, next) {
-      next({ path: '/product/view', query: { productId: to.params.id } });
+    redirect(to) {
+      return { path: '/product/view', query: { productId: to.params.id } };
     },
   },
 
@@ -160,7 +164,7 @@ const routes: RouteConfig[] = [
   // manage
   {
     path: '/manage',
-    beforeEnter(to, from, next) {
+    redirect(to) {
       let { query } = to;
       let { view } = query;
 
@@ -170,13 +174,15 @@ const routes: RouteConfig[] = [
       }
 
       try {
-        next({ path: `/manage/${view}`, query });
-      } catch (error) {}
+        return { path: `/manage/${view}`, query };
+      } catch (error) {
+        return to;
+      }
     },
   },
   {
     path: '/manage/product',
-    beforeEnter(to, from, next) {
+    redirect(to) {
       let { query } = to;
       if (query) {
         let { item } = query;
@@ -188,8 +194,10 @@ const routes: RouteConfig[] = [
       }
 
       try {
-        next({ path: '/product/browse', query });
-      } catch (error) {}
+        return { path: '/product/browse', query };
+      } catch (error) {
+        return to;
+      }
     },
   },
   {
@@ -236,7 +244,7 @@ const routes: RouteConfig[] = [
     beforeEnter(to, from, next) {
       const { hash } = to;
 
-      let legacyPath = to.redirectedFrom ?? '';
+      let legacyPath = to.redirectedFrom?.toString() ?? '';
       if (legacyPath.startsWith('/#')) {
         legacyPath = hash.substring(2);
 
@@ -256,7 +264,7 @@ const routes: RouteConfig[] = [
   {
     path: '/login',
     name: 'login',
-    component: PageLogin,
+    component: LoginPage,
   },
   // print
   {
@@ -272,10 +280,10 @@ const routes: RouteConfig[] = [
   },
 
   { path: '/', redirect: { path: '/home' } },
-  { path: '*', redirect: { path: '/error/404' } },
+  { path: '/:pathMatch(.*)*', redirect: { path: '/error/404' } },
 ];
 
-export const router = new VueRouter({
-  mode: 'history',
+export const router = createRouter({
+  history: createWebHistory(),
   routes,
 });

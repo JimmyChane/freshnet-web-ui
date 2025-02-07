@@ -345,14 +345,14 @@ export default {
     },
 
     scrollToTop() {
-      this._self.$el.scrollTo({ top: 0, behavior: 'smooth' });
+      this.$refs.self.scrollTo({ top: 0, behavior: 'smooth' });
     },
   },
 };
 </script>
 
 <template>
-  <div class="PanelProducts">
+  <div ref="self" class="PanelProducts">
     <ActionbarProduct
       :style="{ 'z-index': '2', 'margin-bottom': '0.5rem' }"
       :products="products"

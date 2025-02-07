@@ -1,5 +1,4 @@
 import { computed, ref } from 'vue';
-import { Store } from 'vuex';
 
 import { defineStore } from 'pinia';
 import socketIo, { Socket } from 'socket.io-client';
@@ -37,15 +36,6 @@ interface PopupWindow {
   onOpened?: ((popupWindow: PopupWindow) => void) | undefined;
   onClosed?: ((popupWindow: PopupWindow) => void) | undefined;
 }
-interface State {
-  app: Vue | null;
-  socket: Socket | null;
-  imageViewer: ImageViewerContext;
-  popupMenus: PopupMenu[];
-  snackbars: Snackbar[];
-  popupWindows: PopupWindow[];
-  stores: Record<string, Store<any>>;
-}
 interface ImageViewerContext {
   isShowing: boolean;
   image: any;
@@ -67,7 +57,6 @@ export const useAppStore = defineStore('app', () => {
   const popupMenus = ref<PopupMenu[]>([]);
   const snackbars = ref<Snackbar[]>([]);
   const popupWindows = ref<PopupWindow[]>([]);
-  const stores = ref<Record<string, Store<any>>>({});
 
   const console = computed(() => app.value.console);
   const appWindow = computed(() => app.value.window);
@@ -275,7 +264,6 @@ export const useAppStore = defineStore('app', () => {
     popupMenus,
     snackbars,
     popupWindows,
-    stores,
 
     console,
     window: appWindow,

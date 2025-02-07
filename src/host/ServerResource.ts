@@ -1,6 +1,5 @@
 import { isString } from '@/U';
-
-const config = require('@/../freshnet.config');
+import config from '@/freshnet.config';
 
 export class Icon {
   private name: string = '';

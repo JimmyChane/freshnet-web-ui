@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   devPort: 8080,
 
   hostApi: 'https://api.freshnet.app',

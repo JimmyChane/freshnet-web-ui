@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <!-- Viewport -->
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-    <!-- Icon (Webpack) -->
-    <link rel="icon" href="<%= BASE_URL %>icon/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Icon -->
+    <link rel="icon" href="/icon/favicon.ico" />
     <!-- Theme -->
     <meta name="theme-color" content="#2f579d" />
     <!-- Font -->
@@ -14,8 +14,8 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap"
     />
-    <!-- Title (Webpack) -->
-    <title> <%= htmlWebpackPlugin.options.title %> </title>
+    <!-- Title -->
+    <title>Freshnet Enterprise</title>
     <!-- Cache Control -->
     <meta
       http-equiv="Cache-Control"
@@ -46,24 +46,8 @@
       content="Computer Store | Kuala Selangor District"
     />
   </head>
-
   <body>
-    <noscript>
-      <strong
-        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
-        properly without JavaScript enabled. Please enable it to
-        continue.</strong
-      >
-    </noscript>
-
-    <!-- <script>
-      window.addEventListener("load", () => {
-        if ("serviceWorker" in navigator) {
-          navigator.serviceWorker.register("./service-worker.js");
-        }
-      });
-    </script> -->
-
     <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

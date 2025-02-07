@@ -1,6 +1,6 @@
 import { optArray, optBoolean } from '@/U';
 
-import { ProductPrices, ProductPricesData } from './ProductPrices';
+import { ProductPrices, type ProductPricesData } from './ProductPrices';
 
 export interface ProductStockData {
   isAvailable?: boolean;

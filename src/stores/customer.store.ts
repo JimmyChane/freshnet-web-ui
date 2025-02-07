@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 
 import { optArray, optString } from '@/U';
-import { Customer, CustomerData } from '@/items/Customer';
+import { Customer, type CustomerData } from '@/items/Customer';
 import { OrderCustomer } from '@/items/OrderCustomer';
 import { ServiceCustomer } from '@/items/ServiceCustomer';
 import {

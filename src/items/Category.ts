@@ -15,7 +15,7 @@ import BgMonitor from '@/assets/bg/monitor-u3223qe-gallery-3-w300h100.webp';
 import BgDesktop from '@/assets/bg/niclas-illg-wzVQp_NRIHg-unsplash-w300h100.webp';
 import BgMouse from '@/assets/bg/ryan-putra-j4PqlNVZ4Bc-unsplash-w300h100.webp';
 import { textContains } from '@/objects/ItemSearcher';
-import { Item } from '@/stores/tools/List';
+import type { Item } from '@/stores/tools/List';
 
 import { Image } from './Image';
 

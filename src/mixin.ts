@@ -1,6 +1,6 @@
 import { isObjectOnly, optString } from '@/U';
 
-import { AppRoute } from './router';
+import type { AppRoute } from './router';
 
 function getContextTitle<T extends string>(
   context: any,

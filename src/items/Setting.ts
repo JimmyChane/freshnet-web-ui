@@ -1,5 +1,5 @@
 import { trimId } from '@/U';
-import { Item } from '@/stores/tools/List';
+import type { Item } from '@/stores/tools/List';
 
 interface SettingData {
   key: string;

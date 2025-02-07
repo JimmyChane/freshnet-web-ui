@@ -5,7 +5,7 @@ import { defineStore } from 'pinia';
 import { optArray } from '@/U';
 import { Contact } from '@/items/Contact';
 import { Setting, SettingKey, SettingVisibility } from '@/items/Setting';
-import { WorkingDay, WorkingDayData } from '@/items/WorkingDay';
+import { WorkingDay, type WorkingDayData } from '@/items/WorkingDay';
 import { getSettingList, updateSetting } from '@/request/Setting';
 import { DataLoader } from '@/stores/tools/DataLoader';
 import { List } from '@/stores/tools/List';

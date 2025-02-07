@@ -1,6 +1,4 @@
 <script>
-import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
-
 import { mapStores } from 'pinia';
 // https://www.npmjs.com/package/print-html-element
 import PHE from 'print-html-element';

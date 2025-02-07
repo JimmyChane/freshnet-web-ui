@@ -1,6 +1,7 @@
 <script>
-import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
-
+// todo: fix
+// import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
+// import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 import { mapStores } from 'pinia';
 
 import { optString } from '@/U';

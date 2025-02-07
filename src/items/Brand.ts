@@ -1,6 +1,6 @@
 import { isObjectOnly, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
-import { Item } from '@/stores/tools/List';
+import type { Item } from '@/stores/tools/List';
 
 import { Image } from './Image';
 

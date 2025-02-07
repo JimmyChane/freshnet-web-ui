@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 
 import { optArray } from '@/U';
-import { User, UserData } from '@/items/User';
+import { User, type UserData } from '@/items/User';
 import {
   addUser as addUserRequest,
   getUserList,

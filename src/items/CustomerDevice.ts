@@ -2,7 +2,7 @@ import { optArray, trimId, trimText } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
 import { useCategoryStore } from '@/stores/category.store';
 import { useCustomerStore } from '@/stores/customer.store';
-import { Item } from '@/stores/tools/List';
+import type { Item } from '@/stores/tools/List';
 
 import { Category } from './Category';
 import { Customer } from './Customer';

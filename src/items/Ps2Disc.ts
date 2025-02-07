@@ -1,5 +1,5 @@
 import { trimId, trimText } from '@/U';
-import { Item } from '@/stores/tools/List';
+import type { Item } from '@/stores/tools/List';
 
 import { textContains } from '../objects/ItemSearcher';
 

@@ -1,4 +1,5 @@
 import {
+  type Day,
   endOfDay,
   getDay,
   getMonth,
@@ -172,7 +173,7 @@ export class ServiceTimestamp {
   isWithinWeek(): boolean {
     const today = new Date();
     const dayWeek = getDay(today);
-    const dayWeekPrevious = previousDay(today, dayWeek);
+    const dayWeekPrevious = previousDay(today, dayWeek as Day);
     const timeStartWeek = endOfDay(dayWeekPrevious);
     return this.time > timeStartWeek.getTime();
   }

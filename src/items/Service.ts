@@ -7,11 +7,14 @@ import {
   trimText,
 } from '@/U';
 import { textContains } from '@/objects/ItemSearcher';
-import { Item } from '@/stores/tools/List';
+import type { Item } from '@/stores/tools/List';
 import { useUserStore } from '@/stores/user.store';
 
-import { ServiceBelonging, ServiceBelongingData } from './ServiceBelonging';
-import { ServiceCustomer, ServiceCustomerData } from './ServiceCustomer';
+import {
+  ServiceBelonging,
+  type ServiceBelongingData,
+} from './ServiceBelonging';
+import { ServiceCustomer, type ServiceCustomerData } from './ServiceCustomer';
 import { ServiceEvent } from './ServiceEvent';
 import {
   INITIAL_SERVICE_EVENT_METHOD,
@@ -20,7 +23,7 @@ import {
 import { ServiceImage } from './ServiceImage';
 import {
   Label,
-  LabelData,
+  type LabelData,
   URGENT_SERVICE_LABEL,
   WARRANTY_SERVICE_LABEL,
 } from './ServiceLabel';
