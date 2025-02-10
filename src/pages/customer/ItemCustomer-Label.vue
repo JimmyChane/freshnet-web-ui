@@ -1,11 +1,9 @@
-<script>
-export default {
-  props: {
-    title: { type: String, default: '' },
-    icon: { type: String, default: '' },
-    count: { type: Number, default: 0 },
-  },
-};
+<script setup lang="ts">
+withDefaults(defineProps<{ title?: string; icon?: string; count?: number }>(), {
+  title: '',
+  icon: '',
+  count: 0,
+});
 </script>
 
 <template>

@@ -1,4 +1,6 @@
-<script>
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue';
+
 import IconOrder from '@/assets/icon/order-505050.svg';
 import IconService from '@/assets/icon/service-505050.svg';
 import { Customer } from '@/items/Customer';
@@ -7,55 +9,52 @@ import ItemButton from '@/pages/manage/PanelItems-ItemButton.vue';
 import Label from './ItemCustomer-Label.vue';
 import LabelDevice from './ItemCustomer-LabelDevice.vue';
 
-export default {
-  components: { ItemButton, Label, LabelDevice },
-  emtis: ['click', 'click-remove'],
-  props: {
-    item: { type: Customer, default: null },
-    selected: { type: Boolean, default: false },
-  },
-  data: (c) => ({ itemDeviceGroups: [], IconService, IconOrder }),
-  computed: {
-    name: (c) => c.item.name,
-    phoneNumber: (c) => c.item.phoneNumber,
-    phoneNumberStr: (c) => c.phoneNumber?.toString() ?? '',
-    services: (c) => c.item?.services ?? [],
-    orders: (c) => c.item?.orders ?? [],
-  },
-  watch: {
-    item() {
-      this.invalidate();
-    },
-  },
-  mounted() {
-    this.invalidate();
-  },
-  methods: {
-    async invalidate() {
-      this.itemDeviceGroups = [];
-      if (!this.item) return;
+const emits = defineEmits<{
+  click: [{ item: Customer | undefined | null }];
+  clickRemove: [void];
+}>();
 
-      const previousName = this.name;
-      const previousPhoneNumberStr = this.phoneNumberStr;
+const props = withDefaults(
+  defineProps<{ item?: Customer | null; selected?: boolean }>(),
+  { item: null, default: false },
+);
 
-      const itemDeviceGroups = await this.item.fetchDeviceGroups('categoryKey');
+const itemDeviceGroups = ref<any[]>();
 
-      if (
-        previousName === this.name &&
-        previousPhoneNumberStr === this.phoneNumberStr
-      ) {
-        this.itemDeviceGroups = itemDeviceGroups;
-      }
-    },
-  },
-};
+const name = computed(() => props.item?.name);
+const phoneNumber = computed(() => props.item?.phoneNumber);
+const phoneNumberStr = computed(() => phoneNumber.value?.toString() ?? '');
+const services = computed(() => props.item?.services ?? []);
+const orders = computed(() => props.item?.orders ?? []);
+
+watch([() => props.item], () => invalidate());
+
+async function invalidate() {
+  itemDeviceGroups.value = [];
+  if (!props.item) return;
+
+  const previousName = name.value;
+  const previousPhoneNumberStr = phoneNumberStr.value;
+
+  const localItemDeviceGroups =
+    await props.item.fetchDeviceGroups('categoryKey');
+
+  if (
+    previousName === name.value &&
+    previousPhoneNumberStr === phoneNumberStr.value
+  ) {
+    itemDeviceGroups.value = localItemDeviceGroups;
+  }
+}
+
+onMounted(() => invalidate());
 </script>
 
 <template>
   <ItemButton
     class="ItemCustomer"
     :isSelected="selected"
-    @focus="$emit('click', { item })"
+    @focus="emits('click', { item })"
   >
     <div class="ItemCustomer-body">
       <div class="ItemCustomer-header">
@@ -66,8 +65,8 @@ export default {
       <div
         class="ItemCustomer-labels"
         v-if="
-          item.description ||
-          itemDeviceGroups.length ||
+          item?.description ||
+          itemDeviceGroups?.length ||
           services.length ||
           orders.length
         "

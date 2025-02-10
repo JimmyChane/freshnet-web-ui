@@ -1,25 +1,21 @@
-<script>
-export default {
-  emits: ['click'],
-  props: {
-    isSelected: { type: Boolean, default: false },
-    href: { type: String, default: '' },
-    to: { default: undefined },
-  },
-};
+<script setup lang="ts">
+const emits = defineEmits<{ click: [void]; focus: [void] }>();
+
+withDefaults(defineProps<{ isSelected?: boolean; href?: string; to?: any }>(), {
+  isSelected: false,
+  href: '',
+});
 </script>
 
 <template>
   <button
     class="PanelItems-ItemButton transition"
     :isSelected="`${isSelected}`"
-    @click="$emit('click')"
-    @focus="$emit('focus')"
   >
     <div class="PanelItems-ItemButton-overlay transition"></div>
     <div class="PanelItems-ItemButton-color transition"></div>
 
-    <slot />
+    <slot></slot>
   </button>
 </template>
 

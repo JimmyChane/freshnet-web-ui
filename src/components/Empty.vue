@@ -1,12 +1,10 @@
-<script>
+<script setup lang="ts">
 import IconEmptyFolder from '@/assets/icon/empty-folder-505050.svg';
 
-export default {
-  props: {
-    icon: { type: String, default: IconEmptyFolder },
-    title: { type: String, default: 'Sorry, nothing here' },
-  },
-};
+withDefaults(defineProps<{ icon?: string; title?: string }>(), {
+  icon: IconEmptyFolder,
+  title: 'Sorry, nothing here',
+});
 </script>
 
 <template>

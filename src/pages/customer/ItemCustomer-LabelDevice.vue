@@ -1,35 +1,33 @@
-<script>
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue';
+
+import type { Category } from '@/items/Category';
 import { useCategoryStore } from '@/stores/category.store';
 
 import Label from './ItemCustomer-Label.vue';
 
-export default {
-  components: { Label },
-  props: {
-    categoryKey: { type: String, default: '' },
-    count: { type: Number, default: 0 },
+const props = withDefaults(
+  defineProps<{ categoryKey?: string; count?: number }>(),
+  {
+    categoryKey: '',
+    count: 0,
   },
-  data: (c) => ({ category: null }),
-  computed: {
-    icon: (c) => c.category?.icon?.toUrl() ?? '',
-  },
-  watch: {
-    categoryKey() {
-      this.invalidate();
-    },
-  },
-  mounted() {
-    this.invalidate();
-  },
-  methods: {
-    async invalidate() {
-      this.category = null;
-      this.category = await useCategoryStore().getItemOfKey(this.categoryKey);
-    },
-  },
-};
+);
+
+const category = ref<Category | null>(null);
+const icon = computed(() => category.value?.icon?.toUrl() ?? '');
+
+watch([() => props.categoryKey], () => invalidate());
+
+async function invalidate() {
+  category.value = null;
+  category.value =
+    (await useCategoryStore().getItemOfKey(props.categoryKey)) ?? null;
+}
+
+onMounted(() => invalidate());
 </script>
 
 <template>
-  <Label :icon="icon" :count="count" />
+  <Label :icon="icon" :count="count"></Label>
 </template>

@@ -1,14 +1,14 @@
 import { trimId } from '@/U';
-import config from '@/freshnet.config';
+import { CLOUDINARY_RES, HOST_API, HOST_RES } from '@/freshnet.config';
 
 import { Request, ServerApi } from './ServerApi';
 import { Icon, ServerResource } from './ServerResource';
 
-export const resourceServer = new ServerResource(config.hostRes);
-export const apiServer = new ServerApi(config.hostApi);
+export const resourceServer = new ServerResource(HOST_RES);
+export const apiServer = new ServerApi(HOST_API);
 
 export function originApiServer(): string {
-  return config.hostApi;
+  return HOST_API;
 }
 
 export function iconServer(name: string = '', ext: string = 'svg'): Icon {
@@ -23,7 +23,7 @@ export function cloudinaryServer(param: { url: string } = { url: '' }): string {
   let { url } = param;
   url = trimId(url);
   if (url === '') return '';
-  return `${config.cloudinaryRes}/${url}`;
+  return `${CLOUDINARY_RES}/${url}`;
 }
 
 export function requestServer(): Request {

@@ -32,6 +32,23 @@ export default defineConfig({
       workbox: {
         cleanupOutdatedCaches: true,
         globPatterns: ['**/*'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/api\.freshnet\.app\//,
+            handler: 'NetworkFirst',
+            options: { cacheName: 'api.freshnet.app-precache' },
+          },
+          {
+            urlPattern: /^https:\/\/res\.freshnet\.app\//,
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'res.freshnet.app-precache' },
+          },
+          {
+            urlPattern: /^(?!https:\/\/(?:res|api)\.freshnet\.app\/).*/,
+            handler: 'NetworkFirst',
+            options: { cacheName: 'external-precache' },
+          },
+        ],
       },
     }),
   ],
@@ -39,7 +56,7 @@ export default defineConfig({
     alias: {
       path: 'path-browserify',
       stream: 'stream-browserify',
-      fs: false,
+      fs: 'browserify-fs',
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },

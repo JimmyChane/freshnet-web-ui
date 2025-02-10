@@ -1,71 +1,74 @@
-<script>
+<script setup lang="ts">
+import { computed, ref } from 'vue';
+import { useRoute } from 'vue-router';
 // todo: fix
-// import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
-// import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
-import { mapStores } from 'pinia';
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
 import { optString } from '@/U';
 import Empty from '@/components/Empty.vue';
 import { CUSTOMER_ROUTE } from '@/router';
+import { useCustomerStore } from '@/stores/customer.store';
 
 import ItemCustomer from './ItemCustomer.vue';
 import Actionbar from './PanelCustomers-Actionbar.vue';
 
-export default {
-  components: {
-    Actionbar,
-    DynamicScroller,
-    DynamicScrollerItem,
-    ItemCustomer,
-    Empty,
-  },
-  emits: ['click-refresh', 'click-item-add', 'click-item-remove'],
-  props: {
-    title: { type: String, default: '' },
-    items: { type: Array, default: () => [] },
-    itemSelected: { type: Object, default: () => null },
-  },
-  data: (c) => ({ scrollTop: 0, itemSelect: null }),
-  computed: {
-    ...mapStores(useCustomerStore),
+const emits = defineEmits<{
+  clickRefresh: [void];
+  clickItemAdd: [void];
+  clickItemRemove: [{ item: any }];
+}>();
 
-    iconEmpty: () => CUSTOMER_ROUTE.icon.dark.toUrl(),
+const props = withDefaults(
+  defineProps<{ title?: string; items?: any[]; itemSelected?: any }>(),
+  { title: '', items: () => [], itemSelected: null },
+);
 
-    filter: (c) => optString(c.$route.query.filter),
+const scrollTop = ref(0);
+const itemSelect = ref<any>(null);
 
-    listService: (c) => c.items.filter((item) => item.services.length),
-    listOrder: (c) => c.items.filter((item) => item.orders.length),
-    list: (c) => {
-      switch (c.filter) {
-        case 'service':
-          return c.listService;
-        case 'order':
-          return c.listOrder;
-        default:
-          return c.items;
-      }
-    },
-    myList: (c) => {
-      return c.list.map((item) => {
-        return { id: c.itemKey(item), item };
-      });
-    },
-  },
-  methods: {
-    itemKey(item) {
-      return `${this.itemName(item)}${this.itemPhoneNumberValue(item)}`;
-    },
-    itemName(item) {
-      return optString(item?.name);
-    },
-    itemPhoneNumberValue(item) {
-      return item?.phoneNumber?.value ?? '';
-    },
-    itemPhoneNumberStr(item) {
-      return optString(item?.phoneNumber.toUrl());
-    },
-  },
-};
+const customerStore = useCustomerStore();
+
+const iconEmpty = computed(() => CUSTOMER_ROUTE.icon.dark.toUrl());
+
+const route = useRoute();
+
+const filter = computed(() => optString(route.query.filter));
+
+const listService = computed(() => {
+  return props.items.filter((item) => item.services.length);
+});
+const listOrder = computed(() => {
+  return props.items.filter((item) => item.orders.length);
+});
+const list = computed(() => {
+  switch (filter.value) {
+    case 'service':
+      return listService.value;
+    case 'order':
+      return listOrder.value;
+    default:
+      return props.items;
+  }
+});
+const myList = computed(() => {
+  return list.value.map((item) => {
+    return { id: itemKey(item), item };
+  });
+});
+
+function itemKey(item: any) {
+  return `${itemName(item)}${itemPhoneNumberValue(item)}`;
+}
+function itemName(item: any) {
+  return optString(item?.name);
+}
+function itemPhoneNumberValue(item: any) {
+  return item?.phoneNumber?.value ?? '';
+}
+function itemPhoneNumberStr(item: any) {
+  return optString(item?.phoneNumber.toUrl());
+}
 </script>
 
 <template>
@@ -77,8 +80,8 @@ export default {
       class="PanelCustomers-top"
       :title="title"
       :items="items"
-      @click-item-add="() => $emit('click-item-add')"
-      @click-refresh="() => $emit('click-refresh')"
+      @click-item-add="() => emits('click-item-add')"
+      @click-refresh="() => emits('click-refresh')"
     />
 
     <DynamicScroller
@@ -102,7 +105,8 @@ export default {
                 :item="item.item"
                 :selected="item.item === itemSelected"
                 @click-remove="
-                  (param) => $emit('click-item-remove', { item: item.item })
+                  (_param: any) =>
+                    emits('click-item-remove', { item: item.item })
                 "
               />
             </router-link>

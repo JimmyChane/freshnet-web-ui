@@ -1,5 +1,5 @@
 import { isString } from '@/U';
-import config from '@/freshnet.config';
+import { HOST_RES } from '@/freshnet.config';
 
 export class Icon {
   private name: string = '';
@@ -14,7 +14,7 @@ export class Icon {
     const filename = !isString(this.ext)
       ? this.name
       : `${this.name}.${this.ext}`;
-    return `${config.hostRes}/icon/${filename}`;
+    return `${HOST_RES}/icon/${filename}`;
   }
   toName(): string {
     return this.name;
