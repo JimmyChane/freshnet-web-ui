@@ -1,5 +1,5 @@
 import { isString } from '@/U';
-import { HOST_RES } from '@/freshnet.config';
+import { HOST_RES } from '@/config';
 
 export class Icon {
   private name: string = '';
@@ -34,11 +34,4 @@ export class ServerResource {
   res(path: string): string {
     return `${this.serverUrl}/${path}`;
   }
-}
-
-export function urlIcon(
-  name: string = '',
-  ext: string | undefined = undefined,
-): string {
-  return new Icon(name, ext).toUrl();
 }

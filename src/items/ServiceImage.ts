@@ -1,5 +1,5 @@
 import { trimId } from '@/U';
-import { originApiServer } from '@/host/Server';
+import { HOST_API } from '@/config';
 import { useLoginStore } from '@/stores/login.store';
 
 import { Filename } from '../objects/Filename';
@@ -60,11 +60,11 @@ export class ServiceImage {
       const prefix = '/api/image/name/';
       const name = path.substring(prefix.length, path.length);
       const filename = new Filename(name);
-      return `${originApiServer()}/image/name/${filename.toString()}${query}`;
+      return `${HOST_API}/image/name/${filename.toString()}${query}`;
     }
 
     const filename = new Filename(this.name);
-    return `${originApiServer()}/service_v2/get/image/${filename.toString()}${query}`;
+    return `${HOST_API}/service_v2/get/image/${filename.toString()}${query}`;
   }
 
   async toBlob(

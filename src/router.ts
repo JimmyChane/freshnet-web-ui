@@ -7,100 +7,159 @@ import {
 import LoginPage from '@/pages/login/PageLogin.vue';
 
 import { IconPack } from './app/IconPack';
-import { iconServer } from './host/Server';
+import { resourceServer } from './host/Server';
 
-export interface AppRoute {
-  key: string;
-  name?: string;
-  title: string;
-  icon: IconPack;
-  children?: { key: string; title: string; icon: IconPack }[];
-  groups?: { key: string; title: string; children: AppRoute[] }[];
-  userPermissions?: string[];
+export interface AppRouteOption {
+  readonly key: string;
+  readonly name?: string;
+  readonly title: string;
+  readonly icon: IconPack;
+  readonly children?: {
+    readonly key: string;
+    readonly title: string;
+    readonly icon: IconPack;
+  }[];
+  readonly groups?: {
+    readonly key: string;
+    readonly title: string;
+    readonly children: AppRouteOption[];
+  }[];
+  readonly userPermissions?: string[];
+}
+export class AppRoute {
+  readonly key: string;
+  readonly name?: string;
+  readonly title: string;
+  readonly icon: IconPack;
+  readonly children?: {
+    readonly key: string;
+    readonly title: string;
+    readonly icon: IconPack;
+  }[];
+  readonly groups?: {
+    readonly key: string;
+    readonly title: string;
+    readonly children: AppRouteOption[];
+  }[];
+  readonly userPermissions?: string[];
+
+  constructor(option: AppRouteOption) {
+    this.key = option.key;
+    this.name = option.name;
+    this.title = option.title;
+    this.icon = option.icon;
+    this.children = option.children;
+    this.groups = option.groups;
+    this.userPermissions = option.userPermissions;
+  }
 }
 
-export const HOME_ROUTE: AppRoute = {
+export const HOME_ROUTE = new AppRoute({
   key: 'home',
   name: 'Home',
   title: 'Home',
-  icon: new IconPack(iconServer('home-FFFFFF'), iconServer('home-000000')),
-};
-export const PRODUCT_ROUTE = {
+  icon: new IconPack(
+    resourceServer.icon('home-FFFFFF'),
+    resourceServer.icon('home-000000'),
+  ),
+});
+export const PRODUCT_ROUTE = new AppRoute({
   key: 'product',
   title: 'Search',
   icon: new IconPack(
-    iconServer('magnifying-glass'),
-    iconServer('magnifying-glass'),
+    resourceServer.icon('magnifying-glass'),
+    resourceServer.icon('magnifying-glass'),
   ),
-};
-export const PRINT_ROUTE: AppRoute = {
+});
+export const PRINT_ROUTE = new AppRoute({
   key: 'print',
   title: 'Printing',
-  icon: new IconPack(iconServer('paper-FFFFFF'), iconServer('paper-000000')),
-};
+  icon: new IconPack(
+    resourceServer.icon('paper-FFFFFF'),
+    resourceServer.icon('paper-000000'),
+  ),
+});
+export const PS2_ROUTE = new AppRoute({
+  key: 'ps2',
+  name: 'PagePs2',
+  title: 'PS2 Disc',
+  icon: new IconPack(
+    resourceServer.icon('playstation-FFFFFF'),
+    resourceServer.icon('playstation-000000'),
+  ),
+});
 
-export const PROFILE_ROUTE: AppRoute = {
+export const PROFILE_ROUTE = new AppRoute({
   key: 'profile',
   title: 'Your Profile',
   icon: new IconPack(
-    iconServer('profile-FFFFFF'),
-    iconServer('profile-000000'),
+    resourceServer.icon('profile-FFFFFF'),
+    resourceServer.icon('profile-000000'),
   ),
-};
-export const CUSTOMER_ROUTE: AppRoute = {
+});
+export const CUSTOMER_ROUTE = new AppRoute({
   key: 'customer',
   title: 'Customers',
   icon: new IconPack(
-    iconServer('customers-FFFFFF'),
-    iconServer('customers-000000'),
+    resourceServer.icon('customers-FFFFFF'),
+    resourceServer.icon('customers-000000'),
   ),
   userPermissions: ['admin', 'staff'],
-};
-export const SERVICE_ROUTE: AppRoute = {
+});
+export const SERVICE_ROUTE = new AppRoute({
   key: 'service',
   title: 'Services',
   icon: new IconPack(
-    iconServer('service-FFFFFF'),
-    iconServer('service-000000'),
+    resourceServer.icon('service-FFFFFF'),
+    resourceServer.icon('service-000000'),
   ),
   userPermissions: ['admin', 'staff'],
-};
-export const ORDER_ROUTE: AppRoute = {
+});
+export const ORDER_ROUTE = new AppRoute({
   key: 'order',
   name: 'ViewOrder',
   title: 'Orders',
-  icon: new IconPack(iconServer('order-FFFFFF'), iconServer('order-000000')),
+  icon: new IconPack(
+    resourceServer.icon('order-FFFFFF'),
+    resourceServer.icon('order-000000'),
+  ),
   userPermissions: ['admin', 'staff'],
-};
-export const USERS_ROUTE: AppRoute = {
+});
+export const USERS_ROUTE = new AppRoute({
   key: 'users',
   title: 'Other Users',
-  icon: new IconPack(iconServer('users-FFFFFF'), iconServer('users-000000')),
+  icon: new IconPack(
+    resourceServer.icon('users-FFFFFF'),
+    resourceServer.icon('users-000000'),
+  ),
   userPermissions: ['admin'],
-};
-export const DATABASE_ROUTE: AppRoute = {
+});
+export const DATABASE_ROUTE = new AppRoute({
   key: 'database',
   title: 'Database',
   icon: new IconPack(
-    iconServer('database-FFFFFF'),
-    iconServer('database-000000'),
+    resourceServer.icon('database-FFFFFF'),
+    resourceServer.icon('database-000000'),
   ),
   userPermissions: ['admin'],
-};
-export const SETTING_ROUTE: AppRoute = {
+});
+export const SETTING_ROUTE = new AppRoute({
   key: 'setting',
   title: 'Settings',
   icon: new IconPack(
-    iconServer('setting-FFFFFF'),
-    iconServer('setting-000000'),
+    resourceServer.icon('setting-FFFFFF'),
+    resourceServer.icon('setting-000000'),
   ),
   userPermissions: ['admin'],
-};
-export const MANAGE_ROUTE: AppRoute = {
+});
+export const MANAGE_ROUTE = new AppRoute({
   key: 'manage',
   name: 'Manage',
   title: 'Manage',
-  icon: new IconPack(iconServer('manage-FFFFFF'), iconServer('manage-000000')),
+  icon: new IconPack(
+    resourceServer.icon('manage-FFFFFF'),
+    resourceServer.icon('manage-000000'),
+  ),
 
   children: [PROFILE_ROUTE],
   groups: [
@@ -116,7 +175,7 @@ export const MANAGE_ROUTE: AppRoute = {
     },
   ],
   userPermissions: ['admin', 'staff'],
-};
+});
 
 const routes: RouteRecordRaw[] = [
   {

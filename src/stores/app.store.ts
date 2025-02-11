@@ -8,10 +8,10 @@ import {
   POPUP_MENU_CORNER,
   POPUP_MENU_WIDTH,
 } from '@/app/popupMenu/PopupMenuOption';
+import { HOST_API } from '@/config';
 import { Snackbar } from '@/tools/Snackbar';
 import { TimeNowGetter } from '@/tools/TimeNowGetter';
 
-import { originApiServer } from '../host/Server';
 import { useServiceStore } from './service.store';
 
 interface PopupMenu {
@@ -103,7 +103,7 @@ export const useAppStore = defineStore('app', () => {
         authorization: window.localStorage.getItem('userToken'),
       },
     };
-    socket.value = socketIo(originApiServer(), option)
+    socket.value = socketIo(HOST_API, option)
       .on('connect', () => console.value.info('Socket', 'Connected'))
       .on('connect_error', () => console.value.info('Socket', 'Connect Error'))
       .on('disconnect', (reason) =>

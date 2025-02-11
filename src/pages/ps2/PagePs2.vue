@@ -12,7 +12,6 @@ import LoadingDots from '@/components/LoadingDots.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
-import { iconServer } from '@/host/Server';
 import { useAppStore } from '@/stores/app.store';
 import { usePs2Store } from '@/stores/ps2.store';
 
@@ -23,10 +22,6 @@ export default {
   key: 'ps2',
   name: 'PagePs2',
   title: 'PS2 Disc',
-  icon: new IconPack(
-    iconServer('playstation-FFFFFF'),
-    iconServer('playstation-000000'),
-  ),
 
   components: {
     Actionbar,

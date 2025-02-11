@@ -1,6 +1,6 @@
 import chroma from 'chroma-js';
 
-import { iconServer } from '@/host/Server';
+import { resourceServer } from '@/host/Server';
 import { Icon } from '@/host/ServerResource';
 import { User } from '@/items/User';
 
@@ -117,11 +117,11 @@ export function parseIcon(icon: Record<string, Icon> | any): IconAsset | null {
   const light =
     icon.light instanceof Icon
       ? icon.light.toUrl()
-      : iconServer(icon.light).toUrl();
+      : resourceServer.icon(icon.light).toUrl();
   const dark =
     icon.dark instanceof Icon
       ? icon.dark.toUrl()
-      : iconServer(icon.dark).toUrl();
+      : resourceServer.icon(icon.dark).toUrl();
 
   return { light, dark };
 }

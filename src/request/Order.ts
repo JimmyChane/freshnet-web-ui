@@ -1,16 +1,22 @@
-import { requestServer } from '@/host/Server';
+import { apiServer } from '@/host/Server';
 
 export function getOrderList(): Promise<any> {
-  return requestServer().path('order/').sendJson();
+  return apiServer.request().path('order/').sendJson();
 }
 export function addOrder(body: any): Promise<any> {
-  return requestServer().POST().path('order/').bodyJson(body).sendJson();
+  return apiServer.request().POST().path('order/').bodyJson(body).sendJson();
 }
 export function deleteOrder(id: string): Promise<any> {
-  return requestServer().DELETE().path('order/').bodyJson({ id }).sendJson();
+  return apiServer
+    .request()
+    .DELETE()
+    .path('order/')
+    .bodyJson({ id })
+    .sendJson();
 }
 export function updateOrderStatus(id: string, status: number): Promise<any> {
-  return requestServer()
+  return apiServer
+    .request()
     .PUT()
     .path('order/')
     .bodyJson({ id, status })

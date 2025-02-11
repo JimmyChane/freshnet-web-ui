@@ -1,5 +1,6 @@
 import { isObject, trimId } from '@/U';
-import { originApiServer, resServer } from '@/host/Server';
+import { HOST_API } from '@/config';
+import { resourceServer } from '@/host/Server';
 
 import { Filename } from '../objects/Filename';
 
@@ -67,10 +68,10 @@ export class Image {
         resPath = resPath.substring(1, resPath.length);
       if (resPath.startsWith('resource/')) {
         resPath = resPath.substring('resource/'.length, resPath.length);
-        return resServer(resPath);
+        return resourceServer.res(resPath);
       }
 
-      return `${originApiServer}/${path}`;
+      return `${HOST_API}/${path}`;
     }
     if (method === MethodImage.Link) return path;
     if (method === MethodImage.StorageImage) {
@@ -79,7 +80,7 @@ export class Image {
       const filename = new Filename(name);
       const dimensionQuery = dimensionToQuery(width, height);
       const query = dimensionQuery.length ? `?${dimensionQuery}` : '';
-      return `${originApiServer()}/image/name/${filename.toString()}${query}`;
+      return `${HOST_API}/image/name/${filename.toString()}${query}`;
     }
 
     return '';
