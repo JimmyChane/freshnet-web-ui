@@ -1,6 +1,5 @@
-import { computed, ref } from 'vue';
-
 import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
 
 import { optArray, optString, trimText } from '@/U';
 import { Brand } from '@/items/Brand';

@@ -1,14 +1,15 @@
 <script>
 import { mapStores } from 'pinia';
 
-import Input from '@/components/Input.vue';
-import Loading from '@/components/Loading.vue';
-import PanelRight from '@/components/panel/PanelRight.vue';
-import PopupWindow from '@/components/window/PopupWindow.vue';
 import { onCreatedRoute } from '@/mixin';
 import { CUSTOMER_ROUTE } from '@/router';
 import { useAppStore } from '@/stores/app.store';
 import { useCustomerStore } from '@/stores/customer.store';
+
+import Input from '@/components/Input.vue';
+import Loading from '@/components/Loading.vue';
+import PanelRight from '@/components/panel/PanelRight.vue';
+import PopupWindow from '@/components/window/PopupWindow.vue';
 
 import PanelCustomer from './PanelCustomer.vue';
 import PanelCustomers from './PanelCustomers.vue';

@@ -1,6 +1,5 @@
-import { computed, ref } from 'vue';
-
 import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
 
 import { Service } from '@/items/Service';
 import { ServiceBelonging } from '@/items/ServiceBelonging';

@@ -1,6 +1,7 @@
 <script>
 import { isColorDark } from '@/U';
 import IconEdit from '@/assets/icon/edit-000000.svg';
+
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 
 export default {

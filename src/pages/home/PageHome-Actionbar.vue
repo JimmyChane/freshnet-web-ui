@@ -1,12 +1,13 @@
 <script>
 import { differenceInMinutes, format } from 'date-fns';
 
-import GlobalSearch from '@/app/search/GlobalSearch.vue';
-import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { cloudinaryServer } from '@/host/Server';
 import { SettingKey } from '@/items/Setting';
 import { useAppStore } from '@/stores/app.store';
 import { useSettingStore } from '@/stores/setting.store';
+
+import GlobalSearch from '@/app/search/GlobalSearch.vue';
+import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 
 export default {
   components: { NavigationBar, GlobalSearch },

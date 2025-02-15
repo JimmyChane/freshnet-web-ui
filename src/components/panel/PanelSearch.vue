@@ -1,5 +1,6 @@
 <script>
 import IconArrowLeft from '@/assets/icon/arrow-left-000000.svg';
+
 import Searchbar from '@/components/Searchbar.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';

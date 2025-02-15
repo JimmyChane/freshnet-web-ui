@@ -2,14 +2,15 @@
 import { mapStores } from 'pinia';
 
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
-import Loading from '@/components/Loading.vue';
-import PanelRight from '@/components/panel/PanelRight.vue';
-import WindowRemove from '@/components/window/WindowRemove.vue';
 import { onCreatedRoute } from '@/mixin';
 import { SERVICE_ROUTE } from '@/router';
 import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useServiceStore } from '@/stores/service.store';
+
+import Loading from '@/components/Loading.vue';
+import PanelRight from '@/components/panel/PanelRight.vue';
+import WindowRemove from '@/components/window/WindowRemove.vue';
 
 import PanelService from './PanelService.vue';
 import PanelServices from './PanelServices.vue';

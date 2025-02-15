@@ -1,8 +1,9 @@
 <script>
 import { mapStores } from 'pinia';
 
-import PanelAction from '@/components/panel/PanelAction.vue';
 import { useServiceStore } from '@/stores/service.store';
+
+import PanelAction from '@/components/panel/PanelAction.vue';
 
 import BelongingListEdit from './BelongingListEdit.vue';
 

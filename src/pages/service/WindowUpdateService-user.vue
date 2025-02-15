@@ -1,6 +1,7 @@
 <script>
-import Input from '@/components/Input.vue';
 import { useLoginStore } from '@/stores/login.store';
+
+import Input from '@/components/Input.vue';
 
 export default {
   components: { Input },

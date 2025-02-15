@@ -4,6 +4,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 import IconOrder from '@/assets/icon/order-505050.svg';
 import IconService from '@/assets/icon/service-505050.svg';
 import { Customer } from '@/items/Customer';
+
 import ItemButton from '@/pages/manage/PanelItems-ItemButton.vue';
 
 import Label from './ItemCustomer-Label.vue';

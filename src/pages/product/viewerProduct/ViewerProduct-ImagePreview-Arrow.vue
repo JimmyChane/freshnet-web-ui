@@ -4,6 +4,7 @@ import chroma from 'chroma-js';
 import { isColorDark } from '@/U';
 import IconArrowDownDark from '@/assets/icon/arrowDown-black.svg';
 import IconArrowDownWhite from '@/assets/icon/arrowDown-white.svg';
+
 import IconDynamic from '@/components/IconDynamic.vue';
 import ImageView from '@/components/ImageView.vue';
 

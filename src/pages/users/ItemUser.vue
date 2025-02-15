@@ -1,6 +1,7 @@
 <script>
-import MenuOption from '@/components/button/MenuOption.vue';
 import { User } from '@/items/User';
+
+import MenuOption from '@/components/button/MenuOption.vue';
 
 import Row from './ItemUser-Row.vue';
 

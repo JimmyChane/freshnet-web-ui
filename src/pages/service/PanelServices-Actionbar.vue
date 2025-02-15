@@ -2,13 +2,14 @@
 import chroma from 'chroma-js';
 
 import IconSearch from '@/assets/icon/search-000000.svg';
+import { useAppStore } from '@/stores/app.store';
+import { withItems } from '@/tools/Searcher';
+
 import LabelMenus from '@/components/LabelMenus.vue';
 import SearchInput from '@/components/SearchInput.vue';
 import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import TabLayout from '@/components/tabLayout/TabLayout.vue';
 import LayoutViewSelector from '@/pages/service/PageService-LayoutViewSelector.vue';
-import { useAppStore } from '@/stores/app.store';
-import { withItems } from '@/tools/Searcher';
 
 import ItemService from './item-service/ItemService.vue';
 

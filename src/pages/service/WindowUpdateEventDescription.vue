@@ -1,10 +1,11 @@
 <script>
 import { mapStores } from 'pinia';
 
-import TextArea from '@/components/InputTextArea.vue';
-import PanelAction from '@/components/panel/PanelAction.vue';
 import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
+
+import TextArea from '@/components/InputTextArea.vue';
+import PanelAction from '@/components/panel/PanelAction.vue';
 
 export default {
   components: { PanelAction, TextArea },

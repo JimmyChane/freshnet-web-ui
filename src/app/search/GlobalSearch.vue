@@ -1,12 +1,13 @@
 <script>
-import SearchInput from '@/components/SearchInput.vue';
-import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import { useBrandStore } from '@/stores/brand.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useProductStore } from '@/stores/product.store';
 import { usePs2Store } from '@/stores/ps2.store';
 import { useServiceStore } from '@/stores/service.store';
+
+import SearchInput from '@/components/SearchInput.vue';
+import ButtonIcon from '@/components/button/ButtonIcon.vue';
 
 import ItemSearchBrand from './GlobalSearch-Item-Brand.vue';
 import ItemSearchCategory from './GlobalSearch-Item-Category.vue';

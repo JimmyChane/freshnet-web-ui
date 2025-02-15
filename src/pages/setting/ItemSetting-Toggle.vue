@@ -1,7 +1,8 @@
 <script>
-import ToggleButton from '@/components/button/ToggleButton.vue';
 import { useSettingStore } from '@/stores/setting.store';
 import { useUserStore } from '@/stores/user.store';
+
+import ToggleButton from '@/components/button/ToggleButton.vue';
 
 export default {
   components: { ToggleButton },

@@ -1,5 +1,6 @@
 <script>
 import IconClose from '@/assets/icon/close-000000.svg';
+
 import Loading from '@/components/Loading.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 

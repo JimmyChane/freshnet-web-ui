@@ -2,10 +2,11 @@
 import { mapStores } from 'pinia';
 
 import IconClose from '@/assets/icon/close-000000.svg';
+import { useAppStore } from '@/stores/app.store';
+
 import ImageView from '@/components/ImageView.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import Bottomsheet from '@/components/window/BottomsheetWindow.vue';
-import { useAppStore } from '@/stores/app.store';
 
 export default {
   components: { Bottomsheet, Actionbar, ImageView },

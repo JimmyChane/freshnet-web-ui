@@ -1,8 +1,9 @@
 <script>
-import TextArea from '@/components/InputTextArea.vue';
-import PanelAction from '@/components/panel/PanelAction.vue';
 import { RequirementCustomer } from '@/items/Customer';
 import { useCustomerStore } from '@/stores/customer.store';
+
+import TextArea from '@/components/InputTextArea.vue';
+import PanelAction from '@/components/panel/PanelAction.vue';
 
 import ItemSpecification from './ItemSpecification.vue';
 import WindowSection from './WindowSection.vue';

@@ -1,7 +1,8 @@
 <script>
-import Input from '@/components/Input.vue';
 import { useAppStore } from '@/stores/app.store';
 import { useOrderStore } from '@/stores/order.store';
+
+import Input from '@/components/Input.vue';
 
 export default {
   components: { Input },

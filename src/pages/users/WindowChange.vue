@@ -1,8 +1,9 @@
 <script>
+import { UserType } from '@/items/User';
+
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector from '@/components/selector/Selector.vue';
-import { UserType } from '@/items/User';
 
 export default {
   components: { PanelAction, Input, Selector },

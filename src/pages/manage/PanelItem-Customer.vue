@@ -1,5 +1,6 @@
 <script>
 import IconHamburgerMenu from '@/assets/icon/hamburgerMenu-000000.svg';
+
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 
 export default {

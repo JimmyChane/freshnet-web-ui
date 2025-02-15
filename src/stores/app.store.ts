@@ -1,7 +1,6 @@
-import { computed, ref } from 'vue';
-
 import { defineStore } from 'pinia';
 import socketIo, { Socket } from 'socket.io-client';
+import { computed, ref } from 'vue';
 
 import { optArray } from '@/U';
 import {

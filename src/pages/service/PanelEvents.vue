@@ -1,6 +1,7 @@
 <script>
-import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import { Service } from '@/items/Service';
+
+import ButtonIcon from '@/components/button/ButtonIcon.vue';
 
 import ListEvents from './EventGroups.vue';
 

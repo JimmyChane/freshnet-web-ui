@@ -3,12 +3,13 @@ import chroma from 'chroma-js';
 
 import { isFunction } from '@/U';
 
-import Item from './PopupMenu-Item.vue';
 import {
   POPUP_MENU_ALIGNMENT,
   POPUP_MENU_CORNER,
   POPUP_MENU_WIDTH,
 } from './PopupMenuOption';
+
+import Item from './PopupMenu-Item.vue';
 
 const Width = POPUP_MENU_ALIGNMENT;
 const Corner = POPUP_MENU_CORNER;

@@ -4,7 +4,6 @@ import { mapStores } from 'pinia';
 import PHE from 'print-html-element';
 
 import { isFunction, isPassed, optArray, parseGroup2s, replace } from '@/U';
-import PopupWindow from '@/components/window/PopupWindow.vue';
 import { HOME_ROUTE, MANAGE_ROUTE, PRINT_ROUTE, PRODUCT_ROUTE } from '@/router';
 import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
@@ -15,6 +14,9 @@ import { Navigation } from '@/tools/Navigation';
 import { NavPage } from './NavPage';
 import { NavView } from './NavView';
 import { NavViewGroup as NavGroup } from './NavViewGroup';
+
+import PopupWindow from '@/components/window/PopupWindow.vue';
+
 import Snackbar from './Snackbar.vue';
 import Status from './Status.vue';
 import ViewerImage from './ViewerImage.vue';

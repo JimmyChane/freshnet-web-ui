@@ -1,9 +1,10 @@
 <script>
-import Input from '@/components/Input.vue';
-import PanelAction from '@/components/panel/PanelAction.vue';
 import { RequirementCustomer } from '@/items/Customer';
 import { useAppStore } from '@/stores/app.store';
 import { useCustomerStore } from '@/stores/customer.store';
+
+import Input from '@/components/Input.vue';
+import PanelAction from '@/components/panel/PanelAction.vue';
 
 import WindowSection from './WindowSection.vue';
 

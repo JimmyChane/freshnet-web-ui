@@ -2,8 +2,6 @@
 import { format, formatDistanceToNow } from 'date-fns';
 
 import IconTrash from '@/assets/icon/trash-000000.svg';
-import MenuOption from '@/components/button/MenuOption.vue';
-import WindowRemove from '@/components/window/WindowRemove.vue';
 import { Service } from '@/items/Service';
 import { ServiceEvent } from '@/items/ServiceEvent';
 import {
@@ -14,6 +12,9 @@ import {
 } from '@/items/ServiceEventMethod';
 import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
+
+import MenuOption from '@/components/button/MenuOption.vue';
+import WindowRemove from '@/components/window/WindowRemove.vue';
 
 import ImageView from './ServiceEvent-Image.vue';
 import WindowUpdateEventDescription from './WindowUpdateEventDescription.vue';

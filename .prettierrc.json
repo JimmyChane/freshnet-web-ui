@@ -10,7 +10,13 @@
   "vueIndentScriptAndStyle": false,
 
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
-  "importOrder": ["^vue(.*)$", "<THIRD_PARTY_MODULES>", "^@/(.*)$", "^[./]"],
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^(?!.*\\.vue$)@/(.*)$",
+    "^[./](?!.*\\.vue$)",
+    "^@/.*\\.vue$",
+    "^[./].*\\.vue$"
+  ],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }

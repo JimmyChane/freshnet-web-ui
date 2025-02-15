@@ -3,12 +3,13 @@ import Vue from 'vue';
 
 import { isArray, optString } from '@/U';
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
-import Empty from '@/components/Empty.vue';
-import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { Setting as SettingModule } from '@/items/Setting';
 import { onCreatedRoute } from '@/mixin';
 import { SETTING_ROUTE } from '@/router';
 import { useUserStore } from '@/stores/user.store';
+
+import Empty from '@/components/Empty.vue';
+import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 
 import ItemSetting from './ItemSetting.vue';
 import ItemSettingBusinessHours from './ItemSettingBusinessHours.vue';

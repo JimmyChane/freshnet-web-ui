@@ -1,13 +1,14 @@
 <script>
 import IconArrowDown from '@/assets/icon/arrowDown-000000.svg';
-import Input from '@/components/Input.vue';
-import Loading from '@/components/Loading.vue';
-import NavigationBar from '@/components/actionbar/NavigationBar.vue';
-import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import { onCreatedRoute } from '@/mixin';
 import { PROFILE_ROUTE } from '@/router';
 import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
+
+import Input from '@/components/Input.vue';
+import Loading from '@/components/Loading.vue';
+import NavigationBar from '@/components/actionbar/NavigationBar.vue';
+import ButtonIcon from '@/components/button/ButtonIcon.vue';
 
 import SectionMain from './PageProfile-Section-Main.vue';
 import SectionTitle from './PageProfile-Section-Title.vue';

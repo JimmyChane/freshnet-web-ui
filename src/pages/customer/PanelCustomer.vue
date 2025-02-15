@@ -7,14 +7,15 @@ import IconClose from '@/assets/icon/close-000000.svg';
 import IconEdit from '@/assets/icon/edit-000000.svg';
 import IconTrash from '@/assets/icon/trash-000000.svg';
 import IconWhatsapp from '@/assets/icon/whatsapp-color.svg';
+import { Customer } from '@/items/Customer';
+import { useAppStore } from '@/stores/app.store';
+import { useCustomerStore } from '@/stores/customer.store';
+
 import Loading from '@/components/Loading.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
-import { Customer } from '@/items/Customer';
 import PanelItemCustomer from '@/pages/manage/PanelItem-Customer.vue';
 import Section from '@/pages/manage/PanelItem-Section.vue';
 import ItemService from '@/pages/service/item-service/ItemService.vue';
-import { useAppStore } from '@/stores/app.store';
-import { useCustomerStore } from '@/stores/customer.store';
 
 import ItemDevice from './ItemDevice.vue';
 import PanelCustomerEmpty from './PanelCustomer-Empty.vue';

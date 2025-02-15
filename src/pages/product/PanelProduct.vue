@@ -6,8 +6,9 @@ import IconPrinter from '@/assets/icon/printer-000000.svg';
 import IconTrash from '@/assets/icon/trash-000000.svg';
 import IconView from '@/assets/icon/view-000000.svg';
 import { APP_HOST as AppHost } from '@/host/AppHost';
-import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
 import { useAppStore } from '@/stores/app.store';
+
+import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
 
 export default {
   components: { ViewerProduct },

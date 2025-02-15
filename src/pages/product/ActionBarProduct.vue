@@ -1,13 +1,14 @@
 <script>
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
 import IconSearch from '@/assets/icon/search-000000.svg';
-import SearchInput from '@/components/SearchInput.vue';
-import Actionbar from '@/components/actionbar/Actionbar.vue';
-import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { useAppStore } from '@/stores/app.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useProductStore } from '@/stores/product.store';
 import { withItems } from '@/tools/Searcher';
+
+import SearchInput from '@/components/SearchInput.vue';
+import Actionbar from '@/components/actionbar/Actionbar.vue';
+import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 
 import ItemSearchProduct from './ItemSearchProduct.vue';
 

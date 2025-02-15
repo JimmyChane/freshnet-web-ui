@@ -4,10 +4,10 @@ import {
   createWebHistory,
 } from 'vue-router';
 
-import LoginPage from '@/pages/login/PageLogin.vue';
-
 import { IconPack } from './app/IconPack';
 import { resourceServer } from './host/Server';
+
+import LoginPage from '@/pages/login/PageLogin.vue';
 
 export interface AppRouteOption {
   readonly key: string;

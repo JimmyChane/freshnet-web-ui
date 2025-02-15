@@ -1,6 +1,7 @@
 <script>
 import { NavPage } from '@/app/NavPage';
 import { NavView } from '@/app/NavView';
+
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import IconCustomers from '@/icon/IconCustomers.vue';
 import IconDatabase from '@/icon/IconDatabase.vue';

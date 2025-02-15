@@ -1,11 +1,12 @@
 <script>
 import { mapStores } from 'pinia';
 
-import Footer from '@/app/footer/Footer.vue';
 import IconHamburgerMenu from '@/assets/icon/hamburgerMenu-000000.svg';
 import Logo from '@/assets/logo/freshnet-enterprise-logo.svg';
-import Actionbar from '@/components/actionbar/Actionbar.vue';
 import { useAppStore } from '@/stores/app.store';
+
+import Footer from '@/app/footer/Footer.vue';
+import Actionbar from '@/components/actionbar/Actionbar.vue';
 
 export default {
   components: { Actionbar, Footer },

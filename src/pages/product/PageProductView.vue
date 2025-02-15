@@ -1,9 +1,10 @@
 <script>
-import LoadingDots from '@/components/LoadingDots.vue';
-import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
 import { useAppStore } from '@/stores/app.store';
 import { useProductStore } from '@/stores/product.store';
 import { AppLayoutId } from '@/tools/AppLayout';
+
+import LoadingDots from '@/components/LoadingDots.vue';
+import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
 
 export default {
   components: { ViewerProduct, LoadingDots },

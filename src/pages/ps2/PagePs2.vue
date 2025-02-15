@@ -2,18 +2,19 @@
 import { mapStores } from 'pinia';
 
 import { IconPack } from '@/app/IconPack';
-import Footer from '@/app/footer/Footer.vue';
 import IconClose from '@/assets/icon/close-2A4858.svg';
 import IconHamburgerMenu from '@/assets/icon/hamburgerMenu-000000.svg';
 import IconSearch from '@/assets/icon/search-2A4858.svg';
 import Logo from '@/assets/logo/freshnet-enterprise-logo.svg';
+import { useAppStore } from '@/stores/app.store';
+import { usePs2Store } from '@/stores/ps2.store';
+
+import Footer from '@/app/footer/Footer.vue';
 import Empty from '@/components/Empty.vue';
 import LoadingDots from '@/components/LoadingDots.vue';
 import Actionbar from '@/components/actionbar/Actionbar.vue';
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import PopupWindow from '@/components/window/PopupWindow.vue';
-import { useAppStore } from '@/stores/app.store';
-import { usePs2Store } from '@/stores/ps2.store';
 
 import ItemPs2Disc from './ItemPs2Disc.vue';
 import WindowItemPs2Disc from './WindowItemPs2Disc.vue';

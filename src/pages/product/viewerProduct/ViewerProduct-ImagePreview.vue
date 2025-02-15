@@ -1,7 +1,8 @@
 <script>
+import { useAppStore } from '@/stores/app.store';
+
 import ImageView from '@/components/ImageView.vue';
 import MenuOption from '@/components/button/MenuOption.vue';
-import { useAppStore } from '@/stores/app.store';
 
 import Arrow from './ViewerProduct-ImagePreview-Arrow.vue';
 

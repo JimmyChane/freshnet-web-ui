@@ -1,12 +1,13 @@
 <script>
 import chroma from 'chroma-js';
 
-import Selector from '@/components/selector/Selector.vue';
 import { Service } from '@/items/Service';
 import { findServiceStateByKey } from '@/items/ServiceState';
-import Section from '@/pages/manage/PanelItem-Section.vue';
 import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
+
+import Selector from '@/components/selector/Selector.vue';
+import Section from '@/pages/manage/PanelItem-Section.vue';
 
 import ButtonAddImage from './ButtonAddImage.vue';
 import ButtonImage from './ButtonImage.vue';

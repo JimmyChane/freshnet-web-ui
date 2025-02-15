@@ -1,6 +1,5 @@
-import { computed, ref } from 'vue';
-
 import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
 
 import { optArray } from '@/U';
 import { Ps2Disc } from '@/items/Ps2Disc';

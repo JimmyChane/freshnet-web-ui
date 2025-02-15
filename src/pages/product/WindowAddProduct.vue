@@ -1,12 +1,13 @@
 <script>
-import Input from '@/components/Input.vue';
-import LabelMenus from '@/components/LabelMenus.vue';
-import PanelAction from '@/components/panel/PanelAction.vue';
 import { CategoryKey } from '@/items/Category';
 import { useAppStore } from '@/stores/app.store';
 import { useBrandStore } from '@/stores/brand.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useProductStore } from '@/stores/product.store';
+
+import Input from '@/components/Input.vue';
+import LabelMenus from '@/components/LabelMenus.vue';
+import PanelAction from '@/components/panel/PanelAction.vue';
 
 export default {
   components: { PanelAction, Input, LabelMenus },

@@ -6,9 +6,10 @@ import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 
 import { optString } from '@/U';
-import Empty from '@/components/Empty.vue';
 import { CUSTOMER_ROUTE } from '@/router';
 import { useCustomerStore } from '@/stores/customer.store';
+
+import Empty from '@/components/Empty.vue';
 
 import ItemCustomer from './ItemCustomer.vue';
 import Actionbar from './PanelCustomers-Actionbar.vue';

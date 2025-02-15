@@ -1,9 +1,10 @@
 <script>
+import { useAppStore } from '@/stores/app.store';
+import { useBrandStore } from '@/stores/brand.store';
+
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';
 import Selector3 from '@/components/selector/Selector3.vue';
-import { useAppStore } from '@/stores/app.store';
-import { useBrandStore } from '@/stores/brand.store';
 
 export default {
   components: { PanelAction, Selector3, Input },

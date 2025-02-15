@@ -1,10 +1,11 @@
 <script>
 import IconPrinter from '@/assets/icon/printer-000000.svg';
-import PrintContent from '@/components/PrintContent.vue';
-import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { cmToPixel } from '@/objects/Pixel';
 import { useLoginStore } from '@/stores/login.store';
 import { useProductStore } from '@/stores/product.store';
+
+import PrintContent from '@/components/PrintContent.vue';
+import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 
 import Layout from './PageCategoryExport-Layout.vue';
 

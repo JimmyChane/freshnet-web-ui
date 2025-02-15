@@ -1,16 +1,18 @@
 <script>
-import Footer from '@/app/footer/Footer.vue';
-import NavigationBar from '@/components/actionbar/NavigationBar.vue';
 import { onCreatedRoute } from '@/mixin';
 import { Price } from '@/objects/Price';
 import { PRINT_ROUTE } from '@/router';
 
 import { Output } from './Output';
-import Card from './PagePrint-Card.vue';
-import Tabs from './PagePrint-Tabs.vue';
 import { Paper } from './Paper';
 import { PaperSide } from './PaperSide';
 import { A3PaperSize, A4PaperSize } from './PaperSize';
+
+import Footer from '@/app/footer/Footer.vue';
+import NavigationBar from '@/components/actionbar/NavigationBar.vue';
+
+import Card from './PagePrint-Card.vue';
+import Tabs from './PagePrint-Tabs.vue';
 
 class Media {
   constructor(title = '', items = []) {

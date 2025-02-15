@@ -3,11 +3,12 @@ import chroma from 'chroma-js';
 import { mapStores } from 'pinia';
 
 import { isObjectOnly, optString, trimText } from '@/U';
-import Actionbar from '@/components/actionbar/Actionbar.vue';
 import { SpecificationKey } from '@/items/Specification';
 import { useAppStore } from '@/stores/app.store';
 import { useProductStore } from '@/stores/product.store';
 import { useSettingStore } from '@/stores/setting.store';
+
+import Actionbar from '@/components/actionbar/Actionbar.vue';
 
 import BottomActionbar from './ViewerProduct-BottomActionbar.vue';
 import ProductViewerImagePreview from './ViewerProduct-ImagePreview.vue';

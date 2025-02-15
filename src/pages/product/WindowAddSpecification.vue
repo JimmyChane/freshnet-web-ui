@@ -1,10 +1,11 @@
 <script>
-import Input from '@/components/Input.vue';
-import Spinner from '@/components/selector/Spinner.vue';
-import WindowAction from '@/components/window/WindowAction.vue';
 import { SpecificationKey } from '@/items/Specification';
 import { useAppStore } from '@/stores/app.store';
 import { useSpecificationStore } from '@/stores/specification.store';
+
+import Input from '@/components/Input.vue';
+import Spinner from '@/components/selector/Spinner.vue';
+import WindowAction from '@/components/window/WindowAction.vue';
 
 const keys = Object.keys(SpecificationKey).map((objectKey) => {
   return SpecificationKey[objectKey];

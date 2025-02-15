@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-
 import chroma from 'chroma-js';
+import { computed } from 'vue';
 
 import { isColorDark } from '@/U';
 import IconOptionDark from '@/assets/icon/option-000000.svg';
 import IconOptionLight from '@/assets/icon/option-FFFFFF.svg';
+
 import MenuIcon from '@/components/MenuIcon.vue';
 
 const props = defineProps({

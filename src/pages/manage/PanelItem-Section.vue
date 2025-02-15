@@ -1,5 +1,6 @@
 <script>
 import { isArray, isObjectOnly } from '@/U';
+
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 
 export default {

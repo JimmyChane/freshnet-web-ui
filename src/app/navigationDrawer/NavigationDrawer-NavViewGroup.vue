@@ -1,5 +1,6 @@
 <script>
 import { NavViewGroup } from '../NavViewGroup';
+
 import NavigationLeftClickable from './NavigationDrawer-Clickable.vue';
 
 export default {

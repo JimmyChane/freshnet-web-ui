@@ -1,10 +1,11 @@
 <script>
 import { mapStores } from 'pinia';
 
-import PanelAction from '@/components/panel/PanelAction.vue';
 import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useServiceStore } from '@/stores/service.store';
+
+import PanelAction from '@/components/panel/PanelAction.vue';
 
 import LayoutFindCustomer from './LayoutFindCustomer.vue';
 import BodyBelongings from './WindowUpdateService-belongings.vue';

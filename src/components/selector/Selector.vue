@@ -2,6 +2,7 @@
 import { isColorDark, isString } from '@/U';
 import IconArrowDownDark from '@/assets/icon/arrow_down-black.svg';
 import IconArrowDownLight from '@/assets/icon/arrow_down-white.svg';
+
 import Menu from '@/components/Menu.vue';
 
 const selectionNone = { key: '', title: 'None' };

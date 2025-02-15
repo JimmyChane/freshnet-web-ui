@@ -1,7 +1,8 @@
 <script>
 import { optArray } from '@/U';
-import Input from '@/components/Input.vue';
 import { ServiceBelonging } from '@/items/ServiceBelonging';
+
+import Input from '@/components/Input.vue';
 
 import BelongingListEditItem from './BelongingListEdit-Item.vue';
 

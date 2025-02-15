@@ -1,10 +1,11 @@
 <script>
 import { mapStores } from 'pinia';
 
-import GlobalSearch from '@/app/search/GlobalSearch.vue';
 import SearchIcon from '@/assets/icon/search-000000.svg';
-import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import { useAppStore } from '@/stores/app.store';
+
+import GlobalSearch from '@/app/search/GlobalSearch.vue';
+import ButtonIcon from '@/components/button/ButtonIcon.vue';
 
 export default {
   props: { isWide: { type: Boolean, default: false } },

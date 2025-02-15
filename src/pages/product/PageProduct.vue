@@ -1,8 +1,6 @@
 <script>
 import { mapStores } from 'pinia';
 
-import Footer from '@/app/footer/Footer.vue';
-import PanelRight from '@/components/panel/PanelRight.vue';
 import { onCreatedRoute } from '@/mixin';
 import { PRODUCT_ROUTE } from '@/router';
 import { useAppStore } from '@/stores/app.store';
@@ -10,6 +8,9 @@ import { useCategoryStore } from '@/stores/category.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useProductStore } from '@/stores/product.store';
 import { NavigationLayout } from '@/tools/Navigation';
+
+import Footer from '@/app/footer/Footer.vue';
+import PanelRight from '@/components/panel/PanelRight.vue';
 
 import PanelProduct from './PanelProduct.vue';
 import PanelProducts from './PanelProducts.vue';

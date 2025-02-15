@@ -5,8 +5,6 @@ import {
   POPUP_MENU_ALIGNMENT,
   POPUP_MENU_WIDTH,
 } from '@/app/popupMenu/PopupMenuOption';
-import TextArea from '@/components/InputTextArea.vue';
-import Menu from '@/components/Menu.vue';
 import {
   INFO_SERVICE_EVENT_METHOD,
   PURCHASE_SERVICE_EVENT_METHOD,
@@ -15,6 +13,9 @@ import {
 import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useServiceStore } from '@/stores/service.store';
+
+import TextArea from '@/components/InputTextArea.vue';
+import Menu from '@/components/Menu.vue';
 
 import AddImage from './PanelService-AddEvent-AddImage.vue';
 

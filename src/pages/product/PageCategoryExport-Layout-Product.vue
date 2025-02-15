@@ -1,6 +1,7 @@
 <script>
-import ImageView from '@/components/ImageView.vue';
 import { Product } from '@/items/Product';
+
+import ImageView from '@/components/ImageView.vue';
 
 export default {
   components: { ImageView },

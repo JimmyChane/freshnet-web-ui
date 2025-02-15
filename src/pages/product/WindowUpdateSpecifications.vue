@@ -1,7 +1,8 @@
 <script>
 import { optArray } from '@/U';
-import PanelAction from '@/components/panel/PanelAction.vue';
 import { CustomerDeviceSpecification } from '@/items/CustomerDeviceSpecification';
+
+import PanelAction from '@/components/panel/PanelAction.vue';
 import SpecificationInputs from '@/pages/customer/SpecificationInputs.vue';
 
 export default {

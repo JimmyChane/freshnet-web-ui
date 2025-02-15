@@ -1,6 +1,7 @@
 <script>
 import IconMinus from '@/assets/icon/minus-black.svg';
 import IconPlus from '@/assets/icon/plus-black.svg';
+
 import ButtonIconText from '@/components/button/ButtonIconText.vue';
 
 import ItemObject from './ItemObject.vue';

@@ -1,6 +1,7 @@
 <script>
-import Footer from '@/app/footer/Footer.vue';
 import { useAppStore } from '@/stores/app.store';
+
+import Footer from '@/app/footer/Footer.vue';
 
 import Actionbar from './PageHome-Actionbar.vue';
 import Header from './PageHome-Header.vue';

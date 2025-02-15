@@ -2,16 +2,17 @@
 import chroma from 'chroma-js';
 import { mapStores } from 'pinia';
 
-import Footer from '@/app/footer/Footer.vue';
 import IconAdd from '@/assets/icon/add-000000.svg';
-import Empty from '@/components/Empty.vue';
-import LabelMenus from '@/components/LabelMenus.vue';
-import LoadingDots from '@/components/LoadingDots.vue';
 import { PRODUCT_ROUTE } from '@/router';
 import { useAppStore } from '@/stores/app.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useProductStore } from '@/stores/product.store';
+
+import Footer from '@/app/footer/Footer.vue';
+import Empty from '@/components/Empty.vue';
+import LabelMenus from '@/components/LabelMenus.vue';
+import LoadingDots from '@/components/LoadingDots.vue';
 
 import ActionbarProduct from './ActionBarProduct.vue';
 import ItemProduct from './ItemProduct.vue';

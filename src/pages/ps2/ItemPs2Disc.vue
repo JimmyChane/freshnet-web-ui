@@ -1,6 +1,7 @@
 <script>
-import ImageView from '@/components/ImageView.vue';
 import { cloudinaryServer } from '@/host/Server';
+
+import ImageView from '@/components/ImageView.vue';
 
 export default {
   components: { ImageView },

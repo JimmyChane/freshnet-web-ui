@@ -1,15 +1,16 @@
 <script>
 import { mapStores } from 'pinia';
 
-import Footer from '@/app/footer/Footer.vue';
 import IconHamburgerMenu from '@/assets/icon/hamburgerMenu-000000.svg';
 import Logo from '@/assets/logo/freshnet-enterprise-logo.svg';
-import Input from '@/components/Input.vue';
-import Loading from '@/components/Loading.vue';
-import Actionbar from '@/components/actionbar/Actionbar.vue';
 import { onCreatedContext } from '@/mixin';
 import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
+
+import Footer from '@/app/footer/Footer.vue';
+import Input from '@/components/Input.vue';
+import Loading from '@/components/Loading.vue';
+import Actionbar from '@/components/actionbar/Actionbar.vue';
 
 import ButtonLogin from './ButtonLogin.vue';
 

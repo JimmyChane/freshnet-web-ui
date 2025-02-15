@@ -2,10 +2,11 @@
 import { mapStores } from 'pinia';
 
 import IconEdit from '@/assets/icon/edit-505050.svg';
+import { useProductStore } from '@/stores/product.store';
+
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import MenuOption from '@/components/button/MenuOption.vue';
 import ToggleButton from '@/components/button/ToggleButton.vue';
-import { useProductStore } from '@/stores/product.store';
 
 import ItemPrice from '../item/ItemPrice.vue';
 import ItemProductSpecification from '../item/ItemProductSpecification.vue';
