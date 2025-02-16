@@ -1,14 +1,14 @@
-<script>
-export default {
-  props: {
-    src: { type: String, default: '' },
-    text: { type: String, default: '' },
-  },
-};
+<script setup lang="ts">
+const emits = defineEmits<{ click: [void] }>();
+
+withDefaults(defineProps<{ src?: string; text?: string }>(), {
+  src: '',
+  text: '',
+});
 </script>
 
 <template>
-  <button class="ButtonIconText transition" @click="$emit('click')">
+  <button class="ButtonIconText transition" @click="emits('click')">
     <img
       class="ButtonIconText-icon"
       v-if="src.length > 0"

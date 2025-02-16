@@ -1,16 +1,22 @@
 import { defineStore } from 'pinia';
+// https://www.npmjs.com/package/print-html-element
+import PHE from 'print-html-element';
 import socketIo, { Socket } from 'socket.io-client';
 import { computed, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import { optArray } from '@/U';
+import { optArray, replace } from '@/U';
 import {
   POPUP_MENU_CORNER,
   POPUP_MENU_WIDTH,
 } from '@/app/popupMenu/PopupMenuOption';
 import { HOST_API } from '@/config';
+import { AppLayout } from '@/tools/AppLayout';
+import { Navigation } from '@/tools/Navigation';
 import { Snackbar } from '@/tools/Snackbar';
 import { TimeNowGetter } from '@/tools/TimeNowGetter';
 
+import { useLoginStore } from './login.store';
 import { useServiceStore } from './service.store';
 
 interface PopupMenu {
@@ -46,6 +52,9 @@ const keyGetter = new TimeNowGetter();
 export const useAppStore = defineStore('app', () => {
   // const app = ref<Vue | null>(null);
 
+  const router = useRouter();
+  const route = useRoute();
+
   const app = ref<any>(null);
   const socket = ref<Socket | null>(null);
   const imageViewer = ref<ImageViewerContext>({
@@ -57,26 +66,100 @@ export const useAppStore = defineStore('app', () => {
   const snackbars = ref<Snackbar[]>([]);
   const popupWindows = ref<PopupWindow[]>([]);
 
-  const console = computed(() => app.value.console);
-  const appWindow = computed(() => app.value.window);
-  const appLayout = computed(() => app.value.appLayout);
-  const navigation = computed(() => app.value.navigation);
+  const appConsole = ref({
+    log(param1: any, param2: any) {
+      param2 === undefined ? console.log(param1) : console.log(param1, param2);
+    },
+    error(param1: any, param2: any) {
+      param2 === undefined
+        ? console.error(param1)
+        : console.error(param1, param2);
+    },
+  });
+  const appWindow = ref({ innerWidth: 0, innerHeight: 0 });
+  const appLayout = ref(new AppLayout());
+  const navigation = ref(new Navigation());
 
-  const user = computed(() => app.value.user);
+  const user = computed(() => useLoginStore().user);
   const pages = computed(() => app.value.pages);
-  const paths = computed(() => app.value.paths);
-  const currentPaths = computed(() => app.value.currentPaths);
-  const currentPageKey = computed(() => app.value.currentPageKey);
-  const currentViewKey = computed(() => app.value.currentViewKey);
+  const paths = computed(() => route.path.split('/').filter((path) => path));
+  const currentPaths = computed(() => {
+    let fullPath = route.fullPath;
 
-  const copyText = computed(() => app.value.copyText);
-  const openLink = computed(() => app.value.openLink);
-  const pushDownload = computed(() => app.value.pushDownload);
+    let questionMarkIndex = fullPath.indexOf('?');
+    if (questionMarkIndex !== -1) {
+      fullPath = fullPath.substring(0, questionMarkIndex);
+    }
 
-  const print = computed(() => app.value.print);
-  const nextQuery = computed(() => app.value.nextQuery);
-  const replaceQuery = computed(() => app.value.replaceQuery);
-  const setQuery = computed(() => app.value.setQuery);
+    return fullPath.split(/[/]/).filter((path) => path);
+  });
+  const currentPageKey = computed(() => {
+    let paths = currentPaths.value;
+    return paths.length > 0 ? paths[0] : '';
+  });
+  const currentViewKey = computed(() => {
+    let paths = currentPaths.value;
+    return paths.length > 1 ? paths[1] : '';
+  });
+
+  function copyText(text: any) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.setAttribute('readonly', '');
+    textarea.style.position = 'absolute';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    textarea.remove();
+  }
+  function openLink(link: any, target = '_blank') {
+    let a = document.createElement('a');
+    a.style.position = 'absolute';
+    a.style.opacity = '0';
+    a.style.pointerEvents = 'none';
+    a.href = link;
+    a.target = target;
+    a.dispatchEvent(
+      new MouseEvent('click', {
+        view: window,
+        bubbles: true,
+        cancelable: false,
+      }),
+    );
+    a.remove();
+  }
+  function pushDownload(filename: any, content: any) {
+    const element = document.createElement('a');
+    element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
+      content,
+    )}`;
+    element.download = filename;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+  }
+  function print(element: any) {
+    PHE.printElement(element);
+  }
+
+  function nextQuery(param = {}) {
+    setQuery(param, true);
+  }
+  function replaceQuery(param = {}) {
+    setQuery(param, false);
+  }
+  function setQuery(param: any = {}, isNext = true) {
+    const query = replace(route.query, param.query);
+
+    if (!query) return;
+
+    if (isNext) {
+      router.push({ query });
+    } else {
+      router.replace({ query });
+    }
+  }
 
   // socket
   const isConnected = computed(() => {
@@ -101,11 +184,9 @@ export const useAppStore = defineStore('app', () => {
       extraHeaders: { authorization: window.localStorage.getItem('userToken') },
     };
     socket.value = socketIo(HOST_API, option)
-      .on('connect', () => console.value.info('Socket', 'Connected'))
-      .on('connect_error', () => console.value.info('Socket', 'Connect Error'))
-      .on('disconnect', (reason) =>
-        console.value.info('Socket', 'Disconnected'),
-      )
+      .on('connect', () => console.info('Socket', 'Connected'))
+      .on('connect_error', () => console.info('Socket', 'Connect Error'))
+      .on('disconnect', (reason) => console.info('Socket', 'Disconnected'))
       .on('notify', (body) => socketNotify(body));
   };
   const closeSocket = () => {
@@ -258,7 +339,7 @@ export const useAppStore = defineStore('app', () => {
     snackbars,
     popupWindows,
 
-    console,
+    console: appConsole,
     window: appWindow,
     appLayout,
     navigation,

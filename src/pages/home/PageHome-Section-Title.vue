@@ -1,6 +1,6 @@
 <template>
   <h4 class="PageHomeSection-title">
-    <slot />
+    <slot></slot>
   </h4>
 </template>
 

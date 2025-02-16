@@ -1,6 +1,6 @@
 <template>
   <div class="PageHomeSection">
-    <slot />
+    <slot></slot>
   </div>
 </template>
 

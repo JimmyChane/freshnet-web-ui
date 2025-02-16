@@ -8,9 +8,8 @@ import IconOptionLight from '@/assets/icon/option-FFFFFF.svg';
 
 import MenuIcon from '@/components/MenuIcon.vue';
 
-const props = defineProps({
-  menus: { default: undefined },
-  primaryColor: { default: () => chroma('ffffff') },
+const props = withDefaults(defineProps<{ menus?: any; primaryColor?: any }>(), {
+  primaryColor: () => chroma('ffffff'),
 });
 
 const isDark = computed(() => isColorDark(props.primaryColor, 60));

@@ -1,10 +1,8 @@
-<script>
-export default {
-  props: {
-    title: { type: String, default: '' },
-    text: { type: String, default: '' },
-  },
-};
+<script setup lang="ts">
+withDefaults(defineProps<{ title?: string; text?: string }>(), {
+  title: '',
+  text: '',
+});
 </script>
 
 <template>

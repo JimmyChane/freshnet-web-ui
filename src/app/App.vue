@@ -1,15 +1,10 @@
 <script>
 import { mapStores } from 'pinia';
-// https://www.npmjs.com/package/print-html-element
-import PHE from 'print-html-element';
 
 import { isFunction, isPassed, optArray, parseGroup2s, replace } from '@/U';
 import { HOME_ROUTE, MANAGE_ROUTE, PRINT_ROUTE, PRODUCT_ROUTE } from '@/router';
 import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
-// tools
-import { AppLayout } from '@/tools/AppLayout';
-import { Navigation } from '@/tools/Navigation';
 
 import { NavPage } from './NavPage';
 import { NavView } from './NavView';
@@ -36,27 +31,7 @@ export default {
     Status,
     PopupWindow,
   },
-  data: (c) => ({
-    layoutLoginIsShown: false,
-    shouldShowStatus: false,
-
-    console: {
-      log(param1, param2) {
-        param2 === undefined
-          ? console.log(param1)
-          : console.log(param1, param2);
-      },
-      error(param1, param2) {
-        param2 === undefined
-          ? console.error(param1)
-          : console.error(param1, param2);
-      },
-    },
-    window: { innerWidth: 0, innerHeight: 0 },
-
-    appLayout: null,
-    navigation: null,
-  }),
+  data: (c) => ({ layoutLoginIsShown: false, shouldShowStatus: false }),
   computed: {
     ...mapStores(useAppStore),
 
@@ -131,31 +106,15 @@ export default {
 
       return listGroup1;
     },
-    paths: (c) => c.$route.path.split('/').filter((path) => path),
     currentPaths() {
-      let { fullPath } = this.$route;
-
-      let questionMarkIndex = fullPath.indexOf('?');
-      if (questionMarkIndex !== -1) {
-        fullPath = fullPath.substring(0, questionMarkIndex);
-      }
-
-      return fullPath.split(/[/]/).filter((path) => path);
-    },
-    currentPageKey() {
-      let paths = this.currentPaths;
-      return paths.length > 0 ? paths[0] : '';
-    },
-    currentViewKey() {
-      let paths = this.currentPaths;
-      return paths.length > 1 ? paths[1] : '';
+      return useAppStore().currentPaths;
     },
 
     isLogging: (c) => useLoginStore().isLogging,
   },
   watch: {
     currentPaths() {
-      this.navigation.closeNavigationDrawer();
+      this.appStore.navigation.closeNavigationDrawer();
     },
     isLogging() {
       if (!useLoginStore().user && this.isLogging) {
@@ -168,8 +127,6 @@ export default {
   },
   async created() {
     useAppStore().app = this;
-    this.appLayout = new AppLayout(this);
-    this.navigation = new Navigation(this);
     window.addEventListener('resize', this.invalidateWindow);
 
     this.invalidateUser();
@@ -178,72 +135,10 @@ export default {
     this.invalidateWindow();
   },
   methods: {
-    // external interaction
-    copyText(text) {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.setAttribute('readonly', '');
-      textarea.style = { position: 'absolute', left: '-9999px' };
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand('copy');
-      textarea.remove();
-    },
-    openLink(link, target = '_blank') {
-      let a = document.createElement('a');
-      a.style = {
-        position: 'absolute',
-        opacity: '0',
-        'pointer-events': 'none',
-      };
-      a.href = link;
-      a.target = target;
-      a.dispatchEvent(
-        new MouseEvent('click', {
-          view: window,
-          bubbles: true,
-          cancelable: false,
-        }),
-      );
-      a.remove();
-    },
-    pushDownload(filename, content) {
-      const element = document.createElement('a');
-      element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
-        content,
-      )}`;
-      element.download = filename;
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    },
-    print(element) {
-      PHE.printElement(element);
-    },
-
-    // routes
-    nextQuery(param = {}) {
-      this.setQuery(param, true);
-    },
-    replaceQuery(param = {}) {
-      this.setQuery(param, false);
-    },
-    setQuery(param = {}, isNext = true) {
-      const query = replace(this.$route.query, param.query);
-
-      if (!query) return;
-
-      if (isNext) {
-        this.$router.push({ query });
-      } else {
-        this.$router.replace({ query });
-      }
-    },
-
     // window
     invalidateWindow() {
-      this.window.innerWidth = window.innerWidth;
-      this.window.innerHeight = window.innerHeight;
+      useAppStore().window.innerWidth = window.innerWidth;
+      useAppStore().window.innerHeight = window.innerHeight;
     },
 
     async invalidateUser() {
@@ -269,19 +164,19 @@ export default {
 </script>
 
 <template>
-  <div class="App" :isNormal="`${appLayout.isNormal()}`">
+  <div class="App" :isNormal="`${appStore.appLayout.isNormal()}`">
     <div class="App-background" style="z-index: 0"></div>
 
     <div
       class="App-body"
       :style="{ 'z-index': '1' }"
-      :isDrawer="`${navigation.isDrawer()}`"
-      :isFixed="`${!navigation.isDrawer()}`"
+      :isDrawer="`${appStore.navigation.isDrawer()}`"
+      :isFixed="`${!appStore.navigation.isDrawer()}`"
     >
       <NavigationDrawer
         class="App-NavigationDrawer"
         :style="{ 'grid-area': 'left' }"
-        v-if="!navigation.isNone()"
+        v-if="!appStore.navigation.isNone()"
         @click-logout="() => logout()"
       />
       <router-view
@@ -291,7 +186,7 @@ export default {
       />
       <NavigationBottom
         :style="{ 'grid-area': 'bottom', 'z-index': '1' }"
-        v-if="!navigation.isNone() && navigation.isDrawer()"
+        v-if="!appStore.navigation.isNone() && appStore.navigation.isDrawer()"
       />
     </div>
 

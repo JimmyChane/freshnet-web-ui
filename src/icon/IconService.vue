@@ -1,5 +1,5 @@
-<script>
-export default { props: { isSelected: { type: Boolean, default: false } } };
+<script setup lang="ts">
+withDefaults(defineProps<{ isSelected?: boolean }>(), { isSelected: false });
 </script>
 
 <template>

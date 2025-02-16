@@ -1,16 +1,22 @@
-<script>
+<script setup lang="ts">
 import Icon from '@/components/Icon.vue';
 
-export default {
-  components: { Icon },
-  props: {
-    src: { type: String, default: '' },
-    alt: { type: String, default: '' },
-    href: { type: String, default: '' },
-    target: { type: String, default: '' },
-    to: { default: undefined },
-  },
-};
+const emits = defineEmits<{
+  click: [void];
+  mouseover: [MouseEvent];
+  mouseleave: [MouseEvent];
+}>();
+
+withDefaults(
+  defineProps<{
+    src?: string;
+    alt?: string;
+    href?: string;
+    target?: string;
+    to?: any;
+  }>(),
+  { src: '', alt: '', href: '', target: '' },
+);
 </script>
 
 <template>
@@ -31,8 +37,8 @@ export default {
     v-else-if="to !== undefined"
     :to="to"
     @click="$emit('click')"
-    @mouseover="(x) => $emit('mouseover', x)"
-    @mouseleave="(x) => $emit('mouseleave', x)"
+    @mouseover="(x: any) => emits('mouseover', x)"
+    @mouseleave="(x: any) => emits('mouseleave', x)"
   >
     <Icon class="ButtonIcon-icon" :src="src" :alt="alt" />
   </router-link>

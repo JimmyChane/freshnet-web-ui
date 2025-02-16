@@ -1,18 +1,14 @@
-<script>
+<script setup lang="ts">
 import { User } from '@/items/User';
 
 import MenuOption from '@/components/button/MenuOption.vue';
 
 import Row from './ItemUser-Row.vue';
 
-export default {
-  components: { MenuOption, Row },
-  props: {
-    item: { type: User },
-    isEditable: { type: Boolean, default: false },
-    isCurrentUser: { type: Boolean, default: false },
-  },
-};
+withDefaults(
+  defineProps<{ item: User; isEditable?: boolean; isCurrentUser?: boolean }>(),
+  { isEditable: false, isCurrentUser: false },
+);
 </script>
 
 <template>

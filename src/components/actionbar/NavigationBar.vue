@@ -37,6 +37,6 @@ export default {
 
 <template>
   <Actionbar :title="title" :leftMenus="moreLeftMenus" :rightMenus="rightMenus">
-    <slot />
+    <slot></slot>
   </Actionbar>
 </template>

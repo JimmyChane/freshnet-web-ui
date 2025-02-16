@@ -1,3 +1,5 @@
+import { useAppStore } from '@/stores/app.store';
+
 export enum AppLayoutId {
   NORMAL = -1,
   FULL = -2,
@@ -6,19 +8,14 @@ export enum AppLayoutId {
 export const APP_LAYOUT_KEYS = Object.values(AppLayoutId);
 
 export class AppLayout {
-  context: any;
   requests: { page: string; view: string; mode: number }[] = [];
 
-  constructor(context: any) {
-    this.context = context;
-  }
-
   private getCurrentPageKey(): string {
-    return this.context.currentPageKey;
+    return useAppStore().currentPageKey;
   }
 
   private getCurrentViewKey(): string {
-    return this.context.currentViewKey;
+    return useAppStore().currentViewKey;
   }
 
   private getVisibilityRequest(

@@ -1,53 +1,43 @@
-<script>
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+
 import IconExternalColor from '@/assets/icon/external-1673E1.svg';
 import IconExternalWhite from '@/assets/icon/external-FFFFFF.svg';
 import IconLinkColor from '@/assets/icon/link-1673E1.svg';
 import IconLinkWhite from '@/assets/icon/link-FFFFFF.svg';
 
-export default {
-  props: {
-    to: { default: '' },
-    href: { type: String, default: '' },
-    target: { type: String, default: '' },
-    icon: { type: String },
-  },
-  data: () => ({ isHover: false }),
-  computed: {
-    iconLinkWhite() {
-      return this.icon ?? IconLinkWhite;
-    },
-    iconLinkColor() {
-      return this.icon ?? IconLinkColor;
-    },
-    iconExternalWhite() {
-      return this.icon ?? IconExternalWhite;
-    },
-    iconExternalColor() {
-      return this.icon ?? IconExternalColor;
-    },
-  },
-  mounted() {
-    const refLink = this.$refs.link;
-    const refExternal = this.$refs.external;
+const props = withDefaults(
+  defineProps<{ to?: any; href?: string; target?: string; icon: string }>(),
+  { to: '', href: '', target: '' },
+);
 
-    if (refLink) this.listenElement(refLink.$el);
-    if (refExternal) this.listenElement(refExternal);
-  },
-  methods: {
-    listenElement(element) {
-      element.addEventListener('mouseenter', this.mouseEnter);
-      element.addEventListener('mouseleave', this.mouseLeave);
-      element.addEventListener('touchstart', this.mouseEnter);
-      element.addEventListener('touchend', this.mouseLeave);
-    },
-    mouseEnter() {
-      this.isHover = true;
-    },
-    mouseLeave() {
-      this.isHover = false;
-    },
-  },
-};
+const isHover = ref(false);
+
+const iconLinkWhite = computed(() => props.icon ?? IconLinkWhite);
+const iconLinkColor = computed(() => props.icon ?? IconLinkColor);
+const iconExternalWhite = computed(() => props.icon ?? IconExternalWhite);
+const iconExternalColor = computed(() => props.icon ?? IconExternalColor);
+
+function listenElement(element: any) {
+  element.addEventListener('mouseenter', mouseEnter);
+  element.addEventListener('mouseleave', mouseLeave);
+  element.addEventListener('touchstart', mouseEnter);
+  element.addEventListener('touchend', mouseLeave);
+}
+function mouseEnter() {
+  isHover.value = true;
+}
+function mouseLeave() {
+  isHover.value = false;
+}
+
+const link = ref();
+const external = ref();
+
+onMounted(() => {
+  if (link.value) listenElement(link.value.$el);
+  if (external.value) listenElement(external.value);
+});
 </script>
 
 <template>
@@ -58,7 +48,7 @@ export default {
     :href="href"
     :target="target"
   >
-    <slot />
+    <slot></slot>
     <img :src="isHover ? iconExternalWhite : iconExternalColor" />
   </a>
 
@@ -68,12 +58,12 @@ export default {
     v-else-if="!!to"
     :to="to"
   >
-    <slot />
+    <slot></slot>
     <img :src="isHover ? iconLinkWhite : iconLinkColor" />
   </router-link>
 
   <span class="SectionWhatElse-Item" v-else>
-    <slot />
+    <slot></slot>
   </span>
 </template>
 

@@ -1,5 +1,5 @@
-<script>
-export default { props: { tintColor: { type: String } } };
+<script setup lang="ts">
+defineProps<{ tintColor: string }>();
 </script>
 
 <template>

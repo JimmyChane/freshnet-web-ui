@@ -1,3 +1,5 @@
+import { useAppStore } from '@/stores/app.store';
+
 export const NAVIGATION_MIN_WIDTH: number = 1000;
 export enum NavigationVisibility {
   NONE = -1,
@@ -13,21 +15,16 @@ export const NAVIGATION_VISIBILITIES = Object.values(NavigationVisibility);
 export const NAVIGATION_LAYOUTS = Object.values(NavigationLayout);
 
 export class Navigation {
-  context: any;
   defaultVisibility: number = NavigationVisibility.COLLAPSED;
   defaultLayout: number = NavigationLayout.WIDE;
   visibilityRequests: { page: string; view: string; visibility: number }[] = [];
   layoutRequests: { page: string; view: string; layout: number }[] = [];
 
-  constructor(context: any) {
-    this.context = context;
-  }
-
   private getCurrentPageKey(): string {
-    return this.context.currentPageKey;
+    return useAppStore().currentPageKey;
   }
   private getCurrentViewKey(): string {
-    return this.context.currentViewKey;
+    return useAppStore().currentViewKey;
   }
 
   private getVisibilityRequest(
@@ -115,7 +112,7 @@ export class Navigation {
   isThin(): boolean {
     if (this.isDrawer()) return false;
 
-    const { innerWidth } = this.context.window;
+    const { innerWidth } = useAppStore().window;
 
     if (this.getCurrentLayout() === NavigationLayout.WIDE) {
       return innerWidth <= NAVIGATION_MIN_WIDTH;
@@ -124,7 +121,7 @@ export class Navigation {
   }
 
   isDrawer(): boolean {
-    return this.context.window.innerWidth <= 600;
+    return useAppStore().window.innerWidth <= 600;
   }
 
   isNone(): boolean {

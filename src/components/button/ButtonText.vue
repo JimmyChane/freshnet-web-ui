@@ -1,12 +1,10 @@
-<script>
-export default {
-  props: {
-    text: { type: String, default: '' },
-    href: { type: String, default: '' },
-    target: { type: String, default: '' },
-    to: { default: undefined },
-  },
-};
+<script setup lang="ts">
+const emits = defineEmits<{ click: [void] }>();
+
+withDefaults(
+  defineProps<{ text?: string; href?: string; target?: string; to?: any }>(),
+  { text: '', href: '', target: '' },
+);
 </script>
 
 <template>
@@ -15,7 +13,7 @@ export default {
     v-if="href.length"
     :href="href"
     :target="target"
-    @click="$emit('click')"
+    @click="emits('click')"
   >
     <span>{{ text }}</span>
   </a>
