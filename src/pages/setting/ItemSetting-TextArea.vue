@@ -45,11 +45,7 @@ export default {
       }
 
       return [
-        {
-          title: 'Edit',
-          icon: IconEdit,
-          click: () => (c.isEditing = true),
-        },
+        { title: 'Edit', icon: IconEdit, click: () => (c.isEditing = true) },
       ];
     },
   },

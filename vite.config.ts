@@ -8,6 +8,8 @@ export default defineConfig({
   plugins: [
     vue(),
     VitePWA({
+      selfDestroying: true,
+      injectRegister: null,
       registerType: 'prompt',
       manifestFilename: 'manifest.json',
       manifest: {

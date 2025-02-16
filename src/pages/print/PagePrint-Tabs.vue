@@ -6,9 +6,7 @@ export default {
   components: { Tab, Arrow },
   props: { items: { type: Array, default: () => [] } },
   data: (c) => ({ ArrowDirection: Arrow.Direction, scrollLeft: 0 }),
-  computed: {
-    selectedItem: (c) => c.items.find((item) => item.isSelected()),
-  },
+  computed: { selectedItem: (c) => c.items.find((item) => item.isSelected()) },
   watch: {
     selectedItem() {
       this.onItemChange();

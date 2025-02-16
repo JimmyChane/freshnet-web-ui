@@ -1,9 +1,5 @@
 <script>
-export default {
-  props: {
-    width: { type: Number, default: 32 },
-  },
-};
+export default { props: { width: { type: Number, default: 32 } } };
 </script>
 
 <template>

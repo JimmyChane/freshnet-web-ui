@@ -7,9 +7,7 @@ import Selector from '@/components/selector/Selector.vue';
 
 export default {
   components: { PanelAction, Input, Selector },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: () => ({ UserType: UserType }),
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,

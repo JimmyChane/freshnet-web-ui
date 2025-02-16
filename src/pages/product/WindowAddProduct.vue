@@ -11,9 +11,7 @@ import PanelAction from '@/components/panel/PanelAction.vue';
 
 export default {
   components: { PanelAction, Input, LabelMenus },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({
     categoryMenus: [],
     brandMenus: [],

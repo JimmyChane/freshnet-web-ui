@@ -168,9 +168,7 @@ export default {
     >
       <div
         class="ExportLayoutTwo-header"
-        :style="{
-          padding: `0 ${specificationPadding}px`,
-        }"
+        :style="{ padding: `0 ${specificationPadding}px` }"
       >
         <div class="ExportLayoutTwo-header-left">
           <span class="ExportLayoutTwo-title">{{ fullTitle }}</span>

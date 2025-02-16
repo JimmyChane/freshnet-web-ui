@@ -10,9 +10,7 @@ export default {
   components: { Item },
   props: { isThin: { type: Boolean, default: false } },
   data: (c) => ({ groups: [] }),
-  computed: {
-    ...mapStores(useCategoryStore, useProductStore),
-  },
+  computed: { ...mapStores(useCategoryStore, useProductStore) },
   watch: {
     'categoryStore.lastModified'() {
       this.invalidate();

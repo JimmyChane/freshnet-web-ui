@@ -2,10 +2,7 @@
 import { format, formatDistanceToNow } from 'date-fns';
 
 export default {
-  props: {
-    service: { type: Object },
-    line: { type: Number, default: 2 },
-  },
+  props: { service: { type: Object }, line: { type: Number, default: 2 } },
   computed: {
     timestamp: (c) => c.service.timestamp ?? null,
     timestampText: (c) => {

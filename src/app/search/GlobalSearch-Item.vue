@@ -1,7 +1,5 @@
 <script>
-export default {
-  props: { to: { type: Object } },
-};
+export default { props: { to: { type: Object } } };
 </script>
 
 <template>

@@ -1,6 +1,6 @@
-import { API, Response } from '@/host/ServerApi';
+import { API, ServerResponse } from '@/host/Server';
 
-export async function getPs2DiscList(): Promise<Response> {
+export async function getPs2DiscList(): Promise<ServerResponse> {
   const response = await API.get('ps2/disc/');
-  return new Response(response.data);
+  return new ServerResponse(response.data);
 }

@@ -24,16 +24,10 @@ export default {
     </div>
 
     <div
-      :style="{
-        'grid-area': 'top',
-        'min-height': 'var(--default-size-top)',
-      }"
+      :style="{ 'grid-area': 'top', 'min-height': 'var(--default-size-top)' }"
     />
     <div
-      :style="{
-        'grid-area': 'left',
-        'min-width': 'var(--default-size-left)',
-      }"
+      :style="{ 'grid-area': 'left', 'min-width': 'var(--default-size-left)' }"
     />
     <div
       :style="{

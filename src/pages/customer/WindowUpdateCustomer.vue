@@ -10,9 +10,7 @@ import WindowSection from './WindowSection.vue';
 
 export default {
   components: { PanelAction, WindowSection, Input },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({
     Requirement: RequirementCustomer,
     data: { name: '', phoneNumber: '' },

@@ -4,9 +4,7 @@ import { useSpecificationStore } from '@/stores/specification.store';
 
 export default {
   emtis: ['click', 'click-remove'],
-  props: {
-    item: { type: CustomerDeviceSpecification, default: null },
-  },
+  props: { item: { type: CustomerDeviceSpecification, default: null } },
   data: (c) => ({ specificationType: null }),
   watch: {
     item() {

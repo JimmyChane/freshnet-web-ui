@@ -2,9 +2,7 @@
 import { cloudinaryServer } from '@/host/Server';
 
 export default {
-  props: {
-    item: { type: Object, default: () => null },
-  },
+  props: { item: { type: Object, default: () => null } },
   data: () => {
     return { cloudinaryServer };
   },

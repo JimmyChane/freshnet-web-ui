@@ -104,10 +104,7 @@ export class Specification {
     return this;
   }
   toData(): { key: string | undefined; content: string } {
-    return {
-      key: this.getKey(),
-      content: this.content,
-    };
+    return { key: this.getKey(), content: this.content };
   }
   toCount(strs: string[]): number {
     return strs.reduce((count, str) => {

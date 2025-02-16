@@ -6,9 +6,7 @@ import WindowBottom from './WindowBottom.vue';
 
 export default {
   components: { PanelAction, Actionbar, WindowBottom },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,
     title: (c) => c.popupWindow.title,

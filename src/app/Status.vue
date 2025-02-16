@@ -3,9 +3,7 @@ import { useAppStore } from '@/stores/app.store';
 
 export default {
   data: (c) => ({ isShowing: false }),
-  computed: {
-    isConnected: (c) => useAppStore().isConnected,
-  },
+  computed: { isConnected: (c) => useAppStore().isConnected },
   watch: {
     isConnected() {
       this.onConnectionChange();

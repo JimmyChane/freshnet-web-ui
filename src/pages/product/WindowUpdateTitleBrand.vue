@@ -8,9 +8,7 @@ import Selector3 from '@/components/selector/Selector3.vue';
 
 export default {
   components: { PanelAction, Selector3, Input },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({ data: { title: '', brandId: '' } }),
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,
@@ -56,10 +54,7 @@ export default {
     },
   },
   mounted() {
-    this.data = {
-      title: this.input.title,
-      brandId: this.input.brandId,
-    };
+    this.data = { title: this.input.title, brandId: this.input.brandId };
   },
 };
 </script>

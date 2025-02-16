@@ -9,9 +9,7 @@ import WindowSection from './WindowSection.vue';
 export default {
   components: { PanelAction, WindowSection },
   emits: ['click-dismiss', 'click-cancel', 'click-ok'],
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({ Requirement: RequirementCustomer }),
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,

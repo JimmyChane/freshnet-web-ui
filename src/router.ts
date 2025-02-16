@@ -5,7 +5,7 @@ import {
 } from 'vue-router';
 
 import { IconPack } from './app/IconPack';
-import { resourceServer } from './host/Server';
+import { ServerIcon } from './host/Server';
 
 import LoginPage from '@/pages/login/PageLogin.vue';
 
@@ -59,24 +59,24 @@ export const HOME_ROUTE = new AppRoute({
   name: 'Home',
   title: 'Home',
   icon: new IconPack(
-    resourceServer.icon('home-FFFFFF'),
-    resourceServer.icon('home-000000'),
+    new ServerIcon('home-FFFFFF'),
+    new ServerIcon('home-000000'),
   ),
 });
 export const PRODUCT_ROUTE = new AppRoute({
   key: 'product',
   title: 'Search',
   icon: new IconPack(
-    resourceServer.icon('magnifying-glass'),
-    resourceServer.icon('magnifying-glass'),
+    new ServerIcon('magnifying-glass'),
+    new ServerIcon('magnifying-glass'),
   ),
 });
 export const PRINT_ROUTE = new AppRoute({
   key: 'print',
   title: 'Printing',
   icon: new IconPack(
-    resourceServer.icon('paper-FFFFFF'),
-    resourceServer.icon('paper-000000'),
+    new ServerIcon('paper-FFFFFF'),
+    new ServerIcon('paper-000000'),
   ),
 });
 export const PS2_ROUTE = new AppRoute({
@@ -84,8 +84,8 @@ export const PS2_ROUTE = new AppRoute({
   name: 'PagePs2',
   title: 'PS2 Disc',
   icon: new IconPack(
-    resourceServer.icon('playstation-FFFFFF'),
-    resourceServer.icon('playstation-000000'),
+    new ServerIcon('playstation-FFFFFF'),
+    new ServerIcon('playstation-000000'),
   ),
 });
 
@@ -93,16 +93,16 @@ export const PROFILE_ROUTE = new AppRoute({
   key: 'profile',
   title: 'Your Profile',
   icon: new IconPack(
-    resourceServer.icon('profile-FFFFFF'),
-    resourceServer.icon('profile-000000'),
+    new ServerIcon('profile-FFFFFF'),
+    new ServerIcon('profile-000000'),
   ),
 });
 export const CUSTOMER_ROUTE = new AppRoute({
   key: 'customer',
   title: 'Customers',
   icon: new IconPack(
-    resourceServer.icon('customers-FFFFFF'),
-    resourceServer.icon('customers-000000'),
+    new ServerIcon('customers-FFFFFF'),
+    new ServerIcon('customers-000000'),
   ),
   userPermissions: ['admin', 'staff'],
 });
@@ -110,8 +110,8 @@ export const SERVICE_ROUTE = new AppRoute({
   key: 'service',
   title: 'Services',
   icon: new IconPack(
-    resourceServer.icon('service-FFFFFF'),
-    resourceServer.icon('service-000000'),
+    new ServerIcon('service-FFFFFF'),
+    new ServerIcon('service-000000'),
   ),
   userPermissions: ['admin', 'staff'],
 });
@@ -120,8 +120,8 @@ export const ORDER_ROUTE = new AppRoute({
   name: 'ViewOrder',
   title: 'Orders',
   icon: new IconPack(
-    resourceServer.icon('order-FFFFFF'),
-    resourceServer.icon('order-000000'),
+    new ServerIcon('order-FFFFFF'),
+    new ServerIcon('order-000000'),
   ),
   userPermissions: ['admin', 'staff'],
 });
@@ -129,8 +129,8 @@ export const USERS_ROUTE = new AppRoute({
   key: 'users',
   title: 'Other Users',
   icon: new IconPack(
-    resourceServer.icon('users-FFFFFF'),
-    resourceServer.icon('users-000000'),
+    new ServerIcon('users-FFFFFF'),
+    new ServerIcon('users-000000'),
   ),
   userPermissions: ['admin'],
 });
@@ -138,8 +138,8 @@ export const DATABASE_ROUTE = new AppRoute({
   key: 'database',
   title: 'Database',
   icon: new IconPack(
-    resourceServer.icon('database-FFFFFF'),
-    resourceServer.icon('database-000000'),
+    new ServerIcon('database-FFFFFF'),
+    new ServerIcon('database-000000'),
   ),
   userPermissions: ['admin'],
 });
@@ -147,8 +147,8 @@ export const SETTING_ROUTE = new AppRoute({
   key: 'setting',
   title: 'Settings',
   icon: new IconPack(
-    resourceServer.icon('setting-FFFFFF'),
-    resourceServer.icon('setting-000000'),
+    new ServerIcon('setting-FFFFFF'),
+    new ServerIcon('setting-000000'),
   ),
   userPermissions: ['admin'],
 });
@@ -157,8 +157,8 @@ export const MANAGE_ROUTE = new AppRoute({
   name: 'Manage',
   title: 'Manage',
   icon: new IconPack(
-    resourceServer.icon('manage-FFFFFF'),
-    resourceServer.icon('manage-000000'),
+    new ServerIcon('manage-FFFFFF'),
+    new ServerIcon('manage-000000'),
   ),
 
   children: [PROFILE_ROUTE],
@@ -276,14 +276,8 @@ const routes: RouteRecordRaw[] = [
         path: 'service',
         component: () => import('@/pages/service/PageService.vue'),
       },
-      {
-        path: 'order',
-        component: () => import('@/pages/order/PageOrder.vue'),
-      },
-      {
-        path: 'users',
-        component: () => import('@/pages/users/PageUsers.vue'),
-      },
+      { path: 'order', component: () => import('@/pages/order/PageOrder.vue') },
+      { path: 'users', component: () => import('@/pages/users/PageUsers.vue') },
       {
         path: 'database',
         component: () => import('@/pages/database/PageDatabase.vue'),
@@ -320,11 +314,7 @@ const routes: RouteRecordRaw[] = [
     },
   },
   // login
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginPage,
-  },
+  { path: '/login', name: 'login', component: LoginPage },
   // print
   {
     path: '/print',
@@ -342,7 +332,4 @@ const routes: RouteRecordRaw[] = [
   { path: '/:pathMatch(.*)*', redirect: { path: '/error/404' } },
 ];
 
-export const router = createRouter({
-  history: createWebHistory(),
-  routes,
-});
+export const router = createRouter({ history: createWebHistory(), routes });

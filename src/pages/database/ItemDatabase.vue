@@ -11,9 +11,7 @@ import ItemCollection from './ItemCollection.vue';
 
 export default {
   components: { ButtonIconText, ItemCollection },
-  props: {
-    database: { type: Object, default: null },
-  },
+  props: { database: { type: Object, default: null } },
   data: (c) => ({
     IconDownload,
     IconMinus,

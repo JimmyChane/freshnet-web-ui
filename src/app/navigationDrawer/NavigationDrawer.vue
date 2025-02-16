@@ -11,12 +11,7 @@ import LeftNavLogin from './NavigationDrawer-Login.vue';
 import NavPage from './NavigationDrawer-NavPage.vue';
 
 export default {
-  components: {
-    Drawer,
-    LeftNavHeader,
-    NavPage,
-    LeftNavLogin,
-  },
+  components: { Drawer, LeftNavHeader, NavPage, LeftNavLogin },
   emits: ['click-logout'],
   data: (c) => ({
     isDragging: false,

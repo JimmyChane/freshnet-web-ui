@@ -42,11 +42,7 @@ export default {
           };
         });
 
-        return {
-          title: contact.title,
-          subtitle: contact.links[0].id,
-          links,
-        };
+        return { title: contact.title, subtitle: contact.links[0].id, links };
       });
     },
   },

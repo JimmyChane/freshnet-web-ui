@@ -1,5 +1,5 @@
 import { isString, optArray, optString, trimId, trimText } from '@/U';
-import { APP_HOST as AppHost } from '@/host/AppHost';
+import { getAppPath } from '@/host/AppHost';
 import { textContains } from '@/objects/ItemSearcher';
 import { useBrandStore } from '@/stores/brand.store';
 import { useCategoryStore } from '@/stores/category.store';
@@ -87,10 +87,7 @@ export class Product implements Item {
       const { specification } = data;
       specifications.unshift(
         ...Object.keys(specification).map((type) => {
-          return {
-            type: trimId(type),
-            content: trimId(specification[type]),
-          };
+          return { type: trimId(type), content: trimId(specification[type]) };
         }),
       );
     }
@@ -102,10 +99,7 @@ export class Product implements Item {
     }
     this.setImages(
       images.map((image) => {
-        return {
-          method: trimId(image.method),
-          path: trimId(image.path),
-        };
+        return { method: trimId(image.method), path: trimId(image.path) };
       }),
     );
 
@@ -383,7 +377,7 @@ export class Product implements Item {
     return this.getPricePromotion()?.value ?? 0;
   }
   getLink(): string {
-    return `${AppHost.path}/item/id/${this.id}`;
+    return `${getAppPath()}/item/id/${this.id}`;
   }
 
   setBrandId(brandId: string) {
@@ -406,10 +400,7 @@ export class Product implements Item {
     this.images = images
       .filter((image) => isString(image.method) && isString(image.path))
       .map((image) => {
-        return new Image().fromData({
-          method: image.method,
-          path: image.path,
-        });
+        return new Image().fromData({ method: image.method, path: image.path });
       });
   }
   addImages(images: (Image | any)[]) {

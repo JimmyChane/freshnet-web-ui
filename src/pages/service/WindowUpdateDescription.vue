@@ -9,9 +9,7 @@ import PanelAction from '@/components/panel/PanelAction.vue';
 
 export default {
   components: { PanelAction, TextArea },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({ value: '' }),
   computed: {
     ...mapStores(useServiceStore),

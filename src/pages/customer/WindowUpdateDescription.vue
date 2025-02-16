@@ -10,9 +10,7 @@ import WindowSection from './WindowSection.vue';
 
 export default {
   components: { PanelAction, WindowSection, TextArea },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({ Requirement: RequirementCustomer, data: {} }),
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,

@@ -22,12 +22,7 @@ function getContextColors<
 >(
   context: any,
   options: { color: T | (() => T) },
-): {
-  primary: any;
-  primaryLight: any;
-  primaryDark: any;
-  accent: any;
-} {
+): { primary: any; primaryLight: any; primaryDark: any; accent: any } {
   let color = options.color;
   if (typeof color === 'function') {
     color = color.call(context);
@@ -43,13 +38,7 @@ function getContextColors<
 
   return { primary, primaryLight, primaryDark, accent };
 }
-function getContextIcons<
-  T extends {
-    light: any;
-    dark: any;
-    color: any;
-  },
->(
+function getContextIcons<T extends { light: any; dark: any; color: any }>(
   context: any,
   options: { icon: T | (() => T) },
 ): { light: any; dark: any; color: any } {

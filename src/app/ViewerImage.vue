@@ -113,9 +113,7 @@ export default {
         class="ViewerImage"
         :isShowing="isShowing"
         @click-dismiss="() => clickDismiss()"
-        :style="{
-          '--thumbnails-height': thumbnails.length > 1 ? '5rem' : '0',
-        }"
+        :style="{ '--thumbnails-height': thumbnails.length > 1 ? '5rem' : '0' }"
       >
         <div class="ViewerImage-body">
           <Actionbar

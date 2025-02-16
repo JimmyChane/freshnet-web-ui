@@ -17,12 +17,7 @@ export default {
     isExpand: { type: Boolean, default: false },
   },
   data() {
-    return {
-      IconSuccessGreen,
-      IconSuccessWhite,
-      IconTrashRed,
-      IconTrashWhite,
-    };
+    return { IconSuccessGreen, IconSuccessWhite, IconTrashRed, IconTrashWhite };
   },
   computed: {
     isStatusPending: (c) => c.order.status === OrderStatus.Pending,

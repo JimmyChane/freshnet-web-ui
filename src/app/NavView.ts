@@ -1,5 +1,5 @@
 import { type IconAsset, optString, parseIcon, parseKey } from '@/U';
-import { Icon } from '@/host/ServerResource';
+import type { ServerIcon } from '@/host/Server';
 
 export class NavView {
   key: string = '';
@@ -14,7 +14,7 @@ export class NavView {
     this.title = optString(title);
     return this;
   }
-  setIcon(icon: Record<string, Icon>) {
+  setIcon(icon: Record<string, ServerIcon>) {
     this.icon = parseIcon(icon);
     return this;
   }

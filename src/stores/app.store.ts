@@ -98,9 +98,7 @@ export const useAppStore = defineStore('app', () => {
     if (isConnected.value) return;
 
     const option: Record<string, any> = {
-      extraHeaders: {
-        authorization: window.localStorage.getItem('userToken'),
-      },
+      extraHeaders: { authorization: window.localStorage.getItem('userToken') },
     };
     socket.value = socketIo(HOST_API, option)
       .on('connect', () => console.value.info('Socket', 'Connected'))
@@ -147,11 +145,7 @@ export const useAppStore = defineStore('app', () => {
     arg: {
       anchor: any;
       menus: [];
-      option: {
-        width: number;
-        corner: number;
-        primaryColor: undefined;
-      };
+      option: { width: number; corner: number; primaryColor: undefined };
     } = {
       anchor: null,
       menus: [],

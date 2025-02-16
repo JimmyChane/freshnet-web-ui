@@ -1,7 +1,5 @@
 <script>
-export default {
-  emits: ['click-file'],
-};
+export default { emits: ['click-file'] };
 </script>
 
 <template>

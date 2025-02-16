@@ -4,9 +4,7 @@ import { MANAGE_ROUTE } from '@/router';
 import { useLoginStore } from '@/stores/login.store';
 
 export default {
-  computed: {
-    user: (c) => useLoginStore().user,
-  },
+  computed: { user: (c) => useLoginStore().user },
   watch: {
     user(userNow, userWas) {
       if (!userWas.isTypeNone() && userNow.isTypeNone()) {

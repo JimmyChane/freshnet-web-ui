@@ -70,10 +70,7 @@ export const useDeviceStore = defineStore('device', () => {
   }
   async function removeItemOfId(arg: any) {
     const api = await removeDevice({
-      content: {
-        ownerCustomerId: arg.ownerCustomerId,
-        deviceId: arg.id,
-      },
+      content: { ownerCustomerId: arg.ownerCustomerId, deviceId: arg.id },
     });
     const content = api.optObjectContent();
     const item = new CustomerDevice().fromData(content);

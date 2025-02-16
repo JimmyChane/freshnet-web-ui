@@ -7,10 +7,7 @@ import MenuOption from '@/components/button/MenuOption.vue';
 
 export default {
   components: { MenuOption, ImageView },
-  props: {
-    event: { type: ServiceEvent },
-    src: {},
-  },
+  props: { event: { type: ServiceEvent }, src: {} },
   computed: {
     isInitial() {
       return this.event.method === INITIAL_SERVICE_EVENT_METHOD.key;

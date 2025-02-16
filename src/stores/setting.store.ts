@@ -109,10 +109,7 @@ export const useSettingStore = defineStore('setting', () => {
 
     const setting = new Setting().fromData({ key, value }).toData();
     const api = await updateSetting(setting);
-    const content = api.getObjectContent() as {
-      key: string;
-      value: string;
-    };
+    const content = api.getObjectContent() as { key: string; value: string };
 
     list.value.updateItemById(content.key, (item) => {
       if (!item) return;

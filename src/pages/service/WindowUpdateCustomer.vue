@@ -9,9 +9,7 @@ import PanelAction from '@/components/panel/PanelAction.vue';
 
 export default {
   components: { PanelAction, Input },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({ customerName: '', customerPhoneNumber: '' }),
   computed: {
     ...mapStores(useServiceStore),

@@ -8,9 +8,7 @@ import ItemSpec from './ItemSpecificationInput.vue';
 
 export default {
   components: { ItemSpec, Selector4 },
-  props: {
-    items: { type: Array, default: () => [] },
-  },
+  props: { items: { type: Array, default: () => [] } },
   data: (c) => ({ list: [] }),
   computed: {
     KeyNone: (c) => 'none',

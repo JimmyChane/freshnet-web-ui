@@ -138,10 +138,7 @@ export default {
     <div
       class="ExportLayoutOne-body"
       ref="body"
-      :style="{
-        padding: `${padding}px ${initialPadding}px`,
-        gap: `${gap}px`,
-      }"
+      :style="{ padding: `${padding}px ${initialPadding}px`, gap: `${gap}px` }"
     >
       <span class="ExportLayoutOne-title">{{ fullTitle }}</span>
 

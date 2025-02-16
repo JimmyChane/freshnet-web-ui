@@ -16,10 +16,7 @@ export default {
 <template>
   <div
     class="PCE-Layout"
-    :style="{
-      '--width': `${width}px`,
-      '--height': `${height}px`,
-    }"
+    :style="{ '--width': `${width}px`, '--height': `${height}px` }"
   >
     <ProductVue
       v-for="product of products"

@@ -15,10 +15,7 @@ export class Label {
     return this;
   }
   toData(): { title: string; hexColor: string } {
-    return {
-      title: trimText(this.title),
-      hexColor: trimId(this.hexColor),
-    };
+    return { title: trimText(this.title), hexColor: trimId(this.hexColor) };
   }
   toCount(strs: string[]): number {
     return 0;

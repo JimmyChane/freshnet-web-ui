@@ -1,6 +1,6 @@
 import { isObject, trimId } from '@/U';
 import { HOST_API } from '@/config';
-import { resourceServer } from '@/host/Server';
+import { serverRes } from '@/host/Server';
 
 import { Filename } from '../objects/Filename';
 
@@ -68,7 +68,7 @@ export class Image {
         resPath = resPath.substring(1, resPath.length);
       if (resPath.startsWith('resource/')) {
         resPath = resPath.substring('resource/'.length, resPath.length);
-        return resourceServer.res(resPath);
+        return serverRes(resPath);
       }
 
       return `${HOST_API}/${path}`;

@@ -5,9 +5,7 @@ import ItemSearchProduct from './ItemSearchProduct.vue';
 
 export default {
   components: { PanelSearch, ItemSearchProduct },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({ search: '', results: [] }),
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,

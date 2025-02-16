@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import IconArrowDown from '@/icon/IconArrowDown.vue';
 
-defineProps({
-  isExpand: { type: Boolean },
-});
+defineProps({ isExpand: { type: Boolean } });
 </script>
 
 <template>

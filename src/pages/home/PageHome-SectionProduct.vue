@@ -188,10 +188,7 @@ export default {
           <router-link
             class="HomeSectionProduct-view"
             :style="{ 'grid-area': 'view' }"
-            :to="{
-              path: '/product',
-              query: { productId: itemId },
-            }"
+            :to="{ path: '/product', query: { productId: itemId } }"
           >
             Detail
           </router-link>

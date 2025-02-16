@@ -3,9 +3,7 @@ import TextArea from '@/components/InputTextArea.vue';
 
 export default {
   components: { TextArea },
-  props: {
-    description: { type: String, default: '' },
-  },
+  props: { description: { type: String, default: '' } },
   methods: {
     onInputDescription(value) {
       this.$emit('input-description', value);

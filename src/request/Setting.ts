@@ -1,10 +1,10 @@
-import { API, Response } from '@/host/ServerApi';
+import { API, ServerResponse } from '@/host/Server';
 
 export async function getSettingList() {
   const response = await API.get('settingv3');
 
   const json = response.data;
-  const hostResponse = new Response(json);
+  const hostResponse = new ServerResponse(json);
   const hostError = hostResponse.getError();
   if (hostError) {
     throw new Error(hostError);
@@ -14,5 +14,5 @@ export async function getSettingList() {
 }
 export async function updateSetting(setting: any) {
   const response = await API.put('settingv3/system', setting);
-  return new Response(response.data);
+  return new ServerResponse(response.data);
 }

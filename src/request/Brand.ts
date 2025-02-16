@@ -1,6 +1,6 @@
-import { API, Response } from '@/host/ServerApi';
+import { API, ServerResponse } from '@/host/Server';
 
-export async function getBrandList(): Promise<Response> {
+export async function getBrandList(): Promise<ServerResponse> {
   const response = await API.get('brand/');
-  return new Response(response.data);
+  return new ServerResponse(response.data);
 }

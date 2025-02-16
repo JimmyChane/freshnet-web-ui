@@ -7,9 +7,7 @@ import SpecificationInputs from '@/pages/customer/SpecificationInputs.vue';
 
 export default {
   components: { PanelAction, SpecificationInputs },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({ data: { specifications: [] } }),
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,

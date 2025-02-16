@@ -25,11 +25,7 @@ export class Brand implements Item {
   }
 
   toData(): BrandData {
-    return {
-      _id: this.id,
-      title: this.title,
-      icon: this.icon?.toData() ?? {},
-    };
+    return { _id: this.id, title: this.title, icon: this.icon?.toData() ?? {} };
   }
 
   toCount(strs: string[]): number {

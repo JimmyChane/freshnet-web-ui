@@ -200,33 +200,25 @@ export default {
           </span>
           <span
             class="Property-description"
-            :style="{
-              '--width': `${getPropertyByKey('description').width}px`,
-            }"
+            :style="{ '--width': `${getPropertyByKey('description').width}px` }"
           >
             Description
           </span>
           <span
             class="Property-images"
-            :style="{
-              '--width': `${getPropertyByKey('images').width}px`,
-            }"
+            :style="{ '--width': `${getPropertyByKey('images').width}px` }"
           >
             Images
           </span>
           <span
             class="Property-notice"
-            :style="{
-              '--width': `${getPropertyByKey('notice').width}px`,
-            }"
+            :style="{ '--width': `${getPropertyByKey('notice').width}px` }"
           >
             Notice
           </span>
           <span
             class="Property-timestamp"
-            :style="{
-              '--width': `${getPropertyByKey('timestamp').width}px`,
-            }"
+            :style="{ '--width': `${getPropertyByKey('timestamp').width}px` }"
           >
             Date Created
           </span>

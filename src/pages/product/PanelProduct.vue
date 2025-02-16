@@ -5,7 +5,7 @@ import IconCopyLight from '@/assets/icon/copy-FFFFFF.svg';
 import IconPrinter from '@/assets/icon/printer-000000.svg';
 import IconTrash from '@/assets/icon/trash-000000.svg';
 import IconView from '@/assets/icon/view-000000.svg';
-import { APP_HOST as AppHost } from '@/host/AppHost';
+import { getAppPath } from '@/host/AppHost';
 import { useAppStore } from '@/stores/app.store';
 
 import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';
@@ -78,9 +78,7 @@ export default {
               icon: IconTrash,
               isHidden: true,
               click: () => {
-                this.$emit('click-productRemove', {
-                  product: this.product,
-                });
+                this.$emit('click-productRemove', { product: this.product });
               },
             }
           : null,
@@ -106,7 +104,7 @@ export default {
       });
     },
     clickView() {
-      let urlView = `${AppHost.path}/product/view`;
+      let urlView = `${getAppPath()}/product/view`;
 
       if (!this.product) {
         useAppStore().openLink(urlView);

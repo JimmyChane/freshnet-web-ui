@@ -1,8 +1,8 @@
-import { API, Response } from '@/host/ServerApi';
+import { API, ServerResponse } from '@/host/Server';
 
 export async function getUserList() {
   const response = await API.get('users');
-  return new Response(response.data);
+  return new ServerResponse(response.data);
 }
 export async function addUser(
   username: string,
@@ -16,13 +16,13 @@ export async function addUser(
     passwordNew,
     passwordRepeat,
   });
-  return new Response(response.data);
+  return new ServerResponse(response.data);
 }
 export async function removeUser(username: string) {
   const response = await API.delete('users/user', { data: { username } });
-  return new Response(response.data);
+  return new ServerResponse(response.data);
 }
 export async function updateUser(username: string, userType: string) {
   const response = await API.put('users/user', { username, userType });
-  return new Response(response.data);
+  return new ServerResponse(response.data);
 }

@@ -3,10 +3,7 @@ import Input from '@/components/Input.vue';
 
 export default {
   components: { Input },
-  props: {
-    belongings: { type: Array },
-    belonging: { type: Object },
-  },
+  props: { belongings: { type: Array }, belonging: { type: Object } },
   methods: {
     validateTitle(title, belonging) {
       title = title.trim();

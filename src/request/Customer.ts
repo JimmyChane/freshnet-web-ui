@@ -1,4 +1,4 @@
-import { apiServer } from '@/host/Server';
+import { API_SERVER } from '@/host/Server';
 
 interface CustomerContent {
   _id?: string;
@@ -8,12 +8,11 @@ interface CustomerContent {
 }
 
 export function getCustomerList(): Promise<any> {
-  return apiServer.request().path('customer/list').sendJson();
+  return API_SERVER.request().path('customer/list').sendJson();
 }
 
 export function addCustomer(content: CustomerContent = {}): Promise<any> {
-  return apiServer
-    .request()
+  return API_SERVER.request()
     .POST()
     .path('customer/add')
     .bodyJson({ content })
@@ -21,8 +20,7 @@ export function addCustomer(content: CustomerContent = {}): Promise<any> {
 }
 
 export function removeCustomer(id: string = ''): Promise<any> {
-  return apiServer
-    .request()
+  return API_SERVER.request()
     .DELETE()
     .path('customer/remove')
     .bodyJson({ content: { _id: id } })
@@ -34,8 +32,7 @@ export function updateCustomerNamePhoneNumber(
   name: string = '',
   phoneNumber: string = '',
 ): Promise<any> {
-  return apiServer
-    .request()
+  return API_SERVER.request()
     .PUT()
     .path('customer/update/namePhoneNumber')
     .bodyJson({ content: { _id: id, name, phoneNumber } })
@@ -46,8 +43,7 @@ export function updateCustomerDescription(
   id: string = '',
   description: string = '',
 ): Promise<any> {
-  return apiServer
-    .request()
+  return API_SERVER.request()
     .PUT()
     .path('customer/update/description')
     .bodyJson({ content: { id, description } })

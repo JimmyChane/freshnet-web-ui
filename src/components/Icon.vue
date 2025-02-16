@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { Icon } from '@/host/ServerResource';
+import { ServerIcon } from '@/host/Server';
 
 const props = withDefaults(
-  defineProps<{ src?: string | Icon; alt?: string }>(),
+  defineProps<{ src?: string | ServerIcon; alt?: string }>(),
   { src: '', alt: '' },
 );
 
 const srcString = computed(() => {
-  if (props.src instanceof Icon) {
+  if (props.src instanceof ServerIcon) {
     return props.src.toUrl();
   }
   return props.src;

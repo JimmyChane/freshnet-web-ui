@@ -4,9 +4,7 @@ import DismissableContainer from '@/components/DismissableContainer.vue';
 export default {
   emits: ['click-dismiss', 'listen-open'],
   components: { DismissableContainer },
-  props: {
-    isShowing: { type: Boolean, default: false },
-  },
+  props: { isShowing: { type: Boolean, default: false } },
   watch: {
     isShowing() {
       this.$emit('listen-showing', this.isShowing);

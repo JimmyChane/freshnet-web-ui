@@ -11,10 +11,7 @@ export class CustomerDeviceSpecification {
     return this;
   }
   toData(): any {
-    return {
-      typeKey: trimId(this.typeKey),
-      content: trimText(this.content),
-    };
+    return { typeKey: trimId(this.typeKey), content: trimText(this.content) };
   }
   toCount(strs: string[]): number {
     return 0;

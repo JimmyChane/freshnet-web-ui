@@ -3,9 +3,7 @@ import Label from './GlobalSearch-Item-Label.vue';
 
 export default {
   components: { Label },
-  props: {
-    labels: { type: Array, default: () => [] },
-  },
+  props: { labels: { type: Array, default: () => [] } },
 };
 </script>
 

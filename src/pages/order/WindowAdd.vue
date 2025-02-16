@@ -6,9 +6,7 @@ import Input from '@/components/Input.vue';
 
 export default {
   components: { Input },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: () => ({
     contentError: '',
 

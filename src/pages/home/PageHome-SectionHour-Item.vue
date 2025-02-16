@@ -1,8 +1,6 @@
 <script>
 export default {
-  props: {
-    item: { type: Object },
-  },
+  props: { item: { type: Object } },
   computed: {
     isToday: (c) => c.item.isToday(),
     title: (c) => c.item.title,

@@ -1,9 +1,5 @@
 <script>
-export default {
-  props: {
-    title: { type: String, default: '' },
-  },
-};
+export default { props: { title: { type: String, default: '' } } };
 </script>
 
 <template>

@@ -55,10 +55,7 @@ export const useLoginStore = defineStore('login', () => {
           username: arg.username,
           password: arg.password,
         });
-        const content = api.getObjectContent() as {
-          token: string;
-          user: User;
-        };
+        const content = api.getObjectContent() as { token: string; user: User };
         const { token, user } = content;
         const newUser = onNewCredentail({ token, user });
         return newUser;

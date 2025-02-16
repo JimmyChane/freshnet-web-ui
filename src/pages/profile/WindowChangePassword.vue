@@ -8,14 +8,8 @@ import PanelAction from '@/components/panel/PanelAction.vue';
 export default {
   components: { PanelAction, Input },
   props: { popupWindow: { type: Object } },
-  data: (c) => ({
-    passwordVerify: '',
-    passwordNew: '',
-    passwordRepeat: '',
-  }),
-  computed: {
-    isShowing: (c) => c.popupWindow.isShowing,
-  },
+  data: (c) => ({ passwordVerify: '', passwordNew: '', passwordRepeat: '' }),
+  computed: { isShowing: (c) => c.popupWindow.isShowing },
   methods: {
     commitValues() {
       const { passwordVerify, passwordNew, passwordRepeat } = this;

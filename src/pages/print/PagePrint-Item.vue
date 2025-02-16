@@ -1,10 +1,7 @@
 <script>
 export default {
   props: { item: { type: Object } },
-  computed: {
-    title: (c) => c.item.title,
-    icon: (c) => c.item.icon,
-  },
+  computed: { title: (c) => c.item.title, icon: (c) => c.item.icon },
 };
 </script>
 

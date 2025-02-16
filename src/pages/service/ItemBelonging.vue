@@ -1,8 +1,6 @@
 <script>
 export default {
-  props: {
-    belonging: { type: Object, default: () => null },
-  },
+  props: { belonging: { type: Object, default: () => null } },
   computed: {
     title: (c) => c.belonging.title,
     quantity: (c) => c.belonging.quantity,

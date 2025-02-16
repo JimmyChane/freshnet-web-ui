@@ -39,10 +39,7 @@ export default {
       title: 'Edit',
       icon: IconEdit,
       click: () => {
-        $emit('click-product-priceUpdate', {
-          product: product,
-          price: price,
-        });
+        $emit('click-product-priceUpdate', { product: product, price: price });
       },
     }"
   >

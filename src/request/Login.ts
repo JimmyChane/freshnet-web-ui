@@ -1,12 +1,12 @@
-import { API, Response } from '@/host/ServerApi';
+import { API, ServerResponse } from '@/host/Server';
 
 export async function loginUser(body: any) {
   const reponse = await API.post('session/login/', body);
-  return new Response(reponse.data);
+  return new ServerResponse(reponse.data);
 }
 export async function getUser(token: string) {
   const response = await API.post('session/verifyToken/', { token });
-  return new Response(response.data);
+  return new ServerResponse(response.data);
 }
 export async function updateUserPassword(
   username: string,
@@ -17,5 +17,5 @@ export async function updateUserPassword(
     passwordVerify,
     passwordNew,
   });
-  return new Response(response.data);
+  return new ServerResponse(response.data);
 }

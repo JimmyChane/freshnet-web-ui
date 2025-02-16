@@ -4,12 +4,8 @@ import PanelAction from '@/components/panel/PanelAction.vue';
 
 export default {
   components: { PanelAction, Input },
-  props: {
-    popupWindow: { type: Object },
-  },
-  computed: {
-    isShowing: (c) => c.popupWindow.isShowing,
-  },
+  props: { popupWindow: { type: Object } },
+  computed: { isShowing: (c) => c.popupWindow.isShowing },
   data: (c) => ({
     username: '',
     name: '',

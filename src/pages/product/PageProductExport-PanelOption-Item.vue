@@ -3,9 +3,7 @@ import Selector from '@/components/selector/Selector.vue';
 
 export default {
   components: { Selector },
-  props: {
-    item: { type: Object },
-  },
+  props: { item: { type: Object } },
   data: (c) => ({}),
   computed: {
     title: (c) => c.item.title,

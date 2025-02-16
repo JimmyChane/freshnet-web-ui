@@ -2,9 +2,7 @@
 import { Customer } from '@/items/Customer';
 
 export default {
-  props: {
-    item: { type: Customer, default: () => null },
-  },
+  props: { item: { type: Customer, default: () => null } },
   computed: {
     name: (c) => c.item.name,
     phoneNumber: (c) => c.item.phoneNumber,

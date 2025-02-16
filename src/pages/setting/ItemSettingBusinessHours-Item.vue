@@ -1,8 +1,6 @@
 <script>
 export default {
-  props: {
-    value: { type: Object },
-  },
+  props: { value: { type: Object } },
   computed: {
     title: (c) => c.value.title,
     content: (c) => c.value.hours.toString(),

@@ -42,9 +42,7 @@ export default {
       <img
         class="LeftNavHeader-icon transition"
         :src="
-          cloudinaryServer({
-            url: 'logo/svg/freshnet-enterprise-logo.svg',
-          })
+          cloudinaryServer({ url: 'logo/svg/freshnet-enterprise-logo.svg' })
         "
       />
       <span class="LeftNavHeader-title">Freshnet Enterprise</span>

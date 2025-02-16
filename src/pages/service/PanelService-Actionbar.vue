@@ -216,10 +216,7 @@ export default {
           isExpand ? actionbarBorder : 'transparent'
         }`,
       }"
-      :leftMenus="{
-        icon: IconClose,
-        click: () => actions.onClickClose(),
-      }"
+      :leftMenus="{ icon: IconClose, click: () => actions.onClickClose() }"
       :rightMenus="menus"
     >
       <button

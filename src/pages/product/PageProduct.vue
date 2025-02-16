@@ -25,13 +25,7 @@ import WindowUpdateSpecifications from './WindowUpdateSpecifications.vue';
 import WindowUpdateTitleBrand from './WindowUpdateTitleBrand.vue';
 
 export default {
-  components: {
-    Footer,
-    PanelRight,
-    PanelProducts,
-    PanelProduct,
-    WindowSearch,
-  },
+  components: { Footer, PanelRight, PanelProducts, PanelProduct, WindowSearch },
   data: (c) => ({
     stylePanelProducts: {},
     stylePanelEmpty: {},
@@ -250,9 +244,7 @@ export default {
       this.setProductId(product?.id ?? null);
     },
     setProductId(productId) {
-      useAppStore().nextQuery({
-        query: { productId: productId ?? null },
-      });
+      useAppStore().nextQuery({ query: { productId: productId ?? null } });
     },
 
     async clickSearch() {
@@ -355,10 +347,7 @@ export default {
         onConfirm: (input) => {
           const { product, description } = input;
           useProductStore()
-            .updateDescriptionOfId({
-              id: product.id,
-              description,
-            })
+            .updateDescriptionOfId({ id: product.id, description })
             .then((product) => popupWindow.close())
             .catch((error) => {
               useAppStore().snackbarShow('Cannot Update');

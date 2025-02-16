@@ -16,9 +16,7 @@ export default {
     drawer: { isExpand: false },
     top: { shadow: false },
   }),
-  computed: {
-    ...mapStores(useAppStore),
-  },
+  computed: { ...mapStores(useAppStore) },
   created() {
     document.title = 'Page Not Found';
   },

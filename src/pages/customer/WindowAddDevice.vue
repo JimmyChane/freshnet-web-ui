@@ -20,9 +20,7 @@ export default {
     SpecificationInputs,
     TextArea,
   },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({
     Requirement: RequirementCustomer,
     data: {

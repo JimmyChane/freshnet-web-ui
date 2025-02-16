@@ -1,7 +1,6 @@
 import chroma from 'chroma-js';
 
-import { resourceServer } from '@/host/Server';
-import { Icon } from '@/host/ServerResource';
+import { ServerIcon } from '@/host/Server';
 import { User } from '@/items/User';
 
 import { NavViewGroup } from './app/NavViewGroup';
@@ -95,10 +94,7 @@ export function isColorDark(color: any, threshold = 60): boolean {
 
 export function objectToArray<T>(object: Record<string, T> | any): Parse[] {
   return Object.keys(typeof object === 'object' ? object : {}).map((key) => {
-    return {
-      key,
-      value: object[key],
-    };
+    return { key, value: object[key] };
   });
 }
 export function isPassed(user: User, permissions: any[] | any) {
@@ -111,17 +107,19 @@ export function isPassed(user: User, permissions: any[] | any) {
 
   return true;
 }
-export function parseIcon(icon: Record<string, Icon> | any): IconAsset | null {
+export function parseIcon(
+  icon: Record<string, ServerIcon> | any,
+): IconAsset | null {
   if (!isObjectOnly(icon)) return null;
 
   const light =
-    icon.light instanceof Icon
+    icon.light instanceof ServerIcon
       ? icon.light.toUrl()
-      : resourceServer.icon(icon.light).toUrl();
+      : new ServerIcon(icon.light).toUrl();
   const dark =
-    icon.dark instanceof Icon
+    icon.dark instanceof ServerIcon
       ? icon.dark.toUrl()
-      : resourceServer.icon(icon.dark).toUrl();
+      : new ServerIcon(icon.dark).toUrl();
 
   return { light, dark };
 }

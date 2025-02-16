@@ -5,9 +5,7 @@ import NavigationLeftClickable from './NavigationDrawer-Clickable.vue';
 
 export default {
   components: { NavigationLeftClickable },
-  props: {
-    group2: { type: NavViewGroup, default: () => null },
-  },
+  props: { group2: { type: NavViewGroup, default: () => null } },
   computed: {
     title: (c) => c.group2.title,
     group3s: (c) => c.group2.groups,

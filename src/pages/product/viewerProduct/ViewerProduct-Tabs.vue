@@ -4,9 +4,7 @@ import Tab from './ViewerProduct-Tabs-Tab.vue';
 export default {
   components: { Tab },
   props: { items: { type: Array, default: () => [] } },
-  computed: {
-    item: (c) => c.items.find((item) => item.isSelected()),
-  },
+  computed: { item: (c) => c.items.find((item) => item.isSelected()) },
   watch: {
     item() {
       this.onItemChange();

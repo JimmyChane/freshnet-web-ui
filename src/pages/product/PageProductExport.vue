@@ -196,10 +196,7 @@ export default {
         ref="canvas"
         :width="canvasWidth"
         :height="canvasHeight"
-        :style="{
-          margin: '1rem',
-          'grid-area': 'preview',
-        }"
+        :style="{ margin: '1rem', 'grid-area': 'preview' }"
       >
         <LayoutOne
           v-if="isLayoutOne"

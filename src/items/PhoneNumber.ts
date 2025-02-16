@@ -17,9 +17,7 @@ export class PhoneNumber {
   }
 
   toData(): PhoneNumberData {
-    return {
-      value: this.value,
-    };
+    return { value: this.value };
   }
 
   toString(): string {

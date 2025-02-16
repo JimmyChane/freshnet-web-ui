@@ -5,10 +5,7 @@ import { NavView } from '@/app/NavView';
 import LeftNavItem from './NavigationDrawer-Item.vue';
 
 export default {
-  props: {
-    item: { type: [NavPage, NavView] },
-    isWide: { type: Boolean },
-  },
+  props: { item: { type: [NavPage, NavView] }, isWide: { type: Boolean } },
   components: { LeftNavItem },
 };
 </script>

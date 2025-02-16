@@ -5,9 +5,7 @@ import ImageView from '@/components/ImageView.vue';
 
 export default {
   components: { ImageView },
-  props: {
-    ps2Disc: { type: Object, default: () => null },
-  },
+  props: { ps2Disc: { type: Object, default: () => null } },
   data: () => {
     return { cloudinaryServer };
   },

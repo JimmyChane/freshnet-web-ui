@@ -1,8 +1,6 @@
 <script>
 export default {
-  props: {
-    item: { type: Object },
-  },
+  props: { item: { type: Object } },
   data: (c) => ({ title: '', icon: '', content: '' }),
   watch: {
     item() {

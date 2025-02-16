@@ -8,9 +8,7 @@ import WindowSection from './WindowSection.vue';
 
 export default {
   components: { PanelAction, WindowSection },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({ Requirement: RequirementCustomer }),
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,

@@ -7,9 +7,7 @@ import PopupWindow from '@/components/window/PopupWindow.vue';
 
 export default {
   components: { PopupWindow, Actionbar, Searchbar },
-  props: {
-    placeholder: { type: String, default: 'Search' },
-  },
+  props: { placeholder: { type: String, default: 'Search' } },
   data: (c) => ({ search: '', results: [], IconArrowLeft }),
   watch: {
     search() {

@@ -1,9 +1,6 @@
 <script>
 export default {
-  props: {
-    to: { default: undefined },
-    title: { type: String, default: '' },
-  },
+  props: { to: { default: undefined }, title: { type: String, default: '' } },
 };
 </script>
 

@@ -1,8 +1,6 @@
 <script>
 export default {
-  props: {
-    item: { type: Object, default: () => null },
-  },
+  props: { item: { type: Object, default: () => null } },
   computed: {
     title: (c) => c.item.title,
     isSelected: (c) => c.item.isSelected(),

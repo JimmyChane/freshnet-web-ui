@@ -15,9 +15,7 @@ export default {
   <button
     class="ItemMenu transition"
     :class="[`ItemMenu-${isSelected ? 'selected' : 'deselected'}`]"
-    :style="{
-      '--primary-color': item.color ? item.color : 'inherit',
-    }"
+    :style="{ '--primary-color': item.color ? item.color : 'inherit' }"
     @click="$emit('click')"
   >
     <img class="ItemMenu-icon" v-if="item.icon" :src="item.icon" />

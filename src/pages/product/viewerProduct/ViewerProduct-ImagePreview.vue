@@ -102,10 +102,7 @@ export default {
       v-if="allowEdit && image"
       :primaryColor="primaryColor"
       :menus="[
-        {
-          title: 'Delete Image',
-          click: () => $emit('click-remove', image),
-        },
+        { title: 'Delete Image', click: () => $emit('click-remove', image) },
       ]"
     />
   </div>

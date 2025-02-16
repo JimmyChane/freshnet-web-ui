@@ -31,9 +31,7 @@ export default {
     BodyBelongings,
     BodyLine,
   },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({
     ServiceState,
 

@@ -5,10 +5,7 @@ import ButtonIcon from '@/components/button/ButtonIcon.vue';
 
 export default {
   components: { ButtonIcon },
-  props: {
-    title: { type: String, default: '' },
-    menus: { default: () => [] },
-  },
+  props: { title: { type: String, default: '' }, menus: { default: () => [] } },
   computed: {
     theMenus: (c) => {
       if (isArray(c.menus)) return c.menus;

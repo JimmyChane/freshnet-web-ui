@@ -9,9 +9,7 @@ import BelongingListEdit from './BelongingListEdit.vue';
 
 export default {
   components: { PanelAction, BelongingListEdit },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   computed: {
     ...mapStores(useServiceStore),
 

@@ -8,10 +8,7 @@ import Label from './ItemCustomer-Label.vue';
 
 const props = withDefaults(
   defineProps<{ categoryKey?: string; count?: number }>(),
-  {
-    categoryKey: '',
-    count: 0,
-  },
+  { categoryKey: '', count: 0 },
 );
 
 const category = ref<Category | null>(null);

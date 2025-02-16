@@ -1,6 +1,6 @@
-import { API, Response } from '@/host/ServerApi';
+import { API, ServerResponse } from '@/host/Server';
 
 export async function getSpecificationList() {
   const response = await API.get('spec/');
-  return new Response(response.data);
+  return new ServerResponse(response.data);
 }

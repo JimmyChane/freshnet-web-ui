@@ -9,16 +9,9 @@ import ItemSearch from './GlobalSearch-Item.vue';
 export default {
   emtis: ['callback-click'],
   components: { ImageViews, ItemSearch, Labels },
-  props: {
-    item: { type: Product, default: null },
-  },
-  data: (c) => ({
-    categoryTitle: '',
-    title: '',
-  }),
-  computed: {
-    images: (c) => c.item.images,
-  },
+  props: { item: { type: Product, default: null } },
+  data: (c) => ({ categoryTitle: '', title: '' }),
+  computed: { images: (c) => c.item.images },
   watch: {
     item() {
       this.invalidate();

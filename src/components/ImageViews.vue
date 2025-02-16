@@ -69,11 +69,7 @@ export default {
   >
     <ImageView
       class="ImageViews-item"
-      :style="{
-        width: '100%',
-        height: '100%',
-        'grid-area': `img${index}`,
-      }"
+      :style="{ width: '100%', height: '100%', 'grid-area': `img${index}` }"
       v-for="(image, index) in parsedImages"
       :key="image.toUrl()"
       :src="image"

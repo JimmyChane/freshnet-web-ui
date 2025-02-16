@@ -46,10 +46,7 @@ export default {
       title: 'Edit',
       icon: IconEdit,
       click: () => {
-        $emit('click-edit', {
-          product,
-          categoryId: categoryId,
-        });
+        $emit('click-edit', { product, categoryId: categoryId });
       },
     }"
   >

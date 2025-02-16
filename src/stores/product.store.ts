@@ -234,10 +234,7 @@ export const useProductStore = defineStore('product', () => {
       new ProductPrices().fromData(price).toData(),
     );
 
-    const content = api.optObjectContent() as {
-      productId: string;
-      price: any;
-    };
+    const content = api.optObjectContent() as { productId: string; price: any };
     return list.value.updateItemById(content.productId, (item) => {
       if (!item) return;
       item.setPrice(new ProductPrices().fromData(content.price).toData());
@@ -269,10 +266,7 @@ export const useProductStore = defineStore('product', () => {
   async function addGiftOfId(arg: { id: string; gift: any }) {
     const { id, gift } = arg;
     const api = await addProductGift(id, gift);
-    const content = api.optObjectContent() as {
-      productId: string;
-      gift: any;
-    };
+    const content = api.optObjectContent() as { productId: string; gift: any };
     return list.value.updateItemById(content.productId, (item) => {
       if (!item) return;
       item.addGift(content.gift);

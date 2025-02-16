@@ -3,10 +3,7 @@ import { isFunction } from '@/U';
 
 export default {
   props: { menu: { type: Object } },
-  computed: {
-    title: (c) => c.menu.title,
-    count: (c) => c.menu.count,
-  },
+  computed: { title: (c) => c.menu.title, count: (c) => c.menu.count },
   methods: {
     isSelected() {
       const { menu } = this;

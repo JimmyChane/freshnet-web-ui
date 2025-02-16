@@ -3,9 +3,7 @@ import PanelAction from '@/components/panel/PanelAction.vue';
 
 export default {
   components: { PanelAction },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,
     input: (c) => c.popupWindow.input,

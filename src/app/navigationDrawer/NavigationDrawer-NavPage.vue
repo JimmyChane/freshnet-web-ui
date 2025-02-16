@@ -7,9 +7,7 @@ import NavViewGroup from './NavigationDrawer-NavViewGroup.vue';
 
 export default {
   components: { NavViewGroup, NavigationLeftClickable },
-  props: {
-    group1: { type: NavPage, default: () => null },
-  },
+  props: { group1: { type: NavPage, default: () => null } },
   computed: {
     group2s: (c) => optArray(c.group1.groups),
     hasChildren: (c) => c.group2s.length > 0,

@@ -61,10 +61,7 @@ export default {
             throw new Error();
           }
 
-          return {
-            type: selection.key,
-            content: this.data.content,
-          };
+          return { type: selection.key, content: this.data.content };
         })
         .then((specification) => {
           this.action.onConfirm(specification);

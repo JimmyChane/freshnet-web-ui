@@ -37,11 +37,7 @@ export default {
   <div class="PageCategoryExport">
     <NavigationBar
       :rightMenus="[
-        {
-          title: 'Print',
-          icon: IconPrinter,
-          click: () => $refs.print.print(),
-        },
+        { title: 'Print', icon: IconPrinter, click: () => $refs.print.print() },
       ]"
     />
     <PrintContent

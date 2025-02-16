@@ -1,10 +1,10 @@
-import { Icon } from '@/host/ServerResource';
+import type { ServerIcon } from '@/host/Server';
 
 export class IconPack {
-  readonly light: Icon;
-  readonly dark: Icon;
+  readonly light: ServerIcon;
+  readonly dark: ServerIcon;
 
-  constructor(light: Icon, dark: Icon) {
+  constructor(light: ServerIcon, dark: ServerIcon) {
     this.light = light;
     this.dark = dark;
   }

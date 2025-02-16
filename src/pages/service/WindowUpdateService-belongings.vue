@@ -3,9 +3,7 @@ import BelongingListEdit from './BelongingListEdit.vue';
 
 export default {
   components: { BelongingListEdit },
-  props: {
-    belongings: { type: Array, default: () => [] },
-  },
+  props: { belongings: { type: Array, default: () => [] } },
   methods: {
     getResults() {
       return this.$refs.BelongingListEdit.getResults();

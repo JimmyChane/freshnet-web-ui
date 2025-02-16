@@ -1,8 +1,6 @@
 <script>
 export default {
-  props: {
-    link: { type: Object },
-  },
+  props: { link: { type: Object } },
   computed: {
     category: (c) => c.link.category,
     categoryTitle: (c) => c.category.title,

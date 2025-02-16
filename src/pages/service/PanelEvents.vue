@@ -8,10 +8,7 @@ import ListEvents from './EventGroups.vue';
 export default {
   components: { ButtonIcon, ListEvents },
   emits: ['click-add-event', 'click-remove-event'],
-  props: {
-    service: { type: Service },
-    actions: { type: Object },
-  },
+  props: { service: { type: Service }, actions: { type: Object } },
   computed: {
     events: (c) => {
       if (!c.service) return [];

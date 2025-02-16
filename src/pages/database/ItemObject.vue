@@ -1,12 +1,8 @@
 <script>
 export default {
   name: 'ItemObject',
-  props: {
-    item: { default: () => null },
-  },
-  computed: {
-    itemKeys: (c) => c.keys(c.item),
-  },
+  props: { item: { default: () => null } },
+  computed: { itemKeys: (c) => c.keys(c.item) },
   methods: {
     shouldIncludeNextLine(item, key) {
       return (

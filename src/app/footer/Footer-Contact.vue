@@ -9,11 +9,7 @@ export default {
     primaryLink: (c) => (c.parsedLinks.length ? c.parsedLinks[0] : null),
     parsedLinks: (c) => {
       return c.links.map((link) => {
-        return {
-          icon: link.icon,
-          href: link.href,
-          target: link?.target ?? '',
-        };
+        return { icon: link.icon, href: link.href, target: link?.target ?? '' };
       });
     },
   },

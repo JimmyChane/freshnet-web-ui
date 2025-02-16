@@ -3,13 +3,8 @@ import ContactLink from './ItemSettingContacts-Item-Link.vue';
 
 export default {
   components: { ContactLink },
-  props: {
-    value: { type: Object },
-  },
-  computed: {
-    title: (c) => c.value.title,
-    links: (c) => c.value.links,
-  },
+  props: { value: { type: Object } },
+  computed: { title: (c) => c.value.title, links: (c) => c.value.links },
 };
 </script>
 

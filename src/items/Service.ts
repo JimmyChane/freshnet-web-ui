@@ -52,10 +52,7 @@ export interface ServiceData {
   description?: string;
   belongings?: ServiceBelongingData[];
   labels?: LabelData[];
-  notice?: {
-    isUrgent?: boolean;
-    isWarranty?: boolean;
-  };
+  notice?: { isUrgent?: boolean; isWarranty?: boolean };
 }
 
 export class Service implements Item {

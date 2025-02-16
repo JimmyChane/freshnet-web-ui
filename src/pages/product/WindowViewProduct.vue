@@ -38,12 +38,8 @@ export default {
     MenuOption,
     ButtonIcon,
   },
-  props: {
-    product: { type: Object, default: null },
-  },
-  computed: {
-    ...mapStores(useProductStore),
-  },
+  props: { product: { type: Object, default: null } },
+  computed: { ...mapStores(useProductStore) },
   data: (c) => ({
     IconEdit,
 
@@ -114,9 +110,7 @@ export default {
         </div>
         <div
           class="WindowProduct-image-main"
-          :style="{
-            '--image-size': item.images.length ? '160px' : '100px',
-          }"
+          :style="{ '--image-size': item.images.length ? '160px' : '100px' }"
         >
           <ButtonImage
             class="WindowProduct-image-item-button"

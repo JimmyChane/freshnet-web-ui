@@ -127,16 +127,8 @@ export default {
     });
 
     this.layoutMenus = [
-      {
-        key: ListServices.LayoutMode.Grid,
-        title: 'Grid View',
-        icon: IconGrid,
-      },
-      {
-        key: ListServices.LayoutMode.List,
-        title: 'List View',
-        icon: IconList,
-      },
+      { key: ListServices.LayoutMode.Grid, title: 'Grid View', icon: IconGrid },
+      { key: ListServices.LayoutMode.List, title: 'List View', icon: IconList },
       {
         key: ListServices.LayoutMode.Detail,
         title: 'Detail View',

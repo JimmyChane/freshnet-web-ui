@@ -116,9 +116,7 @@ export default {
           class="HomeActionbar-logo"
           :style="{ 'grid-area': 'logo' }"
           :src="
-            cloudinaryServer({
-              url: 'logo/svg/freshnet-enterprise-logo.svg',
-            })
+            cloudinaryServer({ url: 'logo/svg/freshnet-enterprise-logo.svg' })
           "
           alt="Freshnet Enterprise Logo"
         />

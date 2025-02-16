@@ -1,8 +1,6 @@
 <script>
 export default {
-  props: {
-    item: { type: Object, default: () => null },
-  },
+  props: { item: { type: Object, default: () => null } },
   computed: {
     content: (c) => c.item.content,
     name: (c) => c.item.customer.name,

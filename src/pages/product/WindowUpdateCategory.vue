@@ -7,9 +7,7 @@ import Selector4 from '@/components/selector/Selector4.vue';
 
 export default {
   components: { PanelAction, Selector4 },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({ outputCategoryId: '' }),
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,
@@ -20,11 +18,7 @@ export default {
     items: (c) => [
       { key: '', title: 'None' },
       ...c.categories.map((category) => {
-        return {
-          key: category.id,
-          title: category.title,
-          icon: category.icon,
-        };
+        return { key: category.id, title: category.title, icon: category.icon };
       }),
     ],
     itemMenus: (c) =>

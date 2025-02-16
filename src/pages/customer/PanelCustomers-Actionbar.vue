@@ -36,11 +36,7 @@ export default {
 
     navigationMenus: (c) => {
       return [
-        {
-          title: 'Add',
-          icon: IconAdd,
-          click: () => c.$emit('click-item-add'),
-        },
+        { title: 'Add', icon: IconAdd, click: () => c.$emit('click-item-add') },
         {
           title: 'Refresh',
           icon: IconRefresh,
@@ -51,16 +47,8 @@ export default {
     tabLayoutMenus: (c) => {
       return [
         { key: '', title: 'All', count: c.items.length },
-        {
-          key: 'service',
-          title: 'From Services',
-          count: c.listService.length,
-        },
-        {
-          key: 'order',
-          title: 'From Orders',
-          count: c.listOrder.length,
-        },
+        { key: 'service', title: 'From Services', count: c.listService.length },
+        { key: 'order', title: 'From Orders', count: c.listOrder.length },
       ].map((menu) => {
         menu.isSelected = (menu) => c.filter === menu.key;
         menu.click = (menu) => {

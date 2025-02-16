@@ -5,9 +5,7 @@ import ItemService from './item-service/ItemService.vue';
 
 export default {
   components: { PanelSearch, ItemService },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({ search: '', results: [] }),
   computed: {
     isShowing: (c) => c.popupWindow.isShowing,

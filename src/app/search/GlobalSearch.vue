@@ -25,9 +25,7 @@ export default {
     ItemSearchPs2Disc,
     ItemSearchService,
   },
-  props: {
-    placeholder: { type: String },
-  },
+  props: { placeholder: { type: String } },
   data: (c) => ({ searchText: '', searches: [] }),
   computed: {
     user: (c) => useLoginStore().user,
@@ -81,11 +79,7 @@ export default {
         };
       });
       let brandSearches = this.brands.map((brand) => {
-        return {
-          dataType: 'brand',
-          item: brand,
-          count: brand.toCount(texts),
-        };
+        return { dataType: 'brand', item: brand, count: brand.toCount(texts) };
       });
       let ps2DiscSearches = this.ps2Discs.map((ps2Disc) => {
         return {

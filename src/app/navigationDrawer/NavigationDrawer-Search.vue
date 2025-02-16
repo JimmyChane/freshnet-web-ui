@@ -13,9 +13,7 @@ export default {
   data() {
     return { SearchIcon };
   },
-  computed: {
-    ...mapStores(useAppStore),
-  },
+  computed: { ...mapStores(useAppStore) },
   methods: {
     focus() {
       this.$refs.globalsearch.focus();

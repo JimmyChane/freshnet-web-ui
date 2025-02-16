@@ -2,9 +2,7 @@ import { isString } from '@/U';
 
 interface SearchResult {
   count: number;
-  item: {
-    toCount(strs: string[]): number;
-  };
+  item: { toCount(strs: string[]): number };
 }
 
 export function withItems(items: { toCount(strs: string[]): number }[] = []) {

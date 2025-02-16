@@ -11,9 +11,7 @@ import WindowSection from './WindowSection.vue';
 
 export default {
   components: { PanelAction, WindowSection, SpecificationInputs },
-  props: {
-    popupWindow: { type: Object },
-  },
+  props: { popupWindow: { type: Object } },
   data: (c) => ({
     Requirement: RequirementCustomer,
     data: { specifications: [] },

@@ -68,11 +68,7 @@ export default {
 
       if (!isSearchById && (customer?.isFromStoreCustomer() ?? false)) {
         useAppStore().replaceQuery({
-          query: {
-            id: customer.id,
-            name: null,
-            phoneNumber: null,
-          },
+          query: { id: customer.id, name: null, phoneNumber: null },
         });
       }
 

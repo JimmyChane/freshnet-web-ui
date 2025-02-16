@@ -39,9 +39,7 @@ export default {
     'click-item-device-update-specifications',
     'click-item-device-update-description',
   ],
-  props: {
-    item: { type: Customer, default: () => null },
-  },
+  props: { item: { type: Customer, default: () => null } },
   data: (c) => ({
     IconClose,
     IconEdit,
@@ -227,10 +225,7 @@ export default {
             class="PanelCustomer-SectionService-item"
             v-for="service of services"
             :key="service.id"
-            :to="{
-              path: '/manage/service',
-              query: { service: service.id },
-            }"
+            :to="{ path: '/manage/service', query: { service: service.id } }"
           >
             <ItemService :headerCustomer="false" :item="service" />
           </router-link>
@@ -241,10 +236,7 @@ export default {
           <Item
             v-for="order of orders"
             :key="order.id"
-            :to="{
-              path: '/manage/order',
-              query: { order: order.id },
-            }"
+            :to="{ path: '/manage/order', query: { order: order.id } }"
             title="Content"
           >
             <span>{{ order.content }}</span>
