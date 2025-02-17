@@ -1,5 +1,6 @@
-<script>
-import { isFunction } from '@/U';
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import { NavPage } from '@/app/NavPage';
 
 import IconHome from '@/icon/IconHome.vue';
@@ -7,18 +8,14 @@ import IconProducts from '@/icon/IconMagnifyingGlass.vue';
 import IconManage from '@/icon/IconManage.vue';
 import IconPaper from '@/icon/IconPaper.vue';
 
-export default {
-  components: { IconHome, IconProducts, IconPaper, IconManage },
-  props: { item: { type: NavPage } },
-  computed: {
-    key() {
-      return this.item.key;
-    },
-    isSelected() {
-      return isFunction(this.item.isSelected) ? this.item.isSelected() : false;
-    },
-  },
-};
+const props = defineProps<{ item: NavPage }>();
+
+const key = computed(() => props.item.key);
+const isSelected = computed(() => {
+  return typeof props.item.isSelected === 'function'
+    ? props.item.isSelected()
+    : false;
+});
 </script>
 
 <template>
@@ -50,7 +47,7 @@ export default {
     <img
       v-else
       :class="['BottomNavigationBar-Item-icon', 'transition']"
-      :src="isSelected ? item.icon.light : item.icon.dark"
+      :src="isSelected ? item.icon?.light : item.icon?.dark"
       :alt="`Go to ${item.title}`"
     />
     <span :class="['BottomNavigationBar-Item-title', 'transition']">

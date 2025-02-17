@@ -1,52 +1,47 @@
-<script>
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue';
+
 import { SettingKey } from '@/items/Setting';
 import { useSettingStore } from '@/stores/setting.store';
 
 import Contact from './Footer-Contact.vue';
 
-export default {
-  components: { Contact },
-  data: (c) => ({ contacts: [], address: '', addressHref: '' }),
-  computed: {
-    lastModified() {
-      return useSettingStore().lastModified;
-    },
-  },
-  watch: {
-    lastModified() {
-      this.invalidate();
-    },
-  },
-  mounted() {
-    this.invalidate();
-  },
-  methods: {
-    async invalidate() {
-      this.address = await useSettingStore().findValueOfKey({
-        key: SettingKey.Location,
-      });
-      this.addressHref = await useSettingStore().findValueOfKey({
-        key: SettingKey.LocationLink,
-      });
+const settingStore = useSettingStore();
 
-      const contacts = await useSettingStore().findValueOfKey({
-        key: SettingKey.Contacts,
-        default: [],
-      });
-      this.contacts = contacts.map((contact) => {
-        const links = contact.links.map((link) => {
-          return {
-            icon: link.category.icon,
-            href: link.toHtmlHref(),
-            target: link.toHtmlTarget(),
-          };
-        });
+const contacts = ref([]);
+const address = ref('');
+const addressHref = ref('');
 
-        return { title: contact.title, subtitle: contact.links[0].id, links };
-      });
-    },
-  },
-};
+const lastModified = computed(() => settingStore.lastModified);
+
+async function invalidate() {
+  address.value = await useSettingStore().findValueOfKey({
+    key: SettingKey.Location,
+  });
+  addressHref.value = await useSettingStore().findValueOfKey({
+    key: SettingKey.LocationLink,
+  });
+
+  const xContacts = await useSettingStore().findValueOfKey({
+    key: SettingKey.Contacts,
+    default: [],
+  });
+  contacts.value = xContacts.map((contact) => {
+    const links = contact.links.map((link) => {
+      return {
+        icon: link.category.icon,
+        href: link.toHtmlHref(),
+        target: link.toHtmlTarget(),
+      };
+    });
+
+    return { title: contact.title, subtitle: contact.links[0].id, links };
+  });
+}
+
+watch(lastModified, () => invalidate());
+
+onMounted(() => invalidate());
 </script>
 
 <template>

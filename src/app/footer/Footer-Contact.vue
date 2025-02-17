@@ -1,19 +1,19 @@
-<script>
-export default {
-  props: {
-    title: { type: String, default: '' },
-    subtitle: { type: String, default: '' },
-    links: { type: Array, default: () => [] },
-  },
-  computed: {
-    primaryLink: (c) => (c.parsedLinks.length ? c.parsedLinks[0] : null),
-    parsedLinks: (c) => {
-      return c.links.map((link) => {
-        return { icon: link.icon, href: link.href, target: link?.target ?? '' };
-      });
-    },
-  },
-};
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = withDefaults(
+  defineProps<{ title?: string; subtitle?: string; links?: any[] }>(),
+  { title: '', subtitle: '', links: () => [] },
+);
+
+const primaryLink = computed(() => {
+  return parsedLinks.value.length ? parsedLinks.value[0] : null;
+});
+const parsedLinks = computed(() => {
+  return props.links.map((link) => {
+    return { icon: link.icon, href: link.href, target: link?.target ?? '' };
+  });
+});
 </script>
 
 <template>

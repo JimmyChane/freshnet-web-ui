@@ -1,47 +1,33 @@
-<script>
+<script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+
 import { useAppStore } from '@/stores/app.store';
 
 import Footer from '@/app/footer/Footer.vue';
 
 import Actionbar from './PageHome-Actionbar.vue';
-import Header from './PageHome-Header.vue';
 import SectionTitle from './PageHome-Section-Title.vue';
 import SectionCategory from './PageHome-SectionCategory.vue';
 import SectionContact from './PageHome-SectionContact.vue';
 import SectionHour from './PageHome-SectionHour.vue';
 import SectionLocation from './PageHome-SectionLocation.vue';
-import SectionPrint from './PageHome-SectionPrint.vue';
 import SectionProduct from './PageHome-SectionProduct.vue';
 import SectionService from './PageHome-SectionService.vue';
 
-export default {
-  components: {
-    Footer,
-    Actionbar,
-    Header,
-    SectionTitle,
-    SectionProduct,
-    SectionContact,
-    SectionPrint,
-    SectionLocation,
-    SectionCategory,
-    SectionHour,
-    SectionService,
-  },
-  data: () => ({ scrollTop: 0 }),
-  computed: {
-    innerWidth: (c) => useAppStore().window.innerWidth,
+const appStore = useAppStore();
 
-    isWide: (c) => c.innerWidth > 800,
-    isDrawer: (c) => useAppStore().navigation.isDrawer(),
-    isThin: (c) => c.isWide || c.isDrawer,
+const scrollTop = ref(0);
 
-    classes: (c) => (c.isWide ? 'Home-isOver800' : 'Home-isLess'),
-  },
-  mounted() {
-    document.title = 'Freshnet Enterprise';
-  },
-};
+const isWide = computed(() => appStore.window.innerWidth > 800);
+const isDrawer = computed(() => appStore.navigation.isDrawer());
+const isThin = computed(() => isWide.value || isDrawer.value);
+const classes = computed(() =>
+  isWide.value ? 'Home-isOver800' : 'Home-isLess',
+);
+
+onMounted(() => {
+  document.title = 'Freshnet Enterprise';
+});
 </script>
 
 <template>

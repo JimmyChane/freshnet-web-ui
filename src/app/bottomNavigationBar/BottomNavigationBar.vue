@@ -1,17 +1,11 @@
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import { useAppStore } from '@/stores/app.store';
 
 import Item from './BottomNavigationBar-Item.vue';
 
-export default {
-  components: { Item },
-  computed: {
-    selectedPageKey: (c) => useAppStore().currentPageKey,
-    selectedViewKey: (c) => useAppStore().currentViewKey,
-
-    navigations: (c) => useAppStore().pages,
-  },
-};
+const navigations = computed(() => useAppStore().pages);
 </script>
 
 <template>

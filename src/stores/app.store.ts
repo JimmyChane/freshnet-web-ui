@@ -5,12 +5,16 @@ import socketIo, { Socket } from 'socket.io-client';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-import { optArray, replace } from '@/U';
+import { isPassed, optArray, parseGroup2s, replace } from '@/U';
+import { NavPage } from '@/app/NavPage';
+import { NavView } from '@/app/NavView';
+import { NavViewGroup } from '@/app/NavViewGroup';
 import {
   POPUP_MENU_CORNER,
   POPUP_MENU_WIDTH,
 } from '@/app/popupMenu/PopupMenuOption';
 import { HOST_API } from '@/config';
+import { HOME_ROUTE, MANAGE_ROUTE, PRINT_ROUTE, PRODUCT_ROUTE } from '@/router';
 import { AppLayout } from '@/tools/AppLayout';
 import { Navigation } from '@/tools/Navigation';
 import { Snackbar } from '@/tools/Snackbar';
@@ -81,7 +85,78 @@ export const useAppStore = defineStore('app', () => {
   const navigation = ref(new Navigation());
 
   const user = computed(() => useLoginStore().user);
-  const pages = computed(() => app.value.pages);
+  const appPages = computed(() => {
+    const pages = [HOME_ROUTE, PRODUCT_ROUTE, PRINT_ROUTE, MANAGE_ROUTE];
+    if (pages.length < 1) return [];
+
+    const listGroup1 = pages.map((page) => {
+      const navPage = new NavPage()
+        .setKey(page.key)
+        .setTitle(page.title)
+        .setIcon(page.icon)
+        .setUserPermissions(page.userPermissions);
+
+      const children =
+        typeof page.children === 'function' ? page.children() : [];
+      const groups = typeof page.groups === 'function' ? page.groups() : [];
+      const queries =
+        typeof page._queries === 'function' ? page._queries() : [];
+
+      const returnParsedGroups = [
+        ...parseGroup2s([{ values: children }, ...groups]).map((obj) => {
+          return obj.setIsLink(true).setIsQuery(false);
+        }),
+        ...parseGroup2s(queries).map((obj) => {
+          return obj.setIsLink(true).setIsQuery(true);
+        }),
+      ]
+        .filter((group) => {
+          return isPassed(useLoginStore().user, group.userPermissions);
+        })
+        .reduce((groups: NavViewGroup[], group) => {
+          const views = optArray(group.values)
+            .filter((value) => {
+              return isPassed(useLoginStore().user, value.userPermissions);
+            })
+            .map((value) => {
+              return new NavView()
+                .setKey(value.key)
+                .setTitle(value.title)
+                .setIcon(value.icon);
+            });
+
+          let found: NavViewGroup | undefined = groups.find(
+            (group) => group.key === navPage.key,
+          );
+          if (!found) {
+            found = new NavViewGroup()
+              .setKey(group.key)
+              .setTitle(group.title)
+              .setIsLink(group.isLink)
+              .setIsQuery(group.isQuery);
+
+            groups.push(found);
+          }
+          found.groups.push(...views);
+
+          return groups;
+        }, []);
+
+      return navPage.setGroups(returnParsedGroups);
+    });
+
+    listGroup1.forEach((group1) => {
+      const listGroup2 = group1.groups;
+      listGroup2.forEach((group2) => {
+        const listGroup3 = group2.groups;
+        if (listGroup3.length === 0) {
+          listGroup2.splice(listGroup2.indexOf(group2), 1);
+        }
+      });
+    });
+
+    return listGroup1;
+  });
   const paths = computed(() => route.path.split('/').filter((path) => path));
   const currentPaths = computed(() => {
     let fullPath = route.fullPath;
@@ -345,7 +420,7 @@ export const useAppStore = defineStore('app', () => {
     navigation,
 
     user,
-    pages,
+    pages: appPages,
     paths,
     currentPaths,
     currentPageKey,
