@@ -1,50 +1,74 @@
-<script>
-export default {
-  emits: ['focus', 'blur', 'input', 'change'],
-  props: {
-    name: { type: String, default: '' },
-    label: { type: String, default: '' },
-    type: { type: String, default: '' },
-    autocorrect: { type: String, default: '' },
-    autocapitalize: { type: String, default: '' },
+<script setup lang="ts">
+import { computed, defineEmits, defineProps, ref, watch } from 'vue';
 
-    isRequired: { type: Boolean, default: false },
-    error: { type: String, default: '' },
+import { optString } from '@/U';
 
-    bindValue: { default: undefined },
+const emit = defineEmits<{
+  focus: [void];
+  blur: [void];
+  input: [void];
+  change: [void];
+}>();
+
+const props = withDefaults(
+  defineProps<{
+    name?: string;
+    label?: string;
+    type?: string;
+    autocorrect?: string;
+    autocapitalize?: string;
+
+    isRequired?: boolean;
+    error?: string;
+
+    bindValue?: any;
+  }>(),
+  {
+    name: '',
+    label: '',
+    type: '',
+    autocorrect: '',
+    autocapitalize: '',
+
+    isRequired: false,
+    error: '',
+
+    bindValue: undefined,
   },
-  data: (c) => ({ input_value: '', isFocused: false }),
-  watch: {
-    bindValue() {
-      this.value = this.bindValue;
-    },
+);
+
+const input_value = ref('');
+const isFocused = ref(false);
+
+const selfRef = ref<HTMLElement>;
+const inputRef = ref<HTMLInputElement>();
+
+watch([() => props.bindValue], (newVal) => {
+  value.value = optString(newVal);
+});
+
+const value = computed({
+  get: () => input_value.value,
+  set: (val) => {
+    input_value.value = val;
   },
-  computed: {
-    value: {
-      get() {
-        return this.input_value;
-      },
-      set(x) {
-        return (this.input_value = x);
-      },
-    },
-    isValueEmpty() {
-      if (this.type === 'number') {
-        return false;
-      }
-      return typeof this.value !== 'string' || this.value.trim() === '';
-    },
-  },
-  methods: {
-    focus() {
-      this.$refs.input.focus();
-    },
-  },
+});
+
+const isValueEmpty = computed(() => {
+  if (props.type === 'number') return false;
+  return typeof value.value !== 'string' || value.value.trim() === '';
+});
+
+const focus = () => {
+  inputRef.value?.focus();
 };
 </script>
 
+<script setup lang="ts"></script>
+
 <template>
   <div
+    ref="selfRef"
     :class="[
       'Input',
       isFocused ? 'Input-isFocused' : 'Input-isBlurred',
@@ -87,7 +111,7 @@ export default {
     </label>
     <input
       class="Input-input transition"
-      ref="input"
+      ref="inputRef"
       :name="name"
       :type="type"
       :autocorrect="autocorrect"
@@ -95,24 +119,24 @@ export default {
       @focus="
         (event) => {
           isFocused = true;
-          $emit('focus', this._self);
+          emit('focus', selfRef);
         }
       "
       @blur="
         (event) => {
           isFocused = false;
-          $emit('blur', this._self);
+          emit('blur', selfRef);
         }
       "
       @input="
         (event) => {
           value = event.target.value;
-          $emit('input', this._self);
+          emit('input', selfRef);
         }
       "
       @change="
         (event) => {
-          $emit('change', this._self);
+          emit('change', selfRef);
         }
       "
       v-bind:value="value"

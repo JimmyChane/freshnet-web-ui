@@ -1,38 +1,39 @@
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import IconHamburgerMenuDark from '@/assets/icon/hamburgerMenu-000000.svg';
 import IconHamburgerMenuLight from '@/assets/icon/hamburgerMenu-FFFFFF.svg';
 import { useAppStore } from '@/stores/app.store';
 
 import Actionbar from './Actionbar.vue';
 
-export default {
-  components: { Actionbar },
-  props: {
-    title: { type: String, default: '' },
-    leftMenus: { type: Array, default: () => [] },
-    rightMenus: { type: Array, default: () => [] },
-    iconTheme: { type: String, default: 'black' },
-  },
-  computed: {
-    moreLeftMenus: (c) => {
-      if (!useAppStore().navigation.isDrawer()) return c.leftMenus;
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    leftMenus?: any[];
+    rightMenus?: any[];
+    iconTheme?: string;
+  }>(),
+  { title: '', leftMenus: () => [], rightMenus: () => [], iconTheme: 'black' },
+);
 
-      const hamburgerMenuIcon =
-        c.iconTheme === 'white'
-          ? IconHamburgerMenuLight
-          : IconHamburgerMenuDark;
-      return [
-        {
-          key: 'hamburgerMenu',
-          title: 'Hamburger Menu',
-          icon: hamburgerMenuIcon,
-          click: () => useAppStore().navigation.openNavigationDrawer(),
-        },
-        ...c.leftMenus,
-      ];
+const moreLeftMenus = computed(() => {
+  if (!useAppStore().navigation.isDrawer()) return props.leftMenus;
+
+  const hamburgerMenuIcon =
+    props.iconTheme === 'white'
+      ? IconHamburgerMenuLight
+      : IconHamburgerMenuDark;
+  return [
+    {
+      key: 'hamburgerMenu',
+      title: 'Hamburger Menu',
+      icon: hamburgerMenuIcon,
+      click: () => useAppStore().navigation.openNavigationDrawer(),
     },
-  },
-};
+    ...props.leftMenus,
+  ];
+});
 </script>
 
 <template>

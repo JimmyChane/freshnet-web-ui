@@ -1,15 +1,14 @@
-<script>
-import { isString } from '@/U';
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue';
+
 import { Image } from '@/items/Image';
 import { ServiceImage } from '@/items/ServiceImage';
 
 class Container {
-  constructor(image) {
-    this.image = image;
-  }
+  constructor(readonly image: string | Image | ServiceImage) {}
 
   isString() {
-    return isString(this.image);
+    return typeof this.image === 'string';
   }
   isImage() {
     return this.image instanceof Image;
@@ -19,122 +18,139 @@ class Container {
   }
 
   getKey() {
-    if (this.isString()) {
+    if (typeof this.image === 'string') {
       return this.image;
     }
 
     return this.image.toUrl();
   }
 
-  async toValue(option) {
-    if (this.isString()) return this.image;
-    if (this.isImage()) return this.image.toUrl(option);
-    if (this.isServiceImage()) return await this.image.toBlob(option);
+  async toValue(option: { width?: number; height?: number } | undefined) {
+    if (typeof this.image === 'string') return this.image;
+    if (this.image instanceof Image) return this.image.toUrl(option);
+    if (this.image instanceof ServiceImage)
+      return await this.image.toBlob(option);
 
     return '';
   }
 }
 
-export default {
-  props: {
-    src: { type: [String, Image, ServiceImage], defualt: '' },
-    alt: { type: String, defualt: '' },
-    resize: { type: Boolean, default: true },
-    loading: { type: String, default: 'lazy' },
-  },
-  data: (c) => ({
-    approximateSize: 100,
+const emits = defineEmits<{
+  load: [any];
+  error: [any];
+  abort: [any];
+  click: [any];
+}>();
 
-    state: '',
-    requestValue: '',
-  }),
-  computed: {
-    style: (c) => {
-      return { opacity: c.state === 'loaded' ? '1' : '0.2' };
-    },
-    isValueEmpty: (c) => c.requestValue === '',
-  },
-  watch: {
-    async src() {
-      await this.invalidateSrc();
-    },
-  },
-  async mounted() {
-    await this.invalidateSrc();
-  },
-  methods: {
-    async invalidateSrc() {
-      this.state = '';
+const props = withDefaults(
+  defineProps<{
+    src?: string | Image | ServiceImage;
+    alt?: string;
+    resize?: boolean;
+    loading?: 'lazy' | 'eager' | undefined;
+  }>(),
+  { src: '', alt: '', resize: true, loading: 'lazy' },
+);
 
-      const previousValue = this.requestValue;
+const selfRef = ref<HTMLElement>();
 
-      const option = await this.getDimension();
-      const container = new Container(this.src);
-      const value = await container.toValue(option);
+const approximateSize = ref(1000);
+const state = ref('');
+const requestValue = ref('');
 
-      if (previousValue !== this.requestValue) return;
+const style = computed(() => {
+  return { opacity: state.value === 'loaded' ? '1' : '0.2' };
+});
 
-      this.requestValue = value;
-      const { img } = this.$refs;
-      if (img && img.complete) this.state = 'loaded';
-    },
+const isValueEmpty = computed(() => requestValue.value === '');
 
-    onLoad(event) {
-      this.state = 'loaded';
-      this.$emit('load', event);
-    },
-    onError(event) {
-      this.state = 'error';
-      this.$emit('error', event);
-    },
-    onAbort(event) {
-      this.state = 'aborted';
-      this.$emit('abort', event);
-    },
-    onClick(event) {
-      this.$emit('click', event);
-    },
+watch([() => props.src], () => invalidateSrc());
 
-    async getDimension() {
-      if (!this.resize) return undefined;
+onMounted(() => invalidateSrc());
 
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          const width = Math.max(this._self.$el.offsetWidth, 0);
-          const height = Math.max(this._self.$el.offsetHeight, 0);
+async function invalidateSrc() {
+  state.value = '';
 
-          resolve(this.parseDimension(width, height));
-        }, 100);
-      });
-    },
-    parseDimension(width, height) {
-      if (width > height) {
-        return { width: this.getApproximateSize(width) };
+  const previousValue = requestValue.value;
+
+  const option = await getDimension();
+  const container = new Container(props.src);
+  const value = await container.toValue(option);
+
+  if (previousValue !== requestValue.value) return;
+
+  requestValue.value = value;
+  const img = selfRef.value;
+  if (img instanceof HTMLImageElement && img.complete) {
+    state.value = 'loaded';
+  }
+}
+
+function onLoad(event: any) {
+  state.value = 'loaded';
+  emits('load', event);
+}
+function onError(event: any) {
+  state.value = 'error';
+  emits('error', event);
+}
+function onAbort(event: any) {
+  state.value = 'aborted';
+  emits('abort', event);
+}
+function onClick(event: any) {
+  emits('click', event);
+}
+
+async function getDimension(): Promise<
+  { width?: number; height?: number } | undefined
+> {
+  if (!props.resize) return undefined;
+
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (selfRef.value) {
+        const width = Math.max(selfRef.value.offsetWidth, 0);
+        const height = Math.max(selfRef.value.offsetHeight, 0);
+
+        resolve(parseDimension(width, height));
+      } else {
+        resolve(undefined);
       }
-      if (width < height) {
-        return { height: this.getApproximateSize(height) };
-      }
-      return {
-        width: this.getApproximateSize(width),
-        height: this.getApproximateSize(height),
-      };
-    },
+    }, 100);
+  });
+}
+function parseDimension(
+  width: any,
+  height: any,
+): { width?: number; height?: number } {
+  if (width > height) {
+    return { width: getApproximateSize(width) };
+  }
+  if (width < height) {
+    return { height: getApproximateSize(height) };
+  }
+  return {
+    width: getApproximateSize(width),
+    height: getApproximateSize(height),
+  };
+}
 
-    getApproximateSize(size) {
-      const divide = size / this.approximateSize;
-      return this.approximateSize * Math.max(Math.round(divide), 1);
-    },
-  },
-};
+function getApproximateSize(size: number) {
+  const divide = size / approximateSize.value;
+  return approximateSize.value * Math.max(Math.round(divide), 1);
+}
 </script>
 
 <template>
-  <span v-if="state === 'error'" class="ImageView-error">Error</span>
-  <div class="ImageView-empty" v-else-if="isValueEmpty"></div>
+  <span ref="selfRef" v-if="state === 'error'" class="ImageView-error">
+    Error
+  </span>
+  <div ref="selfRef" class="ImageView-empty" v-else-if="isValueEmpty"></div>
   <img
+    ref="selfRef"
     v-else
     class="ImageView-img"
-    ref="img"
     :style="style"
     :src="requestValue"
     :alt="alt"

@@ -1,31 +1,31 @@
-<script>
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import { isBoolean, isObjectOnly, optArray } from '@/U';
 
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import ButtonText from '@/components/button/ButtonText.vue';
 import MenuOption from '@/components/button/MenuOption.vue';
 
-export default {
-  components: { ButtonIcon, ButtonText, MenuOption },
-  props: { menus: { type: Array, default: () => [] } },
-  computed: {
-    Menus: (c) => {
-      return optArray(c.menus).filter((menu) => isObjectOnly(menu));
-    },
-    visibleMenus: (c) => {
-      return c.Menus.filter((menu) => {
-        if (!isBoolean(menu.isHidden)) return true;
-        return !menu.isHidden;
-      });
-    },
-    hiddenMenus: (c) => {
-      return c.Menus.filter((menu) => {
-        if (!isBoolean(menu.isHidden)) return false;
-        return menu.isHidden;
-      });
-    },
-  },
-};
+const props = withDefaults(defineProps<{ menus?: any[] }>(), {
+  menus: () => [],
+});
+
+const Menus = computed(() =>
+  optArray(props.menus).filter((menu) => isObjectOnly(menu)),
+);
+const visibleMenus = computed(() => {
+  return Menus.value.filter((menu) => {
+    if (!isBoolean(menu.isHidden)) return true;
+    return !menu.isHidden;
+  });
+});
+const hiddenMenus = computed(() => {
+  return Menus.value.filter((menu) => {
+    if (!isBoolean(menu.isHidden)) return false;
+    return menu.isHidden;
+  });
+});
 </script>
 
 <template>

@@ -1,34 +1,32 @@
-<script>
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue';
+
 import { useAppStore } from '@/stores/app.store';
 
-export default {
-  data: (c) => ({ isShowing: false }),
-  computed: { isConnected: (c) => useAppStore().isConnected },
-  watch: {
-    isConnected() {
-      this.onConnectionChange();
-    },
-  },
-  mounted() {
-    setTimeout(() => this.onConnectionChange(), 3000);
-  },
-  methods: {
-    onConnectionChange(attempt = 0) {
-      if (!this.isConnected) {
-        this.isShowing = true;
-        return;
-      }
+const isShowing = ref(false);
 
-      if (attempt === 0) {
-        this.isShowing = false;
-        return;
-      }
+const isConnected = computed(() => useAppStore().isConnected);
 
-      this.isShowing = true;
-      setTimeout(() => (this.isShowing = false), 3000);
-    },
-  },
-};
+watch([isConnected], () => onConnectionChange());
+
+onMounted(() => {
+  setTimeout(() => onConnectionChange(), 3000);
+});
+
+function onConnectionChange(attempt = 0) {
+  if (!isConnected.value) {
+    isShowing.value = true;
+    return;
+  }
+
+  if (attempt === 0) {
+    isShowing.value = false;
+    return;
+  }
+
+  isShowing.value = true;
+  setTimeout(() => (isShowing.value = false), 3000);
+}
 </script>
 
 <template>

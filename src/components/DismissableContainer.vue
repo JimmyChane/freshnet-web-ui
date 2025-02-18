@@ -1,46 +1,58 @@
-<script>
-export default {
-  emits: ['click-dismiss'],
-  mounted() {
-    const elements = [];
-    for (const child of this.$el.children) {
-      elements.push(child);
-    }
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
 
-    elements.forEach((element, index) => {
-      if (index === 0) return;
-      element.addEventListener('click', () => {
-        this.$emit('click-dismiss');
-      });
+const emits = defineEmits<{ clickDismiss: [void] }>();
+
+const selfRef = ref<HTMLElement>();
+const childRef = ref<HTMLElement[]>();
+
+onMounted(() => {
+  const children = selfRef.value?.children;
+
+  if (children === undefined) return;
+
+  const elements = [];
+  for (const child of children) {
+    elements.push(child);
+  }
+
+  elements.forEach((element, index) => {
+    if (index === 0) return;
+    element.addEventListener('click', () => {
+      emits('clickDismiss');
     });
-  },
-};
+  });
+});
 </script>
 
 <template>
-  <div class="DismissableContainer transition">
-    <div class="DismissableContainer-body">
-      <slot />
+  <div ref="selfRef" class="DismissableContainer transition">
+    <div ref="childRef" class="DismissableContainer-body">
+      <slot></slot>
     </div>
 
     <div
+      ref="childRef"
       :style="{ 'grid-area': 'top', 'min-height': 'var(--default-size-top)' }"
-    />
+    ></div>
     <div
+      ref="childRef"
       :style="{ 'grid-area': 'left', 'min-width': 'var(--default-size-left)' }"
-    />
+    ></div>
     <div
+      ref="childRef"
       :style="{
         'grid-area': 'right',
         'min-width': 'var(--default-size-right)',
       }"
-    />
+    ></div>
     <div
+      ref="childRef"
       :style="{
         'grid-area': 'bottom',
         'min-height': 'var(--default-size-bottom)',
       }"
-    />
+    ></div>
   </div>
 </template>
 

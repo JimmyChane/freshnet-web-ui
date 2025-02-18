@@ -7,7 +7,7 @@ import IconLinkColor from '@/assets/icon/link-1673E1.svg';
 import IconLinkWhite from '@/assets/icon/link-FFFFFF.svg';
 
 const props = withDefaults(
-  defineProps<{ to?: any; href?: string; target?: string; icon: string }>(),
+  defineProps<{ to?: any; href?: string; target?: string; icon?: string }>(),
   { to: '', href: '', target: '' },
 );
 
