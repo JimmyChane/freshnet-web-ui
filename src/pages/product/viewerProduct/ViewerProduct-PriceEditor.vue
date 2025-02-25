@@ -1,6 +1,6 @@
 <script>
 import IconEdit from '@/assets/icon/edit-000000.svg';
-import { ProductPrice } from '@/items/ProductPrice';
+import { ProductPrice } from '@/entity/model/ProductPrice';
 
 import Item from './ViewerProduct-PriceEditor-item.vue';
 import Section from './ViewerProduct-Section.vue';

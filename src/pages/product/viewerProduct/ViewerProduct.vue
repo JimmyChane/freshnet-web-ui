@@ -3,7 +3,7 @@ import chroma from 'chroma-js';
 import { mapStores } from 'pinia';
 
 import { isObjectOnly, optString, trimText } from '@/U';
-import { SpecificationKey } from '@/items/Specification';
+import { SpecificationKey } from '@/entity/model/Specification';
 import { useAppStore } from '@/stores/app.store';
 import { useProductStore } from '@/stores/product.store';
 import { useSettingStore } from '@/stores/setting.store';

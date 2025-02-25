@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-import { Order, OrderStatus } from '@/items/Order';
-import { OrderCustomer } from '@/items/OrderCustomer';
-import { ServiceCustomer } from '@/items/ServiceCustomer';
 import {
   addOrder,
   deleteOrder,
   getOrderList,
   updateOrderStatus,
-} from '@/request/Order';
+} from '@/entity/api/Order';
+import { Order, OrderStatus } from '@/entity/model/Order';
+import { OrderCustomer } from '@/entity/model/OrderCustomer';
+import { ServiceCustomer } from '@/entity/model/ServiceCustomer';
 import { DataLoader } from '@/stores/tools/DataLoader';
 import { List } from '@/stores/tools/List';
 import { Processor } from '@/stores/tools/Processor';

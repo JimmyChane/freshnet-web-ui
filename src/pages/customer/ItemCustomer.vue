@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue';
 
 import IconOrder from '@/assets/icon/order-505050.svg';
 import IconService from '@/assets/icon/service-505050.svg';
-import { Customer } from '@/items/Customer';
+import { Customer } from '@/entity/model/Customer';
 
 import ItemButton from '@/pages/manage/PanelItems-ItemButton.vue';
 

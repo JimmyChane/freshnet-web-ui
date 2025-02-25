@@ -1,5 +1,5 @@
 <script>
-import { Category } from '@/items/Category';
+import { Category } from '@/entity/model/Category';
 
 export default {
   props: {

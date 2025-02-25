@@ -2,16 +2,16 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 import { optArray, optString } from '@/U';
-import { Customer, type CustomerData } from '@/items/Customer';
-import { OrderCustomer } from '@/items/OrderCustomer';
-import { ServiceCustomer } from '@/items/ServiceCustomer';
 import {
   addCustomer,
   getCustomerList,
   removeCustomer,
   updateCustomerDescription,
   updateCustomerNamePhoneNumber,
-} from '@/request/Customer';
+} from '@/entity/api/Customer';
+import { Customer, type CustomerData } from '@/entity/model/Customer';
+import { OrderCustomer } from '@/entity/model/OrderCustomer';
+import { ServiceCustomer } from '@/entity/model/ServiceCustomer';
 import { DataLoader } from '@/stores/tools/DataLoader';
 import { List } from '@/stores/tools/List';
 import { Processor } from '@/stores/tools/Processor';

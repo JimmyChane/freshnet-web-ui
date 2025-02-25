@@ -7,7 +7,7 @@ import IconClose from '@/assets/icon/close-000000.svg';
 import IconEdit from '@/assets/icon/edit-000000.svg';
 import IconTrash from '@/assets/icon/trash-000000.svg';
 import IconWhatsapp from '@/assets/icon/whatsapp-color.svg';
-import { Customer } from '@/items/Customer';
+import { Customer } from '@/entity/model/Customer';
 import { useAppStore } from '@/stores/app.store';
 import { useCustomerStore } from '@/stores/customer.store';
 

@@ -1,5 +1,5 @@
 <script>
-import { cloudinaryServer } from '@/host/Server';
+import { cloudinaryServer } from '@/entity/Server';
 import { useAppStore } from '@/stores/app.store';
 import { NAVIGATION_MIN_WIDTH, NavigationLayout } from '@/tools/Navigation';
 

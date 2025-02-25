@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 
-import { Image } from '@/items/Image';
-import { ServiceImage } from '@/items/ServiceImage';
+import { Image } from '@/entity/model/Image';
+import { ServiceImage } from '@/entity/model/ServiceImage';
 
 class Container {
   constructor(readonly image: string | Image | ServiceImage) {}

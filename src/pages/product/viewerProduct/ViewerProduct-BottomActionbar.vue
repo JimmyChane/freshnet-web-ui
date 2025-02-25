@@ -1,5 +1,5 @@
 <script>
-import { SettingKey } from '@/items/Setting';
+import { SettingKey } from '@/entity/model/Setting';
 import { useLoginStore } from '@/stores/login.store';
 import { useSettingStore } from '@/stores/setting.store';
 

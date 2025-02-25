@@ -5,7 +5,7 @@ import IconCopyLight from '@/assets/icon/copy-FFFFFF.svg';
 import IconPrinter from '@/assets/icon/printer-000000.svg';
 import IconTrash from '@/assets/icon/trash-000000.svg';
 import IconView from '@/assets/icon/view-000000.svg';
-import { getAppPath } from '@/host/AppHost';
+import { getAppPath } from '@/entity/AppHost';
 import { useAppStore } from '@/stores/app.store';
 
 import ViewerProduct from '@/pages/product/viewerProduct/ViewerProduct.vue';

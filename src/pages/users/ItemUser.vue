@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { User } from '@/items/User';
+import { User } from '@/entity/model/User';
 
 import MenuOption from '@/components/button/MenuOption.vue';
 

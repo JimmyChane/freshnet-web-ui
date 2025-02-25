@@ -5,7 +5,7 @@ import IconSuccessGreen from '@/assets/icon/success-green.svg';
 import IconSuccessWhite from '@/assets/icon/success-white.svg';
 import IconTrashRed from '@/assets/icon/trash-red.svg';
 import IconTrashWhite from '@/assets/icon/trash-white.svg';
-import { OrderStatus } from '@/items/Order';
+import { OrderStatus } from '@/entity/model/Order';
 
 import ItemOrderAction from '@/pages/order/ItemOrder-Action.vue';
 

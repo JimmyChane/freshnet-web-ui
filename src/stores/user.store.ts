@@ -2,13 +2,13 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 import { optArray } from '@/U';
-import { User, type UserData } from '@/items/User';
 import {
   addUser as addUserRequest,
   getUserList,
   removeUser,
   updateUser,
-} from '@/request/User';
+} from '@/entity/api/User';
+import { User, type UserData } from '@/entity/model/User';
 import { DataLoader } from '@/stores/tools/DataLoader';
 import { List } from '@/stores/tools/List';
 import { Processor } from '@/stores/tools/Processor';

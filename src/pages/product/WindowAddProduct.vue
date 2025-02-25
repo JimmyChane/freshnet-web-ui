@@ -1,5 +1,5 @@
 <script>
-import { CategoryKey } from '@/items/Category';
+import { CategoryKey } from '@/entity/model/Category';
 import { useAppStore } from '@/stores/app.store';
 import { useBrandStore } from '@/stores/brand.store';
 import { useCategoryStore } from '@/stores/category.store';

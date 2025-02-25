@@ -1,5 +1,5 @@
 <script>
-import { RequirementCustomer } from '@/items/Customer';
+import { RequirementCustomer } from '@/entity/model/Customer';
 import { useAppStore } from '@/stores/app.store';
 import { useCustomerStore } from '@/stores/customer.store';
 

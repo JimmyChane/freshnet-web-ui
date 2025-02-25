@@ -1,5 +1,5 @@
 <script>
-import { cmToPixel } from '@/objects/Pixel';
+import { cmToPixel } from '@/entity/Pixel';
 import { useLoginStore } from '@/stores/login.store';
 import { useProductStore } from '@/stores/product.store';
 

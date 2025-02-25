@@ -1,7 +1,7 @@
 import chroma from 'chroma-js';
 
-import { ServerIcon } from '@/host/Server';
-import { User } from '@/items/User';
+import { ServerIcon } from '@/entity/Server';
+import { User } from '@/entity/model/User';
 
 import { NavViewGroup } from './app/NavViewGroup';
 

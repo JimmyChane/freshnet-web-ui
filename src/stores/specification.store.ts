@@ -2,8 +2,8 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 import { optArray } from '@/U';
-import { Type } from '@/items/Specification';
-import { getSpecificationList } from '@/request/Specification';
+import { getSpecificationList } from '@/entity/api/Specification';
+import { Type } from '@/entity/model/Specification';
 import { DataLoader } from '@/stores/tools/DataLoader';
 import { List } from '@/stores/tools/List';
 import { Processor } from '@/stores/tools/Processor';

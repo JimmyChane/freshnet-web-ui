@@ -3,7 +3,7 @@ import Vue from 'vue';
 
 import { isArray, optString } from '@/U';
 import IconRefresh from '@/assets/icon/refresh-000000.svg';
-import { Setting as SettingModule } from '@/items/Setting';
+import { Setting as SettingModule } from '@/entity/model/Setting';
 import { onCreatedRoute } from '@/mixin';
 import { SETTING_ROUTE } from '@/router';
 import { useUserStore } from '@/stores/user.store';

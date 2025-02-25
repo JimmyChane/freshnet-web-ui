@@ -9,7 +9,7 @@ import {
   INFO_SERVICE_EVENT_METHOD,
   PURCHASE_SERVICE_EVENT_METHOD,
   QUOTATION_SERVICE_EVENT_METHOD,
-} from '@/items/ServiceEventMethod';
+} from '@/entity/model/ServiceEventMethod';
 import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useServiceStore } from '@/stores/service.store';

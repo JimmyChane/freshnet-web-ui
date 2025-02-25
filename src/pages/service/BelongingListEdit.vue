@@ -1,6 +1,6 @@
 <script>
 import { optArray } from '@/U';
-import { ServiceBelonging } from '@/items/ServiceBelonging';
+import { ServiceBelonging } from '@/entity/model/ServiceBelonging';
 
 import Input from '@/components/Input.vue';
 

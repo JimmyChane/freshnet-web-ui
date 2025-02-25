@@ -1,6 +1,6 @@
 <script>
-import { Service } from '@/items/Service';
-import { findServiceStateByKey } from '@/items/ServiceState';
+import { Service } from '@/entity/model/Service';
+import { findServiceStateByKey } from '@/entity/model/ServiceState';
 
 import ImageViews from '@/components/ImageViews.vue';
 

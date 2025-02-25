@@ -1,4 +1,4 @@
-import type { ServerIcon } from '@/host/Server';
+import type { ServerIcon } from '@/entity/Server';
 
 export class IconPack {
   readonly light: ServerIcon;

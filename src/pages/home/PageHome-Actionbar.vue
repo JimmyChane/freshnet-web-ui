@@ -1,8 +1,8 @@
 <script>
 import { differenceInMinutes, format } from 'date-fns';
 
-import { cloudinaryServer } from '@/host/Server';
-import { SettingKey } from '@/items/Setting';
+import { cloudinaryServer } from '@/entity/Server';
+import { SettingKey } from '@/entity/model/Setting';
 import { useAppStore } from '@/stores/app.store';
 import { useSettingStore } from '@/stores/setting.store';
 

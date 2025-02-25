@@ -1,8 +1,8 @@
 <script>
 import { optArray } from '@/U';
 import IconImage from '@/assets/icon/image-FFFFFF.svg';
-import { ServicePrice } from '@/items/ServicePrice';
-import { findServiceStateByKey } from '@/items/ServiceState';
+import { ServicePrice } from '@/entity/model/ServicePrice';
+import { findServiceStateByKey } from '@/entity/model/ServiceState';
 
 import ImageView from '@/components/ImageView.vue';
 import ImageViews from '@/components/ImageViews.vue';

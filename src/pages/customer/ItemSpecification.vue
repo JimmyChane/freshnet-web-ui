@@ -1,5 +1,5 @@
 <script>
-import { CustomerDeviceSpecification } from '@/items/CustomerDeviceSpecification';
+import { CustomerDeviceSpecification } from '@/entity/model/CustomerDeviceSpecification';
 import { useSpecificationStore } from '@/stores/specification.store';
 
 export default {

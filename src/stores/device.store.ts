@@ -1,15 +1,15 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-import { Customer } from '@/items/Customer';
-import { CustomerDevice } from '@/items/CustomerDevice';
 import {
   addDevice,
   getDeviceList,
   removeDevice,
   updateDeviceDescription,
   updateDeviceSpecification,
-} from '@/request/Device';
+} from '@/entity/api/Device';
+import { Customer } from '@/entity/model/Customer';
+import { CustomerDevice } from '@/entity/model/CustomerDevice';
 import { DataLoader } from '@/stores/tools/DataLoader';
 import { List } from '@/stores/tools/List';
 import { Processor } from '@/stores/tools/Processor';

@@ -2,13 +2,6 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 import { optArray, optString, trimText } from '@/U';
-import { Brand } from '@/items/Brand';
-import { Category, CategoryKey } from '@/items/Category';
-import { Image } from '@/items/Image';
-import { Product, type ProductData } from '@/items/Product';
-import { ProductBundle } from '@/items/ProductBundle';
-import { ProductPrices } from '@/items/ProductPrices';
-import { Specification } from '@/items/Specification';
 import {
   addProduct,
   addProductBundle,
@@ -29,7 +22,14 @@ import {
   updateProductSecondHand,
   updateProductSpecifications,
   updateProductTitle,
-} from '@/request/Product';
+} from '@/entity/api/Product';
+import { Brand } from '@/entity/model/Brand';
+import { Category, CategoryKey } from '@/entity/model/Category';
+import { Image } from '@/entity/model/Image';
+import { Product, type ProductData } from '@/entity/model/Product';
+import { ProductBundle } from '@/entity/model/ProductBundle';
+import { ProductPrices } from '@/entity/model/ProductPrices';
+import { Specification } from '@/entity/model/Specification';
 import { DataLoader } from '@/stores/tools/DataLoader';
 import { List } from '@/stores/tools/List';
 import { Processor } from '@/stores/tools/Processor';

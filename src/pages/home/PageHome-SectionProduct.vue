@@ -5,7 +5,7 @@ import { mapStores } from 'pinia';
 import { isColorDark } from '@/U';
 import IconArrowDownDark from '@/assets/icon/arrowDown-000000.svg';
 import IconArrowDownLight from '@/assets/icon/arrowDown-FFFFFF.svg';
-import { CategoryKey } from '@/items/Category';
+import { CategoryKey } from '@/entity/model/Category';
 import { useAppStore } from '@/stores/app.store';
 import { useCategoryStore } from '@/stores/category.store';
 import { useProductStore } from '@/stores/product.store';

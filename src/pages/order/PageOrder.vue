@@ -1,7 +1,7 @@
 <script>
 import { mapStores } from 'pinia';
 
-import { OrderStatus } from '@/items/Order';
+import { OrderStatus } from '@/entity/model/Order';
 import { onCreatedRoute } from '@/mixin';
 import { ORDER_ROUTE } from '@/router';
 import { useAppStore } from '@/stores/app.store';

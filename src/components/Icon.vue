@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { ServerIcon } from '@/host/Server';
+import { ServerIcon } from '@/entity/Server';
 
 const props = withDefaults(
   defineProps<{ src?: string | ServerIcon; alt?: string }>(),

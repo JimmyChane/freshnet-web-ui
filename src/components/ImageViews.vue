@@ -2,8 +2,8 @@
 import { computed } from 'vue';
 
 import { optArray } from '@/U';
-import { Image } from '@/items/Image';
-import { ServiceImage } from '@/items/ServiceImage';
+import { Image } from '@/entity/model/Image';
+import { ServiceImage } from '@/entity/model/ServiceImage';
 
 import ImageView from '@/components/ImageView.vue';
 

@@ -1,5 +1,5 @@
 <script>
-import { cloudinaryServer } from '@/host/Server';
+import { cloudinaryServer } from '@/entity/Server';
 
 export default {
   props: { item: { type: Object, default: () => null } },

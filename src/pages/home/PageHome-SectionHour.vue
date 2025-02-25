@@ -1,5 +1,5 @@
 <script>
-import { SettingKey } from '@/items/Setting';
+import { SettingKey } from '@/entity/model/Setting';
 import { useSettingStore } from '@/stores/setting.store';
 
 import SectionTitle from './PageHome-Section-Title.vue';

@@ -9,8 +9,8 @@ import IconClose from '@/assets/icon/close-000000.svg';
 import IconEdit from '@/assets/icon/edit-505050.svg';
 import IconTrash from '@/assets/icon/trash-000000.svg';
 import IconWhatsapp from '@/assets/icon/whatsapp-color.svg';
-import { Service } from '@/items/Service';
-import { mapServiceState } from '@/items/ServiceState';
+import { Service } from '@/entity/model/Service';
+import { mapServiceState } from '@/entity/model/ServiceState';
 import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
 

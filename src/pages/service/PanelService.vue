@@ -1,8 +1,8 @@
 <script>
 import chroma from 'chroma-js';
 
-import { Service } from '@/items/Service';
-import { findServiceStateByKey } from '@/items/ServiceState';
+import { Service } from '@/entity/model/Service';
+import { findServiceStateByKey } from '@/entity/model/ServiceState';
 import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
 

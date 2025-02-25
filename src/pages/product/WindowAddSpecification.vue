@@ -1,5 +1,5 @@
 <script>
-import { SpecificationKey } from '@/items/Specification';
+import { SpecificationKey } from '@/entity/model/Specification';
 import { useAppStore } from '@/stores/app.store';
 import { useSpecificationStore } from '@/stores/specification.store';
 

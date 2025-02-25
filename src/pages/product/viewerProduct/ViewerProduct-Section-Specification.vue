@@ -1,6 +1,6 @@
 <script>
 import IconEdit from '@/assets/icon/edit-000000.svg';
-import { SpecificationKey } from '@/items/Specification';
+import { SpecificationKey } from '@/entity/model/Specification';
 
 import ItemProductSpecification from './ViewerProduct-Section-Specification-Item.vue';
 import Section from './ViewerProduct-Section.vue';

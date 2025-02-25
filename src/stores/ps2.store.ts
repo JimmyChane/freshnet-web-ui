@@ -2,8 +2,8 @@ import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
 import { optArray } from '@/U';
-import { Ps2Disc } from '@/items/Ps2Disc';
-import { getPs2DiscList } from '@/request/Ps2';
+import { getPs2DiscList } from '@/entity/api/Ps2';
+import { Ps2Disc } from '@/entity/model/Ps2Disc';
 import { DataLoader } from '@/stores/tools/DataLoader';
 import { List } from '@/stores/tools/List';
 import { Processor } from '@/stores/tools/Processor';

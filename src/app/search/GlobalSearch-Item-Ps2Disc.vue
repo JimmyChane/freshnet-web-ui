@@ -1,6 +1,6 @@
 <script>
-import { cloudinaryServer } from '@/host/Server';
-import { Ps2Disc } from '@/items/Ps2Disc';
+import { cloudinaryServer } from '@/entity/Server';
+import { Ps2Disc } from '@/entity/model/Ps2Disc';
 
 import ImageView from '@/components/ImageView.vue';
 

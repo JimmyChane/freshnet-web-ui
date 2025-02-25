@@ -1,5 +1,5 @@
 <script>
-import { SpecificationKey } from '@/items/Specification';
+import { SpecificationKey } from '@/entity/model/Specification';
 import { useSpecificationStore } from '@/stores/specification.store';
 
 import Selector4 from '@/components/selector/Selector4.vue';

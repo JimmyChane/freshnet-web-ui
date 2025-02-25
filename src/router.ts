@@ -4,8 +4,9 @@ import {
   createWebHistory,
 } from 'vue-router';
 
+import { ServerIcon } from '@/entity/Server';
+
 import { IconPack } from './app/IconPack';
-import { ServerIcon } from './host/Server';
 
 import LoginPage from '@/pages/login/PageLogin.vue';
 

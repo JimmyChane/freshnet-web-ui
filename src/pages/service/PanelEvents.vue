@@ -1,5 +1,5 @@
 <script>
-import { Service } from '@/items/Service';
+import { Service } from '@/entity/model/Service';
 
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 

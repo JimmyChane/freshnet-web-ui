@@ -8,7 +8,7 @@ import {
   getExport,
   getImport,
   getInfo,
-} from '@/request/Database';
+} from '@/entity/api/Database';
 import { DataLoader } from '@/stores/tools/DataLoader';
 import { Processor } from '@/stores/tools/Processor';
 

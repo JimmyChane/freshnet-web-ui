@@ -2,14 +2,14 @@
 import { format, formatDistanceToNow } from 'date-fns';
 
 import IconTrash from '@/assets/icon/trash-000000.svg';
-import { Service } from '@/items/Service';
-import { ServiceEvent } from '@/items/ServiceEvent';
+import { Service } from '@/entity/model/Service';
+import { ServiceEvent } from '@/entity/model/ServiceEvent';
 import {
   INFO_SERVICE_EVENT_METHOD,
   INITIAL_SERVICE_EVENT_METHOD,
   PURCHASE_SERVICE_EVENT_METHOD,
   QUOTATION_SERVICE_EVENT_METHOD,
-} from '@/items/ServiceEventMethod';
+} from '@/entity/model/ServiceEventMethod';
 import { useAppStore } from '@/stores/app.store';
 import { useServiceStore } from '@/stores/service.store';
 

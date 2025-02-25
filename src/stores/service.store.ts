@@ -1,15 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-import { Service } from '@/items/Service';
-import { ServiceBelonging } from '@/items/ServiceBelonging';
-import { ServiceCustomer } from '@/items/ServiceCustomer';
-import { ServiceEvent } from '@/items/ServiceEvent';
-import { ServiceImage } from '@/items/ServiceImage';
-import {
-  URGENT_SERVICE_LABEL,
-  WARRANTY_SERVICE_LABEL,
-} from '@/items/ServiceLabel';
 import {
   addService,
   addServiceEvent,
@@ -29,7 +20,16 @@ import {
   updateServiceDescription,
   updateServiceEventDescription,
   updateServiceState,
-} from '@/request/Service';
+} from '@/entity/api/Service';
+import { Service } from '@/entity/model/Service';
+import { ServiceBelonging } from '@/entity/model/ServiceBelonging';
+import { ServiceCustomer } from '@/entity/model/ServiceCustomer';
+import { ServiceEvent } from '@/entity/model/ServiceEvent';
+import { ServiceImage } from '@/entity/model/ServiceImage';
+import {
+  URGENT_SERVICE_LABEL,
+  WARRANTY_SERVICE_LABEL,
+} from '@/entity/model/ServiceLabel';
 import { DataLoader } from '@/stores/tools/DataLoader';
 import { List } from '@/stores/tools/List';
 import { Processor } from '@/stores/tools/Processor';

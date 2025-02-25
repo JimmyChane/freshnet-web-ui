@@ -1,5 +1,5 @@
 <script>
-import { RequirementCustomer } from '@/items/Customer';
+import { RequirementCustomer } from '@/entity/model/Customer';
 import { useCustomerStore } from '@/stores/customer.store';
 
 import PanelAction from '@/components/panel/PanelAction.vue';

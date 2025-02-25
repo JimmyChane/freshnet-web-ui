@@ -1,5 +1,5 @@
 <script>
-import { Customer } from '@/items/Customer';
+import { Customer } from '@/entity/model/Customer';
 
 export default {
   props: { item: { type: Customer, default: () => null } },

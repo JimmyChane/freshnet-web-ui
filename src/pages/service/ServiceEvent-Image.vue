@@ -1,6 +1,6 @@
 <script>
-import { ServiceEvent } from '@/items/ServiceEvent';
-import { INITIAL_SERVICE_EVENT_METHOD } from '@/items/ServiceEventMethod';
+import { ServiceEvent } from '@/entity/model/ServiceEvent';
+import { INITIAL_SERVICE_EVENT_METHOD } from '@/entity/model/ServiceEventMethod';
 
 import ImageView from '@/components/ImageView.vue';
 import MenuOption from '@/components/button/MenuOption.vue';

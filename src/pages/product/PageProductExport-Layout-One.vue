@@ -1,6 +1,6 @@
 <script>
-import { ProductPrice } from '@/items/ProductPrice';
-import { SpecificationKey } from '@/items/Specification';
+import { ProductPrice } from '@/entity/model/ProductPrice';
+import { SpecificationKey } from '@/entity/model/Specification';
 import { useLoginStore } from '@/stores/login.store';
 
 import Item from './PageProductExport-Layout-One-Specification.vue';

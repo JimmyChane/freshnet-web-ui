@@ -1,5 +1,5 @@
 <script>
-import { UserType } from '@/items/User';
+import { UserType } from '@/entity/model/User';
 
 import Input from '@/components/Input.vue';
 import PanelAction from '@/components/panel/PanelAction.vue';

@@ -1,7 +1,7 @@
 <script>
 import { getHours } from 'date-fns';
 
-import { SettingKey } from '@/items/Setting';
+import { SettingKey } from '@/entity/model/Setting';
 import { useSettingStore } from '@/stores/setting.store';
 
 import Section from './PageHome-Section.vue';

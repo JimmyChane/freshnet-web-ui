@@ -1,7 +1,7 @@
 <script>
 import { isArray } from '@/U';
-import { RequirementCustomer } from '@/items/Customer';
-import { CustomerDeviceSpecification } from '@/items/CustomerDeviceSpecification';
+import { RequirementCustomer } from '@/entity/model/Customer';
+import { CustomerDeviceSpecification } from '@/entity/model/CustomerDeviceSpecification';
 import { useCustomerStore } from '@/stores/customer.store';
 
 import PanelAction from '@/components/panel/PanelAction.vue';

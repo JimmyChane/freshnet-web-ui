@@ -1,6 +1,6 @@
 <script>
+import { Price } from '@/entity/Price';
 import { onCreatedRoute } from '@/mixin';
-import { Price } from '@/objects/Price';
 import { PRINT_ROUTE } from '@/router';
 
 import { Output } from './Output';

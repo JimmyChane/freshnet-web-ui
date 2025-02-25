@@ -1,5 +1,5 @@
 <script>
-import { cloudinaryServer } from '@/host/Server';
+import { cloudinaryServer } from '@/entity/Server';
 
 import ImageView from '@/components/ImageView.vue';
 

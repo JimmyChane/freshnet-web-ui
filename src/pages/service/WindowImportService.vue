@@ -5,7 +5,7 @@ import {
   PENDING_SERVICE_STATE,
   ServiceState,
   mapServiceState,
-} from '@/items/ServiceState';
+} from '@/entity/model/ServiceState';
 import { useAppStore } from '@/stores/app.store';
 import { useLoginStore } from '@/stores/login.store';
 import { useServiceStore } from '@/stores/service.store';

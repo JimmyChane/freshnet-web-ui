@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 
-import type { Category } from '@/items/Category';
+import type { Category } from '@/entity/model/Category';
 import { useCategoryStore } from '@/stores/category.store';
 
 import Label from './ItemCustomer-Label.vue';

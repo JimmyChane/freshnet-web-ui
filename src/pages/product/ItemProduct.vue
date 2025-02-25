@@ -2,13 +2,13 @@
 import chroma from 'chroma-js';
 
 import { isColorDark } from '@/U';
-import { Product } from '@/items/Product';
-import { ProductPrice } from '@/items/ProductPrice';
-import { SettingKey } from '@/items/Setting';
 import {
   generateSpecificationLabels,
   generateStockLabels,
-} from '@/objects/ProductPreset';
+} from '@/entity/ProductPreset';
+import { Product } from '@/entity/model/Product';
+import { ProductPrice } from '@/entity/model/ProductPrice';
+import { SettingKey } from '@/entity/model/Setting';
 import { useLoginStore } from '@/stores/login.store';
 import { useSettingStore } from '@/stores/setting.store';
 

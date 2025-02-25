@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 
-import { SettingKey } from '@/items/Setting';
+import { SettingKey } from '@/entity/model/Setting';
 import { useSettingStore } from '@/stores/setting.store';
 
 import Contact from './Footer-Contact.vue';

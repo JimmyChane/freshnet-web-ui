@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-import { User, UserType } from '@/items/User';
 import {
   getUser as getUserRequest,
   loginUser,
   updateUserPassword as updateUserPasswordRequest,
-} from '@/request/Login';
+} from '@/entity/api/Login';
+import { User, UserType } from '@/entity/model/User';
 import { Processor } from '@/stores/tools/Processor';
 
 const storageTokenKey = 'userToken';

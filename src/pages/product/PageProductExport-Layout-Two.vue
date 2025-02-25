@@ -1,7 +1,7 @@
 <script>
 import { isArray, isObjectOnly, optString } from '@/U';
-import { ProductPrice } from '@/items/ProductPrice';
-import { SpecificationKey } from '@/items/Specification';
+import { ProductPrice } from '@/entity/model/ProductPrice';
+import { SpecificationKey } from '@/entity/model/Specification';
 import { useLoginStore } from '@/stores/login.store';
 
 import ItemSpecification from './PageProductExport-Layout-Two-Specification.vue';

@@ -1,5 +1,5 @@
 import { type IconAsset, optString, parseIcon, parseKey } from '@/U';
-import type { ServerIcon } from '@/host/Server';
+import type { ServerIcon } from '@/entity/Server';
 
 export class NavView {
   key: string = '';
