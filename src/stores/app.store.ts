@@ -14,7 +14,7 @@ import {
   POPUP_MENU_WIDTH,
 } from '@/app/popupMenu/PopupMenuOption';
 import { HOST_API } from '@/config';
-import { HOME_ROUTE, MANAGE_ROUTE, PRINT_ROUTE, PRODUCT_ROUTE } from '@/router';
+import { HOME_ROUTE, PRINT_ROUTE } from '@/router';
 import { AppLayout } from '@/tools/AppLayout';
 import { Navigation } from '@/tools/Navigation';
 import { Snackbar } from '@/tools/Snackbar';
@@ -86,7 +86,7 @@ export const useAppStore = defineStore('app', () => {
 
   const user = computed(() => useLoginStore().user);
   const appPages = computed(() => {
-    const pages = [HOME_ROUTE, PRODUCT_ROUTE, PRINT_ROUTE, MANAGE_ROUTE];
+    const pages = [HOME_ROUTE, PRINT_ROUTE];
     if (pages.length < 1) return [];
 
     const listGroup1 = pages.map((page) => {
