@@ -3,6 +3,8 @@ import { createApp } from 'vue';
 
 import { router } from '@/router';
 
+import './main.css';
+
 import App from '@/app/App.vue';
 
 const app = createApp(App);

@@ -1,0 +1,33 @@
+:root {
+  font-size: 16px;
+}
+@media (max-width: 320px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  line-height: 1;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  font-family: system-ui, sans-serif;
+  word-break: break-word;
+}
+html {
+  overscroll-behavior-x: none;
+}
+body {
+  width: 100dvw;
+  height: 100dvh;
+  overscroll-behavior-x: none;
+  overscroll-behavior-y: none;
+}
+p {
+  white-space: pre-line;
+}

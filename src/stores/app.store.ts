@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia';
-// https://www.npmjs.com/package/print-html-element
-import PHE from 'print-html-element';
-import socketIo, { Socket } from 'socket.io-client';
+import { Socket } from 'socket.io-client';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -13,8 +11,7 @@ import {
   POPUP_MENU_CORNER,
   POPUP_MENU_WIDTH,
 } from '@/app/popupMenu/PopupMenuOption';
-import { HOST_API } from '@/config';
-import { HOME_ROUTE, PRINT_ROUTE } from '@/router';
+import { HOME_ROUTE } from '@/router';
 import { AppLayout } from '@/tools/AppLayout';
 import { Navigation } from '@/tools/Navigation';
 import { Snackbar } from '@/tools/Snackbar';
@@ -45,11 +42,6 @@ interface PopupWindow {
   onOpened?: ((popupWindow: PopupWindow) => void) | undefined;
   onClosed?: ((popupWindow: PopupWindow) => void) | undefined;
 }
-interface ImageViewerContext {
-  isShowing: boolean;
-  image: any;
-  thumbnails: any[];
-}
 
 const keyGetter = new TimeNowGetter();
 
@@ -61,11 +53,7 @@ export const useAppStore = defineStore('app', () => {
 
   const app = ref<any>(null);
   const socket = ref<Socket | null>(null);
-  const imageViewer = ref<ImageViewerContext>({
-    isShowing: false,
-    image: null,
-    thumbnails: [],
-  });
+
   const popupMenus = ref<PopupMenu[]>([]);
   const snackbars = ref<Snackbar[]>([]);
   const popupWindows = ref<PopupWindow[]>([]);
@@ -86,7 +74,7 @@ export const useAppStore = defineStore('app', () => {
 
   const user = computed(() => useLoginStore().user);
   const appPages = computed(() => {
-    const pages = [HOME_ROUTE, PRINT_ROUTE];
+    const pages = [HOME_ROUTE];
     if (pages.length < 1) return [];
 
     const listGroup1 = pages.map((page) => {
@@ -177,47 +165,6 @@ export const useAppStore = defineStore('app', () => {
     return paths.length > 1 ? paths[1] : '';
   });
 
-  function copyText(text: any) {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.setAttribute('readonly', '');
-    textarea.style.position = 'absolute';
-    textarea.style.left = '-9999px';
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    textarea.remove();
-  }
-  function openLink(link: any, target = '_blank') {
-    let a = document.createElement('a');
-    a.style.position = 'absolute';
-    a.style.opacity = '0';
-    a.style.pointerEvents = 'none';
-    a.href = link;
-    a.target = target;
-    a.dispatchEvent(
-      new MouseEvent('click', {
-        view: window,
-        bubbles: true,
-        cancelable: false,
-      }),
-    );
-    a.remove();
-  }
-  function pushDownload(filename: any, content: any) {
-    const element = document.createElement('a');
-    element.href = `data:text/plain;charset=utf-8,${encodeURIComponent(
-      content,
-    )}`;
-    element.download = filename;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
-  }
-  function print(element: any) {
-    PHE.printElement(element);
-  }
-
   function nextQuery(param = {}) {
     setQuery(param, true);
   }
@@ -251,49 +198,6 @@ export const useAppStore = defineStore('app', () => {
         useServiceStore().socketNotify({ key, content });
         break;
     }
-  };
-  const openSocket = () => {
-    if (isConnected.value) return;
-
-    const option: Record<string, any> = {
-      extraHeaders: { authorization: window.localStorage.getItem('userToken') },
-    };
-    socket.value = socketIo(HOST_API, option)
-      .on('connect', () => console.info('Socket', 'Connected'))
-      .on('connect_error', () => console.info('Socket', 'Connect Error'))
-      .on('disconnect', (reason) => console.info('Socket', 'Disconnected'))
-      .on('notify', (body) => socketNotify(body));
-  };
-  const closeSocket = () => {
-    if (!isConnected.value) return;
-    const oldSocket = socket.value;
-    socket.value = null;
-    oldSocket?.close();
-  };
-  const restartSocket = () => {
-    closeSocket();
-    openSocket();
-  };
-
-  // imageViewer
-  const imageViewerShow = (option = { image: null, thumbnails: [] }) => {
-    imageViewer.value.image = option.image;
-    imageViewer.value.thumbnails = optArray(option.thumbnails);
-    imageViewer.value.isShowing = true;
-    imageViewer.value = imageViewer.value;
-  };
-  const imageViewerHide = () => {
-    imageViewer.value.isShowing = false;
-    imageViewer.value = imageViewer.value;
-    setTimeout(() => {
-      imageViewer.value.thumbnails = [];
-      imageViewer.value.image = null;
-      imageViewer.value = imageViewer.value;
-    }, 300);
-  };
-  const imageViewerSelect = (image = null) => {
-    imageViewer.value.image = image;
-    imageViewer.value = imageViewer.value;
   };
 
   // popupMenus
@@ -350,66 +254,9 @@ export const useAppStore = defineStore('app', () => {
     snackbars.value = snackbars.value;
   };
 
-  // popup windows
-  const openPopupWindow = (
-    arg:
-      | {
-          component: any;
-          onOpened?: ((popupWindow: PopupWindow) => void) | undefined;
-          onClosed?: ((popupWindow: PopupWindow) => void) | undefined;
-        }
-      | Record<string, any>
-      | any,
-  ) => {
-    const popupWindow: PopupWindow | Record<string, any> = {
-      key: keyGetter.get(),
-      isShowing: false,
-      isClosing: false,
-
-      open: () => {
-        if (popupWindow.isShowing) return;
-        if (popupWindow.isClosing) return;
-        popupWindow.isShowing = true;
-
-        if (popupWindow.onOpened) {
-          popupWindow.onOpened(popupWindow);
-        }
-      },
-      close: () => {
-        if (!popupWindow.isShowing) return;
-        if (popupWindow.isClosing) return;
-        popupWindow.isClosing = true;
-
-        setTimeout(() => {
-          popupWindow.isShowing = false;
-          if (popupWindow.onClosed) {
-            popupWindow.onClosed(popupWindow);
-          }
-          setTimeout(() => {
-            const index = popupWindows.value.indexOf(popupWindow as any);
-            popupWindows.value.splice(index, 1);
-            popupWindows.value = popupWindows.value;
-          }, 300);
-        }, 300);
-      },
-    };
-
-    Object.keys(arg).forEach((key) => {
-      popupWindow[key] = arg[key];
-    });
-
-    popupWindows.value.push(popupWindow as any);
-    popupWindows.value = popupWindows.value;
-
-    setTimeout(() => popupWindow.open(), 300);
-
-    return popupWindow;
-  };
-
   return {
     app,
     socket,
-    imageViewer,
     popupMenus,
     snackbars,
     popupWindows,
@@ -426,29 +273,15 @@ export const useAppStore = defineStore('app', () => {
     currentPageKey,
     currentViewKey,
 
-    copyText,
-    openLink,
-    pushDownload,
-
-    print,
     nextQuery,
     replaceQuery,
     setQuery,
 
     isConnected,
     socketNotify,
-    openSocket,
-    closeSocket,
-    restartSocket,
-
-    imageViewerShow,
-    imageViewerHide,
-    imageViewerSelect,
 
     popupMenuShow,
 
     snackbarShow,
-
-    openPopupWindow,
   };
 });

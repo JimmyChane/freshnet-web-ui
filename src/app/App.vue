@@ -8,23 +8,10 @@ import PopupWindow from '@/components/window/PopupWindow.vue';
 
 import Snackbar from './Snackbar.vue';
 import Status from './Status.vue';
-import ViewerImage from './ViewerImage.vue';
-import NavigationBottom from './bottomNavigationBar/BottomNavigationBar.vue';
-import NavigationDrawer from './navigationDrawer/NavigationDrawer.vue';
 import PopupMenu from './popupMenu/PopupMenu.vue';
 
 export default {
-  name: 'App',
-
-  components: {
-    NavigationDrawer,
-    NavigationBottom,
-    ViewerImage,
-    Snackbar,
-    PopupMenu,
-    Status,
-    PopupWindow,
-  },
+  components: { Snackbar, PopupMenu, Status, PopupWindow },
   data: (c) => ({ layoutLoginIsShown: false, shouldShowStatus: false }),
   computed: {
     ...mapStores(useAppStore),
@@ -75,10 +62,8 @@ export default {
 
       if (user.isTypeAdmin() || user.isTypeStaff()) {
         this.shouldShowStatus = true;
-        useAppStore().openSocket();
       } else {
         this.shouldShowStatus = false;
-        useAppStore().closeSocket();
       }
     },
     logout() {
@@ -102,24 +87,13 @@ export default {
       :isDrawer="`${appStore.navigation.isDrawer()}`"
       :isFixed="`${!appStore.navigation.isDrawer()}`"
     >
-      <NavigationDrawer
-        class="App-NavigationDrawer"
-        :style="{ 'grid-area': 'left' }"
-        v-if="!appStore.navigation.isNone()"
-        @click-logout="() => logout()"
-      />
       <router-view
         class="App-routerView"
         :style="{ 'grid-area': 'body' }"
         ref="AppRouterView"
       />
-      <NavigationBottom
-        :style="{ 'grid-area': 'bottom', 'z-index': '1' }"
-        v-if="!appStore.navigation.isNone() && appStore.navigation.isDrawer()"
-      />
     </div>
 
-    <ViewerImage style="z-index: auto" />
     <PopupWindow
       v-for="(popupWindow, index) in appStore.popupWindows"
       :style="{ 'z-index': 6 + index }"
@@ -154,38 +128,6 @@ export default {
 </template>
 
 <style lang="scss">
-// initiate
-:root {
-  font-size: 16px;
-}
-@media (max-width: 320px) {
-  :root {
-    font-size: 14px;
-  }
-}
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-  font-family: 'Roboto', sans-serif;
-  word-break: break-word;
-}
-html {
-  overscroll-behavior-x: none;
-}
-body {
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-  width: 100dvw;
-  height: 100dvh;
-  overscroll-behavior-x: none;
-  overscroll-behavior-y: none;
-}
-p {
-  white-space: pre-line;
-}
-
 .scrollbar {
   --scrollbar-size: 0;
 

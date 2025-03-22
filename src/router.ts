@@ -62,61 +62,16 @@ export const HOME_ROUTE = new AppRoute({
     new ServerIcon('home-000000'),
   ),
 });
-export const PRINT_ROUTE = new AppRoute({
-  key: 'print',
-  title: 'Printing',
-  icon: new IconPack(
-    new ServerIcon('paper-FFFFFF'),
-    new ServerIcon('paper-000000'),
-  ),
-});
-export const PS2_ROUTE = new AppRoute({
-  key: 'ps2',
-  name: 'PagePs2',
-  title: 'PS2 Disc',
-  icon: new IconPack(
-    new ServerIcon('playstation-FFFFFF'),
-    new ServerIcon('playstation-000000'),
-  ),
-});
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/home',
     name: 'home',
-    component: () => import('@/pages/home/PageHome.vue'),
-    beforeEnter(to, from, next) {
-      const { hash } = to;
-
-      let legacyPath = to.redirectedFrom?.toString() ?? '';
-      if (legacyPath.startsWith('/#')) {
-        legacyPath = hash.substring(2);
-
-        if (!hash.startsWith('/')) {
-          legacyPath = `/${legacyPath}`;
-        }
-        if (legacyPath.length) {
-          next({ path: legacyPath, query: to.query });
-        }
-        return;
-      }
-
-      next();
-    },
-  },
-  {
-    path: '/print',
-    name: 'print',
-    component: () => import('@/pages/print/PagePrint.vue'),
-  },
-  {
-    path: '/error/404',
-    name: 'error/404',
-    component: () => import('@/pages/error/Page404.vue'),
+    component: () => import('@/pages/home-v2/Home-v2.page.vue'),
   },
 
   { path: '/', redirect: { path: '/home' } },
-  { path: '/:pathMatch(.*)*', redirect: { path: '/error/404' } },
+  { path: '/:pathMatch(.*)*', redirect: { name: 'home' } },
 ];
 
 export const router = createRouter({ history: createWebHistory(), routes });
