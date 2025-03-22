@@ -51,14 +51,14 @@ export default {
 
   --hitbox-size: 30px;
 
-  @media (max-width: 500px) {
-    --hitbox-size: 10px;
-  }
-
   --default-size-top: var(--hitbox-size);
   --default-size-right: var(--hitbox-size);
   --default-size-bottom: var(--hitbox-size);
   --default-size-left: var(--hitbox-size);
+
+  @media (max-width: 500px) {
+    --hitbox-size: 10px;
+  }
 
   .PopupWindow-body {
     height: 100%;

@@ -64,11 +64,6 @@ onMounted(() => {
   align-items: center;
   --transition-timing: cubic-bezier(1, 0, 0, 1);
 
-  @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-  }
-
   position: absolute;
   top: 0;
   bottom: 0;
@@ -87,6 +82,11 @@ onMounted(() => {
   --default-size-right: 3rem;
   --default-size-bottom: 3rem;
   --default-size-left: 3rem;
+
+  @supports (-webkit-backdrop-filter: none) or (backdrop-filter: none) {
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
 
   & > * {
     z-index: 1;

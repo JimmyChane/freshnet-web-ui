@@ -54,12 +54,5 @@ export default defineConfig({
       },
     }),
   ],
-  resolve: {
-    alias: {
-      path: 'path-browserify',
-      stream: 'stream-browserify',
-      fs: 'browserify-fs',
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
+  resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
 });
