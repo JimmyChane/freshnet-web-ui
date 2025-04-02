@@ -1,7 +1,6 @@
 <script setup lang="ts">
+import { optArray } from '@chanzor/utils';
 import { computed } from 'vue';
-
-import { isObjectOnly, optArray } from '@/U';
 
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import ButtonText from '@/components/button/ButtonText.vue';
@@ -12,7 +11,7 @@ const props = withDefaults(defineProps<{ menus?: any[] }>(), {
 });
 
 const Menus = computed(() =>
-  optArray(props.menus).filter((menu) => isObjectOnly(menu)),
+  optArray(props.menus).filter((menu) => typeof menu === 'object' && menu),
 );
 const visibleMenus = computed(() => {
   return Menus.value.filter((menu) => {

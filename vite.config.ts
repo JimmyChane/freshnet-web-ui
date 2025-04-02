@@ -1,6 +1,7 @@
 import vue from '@vitejs/plugin-vue';
 import { URL, fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
+import ViteInspect from 'vite-plugin-inspect';
 import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
@@ -53,6 +54,7 @@ export default defineConfig({
         ],
       },
     }),
+    ViteInspect(),
   ],
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
 });

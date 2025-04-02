@@ -1,4 +1,4 @@
-import { optArray } from '@/U';
+import { optArray } from '@chanzor/utils';
 
 import { ValidationChecker } from './ValidationChecker';
 

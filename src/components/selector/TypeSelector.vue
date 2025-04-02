@@ -1,5 +1,5 @@
 <script>
-import { optArray, optString } from '@/U';
+import { optArray, optString } from '@chanzor/utils';
 
 export default {
   emits: ['click-item-key'],

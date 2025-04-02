@@ -1,6 +1,5 @@
+import { optString } from '@chanzor/utils';
 import { format, isAfter, isBefore, isSameDay, parse } from 'date-fns';
-
-import { optString } from '@/U';
 
 export interface WorkingHoursData {
   title?: string;

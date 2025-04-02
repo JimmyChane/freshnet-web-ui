@@ -1,30 +1,36 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { optArray } from '@/U';
 import { Image } from '@/entity/model/Image';
 import { ServiceImage } from '@/entity/model/ServiceImage';
 
 import ImageView from '@/components/ImageView.vue';
 
 const props = withDefaults(
-  defineProps<{ width?: number; height?: number; images?: any[] }>(),
+  defineProps<{
+    width?: number;
+    height?: number;
+    images?: (string | Image | ServiceImage)[];
+  }>(),
   { width: 0, height: 0, images: () => [] },
 );
 
 const parsedImages = computed(() => {
-  return optArray(props.images, [props.images])
+  return (Array.isArray(props.images) ? props.images : [props.images])
     .filter((image) => {
       return image instanceof Image || image instanceof ServiceImage;
     })
-    .reduce((images: any[], image, index, sources) => {
-      if (index < 4) images.push(image);
-      return images;
-    }, []);
+    .reduce(
+      (images: (string | Image | ServiceImage)[], image, index, sources) => {
+        if (index < 4) images.push(image);
+        return images;
+      },
+      [],
+    );
 });
-const parsedImage = computed((c) =>
-  parsedImages.value.length === 1 ? parsedImages.value[0] : null,
-);
+const parsedImage = computed(() => {
+  return parsedImages.value.length === 1 ? parsedImages.value[0] : undefined;
+});
 
 const cssWidth = computed(() => `${props.width}px`);
 const cssHeight = computed(() => `${props.height}px`);
@@ -68,7 +74,6 @@ function onAbort(element: any, image: any) {}
       class="ImageViews-item"
       :style="{ width: '100%', height: '100%', 'grid-area': `img${index}` }"
       v-for="(image, index) in parsedImages"
-      :key="image.toUrl()"
       :src="image"
       @load="(event: any) => onLoad(event.target, image)"
       @error="(event: any) => onError(event.target, image)"

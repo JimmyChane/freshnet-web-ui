@@ -1,7 +1,6 @@
 <script>
+import { optString } from '@chanzor/utils';
 import chroma from 'chroma-js';
-
-import { optString } from '@/U';
 
 export default {
   props: {

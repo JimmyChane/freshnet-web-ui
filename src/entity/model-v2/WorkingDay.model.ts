@@ -1,4 +1,5 @@
-import { optString } from '@/U';
+import { optString } from '@chanzor/utils';
+
 import { WorkingHoursModel } from '@/entity/model-v2/WorkingHour.model';
 
 export interface WorkingDayData {

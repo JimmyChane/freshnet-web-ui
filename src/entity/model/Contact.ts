@@ -1,5 +1,5 @@
-import { optString } from '@/U';
-// icon
+import { optString } from '@chanzor/utils';
+
 import IconCall from '@/assets/icon/call-color.svg';
 import IconTelegram from '@/assets/icon/telegram-color.svg';
 import IconTelephone from '@/assets/icon/telephone-color.svg';

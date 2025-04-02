@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { optArray } from '@chanzor/utils';
 import { computed } from 'vue';
 
-import { optArray } from '@/U';
 import { Snackbar } from '@/tools/Snackbar';
 
 const props = defineProps<{ item: Snackbar }>();

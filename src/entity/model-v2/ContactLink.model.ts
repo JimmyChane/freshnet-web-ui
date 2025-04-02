@@ -1,4 +1,5 @@
-import { optString } from '@/U';
+import { optString } from '@chanzor/utils';
+
 import {
   CALL,
   SocialMediaModel,

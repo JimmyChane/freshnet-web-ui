@@ -1,7 +1,7 @@
 <script>
+import { optArray } from '@chanzor/utils';
 import chroma from 'chroma-js';
 
-import { optArray } from '@/U';
 import IconArrowDown from '@/assets/icon/arrowDown-505050.svg';
 
 import Menu from '@/components/Menu.vue';

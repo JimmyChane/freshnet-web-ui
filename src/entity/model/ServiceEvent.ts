@@ -1,4 +1,6 @@
-import { isObject, optArray, trimId, trimText } from '@/U';
+import { optArray } from '@chanzor/utils';
+
+import { trimId, trimText } from '@/U';
 import { textContains } from '@/entity/ItemSearcher';
 import { useUserStore } from '@/stores/user.store';
 
@@ -29,9 +31,10 @@ export class ServiceEvent {
     this.method = trimId(data.method);
     this.description = trimText(data.description);
     this.status = trimId(data.status);
-    this.price = isObject(data.price)
-      ? new ServicePrice().fromData(data.price)
-      : null;
+    this.price =
+      typeof data.price === 'object'
+        ? new ServicePrice().fromData(data.price)
+        : null;
     this.images = optArray(data.images).map((image: any) => {
       return new ServiceImage().fromData(image);
     });

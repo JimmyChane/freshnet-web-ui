@@ -1,4 +1,6 @@
-import { optNumber, trimText } from '@/U';
+import { optNumber } from '@chanzor/utils';
+
+import { trimText } from '@/U';
 
 // todo: copied
 export interface ServiceBelongingData {

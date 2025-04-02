@@ -1,55 +1,11 @@
+import { optString } from '@chanzor/utils';
 import chroma from 'chroma-js';
 
-import { ServerIcon } from '@/entity/Server';
-import { User } from '@/entity/model/User';
-
-import { NavViewGroup } from './app/NavViewGroup';
-
-export interface IconAsset {
-  light: string;
-  dark: string;
-}
-export interface Parse {
-  key: string;
-  value: any;
-}
-export interface GroupAsset {
-  key: string;
-  title: string;
-  icon: string;
-  values: any[];
-  children: any[];
-  userPermissions: any[];
-}
-
-export function isArray(arr: any): boolean {
-  return Array.isArray(arr);
-}
-export function isObject(obj: any): boolean {
-  return typeof obj === 'object';
-}
-export function isObjectOnly(obj: any): boolean {
-  return isObject(obj) && obj;
-}
-
-export function optString(str: any, fallback = ''): string {
-  return typeof str === 'string' ? str : fallback;
-}
-export function optNumber(num: any, fallback = 0): number {
-  return typeof num === 'number' ? num : fallback;
-}
-export function optBoolean(bool: any, fallback = false): boolean {
-  return typeof bool === 'boolean' ? bool : fallback;
-}
-export function optArray<T>(arr: T[] | undefined, fallback: T[] = []): T[] {
-  if (arr === undefined) return fallback;
-  return Array.isArray(arr) ? arr : fallback;
-}
 export function optObject(obj: any, fallback = {}): {} {
-  return isObject(obj) ? obj : fallback;
+  return typeof obj === 'object' ? obj : fallback;
 }
 export function optObjectOnly(obj: any, fallback = {}): {} {
-  return isObjectOnly(obj) ? obj : fallback;
+  return typeof obj === 'object' && obj ? obj : fallback;
 }
 
 export function trimId(str: any): string {
@@ -78,108 +34,4 @@ export function replaceStringAll(str = '', regex = '', replace = ''): string {
 
 export function isColorDark(color: any, threshold = 60): boolean {
   return chroma.deltaE(color, '000000') < threshold;
-}
-
-export function objectToArray<T>(object: Record<string, T> | any): Parse[] {
-  return Object.keys(typeof object === 'object' ? object : {}).map((key) => {
-    return { key, value: object[key] };
-  });
-}
-export function isPassed(user: User, permissions: any[] | any) {
-  permissions = Array.isArray(permissions) ? permissions : [];
-
-  if (permissions.length > 0) {
-    if (user.isTypeAdmin() && !permissions.includes('admin')) return false;
-    if (user.isTypeStaff() && !permissions.includes('staff')) return false;
-  }
-
-  return true;
-}
-export function parseIcon(
-  icon: Record<string, ServerIcon> | any,
-): IconAsset | null {
-  if (!isObjectOnly(icon)) return null;
-
-  const light =
-    icon.light instanceof ServerIcon
-      ? icon.light.toUrl()
-      : new ServerIcon(icon.light).toUrl();
-  const dark =
-    icon.dark instanceof ServerIcon
-      ? icon.dark.toUrl()
-      : new ServerIcon(icon.dark).toUrl();
-
-  return { light, dark };
-}
-export function parseKey(str: string | any) {
-  return optString(str).trim().replace(' ', '');
-}
-export function parseGroup2s(array: GroupAsset[]): NavViewGroup[] {
-  return optArray(array).map((obj: GroupAsset) => {
-    return (
-      new NavViewGroup()
-        .setKey(obj.key)
-        .setTitle(obj.title)
-        // .setTitle(`${obj.title} hello`)
-        .setIcon(obj.icon)
-        .setValues(obj.values)
-        .setChildren(obj.children)
-        .setUserPermissions(obj.userPermissions)
-    );
-  });
-}
-
-export function isValidKey(key: string | any): boolean {
-  return typeof key === 'string' && !key.includes(' ');
-}
-export function isValidValue(value: any): boolean {
-  return value !== null && value !== undefined && value !== '';
-}
-export function replace(
-  currentQuery: Record<string, any>,
-  pendingQuery: Record<string, any>,
-) {
-  const nextQueries = objectToArray(currentQuery);
-  const pendingQueries = objectToArray(pendingQuery);
-  let isChanged = false;
-
-  for (const pendingQuery of pendingQueries) {
-    if (!isObjectOnly(pendingQuery)) continue;
-
-    const { key, value } = pendingQuery;
-    if (!isValidKey(key)) continue;
-
-    const nextQuery = nextQueries.find((nextQuery) => {
-      return nextQuery.key === key;
-    });
-
-    if (!nextQuery) {
-      nextQueries.push({ key, value });
-      isChanged = true;
-      continue;
-    }
-
-    if (nextQuery.value !== pendingQuery.value) {
-      nextQuery.value = pendingQuery.value;
-      isChanged = true;
-      continue;
-    }
-
-    if (!isValidValue(nextQuery.value)) {
-      nextQueries.splice(nextQueries.indexOf(nextQuery), 1);
-      isChanged = true;
-      continue;
-    }
-  }
-
-  if (!isChanged) return;
-
-  return nextQueries
-    .filter((nextQuery) => {
-      return isValidKey(nextQuery.key) && isValidValue(nextQuery.value);
-    })
-    .reduce((query: Record<string, any>, nextQuery) => {
-      query[nextQuery.key] = nextQuery.value;
-      return query;
-    }, {});
 }

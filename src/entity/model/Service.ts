@@ -1,4 +1,6 @@
-import { isObject, optArray, optBoolean, trimId, trimText } from '@/U';
+import { optArray, optBoolean } from '@chanzor/utils';
+
+import { trimId, trimText } from '@/U';
 import { textContains } from '@/entity/ItemSearcher';
 import type { Item } from '@/stores/tools/List';
 import { useUserStore } from '@/stores/user.store';
@@ -84,9 +86,10 @@ export class Service implements Item {
         this.state = PENDING_SERVICE_STATE.key;
     }
 
-    this.customer = isObject(data.customer)
-      ? new ServiceCustomer().fromData(data.customer)
-      : null;
+    this.customer =
+      typeof data.customer === 'object'
+        ? new ServiceCustomer().fromData(data.customer)
+        : null;
     this.description = trimText(data.description);
     this.belongings = optArray(data.belongings).map((belonging) => {
       return new ServiceBelonging().fromData(belonging);

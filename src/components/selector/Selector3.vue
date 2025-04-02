@@ -1,5 +1,5 @@
 <script>
-import { optArray, optString } from '@/U';
+import { optArray, optString } from '@chanzor/utils';
 
 import ItemMenu from './Selector3/ItemMenu.vue';
 

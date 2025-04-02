@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { computed, defineEmits, defineProps, ref, watch } from 'vue';
-
-import { optString } from '@/U';
+import { optString } from '@chanzor/utils';
+import {
+  computed,
+  defineEmits,
+  defineProps,
+  ref,
+  useTemplateRef,
+  watch,
+} from 'vue';
 
 const emit = defineEmits<{
-  focus: [void];
-  blur: [void];
-  input: [void];
-  change: [void];
+  focus: [HTMLDivElement | null];
+  blur: [HTMLDivElement | null];
+  input: [HTMLDivElement | null];
+  change: [HTMLDivElement | null];
 }>();
 
 const props = withDefaults(
@@ -40,8 +46,8 @@ const props = withDefaults(
 const input_value = ref('');
 const isFocused = ref(false);
 
-const selfRef = ref<HTMLElement>;
-const inputRef = ref<HTMLInputElement>();
+const selfRef = useTemplateRef('selfRef');
+const inputRef = useTemplateRef('inputRef');
 
 watch([() => props.bindValue], (newVal) => {
   value.value = optString(newVal);
@@ -62,6 +68,8 @@ const isValueEmpty = computed(() => {
 const focus = () => {
   inputRef.value?.focus();
 };
+
+defineExpose({ focus });
 </script>
 
 <script setup lang="ts"></script>
@@ -130,7 +138,7 @@ const focus = () => {
       "
       @input="
         (event) => {
-          value = event.target.value;
+          value = inputRef?.value ?? '';
           emit('input', selfRef);
         }
       "

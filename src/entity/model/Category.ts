@@ -1,4 +1,4 @@
-import { isObject, trimId, trimStringAll } from '@/U';
+import { trimId, trimStringAll } from '@/U';
 import BgCartridge from '@/assets/bg/177364729-w300h100.webp';
 import BgNotebook from '@/assets/bg/andras-vas-Bd7gNnWJBkU-unsplash-w300h100.webp';
 import BgOther from '@/assets/bg/christopher-bill-3l19r5EOZaw-unsplash-w300h100.webp';
@@ -155,7 +155,8 @@ export class Category implements Item {
     this.id = trimId(data._id);
     this.key = trimId(data.key);
     this.title = trimStringAll(data.title);
-    this.icon = isObject(data.icon) ? new Image().fromData(data.icon) : null;
+    this.icon =
+      typeof data.icon === 'object' ? new Image().fromData(data.icon) : null;
     this.background = getCategoryBackground(this.key);
 
     return this;

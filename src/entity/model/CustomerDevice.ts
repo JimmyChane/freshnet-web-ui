@@ -1,4 +1,6 @@
-import { optArray, trimId, trimText } from '@/U';
+import { optArray } from '@chanzor/utils';
+
+import { trimId, trimText } from '@/U';
 import { textContains } from '@/entity/ItemSearcher';
 import { useCategoryStore } from '@/stores/category.store';
 import { useCustomerStore } from '@/stores/customer.store';

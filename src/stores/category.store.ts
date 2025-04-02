@@ -1,7 +1,7 @@
+import { optArray } from '@chanzor/utils';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-import { optArray } from '@/U';
 import { getCategoryList } from '@/entity/api/Category';
 import { Category } from '@/entity/model/Category';
 import { DataLoader } from '@/stores/tools/DataLoader';
@@ -29,14 +29,6 @@ export const useCategoryStore = defineStore('category', () => {
   async function getItems() {
     return dataLoader.data();
   }
-  async function getItemOfId(id: string) {
-    let items: Category[] = await getItems();
-    return items.find((item) => item.id === id);
-  }
-  async function getItemOfKey(key: string) {
-    const items: Category[] = await getItems();
-    return items.find((item) => item.key === key);
-  }
 
   return {
     isLoading: computed(() => processor.value.isLoading()),
@@ -45,7 +37,5 @@ export const useCategoryStore = defineStore('category', () => {
 
     refresh,
     getItems,
-    getItemOfId,
-    getItemOfKey,
   };
 });

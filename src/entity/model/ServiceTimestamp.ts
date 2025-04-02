@@ -1,3 +1,4 @@
+import { optNumber } from '@chanzor/utils';
 import {
   type Day,
   endOfDay,
@@ -10,7 +11,6 @@ import {
   previousDay,
 } from 'date-fns';
 
-import { optNumber } from '@/U';
 import { textContains } from '@/entity/ItemSearcher';
 
 const getTextOfDayNumber = (day: number): string => {

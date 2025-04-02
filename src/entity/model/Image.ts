@@ -1,4 +1,4 @@
-import { isObject, trimId } from '@/U';
+import { trimId } from '@/U';
 import { HOST_API } from '@/config';
 import { Filename } from '@/entity/Filename';
 import { serverRes } from '@/entity/Server';
@@ -53,7 +53,7 @@ export class Image {
   }
   toUrl(option: ImageUrlOption = { width: 0, height: 0 }): string {
     let { width = 0, height = 0 } =
-      isObject(option) && option !== null ? option : {};
+      typeof option === 'object' && option !== null ? option : {};
 
     const method = this.method;
     const path = this.path;

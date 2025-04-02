@@ -71,35 +71,27 @@ function parseAmount(content: string): number {
 }
 
 export class Price {
-  private _amount: number;
-  private _currency: string;
+  readonly amount: number;
+  readonly currency: string;
 
   constructor(amount: number = 0, currency: string = 'RM') {
-    this._currency =
+    this.currency =
       currency.trim().replace(' ', '').toUpperCase() || DEFAULT_CURRENCY;
-    this._amount = isNaN(amount) ? 0 : Number(amount);
-  }
-
-  get amount(): number {
-    return this._amount;
-  }
-
-  get currency(): string {
-    return this._currency;
+    this.amount = isNaN(amount) ? 0 : Number(amount);
   }
 
   compare(item: Price): number {
-    return this._amount - item._amount;
+    return this.amount - item.amount;
   }
 
   plus(any: Price | number | string | any): Price {
     const price = parsePrice(any);
-    return new Price(this._amount + price._amount, this._currency);
+    return new Price(this.amount + price.amount, this.currency);
   }
 
   minus(any: Price | number | string | any): Price {
     const price = parsePrice(any);
-    return new Price(this._amount - price._amount, this._currency);
+    return new Price(this.amount - price.amount, this.currency);
   }
 
   toString(): string {

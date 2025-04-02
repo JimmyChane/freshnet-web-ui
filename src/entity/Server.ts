@@ -1,7 +1,7 @@
+import { optArray } from '@chanzor/utils';
 import axios, { type AxiosResponse } from 'axios';
 
-import { trimId } from '@/U';
-import { isArray, isObject, isObjectOnly, optArray, optObject } from '@/U';
+import { optObject, trimId } from '@/U';
 import { CLOUDINARY_RES, HOST_API, HOST_RES } from '@/config';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
@@ -50,7 +50,10 @@ export class ServerRequest {
   }
 
   private contentTypeJson(): this {
-    if (!isObject(this.bind.headers) || isArray(this.bind.headers)) {
+    if (
+      typeof this.bind.headers !== 'object' ||
+      Array.isArray(this.bind.headers)
+    ) {
       this.bind.headers = {};
     }
     this.bind.headers['Content-Type'] = 'application/json;charset=UTF-8';
@@ -148,7 +151,7 @@ export class ServerResponse {
 
   getArrayContent(): any[] {
     const content = this.getContent();
-    if (!isArray(content)) {
+    if (!Array.isArray(content)) {
       throw new Error('content not array');
     }
     return content;
@@ -161,8 +164,8 @@ export class ServerResponse {
 
   getObjectContent(): object {
     const content = this.getContent();
-    if (isArray(content)) throw new Error('content array');
-    if (!isObject(content)) throw new Error('content not object');
+    if (Array.isArray(content)) throw new Error('content array');
+    if (typeof content !== 'object') throw new Error('content not object');
     if (content === undefined) throw new Error('content undefined');
     if (content === null) throw new Error('content null');
     return content;
@@ -170,7 +173,7 @@ export class ServerResponse {
 
   optObjectContent(): object | undefined {
     const content = this.getContent();
-    if (isArray(content) || !isObjectOnly(content)) {
+    if (Array.isArray(content) || !(typeof content === 'object' && content)) {
       return {};
     }
     return optObject(content);

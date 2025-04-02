@@ -1,4 +1,6 @@
-import { optString, trimStringAll, trimText } from '@/U';
+import { optString } from '@chanzor/utils';
+
+import { trimStringAll, trimText } from '@/U';
 import { textContains } from '@/entity/ItemSearcher';
 
 import { PhoneNumber } from './PhoneNumber';

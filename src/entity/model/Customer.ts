@@ -1,9 +1,9 @@
-import { optArray, trimId, trimText } from '@/U';
+import { optArray } from '@chanzor/utils';
+
+import { trimId, trimText } from '@/U';
 import { textContains } from '@/entity/ItemSearcher';
-import { useCustomerStore } from '@/stores/customer.store';
 import type { Item } from '@/stores/tools/List';
 
-import { CustomerDevice } from './CustomerDevice';
 import { PhoneNumber } from './PhoneNumber';
 
 export interface CustomerData {
@@ -89,36 +89,5 @@ export class Customer implements Item {
 
   compare(item: Customer): number {
     return 0;
-  }
-
-  async fetchDevices(): Promise<(CustomerDevice | undefined)[]> {
-    if (!this.deviceIds.length) return [];
-    const devices: CustomerDevice[] = await useCustomerStore().getDevices();
-    return this.deviceIds.map((deviceId) => {
-      return devices.find((device) => device.id === deviceId);
-    });
-  }
-
-  async fetchDeviceGroups(property: string = ''): Promise<any[]> {
-    const devices: (CustomerDevice | undefined)[] = await this.fetchDevices();
-
-    const optGroup = (groups: Record<string, any>[], key: any) => {
-      let group = groups.find((group) => group[property] === key);
-      if (!group) {
-        group = { devices: [] };
-        group[property] = key;
-        groups.push(group);
-      }
-      return group;
-    };
-
-    return devices.reduce((groups: any[], device: any) => {
-      if (!device) return groups;
-
-      const deviceValue = device[property];
-
-      optGroup(groups, deviceValue).devices.push(device);
-      return groups;
-    }, []);
   }
 }

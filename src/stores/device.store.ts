@@ -1,13 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 
-import {
-  addDevice,
-  getDeviceList,
-  removeDevice,
-  updateDeviceDescription,
-  updateDeviceSpecification,
-} from '@/entity/api/Device';
+import { addDevice, getDeviceList } from '@/entity/api/Device';
 import { Customer } from '@/entity/model/Customer';
 import { CustomerDevice } from '@/entity/model/CustomerDevice';
 import { DataLoader } from '@/stores/tools/DataLoader';
@@ -39,20 +33,6 @@ export const useDeviceStore = defineStore('device', () => {
   async function getItems() {
     return dataLoader.data();
   }
-  async function getItemOfId(id = '') {
-    if (typeof id !== 'string') return null;
-    const items: CustomerDevice[] = await getItems();
-    return items.find((item) => item.id === id) ?? null;
-  }
-  async function getItemsOfIds(ids: string[] = []) {
-    if (!Array.isArray(ids)) return [];
-
-    const items: CustomerDevice[] = await getItems();
-    const results = ids.map((id) => {
-      return items.find((item) => item.id === id) ?? null;
-    });
-    return results;
-  }
   async function addItem(arg: any) {
     const data: any = new CustomerDevice().fromData(arg).toData();
     delete data.id;
@@ -68,55 +48,6 @@ export const useDeviceStore = defineStore('device', () => {
     }
     return item;
   }
-  async function removeItemOfId(arg: any) {
-    const api = await removeDevice({
-      content: { ownerCustomerId: arg.ownerCustomerId, deviceId: arg.id },
-    });
-    const content = api.optObjectContent();
-    const item = new CustomerDevice().fromData(content);
-    const customer = useCustomerStore().items.find((customer: Customer) => {
-      return customer.id === item.ownerCustomerId;
-    });
-
-    if (!customer) return;
-
-    customer.deviceIds = customer.deviceIds.filter((deviceId: string) => {
-      return deviceId !== item.id;
-    });
-
-    return list.value.removeItemByItem(item);
-  }
-
-  async function updateSpecificationsOfId(arg: {
-    _id: string;
-    specifications: any[];
-  }) {
-    const { _id, specifications } = arg;
-    const api = await updateDeviceSpecification({
-      content: { _id, specifications },
-    });
-    const content = api.optObjectContent();
-    const inputItem = new CustomerDevice().fromData(content);
-    return list.value.updateItemById(inputItem.id, (item) => {
-      if (!item) return;
-      item.specifications = inputItem.specifications;
-    });
-  }
-  async function updateDescriptionOfId(arg: {
-    _id: string;
-    description: string;
-  }) {
-    const { _id, description } = arg;
-    const api = await updateDeviceDescription({
-      content: { _id, description },
-    });
-    const content = api.optObjectContent();
-    const inputItem = new CustomerDevice().fromData(content);
-    return list.value.updateItemById(inputItem.id, (item) => {
-      if (!item) return;
-      item.description = inputItem.description;
-    });
-  }
 
   return {
     isLoading: computed(() => processor.value.isLoading()),
@@ -125,11 +56,6 @@ export const useDeviceStore = defineStore('device', () => {
 
     refresh,
     getItems,
-    getItemOfId,
-    getItemsOfIds,
     addItem,
-    removeItemOfId,
-    updateSpecificationsOfId,
-    updateDescriptionOfId,
   };
 });

@@ -12,16 +12,12 @@ import PopupMenu from './popupMenu/PopupMenu.vue';
 
 export default {
   components: { Snackbar, PopupMenu, Status, PopupWindow },
-  data: (c) => ({ layoutLoginIsShown: false, shouldShowStatus: false }),
+  data: (c) => ({ shouldShowStatus: false }),
   computed: {
     ...mapStores(useAppStore),
 
     user: (c) => useLoginStore().user,
 
-    // pages
-    pages() {
-      return useAppStore().pages;
-    },
     currentPaths() {
       return useAppStore().currentPaths;
     },
@@ -42,7 +38,6 @@ export default {
     },
   },
   async created() {
-    useAppStore().app = this;
     window.addEventListener('resize', this.invalidateWindow);
 
     this.invalidateUser();
@@ -65,13 +60,6 @@ export default {
       } else {
         this.shouldShowStatus = false;
       }
-    },
-    logout() {
-      useLoginStore()
-        .logout()
-        .then((user) => {
-          useAppStore().snackbarShow(`${user.name} is now logged out`);
-        });
     },
   },
 };

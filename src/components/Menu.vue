@@ -1,5 +1,6 @@
 <script>
-import { isArray, isObjectOnly, optArray } from '@/U';
+import { optArray } from '@chanzor/utils';
+
 import {
   POPUP_MENU_ALIGNMENT,
   POPUP_MENU_CORNER,
@@ -35,7 +36,9 @@ export default {
       if (this.popupMenu) this.popupMenu.hide();
 
       const menus =
-        isObjectOnly(this.menus) && !isArray(this.menus)
+        typeof this.menus === 'object' &&
+        this.menus &&
+        !Array.isArray(this.menus)
           ? [this.menus]
           : optArray(this.menus);
 
