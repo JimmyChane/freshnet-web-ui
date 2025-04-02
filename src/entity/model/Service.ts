@@ -1,11 +1,4 @@
-import {
-  isObject,
-  isString,
-  optArray,
-  optBoolean,
-  trimId,
-  trimText,
-} from '@/U';
+import { isObject, optArray, optBoolean, trimId, trimText } from '@/U';
 import { textContains } from '@/entity/ItemSearcher';
 import type { Item } from '@/stores/tools/List';
 import { useUserStore } from '@/stores/user.store';
@@ -240,7 +233,10 @@ export class Service implements Item {
   }
 
   async fetchUser(): Promise<User | undefined> {
-    if (!isString(this.username) || this.username.trim().length === 0) {
+    if (
+      typeof this.username !== 'string' ||
+      this.username.trim().length === 0
+    ) {
       return undefined;
     }
     return await useUserStore().getUserByUsername(this.username);

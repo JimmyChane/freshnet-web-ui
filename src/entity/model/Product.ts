@@ -1,4 +1,4 @@
-import { isString, optArray, optString, trimId, trimText } from '@/U';
+import { optArray, optString, trimId, trimText } from '@/U';
 import { getAppPath } from '@/entity/AppHost';
 import { textContains } from '@/entity/ItemSearcher';
 import { useBrandStore } from '@/stores/brand.store';
@@ -398,7 +398,11 @@ export class Product implements Item {
 
   setImages(images: (Image | any)[]) {
     this.images = images
-      .filter((image) => isString(image.method) && isString(image.path))
+      .filter((image) => {
+        return (
+          typeof image.method === 'string' && typeof image.path === 'string'
+        );
+      })
       .map((image) => {
         return new Image().fromData({ method: image.method, path: image.path });
       });

@@ -1,7 +1,7 @@
 <script>
 import chroma from 'chroma-js';
 
-import { isFunction, optString } from '@/U';
+import { optString } from '@/U';
 
 export default {
   props: {
@@ -17,7 +17,7 @@ export default {
     to: (c) => c.menu.to,
 
     isSelected: (c) => {
-      return isFunction(c.menu.isSelected) && c.menu.isSelected();
+      return typeof c.menu.isSelected === 'function' && c.menu.isSelected();
     },
     hasIcon: (c) => optString(c.icon).length > 0,
   },

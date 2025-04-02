@@ -1,6 +1,4 @@
 <script>
-import { isFunction } from '@/U';
-
 export default {
   props: {
     menu: { type: Object },
@@ -17,12 +15,12 @@ export default {
     isSelected() {
       const { menu } = this;
 
-      if (!isFunction(menu.isSelected)) return false;
+      if (typeof menu.isSelected !== 'function') return false;
 
       return menu.isSelected(menu);
     },
     click() {
-      if (!isFunction(this.menu.click)) return;
+      if (typeof this.menu.click !== 'function') return;
       this.menu.click(this.menu);
     },
   },

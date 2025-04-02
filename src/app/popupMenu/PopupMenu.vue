@@ -1,8 +1,6 @@
 <script>
 import chroma from 'chroma-js';
 
-import { isFunction } from '@/U';
-
 import {
   POPUP_MENU_ALIGNMENT,
   POPUP_MENU_CORNER,
@@ -238,7 +236,7 @@ export default {
       this.style['pointer-events'] = 'none';
     },
     clickMenu(menu) {
-      if (isFunction(menu.click)) {
+      if (typeof menu.click === 'function') {
         menu.click(menu);
         this.hide();
       }

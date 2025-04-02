@@ -1,5 +1,3 @@
-import { isString } from '@/U';
-
 interface SearchResult {
   count: number;
   item: { toCount(strs: string[]): number };
@@ -76,7 +74,7 @@ export class Searcher {
   }
 
   search(str: string | string[]): { toCount(strs: string[]): number }[] {
-    if (!isString(str)) return [];
+    if (typeof str !== 'string') return [];
 
     const strs = Array.isArray(str)
       ? this.onSplitStrings(str)

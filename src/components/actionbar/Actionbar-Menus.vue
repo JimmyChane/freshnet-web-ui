@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-import { isBoolean, isObjectOnly, optArray } from '@/U';
+import { isObjectOnly, optArray } from '@/U';
 
 import ButtonIcon from '@/components/button/ButtonIcon.vue';
 import ButtonText from '@/components/button/ButtonText.vue';
@@ -16,13 +16,13 @@ const Menus = computed(() =>
 );
 const visibleMenus = computed(() => {
   return Menus.value.filter((menu) => {
-    if (!isBoolean(menu.isHidden)) return true;
+    if (typeof menu.isHidden !== 'boolean') return true;
     return !menu.isHidden;
   });
 });
 const hiddenMenus = computed(() => {
   return Menus.value.filter((menu) => {
-    if (!isBoolean(menu.isHidden)) return false;
+    if (typeof menu.isHidden !== 'boolean') return false;
     return menu.isHidden;
   });
 });

@@ -1,5 +1,3 @@
-import { isNumber } from '@/U';
-
 export function getAppPath() {
   return parseOrigin(
     window.location.protocol,
@@ -16,7 +14,7 @@ function parseOrigin(protocol: string, hostname: string, port: string) {
 }
 
 function parsePort(port: string | any): string {
-  if (!isNumber(port)) port = Number.parseInt(port);
+  if (typeof port !== 'number') port = Number.parseInt(port);
   if (Number.isNaN(port)) port = 80;
   return `${port}`;
 }

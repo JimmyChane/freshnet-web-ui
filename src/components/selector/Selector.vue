@@ -1,5 +1,5 @@
 <script>
-import { isColorDark, isString } from '@/U';
+import { isColorDark } from '@/U';
 import IconArrowDownDark from '@/assets/icon/arrow_down-black.svg';
 import IconArrowDownLight from '@/assets/icon/arrow_down-white.svg';
 
@@ -35,7 +35,7 @@ export default {
       return item?.icon?.white ?? '';
     },
     currentColor: (c) => {
-      if (!c.currentMenu || !isString(c.currentMenu.primaryColor)) {
+      if (!c.currentMenu || typeof c.currentMenu.primaryColor !== 'string') {
         return 'hsl(0, 0%, 96%)';
       }
       return c.currentMenu.primaryColor;

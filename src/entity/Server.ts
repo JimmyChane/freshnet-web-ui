@@ -1,6 +1,6 @@
 import axios, { type AxiosResponse } from 'axios';
 
-import { isString, trimId } from '@/U';
+import { trimId } from '@/U';
 import { isArray, isObject, isObjectOnly, optArray, optObject } from '@/U';
 import { CLOUDINARY_RES, HOST_API, HOST_RES } from '@/config';
 
@@ -205,14 +205,13 @@ export class ServerIcon {
   private ext?: string = undefined;
 
   constructor(name: string = '', ext: string | undefined = undefined) {
-    if (isString(name)) this.name = name;
-    if (isString(ext)) this.ext = ext;
+    if (typeof name === 'string') this.name = name;
+    if (typeof ext === 'string') this.ext = ext;
   }
 
   toUrl(): string {
-    const filename = !isString(this.ext)
-      ? this.name
-      : `${this.name}.${this.ext}`;
+    const filename =
+      typeof this.ext !== 'string' ? this.name : `${this.name}.${this.ext}`;
     return `${HOST_RES}/icon/${filename}`;
   }
   toName(): string {

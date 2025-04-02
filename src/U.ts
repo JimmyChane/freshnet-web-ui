@@ -22,15 +22,6 @@ export interface GroupAsset {
   userPermissions: any[];
 }
 
-export function isString(str: any): boolean {
-  return typeof str === 'string';
-}
-export function isNumber(num: any): boolean {
-  return typeof num === 'number' && !Number.isNaN(num);
-}
-export function isBoolean(bool: any): boolean {
-  return typeof bool === 'boolean';
-}
 export function isArray(arr: any): boolean {
   return Array.isArray(arr);
 }
@@ -40,18 +31,15 @@ export function isObject(obj: any): boolean {
 export function isObjectOnly(obj: any): boolean {
   return isObject(obj) && obj;
 }
-export function isFunction(fun: any): boolean {
-  return typeof fun === 'function';
-}
 
 export function optString(str: any, fallback = ''): string {
-  return isString(str) ? str : fallback;
+  return typeof str === 'string' ? str : fallback;
 }
 export function optNumber(num: any, fallback = 0): number {
-  return isNumber(num) ? num : fallback;
+  return typeof num === 'number' ? num : fallback;
 }
 export function optBoolean(bool: any, fallback = false): boolean {
-  return isBoolean(bool) ? bool : fallback;
+  return typeof bool === 'boolean' ? bool : fallback;
 }
 export function optArray<T>(arr: T[] | undefined, fallback: T[] = []): T[] {
   if (arr === undefined) return fallback;
@@ -142,7 +130,7 @@ export function parseGroup2s(array: GroupAsset[]): NavViewGroup[] {
 }
 
 export function isValidKey(key: string | any): boolean {
-  return isString(key) && !key.includes(' ');
+  return typeof key === 'string' && !key.includes(' ');
 }
 export function isValidValue(value: any): boolean {
   return value !== null && value !== undefined && value !== '';

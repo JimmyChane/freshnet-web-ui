@@ -1,5 +1,5 @@
 <script>
-import { isArray, isFunction, isObjectOnly, optArray } from '@/U';
+import { isArray, isObjectOnly, optArray } from '@/U';
 import {
   POPUP_MENU_ALIGNMENT,
   POPUP_MENU_CORNER,
@@ -40,7 +40,9 @@ export default {
           : optArray(this.menus);
 
       for (const menu of menus) {
-        const isLegacy = !isFunction(menu.click) && isFunction(menu.interact);
+        const isLegacy =
+          typeof menu.click !== 'function' &&
+          typeof menu.interact === 'function';
         if (isLegacy) menu.click = () => menu.interact();
       }
 
