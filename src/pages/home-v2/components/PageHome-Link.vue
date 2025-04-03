@@ -15,18 +15,18 @@ const refExternal = ref<HTMLLinkElement>();
 const iconExternalWhite = computed(() => props.icon ?? IconExternalWhite);
 const iconExternalColor = computed(() => props.icon ?? IconExternalColor);
 
-function mouseEnter() {
+const mouseEnter = (): void => {
   isHover.value = true;
-}
-function mouseLeave() {
+};
+const mouseLeave = (): void => {
   isHover.value = false;
-}
-function listenElement(element: HTMLElement) {
+};
+const listenElement = (element: HTMLElement): void => {
   element.addEventListener('mouseenter', mouseEnter);
   element.addEventListener('mouseleave', mouseLeave);
   element.addEventListener('touchstart', mouseEnter);
   element.addEventListener('touchend', mouseLeave);
-}
+};
 
 onMounted(() => {
   const external = refExternal.value as HTMLLinkElement;

@@ -1,117 +1,27 @@
-<script>
-import { mapStores } from 'pinia';
+<script setup lang="ts">
+import { useAppLayoutStore } from '@/stores/app-layout.store';
+import { useAppNavigationStore } from '@/stores/app-navigation.store';
 
-import { useAppStore } from '@/stores/app.store';
-import { useLoginStore } from '@/stores/login.store';
-
-import PopupWindow from '@/components/window/PopupWindow.vue';
-
-import Snackbar from './Snackbar.vue';
-import Status from './Status.vue';
-import PopupMenu from './popupMenu/PopupMenu.vue';
-
-export default {
-  components: { Snackbar, PopupMenu, Status, PopupWindow },
-  data: (c) => ({ shouldShowStatus: false }),
-  computed: {
-    ...mapStores(useAppStore),
-
-    user: (c) => useLoginStore().user,
-
-    currentPaths() {
-      return useAppStore().currentPaths;
-    },
-
-    isLogging: (c) => useLoginStore().isLogging,
-  },
-  watch: {
-    currentPaths() {
-      this.appStore.navigation.closeNavigationDrawer();
-    },
-    isLogging() {
-      if (!useLoginStore().user && this.isLogging) {
-        useAppStore().snackbarShow('User Logging');
-      }
-    },
-    user() {
-      this.invalidateUser();
-    },
-  },
-  async created() {
-    window.addEventListener('resize', this.invalidateWindow);
-
-    this.invalidateUser();
-  },
-  mounted() {
-    this.invalidateWindow();
-  },
-  methods: {
-    // window
-    invalidateWindow() {
-      useAppStore().window.innerWidth = window.innerWidth;
-      useAppStore().window.innerHeight = window.innerHeight;
-    },
-
-    async invalidateUser() {
-      const user = await useLoginStore().getUser();
-
-      if (user.isTypeAdmin() || user.isTypeStaff()) {
-        this.shouldShowStatus = true;
-      } else {
-        this.shouldShowStatus = false;
-      }
-    },
-  },
-};
+const appLayoutStore = useAppLayoutStore();
+const appNavigationStore = useAppNavigationStore();
 </script>
 
 <template>
-  <div class="App" :isNormal="`${appStore.appLayout.isNormal()}`">
+  <div class="App" :isNormal="`${appLayoutStore.isNormal()}`">
     <div class="App-background" style="z-index: 0"></div>
 
     <div
       class="App-body"
       :style="{ 'z-index': '1' }"
-      :isDrawer="`${appStore.navigation.isDrawer()}`"
-      :isFixed="`${!appStore.navigation.isDrawer()}`"
+      :isDrawer="`${appNavigationStore.isDrawer()}`"
+      :isFixed="`${!appNavigationStore.isDrawer()}`"
     >
-      <router-view
+      <RouterView
         class="App-routerView"
         :style="{ 'grid-area': 'body' }"
         ref="AppRouterView"
       />
     </div>
-
-    <PopupWindow
-      v-for="(popupWindow, index) in appStore.popupWindows"
-      :style="{ 'z-index': 6 + index }"
-      :key="popupWindow.key"
-      :isShowing="popupWindow.isShowing"
-      @click-dismiss="() => popupWindow.close()"
-    >
-      <component
-        :is="popupWindow.component"
-        :popupWindow="popupWindow"
-      ></component>
-    </PopupWindow>
-
-    <PopupMenu
-      :style="{ 'z-index': 7 + appStore.popupWindows.length }"
-      v-for="popupMenu of appStore.popupMenus"
-      :key="popupMenu.key"
-      :popupMenu="popupMenu"
-      class="App-PopupMenu"
-    />
-    <Snackbar
-      :style="{ 'z-index': 8 + appStore.popupWindows.length }"
-      v-for="snackbar of appStore.snackbars"
-      :key="snackbar.key"
-      :item="snackbar"
-    />
-    <Status
-      v-if="shouldShowStatus"
-      :style="{ 'z-index': 9 + appStore.popupWindows.length }"
-    />
   </div>
 </template>
 
