@@ -1,6 +1,6 @@
 {
   "name": "freshnet-web-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "type": "module",
   "scripts": {
@@ -39,5 +39,8 @@
     "vite-plugin-inspect": "^11.0.0",
     "vite-plugin-pwa": "^0.21.1",
     "vue-tsc": "^2.2.8"
+  },
+  "engines": {
+    "node": ">=18.17.1 <19"
   }
 }
