@@ -65,7 +65,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <Footer />
+    <Footer></Footer>
   </div>
 </template>
 

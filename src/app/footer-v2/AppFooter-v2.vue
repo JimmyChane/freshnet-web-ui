@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+import { APP_VERSION } from '@/config';
 import { ContactModel } from '@/entity/model-v2/Contact.model';
 
 import ContactVue from './Footer-Contact.vue';
@@ -72,6 +73,8 @@ const contacts = ref([
           </div>
         </div>
       </div>
+
+      <span class="footer-version">v{{ APP_VERSION }}</span>
     </div>
   </div>
 </template>
@@ -83,7 +86,6 @@ const contacts = ref([
   width: 100%;
   margin-top: 4rem;
   padding: 2rem;
-  padding-bottom: 10rem;
   gap: 4rem;
   position: relative;
 

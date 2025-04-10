@@ -142,7 +142,6 @@ const appNavigationStore = useAppNavigationStore();
     }
     .App-routerView {
       z-index: 3;
-      border-radius: 1.2rem 0 0 1.2rem;
       box-shadow: 0 0 1rem rgba(0, 0, 0, 0.2);
     }
   }

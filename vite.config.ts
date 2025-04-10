@@ -4,6 +4,8 @@ import { defineConfig } from 'vite';
 import ViteInspect from 'vite-plugin-inspect';
 import { VitePWA } from 'vite-plugin-pwa';
 
+import Package from './package.json';
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -56,5 +58,9 @@ export default defineConfig({
     }),
     ViteInspect(),
   ],
+  define: {
+    'import.meta.env.APP_VERSION': JSON.stringify(Package.version),
+    'import.meta.env.APP_NAME': JSON.stringify(Package.name),
+  },
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
 });
