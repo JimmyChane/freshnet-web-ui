@@ -2,28 +2,11 @@
 import { ref } from 'vue';
 
 import { APP_VERSION } from '@/config';
-import { ContactModel } from '@/entity/model-v2/Contact.model';
+import { BEH_AIK_KEONG_CONTACT, OFFICE_CONTACT, OFFICE_MOBILE_CONTACT } from '@/entity/model-v2/Contact.model';
 
 import ContactVue from './Footer-Contact.vue';
 
-const contacts = ref([
-  new ContactModel({
-    title: 'Beh Aik Keong',
-    links: [
-      { category: 'call', id: '0167959444' },
-      { category: 'whatsapp', id: '0167959444' },
-    ],
-  }),
-  new ContactModel({
-    title: 'Office (Mobile)',
-    links: [
-      { category: 'call', id: '0146315353' },
-      { category: 'whatsapp', id: '0146315353' },
-      { category: 'telegram', id: 'FreshnetEnterprise' },
-    ],
-  }),
-  new ContactModel({ title: 'Office', links: [{ category: 'telephone', id: '0332897297' }] }),
-]);
+const contacts = ref([BEH_AIK_KEONG_CONTACT, OFFICE_MOBILE_CONTACT, OFFICE_CONTACT]);
 </script>
 
 <template>

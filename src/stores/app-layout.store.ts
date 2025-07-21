@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { useAppPathStore } from './app-path.store';
 
@@ -15,44 +15,37 @@ export const useAppLayoutStore = defineStore('app-layout', () => {
 
   const requests = ref<{ page: string; view: string; mode: number }[]>([]);
 
-  const getCurrentPageKey = (): string => appPathStore.currentPageKey;
-  const getCurrentViewKey = (): string => appPathStore.currentViewKey;
+  const currentPageKey = computed(() => appPathStore.currentPageKey);
+  const currentViewKey = computed(() => appPathStore.currentViewKey);
 
-  const getVisibilityRequest = (
+  function getVisibilityRequest(
     page: string = '',
     view: string = '',
-  ): { page: string; view: string; mode: number } | undefined => {
+  ): { page: string; view: string; mode: number } | undefined {
     return requests.value.find((request) => {
       return request.page === page && request.view === view;
     });
-  };
+  }
 
-  const setLayout = (mode: number = 0): void => {
+  function setLayout(mode: number = 0): void {
     if (!APP_LAYOUT_KEYS.includes(mode)) return;
 
-    const page = getCurrentPageKey();
-    const view = getCurrentViewKey();
-    const request = getVisibilityRequest(page, view);
+    const request = getVisibilityRequest(currentPageKey.value, currentViewKey.value);
 
-    if (request) request.mode = mode;
-    else requests.value.push({ page, view, mode });
-  };
+    if (request) {
+      request.mode = mode;
+    } else {
+      requests.value.push({ page: currentPageKey.value, view: currentViewKey.value, mode });
+    }
+  }
 
-  const getCurrentVisibilityRequest = (): { page: string; view: string; mode: number } | null => {
-    const page = getCurrentPageKey();
-    const view = getCurrentViewKey();
-    const request = getVisibilityRequest(page, view);
-
-    return request ?? null;
-  };
-
-  const getCurrentLayout = (): number => {
-    const request = getCurrentVisibilityRequest();
+  const currentLayout = computed(() => {
+    const request = getVisibilityRequest(currentPageKey.value, currentViewKey.value);
     return request?.mode ?? AppLayoutId.FULL;
-  };
+  });
 
-  const isNormal = (): boolean => getCurrentLayout() === AppLayoutId.NORMAL;
-  const isFull = (): boolean => getCurrentLayout() === AppLayoutId.FULL;
+  const isNormal = computed(() => currentLayout.value === AppLayoutId.NORMAL);
+  const isFull = computed(() => currentLayout.value === AppLayoutId.FULL);
 
-  return { requests, setLayout, getCurrentLayout, isNormal, isFull };
+  return { requests, setLayout, currentLayout, isNormal, isFull };
 });

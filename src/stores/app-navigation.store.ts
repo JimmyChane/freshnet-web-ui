@@ -1,8 +1,8 @@
+import { useWindowSize } from '@vueuse/core';
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { useAppPathStore } from './app-path.store';
-import { useAppSizeStore } from './app-size.store';
 
 export const NAVIGATION_MIN_WIDTH: number = 1000;
 export enum NavigationVisibility {
@@ -20,122 +20,92 @@ export const NAVIGATION_LAYOUTS = Object.values(NavigationLayout);
 
 export const useAppNavigationStore = defineStore('app-navigation', () => {
   const appPathStore = useAppPathStore();
-  const appSizeStore = useAppSizeStore();
+  const appSizeStore = useWindowSize();
 
   const defaultVisibility = ref<NavigationVisibility>(NavigationVisibility.COLLAPSED);
   const defaultLayout = ref<NavigationLayout>(NavigationLayout.WIDE);
   const visibilityRequests = ref<{ page: string; view: string; visibility: number }[]>([]);
   const layoutRequests = ref<{ page: string; view: string; layout: number }[]>([]);
 
-  const getCurrentPageKey = (): string => appPathStore.currentPageKey;
-  const getCurrentViewKey = (): string => appPathStore.currentViewKey;
-
-  const getVisibilityRequest = (
+  function getVisibilityRequest(
     page: string = '',
     view: string = '',
-  ): { page: string; view: string; visibility: number } | undefined => {
+  ): { page: string; view: string; visibility: number } | undefined {
     return visibilityRequests.value.find((request) => {
       return request.page === page && request.view === view;
     });
-  };
-  const getLayoutRequest = (
+  }
+  function getLayoutRequest(
     page: string = '',
     view: string = '',
-  ): { page: string; view: string; layout: number } | undefined => {
+  ): { page: string; view: string; layout: number } | undefined {
     return layoutRequests.value.find((request) => {
       return request.page === page && request.view === view;
     });
-  };
+  }
 
-  const setDefaultVisibility = (visibility: number = 0): void => {
+  function setDefaultVisibility(visibility: number = 0): void {
     if (!NAVIGATION_VISIBILITIES.includes(visibility)) return;
     defaultVisibility.value = visibility;
-  };
-  const setDefaultLayout = (layout: number = 0): void => {
+  }
+  function setDefaultLayout(layout: number = 0): void {
     if (!NAVIGATION_LAYOUTS.includes(layout)) return;
     defaultLayout.value = layout;
-  };
+  }
 
-  const setVisibility = (visibility: number = 0): void => {
+  function setVisibility(visibility: number = 0): void {
     if (!NAVIGATION_VISIBILITIES.includes(visibility)) return;
 
-    const page = getCurrentPageKey();
-    const view = getCurrentViewKey();
-    const request = getVisibilityRequest(page, view);
+    const request = getVisibilityRequest(appPathStore.currentPageKey, appPathStore.currentViewKey);
     if (request) request.visibility = visibility;
-    else visibilityRequests.value.push({ page, view, visibility });
-  };
-  const setLayout = (layout: number = 0): void => {
+    else
+      visibilityRequests.value.push({
+        page: appPathStore.currentPageKey,
+        view: appPathStore.currentViewKey,
+        visibility,
+      });
+  }
+  function setLayout(layout: number = 0): void {
     if (!NAVIGATION_LAYOUTS.includes(layout)) return;
 
-    const page = getCurrentPageKey();
-    const view = getCurrentViewKey();
-    const request = getLayoutRequest(page, view);
+    const request = getLayoutRequest(appPathStore.currentPageKey, appPathStore.currentViewKey);
     if (request) request.layout = layout;
-    else layoutRequests.value.push({ page, view, layout });
-  };
+    else layoutRequests.value.push({ page: appPathStore.currentPageKey, view: appPathStore.currentViewKey, layout });
+  }
 
-  const getCurrentVisibilityRequest = (): { page: string; view: string; visibility: number } | null => {
-    const page = getCurrentPageKey();
-    const view = getCurrentViewKey();
-    const request = getVisibilityRequest(page, view);
+  const currentVisibility = computed(() => {
+    const request = getVisibilityRequest(appPathStore.currentPageKey, appPathStore.currentViewKey);
+    return request?.visibility ?? defaultVisibility.value;
+  });
+  const currentLayout = computed(() => {
+    const request = getLayoutRequest(appPathStore.currentPageKey, appPathStore.currentViewKey);
+    return request?.layout ?? defaultLayout.value;
+  });
 
-    return request ?? null;
-  };
-  const getCurrentLayoutRequest = (): { page: string; view: string; layout: number } | null => {
-    const page = getCurrentPageKey();
-    const view = getCurrentViewKey();
-    const request = getLayoutRequest(page, view);
+  const isWide = computed(() => !isThin.value);
+  const isThin = computed(() => {
+    if (isDrawer.value) return false;
 
-    return request ?? null;
-  };
-
-  const getCurrentVisibility = (): number => {
-    const request = getCurrentVisibilityRequest();
-    if (request) return request.visibility;
-    return defaultVisibility.value;
-  };
-  const getCurrentLayout = (): number => {
-    const request = getCurrentLayoutRequest();
-    if (request) return request.layout;
-    return defaultLayout.value;
-  };
-
-  const isWide = (): boolean => {
-    return !isThin();
-  };
-  const isThin = (): boolean => {
-    if (isDrawer()) return false;
-
-    if (getCurrentLayout() === NavigationLayout.WIDE) {
-      return appSizeStore.width <= NAVIGATION_MIN_WIDTH;
+    if (currentLayout.value === NavigationLayout.WIDE) {
+      return appSizeStore.width.value <= NAVIGATION_MIN_WIDTH;
     }
-    return getCurrentLayout() === NavigationLayout.THIN;
-  };
+    return currentLayout.value === NavigationLayout.THIN;
+  });
+  const isDrawer = computed(() => appSizeStore.width.value <= 600);
 
-  const isDrawer = (): boolean => {
-    return appSizeStore.width <= 600;
-  };
+  const isNone = computed(() => currentVisibility.value === NavigationVisibility.NONE);
+  const isExpanded = computed(() => currentVisibility.value === NavigationVisibility.EXPANDED);
+  const isCollapsed = computed(() => currentVisibility.value === NavigationVisibility.COLLAPSED);
 
-  const isNone = (): boolean => {
-    return getCurrentVisibility() === NavigationVisibility.NONE;
-  };
-  const isExpanded = (): boolean => {
-    return getCurrentVisibility() === NavigationVisibility.EXPANDED;
-  };
-  const isCollapsed = (): boolean => {
-    return getCurrentVisibility() === NavigationVisibility.COLLAPSED;
-  };
-
-  const openNavigationDrawer = (): void => {
+  function openNavigationDrawer(): void {
     setVisibility(NavigationVisibility.EXPANDED);
-  };
-  const closeNavigationDrawer = (): void => {
+  }
+  function closeNavigationDrawer(): void {
     setVisibility(NavigationVisibility.COLLAPSED);
-  };
-  const disableNavigationDrawer = (): void => {
+  }
+  function disableNavigationDrawer(): void {
     setVisibility(NavigationVisibility.NONE);
-  };
+  }
 
   return {
     setDefaultVisibility,
@@ -143,11 +113,8 @@ export const useAppNavigationStore = defineStore('app-navigation', () => {
     setVisibility,
     setLayout,
 
-    getCurrentVisibilityRequest,
-    getCurrentLayoutRequest,
-
-    getCurrentVisibility,
-    getCurrentLayout,
+    currentVisibility,
+    currentLayout,
 
     isWide,
     isThin,

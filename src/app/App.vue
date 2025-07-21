@@ -1,22 +1,23 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 import { useAppLayoutStore } from '@/stores/app-layout.store';
 import { useAppNavigationStore } from '@/stores/app-navigation.store';
 
 const appLayoutStore = useAppLayoutStore();
 const appNavigationStore = useAppNavigationStore();
+
+const isNormal = computed(() => appLayoutStore.isNormal);
+const isDrawer = computed(() => appNavigationStore.isDrawer);
+const isFixed = computed(() => !isDrawer.value);
 </script>
 
 <template>
-  <div class="App" :isNormal="`${appLayoutStore.isNormal()}`">
+  <div class="App" :data-normal="isNormal">
     <div class="App-background" style="z-index: 0"></div>
 
-    <div
-      class="App-body"
-      :style="{ 'z-index': '1' }"
-      :isDrawer="`${appNavigationStore.isDrawer()}`"
-      :isFixed="`${!appNavigationStore.isDrawer()}`"
-    >
-      <RouterView class="App-routerView" :style="{ 'grid-area': 'body' }" ref="AppRouterView" />
+    <div class="App-body" style="z-index: 1" :data-drawer="isDrawer" :data-fixed="isFixed">
+      <RouterView class="App-routerView" style="grid-area: body" ref="AppRouterView" />
     </div>
   </div>
 </template>
@@ -116,7 +117,7 @@ const appNavigationStore = useAppNavigationStore();
       background: #f1f1f1;
     }
   }
-  .App-body[isDrawer='true'] {
+  .App-body[data-drawer='true'] {
     .App-NavigationDrawer {
       z-index: 3;
     }
@@ -124,7 +125,7 @@ const appNavigationStore = useAppNavigationStore();
       z-index: 2;
     }
   }
-  .App-body[isDrawer='false'] {
+  .App-body[data-drawer='false'] {
     .App-NavigationDrawer {
       z-index: 2;
     }
@@ -134,7 +135,7 @@ const appNavigationStore = useAppNavigationStore();
     }
   }
 }
-.App[isNormal='true'] {
+.App[data-normal='true'] {
   @media (min-width: 1600px) {
     .App-body {
       width: calc(100% - 8vw);
