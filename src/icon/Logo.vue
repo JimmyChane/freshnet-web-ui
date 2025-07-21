@@ -3,13 +3,7 @@ defineProps<{ tintColor: string }>();
 </script>
 
 <template>
-  <svg
-    width="512"
-    height="512"
-    viewBox="0 0 512 512"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M17.86 468.345C23.34 468.345 27.7825 463.903 27.7825 458.422C27.7825 452.942 23.34 448.5 17.86 448.5C12.3799 448.5 7.9375 452.942 7.9375 458.422C7.9375 463.903 12.3799 468.345 17.86 468.345Z"
       :fill="tintColor ?? '#FF0000'"

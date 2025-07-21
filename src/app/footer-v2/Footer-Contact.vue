@@ -11,11 +11,7 @@ const links = computed(() => props.contact.links);
 
 const parsedLinks = computed(() => {
   return links.value.map((link) => {
-    return {
-      icon: link.socialMedia?.icon,
-      href: link.toHtmlHref(),
-      target: link.toHtmlTarget(),
-    };
+    return { icon: link.socialMedia?.icon, href: link.toHtmlHref(), target: link.toHtmlTarget() };
   });
 });
 const primaryLink = computed(() => {
@@ -28,12 +24,7 @@ const primaryLink = computed(() => {
     <div class="Footer-Contact-header">
       <span class="Footer-Contact-title" v-if="title">{{ title }}</span>
 
-      <a
-        class="Footer-Contact-primaryLink"
-        v-if="primaryLink"
-        :href="primaryLink.href"
-        :target="primaryLink.target"
-      >
+      <a class="Footer-Contact-primaryLink" v-if="primaryLink" :href="primaryLink.href" :target="primaryLink.target">
         <span class="Footer-Contact-subtitle">{{ subtitle }}</span>
       </a>
 

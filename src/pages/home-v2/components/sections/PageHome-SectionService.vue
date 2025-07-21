@@ -5,12 +5,7 @@ withDefaults(defineProps<{ isThin?: boolean }>(), { isThin: false });
 </script>
 
 <template>
-  <div
-    :class="[
-      'HomeSectionService',
-      `HomeSectionService-${isThin ? 'isThin' : 'isWide'}`,
-    ]"
-  >
+  <div :class="['HomeSectionService', `HomeSectionService-${isThin ? 'isThin' : 'isWide'}`]">
     <div class="HomeSectionyHour-body">
       <Link>Printing</Link>
       <Link>Repair Laptop</Link>

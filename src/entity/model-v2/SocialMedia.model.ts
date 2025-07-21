@@ -15,19 +15,7 @@ export class SocialMediaModel {
   }
 }
 
-export const CALL = new SocialMediaModel('call', {
-  title: 'Call',
-  icon: IconCall,
-});
-export const WHATSAPP = new SocialMediaModel('whatsapp', {
-  title: 'Whatsapp',
-  icon: IconWhatsapp,
-});
-export const TELEGRAM = new SocialMediaModel('telegram', {
-  title: 'Telegram',
-  icon: IconTelegram,
-});
-export const TELEPHONE = new SocialMediaModel('telephone', {
-  title: 'Telephone',
-  icon: IconTelephone,
-});
+export const CALL = new SocialMediaModel('call', { title: 'Call', icon: IconCall });
+export const WHATSAPP = new SocialMediaModel('whatsapp', { title: 'Whatsapp', icon: IconWhatsapp });
+export const TELEGRAM = new SocialMediaModel('telegram', { title: 'Telegram', icon: IconTelegram });
+export const TELEPHONE = new SocialMediaModel('telephone', { title: 'Telephone', icon: IconTelephone });

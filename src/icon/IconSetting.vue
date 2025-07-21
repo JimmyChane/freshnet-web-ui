@@ -3,13 +3,7 @@ withDefaults(defineProps<{ isSelected?: boolean }>(), { isSelected: false });
 </script>
 
 <template>
-  <svg
-    width="512"
-    height="512"
-    viewBox="0 0 512 512"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clip-path="url(#clip0_3415_600)">
       <mask id="path-1-inside-1_3415_600" fill="white">
         <path

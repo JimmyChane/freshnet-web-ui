@@ -38,11 +38,7 @@ export const useAppLayoutStore = defineStore('app-layout', () => {
     else requests.value.push({ page, view, mode });
   };
 
-  const getCurrentVisibilityRequest = (): {
-    page: string;
-    view: string;
-    mode: number;
-  } | null => {
+  const getCurrentVisibilityRequest = (): { page: string; view: string; mode: number } | null => {
     const page = getCurrentPageKey();
     const view = getCurrentViewKey();
     const request = getVisibilityRequest(page, view);

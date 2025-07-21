@@ -6,11 +6,7 @@ import Section from './PageHome-Section.vue';
 <template>
   <Section>
     <SectionTitle>Feedback</SectionTitle>
-    <textarea
-      class="HomeSectionFeedback-input"
-      type="text"
-      placeholder="Write something..."
-    />
+    <textarea class="HomeSectionFeedback-input" type="text" placeholder="Write something..." />
   </Section>
 </template>
 

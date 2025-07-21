@@ -24,11 +24,7 @@ export class WorkingHoursModel {
     const { timeStart, timeEnd } = data;
 
     const now = new Date();
-    const dateHourStart = parse(
-      `${this.parentDay}${timeStart}`,
-      `ccccHHmm`,
-      now,
-    );
+    const dateHourStart = parse(`${this.parentDay}${timeStart}`, `ccccHHmm`, now);
     const dateHourEnd = parse(`${this.parentDay}${timeEnd}`, `ccccHHmm`, now);
 
     this.timeStart = optString(timeStart);

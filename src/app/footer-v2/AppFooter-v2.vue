@@ -22,10 +22,7 @@ const contacts = ref([
       { category: 'telegram', id: 'FreshnetEnterprise' },
     ],
   }),
-  new ContactModel({
-    title: 'Office',
-    links: [{ category: 'telephone', id: '0332897297' }],
-  }),
+  new ContactModel({ title: 'Office', links: [{ category: 'telephone', id: '0332897297' }] }),
 ]);
 </script>
 
@@ -45,11 +42,7 @@ const contacts = ref([
           <div class="Footer-section">
             <span class="Footer-section-title">Contacts</span>
 
-            <ContactVue
-              v-for="contact of contacts"
-              :key="contact.subtitle"
-              :contact="contact"
-            />
+            <ContactVue v-for="contact of contacts" :key="contact.subtitle" :contact="contact" />
           </div>
         </div>
 

@@ -27,20 +27,13 @@ export const HOME_ROUTE = new AppRouteModel({
   key: 'home',
   name: 'Home',
   title: 'Home',
-  icon: new IconPackModel(
-    new ServerIconModel('home-FFFFFF'),
-    new ServerIconModel('home-000000'),
-  ),
+  icon: new IconPackModel(new ServerIconModel('home-FFFFFF'), new ServerIconModel('home-000000')),
 });
 
 export const router = createRouter({
   history: createWebHistory(),
   routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: () => import('@/pages/home-v2/Home-v2.page.vue'),
-    },
+    { path: '/', name: 'home', component: () => import('@/pages/home-v2/Home-v2.page.vue') },
 
     { path: '/:pathMatch(.*)*', redirect: { name: 'home' } },
   ],

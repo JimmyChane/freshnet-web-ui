@@ -1,7 +1,4 @@
-import {
-  type ContactLinkData,
-  ContactLinkModel,
-} from '@/entity/model-v2/ContactLink.model';
+import { type ContactLinkData, ContactLinkModel } from '@/entity/model-v2/ContactLink.model';
 
 export interface ContactData {
   title: string;
@@ -21,9 +18,6 @@ export class ContactModel {
   }
 
   toData(): ContactData {
-    return {
-      title: this.title,
-      links: this.links.map((link) => link.toData()),
-    };
+    return { title: this.title, links: this.links.map((link) => link.toData()) };
   }
 }

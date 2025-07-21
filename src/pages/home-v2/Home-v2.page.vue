@@ -39,27 +39,19 @@ onMounted(() => {
 
     <div class="Home-body">
       <div class="Home-grid">
-        <SectionTitle class="title" style="grid-area: contact-title">
-          Contact
-        </SectionTitle>
+        <SectionTitle class="title" style="grid-area: contact-title">Contact</SectionTitle>
 
         <SectionContact style="grid-area: contact" :isThin="isThin" />
 
-        <SectionTitle class="title" style="grid-area: hour-title">
-          Business Hours
-        </SectionTitle>
+        <SectionTitle class="title" style="grid-area: hour-title">Business Hours</SectionTitle>
 
         <SectionHour style="grid-area: hour" :isThin="isThin" />
 
-        <SectionTitle class="title" style="grid-area: service-title">
-          Services
-        </SectionTitle>
+        <SectionTitle class="title" style="grid-area: service-title">Services</SectionTitle>
 
         <SectionService style="grid-area: service" :isThin="isThin" />
 
-        <SectionTitle class="title" style="grid-area: location-title">
-          Location
-        </SectionTitle>
+        <SectionTitle class="title" style="grid-area: location-title">Location</SectionTitle>
 
         <SectionLocation style="grid-area: location" :isThin="isThin" />
       </div>

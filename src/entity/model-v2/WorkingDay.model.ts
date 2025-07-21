@@ -26,11 +26,7 @@ export class WorkingDayModel {
   toData(): any {
     const dataHours = this.hours.toData();
 
-    return {
-      title: this.title,
-      timeStart: dataHours.timeStart,
-      timeEnd: dataHours.timeEnd,
-    };
+    return { title: this.title, timeStart: dataHours.timeStart, timeEnd: dataHours.timeEnd };
   }
 
   isToday(): boolean {

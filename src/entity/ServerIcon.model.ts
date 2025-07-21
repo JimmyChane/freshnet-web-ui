@@ -10,8 +10,7 @@ export class ServerIconModel {
   }
 
   toUrl(): string {
-    const filename =
-      typeof this.ext !== 'string' ? this.name : `${this.name}.${this.ext}`;
+    const filename = typeof this.ext !== 'string' ? this.name : `${this.name}.${this.ext}`;
     return `${HOST_RES}/icon/${filename}`;
   }
   toName(): string {

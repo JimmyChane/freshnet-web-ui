@@ -22,16 +22,10 @@ export const useAppNavigationStore = defineStore('app-navigation', () => {
   const appPathStore = useAppPathStore();
   const appSizeStore = useAppSizeStore();
 
-  const defaultVisibility = ref<NavigationVisibility>(
-    NavigationVisibility.COLLAPSED,
-  );
+  const defaultVisibility = ref<NavigationVisibility>(NavigationVisibility.COLLAPSED);
   const defaultLayout = ref<NavigationLayout>(NavigationLayout.WIDE);
-  const visibilityRequests = ref<
-    { page: string; view: string; visibility: number }[]
-  >([]);
-  const layoutRequests = ref<{ page: string; view: string; layout: number }[]>(
-    [],
-  );
+  const visibilityRequests = ref<{ page: string; view: string; visibility: number }[]>([]);
+  const layoutRequests = ref<{ page: string; view: string; layout: number }[]>([]);
 
   const getCurrentPageKey = (): string => appPathStore.currentPageKey;
   const getCurrentViewKey = (): string => appPathStore.currentViewKey;
@@ -81,22 +75,14 @@ export const useAppNavigationStore = defineStore('app-navigation', () => {
     else layoutRequests.value.push({ page, view, layout });
   };
 
-  const getCurrentVisibilityRequest = (): {
-    page: string;
-    view: string;
-    visibility: number;
-  } | null => {
+  const getCurrentVisibilityRequest = (): { page: string; view: string; visibility: number } | null => {
     const page = getCurrentPageKey();
     const view = getCurrentViewKey();
     const request = getVisibilityRequest(page, view);
 
     return request ?? null;
   };
-  const getCurrentLayoutRequest = (): {
-    page: string;
-    view: string;
-    layout: number;
-  } | null => {
+  const getCurrentLayoutRequest = (): { page: string; view: string; layout: number } | null => {
     const page = getCurrentPageKey();
     const view = getCurrentViewKey();
     const request = getLayoutRequest(page, view);

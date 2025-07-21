@@ -6,9 +6,6 @@ import Section from './PageHome-Section.vue';
 <template>
   <Section class="HomeSectionAboutUs">
     <SectionTitle>About Us</SectionTitle>
-    <p>
-      Since 2009, from teaching computer class to repair computer, printers,
-      networking, cctv services.
-    </p>
+    <p>Since 2009, from teaching computer class to repair computer, printers, networking, cctv services.</p>
   </Section>
 </template>

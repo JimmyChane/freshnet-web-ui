@@ -4,10 +4,11 @@ import { computed, onMounted, ref } from 'vue';
 import IconExternalColor from '@/assets/icon/external-1673E1.svg';
 import IconExternalWhite from '@/assets/icon/external-FFFFFF.svg';
 
-const props = withDefaults(
-  defineProps<{ to?: string; href?: string; target?: string; icon?: string }>(),
-  { to: '', href: '', target: '' },
-);
+const props = withDefaults(defineProps<{ to?: string; href?: string; target?: string; icon?: string }>(), {
+  to: '',
+  href: '',
+  target: '',
+});
 
 const isHover = ref(false);
 const refExternal = ref<HTMLLinkElement>();
@@ -36,13 +37,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <a
-    class="SectionWhatElse-Item"
-    ref="refExternal"
-    v-if="!!href"
-    :href="href"
-    :target="target"
-  >
+  <a class="SectionWhatElse-Item" ref="refExternal" v-if="!!href" :href="href" :target="target">
     <slot></slot>
 
     <div class="SectionWhatElse-Item-image">

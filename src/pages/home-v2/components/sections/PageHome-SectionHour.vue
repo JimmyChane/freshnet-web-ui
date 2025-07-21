@@ -1,10 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 
-import {
-  type WorkingDayData,
-  WorkingDayModel,
-} from '@/entity/model-v2/WorkingDay.model';
+import { type WorkingDayData, WorkingDayModel } from '@/entity/model-v2/WorkingDay.model';
 
 import Section from './PageHome-Section.vue';
 import Item from './PageHome-SectionHour-Item.vue';
@@ -25,23 +22,17 @@ onMounted(() => {
     { title: 'Sunday', timeStart: '1000', timeEnd: '1830' },
   ];
 
-  const workingDays = workingDayDatas.reduce(
-    (workingDays: WorkingDayModel[], data) => {
-      workingDays.push(new WorkingDayModel(data, workingDays));
-      return workingDays;
-    },
-    [],
-  );
+  const workingDays = workingDayDatas.reduce((workingDays: WorkingDayModel[], data) => {
+    workingDays.push(new WorkingDayModel(data, workingDays));
+    return workingDays;
+  }, []);
 
   todayWorkingDay.value = workingDays.find((workingDay) => {
     return workingDay.isToday();
   });
 
   items.value = [];
-  const index =
-    todayWorkingDay.value === undefined
-      ? -1
-      : workingDays.indexOf(todayWorkingDay.value);
+  const index = todayWorkingDay.value === undefined ? -1 : workingDays.indexOf(todayWorkingDay.value);
   const indexBefore = index - 1;
   const indexAfter = index + 1;
   for (let i = indexAfter; i < workingDays.length; i++) {

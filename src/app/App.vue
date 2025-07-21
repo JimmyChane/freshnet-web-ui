@@ -16,11 +16,7 @@ const appNavigationStore = useAppNavigationStore();
       :isDrawer="`${appNavigationStore.isDrawer()}`"
       :isFixed="`${!appNavigationStore.isDrawer()}`"
     >
-      <RouterView
-        class="App-routerView"
-        :style="{ 'grid-area': 'body' }"
-        ref="AppRouterView"
-      />
+      <RouterView class="App-routerView" :style="{ 'grid-area': 'body' }" ref="AppRouterView" />
     </div>
   </div>
 </template>
@@ -63,8 +59,7 @@ const appNavigationStore = useAppNavigationStore();
   --transition-duration: 200ms;
   --transition-delay: 0;
   --transition-timing: linear;
-  transition: var(--transition-target) var(--transition-duration)
-    var(--transition-timing);
+  transition: var(--transition-target) var(--transition-duration) var(--transition-timing);
   transition-delay: var(--transition-delay);
 }
 
@@ -99,11 +94,7 @@ const appNavigationStore = useAppNavigationStore();
     bottom: 0;
     left: 0;
     right: 0;
-    background-image: linear-gradient(
-      120deg,
-      hsl(202, 61%, 33%) 4%,
-      hsl(236, 66%, 24%) 95%
-    );
+    background-image: linear-gradient(120deg, hsl(202, 61%, 33%) 4%, hsl(236, 66%, 24%) 95%);
     display: none;
   }
   .App-body {
@@ -118,10 +109,7 @@ const appNavigationStore = useAppNavigationStore();
     grid-template-areas:
       'left body'
       'bottom bottom';
-    grid-template-rows: minmax(
-      calc(100% - var(--navigation-bottom-height)),
-      1fr
-    );
+    grid-template-rows: minmax(calc(100% - var(--navigation-bottom-height)), 1fr);
     grid-template-columns: max-content 1fr;
 
     .App-routerView {

@@ -8,24 +8,8 @@ import Section from './PageHome-Section.vue';
 
 withDefaults(defineProps<{ isThin?: boolean }>(), { isThin: false });
 
-const callContacts = ref<
-  {
-    title: string;
-    title1?: string;
-    href: string;
-    target: string;
-    icon: string;
-  }[]
->([]);
-const chatContacts = ref<
-  {
-    title: string;
-    title1: string;
-    href: string;
-    target: string;
-    icon: string;
-  }[]
->([]);
+const callContacts = ref<{ title: string; title1?: string; href: string; target: string; icon: string }[]>([]);
+const chatContacts = ref<{ title: string; title1: string; href: string; target: string; icon: string }[]>([]);
 
 onMounted(() => {
   const contacts = [
@@ -44,10 +28,7 @@ onMounted(() => {
         { category: 'telegram', id: 'FreshnetEnterprise' },
       ],
     }),
-    new ContactModel({
-      title: 'Office',
-      links: [{ category: 'telephone', id: '0332897297' }],
-    }),
+    new ContactModel({ title: 'Office', links: [{ category: 'telephone', id: '0332897297' }] }),
   ];
 
   callContacts.value = [];

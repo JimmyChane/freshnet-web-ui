@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import {
-  COMPANY_ADDRESS_LINK,
-  COMPANY_CATEGORY,
-  COMPANY_NAME,
-  LOGO_LINK,
-} from '@/config';
+import { COMPANY_ADDRESS_LINK, COMPANY_CATEGORY, COMPANY_NAME, LOGO_LINK } from '@/config';
 
 import Actionbar from '@/app/actionbar-v2/AppActionbar-v2.vue';
 
-withDefaults(
-  defineProps<{ isThin?: boolean; isParentScrolledUp?: boolean }>(),
-  { isThin: false, isParentScrolledUp: false },
-);
+withDefaults(defineProps<{ isThin?: boolean; isParentScrolledUp?: boolean }>(), {
+  isThin: false,
+  isParentScrolledUp: false,
+});
 </script>
 
 <template>
@@ -45,11 +40,7 @@ withDefaults(
           {{ COMPANY_CATEGORY }}
         </a>
 
-        <p
-          v-else
-          class="HomeActionbar-classification"
-          :style="{ 'grid-area': 'category' }"
-        >
+        <p v-else class="HomeActionbar-classification" :style="{ 'grid-area': 'category' }">
           {{ COMPANY_CATEGORY }}
         </p>
       </div>

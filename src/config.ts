@@ -3,8 +3,7 @@ export const APP_VERSION: string = import.meta.env.APP_VERSION;
 
 export const HOST_API: string = 'https://api.freshnet.app';
 export const HOST_RES: string = 'https://res.freshnet.app';
-export const CLOUDINARY_RES: string =
-  'https://res.cloudinary.com/freshnet/image/upload/resource';
+export const CLOUDINARY_RES: string = 'https://res.cloudinary.com/freshnet/image/upload/resource';
 
 export const COMPANY_CATEGORY: string = 'Computer Store';
 export const COMPANY_NAME: string = 'Freshnet Enterprise';

@@ -3,13 +3,7 @@ withDefaults(defineProps<{ isSelected?: boolean }>(), { isSelected: false });
 </script>
 
 <template>
-  <svg
-    width="512"
-    height="512"
-    viewBox="0 0 512 512"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       d="M429.502 140.42L324.133 33.573C322.506 31.9251 320.289 31 317.975 31H88.6558C83.8776 31 80 34.8855 80 39.673V473.327C80 478.115 83.8776 482 88.6558 482H423.344C428.122 482 432 478.115 432 473.327V146.519C432 144.242 431.106 142.05 429.502 140.42ZM328.131 62.3098L402.738 137.967H328.131V62.3098ZM97.3117 464.654V48.3462H310.819V146.641C310.819 151.428 314.697 155.314 319.475 155.314H414.689V464.654H97.3117Z"
       :fill="isSelected ? 'none' : 'var(--secondary-color)'"
