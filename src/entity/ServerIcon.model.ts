@@ -1,3 +1,5 @@
+import { getString, optString } from '@chanzor/utils';
+
 import { HOST_RES } from '@/config';
 
 export class ServerIconModel {
@@ -5,8 +7,8 @@ export class ServerIconModel {
   private ext?: string = undefined;
 
   constructor(name: string = '', ext: string | undefined = undefined) {
-    if (typeof name === 'string') this.name = name;
-    if (typeof ext === 'string') this.ext = ext;
+    this.name = optString(name);
+    this.ext = getString(ext);
   }
 
   toUrl(): string {
